@@ -5,7 +5,7 @@ import * as serviceTypes from '../constant/serviceTypes';
 
 import Logger from '../helper/logger';
 
-const getServerAddress = (options, callback) => {
+export const getServerAddress = (options, callback) => {
     const _logger = new Logger();
     _logger.setLogLevel(options.logLevel);
     const socket = io.connect(options.chatProxy, {
@@ -83,5 +83,3 @@ const getServerAddress = (options, callback) => {
         socket.disconnect();
     });
 };
-
-export default getServerAddress;

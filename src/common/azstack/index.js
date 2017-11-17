@@ -1,4 +1,4 @@
-import getServerAddress from './core/getServerAddress';
+import * as Authentication from './core/authentication';
 
 class AZStack {
     constructor() {
@@ -19,7 +19,7 @@ class AZStack {
     };
 
     connect() {
-        getServerAddress({
+        Authentication.getServerAddress({
             logLevel: this.logLevel,
             chatProxy: this.chatProxy
         }, (address) => {
