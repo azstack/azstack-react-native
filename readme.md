@@ -21,7 +21,7 @@ azstack.config({
 ```
 
 > #### logLevel: can be
-> 1. NONE: no log
-> 2. ERROR: just when error occur
-> 3. INFO: log the error and info of porocess running
-> 4. DEBUG: log the error, infor and data send/receiced
+> - NONE: no log
+> - ERROR: just when error occur
+> - INFO: log the error and info of porocess running
+> - DEBUG: log the error, infor and data send/receiced
