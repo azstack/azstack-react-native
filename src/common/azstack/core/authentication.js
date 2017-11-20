@@ -1,85 +1,112 @@
 import io from 'socket.io-client';
 
-import * as logLevelConstants from '../constant/logLevel';
-import * as serviceTypes from '../constant/serviceTypes';
+class Authentication {
+    constructor(options) {
+        this.logLevelConstants = options.logLevelConstants;
+        this.serviceTypes = options.serviceTypes;
+        this.Logger = options.Logger;
+        this.masterSocket = null;
+    };
 
-import Logger from '../helper/logger';
+    getSlaveSocket(options, callback) {
+        this.getServerAddress(options, (address) => {
+            console.log(address);
+        });
+    };
 
-export const getServerAddress = (options, callback) => {
-    const _logger = new Logger();
-    _logger.setLogLevel(options.logLevel);
-    const socket = io.connect(options.chatProxy, {
-        transports: ['websocket'],
-        reconnection: false,
-        autoConnect: false,
-        forceNew: true
-    });
-    _logger.log(logLevelConstants.LOG_LEVEL_INFO, {
-        message: 'Start connect to master server'
-    });
-    _logger.log(logLevelConstants.LOG_LEVEL_DEBUG, {
-        message: 'Chat Proxy',
-        payload: options.chatProxy
-    });
-    socket.open();
+    getServerAddress(options, callback) {
+        this.masterSocket = io.connect(options.chatProxy, {
+            transports: ['websocket'],
+            reconnection: false,
+            autoConnect: false,
+            forceNew: true
+        });
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+            message: 'Start connect to master server'
+        });
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+            message: 'Chat Proxy',
+            payload: options.chatProxy
+        });
+        this.masterSocket.open();
 
-    socket.on('connect', () => {
-        _logger.log(logLevelConstants.LOG_LEVEL_INFO, {
-            message: 'Connected to master server'
-        });
-        _logger.log(logLevelConstants.LOG_LEVEL_INFO, {
-            message: 'Send packet to get server address'
-        });
-        const getServerAddressPacket = {
-            service: serviceTypes.GET_SERVER_ADDR,
-            body: JSON.stringify({
-                azStackUserId: '123'
-            })
-        }
-        _logger.log(logLevelConstants.LOG_LEVEL_DEBUG, {
-            message: 'Get server address packet',
-            payload: getServerAddressPacket
-        });
-        socket.emit('WebPacket', getServerAddressPacket);
-    });
-    socket.on('connect_error', (error) => {
-        _logger.log(logLevelConstants.LOG_LEVEL_ERROR, {
-            message: 'Cannot connect to master socket',
-            error: error
-        });
-    });
-    socket.on('disconnect', () => {
-        _logger.log(logLevelConstants.LOG_LEVEL_INFO, {
-            message: 'Disconnected to master socket'
-        });
-    });
-    socket.on('WebPacket', function (packet) {
-        _logger.log(logLevelConstants.LOG_LEVEL_DEBUG, {
-            message: 'Got web packet from master server',
-            payload: {
-                packet: packet
-            }
-        });
-
-        let serverAddress = null;
-        try {
-            serverAddress = JSON.parse(packet.body);
-        } catch (e) { }
-        if (!serverAddress) {
-            _logger.log(logLevelConstants.LOG_LEVEL_ERROR, {
-                message: 'Get server address error, connect fail'
+        this.masterSocket.on('connect', () => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Connected to master server'
             });
-            return;
-        }
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send packet to get server address'
+            });
+            const getServerAddressPacket = {
+                service: this.serviceTypes.GET_SERVER_ADDR,
+                body: JSON.stringify({
+                    azStackUserId: '123'
+                })
+            }
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Get server address packet',
+                payload: getServerAddressPacket
+            });
+            this.masterSocket.emit('WebPacket', getServerAddressPacket);
+        });
+        this.masterSocket.on('connect_error', (error) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                message: 'Cannot connect to master socket',
+                error: error
+            });
+        });
+        this.masterSocket.on('disconnect', () => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Disconnected to master socket'
+            });
+        });
+        this.masterSocket.on('WebPacket', (packet) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got web packet from master socket'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Master socket web packet',
+                payload: packet
+            });
 
-        _logger.log(logLevelConstants.LOG_LEVEL_INFO, {
+            let body = null;
+            try {
+                body = JSON.parse(packet.body);
+            } catch (e) { }
+            if (!body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Parse packet\'s body error'
+                });
+                return;
+            }
+
+            switch (packet.service) {
+                case this.serviceTypes.GET_SERVER_ADDR:
+                    this.getServerAddressProcessor(body, callback);
+                    break;
+                default:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                        message: 'Got unknown packet from master socket'
+                    });
+                    break;
+            }
+
+            this.masterSocket.disconnect();
+            this.masterSocket = null;
+        });
+    };
+    getServerAddressProcessor(body, callback) {
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
             message: 'Got server address'
         });
-        _logger.log(logLevelConstants.LOG_LEVEL_DEBUG, {
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
             message: 'Server address',
-            payload: serverAddress
+            payload: body
         });
-        callback(serverAddress);
-        socket.disconnect();
-    });
+        if (typeof callback === 'function') {
+            callback(body);
+        }
+    };
 };
+
+export default Authentication;

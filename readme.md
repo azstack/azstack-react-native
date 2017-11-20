@@ -16,7 +16,7 @@ import AZStack from '../../common/azstack/';
 ```javascript 
 const azstack = new AZStack();
 azstack.config({
-    logLevel: 'DEBUG'
+    logLevel: azstack.logLevelConstants.LOG_LEVEL_NONE
 });
 ```
 

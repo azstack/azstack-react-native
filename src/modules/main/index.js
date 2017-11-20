@@ -9,7 +9,7 @@ class AppMain extends React.Component {
         super(props);
         this.AZStack = new AZStack();
         this.AZStack.config({
-            logLevel: 'DEBUG'
+            logLevel: this.AZStack.logLevelConstants.LOG_LEVEL_DEBUG
         });
         this.AZStack.connect();
     };
