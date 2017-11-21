@@ -3,6 +3,7 @@ import * as serviceTypes from './constant/serviceTypes';
 import * as errorCodes from './constant/errorCodes';
 
 import Logger from './helper/logger';
+import Delegates from './core/delegate';
 import Authentication from './core/authentication';
 
 class AZStack {
@@ -14,17 +15,21 @@ class AZStack {
         this.logLevel = this.logLevelConstants.LOG_LEVEL_NONE;
         this.requestTimeout = 60000;
 
+        this.Logger = new Logger();
+        this.Delegates = new Delegates({ logLevelConstants: this.logLevelConstants, Logger: this.Logger });
+
         this.unCalls = {};
         this.slaveSocket = null;
         this.authenticatingData = {};
         this.authenticatedUser = {};
     };
 
-    addUncalls(key, callbackFunction, resolveFunction, rejectFunction) {
+    addUncalls(key, callbackFunction, resolveFunction, rejectFunction, delegateKey) {
         this.unCalls[key] = {};
         this.unCalls[key].callback = callbackFunction;
         this.unCalls[key].resolve = resolveFunction;
         this.unCalls[key].reject = rejectFunction;
+        this.unCalls[key].delegate = delegateKey;
         this.unCalls[key].timeout = setTimeout(() => {
             const error = {
                 code: this.errorCodes.ERR_REQUEST_TIMEOUT,
@@ -44,6 +49,9 @@ class AZStack {
                 callbackFunction(error, null);
             }
             rejectFunction(error);
+            if (typeof this.Delegates[delegateKey] === 'function') {
+                this.Delegates[delegateKey](error, null);
+            }
             delete this.unCalls[key];
         }, this.requestTimeout);
     };
@@ -60,6 +68,9 @@ class AZStack {
             this.unCalls[key].reject(error);
         } else {
             this.unCalls[key].resolve(data);
+        }
+        if (typeof this.Delegates[this.unCalls[key].delegate] === 'function') {
+            this.Delegates[this.unCalls[key].delegate](error, data);
         }
         delete this.unCalls[key];
     };
@@ -82,7 +93,6 @@ class AZStack {
     };
 
     init() {
-        this.Logger = new Logger();
         this.Logger.setLogLevel(this.logLevel);
         this.Authentication = new Authentication({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, Logger: this.Logger });
     };
@@ -115,7 +125,7 @@ class AZStack {
                 return;
             }
 
-            this.addUncalls('authentication', callback, resolve, reject);
+            this.addUncalls('authentication', callback, resolve, reject, 'onAuthencationComplete');
             this.Authentication.getSlaveSocket({
                 chatProxy: this.chatProxy,
                 azStackUserId: this.authenticatingData.azStackUserId

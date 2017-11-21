@@ -46,6 +46,13 @@ azstack.config({
 
 # 3. constants
 
+### Log levels
+
+> - LOG_LEVEL_NONE: no log
+> - LOG_LEVEL_ERROR: just when error occur
+> - LOG_LEVEL_INFO: log the error and info of porocess running
+> - LOG_LEVEL_DEBUG: log the error, infor and data send/receiced
+
 ### Error codes:
 
 ##### ERR_SOCKET_CONNECT: cannot connect to socket
@@ -63,6 +70,7 @@ this.AZStack.connect((error, authenticatedUser) => {
     console.log(authenticatedUser);
 });
 ```
+
 OR
 
 ```javascript 
@@ -71,4 +79,13 @@ this.AZStack.connect().then((authenticatedUser) => {
 }).catch((error) => {
     console.log(error);
 });
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.onAuthencationComplete = (error, authenticatedUser) => {
+    console.log(error, authenticatedUser);
+}
+this.AZStack.connect();
 ```
