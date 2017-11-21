@@ -9,19 +9,19 @@ class Authentication {
         this.masterSocket = null;
     };
 
-    getSlaveSocket(options, callback) {
+    getSlaveSocket(options) {
         return new Promise((resolve, reject) => {
             this.getServerAddress(options).then((address) => {
-                resolve(address);
-                if (typeof callback === 'function') {
-                    callback(null, address);
-                }
+                const slaveSocket = io.connect(options.chatProxy, {
+                    transports: ['websocket'],
+                    reconnection: false,
+                    autoConnect: false,
+                    forceNew: true
+                });
+                resolve(slaveSocket);
                 return;
             }).catch((error) => {
                 reject(error);
-                if (typeof callback === 'function') {
-                    callback(error, null);
-                }
                 return;
             });
         });
@@ -54,7 +54,7 @@ class Authentication {
                 const getServerAddressPacket = {
                     service: this.serviceTypes.GET_SERVER_ADDR,
                     body: JSON.stringify({
-                        azStackUserId: '123'
+                        azStackUserId: options.azStackUserId
                     })
                 }
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
