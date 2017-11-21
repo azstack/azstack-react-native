@@ -9,6 +9,7 @@ class AppMain extends React.Component {
         super(props);
         this.AZStack = new AZStack();
         this.AZStack.config({
+            requestTimeout: 60000,
             logLevel: this.AZStack.logLevelConstants.LOG_LEVEL_DEBUG,
             authenticatingData: {
                 appId: 'bd7095762179b886c094c31b8f5e4646',
@@ -19,7 +20,10 @@ class AppMain extends React.Component {
                 namespace: ''
             }
         });
-        this.AZStack.connect().then((authenticatedUser) => {
+        this.AZStack.connect((error, authenticatedUser) => {
+            console.log(error);
+            console.log(authenticatedUser);
+        }).then((authenticatedUser) => {
             console.log(authenticatedUser);
         }).catch((error) => {
             console.log(error);

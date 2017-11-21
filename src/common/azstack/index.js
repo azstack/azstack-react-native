@@ -12,13 +12,62 @@ class AZStack {
         this.serviceTypes = serviceTypes;
         this.errorCodes = errorCodes;
         this.logLevel = this.logLevelConstants.LOG_LEVEL_NONE;
+        this.requestTimeout = 60000;
 
+        this.unCalls = {};
         this.slaveSocket = null;
         this.authenticatingData = {};
         this.authenticatedUser = {};
     };
 
+    addUncalls(key, callbackFunction, resolveFunction, rejectFunction) {
+        this.unCalls[key] = {};
+        this.unCalls[key].callback = callbackFunction;
+        this.unCalls[key].resolve = resolveFunction;
+        this.unCalls[key].reject = rejectFunction;
+        this.unCalls[key].timeout = setTimeout(() => {
+            const error = {
+                code: this.errorCodes.ERR_REQUEST_TIMEOUT,
+                message: `Request with key "${key}" has exceed timeout ${this.requestTimeout}s`
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                message: 'A request excced timeout'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'A request excced timeout',
+                payload: {
+                    key: key,
+                    timeout: this.requestTimeout
+                }
+            });
+            if (typeof callbackFunction === 'function') {
+                callbackFunction(error, null);
+            }
+            rejectFunction(error);
+            delete this.unCalls[key];
+        }, this.requestTimeout);
+    };
+
+    callUncalls(key, error, data) {
+        if (!this.unCalls[key]) {
+            return;
+        }
+        clearTimeout(this.unCalls[key].timeout);
+        if (typeof this.unCalls[key].callback === 'function') {
+            this.unCalls[key].callback(error, data);
+        }
+        if (error) {
+            this.unCalls[key].reject(error);
+        } else {
+            this.unCalls[key].resolve(data);
+        }
+        delete this.unCalls[key];
+    };
+
     config(options) {
+        if (options.requestTimeout && typeof options.requestTimeout === 'number') {
+            this.requestTimeout = options.requestTimeout;
+        }
         if (options.logLevel) {
             this.logLevel = options.logLevel;
         }
@@ -38,12 +87,16 @@ class AZStack {
         this.Authentication = new Authentication({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, Logger: this.Logger });
     };
 
+    setupSocket() {
+
+    };
+
     connect(callback) {
         return new Promise((resolve, reject) => {
 
             this.init();
 
-            if (!this.authenticatingData.appId || !this.authenticatingData.publicKey || !this.authenticatingData.fullname) {
+            if (!this.authenticatingData.appId || !this.authenticatingData.publicKey || !this.authenticatingData.azStackUserId || !this.authenticatingData.fullname) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Missing authenticating data'
                 });
@@ -53,7 +106,7 @@ class AZStack {
                 });
                 const error = {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'appId, publicKey, fullname are required for authenticating data'
+                    message: 'appId, publicKey, azStackUserId, fullname are required for authenticating data'
                 };
                 reject(error);
                 if (typeof callback === 'function') {
@@ -62,20 +115,16 @@ class AZStack {
                 return;
             }
 
+            this.addUncalls('authentication', callback, resolve, reject);
             this.Authentication.getSlaveSocket({
                 chatProxy: this.chatProxy,
                 azStackUserId: this.authenticatingData.azStackUserId
             }).then((slaveSocket) => {
-                resolve(slaveSocket);
-                if (typeof callback === 'function') {
-                    callback(null, slaveSocket);
-                }
-                retun;
+                this.setupSocket();
+                this.callUncalls('authentication', null, this.authenticatedUser);
+                return;
             }).catch((error) => {
-                reject(error);
-                if (typeof callback === 'function') {
-                    callback(error, null);
-                }
+                this.callUncalls('authentication', error, null);
                 return;
             });
         });
