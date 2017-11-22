@@ -5,6 +5,7 @@ import * as errorCodes from './constant/errorCodes';
 import Logger from './helper/logger';
 import Delegates from './core/delegate';
 import Authentication from './core/authentication';
+import Call from './core/call';
 
 class AZStack {
     constructor() {
@@ -22,6 +23,7 @@ class AZStack {
         this.unCalls = {};
         this.slaveAddress = null;
         this.slaveSocket = null;
+        this.slaveSocketConnected = false;
         this.iceServers = null;
         this.authenticatingData = {};
         this.authenticatedUser = null;
@@ -79,7 +81,20 @@ class AZStack {
     };
 
     sendSlavePacket(packet) {
-        this.slaveSocket.emit('WebPacket', packet);
+        return new Promise((resolve, reject) => {
+            if (!this.slaveSocketConnected) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send packet to slave server, slave socket not connected'
+                });
+                reject({
+                    code: this.errorCodes.ERR_SOCKET_NOT_CONNECTED,
+                    message: 'Cannot send packet to slave server, slave socket not connected'
+                });
+                return;
+            }
+            this.slaveSocket.emit('WebPacket', packet);
+            resolve();
+        });
     };
 
     receiveSlavePacket(packet) {
@@ -135,6 +150,7 @@ class AZStack {
         this.slaveSocket.open();
 
         this.slaveSocket.on('connect', () => {
+            this.slaveSocketConnected = true;
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Connected to slave server'
             });
@@ -161,6 +177,7 @@ class AZStack {
             }, null);
         });
         this.slaveSocket.on('disconnect', () => {
+            this.slaveSocketConnected = false;
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Disconnected to slave socket'
             });
@@ -198,10 +215,12 @@ class AZStack {
     init() {
         this.Logger.setLogLevel(this.logLevel);
         this.Authentication = new Authentication({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, Logger: this.Logger });
+        this.Call = new Call({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, Logger: this.Logger });
     };
 
     connect(callback) {
         return new Promise((resolve, reject) => {
+            this.addUncalls('authentication', callback, resolve, reject, 'onAuthencationReturn');
 
             if (!this.authenticatingData.appId || !this.authenticatingData.publicKey || !this.authenticatingData.azStackUserId || !this.authenticatingData.fullname) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -211,19 +230,15 @@ class AZStack {
                     message: 'Authenticating data',
                     payload: this.authenticatingData
                 });
-                const error = {
+                this.callUncalls('authentication', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'appId, publicKey, azStackUserId, fullname are required for authenticating data'
-                };
-                reject(error);
-                if (typeof callback === 'function') {
-                    callback(error, null);
-                }
+                    message: 'appId, publicKey, azStackUserId, fullname are required for authenticating data, connect fail'
+                }, null);
+                return;
             }
 
             this.init();
 
-            this.addUncalls('authentication', callback, resolve, reject, 'onAuthencationComplete');
             this.Authentication.getSlaveSocket({
                 masterSocketUri: this.masterSocketUri,
                 azStackUserId: this.authenticatingData.azStackUserId
@@ -232,6 +247,46 @@ class AZStack {
                 this.setupSocket(result.slaveSocket);
             }).catch((error) => {
                 this.callUncalls('authentication', error, null);
+            });
+        });
+    };
+
+    startCallout(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Start callout'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Callout data',
+                payload: options
+            });
+            this.addUncalls('startCallout', callback, resolve, reject, 'onStartCalloutReturn');
+
+            if (!options.callData || !options.callData.callId || !options.callData.phoneNumber) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Missing callout data'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Callout data',
+                    payload: options.callData
+                });
+                this.callUncalls('startCallout', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'callId and phoneNumber are required for start callout'
+                }, null);
+                return;
+            }
+
+            this.Call.startCallout({
+                callData: {
+                    callId: options.callData.callId,
+                    phoneNumber: options.callData.phoneNumber
+                },
+                sendFunction: this.sendSlavePacket
+            }).then((result) => {
+                this.callUncalls('startCallout', null, null);
+            }).catch((error) => {
+                this.callUncalls('startCallout', error, null);
             });
         });
     };

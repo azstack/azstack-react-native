@@ -1,19 +1,19 @@
 
 # 1. requirement 
 
-1. Get out sdk
-2. Install socket.io-client https://github.com/socketio/socket.io-client
-3. Install jsencrypt https://github.com/travist/jsencrypt
+### 1. Get out sdk
+### 2. Install socket.io-client https://github.com/socketio/socket.io-client
+### 3. Install jsencrypt https://github.com/travist/jsencrypt
 
 # 2. setup 
 
-### import out sdk 
+### 1. import out sdk 
 
 ```javascript 
 import AZStack from '../../common/azstack/';
 ```
 
-### config 
+### 2. config 
 
 ```javascript 
 const azstack = new AZStack();
@@ -38,7 +38,7 @@ azstack.config({
 > - ERROR: just when error occur
 > - INFO: log the error and info of porocess running
 > - DEBUG: log the error, infor and data send/receiced
-> #### authenticatingData(required):
+> #### authenticatingData(optional):
 > - appId(required): the id of your azstack application
 > - publicKey(required): the public key of ypur azstack application
 > - azStackUserId(required): an unique string for authenticaing user in your application
@@ -48,22 +48,23 @@ azstack.config({
 
 # 3. constants
 
-### Log levels
+### 1. Log levels
 
 > - LOG_LEVEL_NONE: no log
 > - LOG_LEVEL_ERROR: just when error occur
 > - LOG_LEVEL_INFO: log the error and info of porocess running
 > - LOG_LEVEL_DEBUG: log the error, infor and data send/receiced
 
-### Error codes:
+### 2. Error codes:
 
-##### ERR_SOCKET_CONNECT: cannot connect to socket
-##### ERR_SOCKET_PARSE_BODY: cannot parse socket packet's body
-##### ERR_SOCKET_UNKNOWN_SERVICE: unknow socket packet's service
-##### ERR_REQUEST_TIMEOUT: request timeout exceed
-##### ERR_UNEXPECTED_DATA: some params invalid
-##### ERR_UNEXPECTED_SEND_DATA: some params missing
-##### ERR_UNEXPECTED_RECEIVED_DATA: error in response
+> - ERR_SOCKET_CONNECT: cannot connect to socket
+> - ERR_SOCKET_PARSE_BODY: cannot parse socket packet's body
+> - ERR_SOCKET_UNKNOWN_SERVICE: unknow socket packet's service
+> - ERR_SOCKET_NOT_CONNECTED: socket not connected
+> - ERR_REQUEST_TIMEOUT: request timeout exceed
+> - ERR_UNEXPECTED_DATA: some params invalid
+> - ERR_UNEXPECTED_SEND_DATA: some params missing
+> - ERR_UNEXPECTED_RECEIVED_DATA: error in response
 
 # 4. connect 
 
@@ -87,8 +88,57 @@ this.AZStack.connect().then((authenticatedUser) => {
 OR
 
 ```javascript 
-this.AZStack.Delegates.onAuthencationComplete = (error, authenticatedUser) => {
+this.AZStack.Delegates.onAuthencationReturn = (error, authenticatedUser) => {
     console.log(error, authenticatedUser);
 }
 this.AZStack.connect();
 ```
+
+# 4. call 
+
+### 1. callout
+
+```javascript 
+this.AZStack.startCallout({
+    callData: {
+        callId: Math.round(new Date().getTime() / 1000),
+        phoneNumber: '123456789'
+    }
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.startCallout({
+    callData: {
+        callId: Math.round(new Date().getTime() / 1000),
+        phoneNumber: '123456789'
+    }
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.onStartCalloutReturn = (error, result) => {
+    console.log(error, result);
+}
+this.AZStack.startCallout({
+    callData: {
+        callId: Math.round(new Date().getTime() / 1000),
+        phoneNumber: '123456789'
+    }
+});
+```
+
+> #### callData(required):
+> - callId(required): an unique number
+> - phoneNumber(required): target phone number

@@ -1,5 +1,10 @@
 import React from 'react';
-import { Text } from 'react-native';
+import {
+    View,
+    Text,
+    TextInput,
+    Button
+} from 'react-native';
 
 import AZStack from '../../common/azstack/';
 
@@ -7,6 +12,14 @@ class AppMain extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            authenticatedUser: null,
+            calloutNumber: ''
+        };
+
+        this.startCallout = this.startCallout.bind(this);
+
         this.AZStack = new AZStack();
         this.AZStack.config({
             requestTimeout: 60000,
@@ -22,15 +35,32 @@ class AppMain extends React.Component {
         });
 
         this.AZStack.connect().then((authenticatedUser) => {
-            console.log(authenticatedUser);
-        }).catch((error) => {
-            console.log(error);
-        });
+            this.setState({ authenticatedUser: authenticatedUser })
+        }).catch((error) => { });
+    };
+
+    startCallout() {
+        this.AZStack.startCallout({
+            callData: {
+                callId: Math.round(new Date().getTime() / 1000),
+                phoneNumber: this.state.calloutNumber
+            }
+        }).then(() => { }).catch(() => { });
     };
 
     render() {
         return (
-            <Text>Hello world</Text>
+            <View>
+                <Text>
+                    {this.state.authenticatedUser ? `Connected, user ${this.state.authenticatedUser.fullname}` : 'Connecting'}
+                </Text>
+                <Text>{'\n'}{'\n'}</Text>
+                <TextInput
+                    placeholder="Callout phoneNumber"
+                    onChangeText={(text) => this.setState({ calloutNumber: text })}
+                />
+                <Button onPress={this.startCallout} title="Start Callout" />
+            </View>
         );
     };
 };

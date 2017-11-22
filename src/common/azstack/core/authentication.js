@@ -222,8 +222,17 @@ class Authentication {
                 message: 'Authentication packet',
                 payload: authenticationPacket
             });
-            options.sendFunction(authenticationPacket);
-            resolve();
+            options.sendFunction(authenticationPacket).then(() => {
+                resolve();
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send authentication data, conect fail'
+                });
+                reject({
+                    code: error.code,
+                    message: 'Cannot send authentication data, conect fail'
+                });
+            });
         });
     };
     receiveAuthenticate(body) {
