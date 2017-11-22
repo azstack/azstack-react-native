@@ -8,7 +8,7 @@ import Authentication from './core/authentication';
 
 class AZStack {
     constructor() {
-        this.chatProxy = 'https://www.azhub.xyz:9199';
+        this.masterSocketUri = 'https://www.azhub.xyz:9199';
         this.logLevelConstants = logLevelConstants;
         this.serviceTypes = serviceTypes;
         this.errorCodes = errorCodes;
@@ -36,10 +36,10 @@ class AZStack {
                 message: `Request with key "${key}" has exceed timeout ${this.requestTimeout}s`
             };
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                message: 'A request excced timeout'
+                message: 'A request exceed timeout'
             });
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                message: 'A request excced timeout',
+                message: 'A request exceed timeout',
                 payload: {
                     key: key,
                     timeout: this.requestTimeout
@@ -77,6 +77,75 @@ class AZStack {
 
     setupSocket(slaveSocket) {
         this.slaveSocket = slaveSocket;
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+            message: 'Start connect to slave server'
+        });
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+            message: 'Slave socket uri',
+            payload: this.slaveSocket.io.uri
+        });
+        this.slaveSocket.open();
+
+        this.slaveSocket.on('connect', () => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Connected to slave server'
+            });
+            // this.callUncalls('authentication', null, this.authenticatedUser);
+        });
+        this.slaveSocket.on('connect_error', (error) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                message: 'Cannot connect to slave socket'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Slave socket connection error',
+                payload: error
+            });
+            this.callUncalls('authentication', {
+                code: this.errorCodes.ERR_SOCKET_CONNECT,
+                message: 'Cannot connect to slave socket'
+            }, null);
+        });
+        this.slaveSocket.on('disconnect', () => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Disconnected to slave socket'
+            });
+        });
+        this.slaveSocket.on('WebPacket', (packet) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got web packet from slave socket',
+                payload: packet
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Slave socket web packet',
+                payload: packet
+            });
+
+            let body = null;
+            let parseError = null;
+            try {
+                body = JSON.parse(packet.body);
+            } catch (e) {
+                parseError = e;
+            }
+
+            if (!body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Parse slave socket packet\'s body error'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Parse error',
+                    payload: parseError
+                });
+            }
+
+            switch (packet.service) {
+                default:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                        message: 'Got unknown packet from slave socket'
+                    });
+                    break;
+            }
+        });
     };
 
     config(options) {
@@ -120,22 +189,18 @@ class AZStack {
                 if (typeof callback === 'function') {
                     callback(error, null);
                 }
-                return;
             }
 
             this.init();
 
             this.addUncalls('authentication', callback, resolve, reject, 'onAuthencationComplete');
             this.Authentication.getSlaveSocket({
-                chatProxy: this.chatProxy,
+                masterSocketUri: this.masterSocketUri,
                 azStackUserId: this.authenticatingData.azStackUserId
             }).then((slaveSocket) => {
                 this.setupSocket(slaveSocket);
-                this.callUncalls('authentication', null, this.authenticatedUser);
-                return;
             }).catch((error) => {
                 this.callUncalls('authentication', error, null);
-                return;
             });
         });
     };

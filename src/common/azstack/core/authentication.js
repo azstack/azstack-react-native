@@ -12,24 +12,21 @@ class Authentication {
     getSlaveSocket(options) {
         return new Promise((resolve, reject) => {
             this.getServerAddress(options).then((address) => {
-                const slaveSocket = io.connect(options.chatProxy, {
+                resolve(io.connect(options.masterSocketUri, {
                     transports: ['websocket'],
                     reconnection: false,
                     autoConnect: false,
                     forceNew: true
-                });
-                resolve(slaveSocket);
-                return;
+                }));
             }).catch((error) => {
                 reject(error);
-                return;
             });
         });
     };
 
     getServerAddress(options) {
         return new Promise((resolve, reject) => {
-            this.masterSocket = io.connect(options.chatProxy, {
+            this.masterSocket = io.connect(options.masterSocketUri, {
                 transports: ['websocket'],
                 reconnection: false,
                 autoConnect: false,
@@ -39,8 +36,8 @@ class Authentication {
                 message: 'Start connect to master server'
             });
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                message: 'Chat Proxy',
-                payload: options.chatProxy
+                message: 'Master socket uri',
+                payload: options.masterSocketUri
             });
             this.masterSocket.open();
 
@@ -65,14 +62,16 @@ class Authentication {
             });
             this.masterSocket.on('connect_error', (error) => {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'Cannot connect to master socket',
-                    error: error
+                    message: 'Cannot connect to master socket'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Master socket connection error',
+                    payload: error
                 });
                 reject({
                     code: this.errorCodes.ERR_SOCKET_CONNECT,
                     message: 'Cannot connect to master socket'
                 });
-                return;
             });
             this.masterSocket.on('disconnect', () => {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
@@ -80,19 +79,29 @@ class Authentication {
                 });
             });
             this.masterSocket.on('WebPacket', (packet) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Got web packet from master socket'
+                });
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                    message: 'Got web packet from master socket',
+                    message: 'Master socket web packet',
                     payload: packet
                 });
 
                 let body = null;
+                let parseError = null;
                 try {
                     body = JSON.parse(packet.body);
-                } catch (e) { }
+                } catch (e) {
+                    parseError = e;
+                }
 
                 if (!body) {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                        message: 'Parse master packet\'s body error'
+                        message: 'Parse master socket packet\'s body error'
+                    });
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                        message: 'Parse error',
+                        payload: parseError
                     });
                 }
 
@@ -100,10 +109,8 @@ class Authentication {
                     case this.serviceTypes.GET_SERVER_ADDR:
                         this.getServerAddressProcessor(body).then((address) => {
                             resolve(address);
-                            return;
                         }).catch((error) => {
                             reject(error);
-                            return;
                         });
                         break;
                     default:
@@ -142,7 +149,6 @@ class Authentication {
                 payload: body
             });
             resolve(body);
-            return;
         });
     };
 };
