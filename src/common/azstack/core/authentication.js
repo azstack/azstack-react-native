@@ -1,4 +1,5 @@
 import io from 'socket.io-client';
+import JSEncrypt from 'jsencrypt';
 
 class Authentication {
     constructor(options) {
@@ -149,6 +150,13 @@ class Authentication {
                 payload: body
             });
             resolve(body);
+        });
+    };
+
+    authenticate(options) {
+        return new Promise((resolve, reject) => {
+            console.log(JSEncrypt);
+            resolve();
         });
     };
 };

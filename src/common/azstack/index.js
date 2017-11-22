@@ -8,6 +8,7 @@ import Authentication from './core/authentication';
 
 class AZStack {
     constructor() {
+        this.sdkVersion = '0.0.1';
         this.masterSocketUri = 'https://www.azhub.xyz:9199';
         this.logLevelConstants = logLevelConstants;
         this.serviceTypes = serviceTypes;
@@ -75,6 +76,38 @@ class AZStack {
         delete this.unCalls[key];
     };
 
+    sendSlavePacket(service, body) {
+        this.slaveSocket.emit('WebPacket', { service: service, body: JSON.stringify(body) });
+    };
+
+    receiveSlavePacket(packet) {
+        let body = null;
+        let parseError = null;
+        try {
+            body = JSON.parse(packet.body);
+        } catch (e) {
+            parseError = e;
+        }
+
+        if (!body) {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                message: 'Parse slave socket packet\'s body error'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Parse error',
+                payload: parseError
+            });
+        }
+
+        switch (packet.service) {
+            default:
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Got unknown packet from slave socket'
+                });
+                break;
+        }
+    };
+
     setupSocket(slaveSocket) {
         this.slaveSocket = slaveSocket;
         this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
@@ -90,7 +123,15 @@ class AZStack {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Connected to slave server'
             });
-            // this.callUncalls('authentication', null, this.authenticatedUser);
+            this.Authentication.authenticate({
+                authenticatingData: this.authenticatingData,
+                sendFunction: this.sendSlavePacket
+            }).then((authenticatedUser) => {
+                this.authenticatedUser = authenticatedUser;
+                this.callUncalls('authentication', null, this.authenticatedUser);
+            }).catch((error) => {
+                this.callUncalls('authentication', error, null);
+            });
         });
         this.slaveSocket.on('connect_error', (error) => {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -119,32 +160,7 @@ class AZStack {
                 message: 'Slave socket web packet',
                 payload: packet
             });
-
-            let body = null;
-            let parseError = null;
-            try {
-                body = JSON.parse(packet.body);
-            } catch (e) {
-                parseError = e;
-            }
-
-            if (!body) {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'Parse slave socket packet\'s body error'
-                });
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                    message: 'Parse error',
-                    payload: parseError
-                });
-            }
-
-            switch (packet.service) {
-                default:
-                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                        message: 'Got unknown packet from slave socket'
-                    });
-                    break;
-            }
+            this.receiveSlavePacket(packet);
         });
     };
 

@@ -1,7 +1,9 @@
 
 # 1. requirement 
 
-1. get out sdk
+1. Get out sdk
+2. Install socket.io-client https://github.com/socketio/socket.io-client
+3. Install jsencrypt https://github.com/travist/jsencrypt
 
 # 2. setup 
 
