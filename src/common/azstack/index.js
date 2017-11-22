@@ -75,6 +75,10 @@ class AZStack {
         delete this.unCalls[key];
     };
 
+    setupSocket(slaveSocket) {
+        this.slaveSocket = slaveSocket;
+    };
+
     config(options) {
         if (options.requestTimeout && typeof options.requestTimeout === 'number') {
             this.requestTimeout = options.requestTimeout;
@@ -97,14 +101,8 @@ class AZStack {
         this.Authentication = new Authentication({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, Logger: this.Logger });
     };
 
-    setupSocket() {
-
-    };
-
     connect(callback) {
         return new Promise((resolve, reject) => {
-
-            this.init();
 
             if (!this.authenticatingData.appId || !this.authenticatingData.publicKey || !this.authenticatingData.azStackUserId || !this.authenticatingData.fullname) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -125,12 +123,14 @@ class AZStack {
                 return;
             }
 
+            this.init();
+
             this.addUncalls('authentication', callback, resolve, reject, 'onAuthencationComplete');
             this.Authentication.getSlaveSocket({
                 chatProxy: this.chatProxy,
                 azStackUserId: this.authenticatingData.azStackUserId
             }).then((slaveSocket) => {
-                this.setupSocket();
+                this.setupSocket(slaveSocket);
                 this.callUncalls('authentication', null, this.authenticatedUser);
                 return;
             }).catch((error) => {

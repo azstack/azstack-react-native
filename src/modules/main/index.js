@@ -20,13 +20,8 @@ class AppMain extends React.Component {
                 namespace: ''
             }
         });
-        this.AZStack.Delegates.onAuthencationComplete = (error, authenticatedUser) => {
-            console.log(error, authenticatedUser);
-        }
-        this.AZStack.connect((error, authenticatedUser) => {
-            console.log(error);
-            console.log(authenticatedUser);
-        }).then((authenticatedUser) => {
+
+        this.AZStack.connect().then((authenticatedUser) => {
             console.log(authenticatedUser);
         }).catch((error) => {
             console.log(error);
