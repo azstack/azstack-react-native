@@ -61,6 +61,7 @@ azstack.config({
 ##### ERR_SOCKET_PARSE_BODY: cannot parse socket packet's body
 ##### ERR_SOCKET_UNKNOWN_SERVICE: unknow socket packet's service
 ##### ERR_REQUEST_TIMEOUT: request timeout exceed
+##### ERR_UNEXPECTED_DATA: some params invalid
 ##### ERR_UNEXPECTED_SEND_DATA: some params missing
 ##### ERR_UNEXPECTED_RECEIVED_DATA: error in response
 

@@ -20,9 +20,11 @@ class AZStack {
         this.Delegates = new Delegates({ logLevelConstants: this.logLevelConstants, Logger: this.Logger });
 
         this.unCalls = {};
+        this.slaveAddress = null;
         this.slaveSocket = null;
+        this.iceServers = null;
         this.authenticatingData = {};
-        this.authenticatedUser = {};
+        this.authenticatedUser = null;
     };
 
     addUncalls(key, callbackFunction, resolveFunction, rejectFunction, delegateKey) {
@@ -76,8 +78,8 @@ class AZStack {
         delete this.unCalls[key];
     };
 
-    sendSlavePacket(service, body) {
-        this.slaveSocket.emit('WebPacket', { service: service, body: JSON.stringify(body) });
+    sendSlavePacket(packet) {
+        this.slaveSocket.emit('WebPacket', packet);
     };
 
     receiveSlavePacket(packet) {
@@ -100,6 +102,19 @@ class AZStack {
         }
 
         switch (packet.service) {
+            case this.serviceTypes.AUTHENTICATION_RECEIVE_AUTHENTICATE:
+                this.Authentication.receiveAuthenticate(body).then((result) => {
+                    this.iceServers = result.ice_server;
+                    this.authenticatedUser = {
+                        userId: result.userId,
+                        azStackUserId: result.username,
+                        fullname: result.fullname
+                    };
+                    this.callUncalls('authentication', null, this.authenticatedUser);
+                }).catch((error) => {
+                    this.callUncalls('authentication', error, null);
+                });
+                break;
             default:
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Got unknown packet from slave socket'
@@ -123,13 +138,12 @@ class AZStack {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Connected to slave server'
             });
-            this.Authentication.authenticate({
+            this.Authentication.sendAuthenticate({
+                sdkVersion: this.sdkVersion,
+                slaveAddress: this.slaveAddress,
                 authenticatingData: this.authenticatingData,
-                sendFunction: this.sendSlavePacket
-            }).then((authenticatedUser) => {
-                this.authenticatedUser = authenticatedUser;
-                this.callUncalls('authentication', null, this.authenticatedUser);
-            }).catch((error) => {
+                sendFunction: this.sendSlavePacket.bind(this)
+            }).then(() => { }).catch((error) => {
                 this.callUncalls('authentication', error, null);
             });
         });
@@ -213,8 +227,9 @@ class AZStack {
             this.Authentication.getSlaveSocket({
                 masterSocketUri: this.masterSocketUri,
                 azStackUserId: this.authenticatingData.azStackUserId
-            }).then((slaveSocket) => {
-                this.setupSocket(slaveSocket);
+            }).then((result) => {
+                this.slaveAddress = result.slaveAddress;
+                this.setupSocket(result.slaveSocket);
             }).catch((error) => {
                 this.callUncalls('authentication', error, null);
             });
