@@ -209,8 +209,7 @@ class AZStack {
         });
         this.slaveSocket.on('WebPacket', (packet) => {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                message: 'Got web packet from slave socket',
-                payload: packet
+                message: 'Got web packet from slave socket'
             });
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
                 message: 'Slave socket web packet',
