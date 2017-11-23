@@ -6,3 +6,5 @@ export const CALLOUT_START_SEND = 500;
 export const CALLOUT_START_INITIAL = 610;
 export const CALLOUT_START_DONE = 504;
 export const CALLOUT_DATA_SEND = 501;
+export const CALLOUT_STOP_SEND = 502;
+export const CALLOUT_DATA_STATUS_CHANGED = 503;

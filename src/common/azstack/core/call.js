@@ -21,7 +21,10 @@ class Call {
                 peerConnection: null,
                 localIceCandidates: [],
                 localSessionDescription: null,
-                localStream: null
+                localStream: null,
+                remoteIceCandidates: [],
+                remoteSessionDescription: null,
+                remoteStream: null
             }
         };
     }
@@ -40,6 +43,9 @@ class Call {
         this.callData.webRTC.localIceCandidates = [];
         this.callData.webRTC.localSessionDescription = null;
         this.callData.webRTC.localStream = null;
+        this.callData.webRTC.remoteIceCandidates = [];
+        this.callData.webRTC.remoteSessionDescription = null;
+        this.callData.webRTC.remoteStream = null;
     };
 
     sendStartCallout(options) {
@@ -135,20 +141,20 @@ class Call {
 
             const error = {
                 code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
-                status: null,
+                status: this.callStatuses.CALL_STATUS_CALLOUT_ERROR,
                 message: 'Unknown error'
             };
             switch (body.chargingError) {
-                case this.callStatuses.CALL_STATUS_CALLOUT_BUSY:
+                case this.callStatuses.CALL_STATUS_CALLOUT_INITIAL_BUSY:
                     error.status = this.callStatuses.CALL_STATUS_CALLOUT_BUSY;
                     error.message = 'The toPhoneNumber currently busy'
                     break;
-                case this.callStatuses.CALL_STATUS_CALLOUT_NOT_ENOUGH_BALANCE:
-                    error.status = this.callStatuses.CALL_STATUS_CALLOUT_NOT_ENOUGH_BALANCE;
+                case this.callStatuses.CALL_STATUS_CALLOUT_INITIAL_NOT_ENOUGH_BALANCE:
+                    error.status = this.callStatuses.CALL_STATUS_CALLOUT_ERROR_NOT_ENOUGH_BALANCE;
                     error.message = 'Your account has not enough balance'
                     break;
-                case this.callStatuses.CALL_STATUS_CALLOUT_INVALID_NUMBER:
-                    error.status = this.callStatuses.CALL_STATUS_CALLOUT_INVALID_NUMBER;
+                case this.callStatuses.CALL_STATUS_CALLOUT_INITIAL_INVALID_NUMBER:
+                    error.status = this.callStatuses.CALL_STATUS_CALLOUT_ERROR_INVALID_NUMBER;
                     error.message = 'The toPhoneNumber is not valid'
                     break;
                 default:
@@ -305,6 +311,132 @@ class Call {
                     message: 'Cannot get user media'
                 });
             });
+        });
+    };
+    receiveCalloutStatusChanged(body) {
+        return new Promise((resolve, reject) => {
+            if (!body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect callout status, ignored'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got callout status changed data'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Callout status changed data',
+                payload: body
+            });
+
+            if (this.callData.callId && this.callData.callId !== body.callId) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Ignore callout status changed packet when callId not matched'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                return;
+            }
+
+            switch (body.code) {
+                case this.callStatuses.CALL_STATUS_CALLOUT_STATUS_RECEIVED_CONNECTING:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Callout status changed to connecting'
+                    });
+                    resolve({
+                        status: this.callStatuses.CALL_STATUS_CALLOUT_CONNECTING
+                    });
+                    break;
+                case this.callStatuses.CALL_STATUS_CALLOUT_STATUS_RECEIVED_RINGING:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Callout status changed to ringing'
+                    });
+                    resolve({
+                        status: this.callStatuses.CALL_STATUS_CALLOUT_RINGING
+                    });
+                    break;
+                case this.callStatuses.CALL_STATUS_CALLOUT_STATUS_RECEIVED_ANSWERED:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Callout status changed to answered'
+                    });
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Got remote session description and ice candidates'
+                    });
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                        message: 'Remote session description and ice candidates',
+                        payload: body.sdp_candidate
+                    });
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Set remote session description and ice candidates to peer connection'
+                    });
+                    this.callData.webRTC.peerConnection.setRemoteDescription(new RTCSessionDescription({
+                        sdp: body.sdp_candidate,
+                        type: 'answer'
+                    })).then(() => {
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                            message: 'Set remote session description and ice candidates success'
+                        });
+                    }).catch((error) => {
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                            message: 'Set remote session description and ice candidates fail'
+                        });
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                            message: 'Set remote session description and ice candidates error',
+                            payload: error
+                        });
+                    });
+                    resolve({
+                        status: this.callStatuses.CALL_STATUS_CALLOUT_ANSWERED
+                    });
+                    break;
+                case this.callStatuses.CALL_STATUS_CALLOUT_STATUS_RECEIVED_BUSY:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Callout status changed to busy, callout end'
+                    });
+                    this.clearCallData();
+                    resolve({
+                        status: this.callStatuses.CALL_STATUS_CALLOUT_BUSY
+                    });
+                    break;
+                case this.callStatuses.CALL_STATUS_CALLOUT_STATUS_RECEIVED_NOT_ANSWERED:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Callout status changed to not answered, callout end'
+                    });
+                    this.clearCallData();
+                    resolve({
+                        status: this.callStatuses.CALL_STATUS_CALLOUT_NOT_ANSWERED
+                    });
+                    break;
+                case this.callStatuses.CALL_STATUS_CALLOUT_STATUS_RECEIVED_STOP:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Callout status changed to stop, callout end'
+                    });
+                    this.clearCallData();
+                    resolve({
+                        status: this.callStatuses.CALL_STATUS_CALLOUT_STOP
+                    });
+                    break;
+                case this.callStatuses.CALL_STATUS_CALLOUT_STATUS_RECEIVED_NOT_ENOUGH_BALANCE:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Callout status changed to not enough balance, callout end'
+                    });
+                    this.clearCallData();
+                    resolve({
+                        status: this.callStatuses.CALL_STATUS_CALLOUT_ERROR_NOT_ENOUGH_BALANCE
+                    });
+                    break;
+                default:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Callout status changed to unknown'
+                    });
+                    resolve({
+                        status: this.callStatuses.CALL_STATUS_CALLOUT_UNKNOWN
+                    });
+                    break;
+            }
         });
     };
 };

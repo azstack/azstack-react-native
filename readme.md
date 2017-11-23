@@ -68,9 +68,15 @@ azstack.config({
 
 ### 3. Call statuses
 #### Callout
-> - -3 busy
-> - -4 not enough balance
-> - -5 invalid number
+> - CALL_STATUS_CALLOUT_ERROR: error
+> - CALL_STATUS_CALLOUT_ERROR_NOT_ENOUGH_BALANCE: not enough balance
+> - CALL_STATUS_CALLOUT_ERROR_INVALID_NUMBER: invalid number
+> - CALL_STATUS_CALLOUT_CONNECTING: connecting
+> - CALL_STATUS_CALLOUT_RINGING: ringing
+> - CALL_STATUS_CALLOUT_ANSWERED: answered
+> - CALL_STATUS_CALLOUT_BUSY: busy
+> - CALL_STATUS_CALLOUT_NOT_ANSWERED: not answered
+> - CALL_STATUS_CALLOUT_STOP: stop
 
 # 4. Connect 
 
@@ -159,4 +165,6 @@ this.AZStack.startCallout({
 > - status: callout status
 > - message: error message
 
-#### Delegates
+#### 2. Stop
+
+#### 3. Delegates

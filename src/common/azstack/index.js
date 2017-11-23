@@ -148,6 +148,13 @@ class AZStack {
                     this.callUncalls('startCallout', error, null);
                 });
                 break;
+            case this.serviceTypes.CALLOUT_DATA_STATUS_CHANGED:
+                this.Call.receiveCalloutStatusChanged(body).then((result) => {
+                    if (typeof this.Delegates.onCalloutStatusChanged === 'function') {
+                        this.Delegates.onCalloutStatusChanged(null, result);
+                    }
+                }).catch();
+                break;
             default:
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Got unknown packet from slave socket'
