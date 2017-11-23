@@ -119,7 +119,13 @@ class AZStack {
         switch (packet.service) {
             case this.serviceTypes.AUTHENTICATION_RECEIVE_AUTHENTICATE:
                 this.Authentication.receiveAuthenticate(body).then((result) => {
-                    this.iceServers = result.ice_server;
+                    this.iceServers = result.ice_server.map((iceServer) => {
+                        return {
+                            url: iceServer.url,
+                            username: iceServer.username,
+                            credential: iceServer.password
+                        };
+                    });
                     this.authenticatedUser = {
                         userId: result.userId,
                         azStackUserId: result.username,
@@ -130,8 +136,15 @@ class AZStack {
                     this.callUncalls('authentication', error, null);
                 });
                 break;
-            case this.serviceTypes.CALLOUT_START_ERROR:
-                this.Call.receiveStartCalloutError(body).then(() => { }).catch((error) => {
+            case this.serviceTypes.CALLOUT_START_INITIAL:
+                this.Call.receiveStartCalloutInitial(body).then(() => { }).catch((error) => {
+                    this.callUncalls('startCallout', error, null);
+                });
+                break;
+            case this.serviceTypes.CALLOUT_START_DONE:
+                this.Call.receiveStartCalloutDone(body, this.sendSlavePacket.bind(this)).then((result) => {
+                    this.callUncalls('startCallout', null, null);
+                }).catch((error) => {
                     this.callUncalls('startCallout', error, null);
                 });
                 break;
@@ -285,6 +298,7 @@ class AZStack {
                     callId: options.callData.callId,
                     toPhoneNumber: options.callData.toPhoneNumber
                 },
+                iceServers: this.iceServers,
                 sendFunction: this.sendSlavePacket.bind(this)
             }).then(() => { }).catch((error) => {
                 this.callUncalls('startCallout', error, null);
