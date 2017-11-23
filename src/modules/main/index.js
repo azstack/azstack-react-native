@@ -15,7 +15,8 @@ class AppMain extends React.Component {
 
         this.state = {
             authenticatedUser: null,
-            calloutNumber: ''
+            calloutToPhoneNumber: '',
+            msgId: Math.round(new Date().getTime() / 1000)
         };
 
         this.startCallout = this.startCallout.bind(this);
@@ -39,11 +40,21 @@ class AppMain extends React.Component {
         }).catch((error) => { });
     };
 
+    newMsgId() {
+        let currentTime = Math.round(new Date().getTime() / 1000);
+        if (this.state.msgId >= currentTime) {
+            this.setState({ msgId: this.state.msgId + 1 });
+        } else {
+            this.setState({ msgId: currentTime });
+        }
+    };
+
     startCallout() {
+        this.newMsgId();
         this.AZStack.startCallout({
             callData: {
-                callId: Math.round(new Date().getTime() / 1000),
-                phoneNumber: this.state.calloutNumber
+                callId: this.state.msgId,
+                toPhoneNumber: this.state.calloutToPhoneNumber
             }
         }).then(() => { }).catch(() => { });
     };
@@ -56,8 +67,8 @@ class AppMain extends React.Component {
                 </Text>
                 <Text>{'\n'}{'\n'}</Text>
                 <TextInput
-                    placeholder="Callout phoneNumber"
-                    onChangeText={(text) => this.setState({ calloutNumber: text })}
+                    placeholder="Callout toPhoneNumber"
+                    onChangeText={(text) => this.setState({ calloutToPhoneNumber: text })}
                 />
                 <Button onPress={this.startCallout} title="Start Callout" />
             </View>

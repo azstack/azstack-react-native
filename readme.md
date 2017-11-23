@@ -1,19 +1,19 @@
 
-# 1. requirement 
+# 1. Requirements
 
 ### 1. Get out sdk
 ### 2. Install socket.io-client https://github.com/socketio/socket.io-client
 ### 3. Install jsencrypt https://github.com/travist/jsencrypt
 
-# 2. setup 
+# 2. Setup 
 
-### 1. import out sdk 
+### 1. Import out sdk 
 
 ```javascript 
 import AZStack from '../../common/azstack/';
 ```
 
-### 2. config 
+### 2. Config 
 
 ```javascript 
 const azstack = new AZStack();
@@ -46,7 +46,7 @@ azstack.config({
 > - fullname(required): the name of authenticaing user
 > - namespace(optional): the namespace of authenticaing user
 
-# 3. constants
+# 3. Constants
 
 ### 1. Log levels
 
@@ -62,11 +62,17 @@ azstack.config({
 > - ERR_SOCKET_UNKNOWN_SERVICE: unknow socket packet's service
 > - ERR_SOCKET_NOT_CONNECTED: socket not connected
 > - ERR_REQUEST_TIMEOUT: request timeout exceed
-> - ERR_UNEXPECTED_DATA: some params invalid
-> - ERR_UNEXPECTED_SEND_DATA: some params missing
-> - ERR_UNEXPECTED_RECEIVED_DATA: error in response
+> - ERR_UNEXPECTED_DATA: some params invalid when handling in process
+> - ERR_UNEXPECTED_SEND_DATA: some params invalid in send data
+> - ERR_UNEXPECTED_RECEIVED_DATA: some params invalid in received data
 
-# 4. connect 
+### 3. Call statuses
+#### Callout
+> - -3 busy
+> - -4 not enough balance
+> - -5 invalid number
+
+# 4. Connect 
 
 ```javascript 
 this.AZStack.connect((error, authenticatedUser) => {
@@ -94,9 +100,15 @@ this.AZStack.Delegates.onAuthencationReturn = (error, authenticatedUser) => {
 this.AZStack.connect();
 ```
 
-# 4. call 
+> #### error:
+> - code: error code
+> - message: error message
 
-### 1. callout
+# 4. Calls 
+
+### 1. Callout
+
+#### Start function
 
 ```javascript 
 this.AZStack.startCallout({
@@ -142,3 +154,9 @@ this.AZStack.startCallout({
 > #### callData(required):
 > - callId(required): an unique number
 > - phoneNumber(required): target phone number
+> #### error:
+> - code: error code
+> - status: callout status
+> - message: error message
+
+#### Delegates

@@ -1,6 +1,7 @@
 import * as logLevelConstants from './constant/logLevel';
 import * as serviceTypes from './constant/serviceTypes';
 import * as errorCodes from './constant/errorCodes';
+import * as callStatuses from './constant/callStatuses';
 
 import Logger from './helper/logger';
 import Delegates from './core/delegate';
@@ -14,6 +15,7 @@ class AZStack {
         this.logLevelConstants = logLevelConstants;
         this.serviceTypes = serviceTypes;
         this.errorCodes = errorCodes;
+        this.callStatuses = callStatuses;
         this.logLevel = this.logLevelConstants.LOG_LEVEL_NONE;
         this.requestTimeout = 60000;
 
@@ -60,7 +62,6 @@ class AZStack {
             delete this.unCalls[key];
         }, this.requestTimeout);
     };
-
     callUncalls(key, error, data) {
         if (!this.unCalls[key]) {
             return;
@@ -96,7 +97,6 @@ class AZStack {
             resolve();
         });
     };
-
     receiveSlavePacket(packet) {
         let body = null;
         let parseError = null;
@@ -128,6 +128,11 @@ class AZStack {
                     this.callUncalls('authentication', null, this.authenticatedUser);
                 }).catch((error) => {
                     this.callUncalls('authentication', error, null);
+                });
+                break;
+            case this.serviceTypes.CALLOUT_START_ERROR:
+                this.Call.receiveStartCalloutError(body).then(() => { }).catch((error) => {
+                    this.callUncalls('startCallout', error, null);
                 });
                 break;
             default:
@@ -194,7 +199,6 @@ class AZStack {
             this.receiveSlavePacket(packet);
         });
     };
-
     config(options) {
         if (options.requestTimeout && typeof options.requestTimeout === 'number') {
             this.requestTimeout = options.requestTimeout;
@@ -211,11 +215,10 @@ class AZStack {
             this.authenticatingData.namespace = options.authenticatingData.namespace ? options.authenticatingData.namespace : '';
         }
     };
-
     init() {
         this.Logger.setLogLevel(this.logLevel);
         this.Authentication = new Authentication({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, Logger: this.Logger });
-        this.Call = new Call({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, Logger: this.Logger });
+        this.Call = new Call({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, callStatuses: this.callStatuses, Logger: this.Logger });
     };
 
     connect(callback) {
@@ -262,7 +265,7 @@ class AZStack {
             });
             this.addUncalls('startCallout', callback, resolve, reject, 'onStartCalloutReturn');
 
-            if (!options.callData || !options.callData.callId || !options.callData.phoneNumber) {
+            if (!options.callData || !options.callData.callId || !options.callData.toPhoneNumber) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Missing callout data'
                 });
@@ -272,20 +275,18 @@ class AZStack {
                 });
                 this.callUncalls('startCallout', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'callId and phoneNumber are required for start callout'
+                    message: 'callId and toPhoneNumber are required for start callout'
                 }, null);
                 return;
             }
 
-            this.Call.startCallout({
+            this.Call.sendStartCallout({
                 callData: {
                     callId: options.callData.callId,
-                    phoneNumber: options.callData.phoneNumber
+                    toPhoneNumber: options.callData.toPhoneNumber
                 },
-                sendFunction: this.sendSlavePacket
-            }).then((result) => {
-                this.callUncalls('startCallout', null, null);
-            }).catch((error) => {
+                sendFunction: this.sendSlavePacket.bind(this)
+            }).then(() => { }).catch((error) => {
                 this.callUncalls('startCallout', error, null);
             });
         });

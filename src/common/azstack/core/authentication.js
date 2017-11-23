@@ -12,7 +12,7 @@ class Authentication {
 
     getSlaveSocket(options) {
         return new Promise((resolve, reject) => {
-            this.getServerAddress(options).then((address) => {
+            this.sendGetServerAddress(options).then((address) => {
                 resolve({
                     slaveAddress: address,
                     slaveSocket: io.connect(options.masterSocketUri, {
@@ -28,7 +28,7 @@ class Authentication {
         });
     };
 
-    getServerAddress(options) {
+    sendGetServerAddress(options) {
         return new Promise((resolve, reject) => {
             this.masterSocket = io.connect(options.masterSocketUri, {
                 transports: ['websocket'],
@@ -111,7 +111,7 @@ class Authentication {
 
                 switch (packet.service) {
                     case this.serviceTypes.AUTHENTICATION_GET_SERVER_ADDR:
-                        this.getServerAddressProcessor(body).then((address) => {
+                        this.receiveGetServerAddress(body).then((address) => {
                             resolve(address);
                         }).catch((error) => {
                             reject(error);
@@ -133,7 +133,7 @@ class Authentication {
             });
         });
     };
-    getServerAddressProcessor(body) {
+    receiveGetServerAddress(body) {
         return new Promise((resolve, reject) => {
             if (!body) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
