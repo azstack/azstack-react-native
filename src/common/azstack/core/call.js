@@ -48,6 +48,133 @@ class Call {
         this.callData.webRTC.remoteSessionDescription = null;
         this.callData.webRTC.remoteStream = null;
     };
+    initWebRTC() {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Start peer connection'
+            });
+            this.callData.webRTC.peerConnection = new RTCPeerConnection({ iceServers: this.callData.webRTC.iceServers });
+            this.callData.webRTC.peerConnection.onicecandidate = (event) => {
+                if (!event.candidate) {
+                    let sdpCandidate = '' + this.callData.webRTC.localSessionDescription.sdp;
+                    this.callData.webRTC.localIceCandidates.map(function (iceCandidate) {
+                        sdpCandidate += 'a=' + iceCandidate.candidate + '\r\n';
+                    });
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Gathering ice candidate done'
+                    });
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                        message: 'Spd and ice candidate',
+                        payload: sdpCandidate
+                    });
+                    if (this.callData.callType === this.callStatuses.CALL_TYPE_CALLOUT) {
+                        const calloutDataPacket = {
+                            service: this.serviceTypes.CALLOUT_DATA_SEND,
+                            body: JSON.stringify({
+                                callId: this.callData.callId,
+                                to: this.callData.toPhoneNumber,
+                                sdp_candidate: sdpCandidate
+                            })
+                        };
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                            message: 'Send sdp and ice candidate packet'
+                        });
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                            message: 'Sdp and ice candidate packet',
+                            payload: calloutDataPacket
+                        });
+                        this.sendPacketFunction(calloutDataPacket).then(() => { }).catch(() => { });
+                    }
+                    return;
+                }
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Got local ice candidate'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'ice candidate',
+                    payload: event.candidate
+                });
+                this.callData.webRTC.localIceCandidates.push(event.candidate);
+            };
+            this.callData.webRTC.peerConnection.onaddstream = (event) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Got remote strem'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Remote stream',
+                    payload: event.stream
+                });
+                this.callData.webRTC.remoteStream = event.stream;
+            };
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Get user media, audio only'
+            });
+            getUserMedia({
+                audio: true,
+                video: false
+            }).then(stream => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Got local stream'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Local stream',
+                    payload: stream
+                });
+                this.callData.webRTC.localStream = stream;
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Add local stream to peer connection'
+                });
+                this.callData.webRTC.peerConnection.addStream(stream);
+
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Peer connection create offer'
+                });
+                this.callData.webRTC.peerConnection.createOffer({
+                    mandatory: {
+                        OfferToReceiveAudio: true,
+                        OfferToReceiveVideo: false,
+                    }
+                }).then(this.callData.webRTC.peerConnection.setLocalDescription).then(() => {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Got local session description'
+                    });
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                        message: 'Local session description',
+                        payload: this.callData.webRTC.peerConnection.localDescription
+                    });
+                    this.callData.webRTC.localSessionDescription = this.callData.webRTC.peerConnection.localDescription;
+                    resolve();
+                }).catch((error) => {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Cannot create offer'
+                    });
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                        message: 'Create offer error',
+                        payload: error
+                    });
+                    this.clearCallData();
+                    reject({
+                        error: this.errorCodes.ERR_WEBRTC,
+                        message: 'Cannot create offer'
+                    });
+                });
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Cannot get local stream'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Get local stream error',
+                    payload: error
+                });
+                this.clearCallData();
+                reject({
+                    error: this.errorCodes.ERR_WEBRTC,
+                    message: 'Cannot get user media'
+                });
+            });
+        });
+    };
 
     sendStartCallout(options) {
         return new Promise((resolve, reject) => {
@@ -201,126 +328,10 @@ class Call {
                 return;
             }
 
-            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                message: 'Start peer connection'
-            });
-            this.callData.webRTC.peerConnection = new RTCPeerConnection({ iceServers: this.callData.webRTC.iceServers });
-            this.callData.webRTC.peerConnection.onicecandidate = (event) => {
-                if (!event.candidate) {
-                    let sdpCandidate = '' + this.callData.webRTC.localSessionDescription.sdp;
-                    this.callData.webRTC.localIceCandidates.map(function (iceCandidate) {
-                        sdpCandidate += 'a=' + iceCandidate.candidate + '\r\n';
-                    });
-                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                        message: 'Gathering ice candidate done'
-                    });
-                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                        message: 'Spd and ice candidate',
-                        payload: sdpCandidate
-                    });
-                    const calloutDataPacket = {
-                        service: this.serviceTypes.CALLOUT_DATA_SEND,
-                        body: JSON.stringify({
-                            callId: this.callData.callId,
-                            to: this.callData.toPhoneNumber,
-                            sdp_candidate: sdpCandidate
-                        })
-                    };
-                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                        message: 'Send sdp and ice candidate packet'
-                    });
-                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                        message: 'Sdp and ice candidate packet',
-                        payload: calloutDataPacket
-                    });
-                    this.sendPacketFunction(calloutDataPacket).then(() => { }).catch(() => { });
-                    return;
-                }
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                    message: 'Got local ice candidate'
-                });
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                    message: 'ice candidate',
-                    payload: event.candidate
-                });
-                this.callData.webRTC.localIceCandidates.push(event.candidate);
-            };
-            this.callData.webRTC.peerConnection.onaddstream = (event) => {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                    message: 'Got remote strem'
-                });
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                    message: 'Remote stream',
-                    payload: event.stream
-                });
-                this.callData.webRTC.remoteStream = event.stream;
-            };
-
-            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                message: 'Get user media, audio only'
-            });
-            getUserMedia({
-                audio: true,
-                video: false
-            }).then(stream => {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                    message: 'Got local stream'
-                });
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                    message: 'Local stream',
-                    payload: stream
-                });
-                this.callData.webRTC.localStream = stream;
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                    message: 'Add local stream to peer connection'
-                });
-                this.callData.webRTC.peerConnection.addStream(stream);
-
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                    message: 'Peer connection create offer'
-                });
-                this.callData.webRTC.peerConnection.createOffer({
-                    mandatory: {
-                        OfferToReceiveAudio: true,
-                        OfferToReceiveVideo: false,
-                    }
-                }).then(this.callData.webRTC.peerConnection.setLocalDescription).then(() => {
-                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                        message: 'Got local session description'
-                    });
-                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                        message: 'Local session description',
-                        payload: this.callData.webRTC.peerConnection.localDescription
-                    });
-                    this.callData.webRTC.localSessionDescription = this.callData.webRTC.peerConnection.localDescription;
-                    resolve();
-                }).catch((error) => {
-                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                        message: 'Cannot create offer'
-                    });
-                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                        message: 'Create offer error',
-                        payload: error
-                    });
-                    this.clearCallData();
-                    reject({
-                        error: this.errorCodes.ERR_WEBRTC,
-                        message: 'Cannot create offer'
-                    });
-                });
+            return this.initWebRTC().then(() => {
+                resolve()
             }).catch((error) => {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                    message: 'Cannot get local stream'
-                });
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                    message: 'Get local stream error',
-                    payload: error
-                });
-                this.clearCallData();
-                reject({
-                    error: this.errorCodes.ERR_WEBRTC,
-                    message: 'Cannot get user media'
-                });
+                reject(error);
             });
         });
     };
