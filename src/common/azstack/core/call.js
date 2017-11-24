@@ -11,6 +11,7 @@ class Call {
         this.errorCodes = options.errorCodes;
         this.callStatuses = options.callStatuses;
         this.Logger = options.Logger;
+        this.sendPacketFunction = options.sendPacketFunction;
 
         this.callData = {
             callType: null,
@@ -86,7 +87,7 @@ class Call {
                 message: 'Start callout packet',
                 payload: startCalloutPacket
             });
-            options.sendFunction(startCalloutPacket).then(() => {
+            this.sendPacketFunction(startCalloutPacket).then(() => {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                     message: 'Send start callout packet successfully'
                 });
@@ -167,7 +168,7 @@ class Call {
             reject(error);
         });
     };
-    receiveStartCalloutDone(body, sendFunction) {
+    receiveStartCalloutDone(body) {
         return new Promise((resolve, reject) => {
             if (!body) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -232,7 +233,7 @@ class Call {
                         message: 'Sdp and ice candidate packet',
                         payload: calloutDataPacket
                     });
-                    sendFunction(calloutDataPacket).then(() => { }).catch(() => { });
+                    this.sendPacketFunction(calloutDataPacket).then(() => { }).catch(() => { });
                     return;
                 }
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
@@ -481,7 +482,7 @@ class Call {
                 message: 'Stop callout packet',
                 payload: stopCalloutPacket
             });
-            options.sendFunction(stopCalloutPacket).then(() => {
+            this.sendPacketFunction(stopCalloutPacket).then(() => {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                     message: 'Send stop callout packet successfully'
                 });

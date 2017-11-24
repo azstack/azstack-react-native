@@ -7,6 +7,8 @@ class Authentication {
         this.serviceTypes = options.serviceTypes;
         this.errorCodes = options.errorCodes;
         this.Logger = options.Logger;
+        this.sendPacketFunction = options.sendPacketFunction;
+
         this.masterSocket = null;
     };
 
@@ -222,7 +224,7 @@ class Authentication {
                 message: 'Authentication packet',
                 payload: authenticationPacket
             });
-            options.sendFunction(authenticationPacket).then(() => {
+            this.sendPacketFunction(authenticationPacket).then(() => {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                     message: 'Send authentication packet successfully'
                 });

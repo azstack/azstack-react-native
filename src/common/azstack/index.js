@@ -182,8 +182,7 @@ class AZStack {
             this.Authentication.sendAuthenticate({
                 sdkVersion: this.sdkVersion,
                 slaveAddress: this.slaveAddress,
-                authenticatingData: this.authenticatingData,
-                sendFunction: this.sendSlavePacket.bind(this)
+                authenticatingData: this.authenticatingData
             }).then(() => { }).catch((error) => {
                 this.callUncalls('authentication', error, null);
             });
@@ -236,8 +235,8 @@ class AZStack {
     };
     init() {
         this.Logger.setLogLevel(this.logLevel);
-        this.Authentication = new Authentication({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, Logger: this.Logger });
-        this.Call = new Call({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, callStatuses: this.callStatuses, Logger: this.Logger });
+        this.Authentication = new Authentication({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
+        this.Call = new Call({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, callStatuses: this.callStatuses, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this)  });
     };
 
     connect(callback) {
@@ -304,8 +303,7 @@ class AZStack {
                     callId: options.callData.callId,
                     toPhoneNumber: options.callData.toPhoneNumber
                 },
-                iceServers: this.iceServers,
-                sendFunction: this.sendSlavePacket.bind(this)
+                iceServers: this.iceServers
             }).then(() => { }).catch((error) => {
                 this.callUncalls('startCallout', error, null);
             });
@@ -318,9 +316,7 @@ class AZStack {
             });
             this.addUncalls('stopCallout', callback, resolve, reject, 'onStopCalloutReturn');
 
-            this.Call.sendStopCallout({
-                sendFunction: this.sendSlavePacket.bind(this)
-            }).then((result) => {
+            this.Call.sendStopCallout({}).then((result) => {
                 this.callUncalls('stopCallout', null, null);
             }).catch((error) => {
                 this.callUncalls('stopCallout', error, null);
