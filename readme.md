@@ -32,14 +32,14 @@ azstack.config({
 });
 ```
 
-> #### requestTimeout(optional):
+#### requestTimeout(optional):
 > - must be number, default 60000
-> #### logLevel(optional):
+#### logLevel(optional):
 > - NONE: no log (default)
 > - ERROR: just when error occur
 > - INFO: log the error and info of porocess running
 > - DEBUG: log the error, infor and data send/receiced
-> #### authenticatingData(optional):
+#### authenticatingData(optional):
 > - appId(required): the id of your azstack application
 > - publicKey(required): the public key of ypur azstack application
 > - azStackUserId(required): an unique string for authenticaing user in your application
@@ -107,7 +107,7 @@ this.AZStack.Delegates.onAuthencationReturn = (error, authenticatedUser) => {
 this.AZStack.connect();
 ```
 
-> #### error:
+#### error:
 > - code: error code
 > - message: error message
 
@@ -158,10 +158,10 @@ this.AZStack.startCallout({
 });
 ```
 
-> #### callData(required):
+#### callData(required):
 > - callId(required): an unique number
 > - phoneNumber(required): target phone number
-> #### error:
+#### error:
 > - code: error code
 > - status: callout status
 > - message: error message
@@ -194,7 +194,7 @@ this.AZStack.Delegates.onStopCalloutReturn = (error, result) => {
 this.AZStack.stopCallout({});
 ```
 
-> #### error:
+#### error:
 > - code: error code
 > - status: callout status
 > - message: error message
@@ -206,8 +206,8 @@ this.AZStack.Delegates.onCalloutStatusChanged = (error, result) => {
     console.log(error, result);
 };
 ```
-> #### error:
+#### error:
 > - code: error code
 > - message: error message
-> #### result:
+#### result:
 > - status: call status
