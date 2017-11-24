@@ -4,13 +4,14 @@
 ### 1. Get out sdk
 ### 2. Install socket.io-client https://github.com/socketio/socket.io-client
 ### 3. Install jsencrypt https://github.com/travist/jsencrypt
+### 4. Install react-native-webrtc https://github.com/oney/react-native-webrtc
 
 # 2. Setup 
 
 ### 1. Import out sdk 
 
 ```javascript 
-import AZStack from '../../common/azstack/';
+import AZStack from '{path_to_libs}/azstack/';
 ```
 
 ### 2. Config 
@@ -102,7 +103,7 @@ OR
 ```javascript 
 this.AZStack.Delegates.onAuthencationReturn = (error, authenticatedUser) => {
     console.log(error, authenticatedUser);
-}
+};
 this.AZStack.connect();
 ```
 
@@ -148,7 +149,7 @@ OR
 ```javascript 
 this.AZStack.Delegates.onStartCalloutReturn = (error, result) => {
     console.log(error, result);
-}
+};
 this.AZStack.startCallout({
     callData: {
         callId: Math.round(new Date().getTime() / 1000),
@@ -165,6 +166,48 @@ this.AZStack.startCallout({
 > - status: callout status
 > - message: error message
 
-#### 2. Stop
+#### 2. Stop function
+
+```javascript 
+this.AZStack.stopCallout({}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.stopCallout({}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.onStopCalloutReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStack.stopCallout({});
+```
+
+> #### error:
+> - code: error code
+> - status: callout status
+> - message: error message
 
 #### 3. Delegates
+
+```javascript 
+this.AZStack.Delegates.onCalloutStatusChanged = (error, result) => {
+    console.log(error, result);
+};
+```
+> #### error:
+> - code: error code
+> - message: error message
+> #### result:
+> - status: call status

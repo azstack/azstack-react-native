@@ -87,6 +87,9 @@ class Call {
                 payload: startCalloutPacket
             });
             options.sendFunction(startCalloutPacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send start callout packet successfully'
+                });
                 resolve();
             }).catch((error) => {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -437,6 +440,54 @@ class Call {
                     });
                     break;
             }
+        });
+    };
+    sendStopCallout(options) {
+        return new Promise((resolve, reject) => {
+            if (!this.callData.callId || this.callData.callType !== this.callStatuses.CALL_TYPE_CALLOUT) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot stop callout when not currently on callout'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot stop callout when not currently on callout'
+                });
+                return;
+            }
+
+            const stopCalloutPacket = {
+                service: this.serviceTypes.CALLOUT_STOP_SEND,
+                body: JSON.stringify({
+                    callId: this.callData.callId,
+                    to: this.callData.toPhoneNumber
+                })
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send stop callout packet'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Stop callout packet',
+                payload: stopCalloutPacket
+            });
+            options.sendFunction(stopCalloutPacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send stop callout packet successfully'
+                });
+                this.clearCallData();
+                resolve();
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send stop callout data, stop callout fail'
+                });
+                reject({
+                    code: error.code,
+                    message: 'Cannot send stop callout data, stop callout fail'
+                });
+            });
         });
     };
 };

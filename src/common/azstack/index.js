@@ -311,6 +311,22 @@ class AZStack {
             });
         });
     };
+    stopCallout(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Stop callout'
+            });
+            this.addUncalls('stopCallout', callback, resolve, reject, 'onStopCalloutReturn');
+
+            this.Call.sendStopCallout({
+                sendFunction: this.sendSlavePacket.bind(this)
+            }).then((result) => {
+                this.callUncalls('stopCallout', null, null);
+            }).catch((error) => {
+                this.callUncalls('stopCallout', error, null);
+            });
+        });
+    };
 };
 
 export default AZStack;

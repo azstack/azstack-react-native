@@ -29,13 +29,24 @@ class Delegates {
             }
         });
     };
-
     onCalloutStatusChanged = (error, result) => {
         this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
             message: 'Please implement method onCalloutStatusChanged'
         });
         this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
             message: 'onCalloutStatusChanged delegate data',
+            payload: {
+                error: error,
+                result: result
+            }
+        });
+    };
+    onStopCalloutReturn = (error, result) => {
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+            message: 'Please implement method onStopCalloutReturn'
+        });
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+            message: 'onStopCalloutReturn delegate data',
             payload: {
                 error: error,
                 result: result

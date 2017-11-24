@@ -20,6 +20,7 @@ class AppMain extends React.Component {
         };
 
         this.startCallout = this.startCallout.bind(this);
+        this.stopCallout = this.stopCallout.bind(this);
 
         this.AZStack = new AZStack();
         this.AZStack.config({
@@ -58,6 +59,9 @@ class AppMain extends React.Component {
             }
         }).then(() => { }).catch(() => { });
     };
+    stopCallout() {
+        this.AZStack.stopCallout({}).then(() => { }).catch(() => { });
+    };
 
     render() {
         return (
@@ -71,6 +75,7 @@ class AppMain extends React.Component {
                     onChangeText={(text) => this.setState({ calloutToPhoneNumber: text })}
                 />
                 <Button onPress={this.startCallout} title="Start Callout" />
+                <Button onPress={this.stopCallout} title="Stop Callout" />
             </View>
         );
     };
