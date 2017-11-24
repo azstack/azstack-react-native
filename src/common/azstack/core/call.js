@@ -245,7 +245,14 @@ class Call {
                 this.callData.webRTC.localIceCandidates.push(event.candidate);
             };
             this.callData.webRTC.peerConnection.onaddstream = (event) => {
-                console.log(event);
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Got remote strem'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Remote stream',
+                    payload: event.stream
+                });
+                this.callData.webRTC.remoteStream = event.stream;
             };
 
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
@@ -372,13 +379,14 @@ class Call {
                         message: 'Remote session description and ice candidates',
                         payload: body.sdp_candidate
                     });
+                    this.callData.remoteSessionDescription = new RTCSessionDescription({
+                        sdp: body.sdp_candidate,
+                        type: 'answer'
+                    });
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Set remote session description and ice candidates to peer connection'
                     });
-                    this.callData.webRTC.peerConnection.setRemoteDescription(new RTCSessionDescription({
-                        sdp: body.sdp_candidate,
-                        type: 'answer'
-                    })).then(() => {
+                    this.callData.webRTC.peerConnection.setRemoteDescription(this.callData.remoteSessionDescription).then(() => {
                         this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                             message: 'Set remote session description and ice candidates success'
                         });
