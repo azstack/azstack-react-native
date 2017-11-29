@@ -78,6 +78,18 @@ class Delegates {
             }
         });
     };
+    onCallinStatusChangedByMe = (error, result) => {
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+            message: 'Please implement method onCallinStatusChangedByMe'
+        });
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+            message: 'onCallinStatusChangedByMe delegate data',
+            payload: {
+                error: error,
+                result: result
+            }
+        });
+    };
 }
 
 export default Delegates; 

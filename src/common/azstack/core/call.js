@@ -670,6 +670,99 @@ class Call {
             }
         });
     };
+    receiveCallinStatusChangedByMe(body) {
+        return new Promise((resolve, reject) => {
+            if (!body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect callin status by me, ignored'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got callin status changed by me data'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Callin status changed by me data',
+                payload: body
+            });
+
+            if (this.callData.callId && this.callData.callId !== body.callId) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Ignore callin status changed by me packet when callId not matched'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                return;
+            }
+
+            switch (body.code) {
+                case this.callStatuses.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_RINGING:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Callin status changed to ringing by me'
+                    });
+                    resolve({
+                        status: this.callStatuses.CALL_STATUS_CALLIN_BY_ME_RINGING
+                    });
+                    break;
+                case this.callStatuses.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_ANSWERED:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Callin status changed to answered by me, callin end'
+                    });
+                    this.clearCallData();
+                    resolve({
+                        status: this.callStatuses.CALL_STATUS_CALLIN_BY_ME_ANSWERED
+                    });
+                    break;
+                case this.callStatuses.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_BUSY:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Callin status changed to busy by me, callin end'
+                    });
+                    this.clearCallData();
+                    resolve({
+                        status: this.callStatuses.CALL_STATUS_CALLIN_BY_ME_BUSY
+                    });
+                    break;
+                case this.callStatuses.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_RINGING_STOP:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Callin status changed to rejected by me, callin end'
+                    });
+                    this.clearCallData();
+                    resolve({
+                        status: this.callStatuses.CALL_STATUS_CALLIN_BY_ME_REJECTED
+                    });
+                    break;
+                case this.callStatuses.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_STOP:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Callin status changed to stop by me, callin end'
+                    });
+                    this.clearCallData();
+                    resolve({
+                        status: this.callStatuses.CALL_STATUS_CALLIN_BY_ME_STOP
+                    });
+                    break;
+                case this.callStatuses.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_NOT_ANSWERED:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Callin status changed to not answered by me, callin end'
+                    });
+                    this.clearCallData();
+                    resolve({
+                        status: this.callStatuses.CALL_STATUS_CALLIN_BY_ME_NOT_ANSWERED
+                    });
+                    break;
+                default:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Callin status changed to unknown by me'
+                    });
+                    resolve({
+                        status: this.callStatuses.CALL_STATUS_CALLIN_BY_ME_UNKNOWN
+                    });
+                    break;
+            }
+        });
+    };
 };
 
 export default Call;

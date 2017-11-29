@@ -86,6 +86,15 @@ azstack.config({
 > - CALL_STATUS_CALLIN_STOP: stop
 > - CALL_STATUS_CALLOUT_UNKNOWN: unknown
 
+> - CALL_STATUS_CALLIN_BY_ME_ERROR: error by me
+> - CALL_STATUS_CALLIN_BY_ME_RINGING: ringing by me
+> - CALL_STATUS_CALLIN_BY_ME_ANSWERED: answered by me
+> - CALL_STATUS_CALLIN_BY_ME_BUSY: busy by me
+> - CALL_STATUS_CALLIN_BY_ME_REJECTED: rejected by me
+> - CALL_STATUS_CALLIN_BY_ME_STOP: stop by me
+> - CALL_STATUS_CALLIN_BY_ME_NOT_ANSWERED: not answered by me
+> - CALL_STATUS_CALLIN_BY_ME_UNKNOWN: unknown by me
+
 # 4. Connect 
 
 ```javascript 
@@ -250,3 +259,14 @@ this.AZStack.Delegates.onCallinStatusChanged = (error, result) => {
 > - message: error message
 #### result:
 > - status: call status
+
+```javascript 
+this.AZStack.Delegates.onCallinStatusChangedByMe = (error, result) => {
+    console.log(error, result);
+};
+```
+#### error:
+> - code: error code
+> - message: error message
+#### result:
+> - status: call status by me
