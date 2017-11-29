@@ -165,6 +165,13 @@ class AZStack {
                     }
                 }).catch();
                 break;
+            case this.serviceTypes.CALLIN_STATUS_CHANGED:
+                this.Call.receiveCallinStatusChanged(body).then((result) => {
+                    if (typeof this.Delegates.onCallinStatusChanged === 'function') {
+                        this.Delegates.onCallinStatusChanged(null, result);
+                    }
+                }).catch();
+                break;
 
             default:
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {

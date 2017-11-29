@@ -597,11 +597,77 @@ class Call {
                 });
             });
 
+            this.setCallData({
+                callType: this.callStatuses.CALL_TYPE_CALLIN,
+                callId: body.callId,
+                callinType: body.callType,
+                fromPhoneNumber: body.from,
+                toPhoneNumber: body.to
+            });
+
             resolve({
                 callId: body.callId,
                 fromPhoneNumber: body.from,
                 toPhoneNumber: body.to
             });
+        });
+    };
+    receiveCallinStatusChanged(body) {
+        return new Promise((resolve, reject) => {
+            if (!body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect callin status, ignored'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got callin status changed data'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Callin status changed data',
+                payload: body
+            });
+
+            if (this.callData.callId && this.callData.callId !== body.callId) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Ignore callin status changed packet when callId not matched'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                return;
+            }
+
+            switch (body.code) {
+                case this.callStatuses.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_RINGING_STOP:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Callin status changed to stop when ringing, callin end'
+                    });
+                    this.clearCallData();
+                    resolve({
+                        status: this.callStatuses.CALL_STATUS_CALLIN_RINGING_STOP
+                    });
+                    break;
+                case this.callStatuses.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_STOP:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Callin status changed to stop, callin end'
+                    });
+                    this.clearCallData();
+                    resolve({
+                        status: this.callStatuses.CALL_STATUS_CALLIN_STOP
+                    });
+                    break;
+                default:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Callin status changed to unknown'
+                    });
+                    resolve({
+                        status: this.callStatuses.CALL_STATUS_CALLIN_UNKNOWN
+                    });
+                    break;
+            }
         });
     };
 };

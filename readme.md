@@ -1,14 +1,14 @@
 
 # 1. Requirements
 
-### 1. Get out sdk
+### 1. Get our sdk
 ### 2. Install socket.io-client https://github.com/socketio/socket.io-client
 ### 3. Install jsencrypt https://github.com/travist/jsencrypt
 ### 4. Install react-native-webrtc https://github.com/oney/react-native-webrtc
 
 # 2. Setup 
 
-### 1. Import out sdk 
+### 1. Import our sdk 
 
 ```javascript 
 import AZStack from '{path_to_libs}/azstack/';
@@ -78,6 +78,13 @@ azstack.config({
 > - CALL_STATUS_CALLOUT_BUSY: busy
 > - CALL_STATUS_CALLOUT_NOT_ANSWERED: not answered
 > - CALL_STATUS_CALLOUT_STOP: stop
+> - CALL_STATUS_CALLOUT_UNKNOWN: unknown
+
+#### Callin
+> - CALL_STATUS_CALLIN_ERROR: error
+> - CALL_STATUS_CALLIN_RINGING_STOP: ringing stop
+> - CALL_STATUS_CALLIN_STOP: stop
+> - CALL_STATUS_CALLOUT_UNKNOWN: unknown
 
 # 4. Connect 
 
@@ -110,8 +117,12 @@ this.AZStack.connect();
 #### error:
 > - code: error code
 > - message: error message
+#### authenticatedUser:
+> - azStackUserId: unique key string of users
+> - userId: userId of user in azstack
+> - fullname: fullname of user
 
-# 4. Calls 
+# 5. Calls 
 
 ### 1. Callout
 
@@ -203,6 +214,34 @@ this.AZStack.stopCallout({});
 
 ```javascript 
 this.AZStack.Delegates.onCalloutStatusChanged = (error, result) => {
+    console.log(error, result);
+};
+```
+#### error:
+> - code: error code
+> - message: error message
+#### result:
+> - status: call status
+
+### 2. Callin
+
+#### 1. Delegates
+
+```javascript 
+this.AZStack.Delegates.onCallinStart = (error, result) => {
+    console.log(error, result);
+};
+```
+#### error:
+> - code: error code
+> - message: error message
+#### result:
+> - callId: call Id
+> - fromPhoneNumber: from phone number
+> - toPhoneNumber: to phone number
+
+```javascript 
+this.AZStack.Delegates.onCallinStatusChanged = (error, result) => {
     console.log(error, result);
 };
 ```
