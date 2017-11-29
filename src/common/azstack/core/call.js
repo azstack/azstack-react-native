@@ -763,6 +763,57 @@ class Call {
             }
         });
     };
+    sendNotAnsweredCallin(options) {
+        return new Promise((resolve, reject) => {
+            if (!this.callData.callId || this.callData.callType !== this.callStatuses.CALL_TYPE_CALLIN) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send not answered callin when not currently on callin'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot send not answered callin when not currently on callin'
+                });
+                return;
+            }
+
+            const notAnswerdCallinPacket = {
+                service: this.serviceTypes.CALLIN_STATUS_CHANGED,
+                body: JSON.stringify({
+                    callId: this.callData.callId,
+                    callType: this.callData.callinType,
+                    destination: this.callData.toPhoneNumber,
+                    phonenumber: this.callData.fromPhoneNumber,
+                    code: this.callStatuses.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_NOT_ANSWERED
+                })
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send not answered callin packet'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Send not answered callin packet',
+                payload: notAnswerdCallinPacket
+            });
+            this.sendPacketFunction(notAnswerdCallinPacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send not answered callin packet successfully'
+                });
+                this.clearCallData();
+                resolve();
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send not answered callin data, not answered callin fail'
+                });
+                reject({
+                    code: error.code,
+                    message: 'Cannot send not answered callin data, not answered callin fail'
+                });
+            });
+        });
+    };
     sendStopCallin(options) {
         return new Promise((resolve, reject) => {
             if (!this.callData.callId || this.callData.callType !== this.callStatuses.CALL_TYPE_CALLIN) {

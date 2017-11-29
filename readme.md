@@ -233,6 +233,38 @@ this.AZStack.Delegates.onCalloutStatusChanged = (error, result) => {
 
 ### 2. Callin
 
+#### 3. Not Answered function
+
+```javascript 
+this.AZStack.notAnsweredCallin({}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.notAnsweredCallin({}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.onNotAnsweredCallinReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStack.notAnsweredCallin({});
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
 #### 4. Stop function
 
 ```javascript 

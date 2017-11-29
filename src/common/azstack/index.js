@@ -348,6 +348,20 @@ class AZStack {
         });
     };
 
+    notAnsweredCallin(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Not Answered callin'
+            });
+            this.addUncalls('notAnsweredCallin', callback, resolve, reject, 'onNotAnsweredCallinReturn');
+
+            this.Call.sendNotAnsweredCallin({}).then((result) => {
+                this.callUncalls('notAnsweredCallin', null, null);
+            }).catch((error) => {
+                this.callUncalls('notAnsweredCallin', error, null);
+            });
+        });
+    };
     stopCallin(options, callback) {
         return new Promise((resolve, reject) => {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
