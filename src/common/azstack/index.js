@@ -348,6 +348,20 @@ class AZStack {
         });
     };
 
+    rejectCallin(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Reject callin'
+            });
+            this.addUncalls('rejectCallin', callback, resolve, reject, 'onRejectCallinReturn');
+
+            this.Call.sendRejectCallin({}).then((result) => {
+                this.callUncalls('rejectCallin', null, null);
+            }).catch((error) => {
+                this.callUncalls('rejectCallin', error, null);
+            });
+        });
+    };
     notAnsweredCallin(options, callback) {
         return new Promise((resolve, reject) => {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {

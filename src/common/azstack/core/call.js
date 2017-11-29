@@ -763,6 +763,57 @@ class Call {
             }
         });
     };
+    sendRejectCallin(options) {
+        return new Promise((resolve, reject) => {
+            if (!this.callData.callId || this.callData.callType !== this.callStatuses.CALL_TYPE_CALLIN) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot reject callin when not currently on callin'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot reject callin when not currently on callin'
+                });
+                return;
+            }
+
+            const rejectCallinPacket = {
+                service: this.serviceTypes.CALLIN_STATUS_CHANGED,
+                body: JSON.stringify({
+                    callId: this.callData.callId,
+                    callType: this.callData.callinType,
+                    destination: this.callData.toPhoneNumber,
+                    phonenumber: this.callData.fromPhoneNumber,
+                    code: this.callStatuses.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_RINGING_STOP
+                })
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send reject callin packet'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Reject callin packet',
+                payload: rejectCallinPacket
+            });
+            this.sendPacketFunction(rejectCallinPacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send reject callin packet successfully'
+                });
+                this.clearCallData();
+                resolve();
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send reject callin data, reject callin fail'
+                });
+                reject({
+                    code: error.code,
+                    message: 'Cannot send reject callin data, reject callin fail'
+                });
+            });
+        });
+    };
     sendNotAnsweredCallin(options) {
         return new Promise((resolve, reject) => {
             if (!this.callData.callId || this.callData.callType !== this.callStatuses.CALL_TYPE_CALLIN) {
