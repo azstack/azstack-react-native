@@ -16,7 +16,9 @@ class Call {
         this.callData = {
             callType: null,
             callId: null,
+            fromPhoneNumber: null,
             toPhoneNumber: null,
+            callinType: null,
             webRTC: {
                 iceServers: null,
                 peerConnection: null,
@@ -38,7 +40,9 @@ class Call {
     clearCallData() {
         this.callData.callType = null;
         this.callData.callId = null;
+        this.callData.fromPhoneNumber = null;
         this.callData.toPhoneNumber = null;
+        this.callData.callinType = null;
         this.callData.webRTC.iceServers = null;
         this.callData.webRTC.peerConnection = null;
         this.callData.webRTC.localIceCandidates = [];
@@ -507,6 +511,96 @@ class Call {
                     code: error.code,
                     message: 'Cannot send stop callout data, stop callout fail'
                 });
+            });
+        });
+    };
+
+    receiveCallinStart(body) {
+        return new Promise((resolve, reject) => {
+            if (!body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect callin start request, ignored'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got callin start request data'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Callin start request data',
+                payload: body
+            });
+
+            if (this.callData.callId) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot receive callin when currently on call'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+
+                const responseBusyCallinPacket = {
+                    service: this.serviceTypes.CALLIN_STATUS_CHANGED,
+                    body: JSON.stringify({
+                        callId: body.callId,
+                        callType: body.callType,
+                        destination: body.from,
+                        phonenumber: body.to,
+                        code: this.callStatuses.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_BUSY
+                    })
+                };
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send response busy callin packet'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Response busy callin packet',
+                    payload: responseBusyCallinPacket
+                });
+                this.sendPacketFunction(responseBusyCallinPacket).then(() => {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Send response busy callin packet successfully'
+                    });
+                }).catch((error) => {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                        message: 'Cannot send response busy callin data'
+                    });
+                });
+                return;
+            }
+
+            const responseRingingCallinPacket = {
+                service: this.serviceTypes.CALLIN_STATUS_CHANGED,
+                body: JSON.stringify({
+                    callId: body.callId,
+                    callType: body.callType,
+                    destination: body.from,
+                    phonenumber: body.to,
+                    code: this.callStatuses.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_RINGING
+                })
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send response ringing callin packet'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Response ringing callin packet',
+                payload: responseRingingCallinPacket
+            });
+            this.sendPacketFunction(responseRingingCallinPacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send response ringing callin packet successfully'
+                });
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send response ringing callin data'
+                });
+            });
+
+            resolve({
+                callId: body.callId,
+                fromPhoneNumber: body.from,
+                toPhoneNumber: body.to
             });
         });
     };

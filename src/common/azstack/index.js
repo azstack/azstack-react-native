@@ -136,6 +136,7 @@ class AZStack {
                     this.callUncalls('authentication', error, null);
                 });
                 break;
+
             case this.serviceTypes.CALLOUT_START_INITIAL:
                 this.Call.receiveStartCalloutInitial(body).then(() => { }).catch((error) => {
                     this.callUncalls('startCallout', error, null);
@@ -155,6 +156,15 @@ class AZStack {
                     }
                 }).catch();
                 break;
+
+            case this.serviceTypes.CALLIN_START:
+                this.Call.receiveCallinStart(body).then((result) => {
+                    if (typeof this.Delegates.onCallinStart === 'function') {
+                        this.Delegates.onCallinStart(null, result);
+                    }
+                }).catch();
+                break;
+
             default:
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Got unknown packet from slave socket'
@@ -236,7 +246,7 @@ class AZStack {
     init() {
         this.Logger.setLogLevel(this.logLevel);
         this.Authentication = new Authentication({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
-        this.Call = new Call({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, callStatuses: this.callStatuses, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this)  });
+        this.Call = new Call({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, callStatuses: this.callStatuses, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
     };
 
     connect(callback) {
