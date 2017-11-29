@@ -364,7 +364,7 @@ class Call {
             }
 
             switch (body.code) {
-                case this.callStatuses.CALL_STATUS_CALLOUT_STATUS_RECEIVED_CONNECTING:
+                case this.callStatuses.CALL_STATUS_CALLOUT_STATUS_FROM_SERVER_CONNECTING:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callout status changed to connecting'
                     });
@@ -372,7 +372,7 @@ class Call {
                         status: this.callStatuses.CALL_STATUS_CALLOUT_CONNECTING
                     });
                     break;
-                case this.callStatuses.CALL_STATUS_CALLOUT_STATUS_RECEIVED_RINGING:
+                case this.callStatuses.CALL_STATUS_CALLOUT_STATUS_FROM_SERVER_RINGING:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callout status changed to ringing'
                     });
@@ -380,7 +380,7 @@ class Call {
                         status: this.callStatuses.CALL_STATUS_CALLOUT_RINGING
                     });
                     break;
-                case this.callStatuses.CALL_STATUS_CALLOUT_STATUS_RECEIVED_ANSWERED:
+                case this.callStatuses.CALL_STATUS_CALLOUT_STATUS_FROM_SERVER_ANSWERED:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callout status changed to answered'
                     });
@@ -415,7 +415,7 @@ class Call {
                         status: this.callStatuses.CALL_STATUS_CALLOUT_ANSWERED
                     });
                     break;
-                case this.callStatuses.CALL_STATUS_CALLOUT_STATUS_RECEIVED_BUSY:
+                case this.callStatuses.CALL_STATUS_CALLOUT_STATUS_FROM_SERVER_BUSY:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callout status changed to busy, callout end'
                     });
@@ -424,7 +424,7 @@ class Call {
                         status: this.callStatuses.CALL_STATUS_CALLOUT_BUSY
                     });
                     break;
-                case this.callStatuses.CALL_STATUS_CALLOUT_STATUS_RECEIVED_NOT_ANSWERED:
+                case this.callStatuses.CALL_STATUS_CALLOUT_STATUS_FROM_SERVER_NOT_ANSWERED:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callout status changed to not answered, callout end'
                     });
@@ -433,7 +433,7 @@ class Call {
                         status: this.callStatuses.CALL_STATUS_CALLOUT_NOT_ANSWERED
                     });
                     break;
-                case this.callStatuses.CALL_STATUS_CALLOUT_STATUS_RECEIVED_STOP:
+                case this.callStatuses.CALL_STATUS_CALLOUT_STATUS_FROM_SERVER_STOP:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callout status changed to stop, callout end'
                     });
@@ -442,7 +442,7 @@ class Call {
                         status: this.callStatuses.CALL_STATUS_CALLOUT_STOP
                     });
                     break;
-                case this.callStatuses.CALL_STATUS_CALLOUT_STATUS_RECEIVED_NOT_ENOUGH_BALANCE:
+                case this.callStatuses.CALL_STATUS_CALLOUT_STATUS_FROM_SERVER_NOT_ENOUGH_BALANCE:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callout status changed to not enough balance, callout end'
                     });

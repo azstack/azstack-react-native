@@ -8,3 +8,7 @@ export const CALLOUT_START_DONE = 504;
 export const CALLOUT_DATA_SEND = 501;
 export const CALLOUT_STOP_SEND = 502;
 export const CALLOUT_DATA_STATUS_CHANGED = 503;
+
+export const CALLIN_START = 505;
+export const CALLIN_STATUS_CHANGED = 506;
+export const CALLIN_STATUS_CHANGED_BY_ME = 508;
