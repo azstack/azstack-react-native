@@ -26,7 +26,6 @@ class AZStack {
         this.slaveAddress = null;
         this.slaveSocket = null;
         this.slaveSocketConnected = false;
-        this.iceServers = null;
         this.authenticatingData = {};
         this.authenticatedUser = null;
     };
@@ -119,12 +118,14 @@ class AZStack {
         switch (packet.service) {
             case this.serviceTypes.AUTHENTICATION_RECEIVE_AUTHENTICATE:
                 this.Authentication.receiveAuthenticate(body).then((result) => {
-                    this.iceServers = result.ice_server.map((iceServer) => {
-                        return {
-                            url: iceServer.url,
-                            username: iceServer.username,
-                            credential: iceServer.password
-                        };
+                    this.Call.setIceServers({
+                        iceServers: result.ice_server.map((iceServer) => {
+                            return {
+                                url: iceServer.url,
+                                username: iceServer.username,
+                                credential: iceServer.password
+                            };
+                        })
                     });
                     this.authenticatedUser = {
                         userId: result.userId,
@@ -312,8 +313,7 @@ class AZStack {
                 callData: {
                     callId: options.callData.callId,
                     toPhoneNumber: options.callData.toPhoneNumber
-                },
-                iceServers: this.iceServers
+                }
             }).then(() => { }).catch((error) => {
                 this.callUncalls('startCallout', error, null);
             });

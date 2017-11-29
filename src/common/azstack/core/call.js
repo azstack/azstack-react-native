@@ -13,6 +13,7 @@ class Call {
         this.Logger = options.Logger;
         this.sendPacketFunction = options.sendPacketFunction;
 
+        this.iceServers = null;
         this.callData = {
             callType: null,
             callId: null,
@@ -20,7 +21,6 @@ class Call {
             toPhoneNumber: null,
             callinType: null,
             webRTC: {
-                iceServers: null,
                 peerConnection: null,
                 localIceCandidates: [],
                 localSessionDescription: null,
@@ -31,7 +31,9 @@ class Call {
             }
         };
     }
-
+    setIceServers(options) {
+        this.iceServers = options.iceServers;
+    };
     setCallData(options) {
         for (let field in options) {
             this.callData[field] = options[field];
@@ -43,7 +45,6 @@ class Call {
         this.callData.fromPhoneNumber = null;
         this.callData.toPhoneNumber = null;
         this.callData.callinType = null;
-        this.callData.webRTC.iceServers = null;
         this.callData.webRTC.peerConnection = null;
         this.callData.webRTC.localIceCandidates = [];
         this.callData.webRTC.localSessionDescription = null;
@@ -57,7 +58,7 @@ class Call {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Start peer connection'
             });
-            this.callData.webRTC.peerConnection = new RTCPeerConnection({ iceServers: this.callData.webRTC.iceServers });
+            this.callData.webRTC.peerConnection = new RTCPeerConnection({ iceServers: this.iceServers });
             this.callData.webRTC.peerConnection.onicecandidate = (event) => {
                 if (!event.candidate) {
                     let sdpCandidate = '' + this.callData.webRTC.localSessionDescription.sdp;
@@ -202,7 +203,6 @@ class Call {
                 callId: options.callData.callId,
                 toPhoneNumber: options.callData.toPhoneNumber
             });
-            this.callData.webRTC.iceServers = options.iceServers;
 
             const startCalloutPacket = {
                 service: this.serviceTypes.CALLOUT_START_SEND,
