@@ -90,6 +90,18 @@ class Delegates {
             }
         });
     };
+    onStopCallinReturn = (error, result) => {
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+            message: 'Please implement method onStopCallinReturn'
+        });
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+            message: 'onStopCallinReturn delegate data',
+            payload: {
+                error: error,
+                result: result
+            }
+        });
+    };
 }
 
 export default Delegates; 

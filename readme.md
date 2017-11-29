@@ -216,7 +216,6 @@ this.AZStack.stopCallout({});
 
 #### error:
 > - code: error code
-> - status: callout status
 > - message: error message
 
 #### 3. Delegates
@@ -234,7 +233,39 @@ this.AZStack.Delegates.onCalloutStatusChanged = (error, result) => {
 
 ### 2. Callin
 
-#### 1. Delegates
+#### 4. Stop function
+
+```javascript 
+this.AZStack.stopCallin({}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.stopCallin({}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.onStopCallinReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStack.stopCallin({});
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### 5. Delegates
 
 ```javascript 
 this.AZStack.Delegates.onCallinStart = (error, result) => {

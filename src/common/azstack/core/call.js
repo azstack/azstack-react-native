@@ -763,6 +763,57 @@ class Call {
             }
         });
     };
+    sendStopCallin(options) {
+        return new Promise((resolve, reject) => {
+            if (!this.callData.callId || this.callData.callType !== this.callStatuses.CALL_TYPE_CALLIN) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot stop callin when not currently on callin'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot stop callin when not currently on callin'
+                });
+                return;
+            }
+
+            const stopCallinPacket = {
+                service: this.serviceTypes.CALLIN_STATUS_CHANGED,
+                body: JSON.stringify({
+                    callId: this.callData.callId,
+                    callType: this.callData.callinType,
+                    destination: this.callData.toPhoneNumber,
+                    phonenumber: this.callData.fromPhoneNumber,
+                    code: this.callStatuses.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_STOP
+                })
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send stop callin packet'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Stop callin packet',
+                payload: stopCallinPacket
+            });
+            this.sendPacketFunction(stopCallinPacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send stop callin packet successfully'
+                });
+                this.clearCallData();
+                resolve();
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send stop callin data, stop callin fail'
+                });
+                reject({
+                    code: error.code,
+                    message: 'Cannot send stop callin data, stop callin fail'
+                });
+            });
+        });
+    };
 };
 
 export default Call;

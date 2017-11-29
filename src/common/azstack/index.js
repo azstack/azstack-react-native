@@ -347,6 +347,21 @@ class AZStack {
             });
         });
     };
+
+    stopCallin(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Stop callin'
+            });
+            this.addUncalls('stopCallin', callback, resolve, reject, 'onStopCallinReturn');
+
+            this.Call.sendStopCallin({}).then((result) => {
+                this.callUncalls('stopCallin', null, null);
+            }).catch((error) => {
+                this.callUncalls('stopCallin', error, null);
+            });
+        });
+    };
 };
 
 export default AZStack;
