@@ -90,6 +90,18 @@ class Delegates {
             }
         });
     };
+    onAnswerCallinReturn = (error, result) => {
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+            message: 'Please implement method onAnswerCallinReturn'
+        });
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+            message: 'onAnswerCallinReturn delegate data',
+            payload: {
+                error: error,
+                result: result
+            }
+        });
+    };
     onRejectCallinReturn = (error, result) => {
         this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
             message: 'Please implement method onRejectCallinReturn'

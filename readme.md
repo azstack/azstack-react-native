@@ -233,6 +233,38 @@ this.AZStack.Delegates.onCalloutStatusChanged = (error, result) => {
 
 ### 2. Callin
 
+#### 1. Answer function
+
+```javascript 
+this.AZStack.answerCallin({}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.answerCallin({}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.onAnswerCallinReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStack.answerCallin({});
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
 #### 2. Reject function
 
 ```javascript 

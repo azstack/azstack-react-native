@@ -22,6 +22,11 @@ class AppMain extends React.Component {
         this.startCallout = this.startCallout.bind(this);
         this.stopCallout = this.stopCallout.bind(this);
 
+        this.answerCallin = this.answerCallin.bind(this);
+        this.rejectCallin = this.rejectCallin.bind(this);
+        this.notAnsweredCallin = this.notAnsweredCallin.bind(this);
+        this.stopCallin = this.stopCallin.bind(this);
+
         this.AZStack = new AZStack();
         this.AZStack.config({
             requestTimeout: 60000,
@@ -63,6 +68,19 @@ class AppMain extends React.Component {
         this.AZStack.stopCallout({}).then(() => { }).catch(() => { });
     };
 
+    answerCallin() {
+        this.AZStack.answerCallin().then(() => { }).catch(() => { });
+    };
+    rejectCallin() {
+        this.AZStack.rejectCallin().then(() => { }).catch(() => { });
+    };
+    notAnsweredCallin() {
+        this.AZStack.notAnsweredCallin().then(() => { }).catch(() => { });
+    };
+    stopCallin() {
+        this.AZStack.stopCallin().then(() => { }).catch(() => { });
+    };
+
     render() {
         return (
             <View>
@@ -76,6 +94,11 @@ class AppMain extends React.Component {
                 />
                 <Button onPress={this.startCallout} title="Start Callout" />
                 <Button onPress={this.stopCallout} title="Stop Callout" />
+                <Text>{'\n'}{'\n'}</Text>
+                <Button onPress={this.answerCallin} title="Anwser Callin" />
+                <Button onPress={this.rejectCallin} title="Reject Callin" />
+                <Button onPress={this.notAnsweredCallin} title="Not answer Callin" />
+                <Button onPress={this.stopCallin} title="Stop Callin" />
             </View>
         );
     };

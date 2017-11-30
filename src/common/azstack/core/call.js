@@ -15,6 +15,7 @@ class Call {
 
         this.iceServers = null;
         this.callData = {
+            isCaller: null,
             callType: null,
             callId: null,
             fromPhoneNumber: null,
@@ -40,6 +41,7 @@ class Call {
         }
     };
     clearCallData() {
+        this.callData.isCaller = null;
         this.callData.callType = null;
         this.callData.callId = null;
         this.callData.fromPhoneNumber = null;
@@ -95,6 +97,41 @@ class Call {
                         }).catch(() => {
                             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                                 message: 'Send sdp and ice candidate packet fail'
+                            });
+                        });
+                    }
+                    if (this.callData.callType === this.callStatuses.CALL_TYPE_CALLIN) {
+                        const answerCallinPacket = {
+                            service: this.serviceTypes.CALLIN_STATUS_CHANGED,
+                            body: JSON.stringify({
+                                callId: this.callData.callId,
+                                callType: this.callData.callinType,
+                                destination: this.callData.fromPhoneNumber,
+                                phonenumber: this.callData.toPhoneNumber,
+                                code: this.callStatuses.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_ANSWERED,
+                                sdp_candidate: sdpCandidate
+                            })
+                        };
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                            message: 'Send answer callin packet'
+                        });
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                            message: 'Answer callin packet',
+                            payload: answerCallinPacket
+                        });
+                        this.sendPacketFunction(answerCallinPacket).then(() => {
+                            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                                message: 'Send answer callin packet successfully'
+                            });
+                            resolve();
+                        }).catch((error) => {
+                            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                                message: 'Cannot send answer callin data, answer callin fail'
+                            });
+                            this.clearCallData();
+                            reject({
+                                code: error.code,
+                                message: 'Cannot send answer callin data, answer callin fail'
                             });
                         });
                     }
@@ -162,13 +199,39 @@ class Call {
                     message: 'Peer connection options mandatory',
                     payload: peerConnectionMandatory
                 });
-                this.callData.webRTC.peerConnection.createOffer({
-                    mandatory: peerConnectionMandatory
-                }).then(this.callData.webRTC.peerConnection.setLocalDescription).then(() => {
-                    peerConnectionInitConnectionSuccess();
-                }).catch((error) => {
-                    peerConnectionInitConnectionError(error);
-                });
+                if (this.callData.isCaller) {
+                    this.callData.webRTC.peerConnection.createOffer({
+                        mandatory: peerConnectionMandatory
+                    }).then(this.callData.webRTC.peerConnection.setLocalDescription).then(() => {
+                        peerConnectionInitConnectionSuccess();
+                    }).catch((error) => {
+                        peerConnectionInitConnectionError(error);
+                    });
+                } else {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Set remote session description and ice candidates to peer connection'
+                    });
+                    this.callData.webRTC.peerConnection.setRemoteDescription(this.callData.webRTC.remoteSessionDescription).then(() => {
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                            message: 'Set remote session description and ice candidates success'
+                        });
+                    }).catch((error) => {
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                            message: 'Set remote session description and ice candidates fail'
+                        });
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                            message: 'Set remote session description and ice candidates error',
+                            payload: error
+                        });
+                    });
+                    this.callData.webRTC.peerConnection.createAnswer({
+                        mandatory: peerConnectionMandatory
+                    }).then(this.callData.webRTC.peerConnection.setLocalDescription).then(() => {
+                        peerConnectionInitConnectionSuccess();
+                    }).catch((error) => {
+                        peerConnectionInitConnectionError(error);
+                    });
+                }
             };
             const getUserMediaError = (error) => {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
@@ -193,7 +256,9 @@ class Call {
                     payload: this.callData.webRTC.peerConnection.localDescription
                 });
                 this.callData.webRTC.localSessionDescription = this.callData.webRTC.peerConnection.localDescription;
-                resolve();
+                if (this.callData.callType === this.callStatuses.CALL_TYPE_CALLOUT) {
+                    resolve();
+                }
             };
             const peerConnectionInitConnectionError = (error) => {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
@@ -230,6 +295,7 @@ class Call {
             }
 
             this.setCallData({
+                isCaller: true,
                 callType: this.callStatuses.CALL_TYPE_CALLOUT,
                 callId: options.callData.callId,
                 toPhoneNumber: options.callData.toPhoneNumber
@@ -426,14 +492,14 @@ class Call {
                         message: 'Remote session description and ice candidates',
                         payload: body.sdp_candidate
                     });
-                    this.callData.remoteSessionDescription = new RTCSessionDescription({
+                    this.callData.webRTC.remoteSessionDescription = new RTCSessionDescription({
                         sdp: body.sdp_candidate,
                         type: 'answer'
                     });
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Set remote session description and ice candidates to peer connection'
                     });
-                    this.callData.webRTC.peerConnection.setRemoteDescription(this.callData.remoteSessionDescription).then(() => {
+                    this.callData.webRTC.peerConnection.setRemoteDescription(this.callData.webRTC.remoteSessionDescription).then(() => {
                         this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                             message: 'Set remote session description and ice candidates success'
                         });
@@ -629,11 +695,23 @@ class Call {
             });
 
             this.setCallData({
+                isCaller: false,
                 callType: this.callStatuses.CALL_TYPE_CALLIN,
                 callId: body.callId,
                 callinType: body.callType,
                 fromPhoneNumber: body.from,
                 toPhoneNumber: body.to
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got remote session description and ice candidates'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Remote session description and ice candidates',
+                payload: body.sdp_candidate
+            });
+            this.callData.webRTC.remoteSessionDescription = new RTCSessionDescription({
+                sdp: body.sdp_candidate,
+                type: 'offer'
             });
 
             resolve({
@@ -794,6 +872,30 @@ class Call {
             }
         });
     };
+    sendAnswerCallin(options) {
+        return new Promise((resolve, reject) => {
+            if (!this.callData.callId || this.callData.callType !== this.callStatuses.CALL_TYPE_CALLIN) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot answer callin when not currently on callin'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot answer callin when not currently on callin'
+                });
+                return;
+            }
+
+            return this.initWebRTC().then(() => {
+                resolve()
+            }).catch((error) => {
+                reject(error);
+            });
+        });
+    };
     sendRejectCallin(options) {
         return new Promise((resolve, reject) => {
             if (!this.callData.callId || this.callData.callType !== this.callStatuses.CALL_TYPE_CALLIN) {
@@ -816,8 +918,8 @@ class Call {
                 body: JSON.stringify({
                     callId: this.callData.callId,
                     callType: this.callData.callinType,
-                    destination: this.callData.toPhoneNumber,
-                    phonenumber: this.callData.fromPhoneNumber,
+                    destination: this.callData.fromPhoneNumber,
+                    phonenumber: this.callData.toPhoneNumber,
                     code: this.callStatuses.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_RINGING_STOP
                 })
             };
@@ -867,8 +969,8 @@ class Call {
                 body: JSON.stringify({
                     callId: this.callData.callId,
                     callType: this.callData.callinType,
-                    destination: this.callData.toPhoneNumber,
-                    phonenumber: this.callData.fromPhoneNumber,
+                    destination: this.callData.fromPhoneNumber,
+                    phonenumber: this.callData.toPhoneNumber,
                     code: this.callStatuses.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_NOT_ANSWERED
                 })
             };
@@ -918,8 +1020,8 @@ class Call {
                 body: JSON.stringify({
                     callId: this.callData.callId,
                     callType: this.callData.callinType,
-                    destination: this.callData.toPhoneNumber,
-                    phonenumber: this.callData.fromPhoneNumber,
+                    destination: this.callData.fromPhoneNumber,
+                    phonenumber: this.callData.toPhoneNumber,
                     code: this.callStatuses.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_STOP
                 })
             };
