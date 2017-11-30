@@ -17,6 +17,19 @@ class Delegates {
         });
     };
 
+    onToggleAudioStateReturn = (error, result) => {
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+            message: 'Please implement method onToggleAudioStateReturn'
+        });
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+            message: 'onToggleAudioStateReturn delegate data',
+            payload: {
+                error: error,
+                result: result
+            }
+        });
+    };
+
     onStartCalloutReturn = (error, result) => {
         this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
             message: 'Please implement method onStartCalloutReturn'

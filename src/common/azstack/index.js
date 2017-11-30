@@ -297,6 +297,21 @@ class AZStack {
         });
     };
 
+    toggleAutioState(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Toggle audio state'
+            });
+            this.addUncalls('toggleAutioState', callback, resolve, reject, 'onToggleAudioStateReturn');
+
+            this.Call.toggleAudioState({}).then((result) => {
+                this.callUncalls('toggleAutioState', null, null);
+            }).catch((error) => {
+                this.callUncalls('toggleAutioState', error, null);
+            });
+        });
+    };
+
     startCallout(options, callback) {
         return new Promise((resolve, reject) => {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {

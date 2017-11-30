@@ -276,6 +276,71 @@ class Call {
             };
         });
     };
+    toggleAudioState(options) {
+        return new Promise((resolve, reject) => {
+            if (!this.callData.callId) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot toggle audio state when not currently on call'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot toggle audio state when not currently on call'
+                });
+                return;
+            }
+            if (!this.callData.webRTC.localStream) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot toggle audio state, local stream not found'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot toggle audio state, local stream not found'
+                });
+                return;
+            }
+
+            const audioTracks = this.callData.webRTC.localStream.getAudioTracks();
+            if (audioTracks.length === 0) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot toggle audio state, no audio stream found'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot toggle audio state, no audio stream found'
+                });
+                return;
+            }
+
+            if (options && typeof options.state === 'boolean') {
+                audioTracks.map((audioTrack) => {
+                    audioTrack.enabled = options.state
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Set audio state done'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Audio state',
+                    payload: audioTracks[0].enabled ? 'on' : 'off'
+                });
+            } else {
+                audioTracks.map((audioTrack) => {
+                    audioTrack.enabled = !audioTrack.enabled
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Toggle audio state done'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Audio state',
+                    payload: audioTracks[0].enabled ? 'on' : 'off'
+                });
+            }
+            resolve();
+        });
+    };
 
     sendStartCallout(options) {
         return new Promise((resolve, reject) => {

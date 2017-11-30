@@ -19,6 +19,8 @@ class AppMain extends React.Component {
             msgId: Math.round(new Date().getTime() / 1000)
         };
 
+        this.toggleAutioState = this.toggleAutioState.bind(this);
+
         this.startCallout = this.startCallout.bind(this);
         this.stopCallout = this.stopCallout.bind(this);
 
@@ -55,6 +57,10 @@ class AppMain extends React.Component {
         }
     };
 
+    toggleAutioState() {
+        this.AZStack.toggleAutioState({}).then(() => { }).catch(() => { });
+    };
+
     startCallout() {
         this.newMsgId();
         this.AZStack.startCallout({
@@ -87,6 +93,8 @@ class AppMain extends React.Component {
                 <Text>
                     {this.state.authenticatedUser ? `Connected, user ${this.state.authenticatedUser.fullname}` : 'Connecting'}
                 </Text>
+                <Text>{'\n'}{'\n'}</Text>
+                <Button onPress={this.toggleAutioState} title="Toggle Audio State" />
                 <Text>{'\n'}{'\n'}</Text>
                 <TextInput
                     placeholder="Callout toPhoneNumber"

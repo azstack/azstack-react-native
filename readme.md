@@ -397,3 +397,45 @@ this.AZStack.Delegates.onCallinStatusChangedByMe = (error, result) => {
 > - message: error message
 #### result:
 > - status: call status by me
+
+### 3. Ultilities
+
+#### Toggle audio state function
+
+```javascript 
+this.AZStack.toggleAudioState({
+    state: false
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.toggleAudioState({
+    state: false
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.onToggleAudioStateReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStack.toggleAudioState({
+    state: false
+});
+```
+
+#### options(optional):
+> - state(optional): boolean for on or off
+#### error:
+> - code: error code
+> - message: error message
