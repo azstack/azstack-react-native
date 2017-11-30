@@ -88,7 +88,15 @@ class Call {
                             message: 'Sdp and ice candidate packet',
                             payload: calloutDataPacket
                         });
-                        this.sendPacketFunction(calloutDataPacket).then(() => { }).catch(() => { });
+                        this.sendPacketFunction(calloutDataPacket).then(() => {
+                            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                                message: 'Send sdp and ice candidate packet successfully'
+                            });
+                        }).catch(() => {
+                            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                                message: 'Send sdp and ice candidate packet fail'
+                            });
+                        });
                     }
                     return;
                 }
@@ -112,13 +120,24 @@ class Call {
                 this.callData.webRTC.remoteStream = event.stream;
             };
 
-            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                message: 'Get user media, audio only'
-            });
-            getUserMedia({
+            const mediaConstraints = {
                 audio: true,
                 video: false
-            }).then(stream => {
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Get user media'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Get user media constraints',
+                payload: mediaConstraints
+            });
+            getUserMedia(mediaConstraints).then((stream) => {
+                getUserMediaSuccess(stream);
+            }).catch((error) => {
+                getUserMediaError(error);
+            });
+
+            const getUserMediaSuccess = (stream) => {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                     message: 'Got local stream'
                 });
@@ -132,39 +151,26 @@ class Call {
                 });
                 this.callData.webRTC.peerConnection.addStream(stream);
 
+                const peerConnectionMandatory = {
+                    OfferToReceiveAudio: true,
+                    OfferToReceiveVideo: false
+                };
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                    message: 'Peer connection create offer'
+                    message: 'Peer connection init'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Peer connection options mandatory',
+                    payload: peerConnectionMandatory
                 });
                 this.callData.webRTC.peerConnection.createOffer({
-                    mandatory: {
-                        OfferToReceiveAudio: true,
-                        OfferToReceiveVideo: false,
-                    }
+                    mandatory: peerConnectionMandatory
                 }).then(this.callData.webRTC.peerConnection.setLocalDescription).then(() => {
-                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                        message: 'Got local session description'
-                    });
-                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                        message: 'Local session description',
-                        payload: this.callData.webRTC.peerConnection.localDescription
-                    });
-                    this.callData.webRTC.localSessionDescription = this.callData.webRTC.peerConnection.localDescription;
-                    resolve();
+                    peerConnectionInitConnectionSuccess();
                 }).catch((error) => {
-                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                        message: 'Cannot create offer'
-                    });
-                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                        message: 'Create offer error',
-                        payload: error
-                    });
-                    this.clearCallData();
-                    reject({
-                        error: this.errorCodes.ERR_WEBRTC,
-                        message: 'Cannot create offer'
-                    });
+                    peerConnectionInitConnectionError(error);
                 });
-            }).catch((error) => {
+            };
+            const getUserMediaError = (error) => {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                     message: 'Cannot get local stream'
                 });
@@ -177,7 +183,32 @@ class Call {
                     error: this.errorCodes.ERR_WEBRTC,
                     message: 'Cannot get user media'
                 });
-            });
+            };
+            const peerConnectionInitConnectionSuccess = () => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Got local session description'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Local session description',
+                    payload: this.callData.webRTC.peerConnection.localDescription
+                });
+                this.callData.webRTC.localSessionDescription = this.callData.webRTC.peerConnection.localDescription;
+                resolve();
+            };
+            const peerConnectionInitConnectionError = (error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Cannot init connection'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Init connection error',
+                    payload: error
+                });
+                this.clearCallData();
+                reject({
+                    error: this.errorCodes.ERR_WEBRTC,
+                    message: 'Cannot init connection'
+                });
+            };
         });
     };
 
