@@ -140,7 +140,6 @@ this.AZStack.connect();
 ```javascript 
 this.AZStack.startCallout({
     callData: {
-        callId: Math.round(new Date().getTime() / 1000),
         toPhoneNumber: '123456789'
     }
 }, (error, result) => {
@@ -154,7 +153,6 @@ OR
 ```javascript 
 this.AZStack.startCallout({
     callData: {
-        callId: Math.round(new Date().getTime() / 1000),
         toPhoneNumber: '123456789'
     }
 }).then((result) => {
@@ -172,14 +170,12 @@ this.AZStack.Delegates.onStartCalloutReturn = (error, result) => {
 };
 this.AZStack.startCallout({
     callData: {
-        callId: Math.round(new Date().getTime() / 1000),
         toPhoneNumber: '123456789'
     }
 });
 ```
 
 #### callData(required):
-> - callId(required): an unique number
 > - phoneNumber(required): target phone number
 #### error:
 > - code: error code
@@ -372,7 +368,6 @@ this.AZStack.Delegates.onCallinStart = (error, result) => {
 > - code: error code
 > - message: error message
 #### result:
-> - callId: call Id
 > - fromPhoneNumber: from phone number
 > - toPhoneNumber: to phone number
 

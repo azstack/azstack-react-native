@@ -780,7 +780,6 @@ class Call {
             });
 
             resolve({
-                callId: body.callId,
                 fromPhoneNumber: body.from,
                 toPhoneNumber: body.to
             });

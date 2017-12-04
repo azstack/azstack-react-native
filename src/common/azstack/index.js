@@ -28,6 +28,17 @@ class AZStack {
         this.slaveSocketConnected = false;
         this.authenticatingData = {};
         this.authenticatedUser = null;
+
+        this.uniqueId = Math.round(new Date().getTime() / 1000);
+    };
+
+    newUniqueId() {
+        let currentTime = Math.round(new Date().getTime() / 1000);
+        if (this.uniqueId >= currentTime) {
+            this.uniqueId = this.uniqueId + 1;
+        } else {
+            this.uniqueId = currentTime;
+        }
     };
 
     addUncall(key, callbackFunction, resolveFunction, rejectFunction, delegateKey) {
@@ -323,7 +334,7 @@ class AZStack {
             });
             this.addUncall('startCallout', callback, resolve, reject, 'onStartCalloutReturn');
 
-            if (!options.callData || !options.callData.callId || !options.callData.toPhoneNumber) {
+            if (!options.callData || !options.callData.toPhoneNumber) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Missing callout data'
                 });
@@ -333,14 +344,15 @@ class AZStack {
                 });
                 this.callUncall('startCallout', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'callId and toPhoneNumber are required for start callout'
+                    message: 'toPhoneNumber is required for start callout'
                 }, null);
                 return;
             }
 
+            this.newUniqueId();
             this.Call.sendStartCallout({
                 callData: {
-                    callId: options.callData.callId,
+                    callId: this.uniqueId,
                     toPhoneNumber: options.callData.toPhoneNumber
                 }
             }).then(() => { }).catch((error) => {

@@ -15,8 +15,7 @@ class AppMain extends React.Component {
 
         this.state = {
             authenticatedUser: null,
-            calloutToPhoneNumber: '',
-            msgId: Math.round(new Date().getTime() / 1000)
+            calloutToPhoneNumber: ''
         };
 
         this.toggleAutioState = this.toggleAutioState.bind(this);
@@ -48,24 +47,13 @@ class AppMain extends React.Component {
         }).catch((error) => { });
     };
 
-    newMsgId() {
-        let currentTime = Math.round(new Date().getTime() / 1000);
-        if (this.state.msgId >= currentTime) {
-            this.setState({ msgId: this.state.msgId + 1 });
-        } else {
-            this.setState({ msgId: currentTime });
-        }
-    };
-
     toggleAutioState() {
         this.AZStack.toggleAutioState({}).then(() => { }).catch(() => { });
     };
 
     startCallout() {
-        this.newMsgId();
         this.AZStack.startCallout({
             callData: {
-                callId: this.state.msgId,
                 toPhoneNumber: this.state.calloutToPhoneNumber
             }
         }).then(() => { }).catch(() => { });
