@@ -2,6 +2,7 @@ import * as logLevelConstants from './constant/logLevel';
 import * as serviceTypes from './constant/serviceTypes';
 import * as errorCodes from './constant/errorCodes';
 import * as callConstants from './constant/callConstants';
+import * as listConstants from './constant/listConstants';
 
 import Logger from './helper/logger';
 import Delegates from './core/delegate';
@@ -16,6 +17,7 @@ class AZStack {
         this.serviceTypes = serviceTypes;
         this.errorCodes = errorCodes;
         this.callConstants = callConstants;
+        this.listConstants = listConstants;
         this.logLevel = this.logLevelConstants.LOG_LEVEL_NONE;
         this.requestTimeout = 60000;
 
@@ -198,6 +200,13 @@ class AZStack {
                     }
                 }).catch();
                 break;
+            case this.serviceTypes.PAID_CALL_LOGS_GET:
+                this.Call.receivePaidCallLogsList(body).then((result) => {
+                    this.callUncall('getPaidCallLogs', null, result);
+                }).catch((error) => {
+                    this.callUncall('getPaidCallLogs', error, null);
+                });
+                break;
 
             default:
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -280,7 +289,7 @@ class AZStack {
     init() {
         this.Logger.setLogLevel(this.logLevel);
         this.Authentication = new Authentication({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
-        this.Call = new Call({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, callConstants: this.callConstants, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
+        this.Call = new Call({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, callConstants: this.callConstants, listConstants: this.listConstants, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
     };
 
     connect(callback) {
@@ -436,6 +445,19 @@ class AZStack {
                 this.callUncall('stopCallin', null, null);
             }).catch((error) => {
                 this.callUncall('stopCallin', error, null);
+            });
+        });
+    };
+
+    getPaidCallLogs(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Get paid call logs'
+            });
+            this.addUncall('getPaidCallLogs', callback, resolve, reject, 'onGetPaidCallLogsReturn');
+
+            this.Call.sendGetPaidCallLogs({}).then().catch((error) => {
+                this.callUncall('getPaidCallLogs', error, null);
             });
         });
     };

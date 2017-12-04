@@ -164,6 +164,18 @@ class Delegates {
             }
         });
     };
+    onGetPaidCallLogsReturn = (error, result) => {
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+            message: 'Please implement method onGetPaidCallLogsReturn'
+        });
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+            message: 'onGetPaidCallLogsReturn delegate data',
+            payload: {
+                error: error,
+                result: result
+            }
+        });
+    };
 }
 
 export default Delegates; 

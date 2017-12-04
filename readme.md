@@ -25,6 +25,7 @@
     * [5.3. Ultilities](#53-ultilities)
         * [5.3.1. Toggle audio state function](#531-toggle-audio-state-function)
     * [5.4. Paid call logs](#54-paid-call-logs)
+        * [5.4.1. Get paid call logs](#541-get-paid-call-logs)
         * [5.4.2. Delegates](#542-delegates)
 
 
@@ -483,6 +484,47 @@ this.AZStack.toggleAudioState({
 > - message: error message
 
 ### 5.4. Paid call logs
+
+#### 5.4.1. Get paid call logs
+
+```javascript 
+this.AZStack.getPaidCallLogs({}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.getPaidCallLogs({}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.onGetPaidCallLogsReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStack.getPaidCallLogs({});
+```
+
+#### error:
+> - code: error code
+> - message: error message
+#### result: list if callLog with
+> - callId: id of call
+> - callType: type of call
+> - callStatus: status of call
+> - userId: id of user
+> - fromPhoneNumber: from phone number
+> - toPhoneNumber: to phone number
+> - recordTime: recording time
+> - recordUrl: recording url
 
 #### 5.4.2. Delegates
 

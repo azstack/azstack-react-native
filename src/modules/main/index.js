@@ -20,6 +20,8 @@ class AppMain extends React.Component {
 
         this.toggleAutioState = this.toggleAutioState.bind(this);
 
+        this.getPaidCallLogs = this.getPaidCallLogs.bind(this);
+
         this.startCallout = this.startCallout.bind(this);
         this.stopCallout = this.stopCallout.bind(this);
 
@@ -49,6 +51,10 @@ class AppMain extends React.Component {
 
     toggleAutioState() {
         this.AZStack.toggleAutioState({}).then(() => { }).catch(() => { });
+    };
+
+    getPaidCallLogs() {
+        this.AZStack.getPaidCallLogs({}).then(() => { }).catch(() => { });
     };
 
     startCallout() {
@@ -83,6 +89,8 @@ class AppMain extends React.Component {
                 </Text>
                 <Text>{'\n'}{'\n'}</Text>
                 <Button onPress={this.toggleAutioState} title="Toggle Audio State" />
+                <Text>{'\n'}{'\n'}</Text>
+                <Button onPress={this.getPaidCallLogs} title="Get paid call logs" />
                 <Text>{'\n'}{'\n'}</Text>
                 <TextInput
                     placeholder="Callout toPhoneNumber"

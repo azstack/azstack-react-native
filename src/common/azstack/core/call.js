@@ -10,6 +10,7 @@ class Call {
         this.serviceTypes = options.serviceTypes;
         this.errorCodes = options.errorCodes;
         this.callConstants = options.callConstants;
+        this.listConstants = options.listConstants;
         this.Logger = options.Logger;
         this.sendPacketFunction = options.sendPacketFunction;
 
@@ -31,7 +32,7 @@ class Call {
                 remoteStream: null
             }
         };
-    }
+    };
     setIceServers(options) {
         this.iceServers = options.iceServers;
     };
@@ -1168,6 +1169,110 @@ class Call {
             }
 
             resolve(callLog);
+        });
+    };
+    sendGetPaidCallLogs(options, callback) {
+        return new Promise((resolve, reject) => {
+
+            const getPaidCallLogsPacket = {
+                service: this.serviceTypes.PAID_CALL_LOGS_GET,
+                body: JSON.stringify({})
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send get paid call logs packet'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Get paid call logs packet',
+                payload: getPaidCallLogsPacket
+            });
+            this.sendPacketFunction(getPaidCallLogsPacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send get paid call logs packet successfully'
+                });
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send get paid call logs data, get paid call logs fail'
+                });
+                reject({
+                    code: error.code,
+                    message: 'Cannot send get paid call logs data, get paid call logs fail'
+                });
+            });
+        });
+    };
+    receivePaidCallLogsList(body) {
+        return new Promise((resolve, reject) => {
+            if (!body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect paid call logs list, ignored'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Cannot detect paid call logs list, get paid call logs fail'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got paid call logs list'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Paid call logs list data',
+                payload: body
+            });
+
+            if (body.r !== this.errorCodes.REQUEST_SUCCESS_FROM_SERVER) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Server response with error, get paid call logs fail'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Server response with error, get paid call logs fail'
+                });
+                return;
+            }
+
+            let callLogs = body.data.map((item) => {
+                let callLog = {
+                    callId: item.callId,
+                    fromPhoneNumber: item.from,
+                    toPhoneNumber: item.to,
+                    recordTime: item.recordTime,
+                    recordUrl: item.url,
+                    userId: item.userId,
+                    callType: this.callConstants.CALL_PAID_LOG_CALL_TYPE_UNKNOWN,
+                    callStatus: this.callConstants.CALL_PAID_LOG_CALL_STATUS_UNKNOWN
+                }
+
+                switch (item.callType) {
+                    case this.callConstants.CALL_PAID_LOG_FROM_SERVER_CALL_TYPE_CALLOUT:
+                        callLog.callType = this.callConstants.CALL_PAID_LOG_CALL_TYPE_CALLOUT;
+                        break;
+                    case this.callConstants.CALL_PAID_LOG_FROM_SERVER_CALL_TYPE_CALLIN:
+                        callLog.callType = this.callConstants.CALL_PAID_LOG_CALL_TYPE_CALLIN;
+                        break;
+                    default:
+                        break;
+                }
+
+                switch (item.status) {
+                    case this.callConstants.CALL_PAID_LOG_FROM_SERVER_CALL_STATUS_ANSWERED:
+                        callLog.callStatus = this.callConstants.CALL_PAID_LOG_CALL_STATUS_ANSWERED;
+                        break;
+                    case this.callConstants.CALL_PAID_LOG_FROM_SERVER_CALL_STATUS_REJECTED:
+                        callLog.callStatus = this.callConstants.CALL_PAID_LOG_CALL_STATUS_REJECTED;
+                        break;
+                    case this.callConstants.CALL_PAID_LOG_FROM_SERVER_CALL_STATUS_NOT_ANSWERED:
+                        callLog.callStatus = this.callConstants.CALL_PAID_LOG_CALL_STATUS_NOT_ANSWERED;
+                        break;
+                    default:
+                        break;
+                }
+
+                return callLog;
+            });
+
+            resolve(callLogs);
         });
     };
 };
