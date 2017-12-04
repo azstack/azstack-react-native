@@ -1,10 +1,37 @@
 
+# Table of Contents
+
+    * [1. Requirements] (#1-requirements)
+    * [2. Setup] (#2-setup)
+    * [3. Constants] (#3-constants)
+        * [3.1. Log levels] (#31-log-levels)
+        * [3.2. Error codes] (#32-error-codes)
+        * [3.3. Call statuses] (#33-call-statuses)
+    * [4. Connect] (#4-connect)
+    * [5. Call] (#5-call)
+        * [5.1 Callout] (#51-callout)
+            * [5.1.1. Start function] (#511-start-function)
+            * [5.1.2. Stop function] (#512-stop-function)
+            * [5.1.3. Delegates] (#513-delegates)
+        * [5.2 Callin] (#52-callin)
+            * [5.2.1. Answer function] (#521-answer-function)
+            * [5.2.2. Reject function] (#522-reject-function)
+            * [5.2.3. Not Answered function] (#523-not-answered-function)
+            * [5.2.4. Stop function] (#524-stop-function)
+            * [5.2.5. Delegates] (#525-delegates)
+        * [5.3. Ultilities] (#53-ultilities)
+            * [5.3.1. Toggle audio state function] (#531-toggle-audio-state-function)
+
+
+
 # 1. Requirements
 
 ### 1.1. Get our sdk
 ### 1.2. Install socket.io-client https://github.com/socketio/socket.io-client
 ### 1.3. Install jsencrypt https://github.com/travist/jsencrypt
 ### 1.4. Install react-native-webrtc https://github.com/oney/react-native-webrtc
+
+
 
 # 2. Setup 
 
@@ -46,6 +73,8 @@ azstack.config({
 > - userCredentials(optional): the creadentials of authenticaing user
 > - fullname(required): the name of authenticaing user
 > - namespace(optional): the namespace of authenticaing user
+
+
 
 # 3. Constants
 
@@ -95,6 +124,8 @@ azstack.config({
 > - CALL_STATUS_CALLIN_BY_ME_NOT_ANSWERED: not answered by me
 > - CALL_STATUS_CALLIN_BY_ME_UNKNOWN: unknown by me
 
+
+
 # 4. Connect 
 
 ```javascript 
@@ -130,6 +161,8 @@ this.AZStack.connect();
 > - azStackUserId: unique key string of users
 > - userId: userId of user in azstack
 > - fullname: fullname of user
+
+
 
 # 5. Calls 
 
