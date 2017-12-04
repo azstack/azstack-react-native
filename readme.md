@@ -1,20 +1,20 @@
 
 # 1. Requirements
 
-### 1. Get our sdk
-### 2. Install socket.io-client https://github.com/socketio/socket.io-client
-### 3. Install jsencrypt https://github.com/travist/jsencrypt
-### 4. Install react-native-webrtc https://github.com/oney/react-native-webrtc
+### 1.1. Get our sdk
+### 1.2. Install socket.io-client https://github.com/socketio/socket.io-client
+### 1.3. Install jsencrypt https://github.com/travist/jsencrypt
+### 1.4. Install react-native-webrtc https://github.com/oney/react-native-webrtc
 
 # 2. Setup 
 
-### 1. Import our sdk 
+### 2.1. Import our sdk 
 
 ```javascript 
 import AZStack from '{path_to_libs}/azstack/';
 ```
 
-### 2. Config 
+### 2.2. Config 
 
 ```javascript 
 const azstack = new AZStack();
@@ -49,14 +49,14 @@ azstack.config({
 
 # 3. Constants
 
-### 1. Log levels
+### 3.1. Log levels
 
 > - LOG_LEVEL_NONE: no log
 > - LOG_LEVEL_ERROR: just when error occur
 > - LOG_LEVEL_INFO: log the error and info of porocess running
 > - LOG_LEVEL_DEBUG: log the error, infor and data send/receiced
 
-### 2. Error codes:
+### 3.2. Error codes:
 
 > - ERR_SOCKET_CONNECT: cannot connect to socket
 > - ERR_SOCKET_PARSE_BODY: cannot parse socket packet's body
@@ -67,8 +67,8 @@ azstack.config({
 > - ERR_UNEXPECTED_SEND_DATA: some params invalid in send data
 > - ERR_UNEXPECTED_RECEIVED_DATA: some params invalid in received data
 
-### 3. Call statuses
-#### Callout
+### 3.3. Call statuses
+#### 3.3.1. Callout
 > - CALL_STATUS_CALLOUT_ERROR: error
 > - CALL_STATUS_CALLOUT_ERROR_NOT_ENOUGH_BALANCE: not enough balance
 > - CALL_STATUS_CALLOUT_ERROR_INVALID_NUMBER: invalid number
@@ -80,7 +80,7 @@ azstack.config({
 > - CALL_STATUS_CALLOUT_STOP: stop
 > - CALL_STATUS_CALLOUT_UNKNOWN: unknown
 
-#### Callin
+#### 3.3.2. Callin
 > - CALL_STATUS_CALLIN_ERROR: error
 > - CALL_STATUS_CALLIN_RINGING_STOP: ringing stop
 > - CALL_STATUS_CALLIN_STOP: stop
@@ -133,9 +133,9 @@ this.AZStack.connect();
 
 # 5. Calls 
 
-### 1. Callout
+### 5.1. Callout
 
-#### Start function
+#### 5.1.1. Start function
 
 ```javascript 
 this.AZStack.startCallout({
@@ -182,7 +182,7 @@ this.AZStack.startCallout({
 > - status: callout status
 > - message: error message
 
-#### 2. Stop function
+#### 5.1.2. Stop function
 
 ```javascript 
 this.AZStack.stopCallout({}, (error, result) => {
@@ -214,7 +214,7 @@ this.AZStack.stopCallout({});
 > - code: error code
 > - message: error message
 
-#### 3. Delegates
+#### 5.1.3. Delegates
 
 ```javascript 
 this.AZStack.Delegates.onCalloutStatusChanged = (error, result) => {
@@ -227,9 +227,9 @@ this.AZStack.Delegates.onCalloutStatusChanged = (error, result) => {
 #### result:
 > - status: call status
 
-### 2. Callin
+### 5.2. Callin
 
-#### 1. Answer function
+#### 5.2.1. Answer function
 
 ```javascript 
 this.AZStack.answerCallin({}, (error, result) => {
@@ -261,7 +261,7 @@ this.AZStack.answerCallin({});
 > - code: error code
 > - message: error message
 
-#### 2. Reject function
+#### 5.2.2. Reject function
 
 ```javascript 
 this.AZStack.rejectCallin({}, (error, result) => {
@@ -293,7 +293,7 @@ this.AZStack.rejectCallin({});
 > - code: error code
 > - message: error message
 
-#### 3. Not Answered function
+#### 5.2.3. Not Answered function
 
 ```javascript 
 this.AZStack.notAnsweredCallin({}, (error, result) => {
@@ -325,7 +325,7 @@ this.AZStack.notAnsweredCallin({});
 > - code: error code
 > - message: error message
 
-#### 4. Stop function
+#### 5.2.4. Stop function
 
 ```javascript 
 this.AZStack.stopCallin({}, (error, result) => {
@@ -357,7 +357,7 @@ this.AZStack.stopCallin({});
 > - code: error code
 > - message: error message
 
-#### 5. Delegates
+#### 5.2.5. Delegates
 
 ```javascript 
 this.AZStack.Delegates.onCallinStart = (error, result) => {
@@ -393,9 +393,9 @@ this.AZStack.Delegates.onCallinStatusChangedByMe = (error, result) => {
 #### result:
 > - status: call status by me
 
-### 3. Ultilities
+### 5.3. Ultilities
 
-#### Toggle audio state function
+#### 5.3.1. Toggle audio state function
 
 ```javascript 
 this.AZStack.toggleAudioState({
