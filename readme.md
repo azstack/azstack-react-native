@@ -1,7 +1,8 @@
 
 # Table of Contents
+===================
 
-* [1. Requirements] (#1-requirements)
+* [1. Requirements](#1-requirements)
 * [2. Setup](#2-setup)
 * [3. Constants](#3-constants)
     * [3.1. Log levels](#31-log-levels)
@@ -25,6 +26,7 @@
 
 
 # 1. Requirements
+=================
 
 ### 1.1. Get our sdk
 ### 1.2. Install socket.io-client https://github.com/socketio/socket.io-client
@@ -34,6 +36,7 @@
 
 
 # 2. Setup 
+==========
 
 ### 2.1. Import our sdk 
 
@@ -77,6 +80,7 @@ azstack.config({
 
 
 # 3. Constants
+==============
 
 ### 3.1. Log levels
 
@@ -126,7 +130,8 @@ azstack.config({
 
 
 
-# 4. Connect 
+# 4. Connect
+============ 
 
 ```javascript 
 this.AZStack.connect((error, authenticatedUser) => {
@@ -164,7 +169,8 @@ this.AZStack.connect();
 
 
 
-# 5. Calls 
+# 5. Calls
+========== 
 
 ### 5.1. Callout
 
