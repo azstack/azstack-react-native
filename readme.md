@@ -7,6 +7,9 @@
     * [3.1. Log levels](#31-log-levels)
     * [3.2. Error codes](#32-error-codes)
     * [3.3. Call statuses](#33-call-statuses)
+        * [3.3.1. Callout](#331-callout)
+        * [3.3.2. Callin](#332-callin)
+        * [3.3.3. Call log](#333-call-log)
 * [4. Connect](#4-connect)
 * [5. Calls](#5-calls)
     * [5.1 Callout](#51-callout)
@@ -21,6 +24,8 @@
         * [5.2.5. Delegates](#525-delegates)
     * [5.3. Ultilities](#53-ultilities)
         * [5.3.1. Toggle audio state function](#531-toggle-audio-state-function)
+    * [5.4. Paid call logs](#54-paid-call-logs)
+        * [5.4.2. Delegates](#542-delegates)
 
 
 
@@ -96,7 +101,7 @@ azstack.config({
 > - ERR_UNEXPECTED_SEND_DATA: some params invalid in send data
 > - ERR_UNEXPECTED_RECEIVED_DATA: some params invalid in received data
 
-### 3.3. Call statuses
+### 3.3. Call constants
 #### 3.3.1. Callout
 > - CALL_STATUS_CALLOUT_ERROR: error
 > - CALL_STATUS_CALLOUT_ERROR_NOT_ENOUGH_BALANCE: not enough balance
@@ -124,6 +129,15 @@ azstack.config({
 > - CALL_STATUS_CALLIN_BY_ME_NOT_ANSWERED: not answered by me
 > - CALL_STATUS_CALLIN_BY_ME_UNKNOWN: unknown by me
 
+#### 3.3.3. Call log
+> - CALL_PAID_LOG_CALL_TYPE_UNKNOWN: unknown type
+> - CALL_PAID_LOG_CALL_TYPE_CALLOUT: callout type
+> - CALL_PAID_LOG_CALL_TYPE_CALLIN: callin type
+
+> - CALL_PAID_LOG_CALL_STATUS_UNKNOWN: unknown status
+> - CALL_PAID_LOG_CALL_STATUS_ANSWERED: status answered
+> - CALL_PAID_LOG_CALL_STATUS_REJECTED: status rejected
+> - CALL_PAID_LOG_CALL_STATUS_NOT_ANSWERED: status not answered
 
 
 # 4. Connect 
@@ -467,3 +481,25 @@ this.AZStack.toggleAudioState({
 #### error:
 > - code: error code
 > - message: error message
+
+### 5.4. Paid call logs
+
+#### 5.4.2. Delegates
+
+```javascript 
+this.AZStack.Delegates.onPaidCallLogReturn = (error, result) => {
+    console.log(error, result);
+};
+```
+#### error:
+> - code: error code
+> - message: error message
+#### result:
+> - callId: id of call
+> - callType: type of call
+> - callStatus: status of call
+> - userId: id of user
+> - fromPhoneNumber: from phone number
+> - toPhoneNumber: to phone number
+> - recordTime: recording time
+> - recordUrl: recording url

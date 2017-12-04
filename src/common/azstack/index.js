@@ -1,7 +1,7 @@
 import * as logLevelConstants from './constant/logLevel';
 import * as serviceTypes from './constant/serviceTypes';
 import * as errorCodes from './constant/errorCodes';
-import * as callStatuses from './constant/callStatuses';
+import * as callConstants from './constant/callConstants';
 
 import Logger from './helper/logger';
 import Delegates from './core/delegate';
@@ -15,7 +15,7 @@ class AZStack {
         this.logLevelConstants = logLevelConstants;
         this.serviceTypes = serviceTypes;
         this.errorCodes = errorCodes;
-        this.callStatuses = callStatuses;
+        this.callConstants = callConstants;
         this.logLevel = this.logLevelConstants.LOG_LEVEL_NONE;
         this.requestTimeout = 60000;
 
@@ -191,6 +191,14 @@ class AZStack {
                 }).catch();
                 break;
 
+            case this.serviceTypes.PAID_CALL_LOG_RETURN:
+                this.Call.receivePaidCallLog(body).then((result) => {
+                    if (typeof this.Delegates.onPaidCallLogReturn === 'function') {
+                        this.Delegates.onPaidCallLogReturn(null, result);
+                    }
+                }).catch();
+                break;
+
             default:
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Got unknown packet from slave socket'
@@ -272,7 +280,7 @@ class AZStack {
     init() {
         this.Logger.setLogLevel(this.logLevel);
         this.Authentication = new Authentication({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
-        this.Call = new Call({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, callStatuses: this.callStatuses, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
+        this.Call = new Call({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, callConstants: this.callConstants, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
     };
 
     connect(callback) {
