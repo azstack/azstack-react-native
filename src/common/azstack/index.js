@@ -30,7 +30,7 @@ class AZStack {
         this.authenticatedUser = null;
     };
 
-    addUncalls(key, callbackFunction, resolveFunction, rejectFunction, delegateKey) {
+    addUncall(key, callbackFunction, resolveFunction, rejectFunction, delegateKey) {
         this.unCalls[key] = {};
         this.unCalls[key].callback = callbackFunction;
         this.unCalls[key].resolve = resolveFunction;
@@ -61,7 +61,7 @@ class AZStack {
             delete this.unCalls[key];
         }, this.requestTimeout);
     };
-    callUncalls(key, error, data) {
+    callUncall(key, error, data) {
         if (!this.unCalls[key]) {
             return;
         }
@@ -132,22 +132,22 @@ class AZStack {
                         azStackUserId: result.username,
                         fullname: result.fullname
                     };
-                    this.callUncalls('authentication', null, this.authenticatedUser);
+                    this.callUncall('authentication', null, this.authenticatedUser);
                 }).catch((error) => {
-                    this.callUncalls('authentication', error, null);
+                    this.callUncall('authentication', error, null);
                 });
                 break;
 
             case this.serviceTypes.CALLOUT_START_INITIAL:
                 this.Call.receiveStartCalloutInitial(body).then(() => { }).catch((error) => {
-                    this.callUncalls('startCallout', error, null);
+                    this.callUncall('startCallout', error, null);
                 });
                 break;
             case this.serviceTypes.CALLOUT_START_DONE:
                 this.Call.receiveStartCalloutDone(body, this.sendSlavePacket.bind(this)).then((result) => {
-                    this.callUncalls('startCallout', null, null);
+                    this.callUncall('startCallout', null, null);
                 }).catch((error) => {
-                    this.callUncalls('startCallout', error, null);
+                    this.callUncall('startCallout', error, null);
                 });
                 break;
             case this.serviceTypes.CALLOUT_DATA_STATUS_CHANGED:
@@ -209,7 +209,7 @@ class AZStack {
                 slaveAddress: this.slaveAddress,
                 authenticatingData: this.authenticatingData
             }).then(() => { }).catch((error) => {
-                this.callUncalls('authentication', error, null);
+                this.callUncall('authentication', error, null);
             });
         });
         this.slaveSocket.on('connect_error', (error) => {
@@ -220,7 +220,7 @@ class AZStack {
                 message: 'Slave socket connection error',
                 payload: error
             });
-            this.callUncalls('authentication', {
+            this.callUncall('authentication', {
                 code: this.errorCodes.ERR_SOCKET_CONNECT,
                 message: 'Cannot connect to slave socket'
             }, null);
@@ -266,7 +266,7 @@ class AZStack {
 
     connect(callback) {
         return new Promise((resolve, reject) => {
-            this.addUncalls('authentication', callback, resolve, reject, 'onAuthencationReturn');
+            this.addUncall('authentication', callback, resolve, reject, 'onAuthencationReturn');
 
             if (!this.authenticatingData.appId || !this.authenticatingData.publicKey || !this.authenticatingData.azStackUserId || !this.authenticatingData.fullname) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -276,7 +276,7 @@ class AZStack {
                     message: 'Authenticating data',
                     payload: this.authenticatingData
                 });
-                this.callUncalls('authentication', {
+                this.callUncall('authentication', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'appId, publicKey, azStackUserId, fullname are required for authenticating data, connect fail'
                 }, null);
@@ -292,7 +292,7 @@ class AZStack {
                 this.slaveAddress = result.slaveAddress;
                 this.setupSocket(result.slaveSocket);
             }).catch((error) => {
-                this.callUncalls('authentication', error, null);
+                this.callUncall('authentication', error, null);
             });
         });
     };
@@ -302,12 +302,12 @@ class AZStack {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Toggle audio state'
             });
-            this.addUncalls('toggleAutioState', callback, resolve, reject, 'onToggleAudioStateReturn');
+            this.addUncall('toggleAutioState', callback, resolve, reject, 'onToggleAudioStateReturn');
 
             this.Call.toggleAudioState({}).then((result) => {
-                this.callUncalls('toggleAutioState', null, null);
+                this.callUncall('toggleAutioState', null, null);
             }).catch((error) => {
-                this.callUncalls('toggleAutioState', error, null);
+                this.callUncall('toggleAutioState', error, null);
             });
         });
     };
@@ -321,7 +321,7 @@ class AZStack {
                 message: 'Callout data',
                 payload: options
             });
-            this.addUncalls('startCallout', callback, resolve, reject, 'onStartCalloutReturn');
+            this.addUncall('startCallout', callback, resolve, reject, 'onStartCalloutReturn');
 
             if (!options.callData || !options.callData.callId || !options.callData.toPhoneNumber) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -331,7 +331,7 @@ class AZStack {
                     message: 'Callout data',
                     payload: options.callData
                 });
-                this.callUncalls('startCallout', {
+                this.callUncall('startCallout', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'callId and toPhoneNumber are required for start callout'
                 }, null);
@@ -344,7 +344,7 @@ class AZStack {
                     toPhoneNumber: options.callData.toPhoneNumber
                 }
             }).then(() => { }).catch((error) => {
-                this.callUncalls('startCallout', error, null);
+                this.callUncall('startCallout', error, null);
             });
         });
     };
@@ -353,12 +353,12 @@ class AZStack {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Stop callout'
             });
-            this.addUncalls('stopCallout', callback, resolve, reject, 'onStopCalloutReturn');
+            this.addUncall('stopCallout', callback, resolve, reject, 'onStopCalloutReturn');
 
             this.Call.sendStopCallout({}).then((result) => {
-                this.callUncalls('stopCallout', null, null);
+                this.callUncall('stopCallout', null, null);
             }).catch((error) => {
-                this.callUncalls('stopCallout', error, null);
+                this.callUncall('stopCallout', error, null);
             });
         });
     };
@@ -368,12 +368,12 @@ class AZStack {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Answer callin'
             });
-            this.addUncalls('answerCallin', callback, resolve, reject, 'onAnswerCallinReturn');
+            this.addUncall('answerCallin', callback, resolve, reject, 'onAnswerCallinReturn');
 
             this.Call.sendAnswerCallin({}).then((result) => {
-                this.callUncalls('answerCallin', null, null);
+                this.callUncall('answerCallin', null, null);
             }).catch((error) => {
-                this.callUncalls('answerCallin', error, null);
+                this.callUncall('answerCallin', error, null);
             });
         });
     };
@@ -382,12 +382,12 @@ class AZStack {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Reject callin'
             });
-            this.addUncalls('rejectCallin', callback, resolve, reject, 'onRejectCallinReturn');
+            this.addUncall('rejectCallin', callback, resolve, reject, 'onRejectCallinReturn');
 
             this.Call.sendRejectCallin({}).then((result) => {
-                this.callUncalls('rejectCallin', null, null);
+                this.callUncall('rejectCallin', null, null);
             }).catch((error) => {
-                this.callUncalls('rejectCallin', error, null);
+                this.callUncall('rejectCallin', error, null);
             });
         });
     };
@@ -396,12 +396,12 @@ class AZStack {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Not Answered callin'
             });
-            this.addUncalls('notAnsweredCallin', callback, resolve, reject, 'onNotAnsweredCallinReturn');
+            this.addUncall('notAnsweredCallin', callback, resolve, reject, 'onNotAnsweredCallinReturn');
 
             this.Call.sendNotAnsweredCallin({}).then((result) => {
-                this.callUncalls('notAnsweredCallin', null, null);
+                this.callUncall('notAnsweredCallin', null, null);
             }).catch((error) => {
-                this.callUncalls('notAnsweredCallin', error, null);
+                this.callUncall('notAnsweredCallin', error, null);
             });
         });
     };
@@ -410,12 +410,12 @@ class AZStack {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Stop callin'
             });
-            this.addUncalls('stopCallin', callback, resolve, reject, 'onStopCallinReturn');
+            this.addUncall('stopCallin', callback, resolve, reject, 'onStopCallinReturn');
 
             this.Call.sendStopCallin({}).then((result) => {
-                this.callUncalls('stopCallin', null, null);
+                this.callUncall('stopCallin', null, null);
             }).catch((error) => {
-                this.callUncalls('stopCallin', error, null);
+                this.callUncall('stopCallin', error, null);
             });
         });
     };
