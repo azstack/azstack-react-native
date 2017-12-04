@@ -8,7 +8,7 @@
     * [3.2. Error codes](#32-error-codes)
     * [3.3. Call statuses](#33-call-statuses)
 * [4. Connect](#4-connect)
-* [5. Call](#5-call)
+* [5. Calls](#5-calls)
     * [5.1 Callout](#51-callout)
         * [5.1.1. Start function](#511-start-function)
         * [5.1.2. Stop function](#512-stop-function)
