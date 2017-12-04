@@ -19,7 +19,7 @@
         * [5.2.3. Not Answered function](#523-not-answered-function)
         * [5.2.4. Stop function](#524-stop-function)
         * [5.2.5. Delegates](#525-delegates)
-     * [5.3. Ultilities](#53-ultilities)
+    * [5.3. Ultilities](#53-ultilities)
         * [5.3.1. Toggle audio state function](#531-toggle-audio-state-function)
 
 
