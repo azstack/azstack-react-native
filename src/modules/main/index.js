@@ -32,6 +32,8 @@ class AppMain extends React.Component {
 
         this.getPaidCallLogs = this.getPaidCallLogs.bind(this);
 
+        this.getUnreadMessages = this.getUnreadMessages.bind(this);
+
         this.AZStack = new AZStack();
         this.AZStack.config({
             requestTimeout: 60000,
@@ -45,6 +47,8 @@ class AppMain extends React.Component {
                 namespace: ''
             }
         });
+        //user 1: test_user_1 381032
+        //user 2: test_user_2 387212
 
         this.AZStack.connect({}).then((authenticatedUser) => {
             this.setState({ authenticatedUser: authenticatedUser })
@@ -87,6 +91,14 @@ class AppMain extends React.Component {
         this.AZStack.getPaidCallLogs({}).then(() => { }).catch(() => { });
     };
 
+    getUnreadMessages() {
+        this.AZStack.getUnreadMessages({
+            page: 1,
+            chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+            chatId: 387212
+        }).then(() => { }).catch(() => { });
+    };
+
     render() {
         return (
             <View>
@@ -110,6 +122,8 @@ class AppMain extends React.Component {
                 <Button onPress={this.stopCallin} title="Stop Callin" />
                 <Text>{'\n'}{'\n'}</Text>
                 <Button onPress={this.getPaidCallLogs} title="Get paid call logs" />
+                <Text>{'\n'}{'\n'}</Text>
+                <Button onPress={this.getUnreadMessages} title="Get unread messages" />
             </View>
         );
     };

@@ -12,6 +12,8 @@
         * [3.3.3. Call log](#333-call-log)
     * [3.4. List constants](#34-list-constants)
         * [3.4.1. Done](#341-done)
+    * [3.5. Chat constants](#35-chat-constants)
+        * [3.5.1. Chat Type](#351-chat-type)
 * [4. Connection](#4-connection)
     * [4.1. Connect](#41-connect)
     * [4.2. Disconnect](#42-disconnect)
@@ -31,6 +33,8 @@
     * [5.4. Paid call logs](#54-paid-call-logs)
         * [5.4.1. Get paid call logs](#541-get-paid-call-logs)
         * [5.4.2. Delegates](#542-delegates)
+* [6. Messages](#6-messages)
+    * [6.1. Get unread messages](#61-get-unread-messages)
 
 
 
@@ -149,8 +153,15 @@ azstack.config({
 
 ### 3.4. List constants
 #### 3.4.1. Done
+> - GET_LIST_UNKNOWN_DONE: unknown done or not
 > - GET_LIST_DONE: done
 > - GET_LIST_UNDONE: undone
+
+### 3.5. Chat constants
+#### 3.5.1. Chat Type
+> - CHAT_TYPE_UNKNOWN: chat with unknown
+> - CHAT_TYPE_USER: chat with user
+> - CHAT_TYPE_GROUP: chat with group
 
 
 # 4. Connection 
@@ -594,3 +605,59 @@ this.AZStack.Delegates.onPaidCallLogReturn = (error, result) => {
 > - toPhoneNumber: to phone number
 > - recordTime: recording time
 > - recordUrl: recording url
+
+
+
+# 6. Messages
+
+### 6.1. Get unread messages
+
+```javascript 
+this.AZStack.getUnreadMessages({
+    page: 1,
+    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatId: 12345
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.getUnreadMessages({
+    page: 1,
+    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatId: 12345
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.getUnreadMessages = (error, result) => {
+    console.log(error, result);
+};
+this.AZStack.onGetUnreadMessagesReturn({
+    page: 1,
+    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatId: 12345
+});
+```
+#### params
+> - page: page number
+> - chatType: chat type
+> - chatId: chatId
+#### error:
+> - code: error code
+> - message: error message
+#### result:
+> - chatType: chat type
+> - chatId: chat id
+> - done: done or not
+> - list: unread message list

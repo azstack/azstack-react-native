@@ -1189,6 +1189,7 @@ class Call {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                     message: 'Send get paid call logs packet successfully'
                 });
+                resolve();
             }).catch((error) => {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Cannot send get paid call logs data, get paid call logs fail'

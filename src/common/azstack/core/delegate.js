@@ -188,6 +188,19 @@ class Delegates {
             }
         });
     };
+
+    onGetUnreadMessagesReturn = (error, result) => {
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+            message: 'Please implement method onGetUnreadMessagesReturn'
+        });
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+            message: 'onGetUnreadMessagesReturn delegate data',
+            payload: {
+                error: error,
+                result: result
+            }
+        });
+    };
 }
 
 export default Delegates; 

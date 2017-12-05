@@ -3,8 +3,10 @@ import * as serviceTypes from './constant/serviceTypes';
 import * as errorCodes from './constant/errorCodes';
 import * as callConstants from './constant/callConstants';
 import * as listConstants from './constant/listConstants';
+import * as chatConstants from './constant/chatConstants';
 
 import Logger from './helper/logger';
+import Converter from './helper/converter';
 import Delegates from './core/delegate';
 import Authentication from './core/authentication';
 import Call from './core/call';
@@ -19,11 +21,13 @@ class AZStack {
         this.errorCodes = errorCodes;
         this.callConstants = callConstants;
         this.listConstants = listConstants;
+        this.chatConstants = chatConstants;
         this.logLevel = this.logLevelConstants.LOG_LEVEL_NONE;
         this.requestTimeout = 60000;
         this.intervalPingTime = 60000;
 
         this.Logger = new Logger();
+        this.Converter = new Converter({ listConstants: this.listConstants, chatConstants: this.chatConstants });
         this.Delegates = new Delegates({ logLevelConstants: this.logLevelConstants, Logger: this.Logger });
 
         this.unCalls = {};
@@ -212,6 +216,14 @@ class AZStack {
                 });
                 break;
 
+            case this.serviceTypes.MESSAGE_GET_LIST_UNREAD:
+                this.Message.receiveUnreadMessages(body).then((result) => {
+                    this.callUncall('getUnreadMessages', null, result);
+                }).catch((error) => {
+                    this.callUncall('getUnreadMessages', error, null);
+                });
+                break;
+
             default:
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Got unknown packet from slave socket'
@@ -323,7 +335,7 @@ class AZStack {
         this.Logger.setLogLevel(this.logLevel);
         this.Authentication = new Authentication({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
         this.Call = new Call({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, callConstants: this.callConstants, listConstants: this.listConstants, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
-        this.Message = new Message({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, listConstants: this.listConstants, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
+        this.Message = new Message({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, listConstants: this.listConstants, chatConstants: this.chatConstants, Logger: this.Logger, Converter: this.Converter, sendPacketFunction: this.sendSlavePacket.bind(this) });
     };
 
     connect(options, callback) {
@@ -512,10 +524,110 @@ class AZStack {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Get paid call logs'
             });
+
             this.addUncall('getPaidCallLogs', callback, resolve, reject, 'onGetPaidCallLogsReturn');
 
             this.Call.sendGetPaidCallLogs({}).then().catch((error) => {
                 this.callUncall('getPaidCallLogs', error, null);
+            });
+        });
+    };
+
+    getUnreadMessages(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Get unread messages'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Get unread messages params',
+                payload: options
+            });
+
+            this.addUncall('getUnreadMessages', callback, resolve, reject, 'onGetUnreadMessagesReturn');
+
+            if (!options || typeof options !== 'object') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Missing unread messages params'
+                });
+                this.callUncall('getUnreadMessages', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'Missing unread messages params'
+                }, null);
+                return;
+            }
+
+            if (!options.page) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'page is required'
+                });
+                this.callUncall('getUnreadMessages', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'page is required'
+                }, null);
+                return;
+            }
+
+            if (typeof options.page !== 'number') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'page must be number'
+                });
+                this.callUncall('getUnreadMessages', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'page must be number'
+                }, null);
+                return;
+            }
+
+            if (!options.chatType) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'chatType is required'
+                });
+                this.callUncall('getUnreadMessages', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'chatType is required'
+                }, null);
+                return;
+            }
+
+            if (options.chatType !== this.chatConstants.CHAT_TYPE_USER && options.chatType !== this.chatConstants.CHAT_TYPE_GROUP) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'unknown chatType'
+                });
+                this.callUncall('getUnreadMessages', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'unknown chatType'
+                }, null);
+                return;
+            }
+
+            if (!options.chatId) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'chatId is required'
+                });
+                this.callUncall('getUnreadMessages', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'chatId is required'
+                }, null);
+                return;
+            }
+
+            if (typeof options.chatId !== 'number') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'chatId must be number'
+                });
+                this.callUncall('getUnreadMessages', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'chatId must be number'
+                }, null);
+                return;
+            }
+
+            this.Message.sendGetUnreadMessages({
+                page: options.page,
+                chatType: options.chatType,
+                chatId: options.chatId
+            }).then().catch((error) => {
+                this.callUncall('getUnreadMessages', error, null);
             });
         });
     };
