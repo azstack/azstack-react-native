@@ -238,9 +238,7 @@ this.AZStack.disconnect({});
 
 ```javascript 
 this.AZStack.startCallout({
-    callData: {
-        toPhoneNumber: '123456789'
-    }
+    toPhoneNumber: '123456789'
 }, (error, result) => {
     console.log(error);
     console.log(result);
@@ -251,9 +249,7 @@ OR
 
 ```javascript 
 this.AZStack.startCallout({
-    callData: {
-        toPhoneNumber: '123456789'
-    }
+    toPhoneNumber: '123456789'
 }).then((result) => {
     console.log(result);
 }).catch((error) => {
@@ -268,13 +264,11 @@ this.AZStack.Delegates.onStartCalloutReturn = (error, result) => {
     console.log(error, result);
 };
 this.AZStack.startCallout({
-    callData: {
-        toPhoneNumber: '123456789'
-    }
+    toPhoneNumber: '123456789'
 });
 ```
 
-#### callData(required):
+#### params(required):
 > - toPhoneNumber(required): target phone number
 #### error:
 > - code: error code

@@ -65,9 +65,7 @@ class AppMain extends React.Component {
 
     startCallout() {
         this.AZStack.startCallout({
-            callData: {
-                toPhoneNumber: this.state.calloutToPhoneNumber
-            }
+            toPhoneNumber: this.state.calloutToPhoneNumber
         }).then(() => { }).catch(() => { });
     };
     stopCallout() {

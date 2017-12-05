@@ -363,8 +363,8 @@ class Call {
             this.setCallData({
                 isCaller: true,
                 callType: this.callConstants.CALL_TYPE_CALLOUT,
-                callId: options.callData.callId,
-                toPhoneNumber: options.callData.toPhoneNumber
+                callId: options.callId,
+                toPhoneNumber: options.toPhoneNumber
             });
 
             const startCalloutPacket = {

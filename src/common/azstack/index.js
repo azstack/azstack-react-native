@@ -419,13 +419,20 @@ class AZStack {
             });
             this.addUncall('startCallout', callback, resolve, reject, 'onStartCalloutReturn');
 
-            if (!options.callData || !options.callData.toPhoneNumber) {
+            if (!options || typeof options !== 'object') {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Missing callout data'
                 });
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                    message: 'Callout data',
-                    payload: options.callData
+                this.callUncall('startCallout', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'Missing callout data'
+                }, null);
+                return;
+            }
+
+            if (!options.toPhoneNumber) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'toPhoneNumber is required for start callout'
                 });
                 this.callUncall('startCallout', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
@@ -434,12 +441,21 @@ class AZStack {
                 return;
             }
 
+            if (typeof options.toPhoneNumber !== 'string' || !/^\+?\d+$/.test(options.toPhoneNumber)) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'toPhoneNumber is invalid, not a string number'
+                });
+                this.callUncall('startCallout', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'toPhoneNumber is invalid, not a string number'
+                }, null);
+                return;
+            }
+
             this.newUniqueId();
             this.Call.sendStartCallout({
-                callData: {
-                    callId: this.uniqueId,
-                    toPhoneNumber: options.callData.toPhoneNumber
-                }
+                callId: this.uniqueId,
+                toPhoneNumber: options.toPhoneNumber
             }).then(() => { }).catch((error) => {
                 this.callUncall('startCallout', error, null);
             });
