@@ -79,11 +79,13 @@ azstack.config({
 
 #### intervalPingTime(optional):
 > - must be number, default 60000
+
 #### logLevel(optional):
 > - NONE: no log (default)
 > - ERROR: just when error occur
 > - INFO: log the error and info of porocess running
 > - DEBUG: log the error, infor and data send/receiced
+
 #### authenticatingData(optional):
 > - appId(required): the id of your azstack application
 > - publicKey(required): the public key of ypur azstack application
@@ -97,14 +99,12 @@ azstack.config({
 # 3. Constants
 
 ### 3.1. Log levels
-
 > - LOG_LEVEL_NONE: no log
 > - LOG_LEVEL_ERROR: just when error occur
 > - LOG_LEVEL_INFO: log the error and info of porocess running
 > - LOG_LEVEL_DEBUG: log the error, infor and data send/receiced
 
 ### 3.2. Error codes:
-
 > - ERR_SOCKET_CONNECT: cannot connect to socket
 > - ERR_SOCKET_PARSE_BODY: cannot parse socket packet's body
 > - ERR_SOCKET_UNKNOWN_SERVICE: unknow socket packet's service
@@ -115,6 +115,7 @@ azstack.config({
 > - ERR_UNEXPECTED_RECEIVED_DATA: some params invalid in received data
 
 ### 3.3. Call constants
+
 #### 3.3.1. Callout
 > - CALL_STATUS_CALLOUT_INITIAL_BUSY(-3): initial busy;
 > - CALL_STATUS_CALLOUT_INITIAL_NOT_ENOUGH_BALANCE(-4): initial not enough balance;
@@ -146,14 +147,17 @@ azstack.config({
 > - CALL_PAID_LOG_CALL_STATUS_NOT_ANSWERED(2): status not answered
 
 ### 3.4. List constants
+
 #### 3.4.1. Done
 > - GET_LIST_DONE(1): done
 > - GET_LIST_UNDONE(0): undone
 
 ### 3.5. Chat constants
+
 #### 3.5.1. Chat Type
 > - CHAT_TYPE_USER(1): chat with user
 > - CHAT_TYPE_GROUP(2): chat with group
+
 
 
 # 4. Connection 
@@ -189,6 +193,7 @@ this.AZStack.connect({});
 #### error:
 > - code: error code
 > - message: error message
+
 #### authenticatedUser:
 > - azStackUserId: unique key string of users
 > - userId: userId of user in azstack
@@ -225,10 +230,12 @@ this.AZStack.disconnect({});
 #### error:
 > - code: error code
 > - message: error message
+
 #### authenticatedUser:
 > - azStackUserId: unique key string of users
 > - userId: userId of user in azstack
 > - fullname: fullname of user
+
 
 
 # 5. Calls 
@@ -271,6 +278,7 @@ this.AZStack.startCallout({
 
 #### params(required):
 > - toPhoneNumber(required): target phone number
+
 #### error:
 > - code: error code
 > - status: callout status
@@ -318,6 +326,7 @@ this.AZStack.Delegates.onCalloutStatusChanged = (error, result) => {
 #### error:
 > - code: error code
 > - message: error message
+
 #### result:
 > - status: call status
 > - message: status message
@@ -462,6 +471,7 @@ this.AZStack.Delegates.onCallinStart = (error, result) => {
 #### error:
 > - code: error code
 > - message: error message
+
 #### result:
 > - fromPhoneNumber: from phone number
 > - toPhoneNumber: to phone number
@@ -471,9 +481,11 @@ this.AZStack.Delegates.onCallinStatusChanged = (error, result) => {
     console.log(error, result);
 };
 ```
+
 #### error:
 > - code: error code
 > - message: error message
+
 #### result:
 > - status: call status
 > - message: status message
@@ -483,9 +495,11 @@ this.AZStack.Delegates.onCallinStatusChangedByMe = (error, result) => {
     console.log(error, result);
 };
 ```
+
 #### error:
 > - code: error code
 > - message: error message
+
 #### result:
 > - status: call status by me
 > - message: status message
@@ -528,6 +542,7 @@ this.AZStack.toggleAudioState({
 
 #### options(optional):
 > - state(optional): boolean for on or off
+
 #### error:
 > - code: error code
 > - message: error message
@@ -565,6 +580,7 @@ this.AZStack.getPaidCallLogs({});
 #### error:
 > - code: error code
 > - message: error message
+
 #### result: list if callLog with
 > - callId: id of call
 > - callType: type of call
@@ -582,9 +598,11 @@ this.AZStack.Delegates.onPaidCallLogReturn = (error, result) => {
     console.log(error, result);
 };
 ```
+
 #### error:
 > - code: error code
 > - message: error message
+
 #### result:
 > - callId: id of call
 > - callType: type of call
@@ -642,9 +660,11 @@ this.AZStack.onGetUnreadMessagesReturn({
 > - page: page number
 > - chatType: chat type
 > - chatId: chatId
+
 #### error:
 > - code: error code
 > - message: error message
+
 #### result:
 > - chatType: chat type
 > - chatId: chat id
