@@ -76,6 +76,7 @@ azstack.config({
 
 #### requestTimeout(optional):
 > - must be number, default 60000
+
 #### intervalPingTime(optional):
 > - must be number, default 60000
 #### logLevel(optional):
