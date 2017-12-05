@@ -9,7 +9,7 @@
     * [3.3. Call constants](#33-call-constants)
         * [3.3.1. Callout](#331-callout)
         * [3.3.2. Callin](#332-callin)
-        * [3.3.3. Call log](#333-call-log)
+        * [3.3.3. Paid call log](#333-paid-call-log)
     * [3.4. List constants](#34-list-constants)
         * [3.4.1. Done](#341-done)
     * [3.5. Chat constants](#35-chat-constants)
@@ -141,15 +141,13 @@ azstack.config({
 > - CALL_STATUS_CALLIN_BY_ME_NOT_ANSWERED: not answered by me
 > - CALL_STATUS_CALLIN_BY_ME_UNKNOWN: unknown by me
 
-#### 3.3.3. Call log
-> - CALL_PAID_LOG_CALL_TYPE_UNKNOWN: unknown type
-> - CALL_PAID_LOG_CALL_TYPE_CALLOUT: callout type
-> - CALL_PAID_LOG_CALL_TYPE_CALLIN: callin type
+#### 3.3.3. Paid call log
+> - CALL_PAID_LOG_CALL_TYPE_CALLOUT(1): callout type
+> - CALL_PAID_LOG_CALL_TYPE_CALLIN(2): callin type
 
-> - CALL_PAID_LOG_CALL_STATUS_UNKNOWN: unknown status
-> - CALL_PAID_LOG_CALL_STATUS_ANSWERED: status answered
-> - CALL_PAID_LOG_CALL_STATUS_REJECTED: status rejected
-> - CALL_PAID_LOG_CALL_STATUS_NOT_ANSWERED: status not answered
+> - CALL_PAID_LOG_CALL_STATUS_ANSWERED(0): status answered
+> - CALL_PAID_LOG_CALL_STATUS_REJECTED(1): status rejected
+> - CALL_PAID_LOG_CALL_STATUS_NOT_ANSWERED(2): status not answered
 
 ### 3.4. List constants
 #### 3.4.1. Done

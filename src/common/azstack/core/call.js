@@ -1234,43 +1234,16 @@ class Call {
             }
 
             let callLogs = body.data.map((item) => {
-                let callLog = {
+                return {
                     callId: item.callId,
                     fromPhoneNumber: item.from,
                     toPhoneNumber: item.to,
                     recordTime: item.recordTime,
                     recordUrl: item.url,
                     userId: item.userId,
-                    callType: this.callConstants.CALL_PAID_LOG_CALL_TYPE_UNKNOWN,
-                    callStatus: this.callConstants.CALL_PAID_LOG_CALL_STATUS_UNKNOWN
-                }
-
-                switch (item.callType) {
-                    case this.callConstants.CALL_PAID_LOG_FROM_SERVER_CALL_TYPE_CALLOUT:
-                        callLog.callType = this.callConstants.CALL_PAID_LOG_CALL_TYPE_CALLOUT;
-                        break;
-                    case this.callConstants.CALL_PAID_LOG_FROM_SERVER_CALL_TYPE_CALLIN:
-                        callLog.callType = this.callConstants.CALL_PAID_LOG_CALL_TYPE_CALLIN;
-                        break;
-                    default:
-                        break;
-                }
-
-                switch (item.status) {
-                    case this.callConstants.CALL_PAID_LOG_FROM_SERVER_CALL_STATUS_ANSWERED:
-                        callLog.callStatus = this.callConstants.CALL_PAID_LOG_CALL_STATUS_ANSWERED;
-                        break;
-                    case this.callConstants.CALL_PAID_LOG_FROM_SERVER_CALL_STATUS_REJECTED:
-                        callLog.callStatus = this.callConstants.CALL_PAID_LOG_CALL_STATUS_REJECTED;
-                        break;
-                    case this.callConstants.CALL_PAID_LOG_FROM_SERVER_CALL_STATUS_NOT_ANSWERED:
-                        callLog.callStatus = this.callConstants.CALL_PAID_LOG_CALL_STATUS_NOT_ANSWERED;
-                        break;
-                    default:
-                        break;
-                }
-
-                return callLog;
+                    callType: item.callType,
+                    callStatus: item.status
+                };
             });
 
             resolve({
