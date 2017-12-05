@@ -115,16 +115,17 @@ azstack.config({
 
 ### 3.3. Call constants
 #### 3.3.1. Callout
-> - CALL_STATUS_CALLOUT_ERROR: error
-> - CALL_STATUS_CALLOUT_ERROR_NOT_ENOUGH_BALANCE: not enough balance
-> - CALL_STATUS_CALLOUT_ERROR_INVALID_NUMBER: invalid number
-> - CALL_STATUS_CALLOUT_CONNECTING: connecting
-> - CALL_STATUS_CALLOUT_RINGING: ringing
-> - CALL_STATUS_CALLOUT_ANSWERED: answered
-> - CALL_STATUS_CALLOUT_BUSY: busy
-> - CALL_STATUS_CALLOUT_NOT_ANSWERED: not answered
-> - CALL_STATUS_CALLOUT_STOP: stop
-> - CALL_STATUS_CALLOUT_UNKNOWN: unknown
+> - CALL_STATUS_CALLOUT_INITIAL_BUSY(-3): initial busy;
+> - CALL_STATUS_CALLOUT_INITIAL_NOT_ENOUGH_BALANCE(-4): initial not enough balance;
+> - CALL_STATUS_CALLOUT_INITIAL_INVALID_NUMBER(-5): initial invalid number;
+> - CALL_STATUS_CALLOUT_STATUS_UNKNOWN(0): status unknown;
+> - CALL_STATUS_CALLOUT_STATUS_CONNECTING(100): status connecting;
+> - CALL_STATUS_CALLOUT_STATUS_RINGING(183): status ringing;
+> - CALL_STATUS_CALLOUT_STATUS_ANSWERED(200): status answered;
+> - CALL_STATUS_CALLOUT_STATUS_BUSY(486): status busy;
+> - CALL_STATUS_CALLOUT_STATUS_NOT_ANSWERED(480): status answered;
+> - CALL_STATUS_CALLOUT_STATUS_STOP(700): status stop;
+> - CALL_STATUS_CALLOUT_STATUS_NOT_ENOUGH_BALANCE(702): status not enough balance;
 
 #### 3.3.2. Callin
 > - CALL_STATUS_CALLIN_ERROR: error
@@ -280,7 +281,7 @@ this.AZStack.startCallout({
 ```
 
 #### callData(required):
-> - phoneNumber(required): target phone number
+> - toPhoneNumber(required): target phone number
 #### error:
 > - code: error code
 > - status: callout status
@@ -330,6 +331,7 @@ this.AZStack.Delegates.onCalloutStatusChanged = (error, result) => {
 > - message: error message
 #### result:
 > - status: call status
+> - message: status message
 
 ### 5.2. Callin
 

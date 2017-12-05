@@ -439,20 +439,20 @@ class Call {
 
             const error = {
                 code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
-                status: this.callConstants.CALL_STATUS_CALLOUT_ERROR,
+                status: this.callConstants.CALL_STATUS_CALLOUT_INITIAL_UNKNOWN,
                 message: 'Unknown error'
             };
             switch (body.chargingError) {
                 case this.callConstants.CALL_STATUS_CALLOUT_INITIAL_BUSY:
-                    error.status = this.callConstants.CALL_STATUS_CALLOUT_BUSY;
+                    error.status = this.callConstants.CALL_STATUS_CALLOUT_INITIAL_BUSY;
                     error.message = 'The toPhoneNumber currently busy'
                     break;
                 case this.callConstants.CALL_STATUS_CALLOUT_INITIAL_NOT_ENOUGH_BALANCE:
-                    error.status = this.callConstants.CALL_STATUS_CALLOUT_ERROR_NOT_ENOUGH_BALANCE;
+                    error.status = this.callConstants.CALL_STATUS_CALLOUT_INITIAL_NOT_ENOUGH_BALANCE;
                     error.message = 'Your account has not enough balance'
                     break;
                 case this.callConstants.CALL_STATUS_CALLOUT_INITIAL_INVALID_NUMBER:
-                    error.status = this.callConstants.CALL_STATUS_CALLOUT_ERROR_INVALID_NUMBER;
+                    error.status = this.callConstants.CALL_STATUS_CALLOUT_INITIAL_INVALID_NUMBER;
                     error.message = 'The toPhoneNumber is not valid'
                     break;
                 default:
@@ -531,23 +531,25 @@ class Call {
             }
 
             switch (body.code) {
-                case this.callConstants.CALL_STATUS_CALLOUT_STATUS_FROM_SERVER_CONNECTING:
+                case this.callConstants.CALL_STATUS_CALLOUT_STATUS_CONNECTING:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callout status changed to connecting'
                     });
                     resolve({
-                        status: this.callConstants.CALL_STATUS_CALLOUT_CONNECTING
+                        status: this.callConstants.CALL_STATUS_CALLOUT_STATUS_CONNECTING,
+                        message: 'Callout status changed to connecting'
                     });
                     break;
-                case this.callConstants.CALL_STATUS_CALLOUT_STATUS_FROM_SERVER_RINGING:
+                case this.callConstants.CALL_STATUS_CALLOUT_STATUS_RINGING:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callout status changed to ringing'
                     });
                     resolve({
-                        status: this.callConstants.CALL_STATUS_CALLOUT_RINGING
+                        status: this.callConstants.CALL_STATUS_CALLOUT_STATUS_RINGING,
+                        message: 'Callout status changed to ringing'
                     });
                     break;
-                case this.callConstants.CALL_STATUS_CALLOUT_STATUS_FROM_SERVER_ANSWERED:
+                case this.callConstants.CALL_STATUS_CALLOUT_STATUS_ANSWERED:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callout status changed to answered'
                     });
@@ -579,43 +581,48 @@ class Call {
                         });
                     });
                     resolve({
-                        status: this.callConstants.CALL_STATUS_CALLOUT_ANSWERED
+                        status: this.callConstants.CALL_STATUS_CALLOUT_STATUS_ANSWERED,
+                        message: 'Callout status changed to answered'
                     });
                     break;
-                case this.callConstants.CALL_STATUS_CALLOUT_STATUS_FROM_SERVER_BUSY:
+                case this.callConstants.CALL_STATUS_CALLOUT_STATUS_BUSY:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callout status changed to busy, callout end'
                     });
                     this.clearCallData();
                     resolve({
-                        status: this.callConstants.CALL_STATUS_CALLOUT_BUSY
+                        status: this.callConstants.CALL_STATUS_CALLOUT_STATUS_BUSY,
+                        message: 'Callout status changed to busy, callout end'
                     });
                     break;
-                case this.callConstants.CALL_STATUS_CALLOUT_STATUS_FROM_SERVER_NOT_ANSWERED:
+                case this.callConstants.CALL_STATUS_CALLOUT_STATUS_NOT_ANSWERED:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callout status changed to not answered, callout end'
                     });
                     this.clearCallData();
                     resolve({
-                        status: this.callConstants.CALL_STATUS_CALLOUT_NOT_ANSWERED
+                        status: this.callConstants.CALL_STATUS_CALLOUT_STATUS_NOT_ANSWERED,
+                        message: 'Callout status changed to not answered, callout end'
                     });
                     break;
-                case this.callConstants.CALL_STATUS_CALLOUT_STATUS_FROM_SERVER_STOP:
+                case this.callConstants.CALL_STATUS_CALLOUT_STATUS_STOP:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callout status changed to stop, callout end'
                     });
                     this.clearCallData();
                     resolve({
-                        status: this.callConstants.CALL_STATUS_CALLOUT_STOP
+                        status: this.callConstants.CALL_STATUS_CALLOUT_STATUS_STOP,
+                        message: 'Callout status changed to stop, callout end'
                     });
                     break;
-                case this.callConstants.CALL_STATUS_CALLOUT_STATUS_FROM_SERVER_NOT_ENOUGH_BALANCE:
+                case this.callConstants.CALL_STATUS_CALLOUT_STATUS_NOT_ENOUGH_BALANCE:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callout status changed to not enough balance, callout end'
                     });
                     this.clearCallData();
                     resolve({
-                        status: this.callConstants.CALL_STATUS_CALLOUT_ERROR_NOT_ENOUGH_BALANCE
+                        status: this.callConstants.CALL_STATUS_CALLOUT_STATUS_NOT_ENOUGH_BALANCE,
+                        message: 'Callout status changed to not enough balance, callout end'
                     });
                     break;
                 default:
@@ -623,7 +630,8 @@ class Call {
                         message: 'Callout status changed to unknown'
                     });
                     resolve({
-                        status: this.callConstants.CALL_STATUS_CALLOUT_UNKNOWN
+                        status: this.callConstants.CALL_STATUS_CALLOUT_STATUS_UNKNOWN,
+                        message: 'Callout status changed to unknown'
                     });
                     break;
             }
@@ -1132,43 +1140,16 @@ class Call {
                 payload: body
             });
 
-            let callLog = {
+            resolve({
                 callId: body.data.callId,
                 fromPhoneNumber: body.data.from,
                 toPhoneNumber: body.data.to,
                 recordTime: body.data.recordTime,
                 recordUrl: body.data.urlRecord,
                 userId: body.data.azUserId,
-                callType: this.callConstants.CALL_PAID_LOG_CALL_TYPE_UNKNOWN,
-                callStatus: this.callConstants.CALL_PAID_LOG_CALL_STATUS_UNKNOWN
-            }
-
-            switch (body.data.callType) {
-                case this.callConstants.CALL_PAID_LOG_FROM_SERVER_CALL_TYPE_CALLOUT:
-                    callLog.callType = this.callConstants.CALL_PAID_LOG_CALL_TYPE_CALLOUT;
-                    break;
-                case this.callConstants.CALL_PAID_LOG_FROM_SERVER_CALL_TYPE_CALLIN:
-                    callLog.callType = this.callConstants.CALL_PAID_LOG_CALL_TYPE_CALLIN;
-                    break;
-                default:
-                    break;
-            }
-
-            switch (body.data.status) {
-                case this.callConstants.CALL_PAID_LOG_FROM_SERVER_CALL_STATUS_ANSWERED:
-                    callLog.callStatus = this.callConstants.CALL_PAID_LOG_CALL_STATUS_ANSWERED;
-                    break;
-                case this.callConstants.CALL_PAID_LOG_FROM_SERVER_CALL_STATUS_REJECTED:
-                    callLog.callStatus = this.callConstants.CALL_PAID_LOG_CALL_STATUS_REJECTED;
-                    break;
-                case this.callConstants.CALL_PAID_LOG_FROM_SERVER_CALL_STATUS_NOT_ANSWERED:
-                    callLog.callStatus = this.callConstants.CALL_PAID_LOG_CALL_STATUS_NOT_ANSWERED;
-                    break;
-                default:
-                    break;
-            }
-
-            resolve(callLog);
+                callType: body.data.callType,
+                callStatus: body.data.status
+            });
         });
     };
     sendGetPaidCallLogs(options, callback) {
