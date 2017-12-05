@@ -109,7 +109,7 @@ class Call {
                                 callType: this.callData.callinType,
                                 destination: this.callData.fromPhoneNumber,
                                 phonenumber: this.callData.toPhoneNumber,
-                                code: this.callConstants.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_ANSWERED,
+                                code: this.callConstants.CALL_STATUS_CALLIN_STATUS_ANSWERED,
                                 sdp_candidate: sdpCandidate
                             })
                         };
@@ -719,7 +719,7 @@ class Call {
                         callType: body.callType,
                         destination: body.from,
                         phonenumber: body.to,
-                        code: this.callConstants.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_BUSY
+                        code: this.callConstants.CALL_STATUS_CALLIN_STATUS_BUSY
                     })
                 };
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
@@ -748,7 +748,7 @@ class Call {
                     callType: body.callType,
                     destination: body.from,
                     phonenumber: body.to,
-                    code: this.callConstants.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_RINGING
+                    code: this.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING
                 })
             };
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
@@ -823,22 +823,24 @@ class Call {
             }
 
             switch (body.code) {
-                case this.callConstants.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_RINGING_STOP:
+                case this.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING_STOP:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callin status changed to stop when ringing, callin end'
                     });
                     this.clearCallData();
                     resolve({
-                        status: this.callConstants.CALL_STATUS_CALLIN_RINGING_STOP
+                        status: this.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING_STOP,
+                        message: 'Callin status changed to stop when ringing, callin end'
                     });
                     break;
-                case this.callConstants.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_STOP:
+                case this.callConstants.CALL_STATUS_CALLIN_STATUS_STOP:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callin status changed to stop, callin end'
                     });
                     this.clearCallData();
                     resolve({
-                        status: this.callConstants.CALL_STATUS_CALLIN_STOP
+                        status: this.callConstants.CALL_STATUS_CALLIN_STATUS_STOP,
+                        message: 'Callin status changed to stop, callin end'
                     });
                     break;
                 default:
@@ -846,7 +848,8 @@ class Call {
                         message: 'Callin status changed to unknown'
                     });
                     resolve({
-                        status: this.callConstants.CALL_STATUS_CALLIN_UNKNOWN
+                        status: this.callConstants.CALL_STATUS_CALLIN_STATUS_UNKNOWN,
+                        message: 'Callin status changed to unknown'
                     });
                     break;
             }
@@ -881,57 +884,63 @@ class Call {
             }
 
             switch (body.code) {
-                case this.callConstants.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_RINGING:
+                case this.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callin status changed to ringing by me'
                     });
                     resolve({
-                        status: this.callConstants.CALL_STATUS_CALLIN_BY_ME_RINGING
+                        status: this.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING,
+                        message: 'Callin status changed to ringing by me'
                     });
                     break;
-                case this.callConstants.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_ANSWERED:
+                case this.callConstants.CALL_STATUS_CALLIN_STATUS_ANSWERED:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callin status changed to answered by me, callin end'
                     });
                     this.clearCallData();
                     resolve({
-                        status: this.callConstants.CALL_STATUS_CALLIN_BY_ME_ANSWERED
+                        status: this.callConstants.CALL_STATUS_CALLIN_STATUS_ANSWERED,
+                        message: 'Callin status changed to answered by me, callin end'
                     });
                     break;
-                case this.callConstants.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_BUSY:
+                case this.callConstants.CALL_STATUS_CALLIN_STATUS_BUSY:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callin status changed to busy by me, callin end'
                     });
                     this.clearCallData();
                     resolve({
-                        status: this.callConstants.CALL_STATUS_CALLIN_BY_ME_BUSY
+                        status: this.callConstants.CALL_STATUS_CALLIN_STATUS_BUSY,
+                        message: 'Callin status changed to busy by me, callin end'
                     });
                     break;
-                case this.callConstants.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_RINGING_STOP:
+                case this.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING_STOP:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callin status changed to rejected by me, callin end'
                     });
                     this.clearCallData();
                     resolve({
-                        status: this.callConstants.CALL_STATUS_CALLIN_BY_ME_REJECTED
+                        status: this.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING_STOP,
+                        message: 'Callin status changed to rejected by me, callin end'
                     });
                     break;
-                case this.callConstants.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_STOP:
+                case this.callConstants.CALL_STATUS_CALLIN_STATUS_STOP:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callin status changed to stop by me, callin end'
                     });
                     this.clearCallData();
                     resolve({
-                        status: this.callConstants.CALL_STATUS_CALLIN_BY_ME_STOP
+                        status: this.callConstants.CALL_STATUS_CALLIN_STATUS_STOP,
+                        message: 'Callin status changed to stop by me, callin end'
                     });
                     break;
-                case this.callConstants.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_NOT_ANSWERED:
+                case this.callConstants.CALL_STATUS_CALLIN_STATUS_NOT_ANSWERED:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callin status changed to not answered by me, callin end'
                     });
                     this.clearCallData();
                     resolve({
-                        status: this.callConstants.CALL_STATUS_CALLIN_BY_ME_NOT_ANSWERED
+                        status: this.callConstants.CALL_STATUS_CALLIN_STATUS_NOT_ANSWERED,
+                        message: 'Callin status changed to not answered by me, callin end'
                     });
                     break;
                 default:
@@ -939,7 +948,8 @@ class Call {
                         message: 'Callin status changed to unknown by me'
                     });
                     resolve({
-                        status: this.callConstants.CALL_STATUS_CALLIN_BY_ME_UNKNOWN
+                        status: this.callConstants.CALL_STATUS_CALLIN_STATUS_UNKNOWN,
+                        message: 'Callin status changed to unknown by me'
                     });
                     break;
             }
@@ -993,7 +1003,7 @@ class Call {
                     callType: this.callData.callinType,
                     destination: this.callData.fromPhoneNumber,
                     phonenumber: this.callData.toPhoneNumber,
-                    code: this.callConstants.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_RINGING_STOP
+                    code: this.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING_STOP
                 })
             };
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
@@ -1044,7 +1054,7 @@ class Call {
                     callType: this.callData.callinType,
                     destination: this.callData.fromPhoneNumber,
                     phonenumber: this.callData.toPhoneNumber,
-                    code: this.callConstants.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_NOT_ANSWERED
+                    code: this.callConstants.CALL_STATUS_CALLIN_STATUS_NOT_ANSWERED
                 })
             };
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
@@ -1095,7 +1105,7 @@ class Call {
                     callType: this.callData.callinType,
                     destination: this.callData.fromPhoneNumber,
                     phonenumber: this.callData.toPhoneNumber,
-                    code: this.callConstants.CALL_STATUS_CALLIN_STATUS_FROM_SERVER_STOP
+                    code: this.callConstants.CALL_STATUS_CALLIN_STATUS_STOP
                 })
             };
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {

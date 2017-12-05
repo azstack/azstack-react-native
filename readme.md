@@ -128,19 +128,13 @@ azstack.config({
 > - CALL_STATUS_CALLOUT_STATUS_NOT_ENOUGH_BALANCE(702): status not enough balance;
 
 #### 3.3.2. Callin
-> - CALL_STATUS_CALLIN_ERROR: error
-> - CALL_STATUS_CALLIN_RINGING_STOP: ringing stop
-> - CALL_STATUS_CALLIN_STOP: stop
-> - CALL_STATUS_CALLOUT_UNKNOWN: unknown
-
-> - CALL_STATUS_CALLIN_BY_ME_ERROR: error by me
-> - CALL_STATUS_CALLIN_BY_ME_RINGING: ringing by me
-> - CALL_STATUS_CALLIN_BY_ME_ANSWERED: answered by me
-> - CALL_STATUS_CALLIN_BY_ME_BUSY: busy by me
-> - CALL_STATUS_CALLIN_BY_ME_REJECTED: rejected by me
-> - CALL_STATUS_CALLIN_BY_ME_STOP: stop by me
-> - CALL_STATUS_CALLIN_BY_ME_NOT_ANSWERED: not answered by me
-> - CALL_STATUS_CALLIN_BY_ME_UNKNOWN: unknown by me
+> - CALL_STATUS_CALLIN_STATUS_UNKNOWN(0): status unknown;
+> - CALL_STATUS_CALLIN_STATUS_RINGING(183): status ringing;
+> - CALL_STATUS_CALLIN_STATUS_ANSWERED(200): status answered;
+> - CALL_STATUS_CALLIN_STATUS_BUSY(486): status busy;
+> - CALL_STATUS_CALLIN_STATUS_NOT_ANSWERED(403): status answered;
+> - CALL_STATUS_CALLIN_STATUS_RINGING_STOP(702): status ringing stop;
+> - CALL_STATUS_CALLIN_STATUS_STOP(700): status stop;
 
 #### 3.3.3. Paid call log
 > - CALL_PAID_LOG_CALL_TYPE_CALLOUT(1): callout type
@@ -487,6 +481,7 @@ this.AZStack.Delegates.onCallinStatusChanged = (error, result) => {
 > - message: error message
 #### result:
 > - status: call status
+> - message: status message
 
 ```javascript 
 this.AZStack.Delegates.onCallinStatusChangedByMe = (error, result) => {
@@ -498,6 +493,7 @@ this.AZStack.Delegates.onCallinStatusChangedByMe = (error, result) => {
 > - message: error message
 #### result:
 > - status: call status by me
+> - message: status message
 
 ### 5.3. Ultilities
 
