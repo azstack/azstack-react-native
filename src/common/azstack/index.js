@@ -28,6 +28,7 @@ class AZStack {
         this.slaveAddress = null;
         this.slaveSocket = null;
         this.slaveSocketConnected = false;
+        this.slaveSocketDisconnecting = false;
         this.authenticatingData = {};
         this.authenticatedUser = null;
 
@@ -255,9 +256,16 @@ class AZStack {
         });
         this.slaveSocket.on('disconnect', () => {
             this.slaveSocketConnected = false;
+            this.slaveAddress = null;
+            this.authenticatedUser = null;
+            this.slaveSocket = null;
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Disconnected to slave socket'
             });
+            if (this.slaveSocketDisconnecting) {
+                this.slaveSocketDisconnecting = false;
+                this.callUncall('disconnect', null, null);
+            }
         });
         this.slaveSocket.on('WebPacket', (packet) => {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
@@ -292,7 +300,7 @@ class AZStack {
         this.Call = new Call({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, callConstants: this.callConstants, listConstants: this.listConstants, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
     };
 
-    connect(callback) {
+    connect(options, callback) {
         return new Promise((resolve, reject) => {
             this.addUncall('authentication', callback, resolve, reject, 'onAuthencationReturn');
 
@@ -322,6 +330,30 @@ class AZStack {
             }).catch((error) => {
                 this.callUncall('authentication', error, null);
             });
+        });
+    };
+    disconnect(options, callback) {
+        return new Promise((resolve, reject) => {
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Start disconnect to slave server'
+            });
+
+            this.addUncall('disconnect', callback, resolve, reject, 'onDisconnectReturn');
+
+            if (!this.slaveSocketConnected) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot disconnect to slave server, slave socket not connected'
+                });
+                this.callUncall('disconnect', {
+                    code: this.errorCodes.ERR_SOCKET_NOT_CONNECTED,
+                    message: 'Cannot disconnect to slave server, slave socket not connected'
+                }, null);
+                return;
+            }
+
+            this.slaveSocketDisconnecting = true;
+            this.slaveSocket.disconnect();
         });
     };
 

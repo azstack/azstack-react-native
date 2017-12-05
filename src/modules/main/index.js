@@ -18,9 +18,9 @@ class AppMain extends React.Component {
             calloutToPhoneNumber: ''
         };
 
-        this.toggleAutioState = this.toggleAutioState.bind(this);
+        this.disconnect = this.disconnect.bind(this);
 
-        this.getPaidCallLogs = this.getPaidCallLogs.bind(this);
+        this.toggleAutioState = this.toggleAutioState.bind(this);
 
         this.startCallout = this.startCallout.bind(this);
         this.stopCallout = this.stopCallout.bind(this);
@@ -29,6 +29,8 @@ class AppMain extends React.Component {
         this.rejectCallin = this.rejectCallin.bind(this);
         this.notAnsweredCallin = this.notAnsweredCallin.bind(this);
         this.stopCallin = this.stopCallin.bind(this);
+
+        this.getPaidCallLogs = this.getPaidCallLogs.bind(this);
 
         this.AZStack = new AZStack();
         this.AZStack.config({
@@ -44,17 +46,17 @@ class AppMain extends React.Component {
             }
         });
 
-        this.AZStack.connect().then((authenticatedUser) => {
+        this.AZStack.connect({}).then((authenticatedUser) => {
             this.setState({ authenticatedUser: authenticatedUser })
         }).catch((error) => { });
     };
 
-    toggleAutioState() {
-        this.AZStack.toggleAutioState({}).then(() => { }).catch(() => { });
+    disconnect() {
+        this.AZStack.disconnect({}).then(() => { }).catch(() => { });
     };
 
-    getPaidCallLogs() {
-        this.AZStack.getPaidCallLogs({}).then(() => { }).catch(() => { });
+    toggleAutioState() {
+        this.AZStack.toggleAutioState({}).then(() => { }).catch(() => { });
     };
 
     startCallout() {
@@ -81,16 +83,19 @@ class AppMain extends React.Component {
         this.AZStack.stopCallin().then(() => { }).catch(() => { });
     };
 
+    getPaidCallLogs() {
+        this.AZStack.getPaidCallLogs({}).then(() => { }).catch(() => { });
+    };
+
     render() {
         return (
             <View>
                 <Text>
                     {this.state.authenticatedUser ? `Connected, user ${this.state.authenticatedUser.fullname}` : 'Connecting'}
                 </Text>
+                <Button onPress={this.disconnect} title="Disconnect" />
                 <Text>{'\n'}{'\n'}</Text>
                 <Button onPress={this.toggleAutioState} title="Toggle Audio State" />
-                <Text>{'\n'}{'\n'}</Text>
-                <Button onPress={this.getPaidCallLogs} title="Get paid call logs" />
                 <Text>{'\n'}{'\n'}</Text>
                 <TextInput
                     placeholder="Callout toPhoneNumber"
@@ -103,6 +108,8 @@ class AppMain extends React.Component {
                 <Button onPress={this.rejectCallin} title="Reject Callin" />
                 <Button onPress={this.notAnsweredCallin} title="Not answer Callin" />
                 <Button onPress={this.stopCallin} title="Stop Callin" />
+                <Text>{'\n'}{'\n'}</Text>
+                <Button onPress={this.getPaidCallLogs} title="Get paid call logs" />
             </View>
         );
     };

@@ -10,7 +10,9 @@
         * [3.3.1. Callout](#331-callout)
         * [3.3.2. Callin](#332-callin)
         * [3.3.3. Call log](#333-call-log)
-* [4. Connect](#4-connect)
+* [4. Connection](#4-connection)
+    * [4.1. Connect](#41-connect)
+    * [4.2. Disconnect](#42-disconnect)
 * [5. Calls](#5-calls)
     * [5.1 Callout](#51-callout)
         * [5.1.1. Start function](#511-start-function)
@@ -141,10 +143,12 @@ azstack.config({
 > - CALL_PAID_LOG_CALL_STATUS_NOT_ANSWERED: status not answered
 
 
-# 4. Connect 
+# 4. Connection 
+
+### 4.1. Connect
 
 ```javascript 
-this.AZStack.connect((error, authenticatedUser) => {
+this.AZStack.connect({}, (error, authenticatedUser) => {
     console.log(error);
     console.log(authenticatedUser);
 });
@@ -153,7 +157,7 @@ this.AZStack.connect((error, authenticatedUser) => {
 OR
 
 ```javascript 
-this.AZStack.connect().then((authenticatedUser) => {
+this.AZStack.connect({}).then((authenticatedUser) => {
     console.log(authenticatedUser);
 }).catch((error) => {
     console.log(error);
@@ -166,7 +170,7 @@ OR
 this.AZStack.Delegates.onAuthencationReturn = (error, authenticatedUser) => {
     console.log(error, authenticatedUser);
 };
-this.AZStack.connect();
+this.AZStack.connect({});
 ```
 
 #### error:
@@ -177,6 +181,41 @@ this.AZStack.connect();
 > - userId: userId of user in azstack
 > - fullname: fullname of user
 
+### 4.2. Disconnect
+
+```javascript 
+this.AZStack.disconnect({}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.disconnect({}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.onDisconnectReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStack.disconnect({});
+```
+
+#### error:
+> - code: error code
+> - message: error message
+#### authenticatedUser:
+> - azStackUserId: unique key string of users
+> - userId: userId of user in azstack
+> - fullname: fullname of user
 
 
 # 5. Calls 

@@ -16,6 +16,18 @@ class Delegates {
             }
         });
     };
+    onDisconnectReturn = (error, result) => {
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+            message: 'Please implement method onDisconnectReturn'
+        });
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+            message: 'onDisconnectReturn delegate data',
+            payload: {
+                error: error,
+                result: result
+            }
+        });
+    };
 
     onToggleAudioStateReturn = (error, result) => {
         this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
