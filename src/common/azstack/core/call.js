@@ -1272,7 +1272,10 @@ class Call {
                 return callLog;
             });
 
-            resolve(callLogs);
+            resolve({
+                done: this.listConstants.GET_LIST_DONE,
+                list: callLogs
+            });
         });
     };
 };

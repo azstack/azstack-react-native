@@ -6,10 +6,12 @@
 * [3. Constants](#3-constants)
     * [3.1. Log levels](#31-log-levels)
     * [3.2. Error codes](#32-error-codes)
-    * [3.3. Call statuses](#33-call-statuses)
+    * [3.3. Call constants](#33-call-constants)
         * [3.3.1. Callout](#331-callout)
         * [3.3.2. Callin](#332-callin)
         * [3.3.3. Call log](#333-call-log)
+    * [3.4. List constants](#34-list-constants)
+        * [3.4.1. Done](#341-done)
 * [4. Connection](#4-connection)
     * [4.1. Connect](#41-connect)
     * [4.2. Disconnect](#42-disconnect)
@@ -144,6 +146,11 @@ azstack.config({
 > - CALL_PAID_LOG_CALL_STATUS_ANSWERED: status answered
 > - CALL_PAID_LOG_CALL_STATUS_REJECTED: status rejected
 > - CALL_PAID_LOG_CALL_STATUS_NOT_ANSWERED: status not answered
+
+### 3.4. List constants
+#### 3.4.1. Done
+> - GET_LIST_DONE: done
+> - GET_LIST_UNDONE: undone
 
 
 # 4. Connection 
