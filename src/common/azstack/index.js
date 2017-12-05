@@ -20,6 +20,7 @@ class AZStack {
         this.listConstants = listConstants;
         this.logLevel = this.logLevelConstants.LOG_LEVEL_NONE;
         this.requestTimeout = 60000;
+        this.intervalPingTime = 60000;
 
         this.Logger = new Logger();
         this.Delegates = new Delegates({ logLevelConstants: this.logLevelConstants, Logger: this.Logger });
@@ -31,6 +32,7 @@ class AZStack {
         this.slaveSocketDisconnecting = false;
         this.authenticatingData = {};
         this.authenticatedUser = null;
+        this.intervalSendPing = null;
 
         this.uniqueId = Math.round(new Date().getTime() / 1000);
     };
@@ -240,6 +242,23 @@ class AZStack {
             }).then(() => { }).catch((error) => {
                 this.callUncall('authentication', error, null);
             });
+            this.intervalSendPing = setInterval(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send ping packet to slave server'
+                });
+                this.sendSlavePacket({
+                    service: this.serviceTypes.PING,
+                    body: JSON.stringify({})
+                }).then(() => {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Send ping packet to slave server successfully'
+                    });
+                }).catch(() => {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                        message: 'Send ping packet to slave server fail'
+                    });
+                });
+            }, this.intervalPingTime);
         });
         this.slaveSocket.on('connect_error', (error) => {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -259,6 +278,8 @@ class AZStack {
             this.slaveAddress = null;
             this.authenticatedUser = null;
             this.slaveSocket = null;
+            clearInterval(this.intervalSendPing);
+            this.intervalSendPing = null;
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Disconnected to slave socket'
             });
@@ -281,6 +302,9 @@ class AZStack {
     config(options) {
         if (options.requestTimeout && typeof options.requestTimeout === 'number') {
             this.requestTimeout = options.requestTimeout;
+        }
+        if (options.intervalPingTime && typeof options.intervalPingTime === 'number') {
+            this.intervalPingTime = options.intervalPingTime;
         }
         if (options.logLevel) {
             this.logLevel = options.logLevel;

@@ -55,6 +55,7 @@ import AZStack from '{path_to_libs}/azstack/';
 const azstack = new AZStack();
 azstack.config({
     requestTimeout: 60000,
+    intervalPingTime: 60000,
     logLevel: azstack.logLevelConstants.LOG_LEVEL_NONE,
     authenticatingData: {
         appId: 'bd7095762179b886c094c31b8f5e4646',
@@ -68,6 +69,8 @@ azstack.config({
 ```
 
 #### requestTimeout(optional):
+> - must be number, default 60000
+#### intervalPingTime(optional):
 > - must be number, default 60000
 #### logLevel(optional):
 > - NONE: no log (default)
