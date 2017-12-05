@@ -6,7 +6,6 @@ class Message {
         this.listConstants = options.listConstants;
         this.chatConstants = options.chatConstants;
         this.Logger = options.Logger;
-        this.Converter = options.Converter;
         this.sendPacketFunction = options.sendPacketFunction;
     };
 
@@ -17,7 +16,7 @@ class Message {
                 service: this.serviceTypes.MESSAGE_GET_LIST_UNREAD,
                 body: JSON.stringify({
                     page: options.page,
-                    type: this.Converter.chatTypeClientToServer(options.chatType),
+                    type: options.chatType,
                     chatId: options.chatId
                 })
             };
@@ -66,9 +65,9 @@ class Message {
             });
 
             let unreadMessages = {
-                chatType: this.Converter.chatTypeServerToClient(body.type),
+                chatType: body.type,
                 chatId: body.chatId,
-                done: this.Converter.listDoneServerToClient(body.done),
+                done: body.done,
                 list: []
             };
 

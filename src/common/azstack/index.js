@@ -6,7 +6,6 @@ import * as listConstants from './constant/listConstants';
 import * as chatConstants from './constant/chatConstants';
 
 import Logger from './helper/logger';
-import Converter from './helper/converter';
 import Delegates from './core/delegate';
 import Authentication from './core/authentication';
 import Call from './core/call';
@@ -27,7 +26,6 @@ class AZStack {
         this.intervalPingTime = 60000;
 
         this.Logger = new Logger();
-        this.Converter = new Converter({ listConstants: this.listConstants, chatConstants: this.chatConstants });
         this.Delegates = new Delegates({ logLevelConstants: this.logLevelConstants, Logger: this.Logger });
 
         this.unCalls = {};
@@ -335,7 +333,7 @@ class AZStack {
         this.Logger.setLogLevel(this.logLevel);
         this.Authentication = new Authentication({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
         this.Call = new Call({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, callConstants: this.callConstants, listConstants: this.listConstants, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
-        this.Message = new Message({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, listConstants: this.listConstants, chatConstants: this.chatConstants, Logger: this.Logger, Converter: this.Converter, sendPacketFunction: this.sendSlavePacket.bind(this) });
+        this.Message = new Message({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, listConstants: this.listConstants, chatConstants: this.chatConstants, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
     };
 
     connect(options, callback) {

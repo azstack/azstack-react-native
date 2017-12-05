@@ -153,15 +153,13 @@ azstack.config({
 
 ### 3.4. List constants
 #### 3.4.1. Done
-> - GET_LIST_UNKNOWN_DONE: unknown done or not
-> - GET_LIST_DONE: done
-> - GET_LIST_UNDONE: undone
+> - GET_LIST_DONE(1): done
+> - GET_LIST_UNDONE(0): undone
 
 ### 3.5. Chat constants
 #### 3.5.1. Chat Type
-> - CHAT_TYPE_UNKNOWN: chat with unknown
-> - CHAT_TYPE_USER: chat with user
-> - CHAT_TYPE_GROUP: chat with group
+> - CHAT_TYPE_USER(1): chat with user
+> - CHAT_TYPE_GROUP(2): chat with group
 
 
 # 4. Connection 
