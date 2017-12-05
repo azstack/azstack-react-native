@@ -1200,7 +1200,7 @@ class Call {
             });
         });
     };
-    receivePaidCallLogsList(body) {
+    receivePaidCallLogs(body) {
         return new Promise((resolve, reject) => {
             if (!body) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
