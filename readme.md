@@ -581,7 +581,7 @@ this.AZStack.getPaidCallLogs({});
 > - code: error code
 > - message: error message
 
-#### result: list if callLog with
+#### result: list of callLog with
 > - callId: id of call
 > - callType: type of call
 > - callStatus: status of call
