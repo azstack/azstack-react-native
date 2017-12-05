@@ -431,7 +431,7 @@ class Call {
             }
 
             if (!body.chargingError) {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                     message: 'Ignore start callout initial because of no error'
                 });
                 return;

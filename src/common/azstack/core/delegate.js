@@ -5,7 +5,7 @@ class Delegates {
     };
 
     onAuthencationReturn = (error, authenticatedUser) => {
-        this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
             message: 'Please implement method onAuthencationReturn'
         });
         this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
@@ -17,7 +17,7 @@ class Delegates {
         });
     };
     onDisconnectReturn = (error, result) => {
-        this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
             message: 'Please implement method onDisconnectReturn'
         });
         this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
@@ -30,7 +30,7 @@ class Delegates {
     };
 
     onToggleAudioStateReturn = (error, result) => {
-        this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
             message: 'Please implement method onToggleAudioStateReturn'
         });
         this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
@@ -43,7 +43,7 @@ class Delegates {
     };
 
     onStartCalloutReturn = (error, result) => {
-        this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
             message: 'Please implement method onStartCalloutReturn'
         });
         this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
@@ -67,7 +67,7 @@ class Delegates {
         });
     };
     onStopCalloutReturn = (error, result) => {
-        this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
             message: 'Please implement method onStopCalloutReturn'
         });
         this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
@@ -116,7 +116,7 @@ class Delegates {
         });
     };
     onAnswerCallinReturn = (error, result) => {
-        this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
             message: 'Please implement method onAnswerCallinReturn'
         });
         this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
@@ -128,7 +128,7 @@ class Delegates {
         });
     };
     onRejectCallinReturn = (error, result) => {
-        this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
             message: 'Please implement method onRejectCallinReturn'
         });
         this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
@@ -140,7 +140,7 @@ class Delegates {
         });
     };
     onNotAnsweredCallinReturn = (error, result) => {
-        this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
             message: 'Please implement method onNotAnsweredCallinReturn'
         });
         this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
@@ -152,7 +152,7 @@ class Delegates {
         });
     };
     onStopCallinReturn = (error, result) => {
-        this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
             message: 'Please implement method onStopCallinReturn'
         });
         this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
@@ -177,7 +177,7 @@ class Delegates {
         });
     };
     onGetPaidCallLogsReturn = (error, result) => {
-        this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
             message: 'Please implement method onGetPaidCallLogsReturn'
         });
         this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
