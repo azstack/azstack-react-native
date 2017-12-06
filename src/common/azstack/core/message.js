@@ -74,6 +74,72 @@ class Message {
             resolve(unreadMessages);
         });
     };
+    sendGetModifiedMessages(options, callback) {
+        return new Promise((resolve, reject) => {
+
+            const getModifiedMessagesPacket = {
+                service: this.serviceTypes.MESSAGE_GET_LIST_MODIFIED,
+                body: JSON.stringify({
+                    page: options.page,
+                    lastCreated: options.lastCreated,
+                    type: options.chatType,
+                    chatId: options.chatId
+                })
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send get modified messages packet'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Get modified messages packet',
+                payload: getModifiedMessagesPacket
+            });
+            this.sendPacketFunction(getModifiedMessagesPacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send get modified messages packet successfully'
+                });
+                resolve();
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send get modified messages data, get modified messages fail'
+                });
+                reject({
+                    code: error.code,
+                    message: 'Cannot send get modified messages data, get modified messages fail'
+                });
+            });
+        });
+    };
+    receiveModifiedMessages(body) {
+        return new Promise((resolve, reject) => {
+            if (!body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect modified messages list, ignored'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Cannot detect modified messages list, get modified messages fail'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got modified messages list'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Modified messages list data',
+                payload: body
+            });
+
+            let modifiedMessages = {
+                chatType: body.type,
+                chatId: body.chatId,
+                done: body.done,
+                list: []
+            };
+
+            resolve(modifiedMessages);
+        });
+    };
 };
 
 export default Message;

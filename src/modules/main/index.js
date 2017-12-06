@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    ScrollView,
     View,
     Text,
     TextInput,
@@ -33,6 +34,7 @@ class AppMain extends React.Component {
         this.getPaidCallLogs = this.getPaidCallLogs.bind(this);
 
         this.getUnreadMessages = this.getUnreadMessages.bind(this);
+        this.getModifiedMessages = this.getModifiedMessages.bind(this);
 
         this.AZStack = new AZStack();
         this.AZStack.config({
@@ -96,33 +98,44 @@ class AppMain extends React.Component {
             chatId: 387212
         }).then(() => { }).catch(() => { });
     };
+    getModifiedMessages() {
+        this.AZStack.getModifiedMessages({
+            page: 1,
+            lastCreated: new Date().getTime(),
+            chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+            chatId: 387212
+        }).then(() => { }).catch(() => { });
+    };
 
     render() {
         return (
-            <View>
-                <Text>
-                    {this.state.authenticatedUser ? `Connected, user ${this.state.authenticatedUser.fullname}` : 'Connecting'}
-                </Text>
-                <Button onPress={this.disconnect} title="Disconnect" />
-                <Text>{'\n'}{'\n'}</Text>
-                <Button onPress={this.toggleAutioState} title="Toggle Audio State" />
-                <Text>{'\n'}{'\n'}</Text>
-                <TextInput
-                    placeholder="Callout toPhoneNumber"
-                    onChangeText={(text) => this.setState({ calloutToPhoneNumber: text })}
-                />
-                <Button onPress={this.startCallout} title="Start Callout" />
-                <Button onPress={this.stopCallout} title="Stop Callout" />
-                <Text>{'\n'}{'\n'}</Text>
-                <Button onPress={this.answerCallin} title="Anwser Callin" />
-                <Button onPress={this.rejectCallin} title="Reject Callin" />
-                <Button onPress={this.notAnsweredCallin} title="Not answer Callin" />
-                <Button onPress={this.stopCallin} title="Stop Callin" />
-                <Text>{'\n'}{'\n'}</Text>
-                <Button onPress={this.getPaidCallLogs} title="Get paid call logs" />
-                <Text>{'\n'}{'\n'}</Text>
-                <Button onPress={this.getUnreadMessages} title="Get unread messages" />
-            </View>
+            <ScrollView>
+                <View>
+                    <Text>
+                        {this.state.authenticatedUser ? `Connected, user ${this.state.authenticatedUser.fullname}` : 'Connecting'}
+                    </Text>
+                    <Button onPress={this.disconnect} title="Disconnect" />
+                    <Text>{'\n'}{'\n'}</Text>
+                    <Button onPress={this.toggleAutioState} title="Toggle Audio State" />
+                    <Text>{'\n'}{'\n'}</Text>
+                    <TextInput
+                        placeholder="Callout toPhoneNumber"
+                        onChangeText={(text) => this.setState({ calloutToPhoneNumber: text })}
+                    />
+                    <Button onPress={this.startCallout} title="Start Callout" />
+                    <Button onPress={this.stopCallout} title="Stop Callout" />
+                    <Text>{'\n'}{'\n'}</Text>
+                    <Button onPress={this.answerCallin} title="Anwser Callin" />
+                    <Button onPress={this.rejectCallin} title="Reject Callin" />
+                    <Button onPress={this.notAnsweredCallin} title="Not answer Callin" />
+                    <Button onPress={this.stopCallin} title="Stop Callin" />
+                    <Text>{'\n'}{'\n'}</Text>
+                    <Button onPress={this.getPaidCallLogs} title="Get paid call logs" />
+                    <Text>{'\n'}{'\n'}</Text>
+                    <Button onPress={this.getUnreadMessages} title="Get unread messages" />
+                    <Button onPress={this.getModifiedMessages} title="Get modified messages" />
+                </View>
+            </ScrollView>
         );
     };
 };

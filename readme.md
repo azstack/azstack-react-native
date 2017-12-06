@@ -34,7 +34,9 @@
         * [5.4.1. Get paid call logs](#541-get-paid-call-logs)
         * [5.4.2. Delegates](#542-delegates)
 * [6. Messages](#6-messages)
-    * [6.1. Get unread messages](#61-get-unread-messages)
+    * [### 6.1. Get list](#61-get-list)
+        * [6.1.1 Get unread messages](#611-get-unread-messages)
+        * [6.1.2 Get modified messages](#612-get-modified-messages)
 
 
 
@@ -617,7 +619,9 @@ this.AZStack.Delegates.onPaidCallLogReturn = (error, result) => {
 
 # 6. Messages
 
-### 6.1. Get unread messages
+### 6.1. Get list
+
+#### 6.1.1. Get unread messages
 
 ```javascript 
 this.AZStack.getUnreadMessages({
@@ -670,3 +674,61 @@ this.AZStack.onGetUnreadMessagesReturn({
 > - chatId: chat id
 > - done: done or not
 > - list: unread message list
+
+#### 6.1.2 Get modified messages
+
+```javascript 
+this.AZStack.getModifiedMessages({
+    page: 1,
+    lastCreated: new Date().getTime(),
+    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatId: 12345
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.getModifiedMessages({
+    page: 1,
+    lastCreated: new Date().getTime(),
+    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatId: 12345
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.getModifiedMessages = (error, result) => {
+    console.log(error, result);
+};
+this.AZStack.onGetModifiedMessagesReturn({
+    page: 1,
+    lastCreated: new Date().getTime(),
+    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatId: 12345
+});
+```
+#### params
+> - page: page number
+> - lastCreated: last created date time
+> - chatType: chat type
+> - chatId: chatId
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - chatType: chat type
+> - chatId: chat id
+> - done: done or not
+> - list: modified message list

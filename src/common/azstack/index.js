@@ -221,6 +221,13 @@ class AZStack {
                     this.callUncall('getUnreadMessages', error, null);
                 });
                 break;
+            case this.serviceTypes.MESSAGE_GET_LIST_MODIFIED:
+                this.Message.receiveModifiedMessages(body).then((result) => {
+                    this.callUncall('getModifiedMessages', null, result);
+                }).catch((error) => {
+                    this.callUncall('getModifiedMessages', error, null);
+                });
+                break;
 
             default:
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -642,6 +649,127 @@ class AZStack {
                 chatId: options.chatId
             }).then().catch((error) => {
                 this.callUncall('getUnreadMessages', error, null);
+            });
+        });
+    };
+    getModifiedMessages(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Get modified messages'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Get modified messages params',
+                payload: options
+            });
+
+            this.addUncall('getModifiedMessages', callback, resolve, reject, 'onGetModifiedMessagesReturn');
+
+            if (!options || typeof options !== 'object') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Missing modified messages params'
+                });
+                this.callUncall('getModifiedMessages', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'Missing modified messages params'
+                }, null);
+                return;
+            }
+
+            if (!options.page) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'page is required'
+                });
+                this.callUncall('getModifiedMessages', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'page is required'
+                }, null);
+                return;
+            }
+
+            if (typeof options.page !== 'number') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'page must be number'
+                });
+                this.callUncall('getModifiedMessages', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'page must be number'
+                }, null);
+                return;
+            }
+
+            if (!options.lastCreated) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'lastCreated is required'
+                });
+                this.callUncall('getModifiedMessages', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'lastCreated is required'
+                }, null);
+                return;
+            }
+
+            if (typeof options.lastCreated !== 'number') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'lastCreated must be number'
+                });
+                this.callUncall('getModifiedMessages', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'lastCreated must be number'
+                }, null);
+                return;
+            }
+
+            if (!options.chatType) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'chatType is required'
+                });
+                this.callUncall('getModifiedMessages', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'chatType is required'
+                }, null);
+                return;
+            }
+
+            if (options.chatType !== this.chatConstants.CHAT_TYPE_USER && options.chatType !== this.chatConstants.CHAT_TYPE_GROUP) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'unknown chatType'
+                });
+                this.callUncall('getModifiedMessages', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'unknown chatType'
+                }, null);
+                return;
+            }
+
+            if (!options.chatId) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'chatId is required'
+                });
+                this.callUncall('getModifiedMessages', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'chatId is required'
+                }, null);
+                return;
+            }
+
+            if (typeof options.chatId !== 'number') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'chatId must be number'
+                });
+                this.callUncall('getModifiedMessages', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'chatId must be number'
+                }, null);
+                return;
+            }
+
+            this.Message.sendGetModifiedMessages({
+                page: options.page,
+                lastCreated: options.lastCreated,
+                chatType: options.chatType,
+                chatId: options.chatId
+            }).then().catch((error) => {
+                this.callUncall('getModifiedMessages', error, null);
             });
         });
     };

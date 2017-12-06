@@ -201,6 +201,18 @@ class Delegates {
             }
         });
     };
+    onGetModifiedMessagesReturn = (error, result) => {
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+            message: 'Please implement method onGetModifiedMessagesReturn'
+        });
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+            message: 'onGetModifiedMessagesReturn delegate data',
+            payload: {
+                error: error,
+                result: result
+            }
+        });
+    };
 }
 
 export default Delegates; 

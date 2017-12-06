@@ -19,3 +19,4 @@ export const PAID_CALL_LOG_RETURN = 601;
 export const PAID_CALL_LOGS_GET = 509;
 
 export const MESSAGE_GET_LIST_UNREAD = 173;
+export const MESSAGE_GET_LIST_MODIFIED = 169;
