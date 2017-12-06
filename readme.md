@@ -697,6 +697,7 @@ this.AZStack.onGetUnreadMessagesReturn({
 > - chatType: chat type
 > - chatId: chat id
 > - done: done or not
+> - page: page number
 > - list: unread message list
 >   - chatType: chat type
 >   - chatId: chat id
@@ -765,6 +766,7 @@ this.AZStack.onGetModifiedMessagesReturn({
 > - chatType: chat type
 > - chatId: chat id
 > - done: done or not
+> - page: page number
 > - list: modified message list
 >   - chatType: chat type
 >   - chatId: chat id

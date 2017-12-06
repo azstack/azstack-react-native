@@ -68,6 +68,7 @@ class Message {
                 chatType: body.type,
                 chatId: body.chatId,
                 done: body.done,
+                page: body.page,
                 list: []
             };
             body.list.map((message) => {
@@ -155,6 +156,7 @@ class Message {
                 chatType: body.type,
                 chatId: body.chatId,
                 done: body.done,
+                page: body.page,
                 list: []
             };
             body.list.map((message) => {
