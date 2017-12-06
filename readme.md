@@ -37,13 +37,14 @@
     * [5.4. Paid call logs](#54-paid-call-logs)
         * [5.4.1. Get paid call logs](#541-get-paid-call-logs)
         * [5.4.2. Delegates](#542-delegates)
-* [6. Messages](#6-messages)
-    * [6.1. Get list](#61-get-list)
-        * [6.1.1 Get unread messages](#611-get-unread-messages)
-        * [6.1.2 Get modified messages](#612-get-modified-messages)
-    * [6.2. New message](#62-new-message)
-* [7. User](#7-user)
-    * [7.1. Get users information](#71-get-users-information)
+* [6. Conversations](#6-conversations)
+* [7. Messages](#7-messages)
+    * [7.1. Get list](#71-get-list)
+        * [7.1.1 Get unread messages](#711-get-unread-messages)
+        * [7.1.2 Get modified messages](#712-get-modified-messages)
+    * [7.2. New message](#72-new-message)
+* [8. User](#8-user)
+    * [8.1. Get users information](#81-get-users-information)
 
 
 
@@ -636,11 +637,15 @@ this.AZStack.Delegates.onPaidCallLogReturn = (error, result) => {
 
 
 
-# 6. Messages
+# 6. Conversations
 
-### 6.1. Get list
 
-#### 6.1.1. Get unread messages
+
+# 7. Messages
+
+### 7.1. Get list
+
+#### 7.1.1. Get unread messages
 
 ```javascript 
 this.AZStack.getUnreadMessages({
@@ -704,7 +709,7 @@ this.AZStack.onGetUnreadMessagesReturn({
 >   - modified: modified time
 >   - text: text of message
 
-#### 6.1.2 Get modified messages
+#### 7.1.2 Get modified messages
 
 ```javascript 
 this.AZStack.getModifiedMessages({
@@ -772,7 +777,7 @@ this.AZStack.onGetModifiedMessagesReturn({
 >   - modified: modified time
 >   - text: text of message
 
-### 6.2. New message
+### 7.2. New message
 
 ```javascript 
 this.AZStack.newMessage({
@@ -834,9 +839,9 @@ this.AZStack.newMessage({
 
 
 
-# 7. User
+# 8. User
 
-### 7.1. Get users information
+### 8.1. Get users information
 
 ```javascript 
 this.AZStack.getUsersInformation({

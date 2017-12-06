@@ -12,6 +12,7 @@ import Logger from './helper/logger';
 import Delegates from './core/delegate';
 import Authentication from './core/authentication';
 import Call from './core/call';
+import Conversation from './core/conversation';
 import Message from './core/message';
 import User from './core/user';
 
@@ -400,6 +401,7 @@ class AZStack {
         this.Logger.setLogLevel(this.logLevel);
         this.Authentication = new Authentication({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
         this.Call = new Call({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, callConstants: this.callConstants, listConstants: this.listConstants, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
+        this.Conversation = new Conversation({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, listConstants: this.listConstants, chatConstants: this.chatConstants, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
         this.Message = new Message({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, listConstants: this.listConstants, chatConstants: this.chatConstants, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
         this.User = new User({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, listConstants: this.listConstants, userConstants: this.userConstants, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
     };
