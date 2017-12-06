@@ -9,7 +9,7 @@ class Message {
         this.sendPacketFunction = options.sendPacketFunction;
     };
 
-    sendGetUnreadMessages(options, callback) {
+    sendGetUnreadMessages(options) {
         return new Promise((resolve, reject) => {
 
             const getUnreadMessagesPacket = {
@@ -74,7 +74,7 @@ class Message {
             resolve(unreadMessages);
         });
     };
-    sendGetModifiedMessages(options, callback) {
+    sendGetModifiedMessages(options) {
         return new Promise((resolve, reject) => {
 
             const getModifiedMessagesPacket = {
@@ -138,6 +138,67 @@ class Message {
             };
 
             resolve(modifiedMessages);
+        });
+    };
+
+    sendNewMessage(options) {
+        return new Promise((resolve, reject) => {
+
+            let newMessagePacketService = null;
+            let newMessagePacketBody = {};
+            let newMessageObj = {};
+
+            if (options.chatType === this.chatConstants.CHAT_TYPE_USER) {
+                if (options.text) {
+                    newMessagePacketService = this.serviceTypes.MESSAGE_NEW_WITH_USER_TYPE_TEXT;
+                    newMessagePacketBody = {
+                        msgId: options.msgId,
+                        to: options.chatId,
+                        msg: options.text
+                    };
+                    let currentTimeStamp = new Date().getTime();
+                    newMessageObj = {
+                        chatType: options.chatType,
+                        chatId: options.chatId,
+                        senderId: 0,
+                        receiverId: options.chatId,
+                        msgId: options.msgId,
+                        messageType: this.chatConstants.MESSAGE_TYPE_TEXT,
+                        messageStatus: this.chatConstants.MESSAGE_STATUS_SENDING,
+                        created: currentTimeStamp,
+                        modified: currentTimeStamp,
+                        text: options.text
+                    };
+                }
+            } else if (options.chatType === this.chatConstants.CHAT_TYPE_GROUP) {
+
+            }
+
+            const newMessagePacket = {
+                service: newMessagePacketService,
+                body: JSON.stringify(newMessagePacketBody)
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send new message packet'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'New message packet',
+                payload: newMessagePacket
+            });
+            this.sendPacketFunction(newMessagePacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send new message packet successfully'
+                });
+                resolve(newMessageObj);
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send new message data, new message fail'
+                });
+                reject({
+                    code: error.code,
+                    message: 'Cannot send new message data, new message fail'
+                });
+            });
         });
     };
 };

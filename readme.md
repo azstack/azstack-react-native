@@ -13,7 +13,9 @@
     * [3.4. List constants](#34-list-constants)
         * [3.4.1. Done](#341-done)
     * [3.5. Chat constants](#35-chat-constants)
-        * [3.5.1. Chat Type](#351-chat-type)
+        * [3.5.1. Chat Types](#351-chat-types)
+        * [3.5.2. Message Types](#352-message-types)
+        * [3.5.3. Message Statuses](#353-message-statuses)
     * [3.6. User constants](#36-user-constants)
         * [3.6.1. User status](#361-user-status)
 * [4. Connection](#4-connection)
@@ -36,9 +38,10 @@
         * [5.4.1. Get paid call logs](#541-get-paid-call-logs)
         * [5.4.2. Delegates](#542-delegates)
 * [6. Messages](#6-messages)
-    * [### 6.1. Get list](#61-get-list)
+    * [6.1. Get list](#61-get-list)
         * [6.1.1 Get unread messages](#611-get-unread-messages)
         * [6.1.2 Get modified messages](#612-get-modified-messages)
+    * [6.2. New message](#62-new-message)
 * [7. User](#7-user)
     * [7.1. Get users information](#71-get-users-information)
 
@@ -160,9 +163,20 @@ azstack.config({
 
 ### 3.5. Chat constants
 
-#### 3.5.1. Chat Type
+#### 3.5.1. Chat Types
 > - CHAT_TYPE_USER(1): chat with user
 > - CHAT_TYPE_GROUP(2): chat with group
+
+#### 3.5.2. Message Types
+> - MESSAGE_TYPE_TEXT(1): text message
+> - MESSAGE_TYPE_STICKER(2): sticker message
+> - MESSAGE_TYPE_FILE(3): file message
+
+#### 3.5.3. Message Statuses
+> - MESSAGE_STATUS_SENDING(0): status sending
+> - MESSAGE_STATUS_SENT(1): status sent
+> - MESSAGE_STATUS_DELIVERED(2): status delivered
+> - MESSAGE_STATUS_SEEN(3): status seen
 
 ### 3.6. User constants
 
@@ -666,9 +680,9 @@ this.AZStack.onGetUnreadMessagesReturn({
 });
 ```
 #### params
-> - page: page number
-> - chatType: chat type
-> - chatId: chatId
+> - page(required): page number
+> - chatType(required): chat type
+> - chatId(required): chatId
 
 #### error:
 > - code: error code
@@ -723,10 +737,10 @@ this.AZStack.onGetModifiedMessagesReturn({
 });
 ```
 #### params
-> - page: page number
-> - lastCreated: last created date time
-> - chatType: chat type
-> - chatId: chatId
+> - page(required): page number
+> - lastCreated(required): last created date time
+> - chatType(required): chat type
+> - chatId(required): chatId
 
 #### error:
 > - code: error code
@@ -737,6 +751,68 @@ this.AZStack.onGetModifiedMessagesReturn({
 > - chatId: chat id
 > - done: done or not
 > - list: modified message list
+
+### 6.2. New message
+
+```javascript 
+this.AZStack.newMessage({
+    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatId: 12345,
+    text: 'text'
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.newMessage({
+    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatId: 12345,
+    text: 'text'
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.onNewMessageReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStack.newMessage({
+    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatId: 12345,
+    text: 'text'
+});
+```
+#### params
+> - chatType(required): chat type
+> - chatId(required): chatId
+> - text(optional): text message
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - chatType: chat type
+> - chatId: chat id
+> - senderId: id of sender
+> - receiverId: id of receiverId
+> - msgId: id of message
+> - messageType: type of message
+> - messageStatus: status of message
+> - created: created time
+> - modified: modified time
+> - text: text of message
+
+
 
 # 7. User
 
@@ -776,9 +852,10 @@ this.AZStack.getUsersInformation({
     azStackUserIds: ['abcd']
 });
 ```
+
 #### params
-> - userIds: array of userIds (number)
-> - azStackUserIds: array of azStackUserIds (string)
+> - userIds(optional): array of userIds (number)
+> - azStackUserIds(optional): array of azStackUserIds (string)
 
 #### error:
 > - code: error code

@@ -835,6 +835,110 @@ class AZStack {
         });
     };
 
+    newMessage(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'New message'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'New message params',
+                payload: options
+            });
+
+            this.addUncall(this.uncallConstants.UNCALL_NEW_MESSAGE, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_NEW_MESSAGE_RETURN);
+
+            if (!options || typeof options !== 'object') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Missing new message params'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_NEW_MESSAGE, {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'Missing new message params'
+                }, null);
+                return;
+            }
+
+            if (!options.chatType) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'chatType is required'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_NEW_MESSAGE, {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'chatType is required'
+                }, null);
+                return;
+            }
+
+            if (options.chatType !== this.chatConstants.CHAT_TYPE_USER && options.chatType !== this.chatConstants.CHAT_TYPE_GROUP) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'unknown chatType'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_NEW_MESSAGE, {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'unknown chatType'
+                }, null);
+                return;
+            }
+
+            if (!options.chatId) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'chatId is required'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_NEW_MESSAGE, {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'chatId is required'
+                }, null);
+                return;
+            }
+
+            if (typeof options.chatId !== 'number') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'chatId must be number'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_NEW_MESSAGE, {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'chatId must be number'
+                }, null);
+                return;
+            }
+
+            if (!options.text) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'text is required'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_NEW_MESSAGE, {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'text is required'
+                }, null);
+                return;
+            }
+
+            if (options.text && typeof options.text !== 'string') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'text must be string'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_NEW_MESSAGE, {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'text must be string'
+                }, null);
+                return;
+            }
+
+            this.newUniqueId();
+            this.Message.sendNewMessage({
+                chatType: options.chatType,
+                chatId: options.chatId,
+                msgId: this.uniqueId,
+                text: options.text
+            }).then((result) => {
+                result.senderId = this.authenticatedUser.userId;
+                this.callUncall(this.uncallConstants.UNCALL_NEW_MESSAGE, null, result);
+            }).catch((error) => {
+                this.callUncall(this.uncallConstants.UNCALL_NEW_MESSAGE, error, null);
+            });
+        });
+    };
+
     getUsersInformation(options, callback) {
         return new Promise((resolve, reject) => {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {

@@ -21,5 +21,7 @@ export const PAID_CALL_LOGS_GET = 509;
 export const MESSAGE_GET_LIST_UNREAD = 173;
 export const MESSAGE_GET_LIST_MODIFIED = 169;
 
+export const MESSAGE_NEW_WITH_USER_TYPE_TEXT = 72;
+
 export const USER_GET_INFO_BY_IDS = 164;
 export const USER_GET_INFO_BY_USERNAMES = 165;

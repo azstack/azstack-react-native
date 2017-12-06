@@ -36,6 +36,8 @@ class AppMain extends React.Component {
         this.getUnreadMessagesTypeUser = this.getUnreadMessagesTypeUser.bind(this);
         this.getModifiedMessagesTypeUser = this.getModifiedMessagesTypeUser.bind(this);
 
+        this.newMessageWithUserTypeText = this.newMessageWithUserTypeText.bind(this);
+
         this.getUsersInfomationWithId = this.getUsersInfomationWithId.bind(this);
         this.getUsersInfomationWithAzstackUserId = this.getUsersInfomationWithAzstackUserId.bind(this);
 
@@ -110,6 +112,14 @@ class AppMain extends React.Component {
         }).then(() => { }).catch(() => { });
     };
 
+    newMessageWithUserTypeText() {
+        this.AZStack.newMessage({
+            chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+            chatId: 387212,
+            text: 'text'
+        }).then(() => { }).catch(() => { });
+    };
+
     getUsersInfomationWithId() {
         this.AZStack.getUsersInformation({
             userIds: [387212]
@@ -148,6 +158,8 @@ class AppMain extends React.Component {
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.getUnreadMessagesTypeUser} title="Get unread messages type user" />
                     <Button onPress={this.getModifiedMessagesTypeUser} title="Get modified messages type user" />
+                    <Text>{'\n'}{'\n'}</Text>
+                    <Button onPress={this.newMessageWithUserTypeText} title="New message with user type text" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.getUsersInfomationWithId} title="Get users onformation with id" />
                     <Button onPress={this.getUsersInfomationWithAzstackUserId} title="Get users onformation with azStackUserId" />
