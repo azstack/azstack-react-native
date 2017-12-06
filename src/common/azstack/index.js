@@ -847,13 +847,13 @@ class AZStack {
                 payload: options
             });
 
-            this.addUncall(this.uncallConstants.UNCALL_NEW_MESSAGE, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_NEW_MESSAGE_RETURN);
+            this.addUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_NEW_MESSAGE_RETURN);
 
             if (!options || typeof options !== 'object') {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Missing new message params'
                 });
-                this.callUncall(this.uncallConstants.UNCALL_NEW_MESSAGE, {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'Missing new message params'
                 }, null);
@@ -864,7 +864,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'chatType is required'
                 });
-                this.callUncall(this.uncallConstants.UNCALL_NEW_MESSAGE, {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'chatType is required'
                 }, null);
@@ -875,7 +875,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'unknown chatType'
                 });
-                this.callUncall(this.uncallConstants.UNCALL_NEW_MESSAGE, {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'unknown chatType'
                 }, null);
@@ -886,7 +886,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'chatId is required'
                 });
-                this.callUncall(this.uncallConstants.UNCALL_NEW_MESSAGE, {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'chatId is required'
                 }, null);
@@ -897,7 +897,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'chatId must be number'
                 });
-                this.callUncall(this.uncallConstants.UNCALL_NEW_MESSAGE, {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'chatId must be number'
                 }, null);
@@ -908,7 +908,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'text is required'
                 });
-                this.callUncall(this.uncallConstants.UNCALL_NEW_MESSAGE, {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'text is required'
                 }, null);
@@ -919,7 +919,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'text must be string'
                 });
-                this.callUncall(this.uncallConstants.UNCALL_NEW_MESSAGE, {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'text must be string'
                 }, null);
@@ -934,9 +934,9 @@ class AZStack {
                 text: options.text
             }).then((result) => {
                 result.senderId = this.authenticatedUser.userId;
-                this.callUncall(this.uncallConstants.UNCALL_NEW_MESSAGE, null, result);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, null, result);
             }).catch((error) => {
-                this.callUncall(this.uncallConstants.UNCALL_NEW_MESSAGE, error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, error, null);
             });
         });
     };
