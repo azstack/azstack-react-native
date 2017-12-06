@@ -177,17 +177,17 @@ azstack.config({
 ### 4.1. Connect
 
 ```javascript 
-this.AZStack.connect({}, (error, authenticatedUser) => {
+this.AZStack.connect({}, (error, result) => {
     console.log(error);
-    console.log(authenticatedUser);
+    console.log(result);
 });
 ```
 
 OR
 
 ```javascript 
-this.AZStack.connect({}).then((authenticatedUser) => {
-    console.log(authenticatedUser);
+this.AZStack.connect({}).then((result) => {
+    console.log(result);
 }).catch((error) => {
     console.log(error);
 });
@@ -196,8 +196,8 @@ this.AZStack.connect({}).then((authenticatedUser) => {
 OR
 
 ```javascript 
-this.AZStack.Delegates.onAuthencationReturn = (error, authenticatedUser) => {
-    console.log(error, authenticatedUser);
+this.AZStack.Delegates.onAuthencationReturn = (error, result) => {
+    console.log(error, result);
 };
 this.AZStack.connect({});
 ```
@@ -206,7 +206,7 @@ this.AZStack.connect({});
 > - code: error code
 > - message: error message
 
-#### authenticatedUser:
+#### result:
 > - azStackUserId: unique key string of users
 > - userId: userId of user in azstack
 > - fullname: fullname of user
@@ -242,11 +242,6 @@ this.AZStack.disconnect({});
 #### error:
 > - code: error code
 > - message: error message
-
-#### authenticatedUser:
-> - azStackUserId: unique key string of users
-> - userId: userId of user in azstack
-> - fullname: fullname of user
 
 
 

@@ -1,4 +1,5 @@
 import * as uncallConstants from './constant/uncallConstants';
+import * as delegateConstants from './constant/delegateConstants';
 import * as logLevelConstants from './constant/logLevel';
 import * as serviceTypes from './constant/serviceTypes';
 import * as errorCodes from './constant/errorCodes';
@@ -19,6 +20,7 @@ class AZStack {
         this.sdkVersion = '0.0.1';
         this.masterSocketUri = 'https://www.azhub.xyz:9199';
         this.uncallConstants = uncallConstants;
+        this.delegateConstants = delegateConstants;
         this.logLevelConstants = logLevelConstants;
         this.serviceTypes = serviceTypes;
         this.errorCodes = errorCodes;
@@ -30,7 +32,7 @@ class AZStack {
         this.intervalPingTime = 60000;
 
         this.Logger = new Logger();
-        this.Delegates = new Delegates({ logLevelConstants: this.logLevelConstants, Logger: this.Logger });
+        this.Delegates = new Delegates({ logLevelConstants: this.logLevelConstants, delegateConstants: this.delegateConstants, Logger: this.Logger });
 
         this.unCalls = {};
         this.slaveAddress = null;
@@ -196,22 +198,22 @@ class AZStack {
                         azStackUserId: result.username,
                         fullname: result.fullname
                     };
-                    this.callUncall('authentication', null, this.authenticatedUser);
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_AUTHENTICATION, null, this.authenticatedUser);
                 }).catch((error) => {
-                    this.callUncall('authentication', error, null);
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_AUTHENTICATION, error, null);
                 });
                 break;
 
             case this.serviceTypes.CALLOUT_START_INITIAL:
                 this.Call.receiveStartCalloutInitial(body).then(() => { }).catch((error) => {
-                    this.callUncall('startCallout', error, null);
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_START_CALLOUT, error, null);
                 });
                 break;
             case this.serviceTypes.CALLOUT_START_DONE:
                 this.Call.receiveStartCalloutDone(body, this.sendSlavePacket.bind(this)).then((result) => {
-                    this.callUncall('startCallout', null, null);
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_START_CALLOUT, null, null);
                 }).catch((error) => {
-                    this.callUncall('startCallout', error, null);
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_START_CALLOUT, error, null);
                 });
                 break;
             case this.serviceTypes.CALLOUT_DATA_STATUS_CHANGED:
@@ -253,24 +255,24 @@ class AZStack {
                 break;
             case this.serviceTypes.PAID_CALL_LOGS_GET:
                 this.Call.receivePaidCallLogs(body).then((result) => {
-                    this.callUncall('getPaidCallLogs', null, result);
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_PAID_CALL_LOGS, null, result);
                 }).catch((error) => {
-                    this.callUncall('getPaidCallLogs', error, null);
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_PAID_CALL_LOGS, error, null);
                 });
                 break;
 
             case this.serviceTypes.MESSAGE_GET_LIST_UNREAD:
                 this.Message.receiveUnreadMessages(body).then((result) => {
-                    this.callUncall('getUnreadMessages', null, result);
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_UNREAD_MESSAGES, null, result);
                 }).catch((error) => {
-                    this.callUncall('getUnreadMessages', error, null);
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_UNREAD_MESSAGES, error, null);
                 });
                 break;
             case this.serviceTypes.MESSAGE_GET_LIST_MODIFIED:
                 this.Message.receiveModifiedMessages(body).then((result) => {
-                    this.callUncall('getModifiedMessages', null, result);
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_MESSAGES, null, result);
                 }).catch((error) => {
-                    this.callUncall('getModifiedMessages', error, null);
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_MESSAGES, error, null);
                 });
                 break;
 
@@ -278,12 +280,12 @@ class AZStack {
             case this.serviceTypes.USER_GET_INFO_BY_USERNAMES:
                 this.User.receiveUsersInfomation(body).then((result) => {
                     if (result.done === 1) {
-                        this.callUncall('getUsersInformation', null, result);
+                        this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, null, result);
                     } else {
-                        this.addUncallTemporary('getUsersInformation', 'list', result, this.uncallConstants.UNCALL_TEMPORARY_TYPE_ARRAY);
+                        this.addUncallTemporary(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, 'list', result, this.uncallConstants.UNCALL_TEMPORARY_TYPE_ARRAY);
                     }
                 }).catch((error) => {
-                    this.callUncall('getUsersInformation', error, null);
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, error, null);
                 });
                 break;
 
@@ -316,7 +318,7 @@ class AZStack {
                 slaveAddress: this.slaveAddress,
                 authenticatingData: this.authenticatingData
             }).then(() => { }).catch((error) => {
-                this.callUncall('authentication', error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_AUTHENTICATION, error, null);
             });
             this.intervalSendPing = setInterval(() => {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
@@ -344,12 +346,12 @@ class AZStack {
                 message: 'Slave socket connection error',
                 payload: error
             });
-            this.callUncall('authentication', {
+            this.callUncall(this.uncallConstants.UNCALL_KEY_AUTHENTICATION, {
                 code: this.errorCodes.ERR_SOCKET_CONNECT,
                 message: 'Cannot connect to slave socket'
             }, null);
         });
-        this.slaveSocket.on('disconnect', () => {
+        this.slaveSocket.on(this.uncallConstants.UNCALL_KEY_DISCONNECT, () => {
             this.slaveSocketConnected = false;
             this.slaveAddress = null;
             this.authenticatedUser = null;
@@ -361,7 +363,7 @@ class AZStack {
             });
             if (this.slaveSocketDisconnecting) {
                 this.slaveSocketDisconnecting = false;
-                this.callUncall('disconnect', null, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_DISCONNECT, null, null);
             }
         });
         this.slaveSocket.on('WebPacket', (packet) => {
@@ -404,7 +406,7 @@ class AZStack {
 
     connect(options, callback) {
         return new Promise((resolve, reject) => {
-            this.addUncall('authentication', callback, resolve, reject, 'onAuthencationReturn');
+            this.addUncall(this.uncallConstants.UNCALL_KEY_AUTHENTICATION, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_AUTHENTICATION_RETURN);
 
             if (!this.authenticatingData.appId || !this.authenticatingData.publicKey || !this.authenticatingData.azStackUserId || !this.authenticatingData.fullname) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -414,7 +416,7 @@ class AZStack {
                     message: 'Authenticating data',
                     payload: this.authenticatingData
                 });
-                this.callUncall('authentication', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_AUTHENTICATION, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'appId, publicKey, azStackUserId, fullname are required for authenticating data, connect fail'
                 }, null);
@@ -430,7 +432,7 @@ class AZStack {
                 this.slaveAddress = result.slaveAddress;
                 this.setupSocket(result.slaveSocket);
             }).catch((error) => {
-                this.callUncall('authentication', error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_AUTHENTICATION, error, null);
             });
         });
     };
@@ -441,13 +443,13 @@ class AZStack {
                 message: 'Start disconnect to slave server'
             });
 
-            this.addUncall('disconnect', callback, resolve, reject, 'onDisconnectReturn');
+            this.addUncall(this.uncallConstants.UNCALL_KEY_DISCONNECT, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_DISCONNECT_RETURN);
 
             if (!this.slaveSocketConnected) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Cannot disconnect to slave server, slave socket not connected'
                 });
-                this.callUncall('disconnect', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_DISCONNECT, {
                     code: this.errorCodes.ERR_SOCKET_NOT_CONNECTED,
                     message: 'Cannot disconnect to slave server, slave socket not connected'
                 }, null);
@@ -464,12 +466,12 @@ class AZStack {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Toggle audio state'
             });
-            this.addUncall('toggleAutioState', callback, resolve, reject, 'onToggleAudioStateReturn');
+            this.addUncall(this.uncallConstants.UNCALL_KEY_TOGGLE_AUDIO_STATE, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_TOGGLE_AUDIO_STATE_RETURN);
 
             this.Call.toggleAudioState({}).then((result) => {
-                this.callUncall('toggleAutioState', null, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_TOGGLE_AUDIO_STATE, null, null);
             }).catch((error) => {
-                this.callUncall('toggleAutioState', error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_TOGGLE_AUDIO_STATE, error, null);
             });
         });
     };
@@ -483,13 +485,13 @@ class AZStack {
                 message: 'Callout data',
                 payload: options
             });
-            this.addUncall('startCallout', callback, resolve, reject, 'onStartCalloutReturn');
+            this.addUncall(this.uncallConstants.UNCALL_KEY_START_CALLOUT, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_START_CALLOUT_RETURN);
 
             if (!options || typeof options !== 'object') {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Missing callout data'
                 });
-                this.callUncall('startCallout', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_START_CALLOUT, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'Missing callout data'
                 }, null);
@@ -500,7 +502,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'toPhoneNumber is required for start callout'
                 });
-                this.callUncall('startCallout', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_START_CALLOUT, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'toPhoneNumber is required for start callout'
                 }, null);
@@ -511,7 +513,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'toPhoneNumber is invalid, not a string number'
                 });
-                this.callUncall('startCallout', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_START_CALLOUT, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'toPhoneNumber is invalid, not a string number'
                 }, null);
@@ -523,7 +525,7 @@ class AZStack {
                 callId: this.uniqueId,
                 toPhoneNumber: options.toPhoneNumber
             }).then(() => { }).catch((error) => {
-                this.callUncall('startCallout', error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_START_CALLOUT, error, null);
             });
         });
     };
@@ -532,12 +534,12 @@ class AZStack {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Stop callout'
             });
-            this.addUncall('stopCallout', callback, resolve, reject, 'onStopCalloutReturn');
+            this.addUncall(this.uncallConstants.UNCALL_KEY_STOP_CALLOUT, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_STOP_CALLOUT_RETURN);
 
             this.Call.sendStopCallout({}).then((result) => {
-                this.callUncall('stopCallout', null, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_STOP_CALLOUT, null, null);
             }).catch((error) => {
-                this.callUncall('stopCallout', error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_STOP_CALLOUT, error, null);
             });
         });
     };
@@ -547,12 +549,12 @@ class AZStack {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Answer callin'
             });
-            this.addUncall('answerCallin', callback, resolve, reject, 'onAnswerCallinReturn');
+            this.addUncall(this.uncallConstants.UNCALL_KEY_ANSWER_CALLIN, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_ANSWER_CALLIN_RETURN);
 
             this.Call.sendAnswerCallin({}).then((result) => {
-                this.callUncall('answerCallin', null, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_ANSWER_CALLIN, null, null);
             }).catch((error) => {
-                this.callUncall('answerCallin', error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_ANSWER_CALLIN, error, null);
             });
         });
     };
@@ -561,12 +563,12 @@ class AZStack {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Reject callin'
             });
-            this.addUncall('rejectCallin', callback, resolve, reject, 'onRejectCallinReturn');
+            this.addUncall(this.uncallConstants.UNCALL_KEY_REJECT_CALLIN, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_REJECT_CALLIN_RETURN);
 
             this.Call.sendRejectCallin({}).then((result) => {
-                this.callUncall('rejectCallin', null, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_REJECT_CALLIN, null, null);
             }).catch((error) => {
-                this.callUncall('rejectCallin', error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_REJECT_CALLIN, error, null);
             });
         });
     };
@@ -575,12 +577,12 @@ class AZStack {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Not Answered callin'
             });
-            this.addUncall('notAnsweredCallin', callback, resolve, reject, 'onNotAnsweredCallinReturn');
+            this.addUncall(this.uncallConstants.UNCALL_KEY_NOT_ANSWERED_CALLIN, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_NOT_ANSWERED_CALLIN_RETURN);
 
             this.Call.sendNotAnsweredCallin({}).then((result) => {
-                this.callUncall('notAnsweredCallin', null, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NOT_ANSWERED_CALLIN, null, null);
             }).catch((error) => {
-                this.callUncall('notAnsweredCallin', error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NOT_ANSWERED_CALLIN, error, null);
             });
         });
     };
@@ -589,12 +591,12 @@ class AZStack {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Stop callin'
             });
-            this.addUncall('stopCallin', callback, resolve, reject, 'onStopCallinReturn');
+            this.addUncall(this.uncallConstants.UNCALL_KEY_STOP_CALLIN, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_STOP_CALLIN_RETURN);
 
             this.Call.sendStopCallin({}).then((result) => {
-                this.callUncall('stopCallin', null, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_STOP_CALLIN, null, null);
             }).catch((error) => {
-                this.callUncall('stopCallin', error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_STOP_CALLIN, error, null);
             });
         });
     };
@@ -605,10 +607,10 @@ class AZStack {
                 message: 'Get paid call logs'
             });
 
-            this.addUncall('getPaidCallLogs', callback, resolve, reject, 'onGetPaidCallLogsReturn');
+            this.addUncall(this.uncallConstants.UNCALL_KEY_GET_PAID_CALL_LOGS, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_GET_PAID_CALL_LOGS_RETURN);
 
             this.Call.sendGetPaidCallLogs({}).then().catch((error) => {
-                this.callUncall('getPaidCallLogs', error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_PAID_CALL_LOGS, error, null);
             });
         });
     };
@@ -623,13 +625,13 @@ class AZStack {
                 payload: options
             });
 
-            this.addUncall('getUnreadMessages', callback, resolve, reject, 'onGetUnreadMessagesReturn');
+            this.addUncall(this.uncallConstants.UNCALL_KEY_GET_UNREAD_MESSAGES, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_GET_UNREAD_MESSAGES_RETURN);
 
             if (!options || typeof options !== 'object') {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Missing unread messages params'
                 });
-                this.callUncall('getUnreadMessages', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_UNREAD_MESSAGES, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'Missing unread messages params'
                 }, null);
@@ -640,7 +642,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'page is required'
                 });
-                this.callUncall('getUnreadMessages', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_UNREAD_MESSAGES, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'page is required'
                 }, null);
@@ -651,7 +653,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'page must be number'
                 });
-                this.callUncall('getUnreadMessages', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_UNREAD_MESSAGES, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'page must be number'
                 }, null);
@@ -662,7 +664,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'chatType is required'
                 });
-                this.callUncall('getUnreadMessages', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_UNREAD_MESSAGES, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'chatType is required'
                 }, null);
@@ -673,7 +675,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'unknown chatType'
                 });
-                this.callUncall('getUnreadMessages', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_UNREAD_MESSAGES, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'unknown chatType'
                 }, null);
@@ -684,7 +686,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'chatId is required'
                 });
-                this.callUncall('getUnreadMessages', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_UNREAD_MESSAGES, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'chatId is required'
                 }, null);
@@ -695,7 +697,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'chatId must be number'
                 });
-                this.callUncall('getUnreadMessages', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_UNREAD_MESSAGES, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'chatId must be number'
                 }, null);
@@ -707,7 +709,7 @@ class AZStack {
                 chatType: options.chatType,
                 chatId: options.chatId
             }).then().catch((error) => {
-                this.callUncall('getUnreadMessages', error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_UNREAD_MESSAGES, error, null);
             });
         });
     };
@@ -721,13 +723,13 @@ class AZStack {
                 payload: options
             });
 
-            this.addUncall('getModifiedMessages', callback, resolve, reject, 'onGetModifiedMessagesReturn');
+            this.addUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_MESSAGES, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_GET_MODIFIED_MESSAGES_RETURN);
 
             if (!options || typeof options !== 'object') {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Missing modified messages params'
                 });
-                this.callUncall('getModifiedMessages', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_MESSAGES, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'Missing modified messages params'
                 }, null);
@@ -738,7 +740,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'page is required'
                 });
-                this.callUncall('getModifiedMessages', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_MESSAGES, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'page is required'
                 }, null);
@@ -749,7 +751,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'page must be number'
                 });
-                this.callUncall('getModifiedMessages', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_MESSAGES, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'page must be number'
                 }, null);
@@ -760,7 +762,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'lastCreated is required'
                 });
-                this.callUncall('getModifiedMessages', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_MESSAGES, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'lastCreated is required'
                 }, null);
@@ -771,7 +773,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'lastCreated must be number'
                 });
-                this.callUncall('getModifiedMessages', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_MESSAGES, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'lastCreated must be number'
                 }, null);
@@ -782,7 +784,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'chatType is required'
                 });
-                this.callUncall('getModifiedMessages', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_MESSAGES, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'chatType is required'
                 }, null);
@@ -793,7 +795,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'unknown chatType'
                 });
-                this.callUncall('getModifiedMessages', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_MESSAGES, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'unknown chatType'
                 }, null);
@@ -804,7 +806,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'chatId is required'
                 });
-                this.callUncall('getModifiedMessages', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_MESSAGES, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'chatId is required'
                 }, null);
@@ -815,7 +817,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'chatId must be number'
                 });
-                this.callUncall('getModifiedMessages', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_MESSAGES, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'chatId must be number'
                 }, null);
@@ -828,7 +830,7 @@ class AZStack {
                 chatType: options.chatType,
                 chatId: options.chatId
             }).then().catch((error) => {
-                this.callUncall('getModifiedMessages', error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_MESSAGES, error, null);
             });
         });
     };
@@ -843,13 +845,13 @@ class AZStack {
                 payload: options
             });
 
-            this.addUncall('getUsersInformation', callback, resolve, reject, 'onGetUsersInformationReturn');
+            this.addUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_GET_USERS_INFORMATION_RETURN);
 
             if (!options || typeof options !== 'object') {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Missing users information params'
                 });
-                this.callUncall('getUsersInformation', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'Missing users information params'
                 }, null);
@@ -860,7 +862,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'userIds or azStackUserIds is required'
                 });
-                this.callUncall('getUsersInformation', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'userIds or azStackUserIds is required'
                 }, null);
@@ -872,7 +874,7 @@ class AZStack {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                         message: 'userIds must be an array'
                     });
-                    this.callUncall('getUsersInformation', {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, {
                         code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                         message: 'userIds must be an array'
                     }, null);
@@ -883,7 +885,7 @@ class AZStack {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                         message: 'userIds cannot be empty'
                     });
-                    this.callUncall('getUsersInformation', {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, {
                         code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                         message: 'userIds cannot be empty'
                     }, null);
@@ -902,7 +904,7 @@ class AZStack {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                         message: 'userIds must contain all numbers'
                     });
-                    this.callUncall('getUsersInformation', {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, {
                         code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                         message: 'userIds must contain all numbers'
                     }, null);
@@ -915,7 +917,7 @@ class AZStack {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                         message: 'azStackUserIds must be an array'
                     });
-                    this.callUncall('getUsersInformation', {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, {
                         code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                         message: 'azStackUserIds must be an array'
                     }, null);
@@ -926,7 +928,7 @@ class AZStack {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                         message: 'azStackUserIds cannot be empty'
                     });
-                    this.callUncall('getUsersInformation', {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, {
                         code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                         message: 'azStackUserIds cannot be empty'
                     }, null);
@@ -945,7 +947,7 @@ class AZStack {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                         message: 'azStackUserIds must contain all strings'
                     });
-                    this.callUncall('getUsersInformation', {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, {
                         code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                         message: 'azStackUserIds must contain all strings'
                     }, null);
@@ -957,7 +959,7 @@ class AZStack {
                 userIds: options.userIds,
                 azStackUserIds: options.azStackUserIds
             }).then().catch((error) => {
-                this.callUncall('getUsersInformation', error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, error, null);
             });
         });
     };

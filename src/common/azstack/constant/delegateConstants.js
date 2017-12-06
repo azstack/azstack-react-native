@@ -1,0 +1,13 @@
+export const DELEGATE_ON_AUTHENTICATION_RETURN = 'onAuthencationReturn';
+export const DELEGATE_ON_DISCONNECT_RETURN = 'onDisconnectReturn';
+export const DELEGATE_ON_TOGGLE_AUDIO_STATE_RETURN = 'onToggleAudioStateReturn';
+export const DELEGATE_ON_START_CALLOUT_RETURN = 'onStartCalloutReturn';
+export const DELEGATE_ON_STOP_CALLOUT_RETURN = 'onStopCalloutReturn';
+export const DELEGATE_ON_ANSWER_CALLIN_RETURN = 'onAnswerCallinReturn';
+export const DELEGATE_ON_REJECT_CALLIN_RETURN = 'onRejectCallinReturn';
+export const DELEGATE_ON_NOT_ANSWERED_CALLIN_RETURN = 'onNotAnsweredCallinReturn';
+export const DELEGATE_ON_STOP_CALLIN_RETURN = 'onStopCallinReturn';
+export const DELEGATE_ON_GET_PAID_CALL_LOGS_RETURN = 'onGetPaidCallLogsReturn';
+export const DELEGATE_ON_GET_UNREAD_MESSAGES_RETURN = 'onGetUnreadMessagesReturn';
+export const DELEGATE_ON_GET_MODIFIED_MESSAGES_RETURN = 'onGetModifiedMessagesReturn';
+export const DELEGATE_ON_GET_USERS_INFORMATION_RETURN = 'onGetUsersInformationReturn';
