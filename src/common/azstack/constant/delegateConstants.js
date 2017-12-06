@@ -13,6 +13,8 @@ export const DELEGATE_ON_STOP_CALLIN_RETURN = 'onStopCallinReturn';
 
 export const DELEGATE_ON_GET_PAID_CALL_LOGS_RETURN = 'onGetPaidCallLogsReturn';
 
+export const DELEGATE_ON_GET_MODIFIED_CONVERSATIONS_RETURN = 'onGetModifiedConversationsReturn';
+
 export const DELEGATE_ON_GET_UNREAD_MESSAGES_RETURN = 'onGetUnreadMessagesReturn';
 export const DELEGATE_ON_GET_MODIFIED_MESSAGES_RETURN = 'onGetModifiedMessagesReturn';
 

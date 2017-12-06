@@ -33,6 +33,8 @@ class AppMain extends React.Component {
 
         this.getPaidCallLogs = this.getPaidCallLogs.bind(this);
 
+        this.getModifiedConversations = this.getModifiedConversations.bind(this);
+
         this.getUnreadMessagesTypeUser = this.getUnreadMessagesTypeUser.bind(this);
         this.getModifiedMessagesTypeUser = this.getModifiedMessagesTypeUser.bind(this);
 
@@ -96,6 +98,13 @@ class AppMain extends React.Component {
         this.AZStack.getPaidCallLogs({}).then(() => { }).catch(() => { });
     };
 
+    getModifiedConversations() {
+        this.AZStack.getModifiedConversations({
+            page: 1,
+            lastCreated: new Date().getTime()
+        }).then(() => { }).catch(() => { });
+    };
+
     getUnreadMessagesTypeUser() {
         this.AZStack.getUnreadMessages({
             page: 1,
@@ -155,6 +164,8 @@ class AppMain extends React.Component {
                     <Button onPress={this.stopCallin} title="Stop Callin" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.getPaidCallLogs} title="Get paid call logs" />
+                    <Text>{'\n'}{'\n'}</Text>
+                    <Button onPress={this.getModifiedConversations} title="Get modified conversations" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.getUnreadMessagesTypeUser} title="Get unread messages type user" />
                     <Button onPress={this.getModifiedMessagesTypeUser} title="Get modified messages type user" />

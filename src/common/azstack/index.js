@@ -262,6 +262,14 @@ class AZStack {
                 });
                 break;
 
+            case this.serviceTypes.CONVERSATION_GET_LIST_MODIFIED:
+                this.Conversation.receiveModifiedConversations(body).then((result) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_CONVERSATIONS, null, result);
+                }).catch((error) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_CONVERSATIONS, error, null);
+                });
+                break;
+
             case this.serviceTypes.MESSAGE_GET_LIST_UNREAD:
                 this.Message.receiveUnreadMessages(body).then((result) => {
                     this.callUncall(this.uncallConstants.UNCALL_KEY_GET_UNREAD_MESSAGES, null, result);
@@ -613,6 +621,82 @@ class AZStack {
 
             this.Call.sendGetPaidCallLogs({}).then().catch((error) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_GET_PAID_CALL_LOGS, error, null);
+            });
+        });
+    };
+
+    getModifiedConversations(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Get modified conversations'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Get modified conversations params',
+                payload: options
+            });
+
+            this.addUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_CONVERSATIONS, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_GET_MODIFIED_CONVERSATIONS_RETURN);
+
+            if (!options || typeof options !== 'object') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Missing modified conversations params'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_CONVERSATIONS, {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'Missing modified conversations params'
+                }, null);
+                return;
+            }
+
+            if (!options.page) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'page is required'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_CONVERSATIONS, {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'page is required'
+                }, null);
+                return;
+            }
+
+            if (typeof options.page !== 'number') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'page must be number'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_CONVERSATIONS, {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'page must be number'
+                }, null);
+                return;
+            }
+
+            if (!options.lastCreated) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'lastCreated is required'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_CONVERSATIONS, {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'lastCreated is required'
+                }, null);
+                return;
+            }
+
+            if (typeof options.lastCreated !== 'number') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'lastCreated must be number'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_CONVERSATIONS, {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'lastCreated must be number'
+                }, null);
+                return;
+            }
+
+            this.Conversation.sendGetModifiedConversations({
+                page: options.page,
+                lastCreated: options.lastCreated
+            }).then().catch((error) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_CONVERSATIONS, error, null);
             });
         });
     };

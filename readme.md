@@ -38,6 +38,7 @@
         * [5.4.1. Get paid call logs](#541-get-paid-call-logs)
         * [5.4.2. Delegates](#542-delegates)
 * [6. Conversations](#6-conversations)
+    * [6.1 Get modified conversations](#61-get-modified-conversations)
 * [7. Messages](#7-messages)
     * [7.1. Get list](#71-get-list)
         * [7.1.1 Get unread messages](#711-get-unread-messages)
@@ -639,6 +640,55 @@ this.AZStack.Delegates.onPaidCallLogReturn = (error, result) => {
 
 # 6. Conversations
 
+#### 6.1 Get modified conversations
+
+```javascript 
+this.AZStack.getModifiedConversations({
+    page: 1,
+    lastCreated: new Date().getTime()
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.getModifiedConversations({
+    page: 1,
+    lastCreated: new Date().getTime()
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.onGetModifiedConversationsReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStack.getModifiedConversations({
+    page: 1,
+    lastCreated: new Date().getTime()
+});
+```
+#### params
+> - page(required): page number
+> - lastCreated(required): last created date time
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - done: done or not
+> - page: page number
+> - list: modified conversations list
+
 
 
 # 7. Messages
@@ -698,7 +748,7 @@ this.AZStack.onGetUnreadMessagesReturn({
 > - chatId: chat id
 > - done: done or not
 > - page: page number
-> - list: unread message list
+> - list: unread messages list
 >   - chatType: chat type
 >   - chatId: chat id
 >   - senderId: id of sender
@@ -742,10 +792,10 @@ this.AZStack.getModifiedMessages({
 OR
 
 ```javascript 
-this.AZStack.Delegates.getModifiedMessages = (error, result) => {
+this.AZStack.Delegates.onGetModifiedMessagesReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.onGetModifiedMessagesReturn({
+this.AZStack.getModifiedMessages({
     page: 1,
     lastCreated: new Date().getTime(),
     chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
@@ -767,7 +817,7 @@ this.AZStack.onGetModifiedMessagesReturn({
 > - chatId: chat id
 > - done: done or not
 > - page: page number
-> - list: modified message list
+> - list: modified messages list
 >   - chatType: chat type
 >   - chatId: chat id
 >   - senderId: id of sender
@@ -871,10 +921,10 @@ this.AZStack.getUsersInformation({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onGetUsersInformationReturn = (error, result) => {
+this.AZStack.Delegates.getUsersInformation = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.getUsersInformation({
+this.AZStack.onGetUsersInformationReturn({
     userIds: [123],
     azStackUserIds: ['abcd']
 });
