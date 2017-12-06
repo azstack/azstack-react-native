@@ -70,6 +70,27 @@ class Message {
                 done: body.done,
                 list: []
             };
+            body.list.map((message) => {
+                let unreadMessage = {
+                    chatType: 0,
+                    chatId: message.receiverId,
+                    senderId: message.senderId,
+                    receiverId: message.receiverId,
+                    msgId: message.msgId,
+                    messageType: 0,
+                    messageStatus: message.status,
+                    created: message.created,
+                    modified: message.modified
+                };
+                if (message.serviceType === 5) {
+                    unreadMessage.chatType = this.chatConstants.CHAT_TYPE_USER;
+                }
+                if (message.msg) {
+                    unreadMessage.messageType = this.chatConstants.MESSAGE_TYPE_TEXT;
+                    unreadMessage.text = message.msg;
+                }
+                unreadMessages.list.push(unreadMessage);
+            });
 
             resolve(unreadMessages);
         });
@@ -136,6 +157,27 @@ class Message {
                 done: body.done,
                 list: []
             };
+            body.list.map((message) => {
+                let modifiedMessage = {
+                    chatType: 0,
+                    chatId: message.receiverId,
+                    senderId: message.senderId,
+                    receiverId: message.receiverId,
+                    msgId: message.msgId,
+                    messageType: 0,
+                    messageStatus: message.status,
+                    created: message.created,
+                    modified: message.modified
+                };
+                if (message.serviceType === 5) {
+                    modifiedMessage.chatType = this.chatConstants.CHAT_TYPE_USER;
+                }
+                if (message.msg) {
+                    modifiedMessage.messageType = this.chatConstants.MESSAGE_TYPE_TEXT;
+                    modifiedMessage.text = message.msg;
+                }
+                modifiedMessages.list.push(modifiedMessage);
+            });
 
             resolve(modifiedMessages);
         });

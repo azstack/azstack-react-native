@@ -693,6 +693,16 @@ this.AZStack.onGetUnreadMessagesReturn({
 > - chatId: chat id
 > - done: done or not
 > - list: unread message list
+>   - chatType: chat type
+>   - chatId: chat id
+>   - senderId: id of sender
+>   - receiverId: id of receiverId
+>   - msgId: id of message
+>   - messageType: type of message
+>   - messageStatus: status of message
+>   - created: created time
+>   - modified: modified time
+>   - text: text of message
 
 #### 6.1.2 Get modified messages
 
@@ -751,6 +761,16 @@ this.AZStack.onGetModifiedMessagesReturn({
 > - chatId: chat id
 > - done: done or not
 > - list: modified message list
+>   - chatType: chat type
+>   - chatId: chat id
+>   - senderId: id of sender
+>   - receiverId: id of receiverId
+>   - msgId: id of message
+>   - messageType: type of message
+>   - messageStatus: status of message
+>   - created: created time
+>   - modified: modified time
+>   - text: text of message
 
 ### 6.2. New message
 
