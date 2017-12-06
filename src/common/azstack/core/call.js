@@ -419,7 +419,7 @@ class Call {
                 payload: body
             });
 
-            if (this.callData.callId && this.callData.callId !== body.callId) {
+            if (this.callData.callId !== body.callId) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Ignore start callout initial packet when callId not matched'
                 });
@@ -484,7 +484,7 @@ class Call {
                 payload: body
             });
 
-            if (this.callData.callId && this.callData.callId !== body.callId) {
+            if (this.callData.callId !== body.callId) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Ignore start callout done packet when callId not matched'
                 });
@@ -519,7 +519,7 @@ class Call {
                 payload: body
             });
 
-            if (this.callData.callId && this.callData.callId !== body.callId) {
+            if (this.callData.callId !== body.callId) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Ignore callout status changed packet when callId not matched'
                 });
@@ -811,7 +811,7 @@ class Call {
                 payload: body
             });
 
-            if (this.callData.callId && this.callData.callId !== body.callId) {
+            if (this.callData.callId !== body.callId) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Ignore callin status changed packet when callId not matched'
                 });
@@ -872,7 +872,7 @@ class Call {
                 payload: body
             });
 
-            if (this.callData.callId && this.callData.callId !== body.callId) {
+            if (this.callData.callId !== body.callId) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Ignore callin status changed by me packet when callId not matched'
                 });
