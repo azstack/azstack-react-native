@@ -14,6 +14,8 @@
         * [3.4.1. Done](#341-done)
     * [3.5. Chat constants](#35-chat-constants)
         * [3.5.1. Chat Type](#351-chat-type)
+    * [3.6. User constants](#36-user-constants)
+        * [3.6.1. User status](#361-user-status)
 * [4. Connection](#4-connection)
     * [4.1. Connect](#41-connect)
     * [4.2. Disconnect](#42-disconnect)
@@ -37,6 +39,8 @@
     * [### 6.1. Get list](#61-get-list)
         * [6.1.1 Get unread messages](#611-get-unread-messages)
         * [6.1.2 Get modified messages](#612-get-modified-messages)
+* [7. User](#7-user)
+    * [7.1. Get users information](#71-get-users-information)
 
 
 
@@ -91,10 +95,10 @@ azstack.config({
 #### authenticatingData(optional):
 > - appId(required): the id of your azstack application
 > - publicKey(required): the public key of ypur azstack application
-> - azStackUserId(required): an unique string for authenticaing user in your application
-> - userCredentials(optional): the creadentials of authenticaing user
-> - fullname(required): the name of authenticaing user
-> - namespace(optional): the namespace of authenticaing user
+> - azStackUserId(required): an unique string for authenticating user in your application
+> - userCredentials(optional): the creadentials of authenticating user
+> - fullname(required): the name of authenticating user
+> - namespace(optional): the namespace of authenticating user
 
 
 
@@ -159,6 +163,12 @@ azstack.config({
 #### 3.5.1. Chat Type
 > - CHAT_TYPE_USER(1): chat with user
 > - CHAT_TYPE_GROUP(2): chat with group
+
+### 3.6. User constants
+
+#### 3.6.1. User status
+> - USER_STATUS_ONLINE(1): online
+> - USER_STATUS_NOT_ONLINE(0): not online
 
 
 
@@ -732,3 +742,58 @@ this.AZStack.onGetModifiedMessagesReturn({
 > - chatId: chat id
 > - done: done or not
 > - list: modified message list
+
+# 7. User
+
+### 7.1. Get users information
+
+```javascript 
+this.AZStack.getUsersInformation({
+    userIds: [123],
+    azStackUserIds: ['abcd']
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.getUsersInformation({
+    userIds: [123],
+    azStackUserIds: ['abcd']
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.onGetUsersInformationReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStack.getUsersInformation({
+    userIds: [123],
+    azStackUserIds: ['abcd']
+});
+```
+#### params
+> - userIds: array of userIds (number)
+> - azStackUserIds: array of azStackUserIds (string)
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - done: done or not
+> - list: users information list
+>   - userId: id of user
+>   - azStackUserId: unique string of user
+>   - fullname: fullname of user
+>   - status: status of user
+>   - lastVisitDate: last visit date of user

@@ -4,12 +4,14 @@ import * as errorCodes from './constant/errorCodes';
 import * as callConstants from './constant/callConstants';
 import * as listConstants from './constant/listConstants';
 import * as chatConstants from './constant/chatConstants';
+import * as userConstants from './constant/userConstants';
 
 import Logger from './helper/logger';
 import Delegates from './core/delegate';
 import Authentication from './core/authentication';
 import Call from './core/call';
 import Message from './core/message';
+import User from './core/user';
 
 class AZStack {
     constructor() {
@@ -229,6 +231,15 @@ class AZStack {
                 });
                 break;
 
+            case this.serviceTypes.USER_GET_INFO_BY_IDS:
+            case this.serviceTypes.USER_GET_INFO_BY_USERNAMES:
+                this.User.receiveUsersInfomation(body).then((result) => {
+                    this.callUncall('getUsersInformation', null, result);
+                }).catch((error) => {
+                    this.callUncall('getUsersInformation', error, null);
+                });
+                break;
+
             default:
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Got unknown packet from slave socket'
@@ -341,6 +352,7 @@ class AZStack {
         this.Authentication = new Authentication({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
         this.Call = new Call({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, callConstants: this.callConstants, listConstants: this.listConstants, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
         this.Message = new Message({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, listConstants: this.listConstants, chatConstants: this.chatConstants, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
+        this.User = new User({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, listConstants: this.listConstants, userConstants: this.userConstants, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
     };
 
     connect(options, callback) {
@@ -770,6 +782,135 @@ class AZStack {
                 chatId: options.chatId
             }).then().catch((error) => {
                 this.callUncall('getModifiedMessages', error, null);
+            });
+        });
+    };
+
+    getUsersInformation(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Get users information'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Get users information params',
+                payload: options
+            });
+
+            this.addUncall('getUsersInformation', callback, resolve, reject, 'onGetUsersInformationReturn');
+
+            if (!options || typeof options !== 'object') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Missing users information params'
+                });
+                this.callUncall('getUsersInformation', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'Missing users information params'
+                }, null);
+                return;
+            }
+
+            if (!options.userIds && !options.azStackUserIds) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'userIds or azStackUserIds is required'
+                });
+                this.callUncall('getUsersInformation', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'userIds or azStackUserIds is required'
+                }, null);
+                return;
+            }
+
+            if (options.userIds) {
+                if (!Array.isArray(options.userIds)) {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                        message: 'userIds must be an array'
+                    });
+                    this.callUncall('getUsersInformation', {
+                        code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                        message: 'userIds must be an array'
+                    }, null);
+                    return;
+                }
+
+                if (!options.userIds.length) {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                        message: 'userIds cannot be empty'
+                    });
+                    this.callUncall('getUsersInformation', {
+                        code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                        message: 'userIds cannot be empty'
+                    }, null);
+                    return;
+                }
+
+                let allNumber = true;
+                for (let i = 0; i < options.userIds.length; i++) {
+                    if (typeof options.userIds[i] !== 'number') {
+                        allNumber = false;
+                        break;
+                    }
+                }
+
+                if (!allNumber) {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                        message: 'userIds must contain all numbers'
+                    });
+                    this.callUncall('getUsersInformation', {
+                        code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                        message: 'userIds must contain all numbers'
+                    }, null);
+                    return;
+                }
+            }
+
+            if (options.azStackUserIds) {
+                if (!Array.isArray(options.azStackUserIds)) {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                        message: 'azStackUserIds must be an array'
+                    });
+                    this.callUncall('getUsersInformation', {
+                        code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                        message: 'azStackUserIds must be an array'
+                    }, null);
+                    return;
+                }
+
+                if (!options.azStackUserIds.length) {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                        message: 'azStackUserIds cannot be empty'
+                    });
+                    this.callUncall('getUsersInformation', {
+                        code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                        message: 'azStackUserIds cannot be empty'
+                    }, null);
+                    return;
+                }
+
+                let allString = true;
+                for (let i = 0; i < options.azStackUserIds.length; i++) {
+                    if (typeof options.azStackUserIds[i] !== 'string') {
+                        allString = false;
+                        break;
+                    }
+                }
+
+                if (!allString) {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                        message: 'azStackUserIds must contain all strings'
+                    });
+                    this.callUncall('getUsersInformation', {
+                        code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                        message: 'azStackUserIds must contain all strings'
+                    }, null);
+                    return;
+                }
+            }
+
+            this.User.sendGetUsersInfomation({
+                userIds: options.userIds,
+                azStackUserIds: options.azStackUserIds
+            }).then().catch((error) => {
+                this.callUncall('getUsersInformation', error, null);
             });
         });
     };

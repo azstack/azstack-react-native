@@ -33,8 +33,11 @@ class AppMain extends React.Component {
 
         this.getPaidCallLogs = this.getPaidCallLogs.bind(this);
 
-        this.getUnreadMessages = this.getUnreadMessages.bind(this);
-        this.getModifiedMessages = this.getModifiedMessages.bind(this);
+        this.getUnreadMessagesTypeUser = this.getUnreadMessagesTypeUser.bind(this);
+        this.getModifiedMessagesTypeUser = this.getModifiedMessagesTypeUser.bind(this);
+
+        this.getUsersInfomationWithId = this.getUsersInfomationWithId.bind(this);
+        this.getUsersInfomationWithAzstackUserId = this.getUsersInfomationWithAzstackUserId.bind(this);
 
         this.AZStack = new AZStack();
         this.AZStack.config({
@@ -91,19 +94,30 @@ class AppMain extends React.Component {
         this.AZStack.getPaidCallLogs({}).then(() => { }).catch(() => { });
     };
 
-    getUnreadMessages() {
+    getUnreadMessagesTypeUser() {
         this.AZStack.getUnreadMessages({
             page: 1,
             chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
             chatId: 387212
         }).then(() => { }).catch(() => { });
     };
-    getModifiedMessages() {
+    getModifiedMessagesTypeUser() {
         this.AZStack.getModifiedMessages({
             page: 1,
             lastCreated: new Date().getTime(),
             chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
             chatId: 387212
+        }).then(() => { }).catch(() => { });
+    };
+
+    getUsersInfomationWithId() {
+        this.AZStack.getUsersInformation({
+            userIds: [387212]
+        }).then(() => { }).catch(() => { });
+    };
+    getUsersInfomationWithAzstackUserId() {
+        this.AZStack.getUsersInformation({
+            azStackUserIds: ['test_user_2']
         }).then(() => { }).catch(() => { });
     };
 
@@ -132,8 +146,11 @@ class AppMain extends React.Component {
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.getPaidCallLogs} title="Get paid call logs" />
                     <Text>{'\n'}{'\n'}</Text>
-                    <Button onPress={this.getUnreadMessages} title="Get unread messages" />
-                    <Button onPress={this.getModifiedMessages} title="Get modified messages" />
+                    <Button onPress={this.getUnreadMessagesTypeUser} title="Get unread messages type user" />
+                    <Button onPress={this.getModifiedMessagesTypeUser} title="Get modified messages type user" />
+                    <Text>{'\n'}{'\n'}</Text>
+                    <Button onPress={this.getUsersInfomationWithId} title="Get users onformation with id" />
+                    <Button onPress={this.getUsersInfomationWithAzstackUserId} title="Get users onformation with azStackUserId" />
                 </View>
             </ScrollView>
         );

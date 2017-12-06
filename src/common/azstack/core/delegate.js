@@ -213,6 +213,19 @@ class Delegates {
             }
         });
     };
+
+    onGetUsersInformationReturn = (error, result) => {
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+            message: 'Please implement method onGetUsersInformationReturn'
+        });
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+            message: 'onGetUsersInformationReturn delegate data',
+            payload: {
+                error: error,
+                result: result
+            }
+        });
+    };
 }
 
 export default Delegates; 
