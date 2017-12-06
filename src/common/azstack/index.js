@@ -1,3 +1,4 @@
+import * as uncallConstants from './constant/uncallConstants';
 import * as logLevelConstants from './constant/logLevel';
 import * as serviceTypes from './constant/serviceTypes';
 import * as errorCodes from './constant/errorCodes';
@@ -17,6 +18,7 @@ class AZStack {
     constructor() {
         this.sdkVersion = '0.0.1';
         this.masterSocketUri = 'https://www.azhub.xyz:9199';
+        this.uncallConstants = uncallConstants;
         this.logLevelConstants = logLevelConstants;
         this.serviceTypes = serviceTypes;
         this.errorCodes = errorCodes;
@@ -87,6 +89,20 @@ class AZStack {
             return;
         }
         clearTimeout(this.unCalls[key].timeout);
+
+        if (data && this.unCalls[key].temporary) {
+            for (let temporaryKey in this.unCalls[key].temporary) {
+                switch (this.unCalls[key].temporary[temporaryKey].type) {
+                    case this.uncallConstants.UNCALL_TEMPORARY_TYPE_ARRAY:
+                        data[temporaryKey] = data[temporaryKey].concat(this.unCalls[key].temporary[temporaryKey].data)
+                        break;
+                    default:
+                        data[temporaryKey] = this.unCalls[key].temporary[temporaryKey].data;
+                        break;
+                }
+            }
+        }
+
         if (typeof this.unCalls[key].callback === 'function') {
             this.unCalls[key].callback(error, data);
         }
@@ -100,6 +116,33 @@ class AZStack {
         }
         delete this.unCalls[key];
     };
+    addUncallTemporary(uncallKey, temporaryKey, dataObj, type) {
+        if (!this.unCalls[uncallKey].temporary) {
+            this.unCalls[uncallKey].temporary = {};
+        }
+        if (!this.unCalls[uncallKey].temporary[temporaryKey]) {
+            this.unCalls[uncallKey].temporary[temporaryKey] = {
+                type: type,
+                data: null
+            };
+            switch (type) {
+                case this.uncallConstants.UNCALL_TEMPORARY_TYPE_ARRAY:
+                    this.unCalls[uncallKey].temporary[temporaryKey].data = [];
+                    break;
+                default:
+                    this.unCalls[uncallKey].temporary[temporaryKey].data = null;
+                    break;
+            }
+        }
+        switch (type) {
+            case this.uncallConstants.UNCALL_TEMPORARY_TYPE_ARRAY:
+                this.unCalls[uncallKey].temporary[temporaryKey].data = this.unCalls[uncallKey].temporary[temporaryKey].data.concat(dataObj[temporaryKey]);
+                break;
+            default:
+                this.unCalls[uncallKey].temporary[temporaryKey].data = dataObj[temporaryKey];
+                break;
+        }
+    }
 
     sendSlavePacket(packet) {
         return new Promise((resolve, reject) => {
@@ -234,7 +277,11 @@ class AZStack {
             case this.serviceTypes.USER_GET_INFO_BY_IDS:
             case this.serviceTypes.USER_GET_INFO_BY_USERNAMES:
                 this.User.receiveUsersInfomation(body).then((result) => {
-                    this.callUncall('getUsersInformation', null, result);
+                    if (result.done === 1) {
+                        this.callUncall('getUsersInformation', null, result);
+                    } else {
+                        this.addUncallTemporary('getUsersInformation', 'list', result, this.uncallConstants.UNCALL_TEMPORARY_TYPE_ARRAY);
+                    }
                 }).catch((error) => {
                     this.callUncall('getUsersInformation', error, null);
                 });
