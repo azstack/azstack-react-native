@@ -225,38 +225,38 @@ class AZStack {
                 break;
             case this.serviceTypes.CALLOUT_DATA_STATUS_CHANGED:
                 this.Call.receiveCalloutStatusChanged(body).then((result) => {
-                    if (typeof this.Delegates.onCalloutStatusChanged === 'function') {
-                        this.Delegates.onCalloutStatusChanged(null, result);
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_CALLOUT_STAUTUS_CHANGED] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_CALLOUT_STAUTUS_CHANGED](null, result);
                     }
                 }).catch();
                 break;
 
             case this.serviceTypes.CALLIN_START:
                 this.Call.receiveCallinStart(body).then((result) => {
-                    if (typeof this.Delegates.onCallinStart === 'function') {
-                        this.Delegates.onCallinStart(null, result);
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_CALLIN_START] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_CALLIN_START](null, result);
                     }
                 }).catch();
                 break;
             case this.serviceTypes.CALLIN_STATUS_CHANGED:
                 this.Call.receiveCallinStatusChanged(body).then((result) => {
-                    if (typeof this.Delegates.onCallinStatusChanged === 'function') {
-                        this.Delegates.onCallinStatusChanged(null, result);
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_CALLIN_STATUS_CHANGED] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_CALLIN_STATUS_CHANGED](null, result);
                     }
                 }).catch();
                 break;
             case this.serviceTypes.CALLIN_STATUS_CHANGED_BY_ME:
                 this.Call.receiveCallinStatusChangedByMe(body).then((result) => {
-                    if (typeof this.Delegates.onCallinStatusChangedByMe === 'function') {
-                        this.Delegates.onCallinStatusChangedByMe(null, result);
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_CALLIN_STATUS_CHANGED_BY_ME] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_CALLIN_STATUS_CHANGED_BY_ME](null, result);
                     }
                 }).catch();
                 break;
 
             case this.serviceTypes.PAID_CALL_LOG_RETURN:
                 this.Call.receivePaidCallLog(body).then((result) => {
-                    if (typeof this.Delegates.onPaidCallLogReturn === 'function') {
-                        this.Delegates.onPaidCallLogReturn(null, result);
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_PAID_CALL_LOG_RETURN] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_PAID_CALL_LOG_RETURN](null, result);
                     }
                 }).catch();
                 break;
