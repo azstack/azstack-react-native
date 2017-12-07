@@ -688,6 +688,21 @@ this.AZStack.getModifiedConversations({
 > - done: done or not
 > - page: page number
 > - list: modified conversations list
+>   - chatType: chat type
+>   - chatId: chat id
+>   - modified: modified date time stamp
+>   - unread: number of unread message
+>   - lastMessage: last message 
+>       - chatType: chat type
+>       - chatId: chat id
+>       - senderId: id of sender
+>       - receiverId: id of receiverId
+>       - msgId: id of message
+>       - messageType: type of message
+>       - messageStatus: status of message
+>       - created: created time
+>       - modified: modified time
+>       - text: text of message
 
 
 

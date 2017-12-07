@@ -68,6 +68,30 @@ class Conversation {
                 page: body.page,
                 list: []
             };
+            body.list.map((conversation) => {
+                let modifiedConversation = {
+                    chatType: conversation.type,
+                    chatId: conversation.chatId,
+                    modified: conversation.modified,
+                    unread: conversation.unread,
+                    lastMessage: {
+                        chatType: conversation.type,
+                        chatId: conversation.chatId,
+                        senderId: conversation.lastMsg.sender,
+                        receiverId: conversation.chatId,
+                        msgId: conversation.lastMsg.msgId,
+                        messageType: 0,
+                        messageStatus: conversation.lastMsg.status,
+                        created: conversation.lastMsg.created,
+                        modified: conversation.modified
+                    }
+                };
+                if (conversation.lastMsg.msg) {
+                    modifiedConversation.lastMessage.messageType = this.chatConstants.MESSAGE_TYPE_TEXT;
+                    modifiedConversation.lastMessage.text = conversation.lastMsg.msg;
+                }
+                modifiedConversations.list.push(modifiedConversation);
+            });
 
             resolve(modifiedConversations);
         });
