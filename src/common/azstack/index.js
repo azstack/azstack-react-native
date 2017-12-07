@@ -56,16 +56,16 @@ class AZStack {
         }
     };
 
-    addUncall(key, callbackFunction, resolveFunction, rejectFunction, delegateKey) {
-        this.unCalls[key] = {};
-        this.unCalls[key].callback = callbackFunction;
-        this.unCalls[key].resolve = resolveFunction;
-        this.unCalls[key].reject = rejectFunction;
-        this.unCalls[key].delegate = delegateKey;
-        this.unCalls[key].timeout = setTimeout(() => {
+    addUncall(uncallKey, callbackFunction, resolveFunction, rejectFunction, delegateKey) {
+        this.unCalls[uncallKey] = {};
+        this.unCalls[uncallKey].callback = callbackFunction;
+        this.unCalls[uncallKey].resolve = resolveFunction;
+        this.unCalls[uncallKey].reject = rejectFunction;
+        this.unCalls[uncallKey].delegate = delegateKey;
+        this.unCalls[uncallKey].timeout = setTimeout(() => {
             const error = {
                 code: this.errorCodes.ERR_REQUEST_TIMEOUT,
-                message: `Request with key "${key}" has exceed timeout ${this.requestTimeout}s`
+                message: `Request with uncallKey "${uncallKey}" has exceed timeout ${this.requestTimeout}s`
             };
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                 message: 'A request exceed timeout'
@@ -73,7 +73,7 @@ class AZStack {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
                 message: 'A request exceed timeout',
                 payload: {
-                    key: key,
+                    uncallKey: uncallKey,
                     timeout: this.requestTimeout
                 }
             });
@@ -84,40 +84,40 @@ class AZStack {
             if (typeof this.Delegates[delegateKey] === 'function') {
                 this.Delegates[delegateKey](error, null);
             }
-            delete this.unCalls[key];
+            delete this.unCalls[uncallKey];
         }, this.requestTimeout);
     };
-    callUncall(key, error, data) {
-        if (!this.unCalls[key]) {
+    callUncall(uncallKey, error, data) {
+        if (!this.unCalls[uncallKey]) {
             return;
         }
-        clearTimeout(this.unCalls[key].timeout);
+        clearTimeout(this.unCalls[uncallKey].timeout);
 
-        if (data && this.unCalls[key].temporary) {
-            for (let temporaryKey in this.unCalls[key].temporary) {
-                switch (this.unCalls[key].temporary[temporaryKey].type) {
+        if (data && this.unCalls[uncallKey].temporary) {
+            for (let temporaryKey in this.unCalls[uncallKey].temporary) {
+                switch (this.unCalls[uncallKey].temporary[temporaryKey].type) {
                     case this.uncallConstants.UNCALL_TEMPORARY_TYPE_ARRAY:
-                        data[temporaryKey] = data[temporaryKey].concat(this.unCalls[key].temporary[temporaryKey].data)
+                        data[temporaryKey] = data[temporaryKey].concat(this.unCalls[uncallKey].temporary[temporaryKey].data)
                         break;
                     default:
-                        data[temporaryKey] = this.unCalls[key].temporary[temporaryKey].data;
+                        data[temporaryKey] = this.unCalls[uncallKey].temporary[temporaryKey].data;
                         break;
                 }
             }
         }
 
-        if (typeof this.unCalls[key].callback === 'function') {
-            this.unCalls[key].callback(error, data);
+        if (typeof this.unCalls[uncallKey].callback === 'function') {
+            this.unCalls[uncallKey].callback(error, data);
         }
         if (error) {
-            this.unCalls[key].reject(error);
+            this.unCalls[uncallKey].reject(error);
         } else {
-            this.unCalls[key].resolve(data);
+            this.unCalls[uncallKey].resolve(data);
         }
-        if (typeof this.Delegates[this.unCalls[key].delegate] === 'function') {
-            this.Delegates[this.unCalls[key].delegate](error, data);
+        if (typeof this.Delegates[this.unCalls[uncallKey].delegate] === 'function') {
+            this.Delegates[this.unCalls[uncallKey].delegate](error, data);
         }
-        delete this.unCalls[key];
+        delete this.unCalls[uncallKey];
     };
     addUncallTemporary(uncallKey, temporaryKey, dataObj, type) {
         if (!this.unCalls[uncallKey].temporary) {
@@ -145,7 +145,7 @@ class AZStack {
                 this.unCalls[uncallKey].temporary[temporaryKey].data = dataObj[temporaryKey];
                 break;
         }
-    }
+    };
 
     sendSlavePacket(packet) {
         return new Promise((resolve, reject) => {
