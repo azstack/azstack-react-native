@@ -44,6 +44,8 @@
         * [7.1.1 Get unread messages](#711-get-unread-messages)
         * [7.1.2 Get modified messages](#712-get-modified-messages)
     * [7.2. New message](#72-new-message)
+    * [7.3. Delegates](#73-delegates)
+        * [7.3.1. On new message](#731-on-new-message)
 * [8. User](#8-user)
     * [8.1. Get users information](#81-get-users-information)
 
@@ -887,6 +889,32 @@ this.AZStack.newMessage({
 > - chatType(required): chat type
 > - chatId(required): chatId
 > - text(optional): text message
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - chatType: chat type
+> - chatId: chat id
+> - senderId: id of sender
+> - receiverId: id of receiverId
+> - msgId: id of message
+> - messageType: type of message
+> - messageStatus: status of message
+> - created: created time
+> - modified: modified time
+> - text: text of message
+
+### 7.3. Delegates
+
+#### 7.3.1. On new message
+
+```javascript 
+this.AZStack.Delegates.onHasNewMessage = (error, result) => {
+    console.log(error, result);
+};
+```
 
 #### error:
 > - code: error code

@@ -1,3 +1,5 @@
+import { CHAT_TYPE_USER } from "../constant/chatConstants";
+
 class Message {
     constructor(options) {
         this.logLevelConstants = options.logLevelConstants;
@@ -243,6 +245,50 @@ class Message {
                     message: 'Cannot send new message data, new message fail'
                 });
             });
+        });
+    };
+
+    receiveHasNewMessage(options) {
+        return new Promise((resolve, reject) => {
+            if (!options.body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect new message, ignored'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Cannot detect new message'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got new message'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'New message data',
+                payload: options.body
+            });
+
+            let newMessage = {};
+
+            if (options.chatType === this.chatConstants.CHAT_TYPE_USER) {
+                if (options.messageType === this.chatConstants.MESSAGE_TYPE_TEXT) {
+                    newMessage = {
+                        chatType: this.chatConstants.CHAT_TYPE_USER,
+                        chatId: options.body.from,
+                        senderId: options.body.from,
+                        receiverId: 0,
+                        msgId: options.body.msgId,
+                        messageType: this.chatConstants.MESSAGE_TYPE_TEXT,
+                        messageStatus: this.chatConstants.MESSAGE_STATUS_SENT,
+                        created: options.body.time,
+                        modified: options.body.time,
+                        text: options.body.msg
+                    };
+                }
+            }
+
+            resolve(newMessage);
         });
     };
 };
