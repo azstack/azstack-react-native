@@ -16,6 +16,7 @@ class User {
             const getUsersInfomationPacket = {
                 service: options.userIds ? this.serviceTypes.USER_GET_INFO_BY_IDS : this.serviceTypes.USER_GET_INFO_BY_USERNAMES,
                 body: JSON.stringify({
+                    purpose: options.purpose,
                     [options.userIds ? 'userIdList' : 'usernameList']: options.userIds ? options.userIds : options.azStackUserIds
                 })
             };
@@ -76,6 +77,7 @@ class User {
 
             resolve({
                 done: body.done,
+                purpose: body.purpose,
                 list: body.userInfoList.map((userInfo) => {
                     return {
                         userId: userInfo.userId,

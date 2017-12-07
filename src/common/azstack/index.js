@@ -8,6 +8,7 @@ import * as listConstants from './constant/listConstants';
 import * as chatConstants from './constant/chatConstants';
 import * as userConstants from './constant/userConstants';
 
+import Tool from './helper/tool';
 import Logger from './helper/logger';
 import Delegates from './core/delegate';
 import Authentication from './core/authentication';
@@ -32,6 +33,7 @@ class AZStack {
         this.requestTimeout = 60000;
         this.intervalPingTime = 60000;
 
+        this.Tool = new Tool();
         this.Logger = new Logger();
         this.Delegates = new Delegates({ logLevelConstants: this.logLevelConstants, delegateConstants: this.delegateConstants, Logger: this.Logger });
 
@@ -293,9 +295,11 @@ class AZStack {
             case this.serviceTypes.USER_GET_INFO_BY_USERNAMES:
                 this.User.receiveUsersInfomation(body).then((result) => {
                     if (result.done === 1) {
-                        this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, 'default', null, result);
+                        let requestKey = result.purpose;
+                        delete result.purpose;
+                        this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, requestKey, null, result);
                     } else {
-                        this.addUncallTemporary(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, 'default', 'list', result, this.uncallConstants.UNCALL_TEMPORARY_TYPE_ARRAY);
+                        this.addUncallTemporary(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, result.purpose, 'list', result, this.uncallConstants.UNCALL_TEMPORARY_TYPE_ARRAY);
                     }
                 }).catch((error) => {
                     this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, 'default', error, null);
@@ -1031,6 +1035,9 @@ class AZStack {
 
     getUsersInformation(options, callback) {
         return new Promise((resolve, reject) => {
+
+            const requestKey = this.Tool.generateRequestPurpost();
+
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Get users information'
             });
@@ -1039,13 +1046,13 @@ class AZStack {
                 payload: options
             });
 
-            this.addUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_GET_USERS_INFORMATION_RETURN);
+            this.addUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, requestKey, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_GET_USERS_INFORMATION_RETURN);
 
             if (!options || typeof options !== 'object') {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Missing users information params'
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, 'default', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, requestKey, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'Missing users information params'
                 }, null);
@@ -1056,7 +1063,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'userIds or azStackUserIds is required'
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, 'default', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, requestKey, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'userIds or azStackUserIds is required'
                 }, null);
@@ -1068,7 +1075,7 @@ class AZStack {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                         message: 'userIds must be an array'
                     });
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, 'default', {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, requestKey, {
                         code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                         message: 'userIds must be an array'
                     }, null);
@@ -1079,7 +1086,7 @@ class AZStack {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                         message: 'userIds cannot be empty'
                     });
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, 'default', {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, requestKey, {
                         code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                         message: 'userIds cannot be empty'
                     }, null);
@@ -1098,7 +1105,7 @@ class AZStack {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                         message: 'userIds must contain all numbers'
                     });
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, 'default', {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, requestKey, {
                         code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                         message: 'userIds must contain all numbers'
                     }, null);
@@ -1111,7 +1118,7 @@ class AZStack {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                         message: 'azStackUserIds must be an array'
                     });
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, 'default', {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, requestKey, {
                         code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                         message: 'azStackUserIds must be an array'
                     }, null);
@@ -1122,7 +1129,7 @@ class AZStack {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                         message: 'azStackUserIds cannot be empty'
                     });
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, 'default', {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, requestKey, {
                         code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                         message: 'azStackUserIds cannot be empty'
                     }, null);
@@ -1141,7 +1148,7 @@ class AZStack {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                         message: 'azStackUserIds must contain all strings'
                     });
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, 'default', {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, requestKey, {
                         code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                         message: 'azStackUserIds must contain all strings'
                     }, null);
@@ -1150,10 +1157,11 @@ class AZStack {
             }
 
             this.User.sendGetUsersInfomation({
+                purpose: requestKey,
                 userIds: options.userIds,
                 azStackUserIds: options.azStackUserIds
             }).then().catch((error) => {
-                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, 'default', error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, requestKey, error, null);
             });
         });
     };
