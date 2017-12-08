@@ -40,6 +40,8 @@ class AppMain extends React.Component {
 
         this.newMessageWithUserTypeText = this.newMessageWithUserTypeText.bind(this);
 
+        this.sendTypingWithUser = this.sendTypingWithUser.bind(this);
+
         this.getUsersInfomationWithId = this.getUsersInfomationWithId.bind(this);
         this.getUsersInfomationWithAzstackUserId = this.getUsersInfomationWithAzstackUserId.bind(this);
 
@@ -129,6 +131,13 @@ class AppMain extends React.Component {
         }).then(() => { }).catch(() => { });
     };
 
+    sendTypingWithUser() {
+        this.AZStack.sendTyping({
+            chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+            chatId: 387212
+        }).then(() => { }).catch(() => { });
+    };
+
     getUsersInfomationWithId() {
         this.AZStack.getUsersInformation({
             userIds: [387212]
@@ -171,6 +180,8 @@ class AppMain extends React.Component {
                     <Button onPress={this.getModifiedMessagesTypeUser} title="Get modified messages type user" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.newMessageWithUserTypeText} title="New message with user type text" />
+                    <Text>{'\n'}{'\n'}</Text>
+                    <Button onPress={this.sendTypingWithUser} title="Send typing with user" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.getUsersInfomationWithId} title="Get users onformation with id" />
                     <Button onPress={this.getUsersInfomationWithAzstackUserId} title="Get users onformation with azStackUserId" />

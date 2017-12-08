@@ -26,6 +26,8 @@ export const DELEGATE_ON_GET_MODIFIED_MESSAGES_RETURN = 'onGetModifiedMessagesRe
 export const DELEGATE_ON_NEW_MESSAGE_RETURN = 'onNewMessageReturn';
 
 export const DELEGATE_ON_HAS_NEW_MESSAGE = 'onHasNewMessage';
+
+export const DELEGATE_ON_SEND_TYPING_RETURN = 'onSendTypingReturn';
 export const DELEGATE_ON_TYPING = 'onTyping';
 
 export const DELEGATE_ON_GET_USERS_INFORMATION_RETURN = 'onGetUsersInformationReturn';

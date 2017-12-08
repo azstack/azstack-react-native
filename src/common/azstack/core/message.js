@@ -291,6 +291,48 @@ class Message {
         });
     };
 
+    sendTyping(options) {
+        return new Promise((resolve, reject) => {
+
+            let typingPacketService = null;
+            let typingPacketBody = {};
+
+            if (options.chatType === this.chatConstants.CHAT_TYPE_USER) {
+                typingPacketService = this.serviceTypes.MESSAGE_TYPING_WITH_USER;
+                typingPacketBody = {
+                    to: options.chatId
+                };
+            } else if (options.chatType === this.chatConstants.CHAT_TYPE_GROUP) {
+
+            }
+
+            const newMessagePacket = {
+                service: typingPacketService,
+                body: JSON.stringify(typingPacketBody)
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send typing packet'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Typing packet',
+                payload: newMessagePacket
+            });
+            this.sendPacketFunction(newMessagePacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send typing packet successfully'
+                });
+                resolve();
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send typing data, send typing fail'
+                });
+                reject({
+                    code: error.code,
+                    message: 'Cannot send typing data, send typing fail'
+                });
+            });
+        });
+    };
     receiveTyping(options) {
         return new Promise((resolve, reject) => {
             if (!options.body) {

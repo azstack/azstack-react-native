@@ -1058,6 +1058,84 @@ class AZStack {
         });
     };
 
+    sendTyping(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send typing'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Send typing params',
+                payload: options
+            });
+
+            this.addUncall(this.uncallConstants.UNCALL_KEY_SEND_TYPING, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_SEND_TYPING_RETURN);
+
+            if (!options || typeof options !== 'object') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Missing send typing params'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_SEND_TYPING, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'Missing send typing params'
+                }, null);
+                return;
+            }
+
+            if (!options.chatType) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'chatType is required'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_SEND_TYPING, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'chatType is required'
+                }, null);
+                return;
+            }
+
+            if (options.chatType !== this.chatConstants.CHAT_TYPE_USER && options.chatType !== this.chatConstants.CHAT_TYPE_GROUP) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'unknown chatType'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_SEND_TYPING, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'unknown chatType'
+                }, null);
+                return;
+            }
+
+            if (!options.chatId) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'chatId is required'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_SEND_TYPING, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'chatId is required'
+                }, null);
+                return;
+            }
+
+            if (typeof options.chatId !== 'number') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'chatId must be number'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_SEND_TYPING, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'chatId must be number'
+                }, null);
+                return;
+            }
+
+            this.Message.sendTyping({
+                chatType: options.chatType,
+                chatId: options.chatId
+            }).then((result) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_SEND_TYPING, 'default', null, null);
+            }).catch((error) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_SEND_TYPING, 'default', error, null);
+            });
+        });
+    };
+
     getUsersInformation(options, callback) {
         return new Promise((resolve, reject) => {
 

@@ -43,7 +43,9 @@
     * [7.1. Get list](#71-get-list)
         * [7.1.1 Get unread messages](#711-get-unread-messages)
         * [7.1.2 Get modified messages](#712-get-modified-messages)
-    * [7.2. New message](#72-new-message)
+    * [7.2. Sending](#72-sending)
+        * [7.2.1. New message](#721-new-message)
+        * [7.2.2. Send typing](#722-send-typing)
     * [7.3. Delegates](#73-delegates)
         * [7.3.1. On new message](#731-on-new-message)
         * [7.3.2. On typing](#732-on-typing)
@@ -847,7 +849,9 @@ this.AZStack.getModifiedMessages({
 >   - modified: modified time
 >   - text: text of message
 
-### 7.2. New message
+### 7.2. Sending
+
+### 7.2.1. New message
 
 ```javascript 
 this.AZStack.newMessage({
@@ -906,6 +910,51 @@ this.AZStack.newMessage({
 > - created: created time
 > - modified: modified time
 > - text: text of message
+
+### 7.2.2. Send typing
+
+```javascript 
+this.AZStack.sendTyping({
+    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatId: 12345
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.sendTyping({
+    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatId: 12345
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.onSendTypingReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStack.sendTyping({
+    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatId: 12345
+});
+```
+
+#### params
+> - chatType(required): chat type
+> - chatId(required): chatId
+
+#### error:
+> - code: error code
+> - message: error message
 
 ### 7.3. Delegates
 
