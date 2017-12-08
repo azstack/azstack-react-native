@@ -37,6 +37,9 @@ class Validator {
     isArray(testTarget) {
         return Array.isArray(testTarget);
     };
+    isObject(testTarget) {
+        return typeof testTarget === 'object';
+    };
 
     check(targetArray) {
         for (let i = 0; i < targetArray.length; i++) {
@@ -95,6 +98,11 @@ class Validator {
                 case this.dataTypes.DATA_TYPE_ARRAY:
                     if (!this.isArray(targetItem.data)) {
                         return `${targetItem.name} must be an array`;
+                    }
+                    break;
+                case this.dataTypes.DATA_TYPE_OBJECT:
+                    if (!this.isObject(targetItem.data)) {
+                        return `${targetItem.name} must be an object`;
                     }
                     break;
                 default:

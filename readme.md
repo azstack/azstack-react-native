@@ -865,7 +865,12 @@ this.AZStack.getModifiedMessages({
 this.AZStack.newMessage({
     chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
     chatId: 12345,
-    text: 'text'
+    text: 'text',
+    sticker: {
+        name: 'name',
+        catId: 1,
+        url: 'https://link.com'
+    }
 }, (error, result) => {
     console.log(error);
     console.log(result);
@@ -878,7 +883,12 @@ OR
 this.AZStack.newMessage({
     chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
     chatId: 12345,
-    text: 'text'
+    text: 'text',
+    sticker: {
+        name: 'name',
+        catId: 1,
+        url: 'https://link.com'
+    }
 }).then((result) => {
     console.log(result);
 }).catch((error) => {
@@ -895,13 +905,22 @@ this.AZStack.Delegates.onNewMessageReturn = (error, result) => {
 this.AZStack.newMessage({
     chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
     chatId: 12345,
-    text: 'text'
+    text: 'text',
+    sticker: {
+        name: 'name',
+        catId: 1,
+        url: 'https://link.com'
+    }
 });
 ```
 #### params
 > - chatType(required): chat type
 > - chatId(required): chatId
 > - text(optional): text message
+> - sticker(optional): sticker of message
+>   - name(required): name
+>   - catId(required): catId
+>   - url(required): url
 
 #### error:
 > - code: error code

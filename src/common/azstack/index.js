@@ -436,6 +436,9 @@ class AZStack {
         });
     };
     config(options) {
+        if (!this.Validator.isObject(options)) {
+            return;
+        }
         if (options.requestTimeout && this.Validator.isNumber(options.requestTimeout)) {
             this.requestTimeout = options.requestTimeout;
         }
@@ -445,7 +448,7 @@ class AZStack {
         if (options.logLevel && this.Validator.isString(options.logLevel)) {
             this.logLevel = options.logLevel;
         }
-        if (options.authenticatingData) {
+        if (options.authenticatingData && this.Validator.isObject(options.authenticatingData)) {
             this.authenticatingData.appId = this.Validator.isString(options.authenticatingData.appId) ? options.authenticatingData.appId : '';
             this.authenticatingData.publicKey = this.Validator.isString(options.authenticatingData.publicKey) ? options.authenticatingData.publicKey : '';
             this.authenticatingData.azStackUserId = this.Validator.isString(options.authenticatingData.azStackUserId) ? options.authenticatingData.azStackUserId : '';
@@ -920,6 +923,10 @@ class AZStack {
                 name: 'text',
                 dataType: this.dataTypes.DATA_TYPE_STRING,
                 data: options.text
+            }, {
+                name: 'sticker',
+                dataType: this.dataTypes.DATA_TYPE_OBJECT,
+                data: options.sticker
             }]);
             if (dataErrorMessage) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -932,15 +939,44 @@ class AZStack {
                 return;
             }
 
-            if (!options.text) {
+            if (!options.text && !options.sticker) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'text is required'
+                    message: 'text or sticker is required'
                 });
                 this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'text is required'
+                    message: 'text or sticker is required'
                 }, null);
                 return;
+            }
+
+            if (options.sticker) {
+                dataErrorMessage = this.Validator.check([{
+                    name: 'sticker name',
+                    required: true,
+                    dataType: this.dataTypes.DATA_TYPE_STRING,
+                    data: options.sticker.name
+                }, {
+                    name: 'sticker catId',
+                    required: true,
+                    dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                    data: options.sticker.catId
+                }, {
+                    name: 'sticker url',
+                    required: true,
+                    dataType: this.dataTypes.DATA_TYPE_URL,
+                    data: options.sticker.url
+                }]);
+                if (dataErrorMessage) {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                        message: dataErrorMessage
+                    });
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, 'default', {
+                        code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                        message: dataErrorMessage
+                    }, null);
+                    return;
+                }
             }
 
             this.newUniqueId();
@@ -948,7 +984,8 @@ class AZStack {
                 chatType: options.chatType,
                 chatId: options.chatId,
                 msgId: this.uniqueId,
-                text: options.text
+                text: options.text,
+                sticker: options.sticker
             }).then((result) => {
                 result.senderId = this.authenticatedUser.userId;
                 this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, 'default', null, result);

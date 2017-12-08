@@ -232,6 +232,33 @@ class Message {
                         text: options.text
                     };
                 }
+                if (options.sticker) {
+                    newMessagePacketService = this.serviceTypes.MESSAGE_NEW_WITH_USER_TYPE_STICKER;
+                    newMessagePacketBody = {
+                        id: options.msgId,
+                        to: options.chatId,
+                        imgName: options.sticker.name,
+                        catId: options.sticker.catId,
+                        url: options.sticker.url
+                    };
+                    let currentTimeStamp = new Date().getTime();
+                    newMessageObj = {
+                        chatType: options.chatType,
+                        chatId: options.chatId,
+                        senderId: 0,
+                        receiverId: options.chatId,
+                        msgId: options.msgId,
+                        messageType: this.chatConstants.MESSAGE_TYPE_STICKER,
+                        messageStatus: this.chatConstants.MESSAGE_STATUS_SENDING,
+                        created: currentTimeStamp,
+                        modified: currentTimeStamp,
+                        sticker: {
+                            name: options.sticker.name,
+                            catId: options.sticker.catId,
+                            url: options.sticker.url
+                        }
+                    };
+                }
             } else if (options.chatType === this.chatConstants.CHAT_TYPE_GROUP) {
 
             }

@@ -39,6 +39,7 @@ class AppMain extends React.Component {
         this.getModifiedMessagesTypeUser = this.getModifiedMessagesTypeUser.bind(this);
 
         this.newMessageWithUserTypeText = this.newMessageWithUserTypeText.bind(this);
+        this.newMessageWithUserTypeSticker = this.newMessageWithUserTypeSticker.bind(this);
 
         this.sendTypingWithUser = this.sendTypingWithUser.bind(this);
 
@@ -130,6 +131,17 @@ class AppMain extends React.Component {
             text: 'text'
         }).then(() => { }).catch(() => { });
     };
+    newMessageWithUserTypeSticker() {
+        this.AZStack.newMessage({
+            chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+            chatId: 387212,
+            sticker: {
+                name: '002.png',
+                catId: 1,
+                url: 'http://azstack.com/api/public_html/sticker/1/002.png'
+            }
+        }).then(() => { }).catch(() => { });
+    };
 
     sendTypingWithUser() {
         this.AZStack.sendTyping({
@@ -180,6 +192,7 @@ class AppMain extends React.Component {
                     <Button onPress={this.getModifiedMessagesTypeUser} title="Get modified messages type user" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.newMessageWithUserTypeText} title="New message with user type text" />
+                    <Button onPress={this.newMessageWithUserTypeSticker} title="New message with user type sticker" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.sendTypingWithUser} title="Send typing with user" />
                     <Text>{'\n'}{'\n'}</Text>
