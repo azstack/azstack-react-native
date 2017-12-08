@@ -1,5 +1,6 @@
 import * as uncallConstants from './constant/uncallConstants';
 import * as delegateConstants from './constant/delegateConstants';
+import * as dataTypes from './constant/dataTypes';
 import * as logLevelConstants from './constant/logLevel';
 import * as serviceTypes from './constant/serviceTypes';
 import * as errorCodes from './constant/errorCodes';
@@ -9,6 +10,7 @@ import * as chatConstants from './constant/chatConstants';
 import * as userConstants from './constant/userConstants';
 
 import Tool from './helper/tool';
+import Validator from './helper/validator';
 import Logger from './helper/logger';
 import Delegates from './core/delegate';
 import Authentication from './core/authentication';
@@ -23,6 +25,7 @@ class AZStack {
         this.masterSocketUri = 'https://www.azhub.xyz:9199';
         this.uncallConstants = uncallConstants;
         this.delegateConstants = delegateConstants;
+        this.dataTypes = dataTypes;
         this.logLevelConstants = logLevelConstants;
         this.serviceTypes = serviceTypes;
         this.errorCodes = errorCodes;
@@ -34,6 +37,7 @@ class AZStack {
         this.intervalPingTime = 60000;
 
         this.Tool = new Tool();
+        this.Validator = new Validator({ dataTypes: this.dataTypes });
         this.Logger = new Logger();
         this.Delegates = new Delegates({ logLevelConstants: this.logLevelConstants, delegateConstants: this.delegateConstants, Logger: this.Logger });
 
@@ -432,22 +436,22 @@ class AZStack {
         });
     };
     config(options) {
-        if (options.requestTimeout && typeof options.requestTimeout === 'number') {
+        if (options.requestTimeout && this.Validator.isNumber(options.requestTimeout)) {
             this.requestTimeout = options.requestTimeout;
         }
-        if (options.intervalPingTime && typeof options.intervalPingTime === 'number') {
+        if (options.intervalPingTime && this.Validator.isNumber(options.intervalPingTime)) {
             this.intervalPingTime = options.intervalPingTime;
         }
-        if (options.logLevel) {
+        if (options.logLevel && this.Validator.isString(options.logLevel)) {
             this.logLevel = options.logLevel;
         }
         if (options.authenticatingData) {
-            this.authenticatingData.appId = options.authenticatingData.appId ? options.authenticatingData.appId : '';
-            this.authenticatingData.publicKey = options.authenticatingData.publicKey ? options.authenticatingData.publicKey : '';
-            this.authenticatingData.azStackUserId = options.authenticatingData.azStackUserId ? options.authenticatingData.azStackUserId : '';
-            this.authenticatingData.userCredentials = options.authenticatingData.userCredentials ? options.authenticatingData.userCredentials : '';
-            this.authenticatingData.fullname = options.authenticatingData.fullname ? options.authenticatingData.fullname : '';
-            this.authenticatingData.namespace = options.authenticatingData.namespace ? options.authenticatingData.namespace : '';
+            this.authenticatingData.appId = this.Validator.isString(options.authenticatingData.appId) ? options.authenticatingData.appId : '';
+            this.authenticatingData.publicKey = this.Validator.isString(options.authenticatingData.publicKey) ? options.authenticatingData.publicKey : '';
+            this.authenticatingData.azStackUserId = this.Validator.isString(options.authenticatingData.azStackUserId) ? options.authenticatingData.azStackUserId : '';
+            this.authenticatingData.userCredentials = this.Validator.isString(options.authenticatingData.userCredentials) ? options.authenticatingData.userCredentials : '';
+            this.authenticatingData.fullname = this.Validator.isString(options.authenticatingData.fullname) ? options.authenticatingData.fullname : '';
+            this.authenticatingData.namespace = this.Validator.isString(options.authenticatingData.namespace) ? options.authenticatingData.namespace : '';
         }
     };
     init() {
@@ -521,9 +525,33 @@ class AZStack {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Toggle audio state'
             });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Toggle audio state data',
+                payload: options
+            });
             this.addUncall(this.uncallConstants.UNCALL_KEY_TOGGLE_AUDIO_STATE, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_TOGGLE_AUDIO_STATE_RETURN);
 
-            this.Call.toggleAudioState({}).then((result) => {
+            if (options && typeof options === 'object') {
+                let dataErrorMessage = this.Validator.check([{
+                    name: 'state',
+                    dataType: this.dataTypes.DATA_TYPE_BOOLEAN,
+                    data: options.state
+                }]);
+                if (dataErrorMessage) {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                        message: dataErrorMessage
+                    });
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_TOGGLE_AUDIO_STATE, 'default', {
+                        code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                        message: dataErrorMessage
+                    }, null);
+                    return;
+                }
+            }
+
+            this.Call.toggleAudioState({
+                state: options.state
+            }).then((result) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_TOGGLE_AUDIO_STATE, 'default', null, null);
             }).catch((error) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_TOGGLE_AUDIO_STATE, 'default', error, null);
@@ -553,24 +581,19 @@ class AZStack {
                 return;
             }
 
-            if (!options.toPhoneNumber) {
+            let dataErrorMessage = this.Validator.check([{
+                name: 'toPhoneNumber',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_PHONE_NUMBER,
+                data: options.toPhoneNumber
+            }]);
+            if (dataErrorMessage) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'toPhoneNumber is required for start callout'
+                    message: dataErrorMessage
                 });
                 this.callUncall(this.uncallConstants.UNCALL_KEY_START_CALLOUT, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'toPhoneNumber is required for start callout'
-                }, null);
-                return;
-            }
-
-            if (typeof options.toPhoneNumber !== 'string' || !/^\+?\d+$/.test(options.toPhoneNumber)) {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'toPhoneNumber is invalid, not a string number'
-                });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_START_CALLOUT, 'default', {
-                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'toPhoneNumber is invalid, not a string number'
+                    message: dataErrorMessage
                 }, null);
                 return;
             }
@@ -693,46 +716,26 @@ class AZStack {
                 return;
             }
 
-            if (!options.page) {
+            let dataErrorMessage = this.Validator.check([{
+                name: 'page',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.page,
+                notEqual: 0
+            }, {
+                name: 'lastCreated',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.lastCreated,
+                notEqual: 0
+            }]);
+            if (dataErrorMessage) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'page is required'
+                    message: dataErrorMessage
                 });
                 this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_CONVERSATIONS, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'page is required'
-                }, null);
-                return;
-            }
-
-            if (typeof options.page !== 'number') {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'page must be number'
-                });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_CONVERSATIONS, 'default', {
-                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'page must be number'
-                }, null);
-                return;
-            }
-
-            if (!options.lastCreated) {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'lastCreated is required'
-                });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_CONVERSATIONS, 'default', {
-                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'lastCreated is required'
-                }, null);
-                return;
-            }
-
-            if (typeof options.lastCreated !== 'number') {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'lastCreated must be number'
-                });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_CONVERSATIONS, 'default', {
-                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'lastCreated must be number'
+                    message: dataErrorMessage
                 }, null);
                 return;
             }
@@ -769,68 +772,32 @@ class AZStack {
                 return;
             }
 
-            if (!options.page) {
+            let dataErrorMessage = this.Validator.check([{
+                name: 'page',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.page,
+                notEqual: 0
+            }, {
+                name: 'chatType',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.chatType,
+                in: [this.chatConstants.CHAT_TYPE_USER, this.chatConstants.CHAT_TYPE_GROUP]
+            }, {
+                name: 'chatId',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.chatId,
+                notEqual: 0
+            }]);
+            if (dataErrorMessage) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'page is required'
+                    message: dataErrorMessage
                 });
                 this.callUncall(this.uncallConstants.UNCALL_KEY_GET_UNREAD_MESSAGES, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'page is required'
-                }, null);
-                return;
-            }
-
-            if (typeof options.page !== 'number') {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'page must be number'
-                });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_UNREAD_MESSAGES, 'default', {
-                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'page must be number'
-                }, null);
-                return;
-            }
-
-            if (!options.chatType) {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'chatType is required'
-                });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_UNREAD_MESSAGES, 'default', {
-                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'chatType is required'
-                }, null);
-                return;
-            }
-
-            if (options.chatType !== this.chatConstants.CHAT_TYPE_USER && options.chatType !== this.chatConstants.CHAT_TYPE_GROUP) {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'unknown chatType'
-                });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_UNREAD_MESSAGES, 'default', {
-                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'unknown chatType'
-                }, null);
-                return;
-            }
-
-            if (!options.chatId) {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'chatId is required'
-                });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_UNREAD_MESSAGES, 'default', {
-                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'chatId is required'
-                }, null);
-                return;
-            }
-
-            if (typeof options.chatId !== 'number') {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'chatId must be number'
-                });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_UNREAD_MESSAGES, 'default', {
-                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'chatId must be number'
+                    message: dataErrorMessage
                 }, null);
                 return;
             }
@@ -867,90 +834,38 @@ class AZStack {
                 return;
             }
 
-            if (!options.page) {
+            let dataErrorMessage = this.Validator.check([{
+                name: 'page',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.page,
+                notEqual: 0
+            }, {
+                name: 'lastCreated',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.lastCreated,
+                notEqual: 0
+            }, {
+                name: 'chatType',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.chatType,
+                in: [this.chatConstants.CHAT_TYPE_USER, this.chatConstants.CHAT_TYPE_GROUP]
+            }, {
+                name: 'chatId',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.chatId,
+                notEqual: 0
+            }]);
+            if (dataErrorMessage) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'page is required'
+                    message: dataErrorMessage
                 });
                 this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_MESSAGES, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'page is required'
-                }, null);
-                return;
-            }
-
-            if (typeof options.page !== 'number') {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'page must be number'
-                });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_MESSAGES, 'default', {
-                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'page must be number'
-                }, null);
-                return;
-            }
-
-            if (!options.lastCreated) {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'lastCreated is required'
-                });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_MESSAGES, 'default', {
-                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'lastCreated is required'
-                }, null);
-                return;
-            }
-
-            if (typeof options.lastCreated !== 'number') {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'lastCreated must be number'
-                });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_MESSAGES, 'default', {
-                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'lastCreated must be number'
-                }, null);
-                return;
-            }
-
-            if (!options.chatType) {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'chatType is required'
-                });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_MESSAGES, 'default', {
-                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'chatType is required'
-                }, null);
-                return;
-            }
-
-            if (options.chatType !== this.chatConstants.CHAT_TYPE_USER && options.chatType !== this.chatConstants.CHAT_TYPE_GROUP) {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'unknown chatType'
-                });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_MESSAGES, 'default', {
-                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'unknown chatType'
-                }, null);
-                return;
-            }
-
-            if (!options.chatId) {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'chatId is required'
-                });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_MESSAGES, 'default', {
-                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'chatId is required'
-                }, null);
-                return;
-            }
-
-            if (typeof options.chatId !== 'number') {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'chatId must be number'
-                });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_MESSAGES, 'default', {
-                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'chatId must be number'
+                    message: dataErrorMessage
                 }, null);
                 return;
             }
@@ -989,46 +904,30 @@ class AZStack {
                 return;
             }
 
-            if (!options.chatType) {
+            let dataErrorMessage = this.Validator.check([{
+                name: 'chatType',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.chatType,
+                in: [this.chatConstants.CHAT_TYPE_USER, this.chatConstants.CHAT_TYPE_GROUP]
+            }, {
+                name: 'chatId',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.chatId,
+                notEqual: 0
+            }, {
+                name: 'text',
+                dataType: this.dataTypes.DATA_TYPE_STRING,
+                data: options.text
+            }]);
+            if (dataErrorMessage) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'chatType is required'
+                    message: dataErrorMessage
                 });
                 this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'chatType is required'
-                }, null);
-                return;
-            }
-
-            if (options.chatType !== this.chatConstants.CHAT_TYPE_USER && options.chatType !== this.chatConstants.CHAT_TYPE_GROUP) {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'unknown chatType'
-                });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, 'default', {
-                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'unknown chatType'
-                }, null);
-                return;
-            }
-
-            if (!options.chatId) {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'chatId is required'
-                });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, 'default', {
-                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'chatId is required'
-                }, null);
-                return;
-            }
-
-            if (typeof options.chatId !== 'number') {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'chatId must be number'
-                });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, 'default', {
-                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'chatId must be number'
+                    message: dataErrorMessage
                 }, null);
                 return;
             }
@@ -1040,17 +939,6 @@ class AZStack {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'text is required'
-                }, null);
-                return;
-            }
-
-            if (options.text && typeof options.text !== 'string') {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'text must be string'
-                });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, 'default', {
-                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'text must be string'
                 }, null);
                 return;
             }
@@ -1093,46 +981,26 @@ class AZStack {
                 return;
             }
 
-            if (!options.chatType) {
+            let dataErrorMessage = this.Validator.check([{
+                name: 'chatType',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.chatType,
+                in: [this.chatConstants.CHAT_TYPE_USER, this.chatConstants.CHAT_TYPE_GROUP]
+            }, {
+                name: 'chatId',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.chatId,
+                notEqual: 0
+            }]);
+            if (dataErrorMessage) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'chatType is required'
+                    message: dataErrorMessage
                 });
                 this.callUncall(this.uncallConstants.UNCALL_KEY_SEND_TYPING, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'chatType is required'
-                }, null);
-                return;
-            }
-
-            if (options.chatType !== this.chatConstants.CHAT_TYPE_USER && options.chatType !== this.chatConstants.CHAT_TYPE_GROUP) {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'unknown chatType'
-                });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_SEND_TYPING, 'default', {
-                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'unknown chatType'
-                }, null);
-                return;
-            }
-
-            if (!options.chatId) {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'chatId is required'
-                });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_SEND_TYPING, 'default', {
-                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'chatId is required'
-                }, null);
-                return;
-            }
-
-            if (typeof options.chatId !== 'number') {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'chatId must be number'
-                });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_SEND_TYPING, 'default', {
-                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'chatId must be number'
+                    message: dataErrorMessage
                 }, null);
                 return;
             }
@@ -1174,6 +1042,28 @@ class AZStack {
                 return;
             }
 
+            let dataErrorMessage = this.Validator.check([{
+                name: 'userIds',
+                dataType: this.dataTypes.DATA_TYPE_ARRAY,
+                notEmpty: true,
+                data: options.userIds
+            }, {
+                name: 'azStackUserIds',
+                dataType: this.dataTypes.DATA_TYPE_ARRAY,
+                notEmpty: true,
+                data: options.azStackUserIds
+            }]);
+            if (dataErrorMessage) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: dataErrorMessage
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: dataErrorMessage
+                }, null);
+                return;
+            }
+
             if (!options.userIds && !options.azStackUserIds) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'userIds or azStackUserIds is required'
@@ -1186,31 +1076,10 @@ class AZStack {
             }
 
             if (options.userIds) {
-                if (!Array.isArray(options.userIds)) {
-                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                        message: 'userIds must be an array'
-                    });
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, requestKey, {
-                        code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                        message: 'userIds must be an array'
-                    }, null);
-                    return;
-                }
-
-                if (!options.userIds.length) {
-                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                        message: 'userIds cannot be empty'
-                    });
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, requestKey, {
-                        code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                        message: 'userIds cannot be empty'
-                    }, null);
-                    return;
-                }
 
                 let allNumber = true;
                 for (let i = 0; i < options.userIds.length; i++) {
-                    if (typeof options.userIds[i] !== 'number') {
+                    if (!this.Validator.isNumber(options.userIds[i])) {
                         allNumber = false;
                         break;
                     }
@@ -1229,31 +1098,10 @@ class AZStack {
             }
 
             if (options.azStackUserIds) {
-                if (!Array.isArray(options.azStackUserIds)) {
-                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                        message: 'azStackUserIds must be an array'
-                    });
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, requestKey, {
-                        code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                        message: 'azStackUserIds must be an array'
-                    }, null);
-                    return;
-                }
-
-                if (!options.azStackUserIds.length) {
-                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                        message: 'azStackUserIds cannot be empty'
-                    });
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, requestKey, {
-                        code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                        message: 'azStackUserIds cannot be empty'
-                    }, null);
-                    return;
-                }
 
                 let allString = true;
                 for (let i = 0; i < options.azStackUserIds.length; i++) {
-                    if (typeof options.azStackUserIds[i] !== 'string') {
+                    if (!this.Validator.isString(options.azStackUserIds[i])) {
                         allString = false;
                         break;
                     }
