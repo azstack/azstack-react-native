@@ -24,8 +24,9 @@ export const MESSAGE_GET_LIST_UNREAD = 173;
 export const MESSAGE_GET_LIST_MODIFIED = 169;
 
 export const MESSAGE_NEW_WITH_USER_TYPE_TEXT = 72;
-
 export const MESSAGE_HAS_NEW_WITH_USER_TYPE_TEXT = 73;
+
+export const MESSAGE_TYPING_WITH_USER = 142; 
 
 export const USER_GET_INFO_BY_IDS = 164;
 export const USER_GET_INFO_BY_USERNAMES = 165;

@@ -304,6 +304,18 @@ class AZStack {
                 }).catch();
                 break;
 
+            case this.serviceTypes.MESSAGE_TYPING_WITH_USER:
+                this.Message.receiveTyping({
+                    chatType: this.chatConstants.CHAT_TYPE_USER,
+                    body: body
+                }).then((result) => {
+                    result.receiverId = this.authenticatedUser.userId;
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_TYPING] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_TYPING](null, result);
+                    }
+                }).catch();
+                break;
+
             case this.serviceTypes.USER_GET_INFO_BY_IDS:
             case this.serviceTypes.USER_GET_INFO_BY_USERNAMES:
                 this.User.receiveUsersInfomation(body).then((result) => {

@@ -247,7 +247,6 @@ class Message {
             });
         });
     };
-
     receiveHasNewMessage(options) {
         return new Promise((resolve, reject) => {
             if (!options.body) {
@@ -289,6 +288,42 @@ class Message {
             }
 
             resolve(newMessage);
+        });
+    };
+
+    receiveTyping(options) {
+        return new Promise((resolve, reject) => {
+            if (!options.body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect typing, ignored'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Cannot detect typing'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got typing'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Typing data',
+                payload: options.body
+            });
+
+            let typing = {};
+
+            if (options.chatType === this.chatConstants.CHAT_TYPE_USER) {
+                typing = {
+                    chatType: this.chatConstants.CHAT_TYPE_USER,
+                    chatId: options.body.from,
+                    senderId: options.body.from,
+                    receiverId: 0
+                };
+            }
+
+            resolve(typing);
         });
     };
 };

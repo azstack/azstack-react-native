@@ -46,6 +46,7 @@
     * [7.2. New message](#72-new-message)
     * [7.3. Delegates](#73-delegates)
         * [7.3.1. On new message](#731-on-new-message)
+        * [7.3.2. On typing](#732-on-typing)
 * [8. User](#8-user)
     * [8.1. Get users information](#81-get-users-information)
 
@@ -931,6 +932,24 @@ this.AZStack.Delegates.onHasNewMessage = (error, result) => {
 > - created: created time
 > - modified: modified time
 > - text: text of message
+
+#### 7.3.2. On typing
+
+```javascript 
+this.AZStack.Delegates.onTyping = (error, result) => {
+    console.log(error, result);
+};
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - chatType: chat type
+> - chatId: chat id
+> - senderId: id of sender
+> - receiverId: id of receiverId
 
 
 
