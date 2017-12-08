@@ -85,7 +85,7 @@ class Message {
                     created: message.created,
                     modified: message.modified
                 };
-                if (message.serviceType === 5 || message.serviceType === 104) {
+                if (message.serviceType === 5 || message.serviceType === 104 || message.serviceType === 121) {
                     unreadMessage.chatType = this.chatConstants.CHAT_TYPE_USER;
                 }
                 if (message.msg) {
@@ -97,6 +97,15 @@ class Message {
                     unreadMessage.sticker = {
                         name: message.imgName,
                         catId: message.catId,
+                        url: message.url
+                    };
+                }
+                if (message.fileName) {
+                    unreadMessage.messageType = this.chatConstants.MESSAGE_TYPE_FILE;
+                    unreadMessage.file = {
+                        name: message.fileName,
+                        length: message.fileLength,
+                        type: message.type,
                         url: message.url
                     };
                 }
@@ -181,7 +190,7 @@ class Message {
                     created: message.created,
                     modified: message.modified
                 };
-                if (message.serviceType === 5 || message.serviceType === 104) {
+                if (message.serviceType === 5 || message.serviceType === 104 || message.serviceType === 121) {
                     modifiedMessage.chatType = this.chatConstants.CHAT_TYPE_USER;
                 }
                 if (message.msg) {
@@ -193,6 +202,15 @@ class Message {
                     modifiedMessage.sticker = {
                         name: message.imgName,
                         catId: message.catId,
+                        url: message.url
+                    };
+                }
+                if (message.fileName) {
+                    modifiedMessages.messageType = this.chatConstants.MESSAGE_TYPE_FILE;
+                    modifiedMessages.file = {
+                        name: message.fileName,
+                        length: message.fileLength,
+                        type: message.type,
                         url: message.url
                     };
                 }
@@ -333,7 +351,7 @@ class Message {
                         chatType: this.chatConstants.CHAT_TYPE_USER,
                         chatId: options.body.from,
                         senderId: options.body.from,
-                        receiverId: 0,
+                        receiverId: options.body.to,
                         msgId: options.body.id,
                         messageType: this.chatConstants.MESSAGE_TYPE_STICKER,
                         messageStatus: this.chatConstants.MESSAGE_STATUS_SENT,
@@ -342,6 +360,25 @@ class Message {
                         sticker: {
                             name: options.body.imgName,
                             catId: options.body.catId,
+                            url: options.body.url
+                        }
+                    };
+                }
+                if (options.messageType === this.chatConstants.MESSAGE_TYPE_FILE) {
+                    newMessage = {
+                        chatType: this.chatConstants.CHAT_TYPE_USER,
+                        chatId: options.body.from,
+                        senderId: options.body.from,
+                        receiverId: options.body.to,
+                        msgId: options.body.id,
+                        messageType: this.chatConstants.MESSAGE_TYPE_FILE,
+                        messageStatus: this.chatConstants.MESSAGE_STATUS_SENT,
+                        created: options.body.created,
+                        modified: options.body.created,
+                        file: {
+                            name: options.body.fileName,
+                            length: options.body.fileLength,
+                            type: options.body.type,
                             url: options.body.url
                         }
                     };

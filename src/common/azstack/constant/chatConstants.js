@@ -9,3 +9,15 @@ export const MESSAGE_STATUS_SENDING = 0;
 export const MESSAGE_STATUS_SENT = 1;
 export const MESSAGE_STATUS_DELIVERED = 2;
 export const MESSAGE_STATUS_SEEN = 3;
+
+export const MESSAGE_FILE_TYPE_UNKNOWN = 0;
+export const MESSAGE_FILE_TYPE_IMAGE = 1;
+export const MESSAGE_FILE_TYPE_AUDIO = 2;
+export const MESSAGE_FILE_TYPE_VIDEO = 3;
+export const MESSAGE_FILE_TYPE_EXCEL = 4;
+export const MESSAGE_FILE_TYPE_WORD = 5;
+export const MESSAGE_FILE_TYPE_POWERPOINT = 6;
+export const MESSAGE_FILE_TYPE_PDF = 7;
+export const MESSAGE_FILE_TYPE_TEXT = 8;
+export const MESSAGE_FILE_TYPE_CODE = 9;
+export const MESSAGE_FILE_TYPE_ARCHIVE = 10;

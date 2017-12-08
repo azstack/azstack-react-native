@@ -16,6 +16,7 @@
         * [3.5.1. Chat Types](#351-chat-types)
         * [3.5.2. Message Types](#352-message-types)
         * [3.5.3. Message Statuses](#353-message-statuses)
+        * [3.5.4. Message file types](#354-message-file-types)
     * [3.6. User constants](#36-user-constants)
         * [3.6.1. User status](#361-user-status)
 * [4. Connection](#4-connection)
@@ -184,6 +185,19 @@ azstack.config({
 > - MESSAGE_STATUS_SENT(1): status sent
 > - MESSAGE_STATUS_DELIVERED(2): status delivered
 > - MESSAGE_STATUS_SEEN(3): status seen
+
+#### 3.5.4. Message file types
+> - MESSAGE_FILE_TYPE_UNKNOWN(0): file type unknown
+> - MESSAGE_FILE_TYPE_IMAGE(1): file type image
+> - MESSAGE_FILE_TYPE_AUDIO(2): file type audio
+> - MESSAGE_FILE_TYPE_VIDEO(3): file type video
+> - MESSAGE_FILE_TYPE_EXCEL(4): file type excel
+> - MESSAGE_FILE_TYPE_WORD(5): file type word
+> - MESSAGE_FILE_TYPE_POWERPOINT(6): file type power point
+> - MESSAGE_FILE_TYPE_PDF(7): file type pdf
+> - MESSAGE_FILE_TYPE_TEXT(8): file type text
+> - MESSAGE_FILE_TYPE_CODE(9): file type code
+> - MESSAGE_FILE_TYPE_ARCHIVE(10): file type archive
 
 ### 3.6. User constants
 
@@ -783,6 +797,11 @@ this.AZStack.onGetUnreadMessagesReturn({
 >       - name: name
 >       - catId: catId
 >       - url: url
+>   - file: file of message
+>       - name: name
+>       - length: length
+>       - type: type
+>       - url: url
 
 #### 7.1.2 Get modified messages
 
@@ -855,6 +874,11 @@ this.AZStack.getModifiedMessages({
 >   - sticker: sticker of message
 >       - name: name
 >       - catId: catId
+>       - url: url
+>   - file: file of message
+>       - name: name
+>       - length: length
+>       - type: type
 >       - url: url
 
 ### 7.2. Sending
@@ -941,6 +965,11 @@ this.AZStack.newMessage({
 >   - name: name
 >   - catId: catId
 >   - url: url
+> - file: file of message
+>   - name: name
+>   - length: length
+>   - type: type
+>   - url: url
 
 ### 7.2.2. Send typing
 
@@ -1015,6 +1044,11 @@ this.AZStack.Delegates.onHasNewMessage = (error, result) => {
 > - sticker: sticker of message
 >   - name: name
 >   - catId: catId
+>   - url: url
+> - file: file of message
+>   - name: name
+>   - length: length
+>   - type: type
 >   - url: url
 
 #### 7.3.2. On typing
