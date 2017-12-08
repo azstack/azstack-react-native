@@ -85,12 +85,20 @@ class Message {
                     created: message.created,
                     modified: message.modified
                 };
-                if (message.serviceType === 5) {
+                if (message.serviceType === 5 || message.serviceType === 104) {
                     unreadMessage.chatType = this.chatConstants.CHAT_TYPE_USER;
                 }
                 if (message.msg) {
                     unreadMessage.messageType = this.chatConstants.MESSAGE_TYPE_TEXT;
                     unreadMessage.text = message.msg;
+                }
+                if (message.imgName) {
+                    unreadMessage.messageType = this.chatConstants.MESSAGE_TYPE_STICKER;
+                    unreadMessage.sticker = {
+                        name: message.imgName,
+                        catId: message.catId,
+                        url: message.url
+                    };
                 }
                 unreadMessages.list.push(unreadMessage);
             });
@@ -173,12 +181,20 @@ class Message {
                     created: message.created,
                     modified: message.modified
                 };
-                if (message.serviceType === 5) {
+                if (message.serviceType === 5 || message.serviceType === 104) {
                     modifiedMessage.chatType = this.chatConstants.CHAT_TYPE_USER;
                 }
                 if (message.msg) {
                     modifiedMessage.messageType = this.chatConstants.MESSAGE_TYPE_TEXT;
                     modifiedMessage.text = message.msg;
+                }
+                if (message.imgName) {
+                    modifiedMessage.messageType = this.chatConstants.MESSAGE_TYPE_STICKER;
+                    modifiedMessage.sticker = {
+                        name: message.imgName,
+                        catId: message.catId,
+                        url: message.url
+                    };
                 }
                 modifiedMessages.list.push(modifiedMessage);
             });
@@ -283,6 +299,24 @@ class Message {
                         created: options.body.time,
                         modified: options.body.time,
                         text: options.body.msg
+                    };
+                }
+                if (options.messageType === this.chatConstants.MESSAGE_TYPE_STICKER) {
+                    newMessage = {
+                        chatType: this.chatConstants.CHAT_TYPE_USER,
+                        chatId: options.body.from,
+                        senderId: options.body.from,
+                        receiverId: 0,
+                        msgId: options.body.id,
+                        messageType: this.chatConstants.MESSAGE_TYPE_STICKER,
+                        messageStatus: this.chatConstants.MESSAGE_STATUS_SENT,
+                        created: options.body.created,
+                        modified: options.body.created,
+                        sticker: {
+                            name: options.body.imgName,
+                            catId: options.body.catId,
+                            url: options.body.url
+                        }
                     };
                 }
             }

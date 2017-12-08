@@ -303,6 +303,18 @@ class AZStack {
                     }
                 }).catch();
                 break;
+            case this.serviceTypes.MESSAGE_HAS_NEW_WITH_USER_TYPE_STICKER:
+                this.Message.receiveHasNewMessage({
+                    chatType: this.chatConstants.CHAT_TYPE_USER,
+                    messageType: this.chatConstants.MESSAGE_TYPE_STICKER,
+                    body: body
+                }).then((result) => {
+                    result.receiverId = this.authenticatedUser.userId;
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_HAS_NEW_MESSAGE] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_HAS_NEW_MESSAGE](null, result);
+                    }
+                }).catch();
+                break;
 
             case this.serviceTypes.MESSAGE_TYPING_WITH_USER:
                 this.Message.receiveTyping({

@@ -779,6 +779,10 @@ this.AZStack.onGetUnreadMessagesReturn({
 >   - created: created time
 >   - modified: modified time
 >   - text: text of message
+>   - sticker: sticker of message
+>       - name: name
+>       - catId: catId
+>       - url: url
 
 #### 7.1.2 Get modified messages
 
@@ -848,6 +852,10 @@ this.AZStack.getModifiedMessages({
 >   - created: created time
 >   - modified: modified time
 >   - text: text of message
+>   - sticker: sticker of message
+>       - name: name
+>       - catId: catId
+>       - url: url
 
 ### 7.2. Sending
 
@@ -910,6 +918,10 @@ this.AZStack.newMessage({
 > - created: created time
 > - modified: modified time
 > - text: text of message
+> - sticker: sticker of message
+>   - name: name
+>   - catId: catId
+>   - url: url
 
 ### 7.2.2. Send typing
 
@@ -981,6 +993,10 @@ this.AZStack.Delegates.onHasNewMessage = (error, result) => {
 > - created: created time
 > - modified: modified time
 > - text: text of message
+> - sticker: sticker of message
+>   - name: name
+>   - catId: catId
+>   - url: url
 
 #### 7.3.2. On typing
 
