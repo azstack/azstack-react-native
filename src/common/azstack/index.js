@@ -937,6 +937,10 @@ class AZStack {
                 name: 'sticker',
                 dataType: this.dataTypes.DATA_TYPE_OBJECT,
                 data: options.sticker
+            }, {
+                name: 'file',
+                dataType: this.dataTypes.DATA_TYPE_OBJECT,
+                data: options.file
             }]);
             if (dataErrorMessage) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -949,13 +953,13 @@ class AZStack {
                 return;
             }
 
-            if (!options.text && !options.sticker) {
+            if (!options.text && !options.sticker && !options.file) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'text or sticker is required'
+                    message: 'text or sticker or file is required'
                 });
                 this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'text or sticker is required'
+                    message: 'text or sticker or file is required'
                 }, null);
                 return;
             }
@@ -989,13 +993,61 @@ class AZStack {
                 }
             }
 
+            if (options.file) {
+                dataErrorMessage = this.Validator.check([{
+                    name: 'file name',
+                    required: true,
+                    dataType: this.dataTypes.DATA_TYPE_STRING,
+                    data: options.file.name
+                }, {
+                    name: 'file length',
+                    required: true,
+                    dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                    data: options.file.length
+                }, {
+                    name: 'file type',
+                    required: true,
+                    dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                    data: options.file.type,
+                    in: [
+                        this.chatConstants.MESSAGE_FILE_TYPE_UNKNOWN,
+                        this.chatConstants.MESSAGE_FILE_TYPE_IMAGE,
+                        this.chatConstants.MESSAGE_FILE_TYPE_AUDIO,
+                        this.chatConstants.MESSAGE_FILE_TYPE_VIDEO,
+                        this.chatConstants.MESSAGE_FILE_TYPE_EXCEL,
+                        this.chatConstants.MESSAGE_FILE_TYPE_WORD,
+                        this.chatConstants.MESSAGE_FILE_TYPE_POWERPOINT,
+                        this.chatConstants.MESSAGE_FILE_TYPE_PDF,
+                        this.chatConstants.MESSAGE_FILE_TYPE_TEXT,
+                        this.chatConstants.MESSAGE_FILE_TYPE_CODE,
+                        this.chatConstants.MESSAGE_FILE_TYPE_ARCHIVE
+                    ]
+                }, {
+                    name: 'file url',
+                    required: true,
+                    dataType: this.dataTypes.DATA_TYPE_URL,
+                    data: options.file.url
+                }]);
+                if (dataErrorMessage) {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                        message: dataErrorMessage
+                    });
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, 'default', {
+                        code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                        message: dataErrorMessage
+                    }, null);
+                    return;
+                }
+            }
+
             this.newUniqueId();
             this.Message.sendNewMessage({
                 chatType: options.chatType,
                 chatId: options.chatId,
                 msgId: this.uniqueId,
                 text: options.text,
-                sticker: options.sticker
+                sticker: options.sticker,
+                file: options.file
             }).then((result) => {
                 result.senderId = this.authenticatedUser.userId;
                 this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, 'default', null, result);

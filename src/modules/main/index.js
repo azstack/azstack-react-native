@@ -40,6 +40,7 @@ class AppMain extends React.Component {
 
         this.newMessageWithUserTypeText = this.newMessageWithUserTypeText.bind(this);
         this.newMessageWithUserTypeSticker = this.newMessageWithUserTypeSticker.bind(this);
+        this.newMessageWithUserTypeFile = this.newMessageWithUserTypeFile.bind(this);
 
         this.sendTypingWithUser = this.sendTypingWithUser.bind(this);
 
@@ -142,6 +143,18 @@ class AppMain extends React.Component {
             }
         }).then(() => { }).catch(() => { });
     };
+    newMessageWithUserTypeFile() {
+        this.AZStack.newMessage({
+            chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+            chatId: 387212,
+            file: {
+                name: 'logo.png',
+                length: 5183,
+                type: this.AZStack.chatConstants.MESSAGE_FILE_TYPE_IMAGE,
+                url: 'https://azstack.com/static/images/logo.png'
+            }
+        }).then(() => { }).catch(() => { });
+    };
 
     sendTypingWithUser() {
         this.AZStack.sendTyping({
@@ -193,6 +206,7 @@ class AppMain extends React.Component {
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.newMessageWithUserTypeText} title="New message with user type text" />
                     <Button onPress={this.newMessageWithUserTypeSticker} title="New message with user type sticker" />
+                    <Button onPress={this.newMessageWithUserTypeFile} title="New message with user type file" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.sendTypingWithUser} title="Send typing with user" />
                     <Text>{'\n'}{'\n'}</Text>

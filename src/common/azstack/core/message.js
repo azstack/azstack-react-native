@@ -206,8 +206,8 @@ class Message {
                     };
                 }
                 if (message.fileName) {
-                    modifiedMessages.messageType = this.chatConstants.MESSAGE_TYPE_FILE;
-                    modifiedMessages.file = {
+                    modifiedMessage.messageType = this.chatConstants.MESSAGE_TYPE_FILE;
+                    modifiedMessage.file = {
                         name: message.fileName,
                         length: message.fileLength,
                         type: message.type,
@@ -274,6 +274,35 @@ class Message {
                             name: options.sticker.name,
                             catId: options.sticker.catId,
                             url: options.sticker.url
+                        }
+                    };
+                }
+                if (options.file) {
+                    newMessagePacketService = this.serviceTypes.MESSAGE_WITH_USER_TYPE_FILE;
+                    newMessagePacketBody = {
+                        id: options.msgId,
+                        to: options.chatId,
+                        fileName: options.file.name,
+                        fileLength: options.file.length,
+                        type: options.file.type,
+                        url: options.file.url
+                    };
+                    let currentTimeStamp = new Date().getTime();
+                    newMessageObj = {
+                        chatType: options.chatType,
+                        chatId: options.chatId,
+                        senderId: 0,
+                        receiverId: options.chatId,
+                        msgId: options.msgId,
+                        messageType: this.chatConstants.MESSAGE_TYPE_FILE,
+                        messageStatus: this.chatConstants.MESSAGE_STATUS_SENDING,
+                        created: currentTimeStamp,
+                        modified: currentTimeStamp,
+                        file: {
+                            name: options.file.name,
+                            length: options.file.length,
+                            type: options.file.type,
+                            url: options.file.url
                         }
                     };
                 }

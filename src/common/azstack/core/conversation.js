@@ -86,9 +86,19 @@ class Conversation {
                         modified: conversation.modified
                     }
                 };
-                if (conversation.lastMsg.msg) {
+                if (conversation.lastMsg.serviceType === this.serviceTypes.MESSAGE_SERVER_WITH_USER_TYPE_TEXT) {
                     modifiedConversation.lastMessage.messageType = this.chatConstants.MESSAGE_TYPE_TEXT;
                     modifiedConversation.lastMessage.text = conversation.lastMsg.msg;
+                }
+                if (conversation.lastMsg.serviceType === this.serviceTypes.MESSAGE_WITH_USER_TYPE_STICKER) {
+                    modifiedConversation.lastMessage.messageType = this.chatConstants.MESSAGE_TYPE_STICKER;
+                    modifiedConversation.lastMessage.sticker = {};
+                }
+                if (conversation.lastMsg.serviceType === this.serviceTypes.MESSAGE_WITH_USER_TYPE_FILE) {
+                    modifiedConversation.lastMessage.messageType = this.chatConstants.MESSAGE_TYPE_FILE;
+                    modifiedConversation.lastMessage.file = {
+                        type: conversation.lastMsg.msgType
+                    };
                 }
                 modifiedConversations.list.push(modifiedConversation);
             });

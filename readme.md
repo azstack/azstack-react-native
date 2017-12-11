@@ -722,6 +722,9 @@ this.AZStack.getModifiedConversations({
 >       - created: created time
 >       - modified: modified time
 >       - text: text of message
+>       - sticker: sticker of message
+>       - file: file of message
+>           - type: file type
 
 
 
@@ -893,7 +896,13 @@ this.AZStack.newMessage({
     sticker: {
         name: 'name',
         catId: 1,
-        url: 'https://link.com'
+        url: 'http://azstack.com/api/public_html/sticker/1/002.png'
+    },
+    file: {
+        name: 'logo.png',
+        length: 5183,
+        type: this.chatConstants.MESSAGE_FILE_TYPE_IMAGE,
+        url: 'https://azstack.com/static/images/logo.png'
     }
 }, (error, result) => {
     console.log(error);
@@ -911,7 +920,13 @@ this.AZStack.newMessage({
     sticker: {
         name: 'name',
         catId: 1,
-        url: 'https://link.com'
+        url: 'http://azstack.com/api/public_html/sticker/1/002.png'
+    },
+    file: {
+        name: 'logo.png',
+        length: 5183,
+        type: this.chatConstants.MESSAGE_FILE_TYPE_IMAGE,
+        url: 'https://azstack.com/static/images/logo.png'
     }
 }).then((result) => {
     console.log(result);
@@ -933,7 +948,13 @@ this.AZStack.newMessage({
     sticker: {
         name: 'name',
         catId: 1,
-        url: 'https://link.com'
+        url: 'http://azstack.com/api/public_html/sticker/1/002.png'
+    },
+    file: {
+        name: 'logo.png',
+        length: 5183,
+        type: this.chatConstants.MESSAGE_FILE_TYPE_IMAGE,
+        url: 'https://azstack.com/static/images/logo.png'
     }
 });
 ```
@@ -944,6 +965,11 @@ this.AZStack.newMessage({
 > - sticker(optional): sticker of message
 >   - name(required): name
 >   - catId(required): catId
+>   - url(required): url
+> - file(optional): file of message
+>   - name(required): name
+>   - length(required): length
+>   - type(required): type
 >   - url(required): url
 
 #### error:
