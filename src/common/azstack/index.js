@@ -1173,7 +1173,7 @@ class AZStack {
                 required: true,
                 dataType: this.dataTypes.DATA_TYPE_NUMBER,
                 data: options.messageStatus,
-                in: [this.chatConstants.MESSAGE_STATUS_DELIVERED, this.chatConstants.MESSAGE_STATUS_SEEN]
+                in: [this.chatConstants.MESSAGE_STATUS_DELIVERED, this.chatConstants.MESSAGE_STATUS_SEEN, this.chatConstants.MESSAGE_STATUS_CANCELLED]
             }, {
                 name: 'msgId',
                 required: true,

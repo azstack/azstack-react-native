@@ -516,6 +516,15 @@ class Message {
                         msgId: options.msgId
                     };
                 }
+                if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_CANCELLED) {
+                    messageReportPacketService = this.serviceTypes.MESSAGE_STATUS_CHANGE_CANCELLED_WITH_USER;
+                    messageReportPacketBody = {
+                        type: options.chatType,
+                        chatId: options.chatId,
+                        to: options.chatId,
+                        id: options.msgId
+                    };
+                }
             } else if (options.chatType === this.chatConstants.CHAT_TYPE_GROUP) {
 
             }

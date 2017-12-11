@@ -44,6 +44,7 @@ class AppMain extends React.Component {
 
         this.changeMessageStatusDeliveredWithUser = this.changeMessageStatusDeliveredWithUser.bind(this);
         this.changeMessageStatusSeenWithUser = this.changeMessageStatusSeenWithUser.bind(this);
+        this.changeMessageStatusCancelledWithUser = this.changeMessageStatusCancelledWithUser.bind(this);
 
         this.sendTypingWithUser = this.sendTypingWithUser.bind(this);
 
@@ -177,6 +178,15 @@ class AppMain extends React.Component {
             msgId: 1512639092
         }).then(() => { }).catch(() => { });
     };
+    changeMessageStatusCancelledWithUser() {
+        this.AZStack.changeMessageStatus({
+            chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+            chatId: 387212,
+            messageSenderId: 381032,
+            messageStatus: this.AZStack.chatConstants.MESSAGE_STATUS_CANCELLED,
+            msgId: 1512989141
+        }).then(() => { }).catch(() => { });
+    };
 
     sendTypingWithUser() {
         this.AZStack.sendTyping({
@@ -232,6 +242,7 @@ class AppMain extends React.Component {
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.changeMessageStatusDeliveredWithUser} title="Change message status delivered with user" />
                     <Button onPress={this.changeMessageStatusSeenWithUser} title="Change message status seen with user" />
+                    <Button onPress={this.changeMessageStatusCancelledWithUser} title="Change message status cancelled with user" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.sendTypingWithUser} title="Send typing with user" />
                     <Text>{'\n'}{'\n'}</Text>
