@@ -418,6 +418,87 @@ class Message {
         });
     };
 
+    receiveMessageFromMe(options) {
+        return new Promise((resolve, reject) => {
+            if (!options.body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect message from me, ignored'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Cannot detect message from me'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got message from me'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'New message from me',
+                payload: options.body
+            });
+
+            let messageFromMe = {};
+
+            if (options.chatType === this.chatConstants.CHAT_TYPE_USER) {
+                if (options.body.msg) {
+                    messageFromMe = {
+                        chatType: this.chatConstants.CHAT_TYPE_USER,
+                        chatId: options.body.to,
+                        senderId: 0,
+                        receiverId: options.body.to,
+                        msgId: options.body.msgId,
+                        messageType: this.chatConstants.MESSAGE_TYPE_TEXT,
+                        messageStatus: this.chatConstants.MESSAGE_STATUS_SENDING,
+                        created: options.body.time,
+                        modified: options.body.time,
+                        text: options.body.msg
+                    };
+                }
+                if (options.body.imgName) {
+                    messageFromMe = {
+                        chatType: this.chatConstants.CHAT_TYPE_USER,
+                        chatId: options.body.to,
+                        senderId: options.body.from,
+                        receiverId: options.body.to,
+                        msgId: options.body.id,
+                        messageType: this.chatConstants.MESSAGE_TYPE_STICKER,
+                        messageStatus: this.chatConstants.MESSAGE_STATUS_SENDING,
+                        created: options.body.created,
+                        modified: options.body.created,
+                        sticker: {
+                            name: options.body.imgName,
+                            catId: options.body.catId,
+                            url: options.body.url
+                        }
+                    };
+                }
+                if (options.body.fileName) {
+                    messageFromMe = {
+                        chatType: this.chatConstants.CHAT_TYPE_USER,
+                        chatId: options.body.to,
+                        senderId: options.body.from,
+                        receiverId: options.body.to,
+                        msgId: options.body.id,
+                        messageType: this.chatConstants.MESSAGE_TYPE_FILE,
+                        messageStatus: this.chatConstants.MESSAGE_STATUS_SENDING,
+                        created: options.body.created,
+                        modified: options.body.created,
+                        file: {
+                            name: options.body.fileName,
+                            length: options.body.fileLength,
+                            type: options.body.type,
+                            url: options.body.url
+                        }
+                    };
+                }
+            }
+
+            resolve(messageFromMe);
+        });
+    };
+
     sendTyping(options) {
         return new Promise((resolve, reject) => {
 
