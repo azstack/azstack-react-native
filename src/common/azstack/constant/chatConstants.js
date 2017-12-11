@@ -10,6 +10,9 @@ export const MESSAGE_STATUS_SENT = 1;
 export const MESSAGE_STATUS_DELIVERED = 2;
 export const MESSAGE_STATUS_SEEN = 3;
 
+export const MESSAGE_STATUS_REPORT_FAIL = 0;
+export const MESSAGE_STATUS_REPORT_SUCCESS = 1;
+
 export const MESSAGE_FILE_TYPE_UNKNOWN = 0;
 export const MESSAGE_FILE_TYPE_IMAGE = 1;
 export const MESSAGE_FILE_TYPE_AUDIO = 2;

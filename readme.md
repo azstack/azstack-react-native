@@ -16,7 +16,8 @@
         * [3.5.1. Chat Types](#351-chat-types)
         * [3.5.2. Message Types](#352-message-types)
         * [3.5.3. Message Statuses](#353-message-statuses)
-        * [3.5.4. Message file types](#354-message-file-types)
+        * [3.5.4. Message Status Report](#354-message-status-report)
+        * [3.5.5. Message file types](#355-message-file-types)
     * [3.6. User constants](#36-user-constants)
         * [3.6.1. User status](#361-user-status)
 * [4. Connection](#4-connection)
@@ -189,7 +190,11 @@ azstack.config({
 > - MESSAGE_STATUS_DELIVERED(2): status delivered
 > - MESSAGE_STATUS_SEEN(3): status seen
 
-#### 3.5.4. Message file types
+#### 3.5.4. Message Status Report
+> - MESSAGE_STATUS_REPORT_FAIL(0): status report fail
+> - MESSAGE_STATUS_REPORT_SUCCESS(1): status report success
+
+#### 3.5.5. Message file types
 > - MESSAGE_FILE_TYPE_UNKNOWN(0): file type unknown
 > - MESSAGE_FILE_TYPE_IMAGE(1): file type image
 > - MESSAGE_FILE_TYPE_AUDIO(2): file type audio
@@ -1179,7 +1184,7 @@ this.AZStack.Delegates.onMessageReport = (error, result) => {
 > - message: error message
 
 #### result:
-> - success: success or not (true:false)
+> - reportStatus: report status
 > - chatType: chat type
 > - chatId: chat id
 > - senderId: id of sender

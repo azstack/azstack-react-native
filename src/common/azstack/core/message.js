@@ -570,7 +570,7 @@ class Message {
             if (options.chatType === this.chatConstants.CHAT_TYPE_USER) {
                 if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_SENT) {
                     onSentMessage = {
-                        success: options.body.r === this.errorCodes.REPORT_MESSAGE_SUCCESS_FROM_SERVER ? true : false,
+                        reportStatus: (options.body.r === this.errorCodes.REPORT_MESSAGE_SUCCESS_FROM_SERVER || options.body.r === this.errorCodes.REQUEST_SUCCESS_FROM_SERVER) ? this.chatConstants.MESSAGE_STATUS_REPORT_SUCCESS : this.chatConstants.MESSAGE_STATUS_REPORT_FAIL,
                         chatType: this.chatConstants.CHAT_TYPE_USER,
                         chatId: options.body.from,
                         senderId: options.body.from,
@@ -581,7 +581,7 @@ class Message {
                 }
                 if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_DELIVERED) {
                     onSentMessage = {
-                        success: true,
+                        reportStatus: this.chatConstants.MESSAGE_STATUS_REPORT_SUCCESS,
                         chatType: this.chatConstants.CHAT_TYPE_USER,
                         chatId: options.body.from,
                         senderId: options.body.from,
