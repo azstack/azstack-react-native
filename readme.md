@@ -50,7 +50,8 @@
     * [7.3. Delegates](#73-delegates)
         * [7.3.1. On new message](#731-on-new-message)
         * [7.3.2. On message from me](#732-on-message-from-me)
-        * [7.3.3. On typing](#733-on-typing)
+        * [7.3.3. On message sent report](#733-on-message-sent-report)
+        * [7.3.4. On typing](#734-on-typing)
 * [8. User](#8-user)
     * [8.1. Get users information](#81-get-users-information)
 
@@ -1111,7 +1112,27 @@ this.AZStack.Delegates.onMessageFromMe = (error, result) => {
 >   - type: type
 >   - url: url
 
-#### 7.3.3. On typing
+#### 7.3.3. On message sent report
+
+```javascript 
+this.AZStack.Delegates.onMessageSentReport = (error, result) => {
+    console.log(error, result);
+};
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - success: sent success or not (true:false)
+> - chatType: chat type
+> - chatId: chat id
+> - senderId: id of sender
+> - receiverId: id of receiverId
+> - msgId: id of message
+
+#### 7.3.4. On typing
 
 ```javascript 
 this.AZStack.Delegates.onTyping = (error, result) => {

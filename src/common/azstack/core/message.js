@@ -435,7 +435,7 @@ class Message {
                 message: 'Got message from me'
             });
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                message: 'New message from me',
+                message: 'Message from me',
                 payload: options.body
             });
 
@@ -496,6 +496,44 @@ class Message {
             }
 
             resolve(messageFromMe);
+        });
+    };
+
+    receiveMessageSentReport(options) {
+        return new Promise((resolve, reject) => {
+            if (!options.body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect message sent report, ignored'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Cannot detect message sent report'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got message sent report'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Message sent report',
+                payload: options.body
+            });
+
+            let onSentMessage = {};
+
+            if (options.chatType === this.chatConstants.CHAT_TYPE_USER) {
+                onSentMessage = {
+                    success: options.body.r === this.errorCodes.SENT_MESSAGE_SUCCESS_FROM_SERVER ? true : false,
+                    chatType: this.chatConstants.CHAT_TYPE_USER,
+                    chatId: options.body.from,
+                    senderId: options.body.from,
+                    receiverId: 0,
+                    msgId: options.body.msgId
+                };
+            }
+
+            resolve(onSentMessage);
         });
     };
 
