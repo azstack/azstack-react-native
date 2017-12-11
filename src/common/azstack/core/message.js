@@ -501,14 +501,14 @@ class Message {
 
             if (options.chatType === this.chatConstants.CHAT_TYPE_USER) {
                 if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_DELIVERED) {
-                    messageReportPacketService = this.serviceTypes.MESSAGE_REPORT_DELIVERED_WITH_USER;
+                    messageReportPacketService = this.serviceTypes.MESSAGE_STATUS_CHANGE_DELIVERED_WITH_USER;
                     messageReportPacketBody = {
                         to: options.chatId,
                         msgId: options.msgId
                     };
                 }
                 if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_SEEN) {
-                    messageReportPacketService = this.serviceTypes.MESSAGE_REPORT_SEEN;
+                    messageReportPacketService = this.serviceTypes.MESSAGE_STATUS_CHANGE_SEEN;
                     messageReportPacketBody = {
                         type: options.chatType,
                         chatId: options.chatId,

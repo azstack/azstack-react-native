@@ -364,7 +364,7 @@ class AZStack {
                     }
                 }).catch();
                 break;
-            case this.serviceTypes.MESSAGE_REPORT_DELIVERED_WITH_USER:
+            case this.serviceTypes.MESSAGE_STATUS_CHANGE_DELIVERED_WITH_USER:
                 this.Message.receiveMessageStatusChanged({
                     chatType: this.chatConstants.CHAT_TYPE_USER,
                     messageStatus: this.chatConstants.MESSAGE_STATUS_DELIVERED,
@@ -376,7 +376,7 @@ class AZStack {
                     }
                 }).catch();
                 break;
-            case this.serviceTypes.MESSAGE_REPORT_SEEN:
+            case this.serviceTypes.MESSAGE_STATUS_CHANGE_SEEN:
                 this.Message.receiveMessageStatusChanged({
                     chatType: body.type,
                     messageStatus: this.chatConstants.MESSAGE_STATUS_SEEN,
