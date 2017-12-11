@@ -29,6 +29,7 @@ export const DELEGATE_ON_HAS_NEW_MESSAGE = 'onHasNewMessage';
 
 export const DELEGATE_ON_MESSAGE_FROM_ME = 'onMessageFromMe';
 
+export const DELEGATE_ON_SEND_MESSAGE_REPORT_RETURN = 'onSendMessageReportReturn';
 export const DELEGATE_ON_MESSAGE_REPORT = 'onMessageReport';
 
 export const DELEGATE_ON_SEND_TYPING_RETURN = 'onSendTypingReturn';

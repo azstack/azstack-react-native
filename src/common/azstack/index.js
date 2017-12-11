@@ -1104,6 +1104,78 @@ class AZStack {
         });
     };
 
+    sendMessageReport(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send message report'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Send message report params',
+                payload: options
+            });
+
+            this.addUncall(this.uncallConstants.UNCALL_KEY_SEND_MESSAGE_REPORT, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_SEND_MESSAGE_REPORT_RETURN);
+
+            if (!options || typeof options !== 'object') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Missing send message report params'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_SEND_MESSAGE_REPORT, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'Missing send message report params'
+                }, null);
+                return;
+            }
+
+            let dataErrorMessage = this.Validator.check([{
+                name: 'chatType',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.chatType,
+                in: [this.chatConstants.CHAT_TYPE_USER, this.chatConstants.CHAT_TYPE_GROUP]
+            }, {
+                name: 'chatId',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.chatId,
+                notEqual: 0
+            }, {
+                name: 'messageStatus',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.messageStatus,
+                in: [this.chatConstants.MESSAGE_STATUS_DELIVERED, this.chatConstants.MESSAGE_STATUS_SEEN]
+            }, {
+                name: 'msgId',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.msgId,
+                notEqual: 0
+            }]);
+            if (dataErrorMessage) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: dataErrorMessage
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_SEND_MESSAGE_REPORT, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: dataErrorMessage
+                }, null);
+                return;
+            }
+
+            this.Message.sendReport({
+                chatType: options.chatType,
+                chatId: options.chatId,
+                messageStatus: options.messageStatus,
+                msgId: options.msgId
+            }).then((result) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_SEND_MESSAGE_REPORT, 'default', null, null);
+            }).catch((error) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_SEND_MESSAGE_REPORT, 'default', error, null);
+            });
+        });
+    };
+
     sendTyping(options, callback) {
         return new Promise((resolve, reject) => {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {

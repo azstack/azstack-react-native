@@ -499,6 +499,51 @@ class Message {
         });
     };
 
+    sendReport(options) {
+        return new Promise((resolve, reject) => {
+
+            let messageReportPacketService = null;
+            let messageReportPacketBody = {};
+
+            if (options.chatType === this.chatConstants.CHAT_TYPE_USER) {
+                if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_DELIVERED) {
+                    messageReportPacketService = this.serviceTypes.MESSAGE_REPORT_DELIVERED_WITH_USER;
+                    messageReportPacketBody = {
+                        to: options.chatId,
+                        msgId: options.msgId
+                    };
+                }
+            } else if (options.chatType === this.chatConstants.CHAT_TYPE_GROUP) {
+
+            }
+
+            const newMessagePacket = {
+                service: messageReportPacketService,
+                body: JSON.stringify(messageReportPacketBody)
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send message report packet'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Message report packet',
+                payload: newMessagePacket
+            });
+            this.sendPacketFunction(newMessagePacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send message report packet successfully'
+                });
+                resolve();
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send message report data, send message report fail'
+                });
+                reject({
+                    code: error.code,
+                    message: 'Cannot send message report data, send message report fail'
+                });
+            });
+        });
+    };
     receiveMessageReport(options) {
         return new Promise((resolve, reject) => {
             if (!options.body) {

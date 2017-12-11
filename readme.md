@@ -46,7 +46,8 @@
         * [7.1.2 Get modified messages](#712-get-modified-messages)
     * [7.2. Sending](#72-sending)
         * [7.2.1. New message](#721-new-message)
-        * [7.2.2. Send typing](#722-send-typing)
+        * [7.2.2. Send message report](#722-send-message-report)
+        * [7.2.3. Send typing](#723-send-typing)
     * [7.3. Delegates](#73-delegates)
         * [7.3.1. On new message](#731-on-new-message)
         * [7.3.2. On message from me](#732-on-message-from-me)
@@ -999,7 +1000,60 @@ this.AZStack.newMessage({
 >   - type: type
 >   - url: url
 
-### 7.2.2. Send typing
+### 7.2.2. Send message report
+
+```javascript 
+this.AZStack.sendMessageReport({
+    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatId: 12345,
+    messageStatus: this.AZStack.chatConstants.MESSAGE_STATUS_DELIVERED,
+    msgId: 54321
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.sendMessageReport({
+    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatId: 12345,
+    messageStatus: this.AZStack.chatConstants.MESSAGE_STATUS_DELIVERED,
+    msgId: 54321
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.onSendMessageReportReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStack.sendMessageReport({
+    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatId: 12345,
+    messageStatus: this.AZStack.chatConstants.MESSAGE_STATUS_DELIVERED,
+    msgId: 54321
+});
+```
+
+#### params
+> - chatType(required): chat type
+> - chatId(required): chatId
+> - messageStatus(required): message status
+> - msgId(required): message id
+
+#### error:
+> - code: error code
+> - message: error message
+
+### 7.2.3. Send typing
 
 ```javascript 
 this.AZStack.sendTyping({
