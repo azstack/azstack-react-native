@@ -499,38 +499,41 @@ class Message {
         });
     };
 
-    receiveMessageSentReport(options) {
+    receiveMessageReport(options) {
         return new Promise((resolve, reject) => {
             if (!options.body) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'Cannot detect message sent report, ignored'
+                    message: 'Cannot detect message report, ignored'
                 });
                 reject({
                     code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
-                    message: 'Cannot detect message sent report'
+                    message: 'Cannot detect message report'
                 });
                 return;
             }
 
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                message: 'Got message sent report'
+                message: 'Got message report'
             });
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                message: 'Message sent report',
+                message: 'Message report',
                 payload: options.body
             });
 
             let onSentMessage = {};
 
             if (options.chatType === this.chatConstants.CHAT_TYPE_USER) {
-                onSentMessage = {
-                    success: options.body.r === this.errorCodes.SENT_MESSAGE_SUCCESS_FROM_SERVER ? true : false,
-                    chatType: this.chatConstants.CHAT_TYPE_USER,
-                    chatId: options.body.from,
-                    senderId: options.body.from,
-                    receiverId: 0,
-                    msgId: options.body.msgId
-                };
+                if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_SENT) {
+                    onSentMessage = {
+                        success: options.body.r === this.errorCodes.REPORT_MESSAGE_SUCCESS_FROM_SERVER ? true : false,
+                        chatType: this.chatConstants.CHAT_TYPE_USER,
+                        chatId: options.body.from,
+                        senderId: options.body.from,
+                        receiverId: 0,
+                        msgId: options.body.msgId,
+                        messageStatus: this.chatConstants.MESSAGE_STATUS_SENT
+                    };
+                }
             }
 
             resolve(onSentMessage);

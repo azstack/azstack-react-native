@@ -353,13 +353,14 @@ class AZStack {
                 break;
 
             case this.serviceTypes.MESSAGE_NEW_WITH_USER_TYPE_TEXT:
-                this.Message.receiveMessageSentReport({
+                this.Message.receiveMessageReport({
                     chatType: this.chatConstants.CHAT_TYPE_USER,
+                    messageStatus: this.chatConstants.MESSAGE_STATUS_SENT,
                     body: body
                 }).then((result) => {
                     result.receiverId = this.authenticatedUser.userId;
-                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_SENT_REPORT] === 'function') {
-                        this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_SENT_REPORT](null, result);
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_REPORT] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_REPORT](null, result);
                     }
                 }).catch();
                 break;
