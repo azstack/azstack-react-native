@@ -723,7 +723,6 @@ this.AZStack.getModifiedConversations({
 >       - chatType: chat type
 >       - chatId: chat id
 >       - senderId: id of sender
->       - receiverId: id of receiverId
 >       - msgId: id of message
 >       - messageType: type of message
 >       - messageStatus: status of message

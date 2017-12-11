@@ -75,8 +75,8 @@ class Message {
             };
             body.list.map((message) => {
                 let unreadMessage = {
-                    chatType: 0,
-                    chatId: message.receiverId,
+                    chatType: body.type,
+                    chatId: body.chatId,
                     senderId: message.senderId,
                     receiverId: message.receiverId,
                     msgId: message.msgId,
@@ -85,9 +85,6 @@ class Message {
                     created: message.created,
                     modified: message.modified
                 };
-                if (message.serviceType === this.serviceTypes.MESSAGE_SERVER_WITH_USER_TYPE_TEXT || message.serviceType === this.serviceTypes.MESSAGE_WITH_USER_TYPE_STICKER || message.serviceType === this.serviceTypes.MESSAGE_WITH_USER_TYPE_FILE) {
-                    unreadMessage.chatType = this.chatConstants.CHAT_TYPE_USER;
-                }
                 if (message.msg) {
                     unreadMessage.messageType = this.chatConstants.MESSAGE_TYPE_TEXT;
                     unreadMessage.text = message.msg;
@@ -180,8 +177,8 @@ class Message {
             };
             body.list.map((message) => {
                 let modifiedMessage = {
-                    chatType: 0,
-                    chatId: message.receiverId,
+                    chatType: body.type,
+                    chatId: body.chatId,
                     senderId: message.senderId,
                     receiverId: message.receiverId,
                     msgId: message.msgId,
@@ -190,9 +187,6 @@ class Message {
                     created: message.created,
                     modified: message.modified
                 };
-                if (message.serviceType === this.serviceTypes.MESSAGE_SERVER_WITH_USER_TYPE_TEXT || message.serviceType === this.serviceTypes.MESSAGE_WITH_USER_TYPE_STICKER || message.serviceType === this.serviceTypes.MESSAGE_WITH_USER_TYPE_FILE) {
-                    modifiedMessage.chatType = this.chatConstants.CHAT_TYPE_USER;
-                }
                 if (message.msg) {
                     modifiedMessage.messageType = this.chatConstants.MESSAGE_TYPE_TEXT;
                     modifiedMessage.text = message.msg;

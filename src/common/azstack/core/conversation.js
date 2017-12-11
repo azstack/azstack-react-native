@@ -78,7 +78,6 @@ class Conversation {
                         chatType: conversation.type,
                         chatId: conversation.chatId,
                         senderId: conversation.lastMsg.sender,
-                        receiverId: conversation.chatId,
                         msgId: conversation.lastMsg.msgId,
                         messageType: 0,
                         messageStatus: conversation.lastMsg.status,
