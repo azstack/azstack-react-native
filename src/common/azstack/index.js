@@ -388,6 +388,17 @@ class AZStack {
                     }
                 }).catch();
                 break;
+            case this.serviceTypes.MESSAGE_STATUS_CHANGE_CANCELLED_WITH_USER:
+                this.Message.receiveMessageStatusChanged({
+                    chatType: this.chatConstants.CHAT_TYPE_USER,
+                    messageStatus: this.chatConstants.MESSAGE_STATUS_CANCELLED,
+                    body: body
+                }).then((result) => {
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED](null, result);
+                    }
+                }).catch();
+                break;
 
             case this.serviceTypes.MESSAGE_TYPING_WITH_USER:
                 this.Message.receiveTyping({

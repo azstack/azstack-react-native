@@ -568,11 +568,11 @@ class Message {
                 payload: options.body
             });
 
-            let onMessageReport = {};
+            let onMessageStatusChanged = {};
 
             if (options.chatType === this.chatConstants.CHAT_TYPE_USER) {
                 if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_SENT) {
-                    onMessageReport = {
+                    onMessageStatusChanged = {
                         statusChanged: (options.body.r === this.errorCodes.REPORT_MESSAGE_SUCCESS_FROM_SERVER || options.body.r === this.errorCodes.REQUEST_SUCCESS_FROM_SERVER) ? this.chatConstants.MESSAGE_STATUS_CHANGED_SUCCESS : this.chatConstants.MESSAGE_STATUS_CHANGED_FAIL,
                         chatType: this.chatConstants.CHAT_TYPE_USER,
                         chatId: options.body.from,
@@ -583,7 +583,7 @@ class Message {
                     };
                 }
                 if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_DELIVERED) {
-                    onMessageReport = {
+                    onMessageStatusChanged = {
                         statusChanged: this.chatConstants.MESSAGE_STATUS_CHANGED_SUCCESS,
                         chatType: this.chatConstants.CHAT_TYPE_USER,
                         chatId: options.body.from,
@@ -604,7 +604,7 @@ class Message {
                         });
                         return;
                     }
-                    onMessageReport = {
+                    onMessageStatusChanged = {
                         statusChanged: this.chatConstants.MESSAGE_STATUS_CHANGED_SUCCESS,
                         chatType: this.chatConstants.CHAT_TYPE_USER,
                         chatId: options.body.from,
@@ -614,9 +614,30 @@ class Message {
                         messageStatus: this.chatConstants.MESSAGE_STATUS_SEEN
                     };
                 }
+                if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_CANCELLED) {
+                    if (options.body.r !== undefined) {
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                            message: 'Got report for change message status to cancelled, ignored'
+                        });
+                        reject({
+                            code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                            message: 'Got report for change message status to cancelled'
+                        });
+                        return;
+                    }
+                    onMessageStatusChanged = {
+                        statusChanged: this.chatConstants.MESSAGE_STATUS_CHANGED_SUCCESS,
+                        chatType: this.chatConstants.CHAT_TYPE_USER,
+                        chatId: options.body.from,
+                        senderId: options.body.from,
+                        receiverId: options.body.to,
+                        msgId: options.body.id,
+                        messageStatus: this.chatConstants.MESSAGE_STATUS_CANCELLED
+                    };
+                }
             }
 
-            resolve(onMessageReport);
+            resolve(onMessageStatusChanged);
         });
     };
 

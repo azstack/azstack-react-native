@@ -189,6 +189,7 @@ azstack.config({
 > - MESSAGE_STATUS_SENT(1): status sent
 > - MESSAGE_STATUS_DELIVERED(2): status delivered
 > - MESSAGE_STATUS_SEEN(3): status seen
+> - MESSAGE_STATUS_CANCELLED(6): status cancelled
 
 #### 3.5.4. Message Status Changed
 > - MESSAGE_STATUS_CHANGED_FAIL(0): status changed fail
