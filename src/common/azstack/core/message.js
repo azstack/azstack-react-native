@@ -493,7 +493,7 @@ class Message {
         });
     };
 
-    sendReport(options) {
+    changeStatus(options) {
         return new Promise((resolve, reject) => {
 
             let messageReportPacketService = null;
@@ -525,46 +525,46 @@ class Message {
                 body: JSON.stringify(messageReportPacketBody)
             };
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                message: 'Send message report packet'
+                message: 'Send change message status packet'
             });
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                message: 'Message report packet',
+                message: 'Change message status packet',
                 payload: newMessagePacket
             });
             this.sendPacketFunction(newMessagePacket).then(() => {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                    message: 'Send message report packet successfully'
+                    message: 'Send change message status packet successfully'
                 });
                 resolve();
             }).catch((error) => {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'Cannot send message report data, send message report fail'
+                    message: 'Cannot send change message status data, send change message status fail'
                 });
                 reject({
                     code: error.code,
-                    message: 'Cannot send message report data, send message report fail'
+                    message: 'Cannot send change message status data, send change message status fail'
                 });
             });
         });
     };
-    receiveMessageReport(options) {
+    receiveMessageStatusChanged(options) {
         return new Promise((resolve, reject) => {
             if (!options.body) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'Cannot detect message report, ignored'
+                    message: 'Cannot detect message status changed, ignored'
                 });
                 reject({
                     code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
-                    message: 'Cannot detect message report'
+                    message: 'Cannot detect message status changed'
                 });
                 return;
             }
 
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                message: 'Got message report'
+                message: 'Got message status changed'
             });
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                message: 'Message report',
+                message: 'Message status changed',
                 payload: options.body
             });
 
@@ -573,7 +573,7 @@ class Message {
             if (options.chatType === this.chatConstants.CHAT_TYPE_USER) {
                 if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_SENT) {
                     onMessageReport = {
-                        reportStatus: (options.body.r === this.errorCodes.REPORT_MESSAGE_SUCCESS_FROM_SERVER || options.body.r === this.errorCodes.REQUEST_SUCCESS_FROM_SERVER) ? this.chatConstants.MESSAGE_STATUS_REPORT_SUCCESS : this.chatConstants.MESSAGE_STATUS_REPORT_FAIL,
+                        statusChanged: (options.body.r === this.errorCodes.REPORT_MESSAGE_SUCCESS_FROM_SERVER || options.body.r === this.errorCodes.REQUEST_SUCCESS_FROM_SERVER) ? this.chatConstants.MESSAGE_STATUS_CHANGED_SUCCESS : this.chatConstants.MESSAGE_STATUS_CHANGED_FAIL,
                         chatType: this.chatConstants.CHAT_TYPE_USER,
                         chatId: options.body.from,
                         senderId: options.body.from,
@@ -584,7 +584,7 @@ class Message {
                 }
                 if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_DELIVERED) {
                     onMessageReport = {
-                        reportStatus: this.chatConstants.MESSAGE_STATUS_REPORT_SUCCESS,
+                        statusChanged: this.chatConstants.MESSAGE_STATUS_CHANGED_SUCCESS,
                         chatType: this.chatConstants.CHAT_TYPE_USER,
                         chatId: options.body.from,
                         senderId: options.body.from,
@@ -596,16 +596,16 @@ class Message {
                 if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_SEEN) {
                     if (options.body.r !== undefined) {
                         this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                            message: 'Got report for sent seen report, ignored'
+                            message: 'Got report for change message status to seen, ignored'
                         });
                         reject({
                             code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
-                            message: 'Got report for sent seen report'
+                            message: 'Got report for change message status to seen'
                         });
                         return;
                     }
                     onMessageReport = {
-                        reportStatus: this.chatConstants.MESSAGE_STATUS_REPORT_SUCCESS,
+                        statusChanged: this.chatConstants.MESSAGE_STATUS_CHANGED_SUCCESS,
                         chatType: this.chatConstants.CHAT_TYPE_USER,
                         chatId: options.body.from,
                         senderId: options.body.from,

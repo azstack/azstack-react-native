@@ -353,38 +353,38 @@ class AZStack {
                 break;
 
             case this.serviceTypes.MESSAGE_NEW_WITH_USER_TYPE_TEXT:
-                this.Message.receiveMessageReport({
+                this.Message.receiveMessageStatusChanged({
                     chatType: this.chatConstants.CHAT_TYPE_USER,
                     messageStatus: this.chatConstants.MESSAGE_STATUS_SENT,
                     body: body
                 }).then((result) => {
                     result.receiverId = this.authenticatedUser.userId;
-                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_REPORT] === 'function') {
-                        this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_REPORT](null, result);
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED](null, result);
                     }
                 }).catch();
                 break;
             case this.serviceTypes.MESSAGE_REPORT_DELIVERED_WITH_USER:
-                this.Message.receiveMessageReport({
+                this.Message.receiveMessageStatusChanged({
                     chatType: this.chatConstants.CHAT_TYPE_USER,
                     messageStatus: this.chatConstants.MESSAGE_STATUS_DELIVERED,
                     body: body
                 }).then((result) => {
                     result.receiverId = this.authenticatedUser.userId;
-                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_REPORT] === 'function') {
-                        this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_REPORT](null, result);
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED](null, result);
                     }
                 }).catch();
                 break;
             case this.serviceTypes.MESSAGE_REPORT_SEEN:
-                this.Message.receiveMessageReport({
+                this.Message.receiveMessageStatusChanged({
                     chatType: body.type,
                     messageStatus: this.chatConstants.MESSAGE_STATUS_SEEN,
                     body: body
                 }).then((result) => {
                     result.receiverId = this.authenticatedUser.userId;
-                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_REPORT] === 'function') {
-                        this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_REPORT](null, result);
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED](null, result);
                     }
                 }).catch();
                 break;
@@ -1116,25 +1116,25 @@ class AZStack {
         });
     };
 
-    sendMessageReport(options, callback) {
+    changeMessageStatus(options, callback) {
         return new Promise((resolve, reject) => {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                message: 'Send message report'
+                message: 'Send change message status'
             });
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                message: 'Send message report params',
+                message: 'Send change message status params',
                 payload: options
             });
 
-            this.addUncall(this.uncallConstants.UNCALL_KEY_SEND_MESSAGE_REPORT, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_SEND_MESSAGE_REPORT_RETURN);
+            this.addUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_CHANGE_MESSAGE_STATUS_RETURN);
 
             if (!options || typeof options !== 'object') {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'Missing send message report params'
+                    message: 'Missing send change message status params'
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_SEND_MESSAGE_REPORT, 'default', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'Missing send message report params'
+                    message: 'Missing send change message status params'
                 }, null);
                 return;
             }
@@ -1174,23 +1174,23 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: dataErrorMessage
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_SEND_MESSAGE_REPORT, 'default', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: dataErrorMessage
                 }, null);
                 return;
             }
 
-            this.Message.sendReport({
+            this.Message.changeStatus({
                 chatType: options.chatType,
                 chatId: options.chatId,
                 messageSenderId: options.messageSenderId,
                 messageStatus: options.messageStatus,
                 msgId: options.msgId
             }).then((result) => {
-                this.callUncall(this.uncallConstants.UNCALL_KEY_SEND_MESSAGE_REPORT, 'default', null, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, 'default', null, null);
             }).catch((error) => {
-                this.callUncall(this.uncallConstants.UNCALL_KEY_SEND_MESSAGE_REPORT, 'default', error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, 'default', error, null);
             });
         });
     };

@@ -16,7 +16,7 @@
         * [3.5.1. Chat Types](#351-chat-types)
         * [3.5.2. Message Types](#352-message-types)
         * [3.5.3. Message Statuses](#353-message-statuses)
-        * [3.5.4. Message Status Report](#354-message-status-report)
+        * [3.5.4. Message Status Changed](#354-message-status-changed)
         * [3.5.5. Message file types](#355-message-file-types)
     * [3.6. User constants](#36-user-constants)
         * [3.6.1. User status](#361-user-status)
@@ -47,12 +47,12 @@
         * [7.1.2 Get modified messages](#712-get-modified-messages)
     * [7.2. Sending](#72-sending)
         * [7.2.1. New message](#721-new-message)
-        * [7.2.2. Send message report](#722-send-message-report)
+        * [7.2.2. Change message status](#722-change-message-status)
         * [7.2.3. Send typing](#723-send-typing)
     * [7.3. Delegates](#73-delegates)
         * [7.3.1. On new message](#731-on-new-message)
         * [7.3.2. On message from me](#732-on-message-from-me)
-        * [7.3.3. On message report](#733-on-message-report)
+        * [7.3.3. On message status changed](#733-on-message-status-changed)
         * [7.3.4. On typing](#734-on-typing)
 * [8. User](#8-user)
     * [8.1. Get users information](#81-get-users-information)
@@ -190,9 +190,9 @@ azstack.config({
 > - MESSAGE_STATUS_DELIVERED(2): status delivered
 > - MESSAGE_STATUS_SEEN(3): status seen
 
-#### 3.5.4. Message Status Report
-> - MESSAGE_STATUS_REPORT_FAIL(0): status report fail
-> - MESSAGE_STATUS_REPORT_SUCCESS(1): status report success
+#### 3.5.4. Message Status Changed
+> - MESSAGE_STATUS_CHANGED_FAIL(0): status changed fail
+> - MESSAGE_STATUS_CHANGED_SUCCESS(1): status changed success
 
 #### 3.5.5. Message file types
 > - MESSAGE_FILE_TYPE_UNKNOWN(0): file type unknown
@@ -1004,10 +1004,10 @@ this.AZStack.newMessage({
 >   - type: type
 >   - url: url
 
-### 7.2.2. Send message report
+### 7.2.2. Change message status
 
 ```javascript 
-this.AZStack.sendMessageReport({
+this.AZStack.changeMessageStatus({
     chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
     chatId: 12345,
     messageStatus: this.AZStack.chatConstants.MESSAGE_STATUS_DELIVERED,
@@ -1021,7 +1021,7 @@ this.AZStack.sendMessageReport({
 OR
 
 ```javascript 
-this.AZStack.sendMessageReport({
+this.AZStack.changeMessageStatus({
     chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
     chatId: 12345,
     messageStatus: this.AZStack.chatConstants.MESSAGE_STATUS_DELIVERED,
@@ -1036,10 +1036,10 @@ this.AZStack.sendMessageReport({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onSendMessageReportReturn = (error, result) => {
+this.AZStack.Delegates.onChangeMessageStatusReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.sendMessageReport({
+this.AZStack.changeMessageStatus({
     chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
     chatId: 12345,
     messageStatus: this.AZStack.chatConstants.MESSAGE_STATUS_DELIVERED,
@@ -1171,10 +1171,10 @@ this.AZStack.Delegates.onMessageFromMe = (error, result) => {
 >   - type: type
 >   - url: url
 
-#### 7.3.3. On message report
+#### 7.3.3. On message status changed
 
 ```javascript 
-this.AZStack.Delegates.onMessageReport = (error, result) => {
+this.AZStack.Delegates.onMessageStatusChanged = (error, result) => {
     console.log(error, result);
 };
 ```
@@ -1184,7 +1184,7 @@ this.AZStack.Delegates.onMessageReport = (error, result) => {
 > - message: error message
 
 #### result:
-> - reportStatus: report status
+> - statusChanged: status changed
 > - chatType: chat type
 > - chatId: chat id
 > - senderId: id of sender

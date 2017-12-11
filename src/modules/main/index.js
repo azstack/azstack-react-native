@@ -42,8 +42,8 @@ class AppMain extends React.Component {
         this.newMessageWithUserTypeSticker = this.newMessageWithUserTypeSticker.bind(this);
         this.newMessageWithUserTypeFile = this.newMessageWithUserTypeFile.bind(this);
 
-        this.sendMessageReportDeliveredWithUser = this.sendMessageReportDeliveredWithUser.bind(this);
-        this.sendMessageReportSeenWithUser = this.sendMessageReportSeenWithUser.bind(this);
+        this.changeMessageStatusDeliveredWithUser = this.changeMessageStatusDeliveredWithUser.bind(this);
+        this.changeMessageStatusSeenWithUser = this.changeMessageStatusSeenWithUser.bind(this);
 
         this.sendTypingWithUser = this.sendTypingWithUser.bind(this);
 
@@ -159,8 +159,8 @@ class AppMain extends React.Component {
         }).then(() => { }).catch(() => { });
     };
 
-    sendMessageReportDeliveredWithUser() {
-        this.AZStack.sendMessageReport({
+    changeMessageStatusDeliveredWithUser() {
+        this.AZStack.changeMessageStatus({
             chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
             chatId: 387212,
             messageSenderId: 387212,
@@ -168,8 +168,8 @@ class AppMain extends React.Component {
             msgId: 1512639092
         }).then(() => { }).catch(() => { });
     };
-    sendMessageReportSeenWithUser() {
-        this.AZStack.sendMessageReport({
+    changeMessageStatusSeenWithUser() {
+        this.AZStack.changeMessageStatus({
             chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
             chatId: 387212,
             messageSenderId: 387212,
@@ -230,8 +230,8 @@ class AppMain extends React.Component {
                     <Button onPress={this.newMessageWithUserTypeSticker} title="New message with user type sticker" />
                     <Button onPress={this.newMessageWithUserTypeFile} title="New message with user type file" />
                     <Text>{'\n'}{'\n'}</Text>
-                    <Button onPress={this.sendMessageReportDeliveredWithUser} title="Send message report delivered with user" />
-                    <Button onPress={this.sendMessageReportSeenWithUser} title="Send message report seen with user" />
+                    <Button onPress={this.changeMessageStatusDeliveredWithUser} title="Change message status delivered with user" />
+                    <Button onPress={this.changeMessageStatusSeenWithUser} title="Change message status seen with user" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.sendTypingWithUser} title="Send typing with user" />
                     <Text>{'\n'}{'\n'}</Text>
