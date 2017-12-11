@@ -307,7 +307,7 @@ class AZStack {
                     }
                 }).catch();
                 break;
-            case this.serviceTypes.MESSAGE_HAS_NEW_WITH_USER_TYPE_STICKER:
+            case this.serviceTypes.MESSAGE_WITH_USER_TYPE_STICKER:
                 this.Message.receiveHasNewMessage({
                     chatType: this.chatConstants.CHAT_TYPE_USER,
                     messageType: this.chatConstants.MESSAGE_TYPE_STICKER,
@@ -318,7 +318,7 @@ class AZStack {
                     }
                 }).catch();
                 break;
-            case this.serviceTypes.MESSAGE_HAS_NEW_WITH_USER_TYPE_FILE:
+            case this.serviceTypes.MESSAGE_WITH_USER_TYPE_FILE:
                 this.Message.receiveHasNewMessage({
                     chatType: this.chatConstants.CHAT_TYPE_USER,
                     messageType: this.chatConstants.MESSAGE_TYPE_FILE,

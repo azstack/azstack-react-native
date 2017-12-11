@@ -85,7 +85,7 @@ class Message {
                     created: message.created,
                     modified: message.modified
                 };
-                if (message.serviceType === 5 || message.serviceType === 104 || message.serviceType === 121) {
+                if (message.serviceType === this.serviceTypes.MESSAGE_SERVER_WITH_USER_TYPE_TEXT || message.serviceType === this.serviceTypes.MESSAGE_WITH_USER_TYPE_STICKER || message.serviceType === this.serviceTypes.MESSAGE_WITH_USER_TYPE_FILE) {
                     unreadMessage.chatType = this.chatConstants.CHAT_TYPE_USER;
                 }
                 if (message.msg) {
@@ -190,7 +190,7 @@ class Message {
                     created: message.created,
                     modified: message.modified
                 };
-                if (message.serviceType === 5 || message.serviceType === 104 || message.serviceType === 121) {
+                if (message.serviceType === this.serviceTypes.MESSAGE_SERVER_WITH_USER_TYPE_TEXT || message.serviceType === this.serviceTypes.MESSAGE_WITH_USER_TYPE_STICKER || message.serviceType === this.serviceTypes.MESSAGE_WITH_USER_TYPE_FILE) {
                     modifiedMessage.chatType = this.chatConstants.CHAT_TYPE_USER;
                 }
                 if (message.msg) {
@@ -251,7 +251,7 @@ class Message {
                     };
                 }
                 if (options.sticker) {
-                    newMessagePacketService = this.serviceTypes.MESSAGE_NEW_WITH_USER_TYPE_STICKER;
+                    newMessagePacketService = this.serviceTypes.MESSAGE_WITH_USER_TYPE_STICKER;
                     newMessagePacketBody = {
                         id: options.msgId,
                         to: options.chatId,
