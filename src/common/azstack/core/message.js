@@ -534,6 +534,17 @@ class Message {
                         messageStatus: this.chatConstants.MESSAGE_STATUS_SENT
                     };
                 }
+                if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_DELIVERED) {
+                    onSentMessage = {
+                        success: true,
+                        chatType: this.chatConstants.CHAT_TYPE_USER,
+                        chatId: options.body.from,
+                        senderId: options.body.from,
+                        receiverId: 0,
+                        msgId: options.body.msgId,
+                        messageStatus: this.chatConstants.MESSAGE_STATUS_DELIVERED
+                    };
+                }
             }
 
             resolve(onSentMessage);
