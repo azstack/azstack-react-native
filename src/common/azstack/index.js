@@ -1140,6 +1140,12 @@ class AZStack {
                 data: options.chatId,
                 notEqual: 0
             }, {
+                name: 'messageSenderId',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.messageSenderId,
+                notEqual: 0
+            }, {
                 name: 'messageStatus',
                 required: true,
                 dataType: this.dataTypes.DATA_TYPE_NUMBER,

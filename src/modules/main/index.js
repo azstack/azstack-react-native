@@ -162,6 +162,7 @@ class AppMain extends React.Component {
         this.AZStack.sendMessageReport({
             chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
             chatId: 387212,
+            messageSenderId: 387212,
             messageStatus: this.AZStack.chatConstants.MESSAGE_STATUS_DELIVERED,
             msgId: 1512639092
         }).then(() => { }).catch(() => { });

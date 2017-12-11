@@ -1051,6 +1051,7 @@ this.AZStack.sendMessageReport({
 #### params
 > - chatType(required): chat type
 > - chatId(required): chatId
+> - messageSenderId(required): message senderId
 > - messageStatus(required): message status
 > - msgId(required): message id
 
