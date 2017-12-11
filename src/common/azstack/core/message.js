@@ -565,11 +565,11 @@ class Message {
                 payload: options.body
             });
 
-            let onSentMessage = {};
+            let onMessageReport = {};
 
             if (options.chatType === this.chatConstants.CHAT_TYPE_USER) {
                 if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_SENT) {
-                    onSentMessage = {
+                    onMessageReport = {
                         reportStatus: (options.body.r === this.errorCodes.REPORT_MESSAGE_SUCCESS_FROM_SERVER || options.body.r === this.errorCodes.REQUEST_SUCCESS_FROM_SERVER) ? this.chatConstants.MESSAGE_STATUS_REPORT_SUCCESS : this.chatConstants.MESSAGE_STATUS_REPORT_FAIL,
                         chatType: this.chatConstants.CHAT_TYPE_USER,
                         chatId: options.body.from,
@@ -580,7 +580,7 @@ class Message {
                     };
                 }
                 if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_DELIVERED) {
-                    onSentMessage = {
+                    onMessageReport = {
                         reportStatus: this.chatConstants.MESSAGE_STATUS_REPORT_SUCCESS,
                         chatType: this.chatConstants.CHAT_TYPE_USER,
                         chatId: options.body.from,
@@ -590,9 +590,30 @@ class Message {
                         messageStatus: this.chatConstants.MESSAGE_STATUS_DELIVERED
                     };
                 }
+                if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_SEEN) {
+                    if (options.body.r !== undefined) {
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                            message: 'Got report for sent seen report, ignored'
+                        });
+                        reject({
+                            code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                            message: 'Got report for sent seen report'
+                        });
+                        return;
+                    }
+                    onMessageReport = {
+                        reportStatus: this.chatConstants.MESSAGE_STATUS_REPORT_SUCCESS,
+                        chatType: this.chatConstants.CHAT_TYPE_USER,
+                        chatId: options.body.from,
+                        senderId: options.body.from,
+                        receiverId: 0,
+                        msgId: options.body.msgId,
+                        messageStatus: this.chatConstants.MESSAGE_STATUS_SEEN
+                    };
+                }
             }
 
-            resolve(onSentMessage);
+            resolve(onMessageReport);
         });
     };
 
