@@ -1184,6 +1184,7 @@ class AZStack {
             this.Message.sendReport({
                 chatType: options.chatType,
                 chatId: options.chatId,
+                messageSenderId: options.messageSenderId,
                 messageStatus: options.messageStatus,
                 msgId: options.msgId
             }).then((result) => {

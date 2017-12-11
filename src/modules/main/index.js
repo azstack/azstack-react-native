@@ -43,6 +43,7 @@ class AppMain extends React.Component {
         this.newMessageWithUserTypeFile = this.newMessageWithUserTypeFile.bind(this);
 
         this.sendMessageReportDeliveredWithUser = this.sendMessageReportDeliveredWithUser.bind(this);
+        this.sendMessageReportSeenWithUser = this.sendMessageReportSeenWithUser.bind(this);
 
         this.sendTypingWithUser = this.sendTypingWithUser.bind(this);
 
@@ -167,6 +168,15 @@ class AppMain extends React.Component {
             msgId: 1512639092
         }).then(() => { }).catch(() => { });
     };
+    sendMessageReportSeenWithUser() {
+        this.AZStack.sendMessageReport({
+            chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+            chatId: 387212,
+            messageSenderId: 387212,
+            messageStatus: this.AZStack.chatConstants.MESSAGE_STATUS_SEEN,
+            msgId: 1512639092
+        }).then(() => { }).catch(() => { });
+    };
 
     sendTypingWithUser() {
         this.AZStack.sendTyping({
@@ -221,6 +231,7 @@ class AppMain extends React.Component {
                     <Button onPress={this.newMessageWithUserTypeFile} title="New message with user type file" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.sendMessageReportDeliveredWithUser} title="Send message report delivered with user" />
+                    <Button onPress={this.sendMessageReportSeenWithUser} title="Send message report seen with user" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.sendTypingWithUser} title="Send typing with user" />
                     <Text>{'\n'}{'\n'}</Text>

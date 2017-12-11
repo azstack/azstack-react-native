@@ -513,6 +513,15 @@ class Message {
                         msgId: options.msgId
                     };
                 }
+                if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_SEEN) {
+                    messageReportPacketService = this.serviceTypes.MESSAGE_REPORT_SEEN;
+                    messageReportPacketBody = {
+                        type: options.chatType,
+                        chatId: options.chatId,
+                        senderId: options.messageSenderId,
+                        msgId: options.msgId
+                    };
+                }
             } else if (options.chatType === this.chatConstants.CHAT_TYPE_GROUP) {
 
             }
