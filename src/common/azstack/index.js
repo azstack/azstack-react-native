@@ -400,6 +400,14 @@ class AZStack {
                 }).catch();
                 break;
 
+            case this.serviceTypes.MESSAGE_DELETE:
+                this.Message.receiveMessageDeleted(body).then((result) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_DELETE_MESSAGE, 'default', null, null);
+                }).catch((error) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_DELETE_MESSAGE, 'default', error, null);
+                });
+                break;
+
             case this.serviceTypes.MESSAGE_TYPING_WITH_USER:
                 this.Message.receiveTyping({
                     chatType: this.chatConstants.CHAT_TYPE_USER,
@@ -1202,6 +1210,78 @@ class AZStack {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, 'default', null, null);
             }).catch((error) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, 'default', error, null);
+            });
+        });
+    };
+
+    deleteMessage(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send delete message'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Send delete message params',
+                payload: options
+            });
+
+            this.addUncall(this.uncallConstants.UNCALL_KEY_DELETE_MESSAGE, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_MESSAGE_DELETED);
+
+            if (!options || typeof options !== 'object') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Missing send delete message params'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_DELETE_MESSAGE, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'Missing send delete message params'
+                }, null);
+                return;
+            }
+
+            let dataErrorMessage = this.Validator.check([{
+                name: 'chatType',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.chatType,
+                in: [this.chatConstants.CHAT_TYPE_USER, this.chatConstants.CHAT_TYPE_GROUP]
+            }, {
+                name: 'chatId',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.chatId,
+                notEqual: 0
+            }, {
+                name: 'messageSenderId',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.messageSenderId,
+                notEqual: 0
+            }, {
+                name: 'msgId',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.msgId,
+                notEqual: 0
+            }]);
+            if (dataErrorMessage) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: dataErrorMessage
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_DELETE_MESSAGE, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: dataErrorMessage
+                }, null);
+                return;
+            }
+
+            this.Message.delete({
+                chatType: options.chatType,
+                chatId: options.chatId,
+                messageSenderId: options.messageSenderId,
+                msgId: options.msgId
+            }).then((result) => {
+
+            }).catch((error) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_DELETE_MESSAGE, 'default', error, null);
             });
         });
     };

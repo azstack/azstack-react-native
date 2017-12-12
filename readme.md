@@ -49,7 +49,8 @@
     * [7.2. Sending](#72-sending)
         * [7.2.1. New message](#721-new-message)
         * [7.2.2. Change message status](#722-change-message-status)
-        * [7.2.3. Send typing](#723-send-typing)
+        * [7.2.3. Delete message](#723-delete-message)
+        * [7.2.4. Send typing](#724-send-typing)
     * [7.3. Delegates](#73-delegates)
         * [7.3.1. On new message](#731-on-new-message)
         * [7.3.2. On message from me](#732-on-message-from-me)
@@ -1071,7 +1072,60 @@ this.AZStack.changeMessageStatus({
 > - code: error code
 > - message: error message
 
-### 7.2.3. Send typing
+### 7.2.3. Delete message
+
+```javascript 
+this.AZStack.deleteMessage({
+    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatId: 12345,
+    messageSenderId: 1111,
+    msgId: 54321
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.deleteMessage({
+    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatId: 12345,
+    messageSenderId: 1111,
+    msgId: 54321
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.onMessageDeleted = (error, result) => {
+    console.log(error, result);
+};
+this.AZStack.deleteMessage({
+    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatId: 12345,
+    messageSenderId: 1111,
+    msgId: 54321
+});
+```
+
+#### params
+> - chatType(required): chat type
+> - chatId(required): chatId
+> - messageSenderId(required): message senderId
+> - msgId(required): message id
+
+#### error:
+> - code: error code
+> - message: error message
+
+### 7.2.4. Send typing
 
 ```javascript 
 this.AZStack.sendTyping({

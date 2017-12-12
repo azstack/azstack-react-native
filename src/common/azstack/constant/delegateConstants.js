@@ -32,6 +32,8 @@ export const DELEGATE_ON_MESSAGE_FROM_ME = 'onMessageFromMe';
 export const DELEGATE_ON_CHANGE_MESSAGE_STATUS_RETURN = 'onChangeMessageStatusReturn';
 export const DELEGATE_ON_MESSAGE_STATUS_CHANGED = 'onMessageStatusChanged';
 
+export const DELEGATE_ON_MESSAGE_DELETED = 'onMessageDeleted';
+
 export const DELEGATE_ON_SEND_TYPING_RETURN = 'onSendTypingReturn';
 export const DELEGATE_ON_TYPING = 'onTyping';
 

@@ -540,7 +540,7 @@ class Message {
 
             }
 
-            const newMessagePacket = {
+            const changeMessageStatusPacket = {
                 service: messageReportPacketService,
                 body: JSON.stringify(messageReportPacketBody)
             };
@@ -549,9 +549,9 @@ class Message {
             });
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
                 message: 'Change message status packet',
-                payload: newMessagePacket
+                payload: changeMessageStatusPacket
             });
-            this.sendPacketFunction(newMessagePacket).then(() => {
+            this.sendPacketFunction(changeMessageStatusPacket).then(() => {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                     message: 'Send change message status packet successfully'
                 });
@@ -658,6 +658,77 @@ class Message {
             }
 
             resolve(onMessageStatusChanged);
+        });
+    };
+
+    delete(options) {
+        return new Promise((resolve, reject) => {
+
+            const deleteMessagePacket = {
+                service: this.serviceTypes.MESSAGE_DELETE,
+                body: JSON.stringify({
+                    type: options.chatType,
+                    chatId: options.chatId,
+                    senderId: options.messageSenderId,
+                    msgId: options.msgId
+                })
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send delete message packet'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Delete message packet',
+                payload: deleteMessagePacket
+            });
+            this.sendPacketFunction(deleteMessagePacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send delete message packet successfully'
+                });
+                resolve();
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send delete message data, send delete message fail'
+                });
+                reject({
+                    code: error.code,
+                    message: 'Cannot send delete message data, send delete message fail'
+                });
+            });
+        });
+    };
+    receiveMessageDeleted(body) {
+        return new Promise((resolve, reject) => {
+            if (!body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect message deleted, ignored'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Cannot detect message deleted'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got message deleted'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Message deleted',
+                payload: body
+            });
+
+            if (body.r !== this.errorCodes.DELETE_MESSAGE_SUCCESS_FROM_SERVER) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Server response with error, delete message fail'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Server response with error, delete message fail'
+                });
+                return;
+            }
+
+            resolve();
         });
     };
 

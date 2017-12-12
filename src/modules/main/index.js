@@ -46,6 +46,8 @@ class AppMain extends React.Component {
         this.changeMessageStatusSeenWithUser = this.changeMessageStatusSeenWithUser.bind(this);
         this.changeMessageStatusCancelledWithUser = this.changeMessageStatusCancelledWithUser.bind(this);
 
+        this.deleteMessageWithUser = this.deleteMessageWithUser.bind(this);
+
         this.sendTypingWithUser = this.sendTypingWithUser.bind(this);
 
         this.getUsersInfomationWithId = this.getUsersInfomationWithId.bind(this);
@@ -188,6 +190,15 @@ class AppMain extends React.Component {
         }).then(() => { }).catch(() => { });
     };
 
+    deleteMessageWithUser() {
+        this.AZStack.deleteMessage({
+            chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+            chatId: 387212,
+            messageSenderId: 381032,
+            msgId: 1512987550
+        }).then(() => { }).catch(() => { });
+    };
+
     sendTypingWithUser() {
         this.AZStack.sendTyping({
             chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
@@ -243,6 +254,8 @@ class AppMain extends React.Component {
                     <Button onPress={this.changeMessageStatusDeliveredWithUser} title="Change message status delivered with user" />
                     <Button onPress={this.changeMessageStatusSeenWithUser} title="Change message status seen with user" />
                     <Button onPress={this.changeMessageStatusCancelledWithUser} title="Change message status cancelled with user" />
+                    <Text>{'\n'}{'\n'}</Text>
+                    <Button onPress={this.deleteMessageWithUser} title="Delete message with user" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.sendTypingWithUser} title="Send typing with user" />
                     <Text>{'\n'}{'\n'}</Text>
