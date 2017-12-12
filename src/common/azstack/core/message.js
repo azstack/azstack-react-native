@@ -593,7 +593,7 @@ class Message {
             if (options.chatType === this.chatConstants.CHAT_TYPE_USER) {
                 if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_SENT) {
                     onMessageStatusChanged = {
-                        statusChanged: (options.body.r === this.errorCodes.REPORT_MESSAGE_SUCCESS_FROM_SERVER || options.body.r === this.errorCodes.REQUEST_SUCCESS_FROM_SERVER) ? this.chatConstants.MESSAGE_STATUS_CHANGED_SUCCESS : this.chatConstants.MESSAGE_STATUS_CHANGED_FAIL,
+                        statusChanged: (options.body.r === this.errorCodes.CHANGE_STATUS_MESSAGE_SUCCESS_FROM_SERVER || options.body.r === this.errorCodes.REQUEST_SUCCESS_FROM_SERVER) ? this.chatConstants.MESSAGE_STATUS_CHANGED_SUCCESS : this.chatConstants.MESSAGE_STATUS_CHANGED_FAIL,
                         chatType: this.chatConstants.CHAT_TYPE_USER,
                         chatId: options.body.from,
                         senderId: options.body.from,
