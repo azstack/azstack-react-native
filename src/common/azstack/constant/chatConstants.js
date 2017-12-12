@@ -14,6 +14,9 @@ export const MESSAGE_STATUS_CANCELLED = 6;
 export const MESSAGE_STATUS_CHANGED_FAIL = 0;
 export const MESSAGE_STATUS_CHANGED_SUCCESS = 1;
 
+export const MESSAGE_DELETED_FALSE = 0;
+export const MESSAGE_DELETED_TRUE = 1;
+
 export const MESSAGE_FILE_TYPE_UNKNOWN = 0;
 export const MESSAGE_FILE_TYPE_IMAGE = 1;
 export const MESSAGE_FILE_TYPE_AUDIO = 2;

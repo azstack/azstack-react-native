@@ -80,17 +80,18 @@ class Message {
                     senderId: message.senderId,
                     receiverId: message.receiverId,
                     msgId: message.msgId,
-                    messageType: 0,
-                    messageStatus: message.status,
+                    type: 0,
+                    status: message.status,
+                    deleted: message.deleted,
                     created: message.created,
                     modified: message.modified
                 };
                 if (message.msg) {
-                    unreadMessage.messageType = this.chatConstants.MESSAGE_TYPE_TEXT;
+                    unreadMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
                     unreadMessage.text = message.msg;
                 }
                 if (message.imgName) {
-                    unreadMessage.messageType = this.chatConstants.MESSAGE_TYPE_STICKER;
+                    unreadMessage.type = this.chatConstants.MESSAGE_TYPE_STICKER;
                     unreadMessage.sticker = {
                         name: message.imgName,
                         catId: message.catId,
@@ -98,7 +99,7 @@ class Message {
                     };
                 }
                 if (message.fileName) {
-                    unreadMessage.messageType = this.chatConstants.MESSAGE_TYPE_FILE;
+                    unreadMessage.type = this.chatConstants.MESSAGE_TYPE_FILE;
                     unreadMessage.file = {
                         name: message.fileName,
                         length: message.fileLength,
@@ -182,17 +183,18 @@ class Message {
                     senderId: message.senderId,
                     receiverId: message.receiverId,
                     msgId: message.msgId,
-                    messageType: 0,
-                    messageStatus: message.status,
+                    type: 0,
+                    status: message.status,
+                    deleted: message.deleted,
                     created: message.created,
                     modified: message.modified
                 };
                 if (message.msg) {
-                    modifiedMessage.messageType = this.chatConstants.MESSAGE_TYPE_TEXT;
+                    modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
                     modifiedMessage.text = message.msg;
                 }
                 if (message.imgName) {
-                    modifiedMessage.messageType = this.chatConstants.MESSAGE_TYPE_STICKER;
+                    modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_STICKER;
                     modifiedMessage.sticker = {
                         name: message.imgName,
                         catId: message.catId,
@@ -200,7 +202,7 @@ class Message {
                     };
                 }
                 if (message.fileName) {
-                    modifiedMessage.messageType = this.chatConstants.MESSAGE_TYPE_FILE;
+                    modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_FILE;
                     modifiedMessage.file = {
                         name: message.fileName,
                         length: message.fileLength,
@@ -237,8 +239,9 @@ class Message {
                         senderId: 0,
                         receiverId: options.chatId,
                         msgId: options.msgId,
-                        messageType: this.chatConstants.MESSAGE_TYPE_TEXT,
-                        messageStatus: this.chatConstants.MESSAGE_STATUS_SENDING,
+                        type: this.chatConstants.MESSAGE_TYPE_TEXT,
+                        status: this.chatConstants.MESSAGE_STATUS_SENDING,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
                         created: currentTimeStamp,
                         modified: currentTimeStamp,
                         text: options.text
@@ -260,8 +263,9 @@ class Message {
                         senderId: 0,
                         receiverId: options.chatId,
                         msgId: options.msgId,
-                        messageType: this.chatConstants.MESSAGE_TYPE_STICKER,
-                        messageStatus: this.chatConstants.MESSAGE_STATUS_SENDING,
+                        type: this.chatConstants.MESSAGE_TYPE_STICKER,
+                        status: this.chatConstants.MESSAGE_STATUS_SENDING,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
                         created: currentTimeStamp,
                         modified: currentTimeStamp,
                         sticker: {
@@ -288,8 +292,9 @@ class Message {
                         senderId: 0,
                         receiverId: options.chatId,
                         msgId: options.msgId,
-                        messageType: this.chatConstants.MESSAGE_TYPE_FILE,
-                        messageStatus: this.chatConstants.MESSAGE_STATUS_SENDING,
+                        type: this.chatConstants.MESSAGE_TYPE_FILE,
+                        status: this.chatConstants.MESSAGE_STATUS_SENDING,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
                         created: currentTimeStamp,
                         modified: currentTimeStamp,
                         file: {
@@ -362,8 +367,9 @@ class Message {
                         senderId: options.body.from,
                         receiverId: 0,
                         msgId: options.body.msgId,
-                        messageType: this.chatConstants.MESSAGE_TYPE_TEXT,
-                        messageStatus: this.chatConstants.MESSAGE_STATUS_SENT,
+                        type: this.chatConstants.MESSAGE_TYPE_TEXT,
+                        status: this.chatConstants.MESSAGE_STATUS_SENT,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
                         created: options.body.time,
                         modified: options.body.time,
                         text: options.body.msg
@@ -376,8 +382,9 @@ class Message {
                         senderId: options.body.from,
                         receiverId: options.body.to,
                         msgId: options.body.id,
-                        messageType: this.chatConstants.MESSAGE_TYPE_STICKER,
-                        messageStatus: this.chatConstants.MESSAGE_STATUS_SENT,
+                        type: this.chatConstants.MESSAGE_TYPE_STICKER,
+                        status: this.chatConstants.MESSAGE_STATUS_SENT,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
                         created: options.body.created,
                         modified: options.body.created,
                         sticker: {
@@ -394,8 +401,9 @@ class Message {
                         senderId: options.body.from,
                         receiverId: options.body.to,
                         msgId: options.body.id,
-                        messageType: this.chatConstants.MESSAGE_TYPE_FILE,
-                        messageStatus: this.chatConstants.MESSAGE_STATUS_SENT,
+                        type: this.chatConstants.MESSAGE_TYPE_FILE,
+                        status: this.chatConstants.MESSAGE_STATUS_SENT,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
                         created: options.body.created,
                         modified: options.body.created,
                         file: {
@@ -443,8 +451,9 @@ class Message {
                         senderId: 0,
                         receiverId: options.body.to,
                         msgId: options.body.msgId,
-                        messageType: this.chatConstants.MESSAGE_TYPE_TEXT,
-                        messageStatus: this.chatConstants.MESSAGE_STATUS_SENDING,
+                        type: this.chatConstants.MESSAGE_TYPE_TEXT,
+                        status: this.chatConstants.MESSAGE_STATUS_SENDING,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
                         created: options.body.time,
                         modified: options.body.time,
                         text: options.body.msg
@@ -457,8 +466,9 @@ class Message {
                         senderId: options.body.from,
                         receiverId: options.body.to,
                         msgId: options.body.id,
-                        messageType: this.chatConstants.MESSAGE_TYPE_STICKER,
-                        messageStatus: this.chatConstants.MESSAGE_STATUS_SENDING,
+                        type: this.chatConstants.MESSAGE_TYPE_STICKER,
+                        status: this.chatConstants.MESSAGE_STATUS_SENDING,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
                         created: options.body.created,
                         modified: options.body.created,
                         sticker: {
@@ -475,8 +485,9 @@ class Message {
                         senderId: options.body.from,
                         receiverId: options.body.to,
                         msgId: options.body.id,
-                        messageType: this.chatConstants.MESSAGE_TYPE_FILE,
-                        messageStatus: this.chatConstants.MESSAGE_STATUS_SENDING,
+                        type: this.chatConstants.MESSAGE_TYPE_FILE,
+                        status: this.chatConstants.MESSAGE_STATUS_SENDING,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
                         created: options.body.created,
                         modified: options.body.created,
                         file: {

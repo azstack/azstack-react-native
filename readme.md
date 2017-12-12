@@ -17,7 +17,8 @@
         * [3.5.2. Message Types](#352-message-types)
         * [3.5.3. Message Statuses](#353-message-statuses)
         * [3.5.4. Message Status Changed](#354-message-status-changed)
-        * [3.5.5. Message file types](#355-message-file-types)
+        * [3.5.5. Message Deleted](#355-message-deleted)
+        * [3.5.6. Message file types](#356-message-file-types)
     * [3.6. User constants](#36-user-constants)
         * [3.6.1. User status](#361-user-status)
 * [4. Connection](#4-connection)
@@ -195,7 +196,11 @@ azstack.config({
 > - MESSAGE_STATUS_CHANGED_FAIL(0): status changed fail
 > - MESSAGE_STATUS_CHANGED_SUCCESS(1): status changed success
 
-#### 3.5.5. Message file types
+#### 3.5.5. Message Deleted
+> - MESSAGE_DELETED_FALSE(0): not deleted
+> - MESSAGE_DELETED_TRUE(1): deleted
+
+#### 3.5.6. Message file types
 > - MESSAGE_FILE_TYPE_UNKNOWN(0): file type unknown
 > - MESSAGE_FILE_TYPE_IMAGE(1): file type image
 > - MESSAGE_FILE_TYPE_AUDIO(2): file type audio
@@ -725,8 +730,9 @@ this.AZStack.getModifiedConversations({
 >       - chatId: chat id
 >       - senderId: id of sender
 >       - msgId: id of message
->       - messageType: type of message
->       - messageStatus: status of message
+>       - type: type of message
+>       - status: status of message
+>       - deleted: message deleted
 >       - created: created time
 >       - modified: modified time
 >       - text: text of message
@@ -799,8 +805,9 @@ this.AZStack.onGetUnreadMessagesReturn({
 >   - senderId: id of sender
 >   - receiverId: id of receiverId
 >   - msgId: id of message
->   - messageType: type of message
->   - messageStatus: status of message
+>   - type: type of message
+>   - status: status of message
+>   - deleted: message deleted
 >   - created: created time
 >   - modified: modified time
 >   - text: text of message
@@ -877,8 +884,9 @@ this.AZStack.getModifiedMessages({
 >   - senderId: id of sender
 >   - receiverId: id of receiverId
 >   - msgId: id of message
->   - messageType: type of message
->   - messageStatus: status of message
+>   - type: type of message
+>   - status: status of message
+>   - deleted: message deleted
 >   - created: created time
 >   - modified: modified time
 >   - text: text of message
@@ -990,8 +998,9 @@ this.AZStack.newMessage({
 > - senderId: id of sender
 > - receiverId: id of receiverId
 > - msgId: id of message
-> - messageType: type of message
-> - messageStatus: status of message
+> - type: type of message
+> - status: status of message
+> - deleted: message deleted
 > - created: created time
 > - modified: modified time
 > - text: text of message
@@ -1011,6 +1020,7 @@ this.AZStack.newMessage({
 this.AZStack.changeMessageStatus({
     chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
     chatId: 12345,
+    messageSenderId: 1111,
     messageStatus: this.AZStack.chatConstants.MESSAGE_STATUS_DELIVERED,
     msgId: 54321
 }, (error, result) => {
@@ -1025,6 +1035,7 @@ OR
 this.AZStack.changeMessageStatus({
     chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
     chatId: 12345,
+    messageSenderId: 1111,
     messageStatus: this.AZStack.chatConstants.MESSAGE_STATUS_DELIVERED,
     msgId: 54321
 }).then((result) => {
@@ -1043,6 +1054,7 @@ this.AZStack.Delegates.onChangeMessageStatusReturn = (error, result) => {
 this.AZStack.changeMessageStatus({
     chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
     chatId: 12345,
+    messageSenderId: 1111,
     messageStatus: this.AZStack.chatConstants.MESSAGE_STATUS_DELIVERED,
     msgId: 54321
 });
@@ -1124,8 +1136,9 @@ this.AZStack.Delegates.onHasNewMessage = (error, result) => {
 > - senderId: id of sender
 > - receiverId: id of receiverId
 > - msgId: id of message
-> - messageType: type of message
-> - messageStatus: status of message
+> - type: type of message
+> - status: status of message
+> - deleted: message deleted
 > - created: created time
 > - modified: modified time
 > - text: text of message
@@ -1157,8 +1170,9 @@ this.AZStack.Delegates.onMessageFromMe = (error, result) => {
 > - senderId: id of sender
 > - receiverId: id of receiverId
 > - msgId: id of message
-> - messageType: type of message
-> - messageStatus: status of message
+> - type: type of message
+> - status: status of message
+> - deleted: message deleted
 > - created: created time
 > - modified: modified time
 > - text: text of message

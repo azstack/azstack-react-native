@@ -79,22 +79,23 @@ class Conversation {
                         chatId: conversation.chatId,
                         senderId: conversation.lastMsg.sender,
                         msgId: conversation.lastMsg.msgId,
-                        messageType: 0,
-                        messageStatus: conversation.lastMsg.status,
+                        type: 0,
+                        status: conversation.lastMsg.status,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
                         created: conversation.lastMsg.created,
                         modified: conversation.modified
                     }
                 };
                 if (conversation.lastMsg.serviceType === this.serviceTypes.MESSAGE_SERVER_WITH_USER_TYPE_TEXT) {
-                    modifiedConversation.lastMessage.messageType = this.chatConstants.MESSAGE_TYPE_TEXT;
+                    modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
                     modifiedConversation.lastMessage.text = conversation.lastMsg.msg;
                 }
                 if (conversation.lastMsg.serviceType === this.serviceTypes.MESSAGE_WITH_USER_TYPE_STICKER) {
-                    modifiedConversation.lastMessage.messageType = this.chatConstants.MESSAGE_TYPE_STICKER;
+                    modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_STICKER;
                     modifiedConversation.lastMessage.sticker = {};
                 }
                 if (conversation.lastMsg.serviceType === this.serviceTypes.MESSAGE_WITH_USER_TYPE_FILE) {
-                    modifiedConversation.lastMessage.messageType = this.chatConstants.MESSAGE_TYPE_FILE;
+                    modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_FILE;
                     modifiedConversation.lastMessage.file = {
                         type: conversation.lastMsg.msgType
                     };
