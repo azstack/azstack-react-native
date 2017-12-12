@@ -42,3 +42,6 @@ export const MESSAGE_TYPING_WITH_USER = 142;
 
 export const USER_GET_INFO_BY_IDS = 164;
 export const USER_GET_INFO_BY_USERNAMES = 165;
+
+export const GROUP_CREATE = 42;
+export const ON_GROUP_CREATED = 143;

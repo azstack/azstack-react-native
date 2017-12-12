@@ -20,6 +20,8 @@
         * [3.5.5. Message file types](#355-message-file-types)
     * [3.6. User constants](#36-user-constants)
         * [3.6.1. User status](#361-user-status)
+    * [3.7. Group constants](#37-group-constants)
+        * [3.7.1. Group types](#371-group-types)
 * [4. Connection](#4-connection)
     * [4.1. Connect](#41-connect)
     * [4.2. Disconnect](#42-disconnect)
@@ -214,6 +216,12 @@ azstack.config({
 #### 3.6.1. User status
 > - USER_STATUS_ONLINE(1): online
 > - USER_STATUS_NOT_ONLINE(0): not online
+
+### 3.7. Group constants
+
+#### 3.7.1. Group types
+> - GROUP_TYPE_PRIVATE(0): private group
+> - GROUP_TYPE_PUBLIC(1): public group
 
 
 

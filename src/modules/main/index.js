@@ -68,6 +68,7 @@ class AppMain extends React.Component {
         });
         //user 1: test_user_1 381032
         //user 2: test_user_2 387212
+        //user 3: test_user_3 391658
 
         this.AZStack.connect({}).then((authenticatedUser) => {
             this.setState({ authenticatedUser: authenticatedUser })

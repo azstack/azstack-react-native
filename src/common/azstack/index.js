@@ -8,6 +8,7 @@ import * as callConstants from './constant/callConstants';
 import * as listConstants from './constant/listConstants';
 import * as chatConstants from './constant/chatConstants';
 import * as userConstants from './constant/userConstants';
+import * as groupConstants from './constant/groupConstants';
 
 import Tool from './helper/tool';
 import Validator from './helper/validator';
@@ -18,6 +19,7 @@ import Call from './core/call';
 import Conversation from './core/conversation';
 import Message from './core/message';
 import User from './core/user';
+import Group from './core/group';
 
 class AZStack {
     constructor() {
@@ -32,6 +34,8 @@ class AZStack {
         this.callConstants = callConstants;
         this.listConstants = listConstants;
         this.chatConstants = chatConstants;
+        this.userConstants = userConstants;
+        this.groupConstants = groupConstants;
         this.logLevel = this.logLevelConstants.LOG_LEVEL_NONE;
         this.requestTimeout = 60000;
         this.intervalPingTime = 60000;
@@ -570,6 +574,7 @@ class AZStack {
         this.Conversation = new Conversation({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, listConstants: this.listConstants, chatConstants: this.chatConstants, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
         this.Message = new Message({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, listConstants: this.listConstants, chatConstants: this.chatConstants, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
         this.User = new User({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, listConstants: this.listConstants, userConstants: this.userConstants, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
+        this.Group = new Group({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, listConstants: this.listConstants, groupConstants: this.groupConstants, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
     };
 
     connect(options, callback) {
