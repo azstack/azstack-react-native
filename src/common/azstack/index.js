@@ -381,10 +381,20 @@ class AZStack {
                     body: body
                 }).then((result) => {
                     result.receiverId = this.authenticatedUser.userId;
-                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED] === 'function') {
-                        this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED](null, result);
+                    let isReturn = result.isReturn;
+                    delete result.isReturn;
+                    if (!isReturn) {
+                        if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED] === 'function') {
+                            this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED](null, result);
+                        }
+                    } else {
+                        this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, this.chatConstants.MESSAGE_STATUS_SEEN + '_' + result.msgId, null, null);
                     }
-                }).catch();
+                }).catch((error) => {
+                    let msgId = error.msgId;
+                    delete error.msgId;
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, this.chatConstants.MESSAGE_STATUS_SEEN + '_' + msgId, error, null);
+                });
                 break;
             case this.serviceTypes.MESSAGE_STATUS_CHANGE_CANCELLED_WITH_USER:
                 this.Message.receiveMessageStatusChanged({
@@ -392,10 +402,20 @@ class AZStack {
                     messageStatus: this.chatConstants.MESSAGE_STATUS_CANCELLED,
                     body: body
                 }).then((result) => {
-                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED] === 'function') {
-                        this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED](null, result);
+                    let isReturn = result.isReturn;
+                    delete result.isReturn;
+                    if (!isReturn) {
+                        if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED] === 'function') {
+                            this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED](null, result);
+                        }
+                    } else {
+                        this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, this.chatConstants.MESSAGE_STATUS_CANCELLED + '_' + result.msgId, null, null);
                     }
-                }).catch();
+                }).catch((error) => {
+                    let msgId = error.msgId;
+                    delete error.msgId;
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, this.chatConstants.MESSAGE_STATUS_CANCELLED + '_' + msgId, error, null);
+                });
                 break;
 
             case this.serviceTypes.MESSAGE_DELETE:
@@ -1145,13 +1165,13 @@ class AZStack {
                 payload: options
             });
 
-            this.addUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_CHANGE_MESSAGE_STATUS_RETURN);
+            this.addUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, options.messageStatus + '_' + options.msgId, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_CHANGE_MESSAGE_STATUS_RETURN);
 
             if (!options || typeof options !== 'object') {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Missing send change message status params'
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, 'default', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, options.messageStatus + '_' + options.msgId, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'Missing send change message status params'
                 }, null);
@@ -1193,7 +1213,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: dataErrorMessage
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, 'default', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, options.messageStatus + '_' + options.msgId, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: dataErrorMessage
                 }, null);
@@ -1207,9 +1227,11 @@ class AZStack {
                 messageStatus: options.messageStatus,
                 msgId: options.msgId
             }).then((result) => {
-                this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, 'default', null, null);
+                if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_DELIVERED) {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, options.messageStatus + '_' + options.msgId, null, null);
+                }
             }).catch((error) => {
-                this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, 'default', error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, options.messageStatus + '_' + options.msgId, error, null);
             });
         });
     };

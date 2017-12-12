@@ -639,17 +639,19 @@ class Message {
                     };
                 }
                 if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_SEEN) {
-                    if (options.body.r !== undefined) {
+                    if (options.body.r !== undefined && options.body.r !== this.errorCodes.CHANGE_STATUS_MESSAGE_SUCCESS_FROM_SERVER && options.body.r !== this.errorCodes.REQUEST_SUCCESS_FROM_SERVER) {
                         this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                            message: 'Got report for change message status to seen, ignored'
+                            message: 'Server response with error, change message to seen fail'
                         });
                         reject({
                             code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
-                            message: 'Got report for change message status to seen'
+                            message: 'Server response with error, change message to seen fail',
+                            msgId: options.body.msgId
                         });
                         return;
                     }
                     onMessageStatusChanged = {
+                        isReturn: options.body.r === undefined ? false : true,
                         statusChanged: this.chatConstants.MESSAGE_STATUS_CHANGED_SUCCESS,
                         chatType: this.chatConstants.CHAT_TYPE_USER,
                         chatId: options.body.from,
@@ -660,17 +662,19 @@ class Message {
                     };
                 }
                 if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_CANCELLED) {
-                    if (options.body.r !== undefined) {
+                    if (options.body.r !== undefined && options.body.r !== this.errorCodes.CHANGE_STATUS_MESSAGE_SUCCESS_FROM_SERVER && options.body.r !== this.errorCodes.REQUEST_SUCCESS_FROM_SERVER) {
                         this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                            message: 'Got report for change message status to cancelled, ignored'
+                            message: 'Server response with error, change message to cancelled fail'
                         });
                         reject({
                             code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
-                            message: 'Got report for change message status to cancelled'
+                            message: 'Server response with error, change message to cancelled fail',
+                            msgId: options.body.id
                         });
                         return;
                     }
                     onMessageStatusChanged = {
+                        isReturn: options.body.r === undefined ? false : true,
                         statusChanged: this.chatConstants.MESSAGE_STATUS_CHANGED_SUCCESS,
                         chatType: this.chatConstants.CHAT_TYPE_USER,
                         chatId: options.body.from,
