@@ -295,6 +295,16 @@ class AZStack {
                 });
                 break;
 
+            case this.serviceTypes.MESSAGE_NEW_WITH_USER_TYPE_TEXT:
+                this.Message.receiveNewMessageSent(body).then((result) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, result.msgId, null, {});
+                }).catch((error) => {
+                    let msgId = error.msgId;
+                    delete error.msgId;
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, msgId, error, null);
+                });
+                break;
+
             case this.serviceTypes.MESSAGE_HAS_NEW_WITH_USER_TYPE_TEXT:
                 this.Message.receiveHasNewMessage({
                     chatType: this.chatConstants.CHAT_TYPE_USER,
@@ -352,18 +362,6 @@ class AZStack {
                 }).catch();
                 break;
 
-            case this.serviceTypes.MESSAGE_NEW_WITH_USER_TYPE_TEXT:
-                this.Message.receiveMessageStatusChanged({
-                    chatType: this.chatConstants.CHAT_TYPE_USER,
-                    messageStatus: this.chatConstants.MESSAGE_STATUS_SENT,
-                    body: body
-                }).then((result) => {
-                    result.receiverId = this.authenticatedUser.userId;
-                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED] === 'function') {
-                        this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED](null, result);
-                    }
-                }).catch();
-                break;
             case this.serviceTypes.MESSAGE_STATUS_CHANGE_DELIVERED_WITH_USER:
                 this.Message.receiveMessageStatusChanged({
                     chatType: this.chatConstants.CHAT_TYPE_USER,
@@ -982,13 +980,16 @@ class AZStack {
                 payload: options
             });
 
-            this.addUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_NEW_MESSAGE_RETURN);
+            this.newUniqueId();
+            let newMsgId = this.uniqueId;
+
+            this.addUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, newMsgId, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_NEW_MESSAGE_RETURN);
 
             if (!options || typeof options !== 'object') {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Missing new message params'
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, 'default', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, newMsgId, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'Missing new message params'
                 }, null);
@@ -1024,7 +1025,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: dataErrorMessage
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, 'default', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, newMsgId, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: dataErrorMessage
                 }, null);
@@ -1035,7 +1036,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'text or sticker or file is required'
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, 'default', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, newMsgId, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'text or sticker or file is required'
                 }, null);
@@ -1063,7 +1064,7 @@ class AZStack {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                         message: dataErrorMessage
                     });
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, 'default', {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, newMsgId, {
                         code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                         message: dataErrorMessage
                     }, null);
@@ -1110,7 +1111,7 @@ class AZStack {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                         message: dataErrorMessage
                     });
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, 'default', {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, newMsgId, {
                         code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                         message: dataErrorMessage
                     }, null);
@@ -1118,19 +1119,18 @@ class AZStack {
                 }
             }
 
-            this.newUniqueId();
             this.Message.sendNewMessage({
                 chatType: options.chatType,
                 chatId: options.chatId,
-                msgId: this.uniqueId,
+                msgId: newMsgId,
                 text: options.text,
                 sticker: options.sticker,
                 file: options.file
             }).then((result) => {
                 result.senderId = this.authenticatedUser.userId;
-                this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, 'default', null, result);
+                this.addUncallTemporary(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, newMsgId, 'newMessage', { newMessage: result }, this.uncallConstants.UNCALL_TEMPORARY_TYPE_OBJECT);
             }).catch((error) => {
-                this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, 'default', error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, newMsgId, error, null);
             });
         });
     };
