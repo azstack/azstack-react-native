@@ -11,9 +11,6 @@ export const MESSAGE_STATUS_DELIVERED = 2;
 export const MESSAGE_STATUS_SEEN = 3;
 export const MESSAGE_STATUS_CANCELLED = 6;
 
-export const MESSAGE_STATUS_CHANGED_FAIL = 0;
-export const MESSAGE_STATUS_CHANGED_SUCCESS = 1;
-
 export const MESSAGE_DELETED_FALSE = 0;
 export const MESSAGE_DELETED_TRUE = 1;
 

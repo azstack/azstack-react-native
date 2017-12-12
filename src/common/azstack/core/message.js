@@ -629,7 +629,6 @@ class Message {
             if (options.chatType === this.chatConstants.CHAT_TYPE_USER) {
                 if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_DELIVERED) {
                     onMessageStatusChanged = {
-                        statusChanged: this.chatConstants.MESSAGE_STATUS_CHANGED_SUCCESS,
                         chatType: this.chatConstants.CHAT_TYPE_USER,
                         chatId: options.body.from,
                         senderId: options.body.from,
@@ -652,7 +651,6 @@ class Message {
                     }
                     onMessageStatusChanged = {
                         isReturn: options.body.r === undefined ? false : true,
-                        statusChanged: this.chatConstants.MESSAGE_STATUS_CHANGED_SUCCESS,
                         chatType: this.chatConstants.CHAT_TYPE_USER,
                         chatId: options.body.from,
                         senderId: options.body.from,
@@ -675,7 +673,6 @@ class Message {
                     }
                     onMessageStatusChanged = {
                         isReturn: options.body.r === undefined ? false : true,
-                        statusChanged: this.chatConstants.MESSAGE_STATUS_CHANGED_SUCCESS,
                         chatType: this.chatConstants.CHAT_TYPE_USER,
                         chatId: options.body.from,
                         senderId: options.body.from,

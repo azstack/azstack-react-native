@@ -16,9 +16,8 @@
         * [3.5.1. Chat Types](#351-chat-types)
         * [3.5.2. Message Types](#352-message-types)
         * [3.5.3. Message Statuses](#353-message-statuses)
-        * [3.5.4. Message Status Changed](#354-message-status-changed)
-        * [3.5.5. Message Deleted](#355-message-deleted)
-        * [3.5.6. Message file types](#356-message-file-types)
+        * [3.5.4. Message Deleted](#354-message-deleted)
+        * [3.5.5. Message file types](#355-message-file-types)
     * [3.6. User constants](#36-user-constants)
         * [3.6.1. User status](#361-user-status)
 * [4. Connection](#4-connection)
@@ -193,15 +192,11 @@ azstack.config({
 > - MESSAGE_STATUS_SEEN(3): status seen
 > - MESSAGE_STATUS_CANCELLED(6): status cancelled
 
-#### 3.5.4. Message Status Changed
-> - MESSAGE_STATUS_CHANGED_FAIL(0): status changed fail
-> - MESSAGE_STATUS_CHANGED_SUCCESS(1): status changed success
-
-#### 3.5.5. Message Deleted
+#### 3.5.4. Message Deleted
 > - MESSAGE_DELETED_FALSE(0): not deleted
 > - MESSAGE_DELETED_TRUE(1): deleted
 
-#### 3.5.6. Message file types
+#### 3.5.5. Message file types
 > - MESSAGE_FILE_TYPE_UNKNOWN(0): file type unknown
 > - MESSAGE_FILE_TYPE_IMAGE(1): file type image
 > - MESSAGE_FILE_TYPE_AUDIO(2): file type audio
@@ -1253,7 +1248,6 @@ this.AZStack.Delegates.onMessageStatusChanged = (error, result) => {
 > - message: error message
 
 #### result:
-> - statusChanged: status changed
 > - chatType: chat type
 > - chatId: chat id
 > - senderId: id of sender
