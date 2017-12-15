@@ -65,11 +65,13 @@
         * [9.1.2. Invite group](#912-invite-group)
         * [9.1.3. Leave group](#913-leave-group)
         * [9.1.4. Rename group](#914-rename-group)
+        * [9.1.5. Change admin group](#915-change-admin-group)
     * [9.3. Delegates](#92-delegates)
         * [9.3.1. On group created](#931-on-group-created)
         * [9.3.2. On group invited](#932-on-group-invited)
         * [9.3.3. On group left](#933-on-group-left)
         * [9.3.4. On group renamed](#934-on-group-renamed)
+        * [9.3.5. On group admin changed](#935-on-group-admin-changed)
 
 
 
@@ -201,6 +203,7 @@ azstack.config({
 > - MESSAGE_TYPE_GROUP_INVITED(5): invite group message
 > - MESSAGE_TYPE_GROUP_LEFT(6): leave group message
 > - MESSAGE_TYPE_GROUP_RENAMED(7): rename group message
+> - MESSAGE_TYPE_GROUP_ADMIN_CHANGED(8): change admin group message
 
 #### 3.5.3. Message Statuses
 > - MESSAGE_STATUS_SENDING(0): status sending
@@ -774,6 +777,9 @@ this.AZStack.getModifiedConversations({
 >       - renamed: renamed data
 >           - groupId: id of group
 >           - newName: new name
+>       - adminChanged: admin changed data
+>           - groupId: id of group
+>           - newAdminId: new admin id
 
 
 
@@ -872,6 +878,9 @@ this.AZStack.onGetUnreadMessagesReturn({
 >   - renamed: renamed data
 >       - groupId: id of group
 >       - newName: new name
+>   - adminChanged: admin changed data
+>       - groupId: id of group
+>       - newAdminId: new admin id
 
 #### 7.1.2 Get modified messages
 
@@ -968,6 +977,9 @@ this.AZStack.getModifiedMessages({
 >   - renamed: renamed data
 >       - groupId: id of group
 >       - newName: new name
+>   - adminChanged: admin changed data
+>       - groupId: id of group
+>       - newAdminId: new admin id
 
 ### 7.2. Sending
 
@@ -1625,6 +1637,57 @@ this.AZStack.renameGroup({
 > - newName: new name
 > - created: created time
 
+#### 9.1.5. Change admin group
+
+```javascript 
+this.AZStack.changeAdminGroup({
+    groupId: 1234,
+    newAdminId: 4321
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.changeAdminGroup({
+    groupId: 1234,
+    newAdminId: 4321
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.onChangeAdminGroupReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStack.changeAdminGroup({
+    groupId: 1234,
+    newAdminId: 4321
+});
+```
+
+#### params
+> - groupId(required): id of group
+> - newName(required): new name
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - groupId: id of group
+> - msgId: id of create group message
+> - newAdminId: new admin id
+> - created: created time
+
 ### 9.3. Delegates
 
 #### 9.3.1. On group created
@@ -1739,3 +1802,30 @@ this.AZStack.Delegates.onGroupRenamed = (error, result) => {
 > - renamed: renamed data
 >   - groupId: id of group
 >   - newName: new name
+
+#### 9.3.5. On group admin changed
+
+```javascript 
+this.AZStack.Delegates.onGroupAdminChanged = (error, result) => {
+    console.log(error, result);
+};
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - chatType: chat type
+> - chatId: chat id
+> - senderId: id of sender
+> - receiverId: id of receiverId
+> - msgId: id of message
+> - type: type of message
+> - status: status of message
+> - deleted: message deleted
+> - created: created time
+> - modified: modified time
+> - adminChanged: admin changed data
+>   - groupId: id of group
+>   - newAdminId: new admin id

@@ -136,6 +136,12 @@ class Message {
                             groupId: message.group,
                             newName: message.name
                         };
+                    case this.serviceTypes.ON_GROUP_ADMIN_CHANGED:
+                        unreadMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_ADMIN_CHANGED;
+                        unreadMessage.adminChanged = {
+                            groupId: message.group,
+                            newAdminId: message.newAdmin
+                        };
                     default:
                         break;
                 }
@@ -271,6 +277,12 @@ class Message {
                         modifiedMessage.renamed = {
                             groupId: message.group,
                             newName: message.name
+                        };
+                    case this.serviceTypes.ON_GROUP_ADMIN_CHANGED:
+                        modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_ADMIN_CHANGED;
+                        modifiedMessage.adminChanged = {
+                            groupId: message.group,
+                            newAdminId: message.newAdmin
                         };
                     default:
                         break;

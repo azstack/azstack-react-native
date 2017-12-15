@@ -513,6 +513,20 @@ class AZStack {
                     }
                 }).catch((error) => { });
                 break;
+            case this.serviceTypes.GROUP_CHANGE_ADMIN:
+                this.Group.receiveChangeAdminGroupResult(body).then((result) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_ADMIN_GROUP, 'default', null, result);
+                }).catch((error) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_ADMIN_GROUP, 'default', error, null);
+                });
+                break;
+            case this.serviceTypes.ON_GROUP_ADMIN_CHANGED:
+                this.Group.receiveGroupAdminChanged(body).then((result) => {
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_GROUP_ADMIN_CHANGED] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_GROUP_ADMIN_CHANGED](null, result);
+                    }
+                }).catch((error) => { });
+                break;
 
             default:
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -1825,6 +1839,66 @@ class AZStack {
 
             }).catch((error) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_RENAME_GROUP, 'default', error, null);
+            });
+        });
+    };
+    changeAdminGroup(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Change admin group'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Change admin group params',
+                payload: options
+            });
+
+            this.addUncall(this.uncallConstants.UNCALL_KEY_CHANGE_ADMIN_GROUP, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_CHANGE_ADMIN_GROUP_RETURN);
+
+            if (!options || typeof options !== 'object') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Missing change admin group params'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_ADMIN_GROUP, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'Missing change admin group params'
+                }, null);
+                return;
+            }
+
+            let dataErrorMessage = this.Validator.check([{
+                name: 'groupId',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.groupId,
+                notEqual: 0
+            }, {
+                name: 'newAdminId',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.newAdminId,
+                notEqual: 0
+            }]);
+            if (dataErrorMessage) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: dataErrorMessage
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_ADMIN_GROUP, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: dataErrorMessage
+                }, null);
+                return;
+            }
+
+            this.newUniqueId();
+            this.Group.sendChangeAdminGroup({
+                msgId: this.uniqueId,
+                groupId: options.groupId,
+                newAdminId: options.newAdminId,
+                fromId: this.authenticatedUser.userId
+            }).then((result) => {
+
+            }).catch((error) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_ADMIN_GROUP, 'default', error, null);
             });
         });
     };

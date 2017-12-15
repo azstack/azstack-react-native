@@ -47,3 +47,5 @@ export const DELEGATE_ON_LEAVE_GROUP_RETURN = 'onLeaveGroupReturn';
 export const DELEGATE_ON_GROUP_LEFT = 'onGroupLeft';
 export const DELEGATE_ON_RENAME_GROUP_RETURN = 'onRenameGroupReturn';
 export const DELEGATE_ON_GROUP_RENAMED = 'onGroupRenamed';
+export const DELEGATE_ON_CHANGE_ADMIN_GROUP_RETURN = 'onChangeAdminGroupReturn';
+export const DELEGATE_ON_GROUP_ADMIN_CHANGED = 'onGroupAdminChanged';

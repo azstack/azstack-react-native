@@ -127,6 +127,12 @@ class Conversation {
                             groupId: conversation.chatId,
                             newName: conversation.lastMsg.newGroupName
                         };
+                    case this.serviceTypes.ON_GROUP_ADMIN_CHANGED:
+                        modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_ADMIN_CHANGED;
+                        modifiedConversation.lastMessage.adminChanged = {
+                            groupId: conversation.chatId,
+                            newAdminId: conversation.lastMsg.newAdmin
+                        };
                     default:
                         break;
                 }

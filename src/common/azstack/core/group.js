@@ -479,6 +479,121 @@ class Group {
             });
         });
     };
+
+    sendChangeAdminGroup(options) {
+        return new Promise((resolve, reject) => {
+
+            const changeAdminGroupPacket = {
+                service: this.serviceTypes.GROUP_CHANGE_ADMIN,
+                body: JSON.stringify({
+                    msgId: options.msgId,
+                    group: options.groupId,
+                    newAdmin: options.newAdminId,
+                    from: options.fromId
+                })
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send change admin group packet'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Change admin group packet',
+                payload: changeAdminGroupPacket
+            });
+            this.sendPacketFunction(changeAdminGroupPacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send change admin group packet successfully'
+                });
+                resolve();
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send change admin group data, send change admin group fail'
+                });
+                reject({
+                    code: error.code,
+                    message: 'Cannot send change admin group data, send change admin group fail'
+                });
+            });
+        });
+    };
+    receiveChangeAdminGroupResult(body) {
+        return new Promise((resolve, reject) => {
+            if (!body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect change admin group result, ignored'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Cannot detect change admin group result'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got change admin group result'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Change admin group result data',
+                payload: body
+            });
+
+            if (body.r !== this.errorCodes.GROUP_CHANGE_ADMIN_SUCCESS_FROM_SERVER) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Server response with error, change admin group fail'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Server response with error, change admin group fail'
+                });
+                return;
+            }
+
+            resolve({
+                groupId: body.group,
+                msgId: body.msgId,
+                newAdminId: body.newAdmin,
+                created: body.created
+            });
+        });
+    };
+    receiveGroupAdminChanged(body) {
+        return new Promise((resolve, reject) => {
+            if (!body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect admin changed group, ignored'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Cannot detect admin changed group'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got admin changed group'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Admin changed group data',
+                payload: body
+            });
+
+            resolve({
+                chatType: this.chatConstants.CHAT_TYPE_GROUP,
+                chatId: body.group,
+                senderId: body.from,
+                receiverId: body.group,
+                msgId: body.msgId,
+                type: this.chatConstants.MESSAGE_TYPE_GROUP_ADMIN_CHANGED,
+                status: this.chatConstants.MESSAGE_STATUS_SENT,
+                deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
+                created: body.created,
+                modified: body.created,
+                adminChanged: {
+                    groupId: body.group,
+                    newAdminId: body.newAdmin
+                }
+            });
+        });
+    };
 };
 
 export default Group;

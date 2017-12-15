@@ -51,3 +51,5 @@ export const GROUP_LEAVE = 43;
 export const ON_GROUP_LEFT = 145;
 export const GROUP_RENAME = 150;
 export const ON_GROUP_RENAMED = 152;
+export const GROUP_CHANGE_ADMIN = 159;
+export const ON_GROUP_ADMIN_CHANGED = 160;
