@@ -58,6 +58,7 @@ class AppMain extends React.Component {
         this.createGroup = this.createGroup.bind(this);
         this.inviteGroup = this.inviteGroup.bind(this);
         this.leaveGroup = this.leaveGroup.bind(this);
+        this.renameGroup = this.renameGroup.bind(this);
 
         this.AZStack = new AZStack();
         this.AZStack.config({
@@ -259,6 +260,12 @@ class AppMain extends React.Component {
             newAdminId: 387212
         }).then(() => { }).catch(() => { });
     };
+    renameGroup() {
+        this.AZStack.renameGroup({
+            groupId: 7436,
+            newName: 'Test group'
+        }).then(() => { }).catch(() => { });
+    };
 
     render() {
         return (
@@ -310,6 +317,7 @@ class AppMain extends React.Component {
                     <Button onPress={this.createGroup} title="Create group" />
                     <Button onPress={this.inviteGroup} title="Invite group" />
                     <Button onPress={this.leaveGroup} title="Leave group" />
+                    <Button onPress={this.renameGroup} title="Rename group" />
                 </View>
             </ScrollView>
         );

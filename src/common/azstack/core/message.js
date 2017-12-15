@@ -130,6 +130,12 @@ class Message {
                             leaveId: message.leaveUser,
                             newAdminId: message.newAdmin
                         };
+                    case this.serviceTypes.ON_GROUP_RENAMED:
+                        unreadMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_RENAMED;
+                        unreadMessage.renamed = {
+                            groupId: message.group,
+                            newName: message.name
+                        };
                     default:
                         break;
                 }
@@ -259,6 +265,12 @@ class Message {
                             groupId: message.group,
                             leaveId: message.leaveUser,
                             newAdminId: message.newAdmin
+                        };
+                    case this.serviceTypes.ON_GROUP_RENAMED:
+                        modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_RENAMED;
+                        modifiedMessage.renamed = {
+                            groupId: message.group,
+                            newName: message.name
                         };
                     default:
                         break;

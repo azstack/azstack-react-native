@@ -64,10 +64,12 @@
         * [9.1.1. Create group](#911-create-group)
         * [9.1.2. Invite group](#912-invite-group)
         * [9.1.3. Leave group](#913-leave-group)
+        * [9.1.4. Rename group](#914-rename-group)
     * [9.3. Delegates](#92-delegates)
         * [9.3.1. On group created](#931-on-group-created)
         * [9.3.2. On group invited](#932-on-group-invited)
         * [9.3.3. On group left](#933-on-group-left)
+        * [9.3.4. On group renamed](#934-on-group-renamed)
 
 
 
@@ -198,6 +200,7 @@ azstack.config({
 > - MESSAGE_TYPE_GROUP_CREATED(4): create group message
 > - MESSAGE_TYPE_GROUP_INVITED(5): invite group message
 > - MESSAGE_TYPE_GROUP_LEFT(6): leave group message
+> - MESSAGE_TYPE_GROUP_RENAMED(7): rename group message
 
 #### 3.5.3. Message Statuses
 > - MESSAGE_STATUS_SENDING(0): status sending
@@ -768,6 +771,9 @@ this.AZStack.getModifiedConversations({
 >           - groupId: id of group
 >           - leaveId: id of leaver
 >           - newAdminId: id of new admin
+>       - renamed: renamed data
+>           - groupId: id of group
+>           - newName: new name
 
 
 
@@ -863,6 +869,9 @@ this.AZStack.onGetUnreadMessagesReturn({
 >       - groupId: id of group
 >       - leaveId: id of leaver
 >       - newAdminId: id of new admin
+>   - renamed: renamed data
+>       - groupId: id of group
+>       - newName: new name
 
 #### 7.1.2 Get modified messages
 
@@ -956,6 +965,9 @@ this.AZStack.getModifiedMessages({
 >       - groupId: id of group
 >       - leaveId: id of leaver
 >       - newAdminId: id of new admin
+>   - renamed: renamed data
+>       - groupId: id of group
+>       - newName: new name
 
 ### 7.2. Sending
 
@@ -1562,6 +1574,57 @@ this.AZStack.leaveGroup({
 > - leaveId: id of leaver
 > - created: created time
 
+#### 9.1.4. Rename group
+
+```javascript 
+this.AZStack.renameGroup({
+    groupId: 1234,
+    newName: 'Test Group'
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.renameGroup({
+    groupId: 1234,
+    newName: 'Test Group'
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.onRenameGroupReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStack.renameGroup({
+    groupId: 1234,
+    newName: 'Test Group'
+});
+```
+
+#### params
+> - groupId(required): id of group
+> - newName(required): new name
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - groupId: id of group
+> - msgId: id of create group message
+> - newName: new name
+> - created: created time
+
 ### 9.3. Delegates
 
 #### 9.3.1. On group created
@@ -1649,3 +1712,30 @@ this.AZStack.Delegates.onGroupLeft = (error, result) => {
 >   - groupId: id of group
 >   - leaveId: id of leaver
 >   - newAdminId: id of new admin
+
+#### 9.3.4. On group renamed
+
+```javascript 
+this.AZStack.Delegates.onGroupRenamed = (error, result) => {
+    console.log(error, result);
+};
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - chatType: chat type
+> - chatId: chat id
+> - senderId: id of sender
+> - receiverId: id of receiverId
+> - msgId: id of message
+> - type: type of message
+> - status: status of message
+> - deleted: message deleted
+> - created: created time
+> - modified: modified time
+> - renamed: renamed data
+>   - groupId: id of group
+>   - newName: new name

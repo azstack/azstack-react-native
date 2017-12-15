@@ -45,3 +45,5 @@ export const DELEGATE_ON_INVITE_GROUP_RETURN = 'onInviteGroupReturn';
 export const DELEGATE_ON_GROUP_INVITED = 'onGroupInvited';
 export const DELEGATE_ON_LEAVE_GROUP_RETURN = 'onLeaveGroupReturn';
 export const DELEGATE_ON_GROUP_LEFT = 'onGroupLeft';
+export const DELEGATE_ON_RENAME_GROUP_RETURN = 'onRenameGroupReturn';
+export const DELEGATE_ON_GROUP_RENAMED = 'onGroupRenamed';

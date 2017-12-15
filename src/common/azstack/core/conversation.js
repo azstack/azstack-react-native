@@ -121,6 +121,12 @@ class Conversation {
                             leaveId: conversation.lastMsg.leaveUser,
                             newAdminId: conversation.lastMsg.newAdmin
                         };
+                    case this.serviceTypes.ON_GROUP_RENAMED:
+                        modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_RENAMED;
+                        modifiedConversation.lastMessage.renamed = {
+                            groupId: conversation.chatId,
+                            newName: conversation.lastMsg.newGroupName
+                        };
                     default:
                         break;
                 }

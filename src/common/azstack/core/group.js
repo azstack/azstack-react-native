@@ -365,6 +365,120 @@ class Group {
             });
         });
     };
+
+    sendRenameGroup(options) {
+        return new Promise((resolve, reject) => {
+
+            const renameGroupPacket = {
+                service: this.serviceTypes.GROUP_RENAME,
+                body: JSON.stringify({
+                    msgId: options.msgId,
+                    group: options.groupId,
+                    name: options.newName
+                })
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send rename group packet'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Rename group packet',
+                payload: renameGroupPacket
+            });
+            this.sendPacketFunction(renameGroupPacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send rename group packet successfully'
+                });
+                resolve();
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send rename group data, send rename group fail'
+                });
+                reject({
+                    code: error.code,
+                    message: 'Cannot send rename group data, send rename group fail'
+                });
+            });
+        });
+    };
+    receiveRenameGroupResult(body) {
+        return new Promise((resolve, reject) => {
+            if (!body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect rename group result, ignored'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Cannot detect rename group result'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got rename group result'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Rename group result data',
+                payload: body
+            });
+
+            if (body.r !== this.errorCodes.GROUP_RENAME_SUCCESS_FROM_SERVER) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Server response with error, rename group fail'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Server response with error, rename group fail'
+                });
+                return;
+            }
+
+            resolve({
+                groupId: body.group,
+                msgId: body.msgId,
+                newName: body.newName,
+                created: body.created
+            });
+        });
+    };
+    receiveGroupRenamed(body) {
+        return new Promise((resolve, reject) => {
+            if (!body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect renamed group, ignored'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Cannot detect renamed group'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got renamed group'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Renamed group data',
+                payload: body
+            });
+
+            resolve({
+                chatType: this.chatConstants.CHAT_TYPE_GROUP,
+                chatId: body.group,
+                senderId: body.from,
+                receiverId: body.group,
+                msgId: body.msgId,
+                type: this.chatConstants.MESSAGE_TYPE_GROUP_RENAMED,
+                status: this.chatConstants.MESSAGE_STATUS_SENT,
+                deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
+                created: body.created,
+                modified: body.created,
+                renamed: {
+                    groupId: body.group,
+                    newName: body.name
+                }
+            });
+        });
+    };
 };
 
 export default Group;

@@ -7,6 +7,7 @@ export const MESSAGE_TYPE_FILE = 3;
 export const MESSAGE_TYPE_GROUP_CREATED = 4;
 export const MESSAGE_TYPE_GROUP_INVITED = 5;
 export const MESSAGE_TYPE_GROUP_LEFT = 6;
+export const MESSAGE_TYPE_GROUP_RENAMED = 7;
 
 export const MESSAGE_STATUS_SENDING = 0;
 export const MESSAGE_STATUS_SENT = 1;

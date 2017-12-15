@@ -49,3 +49,5 @@ export const GROUP_INVITE = 44;
 export const ON_GROUP_INVITED = 144;
 export const GROUP_LEAVE = 43;
 export const ON_GROUP_LEFT = 145;
+export const GROUP_RENAME = 150;
+export const ON_GROUP_RENAMED = 152;
