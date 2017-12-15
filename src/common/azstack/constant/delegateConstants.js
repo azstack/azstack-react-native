@@ -41,3 +41,5 @@ export const DELEGATE_ON_GET_USERS_INFORMATION_RETURN = 'onGetUsersInformationRe
 
 export const DELEGATE_ON_CREATE_GROUP_RETURN = 'onCreateGroupReturn';
 export const DELEGATE_ON_GROUP_CREATED = 'onGroupCreated';
+export const DELEGATE_ON_INVITE_GROUP_RETURN = 'onInviteGroupReturn';
+export const DELEGATE_ON_GROUP_INVITED = 'onGroupInvited';

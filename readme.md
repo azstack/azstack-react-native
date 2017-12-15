@@ -61,8 +61,10 @@
     * [8.1. Get users information](#81-get-users-information)
 * [9. Group](#9-group)
     * [9.1. Create group](#91-create-group)
-    * [9.2. Delegates](#92-delegates)
-        * [9.2.1. On group created](#921-on-group-created)
+    * [9.2. Invite group](#92-invite-group)
+    * [9.3. Delegates](#92-delegates)
+        * [9.3.1. On group created](#931-on-group-created)
+        * [9.3.2. On group invited](#932-on-group-invited)
 
 
 
@@ -191,6 +193,7 @@ azstack.config({
 > - MESSAGE_TYPE_STICKER(2): sticker message
 > - MESSAGE_TYPE_FILE(3): file message
 > - MESSAGE_TYPE_GROUP_CREATED(4): create group message
+> - MESSAGE_TYPE_GROUP_INVITED(5): invite group message
 
 #### 3.5.3. Message Statuses
 > - MESSAGE_STATUS_SENDING(0): status sending
@@ -750,9 +753,13 @@ this.AZStack.getModifiedConversations({
 >       - file: file of message
 >           - type: file type
 >       - createdGroup: created group
+>           - groupId: id of group
 >           - adminId: id of admin
 >           - name: name of group
 >           - created: created time
+>       - invited: invited data
+>           - groupId: id of group
+>           - inviteIds: id of inviteds
 
 
 
@@ -836,11 +843,14 @@ this.AZStack.onGetUnreadMessagesReturn({
 >       - url: url
 >   - createdGroup: created group
 >       - type: group type
->       - chatId: chat id
+>       - groupId: id of group
 >       - adminId: id of admin
 >       - name: name of group
 >       - memberIds: ids of members
 >       - created: created time
+>   - invited: invited data
+>       - groupId: id of group
+>       - inviteIds: id of inviteds
 
 #### 7.1.2 Get modified messages
 
@@ -922,11 +932,14 @@ this.AZStack.getModifiedMessages({
 >       - url: url
 >   - createdGroup: created group
 >       - type: group type
->       - chatId: chat id
+>       - groupId: id of group
 >       - adminId: id of admin
 >       - name: name of group
 >       - memberIds: ids of members
 >       - created: created time
+>   - invited: invited data
+>       - groupId: id of group
+>       - inviteIds: id of inviteds
 
 ### 7.2. Sending
 
@@ -1408,8 +1421,9 @@ this.AZStack.createGroup({
 ```
 
 #### params
-> - userIds(optional): array of userIds (number)
-> - azStackUserIds(optional): array of azStackUserIds (string)
+> - type(required): group type
+> - name(required): group name
+> - memberIds(required): array of user ids (number)
 
 #### error:
 > - code: error code
@@ -1417,16 +1431,67 @@ this.AZStack.createGroup({
 
 #### result:
 > - type: group type
-> - chatId: chat id
+> - groupId: id of group
 > - msgId: id of create group message
 > - adminId: id of admin
 > - name: name of group
 > - memberIds: ids of members
 > - created: created time
 
-### 9.2. Delegates
+### 9.2. Invite group
 
-#### 9.2.1. On group created
+```javascript 
+this.AZStack.inviteGroup({
+    groupId: 1234,
+    inviteIds: [4321]
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.inviteGroup({
+    groupId: 1234,
+    inviteIds: [4321]
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.onInviteGroupReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStack.inviteGroup({
+    groupId: 1234,
+    inviteIds: [4321]
+});
+```
+
+#### params
+> - groupId(required): id of group
+> - inviteIds(required): array of user ids (number)
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - groupId: id of group
+> - msgId: id of create group message
+> - inviteIds: id of inviteds
+> - created: created time
+
+### 9.3. Delegates
+
+#### 9.3.1. On group created
 
 ```javascript 
 this.AZStack.Delegates.onGroupCreated = (error, result) => {
@@ -1451,8 +1516,35 @@ this.AZStack.Delegates.onGroupCreated = (error, result) => {
 > - modified: modified time
 > - createdGroup: created group
 >   - type: group type
->   - chatId: chat id
+>   - groupId: id of group
 >   - adminId: id of admin
 >   - name: name of group
 >   - memberIds: ids of members
 >   - created: created time
+
+#### 9.3.2. On group invited
+
+```javascript 
+this.AZStack.Delegates.onGroupInvited = (error, result) => {
+    console.log(error, result);
+};
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - chatType: chat type
+> - chatId: chat id
+> - senderId: id of sender
+> - receiverId: id of receiverId
+> - msgId: id of message
+> - type: type of message
+> - status: status of message
+> - deleted: message deleted
+> - created: created time
+> - modified: modified time
+> - invited: invited data
+>   - groupId: id of group
+>   - inviteIds: id of inviteds

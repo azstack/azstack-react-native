@@ -45,3 +45,5 @@ export const USER_GET_INFO_BY_USERNAMES = 165;
 
 export const GROUP_CREATE = 42;
 export const ON_GROUP_CREATED = 143;
+export const GROUP_INVITE = 44;
+export const ON_GROUP_INVITED = 144;

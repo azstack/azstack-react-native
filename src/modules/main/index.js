@@ -56,6 +56,7 @@ class AppMain extends React.Component {
         this.getUsersInfomationWithAzstackUserId = this.getUsersInfomationWithAzstackUserId.bind(this);
 
         this.createGroup = this.createGroup.bind(this);
+        this.inviteGroup = this.inviteGroup.bind(this);
 
         this.AZStack = new AZStack();
         this.AZStack.config({
@@ -244,6 +245,12 @@ class AppMain extends React.Component {
             memberIds: [387212, 391658]
         }).then(() => { }).catch(() => { });
     };
+    inviteGroup() {
+        this.AZStack.inviteGroup({
+            groupId: 7436,
+            inviteIds: [387212]
+        }).then(() => { }).catch(() => { });
+    };
 
     render() {
         return (
@@ -293,6 +300,7 @@ class AppMain extends React.Component {
                     <Button onPress={this.getUsersInfomationWithAzstackUserId} title="Get users onformation with azStackUserId" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.createGroup} title="Create group" />
+                    <Button onPress={this.inviteGroup} title="Invite group" />
                 </View>
             </ScrollView>
         );

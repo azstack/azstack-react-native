@@ -103,9 +103,16 @@ class Conversation {
                     case this.serviceTypes.ON_GROUP_CREATED:
                         modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_CREATED;
                         modifiedConversation.lastMessage.createdGroup = {
+                            groupId: conversation.chatId,
                             adminId: conversation.lastMsg.admin,
                             name: conversation.lastMsg.name,
                             created: conversation.lastMsg.created
+                        };
+                    case this.serviceTypes.ON_GROUP_INVITED:
+                        modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_INVITED;
+                        modifiedConversation.lastMessage.invited = {
+                            groupId: conversation.chatId,
+                            inviteIds: conversation.lastMsg.invitedMembers
                         };
                     default:
                         break;

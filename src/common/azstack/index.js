@@ -471,6 +471,20 @@ class AZStack {
                     }
                 }).catch((error) => { });
                 break;
+            case this.serviceTypes.GROUP_INVITE:
+                this.Group.receiveInviteGroupResult(body).then((result) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_INVITE_GROUP, 'default', null, result);
+                }).catch((error) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_INVITE_GROUP, 'default', error, null);
+                });
+                break;
+            case this.serviceTypes.ON_GROUP_INVITED:
+                this.Group.receiveGroupInvited(body).then((result) => {
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_GROUP_INVITED] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_GROUP_INVITED](null, result);
+                    }
+                }).catch((error) => { });
+                break;
 
             default:
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -1581,6 +1595,84 @@ class AZStack {
 
             }).catch((error) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_CREATE_GROUP, 'default', error, null);
+            });
+        });
+    };
+    inviteGroup(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Invite group'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Invite group params',
+                payload: options
+            });
+
+            this.addUncall(this.uncallConstants.UNCALL_KEY_INVITE_GROUP, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_INVITE_GROUP_RETURN);
+
+            if (!options || typeof options !== 'object') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Missing invite group params'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_INVITE_GROUP, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'Missing invite group params'
+                }, null);
+                return;
+            }
+
+            let dataErrorMessage = this.Validator.check([{
+                name: 'groupId',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.groupId,
+                notEqual: 0
+            }, {
+                name: 'inviteIds',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_ARRAY,
+                notEmpty: true,
+                data: options.inviteIds
+            }]);
+            if (dataErrorMessage) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: dataErrorMessage
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_INVITE_GROUP, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: dataErrorMessage
+                }, null);
+                return;
+            }
+
+            let allNumber = true;
+            for (let i = 0; i < options.inviteIds.length; i++) {
+                if (!this.Validator.isNumber(options.inviteIds[i])) {
+                    allNumber = false;
+                    break;
+                }
+            }
+
+            if (!allNumber) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'inviteIds must contain all numbers'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_INVITE_GROUP, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'inviteIds must contain all numbers'
+                }, null);
+                return;
+            }
+
+            this.newUniqueId();
+            this.Group.sendInviteGroup({
+                msgId: this.uniqueId,
+                groupId: options.groupId,
+                inviteIds: options.inviteIds
+            }).then((result) => {
+
+            }).catch((error) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_INVITE_GROUP, 'default', error, null);
             });
         });
     };

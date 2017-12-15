@@ -111,11 +111,17 @@ class Message {
                         unreadMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_CREATED;
                         unreadMessage.createdGroup = {
                             type: message.typeGroup,
-                            chatId: message.group,
+                            groupId: message.group,
                             adminId: message.admin,
                             name: message.name,
                             memberIds: message.members,
                             created: message.created
+                        };
+                    case this.serviceTypes.ON_GROUP_INVITED:
+                        unreadMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_INVITED;
+                        unreadMessage.invited = {
+                            groupId: message.group,
+                            inviteIds: message.invited
                         };
                     default:
                         break;
@@ -228,11 +234,17 @@ class Message {
                         modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_CREATED;
                         modifiedMessage.createdGroup = {
                             type: message.typeGroup,
-                            chatId: message.group,
+                            groupId: message.group,
                             adminId: message.admin,
                             name: message.name,
                             memberIds: message.members,
                             created: message.created
+                        };
+                    case this.serviceTypes.ON_GROUP_INVITED:
+                        modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_INVITED;
+                        modifiedMessage.invited = {
+                            groupId: message.group,
+                            inviteIds: message.invited
                         };
                     default:
                         break;
