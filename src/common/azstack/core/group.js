@@ -10,7 +10,7 @@ class Group {
         this.sendPacketFunction = options.sendPacketFunction;
     };
 
-    sendCreateGroup(options) {
+    sendGroupCreate(options) {
         return new Promise((resolve, reject) => {
 
             const createGroupPacket = {
@@ -45,7 +45,7 @@ class Group {
             });
         });
     };
-    receiveCreateGroupResult(body) {
+    receiveGroupCreateResult(body) {
         return new Promise((resolve, reject) => {
             if (!body) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -132,7 +132,7 @@ class Group {
         });
     };
 
-    sendInviteGroup(options) {
+    sendGroupInvite(options) {
         return new Promise((resolve, reject) => {
 
             const inviteGroupPacket = {
@@ -166,7 +166,7 @@ class Group {
             });
         });
     };
-    receiveInviteGroupResult(body) {
+    receiveGroupInviteResult(body) {
         return new Promise((resolve, reject) => {
             if (!body) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -250,7 +250,7 @@ class Group {
         });
     };
 
-    sendLeaveGroup(options) {
+    sendGroupLeave(options) {
         return new Promise((resolve, reject) => {
 
             const leaveGroupPacket = {
@@ -285,7 +285,7 @@ class Group {
             });
         });
     };
-    receiveLeaveGroupResult(body) {
+    receiveGroupLeaveResult(body) {
         return new Promise((resolve, reject) => {
             if (!body) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -366,7 +366,7 @@ class Group {
         });
     };
 
-    sendRenameGroup(options) {
+    sendGroupRename(options) {
         return new Promise((resolve, reject) => {
 
             const renameGroupPacket = {
@@ -400,7 +400,7 @@ class Group {
             });
         });
     };
-    receiveRenameGroupResult(body) {
+    receiveGroupRenameResult(body) {
         return new Promise((resolve, reject) => {
             if (!body) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -480,7 +480,7 @@ class Group {
         });
     };
 
-    sendChangeAdminGroup(options) {
+    sendGroupAdminChange(options) {
         return new Promise((resolve, reject) => {
 
             const changeAdminGroupPacket = {
@@ -515,7 +515,7 @@ class Group {
             });
         });
     };
-    receiveChangeAdminGroupResult(body) {
+    receiveGroupAdminChangeResult(body) {
         return new Promise((resolve, reject) => {
             if (!body) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {

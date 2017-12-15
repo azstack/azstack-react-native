@@ -458,7 +458,7 @@ class AZStack {
                 break;
 
             case this.serviceTypes.GROUP_CREATE:
-                this.Group.receiveCreateGroupResult(body).then((result) => {
+                this.Group.receiveGroupCreateResult(body).then((result) => {
                     this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_CREATE, 'default', null, result);
                 }).catch((error) => {
                     this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_CREATE, 'default', error, null);
@@ -472,7 +472,7 @@ class AZStack {
                 }).catch((error) => { });
                 break;
             case this.serviceTypes.GROUP_INVITE:
-                this.Group.receiveInviteGroupResult(body).then((result) => {
+                this.Group.receiveGroupInviteResult(body).then((result) => {
                     this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_INVITE, 'default', null, result);
                 }).catch((error) => {
                     this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_INVITE, 'default', error, null);
@@ -486,7 +486,7 @@ class AZStack {
                 }).catch((error) => { });
                 break;
             case this.serviceTypes.GROUP_LEAVE:
-                this.Group.receiveLeaveGroupResult(body).then((result) => {
+                this.Group.receiveGroupLeaveResult(body).then((result) => {
                     this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_LEAVE, 'default', null, result);
                 }).catch((error) => {
                     this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_LEAVE, 'default', error, null);
@@ -500,7 +500,7 @@ class AZStack {
                 }).catch((error) => { });
                 break;
             case this.serviceTypes.GROUP_RENAME:
-                this.Group.receiveRenameGroupResult(body).then((result) => {
+                this.Group.receiveGroupRenameResult(body).then((result) => {
                     this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_RENAME, 'default', null, result);
                 }).catch((error) => {
                     this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_RENAME, 'default', error, null);
@@ -514,7 +514,7 @@ class AZStack {
                 }).catch((error) => { });
                 break;
             case this.serviceTypes.GROUP_CHANGE_ADMIN:
-                this.Group.receiveChangeAdminGroupResult(body).then((result) => {
+                this.Group.receiveGroupAdminChangeResult(body).then((result) => {
                     this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_CHANGE_ADMIN, 'default', null, result);
                 }).catch((error) => {
                     this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_CHANGE_ADMIN, 'default', error, null);
@@ -1628,7 +1628,7 @@ class AZStack {
             }
 
             this.newUniqueId();
-            this.Group.sendCreateGroup({
+            this.Group.sendGroupCreate({
                 msgId: this.uniqueId,
                 type: options.type,
                 name: options.name,
@@ -1707,7 +1707,7 @@ class AZStack {
             }
 
             this.newUniqueId();
-            this.Group.sendInviteGroup({
+            this.Group.sendGroupInvite({
                 msgId: this.uniqueId,
                 groupId: options.groupId,
                 inviteIds: options.inviteIds
@@ -1771,7 +1771,7 @@ class AZStack {
             }
 
             this.newUniqueId();
-            this.Group.sendLeaveGroup({
+            this.Group.sendGroupLeave({
                 msgId: this.uniqueId,
                 groupId: options.groupId,
                 leaveId: options.leaveId,
@@ -1831,7 +1831,7 @@ class AZStack {
             }
 
             this.newUniqueId();
-            this.Group.sendRenameGroup({
+            this.Group.sendGroupRename({
                 msgId: this.uniqueId,
                 groupId: options.groupId,
                 newName: options.newName
@@ -1890,7 +1890,7 @@ class AZStack {
             }
 
             this.newUniqueId();
-            this.Group.sendChangeAdminGroup({
+            this.Group.sendGroupAdminChange({
                 msgId: this.uniqueId,
                 groupId: options.groupId,
                 newAdminId: options.newAdminId,
