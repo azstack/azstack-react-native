@@ -123,6 +123,13 @@ class Message {
                             groupId: message.group,
                             inviteIds: message.invited
                         };
+                    case this.serviceTypes.ON_GROUP_LEFT:
+                        unreadMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_LEFT;
+                        unreadMessage.left = {
+                            groupId: message.group,
+                            leaveId: message.leaveUser,
+                            newAdminId: message.newAdmin
+                        };
                     default:
                         break;
                 }
@@ -245,6 +252,13 @@ class Message {
                         modifiedMessage.invited = {
                             groupId: message.group,
                             inviteIds: message.invited
+                        };
+                    case this.serviceTypes.ON_GROUP_LEFT:
+                        modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_LEFT;
+                        modifiedMessage.left = {
+                            groupId: message.group,
+                            leaveId: message.leaveUser,
+                            newAdminId: message.newAdmin
                         };
                     default:
                         break;

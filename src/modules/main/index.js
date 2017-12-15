@@ -57,6 +57,7 @@ class AppMain extends React.Component {
 
         this.createGroup = this.createGroup.bind(this);
         this.inviteGroup = this.inviteGroup.bind(this);
+        this.leaveGroup = this.leaveGroup.bind(this);
 
         this.AZStack = new AZStack();
         this.AZStack.config({
@@ -251,6 +252,13 @@ class AppMain extends React.Component {
             inviteIds: [387212]
         }).then(() => { }).catch(() => { });
     };
+    leaveGroup() {
+        this.AZStack.leaveGroup({
+            groupId: 7436,
+            leaveId: 381032,
+            newAdminId: 387212
+        }).then(() => { }).catch(() => { });
+    };
 
     render() {
         return (
@@ -301,6 +309,7 @@ class AppMain extends React.Component {
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.createGroup} title="Create group" />
                     <Button onPress={this.inviteGroup} title="Invite group" />
+                    <Button onPress={this.leaveGroup} title="Leave group" />
                 </View>
             </ScrollView>
         );

@@ -485,6 +485,20 @@ class AZStack {
                     }
                 }).catch((error) => { });
                 break;
+            case this.serviceTypes.GROUP_LEAVE:
+                this.Group.receiveLeaveGroupResult(body).then((result) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_LEAVE_GROUP, 'default', null, result);
+                }).catch((error) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_LEAVE_GROUP, 'default', error, null);
+                });
+                break;
+            case this.serviceTypes.ON_GROUP_LEFT:
+                this.Group.receiveGroupLeft(body).then((result) => {
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_GROUP_LEFT] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_GROUP_LEFT](null, result);
+                    }
+                }).catch((error) => { });
+                break;
 
             default:
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -1673,6 +1687,71 @@ class AZStack {
 
             }).catch((error) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_INVITE_GROUP, 'default', error, null);
+            });
+        });
+    };
+    leaveGroup(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Leave group'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Leave group params',
+                payload: options
+            });
+
+            this.addUncall(this.uncallConstants.UNCALL_KEY_LEAVE_GROUP, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_LEAVE_GROUP_RETURN);
+
+            if (!options || typeof options !== 'object') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Missing leave group params'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_LEAVE_GROUP, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'Missing leave group params'
+                }, null);
+                return;
+            }
+
+            let dataErrorMessage = this.Validator.check([{
+                name: 'groupId',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.groupId,
+                notEqual: 0
+            }, {
+                name: 'leaveId',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.leaveId,
+                notEqual: 0
+            }, {
+                name: 'newAdminId',
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.newAdminId,
+                notEqual: 0
+            }]);
+            if (dataErrorMessage) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: dataErrorMessage
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_LEAVE_GROUP, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: dataErrorMessage
+                }, null);
+                return;
+            }
+
+            this.newUniqueId();
+            this.Group.sendLeaveGroup({
+                msgId: this.uniqueId,
+                groupId: options.groupId,
+                leaveId: options.leaveId,
+                newAdminId: options.newAdminId
+            }).then((result) => {
+
+            }).catch((error) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_LEAVE_GROUP, 'default', error, null);
             });
         });
     };

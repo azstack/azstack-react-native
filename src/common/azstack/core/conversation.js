@@ -114,6 +114,13 @@ class Conversation {
                             groupId: conversation.chatId,
                             inviteIds: conversation.lastMsg.invitedMembers
                         };
+                    case this.serviceTypes.ON_GROUP_LEFT:
+                        modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_LEFT;
+                        modifiedConversation.lastMessage.left = {
+                            groupId: conversation.chatId,
+                            leaveId: conversation.lastMsg.leaveUser,
+                            newAdminId: conversation.lastMsg.newAdmin
+                        };
                     default:
                         break;
                 }

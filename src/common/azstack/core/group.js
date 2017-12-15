@@ -245,7 +245,123 @@ class Group {
                 invited: {
                     groupId: body.group,
                     inviteIds: body.invited
-                } 
+                }
+            });
+        });
+    };
+
+    sendLeaveGroup(options) {
+        return new Promise((resolve, reject) => {
+
+            const leaveGroupPacket = {
+                service: this.serviceTypes.GROUP_LEAVE,
+                body: JSON.stringify({
+                    msgId: options.msgId,
+                    group: options.groupId,
+                    leaveUser: options.leaveId,
+                    newAdmin: options.newAdminId
+                })
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send leave group packet'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Leave group packet',
+                payload: leaveGroupPacket
+            });
+            this.sendPacketFunction(leaveGroupPacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send leave group packet successfully'
+                });
+                resolve();
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send leave group data, send leave group fail'
+                });
+                reject({
+                    code: error.code,
+                    message: 'Cannot send leave group data, send leave group fail'
+                });
+            });
+        });
+    };
+    receiveLeaveGroupResult(body) {
+        return new Promise((resolve, reject) => {
+            if (!body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect leave group result, ignored'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Cannot detect leave group result'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got leave group result'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Leave group result data',
+                payload: body
+            });
+
+            if (body.r !== this.errorCodes.GROUP_LEAVE_SUCCESS_FROM_SERVER) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Server response with error, leave group fail'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Server response with error, leave group fail'
+                });
+                return;
+            }
+
+            resolve({
+                groupId: body.group,
+                msgId: body.msgId,
+                leaveId: body.leaveUserId,
+                created: body.created
+            });
+        });
+    };
+    receiveGroupLeft(body) {
+        return new Promise((resolve, reject) => {
+            if (!body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect left group, ignored'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Cannot detect left group'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got left group'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Left group data',
+                payload: body
+            });
+
+            resolve({
+                chatType: this.chatConstants.CHAT_TYPE_GROUP,
+                chatId: body.group,
+                senderId: body.from,
+                receiverId: body.group,
+                msgId: body.msgId,
+                type: this.chatConstants.MESSAGE_TYPE_GROUP_LEFT,
+                status: this.chatConstants.MESSAGE_STATUS_SENT,
+                deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
+                created: body.created,
+                modified: body.created,
+                left: {
+                    groupId: body.group,
+                    leaveId: body.leaveUser,
+                    newAdminId: body.newAdmin
+                }
             });
         });
     };

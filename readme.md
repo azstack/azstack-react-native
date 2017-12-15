@@ -60,11 +60,14 @@
 * [8. User](#8-user)
     * [8.1. Get users information](#81-get-users-information)
 * [9. Group](#9-group)
-    * [9.1. Create group](#91-create-group)
-    * [9.2. Invite group](#92-invite-group)
+    * [9.1. Group actions](#91-group-actions)
+        * [9.1.1. Create group](#911-create-group)
+        * [9.1.2. Invite group](#912-invite-group)
+        * [9.1.3. Leave group](#913-leave-group)
     * [9.3. Delegates](#92-delegates)
         * [9.3.1. On group created](#931-on-group-created)
         * [9.3.2. On group invited](#932-on-group-invited)
+        * [9.3.3. On group left](#933-on-group-left)
 
 
 
@@ -194,6 +197,7 @@ azstack.config({
 > - MESSAGE_TYPE_FILE(3): file message
 > - MESSAGE_TYPE_GROUP_CREATED(4): create group message
 > - MESSAGE_TYPE_GROUP_INVITED(5): invite group message
+> - MESSAGE_TYPE_GROUP_LEFT(6): leave group message
 
 #### 3.5.3. Message Statuses
 > - MESSAGE_STATUS_SENDING(0): status sending
@@ -760,6 +764,10 @@ this.AZStack.getModifiedConversations({
 >       - invited: invited data
 >           - groupId: id of group
 >           - inviteIds: id of inviteds
+>       - left: left data
+>           - groupId: id of group
+>           - leaveId: id of leaver
+>           - newAdminId: id of new admin
 
 
 
@@ -851,6 +859,10 @@ this.AZStack.onGetUnreadMessagesReturn({
 >   - invited: invited data
 >       - groupId: id of group
 >       - inviteIds: id of inviteds
+>   - left: left data
+>       - groupId: id of group
+>       - leaveId: id of leaver
+>       - newAdminId: id of new admin
 
 #### 7.1.2 Get modified messages
 
@@ -940,6 +952,10 @@ this.AZStack.getModifiedMessages({
 >   - invited: invited data
 >       - groupId: id of group
 >       - inviteIds: id of inviteds
+>   - left: left data
+>       - groupId: id of group
+>       - leaveId: id of leaver
+>       - newAdminId: id of new admin
 
 ### 7.2. Sending
 
@@ -1380,7 +1396,9 @@ this.AZStack.getUsersInformation({
 
 # 9. Group
 
-### 9.1. Create group
+### 9.1. Group actions
+
+#### 9.1.1. Create group
 
 ```javascript 
 this.AZStack.createGroup({
@@ -1438,7 +1456,7 @@ this.AZStack.createGroup({
 > - memberIds: ids of members
 > - created: created time
 
-### 9.2. Invite group
+#### 9.1.2. Invite group
 
 ```javascript 
 this.AZStack.inviteGroup({
@@ -1487,6 +1505,61 @@ this.AZStack.inviteGroup({
 > - groupId: id of group
 > - msgId: id of create group message
 > - inviteIds: id of inviteds
+> - created: created time
+
+#### 9.1.3. Leave group
+
+```javascript 
+this.AZStack.leaveGroup({
+    groupId: 1234,
+    leaveId: 4321,
+    newAdminId: 1122
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.leaveGroup({
+    groupId: 1234,
+    leaveId: 4321,
+    newAdminId: 1122
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.onLeaveGroupReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStack.leaveGroup({
+    groupId: 1234,
+    leaveId: 4321,
+    newAdminId: 1122
+});
+```
+
+#### params
+> - groupId(required): id of group
+> - leaveId(required): user ids 
+> - newAdminId(optional): user ids (required in case leave with role admin)
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - groupId: id of group
+> - msgId: id of create group message
+> - leaveId: id of leaver
 > - created: created time
 
 ### 9.3. Delegates
@@ -1548,3 +1621,31 @@ this.AZStack.Delegates.onGroupInvited = (error, result) => {
 > - invited: invited data
 >   - groupId: id of group
 >   - inviteIds: id of inviteds
+
+#### 9.3.3. On group left
+
+```javascript 
+this.AZStack.Delegates.onGroupLeft = (error, result) => {
+    console.log(error, result);
+};
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - chatType: chat type
+> - chatId: chat id
+> - senderId: id of sender
+> - receiverId: id of receiverId
+> - msgId: id of message
+> - type: type of message
+> - status: status of message
+> - deleted: message deleted
+> - created: created time
+> - modified: modified time
+> - left: left data
+>   - groupId: id of group
+>   - leaveId: id of leaver
+>   - newAdminId: id of new admin
