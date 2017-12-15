@@ -61,6 +61,8 @@ class AppMain extends React.Component {
         this.renameGroup = this.renameGroup.bind(this);
         this.changeAdminGroup = this.changeAdminGroup.bind(this);
 
+        this.getDetailsGroup = this.getDetailsGroup.bind(this);
+
         this.AZStack = new AZStack();
         this.AZStack.config({
             requestTimeout: 60000,
@@ -274,6 +276,12 @@ class AppMain extends React.Component {
         }).then(() => { }).catch(() => { });
     };
 
+    getDetailsGroup() {
+        this.AZStack.getDetailsGroup({
+            groupId: 7436
+        }).then(() => { }).catch(() => { });
+    };
+
     render() {
         return (
             <ScrollView>
@@ -326,6 +334,8 @@ class AppMain extends React.Component {
                     <Button onPress={this.leaveGroup} title="Leave group" />
                     <Button onPress={this.renameGroup} title="Rename group" />
                     <Button onPress={this.changeAdminGroup} title="Change admin group" />
+                    <Text>{'\n'}{'\n'}</Text>
+                    <Button onPress={this.getDetailsGroup} title="Get details group" />
                 </View>
             </ScrollView>
         );

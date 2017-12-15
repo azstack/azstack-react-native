@@ -594,6 +594,90 @@ class Group {
             });
         });
     };
+
+    sendGroupGetDetails(options) {
+        return new Promise((resolve, reject) => {
+
+            const getDetailsGroupPacket = {
+                service: this.serviceTypes.GROUP_GET_DETAILS,
+                body: JSON.stringify({
+                    group: options.groupId
+                })
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send get details group packet'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Get details group packet',
+                payload: getDetailsGroupPacket
+            });
+            this.sendPacketFunction(getDetailsGroupPacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send get details group packet successfully'
+                });
+                resolve();
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send get details group data, send get details group fail'
+                });
+                reject({
+                    code: error.code,
+                    message: 'Cannot send get details group data, send get details group fail'
+                });
+            });
+        });
+    };
+    receiveGroupDetailsGetResult(body) {
+        return new Promise((resolve, reject) => {
+            if (!body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect get details group result, ignored'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Cannot detect get details group result'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got get details group result'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Get details group result data',
+                payload: body
+            });
+
+            if (body.r !== this.errorCodes.GROUP_GET_DETAILS_SUCCESS_FROM_SERVER) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Server response with error, get details group fail'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Server response with error, get details group fail'
+                });
+                return;
+            }
+
+            resolve({
+                type: body.type,
+                groupId: body.group,
+                name: body.name,
+                adminId: body.admin,
+                memberIds: body.members.map((member) => {
+                    return member.userId;
+                }),
+                members: body.members.map((member) => {
+                    return {
+                        userId: member.userId,
+                        azStackUserId: member.username,
+                        fullname: member.fullname,
+                        status: member.online
+                    };
+                })
+            });
+        });
+    };
 };
 
 export default Group;

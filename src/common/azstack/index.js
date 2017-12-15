@@ -528,6 +528,14 @@ class AZStack {
                 }).catch((error) => { });
                 break;
 
+            case this.serviceTypes.GROUP_GET_DETAILS:
+                this.Group.receiveGroupDetailsGetResult(body).then((result) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, 'default', null, result);
+                }).catch((error) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, 'default', error, null);
+                });
+                break;
+
             default:
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Got unknown packet from slave socket'
@@ -1899,6 +1907,58 @@ class AZStack {
 
             }).catch((error) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_CHANGE_ADMIN, 'default', error, null);
+            });
+        });
+    };
+
+    getDetailsGroup(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Get details group'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Get details group params',
+                payload: options
+            });
+
+            this.addUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_GROUP_GET_DETAILS_RETURN);
+
+            if (!options || typeof options !== 'object') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Missing get details group params'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'Missing get details group params'
+                }, null);
+                return;
+            }
+
+            let dataErrorMessage = this.Validator.check([{
+                name: 'groupId',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.groupId,
+                notEqual: 0
+            }]);
+            if (dataErrorMessage) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: dataErrorMessage
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: dataErrorMessage
+                }, null);
+                return;
+            }
+
+            this.newUniqueId();
+            this.Group.sendGroupGetDetails({
+                groupId: options.groupId
+            }).then((result) => {
+
+            }).catch((error) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, 'default', error, null);
             });
         });
     };

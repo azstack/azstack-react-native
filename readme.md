@@ -66,6 +66,8 @@
         * [9.1.3. Leave group](#913-leave-group)
         * [9.1.4. Rename group](#914-rename-group)
         * [9.1.5. Change admin group](#915-change-admin-group)
+    * [9.2. Get functions](#92-get-functions)
+        * [9.2.1. Get group details](#921-get-group-details)
     * [9.3. Delegates](#92-delegates)
         * [9.3.1. On group created](#931-on-group-created)
         * [9.3.2. On group invited](#932-on-group-invited)
@@ -1676,7 +1678,7 @@ this.AZStack.changeAdminGroup({
 
 #### params
 > - groupId(required): id of group
-> - newName(required): new name
+> - newAdminId(required): new admin id
 
 #### error:
 > - code: error code
@@ -1687,6 +1689,60 @@ this.AZStack.changeAdminGroup({
 > - msgId: id of create group message
 > - newAdminId: new admin id
 > - created: created time
+
+### 9.2. Get functions
+
+#### 9.2.1. Get group details
+
+```javascript 
+this.AZStack.getDetailsGroup({
+    groupId: 1234
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.getDetailsGroup({
+    groupId: 1234
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.onGroupGetDetailsReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStack.getDetailsGroup({
+    groupId: 1234
+});
+```
+
+#### params
+> - groupId(required): id of group
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - type: type of group
+> - groupId: id of group
+> - name: name of group
+> - memberIds: array of member user ids
+> - members: array of members
+>   - userId: id of user
+>   - azStackUserId: unique string of user
+>   - fullname: fullname of user
+>   - status: status of user
 
 ### 9.3. Delegates
 
