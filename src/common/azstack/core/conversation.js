@@ -86,20 +86,31 @@ class Conversation {
                         modified: conversation.modified
                     }
                 };
-                if (conversation.lastMsg.serviceType === this.serviceTypes.MESSAGE_SERVER_WITH_USER_TYPE_TEXT) {
-                    modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
-                    modifiedConversation.lastMessage.text = conversation.lastMsg.msg;
+                switch (conversation.lastMsg.serviceType) {
+                    case this.serviceTypes.MESSAGE_SERVER_WITH_USER_TYPE_TEXT:
+                        modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
+                        modifiedConversation.lastMessage.text = conversation.lastMsg.msg;
+                        break;
+                    case this.serviceTypes.MESSAGE_WITH_USER_TYPE_STICKER:
+                        modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_STICKER;
+                        modifiedConversation.lastMessage.sticker = {};
+                        break;
+                    case this.serviceTypes.MESSAGE_WITH_USER_TYPE_FILE:
+                        modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_FILE;
+                        modifiedConversation.lastMessage.file = {
+                            type: conversation.lastMsg.msgType
+                        };
+                    case this.serviceTypes.ON_GROUP_CREATED:
+                        modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_CREATED;
+                        modifiedConversation.lastMessage.createdGroup = {
+                            adminId: conversation.lastMsg.admin,
+                            name: conversation.lastMsg.name,
+                            created: conversation.lastMsg.created
+                        };
+                    default:
+                        break;
                 }
-                if (conversation.lastMsg.serviceType === this.serviceTypes.MESSAGE_WITH_USER_TYPE_STICKER) {
-                    modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_STICKER;
-                    modifiedConversation.lastMessage.sticker = {};
-                }
-                if (conversation.lastMsg.serviceType === this.serviceTypes.MESSAGE_WITH_USER_TYPE_FILE) {
-                    modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_FILE;
-                    modifiedConversation.lastMessage.file = {
-                        type: conversation.lastMsg.msgType
-                    };
-                }
+
                 modifiedConversations.list.push(modifiedConversation);
             });
 

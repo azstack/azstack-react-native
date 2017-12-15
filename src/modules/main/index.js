@@ -37,6 +37,8 @@ class AppMain extends React.Component {
 
         this.getUnreadMessagesTypeUser = this.getUnreadMessagesTypeUser.bind(this);
         this.getModifiedMessagesTypeUser = this.getModifiedMessagesTypeUser.bind(this);
+        this.getUnreadMessagesTypeGroup = this.getUnreadMessagesTypeGroup.bind(this);
+        this.getModifiedMessagesTypeGroup = this.getModifiedMessagesTypeGroup.bind(this);
 
         this.newMessageWithUserTypeText = this.newMessageWithUserTypeText.bind(this);
         this.newMessageWithUserTypeSticker = this.newMessageWithUserTypeSticker.bind(this);
@@ -52,6 +54,8 @@ class AppMain extends React.Component {
 
         this.getUsersInfomationWithId = this.getUsersInfomationWithId.bind(this);
         this.getUsersInfomationWithAzstackUserId = this.getUsersInfomationWithAzstackUserId.bind(this);
+
+        this.createGroup = this.createGroup.bind(this);
 
         this.AZStack = new AZStack();
         this.AZStack.config({
@@ -129,6 +133,21 @@ class AppMain extends React.Component {
             lastCreated: new Date().getTime(),
             chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
             chatId: 387212
+        }).then(() => { }).catch(() => { });
+    };
+    getUnreadMessagesTypeGroup() {
+        this.AZStack.getUnreadMessages({
+            page: 1,
+            chatType: this.AZStack.chatConstants.CHAT_TYPE_GROUP,
+            chatId: 7436
+        }).then(() => { }).catch(() => { });
+    };
+    getModifiedMessagesTypeGroup() {
+        this.AZStack.getModifiedMessages({
+            page: 1,
+            lastCreated: new Date().getTime(),
+            chatType: this.AZStack.chatConstants.CHAT_TYPE_GROUP,
+            chatId: 7436
         }).then(() => { }).catch(() => { });
     };
 
@@ -218,6 +237,14 @@ class AppMain extends React.Component {
         }).then(() => { }).catch(() => { });
     };
 
+    createGroup() {
+        this.AZStack.createGroup({
+            type: this.AZStack.groupConstants.GROUP_TYPE_PRIVATE,
+            name: 'Test group',
+            memberIds: [387212, 391658]
+        }).then(() => { }).catch(() => { });
+    };
+
     render() {
         return (
             <ScrollView>
@@ -247,6 +274,8 @@ class AppMain extends React.Component {
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.getUnreadMessagesTypeUser} title="Get unread messages type user" />
                     <Button onPress={this.getModifiedMessagesTypeUser} title="Get modified messages type user" />
+                    <Button onPress={this.getUnreadMessagesTypeGroup} title="Get unread messages type group" />
+                    <Button onPress={this.getModifiedMessagesTypeGroup} title="Get modified messages type group" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.newMessageWithUserTypeText} title="New message with user type text" />
                     <Button onPress={this.newMessageWithUserTypeSticker} title="New message with user type sticker" />
@@ -262,6 +291,8 @@ class AppMain extends React.Component {
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.getUsersInfomationWithId} title="Get users onformation with id" />
                     <Button onPress={this.getUsersInfomationWithAzstackUserId} title="Get users onformation with azStackUserId" />
+                    <Text>{'\n'}{'\n'}</Text>
+                    <Button onPress={this.createGroup} title="Create group" />
                 </View>
             </ScrollView>
         );

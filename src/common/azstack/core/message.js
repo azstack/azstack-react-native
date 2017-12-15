@@ -86,26 +86,39 @@ class Message {
                     created: message.created,
                     modified: message.modified
                 };
-                if (message.msg) {
-                    unreadMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
-                    unreadMessage.text = message.msg;
-                }
-                if (message.imgName) {
-                    unreadMessage.type = this.chatConstants.MESSAGE_TYPE_STICKER;
-                    unreadMessage.sticker = {
-                        name: message.imgName,
-                        catId: message.catId,
-                        url: message.url
-                    };
-                }
-                if (message.fileName) {
-                    unreadMessage.type = this.chatConstants.MESSAGE_TYPE_FILE;
-                    unreadMessage.file = {
-                        name: message.fileName,
-                        length: message.fileLength,
-                        type: message.type,
-                        url: message.url
-                    };
+                switch (message.serviceType) {
+                    case this.serviceTypes.MESSAGE_SERVER_WITH_USER_TYPE_TEXT:
+                        unreadMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
+                        unreadMessage.text = message.msg;
+                        break;
+                    case this.serviceTypes.MESSAGE_WITH_USER_TYPE_STICKER:
+                        unreadMessage.type = this.chatConstants.MESSAGE_TYPE_STICKER;
+                        unreadMessage.sticker = {
+                            name: message.imgName,
+                            catId: message.catId,
+                            url: message.url
+                        };
+                        break;
+                    case this.serviceTypes.MESSAGE_WITH_USER_TYPE_FILE:
+                        unreadMessage.type = this.chatConstants.MESSAGE_TYPE_FILE;
+                        unreadMessage.file = {
+                            name: message.fileName,
+                            length: message.fileLength,
+                            type: message.type,
+                            url: message.url
+                        };
+                    case this.serviceTypes.ON_GROUP_CREATED:
+                        unreadMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_CREATED;
+                        unreadMessage.createdGroup = {
+                            type: message.typeGroup,
+                            chatId: message.group,
+                            adminId: message.admin,
+                            name: message.name,
+                            memberIds: message.members,
+                            created: message.created
+                        };
+                    default:
+                        break;
                 }
                 unreadMessages.list.push(unreadMessage);
             });
@@ -189,30 +202,44 @@ class Message {
                     created: message.created,
                     modified: message.modified
                 };
-                if (message.msg) {
-                    modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
-                    modifiedMessage.text = message.msg;
+
+                switch (message.serviceType) {
+                    case this.serviceTypes.MESSAGE_SERVER_WITH_USER_TYPE_TEXT:
+                        modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
+                        modifiedMessage.text = message.msg;
+                        break;
+                    case this.serviceTypes.MESSAGE_WITH_USER_TYPE_STICKER:
+                        modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_STICKER;
+                        modifiedMessage.sticker = {
+                            name: message.imgName,
+                            catId: message.catId,
+                            url: message.url
+                        };
+                        break;
+                    case this.serviceTypes.MESSAGE_WITH_USER_TYPE_FILE:
+                        modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_FILE;
+                        modifiedMessage.file = {
+                            name: message.fileName,
+                            length: message.fileLength,
+                            type: message.type,
+                            url: message.url
+                        };
+                    case this.serviceTypes.ON_GROUP_CREATED:
+                        modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_CREATED;
+                        modifiedMessage.createdGroup = {
+                            type: message.typeGroup,
+                            chatId: message.group,
+                            adminId: message.admin,
+                            name: message.name,
+                            memberIds: message.members,
+                            created: message.created
+                        };
+                    default:
+                        break;
                 }
-                if (message.imgName) {
-                    modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_STICKER;
-                    modifiedMessage.sticker = {
-                        name: message.imgName,
-                        catId: message.catId,
-                        url: message.url
-                    };
-                }
-                if (message.fileName) {
-                    modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_FILE;
-                    modifiedMessage.file = {
-                        name: message.fileName,
-                        length: message.fileLength,
-                        type: message.type,
-                        url: message.url
-                    };
-                }
+
                 modifiedMessages.list.push(modifiedMessage);
             });
-
             resolve(modifiedMessages);
         });
     };
@@ -488,7 +515,7 @@ class Message {
                         receiverId: options.body.to,
                         msgId: options.body.msgId,
                         type: this.chatConstants.MESSAGE_TYPE_TEXT,
-                        status: this.chatConstants.MESSAGE_STATUS_SENDING,
+                        status: this.chatConstants.MESSAGE_STATUS_SENT,
                         deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
                         created: options.body.time,
                         modified: options.body.time,
@@ -503,7 +530,7 @@ class Message {
                         receiverId: options.body.to,
                         msgId: options.body.id,
                         type: this.chatConstants.MESSAGE_TYPE_STICKER,
-                        status: this.chatConstants.MESSAGE_STATUS_SENDING,
+                        status: this.chatConstants.MESSAGE_STATUS_SENT,
                         deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
                         created: options.body.created,
                         modified: options.body.created,
@@ -522,7 +549,7 @@ class Message {
                         receiverId: options.body.to,
                         msgId: options.body.id,
                         type: this.chatConstants.MESSAGE_TYPE_FILE,
-                        status: this.chatConstants.MESSAGE_STATUS_SENDING,
+                        status: this.chatConstants.MESSAGE_STATUS_SENT,
                         deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
                         created: options.body.created,
                         modified: options.body.created,

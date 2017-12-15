@@ -457,6 +457,21 @@ class AZStack {
                 });
                 break;
 
+            case this.serviceTypes.GROUP_CREATE:
+                this.Group.receiveCreateGroupResult(body).then((result) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_CREATE_GROUP, 'default', null, result);
+                }).catch((error) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_CREATE_GROUP, 'default', error, null);
+                });
+                break;
+            case this.serviceTypes.ON_GROUP_CREATED:
+                this.Group.receiveGroupCreated(body).then((result) => {
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_GROUP_CREATED] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_GROUP_CREATED](null, result);
+                    }
+                }).catch((error) => { });
+                break;
+
             default:
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Got unknown packet from slave socket'
@@ -574,7 +589,7 @@ class AZStack {
         this.Conversation = new Conversation({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, listConstants: this.listConstants, chatConstants: this.chatConstants, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
         this.Message = new Message({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, listConstants: this.listConstants, chatConstants: this.chatConstants, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
         this.User = new User({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, listConstants: this.listConstants, userConstants: this.userConstants, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
-        this.Group = new Group({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, listConstants: this.listConstants, groupConstants: this.groupConstants, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
+        this.Group = new Group({ logLevelConstants: this.logLevelConstants, serviceTypes: this.serviceTypes, errorCodes: this.errorCodes, listConstants: this.listConstants, chatConstants: this.chatConstants, groupConstants: this.groupConstants, Logger: this.Logger, sendPacketFunction: this.sendSlavePacket.bind(this) });
     };
 
     connect(options, callback) {
@@ -1374,7 +1389,7 @@ class AZStack {
     getUsersInformation(options, callback) {
         return new Promise((resolve, reject) => {
 
-            const requestKey = this.Tool.generateRequestPurpost();
+            const requestKey = this.Tool.generateRequestPurpose();
 
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Get users information'
@@ -1480,6 +1495,92 @@ class AZStack {
                 azStackUserIds: options.azStackUserIds
             }).then().catch((error) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, requestKey, error, null);
+            });
+        });
+    };
+
+    createGroup(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Create group'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Create group params',
+                payload: options
+            });
+
+            this.addUncall(this.uncallConstants.UNCALL_KEY_CREATE_GROUP, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_CREATE_GROUP_RETURN);
+
+            if (!options || typeof options !== 'object') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Missing create group params'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_CREATE_GROUP, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'Missing create group params'
+                }, null);
+                return;
+            }
+
+            let dataErrorMessage = this.Validator.check([{
+                name: 'type',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.type,
+                in: [this.groupConstants.GROUP_TYPE_PRIVATE, this.groupConstants.GROUP_TYPE_PUBLIC]
+            }, {
+                name: 'name',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_STRING,
+                data: options.name,
+                notEqual: ''
+            }, {
+                name: 'memberIds',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_ARRAY,
+                notEmpty: true,
+                data: options.memberIds
+            }]);
+            if (dataErrorMessage) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: dataErrorMessage
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_CREATE_GROUP, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: dataErrorMessage
+                }, null);
+                return;
+            }
+
+            let allNumber = true;
+            for (let i = 0; i < options.memberIds.length; i++) {
+                if (!this.Validator.isNumber(options.memberIds[i])) {
+                    allNumber = false;
+                    break;
+                }
+            }
+
+            if (!allNumber) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'memberIds must contain all numbers'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_CREATE_GROUP, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'memberIds must contain all numbers'
+                }, null);
+                return;
+            }
+
+            this.newUniqueId();
+            this.Group.sendCreateGroup({
+                msgId: this.uniqueId,
+                type: options.type,
+                name: options.name,
+                memberIds: options.memberIds
+            }).then((result) => {
+
+            }).catch((error) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_CREATE_GROUP, 'default', error, null);
             });
         });
     };

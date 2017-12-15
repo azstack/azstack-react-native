@@ -59,6 +59,10 @@
         * [7.3.4. On typing](#734-on-typing)
 * [8. User](#8-user)
     * [8.1. Get users information](#81-get-users-information)
+* [9. Group](#9-group)
+    * [9.1. Create group](#91-create-group)
+    * [9.2. Delegates](#92-delegates)
+        * [9.2.1. On group created](#921-on-group-created)
 
 
 
@@ -186,6 +190,7 @@ azstack.config({
 > - MESSAGE_TYPE_TEXT(1): text message
 > - MESSAGE_TYPE_STICKER(2): sticker message
 > - MESSAGE_TYPE_FILE(3): file message
+> - MESSAGE_TYPE_GROUP_CREATED(4): create group message
 
 #### 3.5.3. Message Statuses
 > - MESSAGE_STATUS_SENDING(0): status sending
@@ -222,6 +227,7 @@ azstack.config({
 #### 3.7.1. Group types
 > - GROUP_TYPE_PRIVATE(0): private group
 > - GROUP_TYPE_PUBLIC(1): public group
+
 
 
 
@@ -743,6 +749,10 @@ this.AZStack.getModifiedConversations({
 >       - sticker: sticker of message
 >       - file: file of message
 >           - type: file type
+>       - createdGroup: created group
+>           - adminId: id of admin
+>           - name: name of group
+>           - created: created time
 
 
 
@@ -824,6 +834,13 @@ this.AZStack.onGetUnreadMessagesReturn({
 >       - length: length
 >       - type: type
 >       - url: url
+>   - createdGroup: created group
+>       - type: group type
+>       - chatId: chat id
+>       - adminId: id of admin
+>       - name: name of group
+>       - memberIds: ids of members
+>       - created: created time
 
 #### 7.1.2 Get modified messages
 
@@ -903,6 +920,13 @@ this.AZStack.getModifiedMessages({
 >       - length: length
 >       - type: type
 >       - url: url
+>   - createdGroup: created group
+>       - type: group type
+>       - chatId: chat id
+>       - adminId: id of admin
+>       - name: name of group
+>       - memberIds: ids of members
+>       - created: created time
 
 ### 7.2. Sending
 
@@ -1313,10 +1337,10 @@ this.AZStack.getUsersInformation({
 OR
 
 ```javascript 
-this.AZStack.Delegates.getUsersInformation = (error, result) => {
+this.AZStack.Delegates.onGetUsersInformationReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.onGetUsersInformationReturn({
+this.AZStack.getUsersInformation({
     userIds: [123],
     azStackUserIds: ['abcd']
 });
@@ -1338,3 +1362,97 @@ this.AZStack.onGetUsersInformationReturn({
 >   - fullname: fullname of user
 >   - status: status of user
 >   - lastVisitDate: last visit date of user
+
+
+
+# 9. Group
+
+### 9.1. Create group
+
+```javascript 
+this.AZStack.createGroup({
+    type: this.AZStack.groupConstants.GROUP_TYPE_PRIVATE,
+    name: 'Group name',
+    memberIds: [1234, 4321]
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.createGroup({
+    type: this.AZStack.groupConstants.GROUP_TYPE_PRIVATE,
+    name: 'Group name',
+    memberIds: [1234, 4321]
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.onCreateGroupReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStack.createGroup({
+    type: this.AZStack.groupConstants.GROUP_TYPE_PRIVATE,
+    name: 'Group name',
+    memberIds: [1234, 4321]
+});
+```
+
+#### params
+> - userIds(optional): array of userIds (number)
+> - azStackUserIds(optional): array of azStackUserIds (string)
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - type: group type
+> - chatId: chat id
+> - msgId: id of create group message
+> - adminId: id of admin
+> - name: name of group
+> - memberIds: ids of members
+> - created: created time
+
+### 9.2. Delegates
+
+#### 9.2.1. On group created
+
+```javascript 
+this.AZStack.Delegates.onGroupCreated = (error, result) => {
+    console.log(error, result);
+};
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - chatType: chat type
+> - chatId: chat id
+> - senderId: id of sender
+> - receiverId: id of receiverId
+> - msgId: id of message
+> - type: type of message
+> - status: status of message
+> - deleted: message deleted
+> - created: created time
+> - modified: modified time
+> - createdGroup: created group
+>   - type: group type
+>   - chatId: chat id
+>   - adminId: id of admin
+>   - name: name of group
+>   - memberIds: ids of members
+>   - created: created time

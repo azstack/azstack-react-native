@@ -38,3 +38,6 @@ export const DELEGATE_ON_SEND_TYPING_RETURN = 'onSendTypingReturn';
 export const DELEGATE_ON_TYPING = 'onTyping';
 
 export const DELEGATE_ON_GET_USERS_INFORMATION_RETURN = 'onGetUsersInformationReturn';
+
+export const DELEGATE_ON_CREATE_GROUP_RETURN = 'onCreateGroupReturn';
+export const DELEGATE_ON_GROUP_CREATED = 'onGroupCreated';

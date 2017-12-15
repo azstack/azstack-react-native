@@ -1,5 +1,5 @@
 class Tool {
-    generateRequestPurpost() {
+    generateRequestPurpose() {
         return Math.floor(Math.random() * 100000);
     };
 };
