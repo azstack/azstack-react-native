@@ -1225,7 +1225,7 @@ class AZStack {
                 return;
             }
 
-            this.Message.changeStatus({
+            this.Message.sendChangeStatus({
                 chatType: options.chatType,
                 chatId: options.chatId,
                 messageSenderId: options.messageSenderId,
@@ -1300,7 +1300,7 @@ class AZStack {
                 return;
             }
 
-            this.Message.delete({
+            this.Message.sendDelete({
                 chatType: options.chatType,
                 chatId: options.chatId,
                 messageSenderId: options.messageSenderId,

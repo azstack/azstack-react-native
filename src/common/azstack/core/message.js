@@ -540,7 +540,7 @@ class Message {
         });
     };
 
-    changeStatus(options) {
+    sendChangeStatus(options) {
         return new Promise((resolve, reject) => {
 
             let messageReportPacketService = null;
@@ -687,7 +687,7 @@ class Message {
         });
     };
 
-    delete(options) {
+    sendDelete(options) {
         return new Promise((resolve, reject) => {
 
             const deleteMessagePacket = {
