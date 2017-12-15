@@ -39,13 +39,13 @@ export const DELEGATE_ON_TYPING = 'onTyping';
 
 export const DELEGATE_ON_GET_USERS_INFORMATION_RETURN = 'onGetUsersInformationReturn';
 
-export const DELEGATE_ON_CREATE_GROUP_RETURN = 'onCreateGroupReturn';
+export const DELEGATE_ON_GROUP_CREATE_RETURN = 'onGroupCreateReturn';
 export const DELEGATE_ON_GROUP_CREATED = 'onGroupCreated';
-export const DELEGATE_ON_INVITE_GROUP_RETURN = 'onInviteGroupReturn';
+export const DELEGATE_ON_GROUP_INVITE_RETURN = 'onGroupInviteReturn';
 export const DELEGATE_ON_GROUP_INVITED = 'onGroupInvited';
-export const DELEGATE_ON_LEAVE_GROUP_RETURN = 'onLeaveGroupReturn';
+export const DELEGATE_ON_GROUP_LEAVE_RETURN = 'onGroupLeaveReturn';
 export const DELEGATE_ON_GROUP_LEFT = 'onGroupLeft';
-export const DELEGATE_ON_RENAME_GROUP_RETURN = 'onRenameGroupReturn';
+export const DELEGATE_ON_GROUP_RENAME_RETURN = 'onGroupRenameReturn';
 export const DELEGATE_ON_GROUP_RENAMED = 'onGroupRenamed';
-export const DELEGATE_ON_CHANGE_ADMIN_GROUP_RETURN = 'onChangeAdminGroupReturn';
+export const DELEGATE_ON_GROUP_ADMIN_CHANGE_RETURN = 'onGroupAdminChangeReturn';
 export const DELEGATE_ON_GROUP_ADMIN_CHANGED = 'onGroupAdminChanged';

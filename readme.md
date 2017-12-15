@@ -1452,7 +1452,7 @@ this.AZStack.createGroup({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onCreateGroupReturn = (error, result) => {
+this.AZStack.Delegates.onGroupCreateReturn = (error, result) => {
     console.log(error, result);
 };
 this.AZStack.createGroup({
@@ -1508,7 +1508,7 @@ this.AZStack.inviteGroup({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onInviteGroupReturn = (error, result) => {
+this.AZStack.Delegates.onGroupInviteReturn = (error, result) => {
     console.log(error, result);
 };
 this.AZStack.inviteGroup({
@@ -1561,7 +1561,7 @@ this.AZStack.leaveGroup({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onLeaveGroupReturn = (error, result) => {
+this.AZStack.Delegates.onGroupLeaveReturn = (error, result) => {
     console.log(error, result);
 };
 this.AZStack.leaveGroup({
@@ -1614,7 +1614,7 @@ this.AZStack.renameGroup({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onRenameGroupReturn = (error, result) => {
+this.AZStack.Delegates.onGroupRenameReturn = (error, result) => {
     console.log(error, result);
 };
 this.AZStack.renameGroup({
@@ -1665,7 +1665,7 @@ this.AZStack.changeAdminGroup({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onChangeAdminGroupReturn = (error, result) => {
+this.AZStack.Delegates.onGroupAdminChangeReturn = (error, result) => {
     console.log(error, result);
 };
 this.AZStack.changeAdminGroup({

@@ -1565,7 +1565,7 @@ class AZStack {
                 payload: options
             });
 
-            this.addUncall(this.uncallConstants.UNCALL_KEY_GROUP_CREATE, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_CREATE_GROUP_RETURN);
+            this.addUncall(this.uncallConstants.UNCALL_KEY_GROUP_CREATE, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_GROUP_CREATE_RETURN);
 
             if (!options || typeof options !== 'object') {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -1650,7 +1650,7 @@ class AZStack {
                 payload: options
             });
 
-            this.addUncall(this.uncallConstants.UNCALL_KEY_GROUP_INVITE, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_INVITE_GROUP_RETURN);
+            this.addUncall(this.uncallConstants.UNCALL_KEY_GROUP_INVITE, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_GROUP_INVITE_RETURN);
 
             if (!options || typeof options !== 'object') {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -1728,7 +1728,7 @@ class AZStack {
                 payload: options
             });
 
-            this.addUncall(this.uncallConstants.UNCALL_KEY_GROUP_LEAVE, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_LEAVE_GROUP_RETURN);
+            this.addUncall(this.uncallConstants.UNCALL_KEY_GROUP_LEAVE, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_GROUP_LEAVE_RETURN);
 
             if (!options || typeof options !== 'object') {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -1793,7 +1793,7 @@ class AZStack {
                 payload: options
             });
 
-            this.addUncall(this.uncallConstants.UNCALL_KEY_GROUP_RENAME, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_RENAME_GROUP_RETURN);
+            this.addUncall(this.uncallConstants.UNCALL_KEY_GROUP_RENAME, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_GROUP_RENAME_RETURN);
 
             if (!options || typeof options !== 'object') {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -1852,7 +1852,7 @@ class AZStack {
                 payload: options
             });
 
-            this.addUncall(this.uncallConstants.UNCALL_KEY_GROUP_CHANGE_ADMIN, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_CHANGE_ADMIN_GROUP_RETURN);
+            this.addUncall(this.uncallConstants.UNCALL_KEY_GROUP_CHANGE_ADMIN, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_GROUP_ADMIN_CHANGE_RETURN);
 
             if (!options || typeof options !== 'object') {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
