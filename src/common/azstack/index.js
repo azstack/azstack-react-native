@@ -459,9 +459,9 @@ class AZStack {
 
             case this.serviceTypes.GROUP_CREATE:
                 this.Group.receiveCreateGroupResult(body).then((result) => {
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_CREATE_GROUP, 'default', null, result);
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_CREATE, 'default', null, result);
                 }).catch((error) => {
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_CREATE_GROUP, 'default', error, null);
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_CREATE, 'default', error, null);
                 });
                 break;
             case this.serviceTypes.ON_GROUP_CREATED:
@@ -473,9 +473,9 @@ class AZStack {
                 break;
             case this.serviceTypes.GROUP_INVITE:
                 this.Group.receiveInviteGroupResult(body).then((result) => {
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_INVITE_GROUP, 'default', null, result);
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_INVITE, 'default', null, result);
                 }).catch((error) => {
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_INVITE_GROUP, 'default', error, null);
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_INVITE, 'default', error, null);
                 });
                 break;
             case this.serviceTypes.ON_GROUP_INVITED:
@@ -487,9 +487,9 @@ class AZStack {
                 break;
             case this.serviceTypes.GROUP_LEAVE:
                 this.Group.receiveLeaveGroupResult(body).then((result) => {
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_LEAVE_GROUP, 'default', null, result);
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_LEAVE, 'default', null, result);
                 }).catch((error) => {
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_LEAVE_GROUP, 'default', error, null);
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_LEAVE, 'default', error, null);
                 });
                 break;
             case this.serviceTypes.ON_GROUP_LEFT:
@@ -501,9 +501,9 @@ class AZStack {
                 break;
             case this.serviceTypes.GROUP_RENAME:
                 this.Group.receiveRenameGroupResult(body).then((result) => {
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_RENAME_GROUP, 'default', null, result);
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_RENAME, 'default', null, result);
                 }).catch((error) => {
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_RENAME_GROUP, 'default', error, null);
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_RENAME, 'default', error, null);
                 });
                 break;
             case this.serviceTypes.ON_GROUP_RENAMED:
@@ -515,9 +515,9 @@ class AZStack {
                 break;
             case this.serviceTypes.GROUP_CHANGE_ADMIN:
                 this.Group.receiveChangeAdminGroupResult(body).then((result) => {
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_ADMIN_GROUP, 'default', null, result);
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_CHANGE_ADMIN, 'default', null, result);
                 }).catch((error) => {
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_ADMIN_GROUP, 'default', error, null);
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_CHANGE_ADMIN, 'default', error, null);
                 });
                 break;
             case this.serviceTypes.ON_GROUP_ADMIN_CHANGED:
@@ -1565,13 +1565,13 @@ class AZStack {
                 payload: options
             });
 
-            this.addUncall(this.uncallConstants.UNCALL_KEY_CREATE_GROUP, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_CREATE_GROUP_RETURN);
+            this.addUncall(this.uncallConstants.UNCALL_KEY_GROUP_CREATE, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_CREATE_GROUP_RETURN);
 
             if (!options || typeof options !== 'object') {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Missing create group params'
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_CREATE_GROUP, 'default', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_CREATE, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'Missing create group params'
                 }, null);
@@ -1601,7 +1601,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: dataErrorMessage
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_CREATE_GROUP, 'default', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_CREATE, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: dataErrorMessage
                 }, null);
@@ -1620,7 +1620,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'memberIds must contain all numbers'
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_CREATE_GROUP, 'default', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_CREATE, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'memberIds must contain all numbers'
                 }, null);
@@ -1636,7 +1636,7 @@ class AZStack {
             }).then((result) => {
 
             }).catch((error) => {
-                this.callUncall(this.uncallConstants.UNCALL_KEY_CREATE_GROUP, 'default', error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_CREATE, 'default', error, null);
             });
         });
     };
@@ -1650,13 +1650,13 @@ class AZStack {
                 payload: options
             });
 
-            this.addUncall(this.uncallConstants.UNCALL_KEY_INVITE_GROUP, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_INVITE_GROUP_RETURN);
+            this.addUncall(this.uncallConstants.UNCALL_KEY_GROUP_INVITE, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_INVITE_GROUP_RETURN);
 
             if (!options || typeof options !== 'object') {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Missing invite group params'
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_INVITE_GROUP, 'default', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_INVITE, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'Missing invite group params'
                 }, null);
@@ -1680,7 +1680,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: dataErrorMessage
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_INVITE_GROUP, 'default', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_INVITE, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: dataErrorMessage
                 }, null);
@@ -1699,7 +1699,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'inviteIds must contain all numbers'
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_INVITE_GROUP, 'default', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_INVITE, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'inviteIds must contain all numbers'
                 }, null);
@@ -1714,7 +1714,7 @@ class AZStack {
             }).then((result) => {
 
             }).catch((error) => {
-                this.callUncall(this.uncallConstants.UNCALL_KEY_INVITE_GROUP, 'default', error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_INVITE, 'default', error, null);
             });
         });
     };
@@ -1728,13 +1728,13 @@ class AZStack {
                 payload: options
             });
 
-            this.addUncall(this.uncallConstants.UNCALL_KEY_LEAVE_GROUP, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_LEAVE_GROUP_RETURN);
+            this.addUncall(this.uncallConstants.UNCALL_KEY_GROUP_LEAVE, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_LEAVE_GROUP_RETURN);
 
             if (!options || typeof options !== 'object') {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Missing leave group params'
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_LEAVE_GROUP, 'default', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_LEAVE, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'Missing leave group params'
                 }, null);
@@ -1763,7 +1763,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: dataErrorMessage
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_LEAVE_GROUP, 'default', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_LEAVE, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: dataErrorMessage
                 }, null);
@@ -1779,7 +1779,7 @@ class AZStack {
             }).then((result) => {
 
             }).catch((error) => {
-                this.callUncall(this.uncallConstants.UNCALL_KEY_LEAVE_GROUP, 'default', error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_LEAVE, 'default', error, null);
             });
         });
     };
@@ -1793,13 +1793,13 @@ class AZStack {
                 payload: options
             });
 
-            this.addUncall(this.uncallConstants.UNCALL_KEY_RENAME_GROUP, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_RENAME_GROUP_RETURN);
+            this.addUncall(this.uncallConstants.UNCALL_KEY_GROUP_RENAME, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_RENAME_GROUP_RETURN);
 
             if (!options || typeof options !== 'object') {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Missing rename group params'
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_RENAME_GROUP, 'default', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_RENAME, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'Missing rename group params'
                 }, null);
@@ -1823,7 +1823,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: dataErrorMessage
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_RENAME_GROUP, 'default', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_RENAME, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: dataErrorMessage
                 }, null);
@@ -1838,7 +1838,7 @@ class AZStack {
             }).then((result) => {
 
             }).catch((error) => {
-                this.callUncall(this.uncallConstants.UNCALL_KEY_RENAME_GROUP, 'default', error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_RENAME, 'default', error, null);
             });
         });
     };
@@ -1852,13 +1852,13 @@ class AZStack {
                 payload: options
             });
 
-            this.addUncall(this.uncallConstants.UNCALL_KEY_CHANGE_ADMIN_GROUP, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_CHANGE_ADMIN_GROUP_RETURN);
+            this.addUncall(this.uncallConstants.UNCALL_KEY_GROUP_CHANGE_ADMIN, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_CHANGE_ADMIN_GROUP_RETURN);
 
             if (!options || typeof options !== 'object') {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Missing change admin group params'
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_ADMIN_GROUP, 'default', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_CHANGE_ADMIN, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'Missing change admin group params'
                 }, null);
@@ -1882,7 +1882,7 @@ class AZStack {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: dataErrorMessage
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_ADMIN_GROUP, 'default', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_CHANGE_ADMIN, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: dataErrorMessage
                 }, null);
@@ -1898,7 +1898,7 @@ class AZStack {
             }).then((result) => {
 
             }).catch((error) => {
-                this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_ADMIN_GROUP, 'default', error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_CHANGE_ADMIN, 'default', error, null);
             });
         });
     };
