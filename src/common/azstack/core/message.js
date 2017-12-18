@@ -392,7 +392,7 @@ class Message {
                 }
             } else if (options.chatType === this.chatConstants.CHAT_TYPE_GROUP) {
                 if (options.text) {
-                    newMessagePacketService = this.serviceTypes.MESSAGE_NEW_WITH_GROUP_TYPE_TEXT;
+                    newMessagePacketService = this.serviceTypes.MESSAGE_NEW_WITH_GROUP;
                     newMessagePacketBody = {
                         msgId: options.msgId,
                         group: options.chatId,
@@ -411,6 +411,34 @@ class Message {
                         created: currentTimeStamp,
                         modified: currentTimeStamp,
                         text: options.text
+                    };
+                }
+                if (options.sticker) {
+                    newMessagePacketService = this.serviceTypes.MESSAGE_NEW_WITH_GROUP;
+                    newMessagePacketBody = {
+                        msgId: options.msgId,
+                        group: options.chatId,
+                        imgName: options.sticker.name,
+                        catId: options.sticker.catId,
+                        url: options.sticker.url
+                    };
+                    let currentTimeStamp = new Date().getTime();
+                    newMessageObj = {
+                        chatType: options.chatType,
+                        chatId: options.chatId,
+                        senderId: 0,
+                        receiverId: options.chatId,
+                        msgId: options.msgId,
+                        type: this.chatConstants.MESSAGE_TYPE_STICKER,
+                        status: this.chatConstants.MESSAGE_STATUS_SENT,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
+                        created: currentTimeStamp,
+                        modified: currentTimeStamp,
+                        sticker: {
+                            name: options.sticker.name,
+                            catId: options.sticker.catId,
+                            url: options.sticker.url
+                        }
                     };
                 }
             }

@@ -308,7 +308,7 @@ class AZStack {
                     this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, msgId, error, null);
                 });
                 break;
-            case this.serviceTypes.MESSAGE_NEW_WITH_GROUP_TYPE_TEXT:
+            case this.serviceTypes.MESSAGE_NEW_WITH_GROUP:
                 this.Message.receiveNewMessageSent(body).then((result) => {
                     this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, result.msgId, null, {});
                 }).catch((error) => {

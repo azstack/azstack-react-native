@@ -44,6 +44,7 @@ class AppMain extends React.Component {
         this.newMessageWithUserTypeSticker = this.newMessageWithUserTypeSticker.bind(this);
         this.newMessageWithUserTypeFile = this.newMessageWithUserTypeFile.bind(this);
         this.newMessageWithGroupTypeText = this.newMessageWithGroupTypeText.bind(this);
+        this.newMessageWithGroupTypeSticker = this.newMessageWithGroupTypeSticker.bind(this);
 
         this.changeMessageStatusDeliveredWithUser = this.changeMessageStatusDeliveredWithUser.bind(this);
         this.changeMessageStatusSeenWithUser = this.changeMessageStatusSeenWithUser.bind(this);
@@ -196,6 +197,17 @@ class AppMain extends React.Component {
             text: 'text'
         }).then(() => { }).catch(() => { });
     };
+    newMessageWithGroupTypeSticker() {
+        this.AZStack.newMessage({
+            chatType: this.AZStack.chatConstants.CHAT_TYPE_GROUP,
+            chatId: 7436,
+            sticker: {
+                name: '002.png',
+                catId: 1,
+                url: 'http://azstack.com/api/public_html/sticker/1/002.png'
+            }
+        }).then(() => { }).catch(() => { });
+    };
 
     changeMessageStatusDeliveredWithUser() {
         this.AZStack.changeMessageStatus({
@@ -333,6 +345,7 @@ class AppMain extends React.Component {
                     <Button onPress={this.newMessageWithUserTypeSticker} title="New message with user type sticker" />
                     <Button onPress={this.newMessageWithUserTypeFile} title="New message with user type file" />
                     <Button onPress={this.newMessageWithGroupTypeText} title="New message with group type text" />
+                    <Button onPress={this.newMessageWithGroupTypeSticker} title="New message with group type sticker" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.changeMessageStatusDeliveredWithUser} title="Change message status delivered with user" />
                     <Button onPress={this.changeMessageStatusSeenWithUser} title="Change message status seen with user" />
