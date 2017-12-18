@@ -45,6 +45,7 @@ class AppMain extends React.Component {
         this.newMessageWithUserTypeFile = this.newMessageWithUserTypeFile.bind(this);
         this.newMessageWithGroupTypeText = this.newMessageWithGroupTypeText.bind(this);
         this.newMessageWithGroupTypeSticker = this.newMessageWithGroupTypeSticker.bind(this);
+        this.newMessageWithGroupTypeFile = this.newMessageWithGroupTypeFile.bind(this);
 
         this.changeMessageStatusDeliveredWithUser = this.changeMessageStatusDeliveredWithUser.bind(this);
         this.changeMessageStatusSeenWithUser = this.changeMessageStatusSeenWithUser.bind(this);
@@ -208,6 +209,18 @@ class AppMain extends React.Component {
             }
         }).then(() => { }).catch(() => { });
     };
+    newMessageWithGroupTypeFile() {
+        this.AZStack.newMessage({
+            chatType: this.AZStack.chatConstants.CHAT_TYPE_GROUP,
+            chatId: 7436,
+            file: {
+                name: 'logo.png',
+                length: 5183,
+                type: this.AZStack.chatConstants.MESSAGE_FILE_TYPE_IMAGE,
+                url: 'https://azstack.com/static/images/logo.png'
+            }
+        }).then(() => { }).catch(() => { });
+    };
 
     changeMessageStatusDeliveredWithUser() {
         this.AZStack.changeMessageStatus({
@@ -346,6 +359,7 @@ class AppMain extends React.Component {
                     <Button onPress={this.newMessageWithUserTypeFile} title="New message with user type file" />
                     <Button onPress={this.newMessageWithGroupTypeText} title="New message with group type text" />
                     <Button onPress={this.newMessageWithGroupTypeSticker} title="New message with group type sticker" />
+                    <Button onPress={this.newMessageWithGroupTypeFile} title="New message with group type file" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.changeMessageStatusDeliveredWithUser} title="Change message status delivered with user" />
                     <Button onPress={this.changeMessageStatusSeenWithUser} title="Change message status seen with user" />

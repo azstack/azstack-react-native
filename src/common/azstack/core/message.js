@@ -460,6 +460,36 @@ class Message {
                         }
                     };
                 }
+                else if (options.file) {
+                    newMessagePacketService = this.serviceTypes.MESSAGE_NEW_WITH_GROUP;
+                    newMessagePacketBody = {
+                        msgId: options.msgId,
+                        group: options.chatId,
+                        fileName: options.file.name,
+                        fileLength: options.file.length,
+                        type: options.file.type,
+                        url: options.file.url
+                    };
+                    let currentTimeStamp = new Date().getTime();
+                    newMessageObj = {
+                        chatType: options.chatType,
+                        chatId: options.chatId,
+                        senderId: 0,
+                        receiverId: options.chatId,
+                        msgId: options.msgId,
+                        type: this.chatConstants.MESSAGE_TYPE_FILE,
+                        status: this.chatConstants.MESSAGE_STATUS_SENT,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
+                        created: currentTimeStamp,
+                        modified: currentTimeStamp,
+                        file: {
+                            name: options.file.name,
+                            length: options.file.length,
+                            type: options.file.type,
+                            url: options.file.url
+                        }
+                    };
+                }
             }
 
             const newMessagePacket = {
