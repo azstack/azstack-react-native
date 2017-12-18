@@ -107,6 +107,11 @@ class Conversation {
                         } else if (conversation.lastMsg.msgType === 3) {
                             modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_STICKER;
                             modifiedConversation.lastMessage.sticker = {};
+                        } else {
+                            modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_FILE;
+                            modifiedConversation.lastMessage.file = {
+                                type: conversation.lastMsg.msgType
+                            };
                         }
                         break;
                     case this.serviceTypes.ON_GROUP_CREATED:

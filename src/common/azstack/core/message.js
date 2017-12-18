@@ -118,6 +118,14 @@ class Message {
                                 catId: message.catId,
                                 url: message.url
                             };
+                        } else if (message.fileName) {
+                            unreadMessage.type = this.chatConstants.MESSAGE_TYPE_FILE;
+                            unreadMessage.file = {
+                                name: message.fileName,
+                                length: message.fileLength,
+                                type: message.type,
+                                url: message.url
+                            };
                         }
                         break;
                     case this.serviceTypes.ON_GROUP_CREATED:
@@ -271,6 +279,14 @@ class Message {
                             modifiedMessage.sticker = {
                                 name: message.imgName,
                                 catId: message.catId,
+                                url: message.url
+                            };
+                        } else if (message.fileName) {
+                            modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_FILE;
+                            modifiedMessage.file = {
+                                name: message.fileName,
+                                length: message.fileLength,
+                                type: message.type,
                                 url: message.url
                             };
                         }
