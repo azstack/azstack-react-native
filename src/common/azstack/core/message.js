@@ -108,8 +108,18 @@ class Message {
                             url: message.url
                         };
                     case this.serviceTypes.MESSAGE_HAS_NEW_WITH_GROUP:
+                    if (message.msg) {
                         unreadMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
                         unreadMessage.text = message.msg;
+                    }
+                    if (message.imgName) {
+                        unreadMessage.type = this.chatConstants.MESSAGE_TYPE_STICKER;
+                        unreadMessage.sticker = {
+                            name: message.imgName,
+                            catId: message.catId,
+                            url: message.url
+                        };
+                    }
                         break;
                     case this.serviceTypes.ON_GROUP_CREATED:
                         unreadMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_CREATED;
@@ -254,8 +264,18 @@ class Message {
                             url: message.url
                         };
                     case this.serviceTypes.MESSAGE_HAS_NEW_WITH_GROUP:
-                        modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
-                        modifiedMessage.text = message.msg;
+                        if (message.msg) {
+                            modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
+                            modifiedMessage.text = message.msg;
+                        }
+                        if (message.imgName) {
+                            modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_STICKER;
+                            modifiedMessage.sticker = {
+                                name: message.imgName,
+                                catId: message.catId,
+                                url: message.url
+                            };
+                        }
                         break;
                     case this.serviceTypes.ON_GROUP_CREATED:
                         modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_CREATED;
@@ -416,6 +436,7 @@ class Message {
                 if (options.sticker) {
                     newMessagePacketService = this.serviceTypes.MESSAGE_NEW_WITH_GROUP;
                     newMessagePacketBody = {
+                        type: 3,
                         msgId: options.msgId,
                         group: options.chatId,
                         imgName: options.sticker.name,

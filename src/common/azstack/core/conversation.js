@@ -101,8 +101,14 @@ class Conversation {
                             type: conversation.lastMsg.msgType
                         };
                     case this.serviceTypes.MESSAGE_HAS_NEW_WITH_GROUP:
-                        modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
-                        modifiedConversation.lastMessage.text = conversation.lastMsg.msg;
+                        if (conversation.lastMsg.msg) {
+                            modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
+                            modifiedConversation.lastMessage.text = conversation.lastMsg.msg;
+                        }
+                        if (conversation.lastMsg.msgType === 3) {
+                            modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_STICKER;
+                            modifiedConversation.lastMessage.sticker = {};
+                        }
                         break;
                     case this.serviceTypes.ON_GROUP_CREATED:
                         modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_CREATED;
