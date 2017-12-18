@@ -911,6 +911,14 @@ class Message {
                     receiverId: 0
                 };
             }
+            if (options.chatType === this.chatConstants.CHAT_TYPE_GROUP) {
+                typing = {
+                    chatType: this.chatConstants.CHAT_TYPE_GROUP,
+                    chatId: options.body.group,
+                    senderId: options.body.from,
+                    receiverId: options.body.group
+                };
+            }
 
             resolve(typing);
         });

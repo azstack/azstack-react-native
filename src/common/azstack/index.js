@@ -441,6 +441,16 @@ class AZStack {
                     }
                 }).catch();
                 break;
+            case this.serviceTypes.MESSAGE_TYPING_WITH_GROUP:
+                this.Message.receiveTyping({
+                    chatType: this.chatConstants.CHAT_TYPE_GROUP,
+                    body: body
+                }).then((result) => {
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_TYPING] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_TYPING](null, result);
+                    }
+                }).catch();
+                break;
 
             case this.serviceTypes.USER_GET_INFO_BY_IDS:
             case this.serviceTypes.USER_GET_INFO_BY_USERNAMES:
