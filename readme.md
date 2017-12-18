@@ -47,6 +47,7 @@
     * [7.1. Get list](#71-get-list)
         * [7.1.1 Get unread messages](#711-get-unread-messages)
         * [7.1.2 Get modified messages](#712-get-modified-messages)
+        * [7.1.3 Get modified files](#713-get-modified-files)
     * [7.2. Sending](#72-sending)
         * [7.2.1. New message](#721-new-message)
         * [7.2.2. Change message status](#722-change-message-status)
@@ -982,6 +983,73 @@ this.AZStack.getModifiedMessages({
 >   - adminChanged: admin changed data
 >       - groupId: id of group
 >       - newAdminId: new admin id
+
+#### 7.1.3 Get modified files
+
+```javascript 
+this.AZStack.getModifiedFiles({
+    lastCreated: new Date().getTime(),
+    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatId: 12345
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.getModifiedFiles({
+    lastCreated: new Date().getTime(),
+    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatId: 12345
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.onGetModifiedFilesReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStack.getModifiedFiles({
+    lastCreated: new Date().getTime(),
+    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatId: 12345
+});
+```
+#### params
+> - lastCreated(required): last created date time
+> - chatType(optional): chat type
+> - chatId(optional): chatId
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - done: done or not
+> - list: modified files list
+>   - chatType: chat type
+>   - chatId: chat id
+>   - senderId: id of sender
+>   - receiverId: id of receiverId
+>   - msgId: id of message
+>   - type: type of message
+>   - status: status of message
+>   - deleted: message deleted
+>   - created: created time
+>   - modified: modified time
+>   - file: file of message
+>       - name: name
+>       - length: length
+>       - type: type
+>       - url: url
 
 ### 7.2. Sending
 

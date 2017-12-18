@@ -22,6 +22,7 @@ export const DELEGATE_ON_GET_MODIFIED_CONVERSATIONS_RETURN = 'onGetModifiedConve
 
 export const DELEGATE_ON_GET_UNREAD_MESSAGES_RETURN = 'onGetUnreadMessagesReturn';
 export const DELEGATE_ON_GET_MODIFIED_MESSAGES_RETURN = 'onGetModifiedMessagesReturn';
+export const DELEGATE_ON_GET_MODIFIED_FILES_RETURN = 'onGetModifiedFilesReturn';
 
 export const DELEGATE_ON_NEW_MESSAGE_RETURN = 'onNewMessageReturn';
 

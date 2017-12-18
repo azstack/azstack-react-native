@@ -39,6 +39,9 @@ class AppMain extends React.Component {
         this.getModifiedMessagesTypeUser = this.getModifiedMessagesTypeUser.bind(this);
         this.getUnreadMessagesTypeGroup = this.getUnreadMessagesTypeGroup.bind(this);
         this.getModifiedMessagesTypeGroup = this.getModifiedMessagesTypeGroup.bind(this);
+        this.getModifiedFilesAll = this.getModifiedFilesAll.bind(this);
+        this.getModifiedFilesOfUser = this.getModifiedFilesOfUser.bind(this);
+        this.getModifiedFilesOfGroup = this.getModifiedFilesOfGroup.bind(this);
 
         this.newMessageWithUserTypeText = this.newMessageWithUserTypeText.bind(this);
         this.newMessageWithUserTypeSticker = this.newMessageWithUserTypeSticker.bind(this);
@@ -159,6 +162,25 @@ class AppMain extends React.Component {
     getModifiedMessagesTypeGroup() {
         this.AZStack.getModifiedMessages({
             page: 1,
+            lastCreated: new Date().getTime(),
+            chatType: this.AZStack.chatConstants.CHAT_TYPE_GROUP,
+            chatId: 7436
+        }).then(() => { }).catch(() => { });
+    };
+    getModifiedFilesAll() {
+        this.AZStack.getModifiedFiles({
+            lastCreated: new Date().getTime()
+        }).then(() => { }).catch(() => { });
+    };
+    getModifiedFilesOfUser() {
+        this.AZStack.getModifiedFiles({
+            lastCreated: new Date().getTime(),
+            chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+            chatId: 387212
+        }).then(() => { }).catch(() => { });
+    };
+    getModifiedFilesOfGroup() {
+        this.AZStack.getModifiedFiles({
             lastCreated: new Date().getTime(),
             chatType: this.AZStack.chatConstants.CHAT_TYPE_GROUP,
             chatId: 7436
@@ -392,6 +414,9 @@ class AppMain extends React.Component {
                     <Button onPress={this.getModifiedMessagesTypeUser} title="Get modified messages type user" />
                     <Button onPress={this.getUnreadMessagesTypeGroup} title="Get unread messages type group" />
                     <Button onPress={this.getModifiedMessagesTypeGroup} title="Get modified messages type group" />
+                    <Button onPress={this.getModifiedFilesAll} title="Get modified files all" />
+                    <Button onPress={this.getModifiedFilesOfUser} title="Get modified files of user" />
+                    <Button onPress={this.getModifiedFilesOfGroup} title="Get modified files of group" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.newMessageWithUserTypeText} title="New message with user type text" />
                     <Button onPress={this.newMessageWithUserTypeSticker} title="New message with user type sticker" />

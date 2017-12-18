@@ -298,6 +298,20 @@ class AZStack {
                     this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_MESSAGES, 'default', error, null);
                 });
                 break;
+            case this.serviceTypes.MESSAGE_GET_LIST_MODIFIED_FILES:
+                this.Message.receiveModifiedFiles({
+                    userId: this.authenticatedUser.userId,
+                    body: body
+                }).then((result) => {
+                    if (result.done === 1) {
+                        this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_FILES, 'default', null, result);
+                    } else {
+                        this.addUncallTemporary(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_FILES, 'default', 'list', result, this.uncallConstants.UNCALL_TEMPORARY_TYPE_ARRAY);
+                    }
+                }).catch((error) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_FILES, 'default', error, null);
+                });
+                break;
 
             case this.serviceTypes.MESSAGE_NEW_WITH_USER_TYPE_TEXT:
                 this.Message.receiveNewMessageSent(body).then((result) => {
@@ -1140,6 +1154,86 @@ class AZStack {
                 chatId: options.chatId
             }).then().catch((error) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_MESSAGES, 'default', error, null);
+            });
+        });
+    };
+    getModifiedFiles(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Get modified files'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Get modified files params',
+                payload: options
+            });
+
+            this.addUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_FILES, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_GET_MODIFIED_FILES_RETURN);
+
+            if (!options || typeof options !== 'object') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Missing modified files params'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_FILES, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'Missing modified files params'
+                }, null);
+                return;
+            }
+
+            let dataErrorMessage = this.Validator.check([{
+                name: 'lastCreated',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.lastCreated,
+                notEqual: 0
+            }, {
+                name: 'chatType',
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.chatType,
+                in: [this.chatConstants.CHAT_TYPE_USER, this.chatConstants.CHAT_TYPE_GROUP]
+            }, {
+                name: 'chatId',
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.chatId,
+                notEqual: 0
+            }]);
+            if (dataErrorMessage) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: dataErrorMessage
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_FILES, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: dataErrorMessage
+                }, null);
+                return;
+            }
+            if (options.chatType && !options.chatId) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'chatId is required'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_FILES, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'chatId is required'
+                }, null);
+                return;
+            }
+            if (options.chatId && !options.chatType) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'chatType is required'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_FILES, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'chatType is required'
+                }, null);
+                return;
+            }
+
+            this.Message.sendGetModifiedFiles({
+                lastCreated: options.lastCreated,
+                chatType: options.chatType,
+                chatId: options.chatId
+            }).then().catch((error) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_FILES, 'default', error, null);
             });
         });
     };

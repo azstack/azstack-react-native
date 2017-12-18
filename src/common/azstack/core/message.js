@@ -335,6 +335,90 @@ class Message {
             resolve(modifiedMessages);
         });
     };
+    sendGetModifiedFiles(options) {
+        return new Promise((resolve, reject) => {
+
+            const getModifiedMessagesPacket = {
+                service: this.serviceTypes.MESSAGE_GET_LIST_MODIFIED_FILES,
+                body: JSON.stringify({
+                    lastCreated: options.lastCreated,
+                    type: options.chatType,
+                    chatId: options.chatId
+                })
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send get modified files packet'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Get modified files packet',
+                payload: getModifiedMessagesPacket
+            });
+            this.sendPacketFunction(getModifiedMessagesPacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send get modified files packet successfully'
+                });
+                resolve();
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send get modified files data, get modified files fail'
+                });
+                reject({
+                    code: error.code,
+                    message: 'Cannot send get modified files data, get modified files fail'
+                });
+            });
+        });
+    };
+    receiveModifiedFiles(options) {
+        return new Promise((resolve, reject) => {
+            if (!options.body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect modified files list, ignored'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Cannot detect modified files list, get modified files fail'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got modified files list'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Modified files list data',
+                payload: options.body
+            });
+
+            modifiedfiles = {
+                done: options.body.done,
+                list: []
+            };
+            options.body.list.map((file) => {
+                let modifiedfile = {
+                    chatType: file.chatType,
+                    chatId: file.chatType === this.chatConstants.CHAT_TYPE_GROUP ? file.group : (file.senderId === options.userId ? file.receiverId : file.senderId),
+                    senderId: file.senderId,
+                    receiverId: file.receiverId,
+                    msgId: file.msgId,
+                    type: this.chatConstants.MESSAGE_TYPE_FILE,
+                    status: file.status,
+                    deleted: file.deleted,
+                    created: file.created,
+                    modified: file.modified,
+                    file: {
+                        name: file.fileName,
+                        length: file.fileLength,
+                        type: file.type,
+                        url: file.url
+                    }
+                }
+                modifiedfiles.list.push(modifiedfile);
+            });
+
+            resolve(modifiedfiles);
+        });
+    };
 
     sendNewMessage(options) {
         return new Promise((resolve, reject) => {
