@@ -308,6 +308,15 @@ class AZStack {
                     this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, msgId, error, null);
                 });
                 break;
+            case this.serviceTypes.MESSAGE_NEW_WITH_GROUP_TYPE_TEXT:
+                this.Message.receiveNewMessageSent(body).then((result) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, result.msgId, null, {});
+                }).catch((error) => {
+                    let msgId = error.msgId;
+                    delete error.msgId;
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, msgId, error, null);
+                });
+                break;
 
             case this.serviceTypes.MESSAGE_HAS_NEW_WITH_USER_TYPE_TEXT:
                 this.Message.receiveHasNewMessage({

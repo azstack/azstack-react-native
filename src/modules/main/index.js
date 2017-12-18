@@ -43,6 +43,7 @@ class AppMain extends React.Component {
         this.newMessageWithUserTypeText = this.newMessageWithUserTypeText.bind(this);
         this.newMessageWithUserTypeSticker = this.newMessageWithUserTypeSticker.bind(this);
         this.newMessageWithUserTypeFile = this.newMessageWithUserTypeFile.bind(this);
+        this.newMessageWithGroupTypeText = this.newMessageWithGroupTypeText.bind(this);
 
         this.changeMessageStatusDeliveredWithUser = this.changeMessageStatusDeliveredWithUser.bind(this);
         this.changeMessageStatusSeenWithUser = this.changeMessageStatusSeenWithUser.bind(this);
@@ -188,6 +189,13 @@ class AppMain extends React.Component {
             }
         }).then(() => { }).catch(() => { });
     };
+    newMessageWithGroupTypeText() {
+        this.AZStack.newMessage({
+            chatType: this.AZStack.chatConstants.CHAT_TYPE_GROUP,
+            chatId: 7436,
+            text: 'text'
+        }).then(() => { }).catch(() => { });
+    };
 
     changeMessageStatusDeliveredWithUser() {
         this.AZStack.changeMessageStatus({
@@ -324,6 +332,7 @@ class AppMain extends React.Component {
                     <Button onPress={this.newMessageWithUserTypeText} title="New message with user type text" />
                     <Button onPress={this.newMessageWithUserTypeSticker} title="New message with user type sticker" />
                     <Button onPress={this.newMessageWithUserTypeFile} title="New message with user type file" />
+                    <Button onPress={this.newMessageWithGroupTypeText} title="New message with group type text" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.changeMessageStatusDeliveredWithUser} title="Change message status delivered with user" />
                     <Button onPress={this.changeMessageStatusSeenWithUser} title="Change message status seen with user" />
