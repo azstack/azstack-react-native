@@ -349,8 +349,7 @@ class Message {
                         modified: currentTimeStamp,
                         text: options.text
                     };
-                }
-                else if (options.sticker) {
+                } else if (options.sticker) {
                     newMessagePacketService = this.serviceTypes.MESSAGE_WITH_USER_TYPE_STICKER;
                     newMessagePacketBody = {
                         id: options.msgId,
@@ -377,8 +376,7 @@ class Message {
                             url: options.sticker.url
                         }
                     };
-                }
-                else if (options.file) {
+                } else if (options.file) {
                     newMessagePacketService = this.serviceTypes.MESSAGE_WITH_USER_TYPE_FILE;
                     newMessagePacketBody = {
                         id: options.msgId,
@@ -430,8 +428,7 @@ class Message {
                         modified: currentTimeStamp,
                         text: options.text
                     };
-                }
-                else if (options.sticker) {
+                } else if (options.sticker) {
                     newMessagePacketService = this.serviceTypes.MESSAGE_NEW_WITH_GROUP;
                     newMessagePacketBody = {
                         type: 3,
@@ -459,8 +456,7 @@ class Message {
                             url: options.sticker.url
                         }
                     };
-                }
-                else if (options.file) {
+                } else if (options.file) {
                     newMessagePacketService = this.serviceTypes.MESSAGE_NEW_WITH_GROUP;
                     newMessagePacketBody = {
                         msgId: options.msgId,
@@ -662,6 +658,25 @@ class Message {
                         sticker: {
                             name: options.body.imgName,
                             catId: options.body.catId,
+                            url: options.body.url
+                        }
+                    };
+                } else if (options.body.fileName) {
+                    newMessage = {
+                        chatType: this.chatConstants.CHAT_TYPE_GROUP,
+                        chatId: options.body.group,
+                        senderId: options.body.from,
+                        receiverId: options.body.group,
+                        msgId: options.body.msgId,
+                        type: this.chatConstants.MESSAGE_TYPE_FILE,
+                        status: this.chatConstants.MESSAGE_STATUS_SENT,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
+                        created: options.body.created,
+                        modified: options.body.created,
+                        file: {
+                            name: options.body.fileName,
+                            length: options.body.fileLength,
+                            type: options.body.type,
                             url: options.body.url
                         }
                     };
