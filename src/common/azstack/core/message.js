@@ -549,6 +549,23 @@ class Message {
                     };
                 }
             }
+            if (options.chatType === this.chatConstants.CHAT_TYPE_GROUP) {
+                if (options.messageType === this.chatConstants.MESSAGE_TYPE_TEXT) {
+                    newMessage = {
+                        chatType: this.chatConstants.CHAT_TYPE_GROUP,
+                        chatId: options.body.group,
+                        senderId: options.body.from,
+                        receiverId: options.body.group,
+                        msgId: options.body.msgId,
+                        type: this.chatConstants.MESSAGE_TYPE_TEXT,
+                        status: this.chatConstants.MESSAGE_STATUS_SENT,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
+                        created: options.body.created,
+                        modified: options.body.created,
+                        text: options.body.msg
+                    };
+                }
+            }
 
             resolve(newMessage);
         });

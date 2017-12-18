@@ -352,6 +352,17 @@ class AZStack {
                     }
                 }).catch();
                 break;
+            case this.serviceTypes.MESSAGE_HAS_NEW_WITH_GROUP_TYPE_TEXT:
+                this.Message.receiveHasNewMessage({
+                    chatType: this.chatConstants.CHAT_TYPE_GROUP,
+                    messageType: this.chatConstants.MESSAGE_TYPE_TEXT,
+                    body: body
+                }).then((result) => {
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_HAS_NEW_MESSAGE] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_HAS_NEW_MESSAGE](null, result);
+                    }
+                }).catch();
+                break;
 
             case this.serviceTypes.MESSAGE_FROM_ME_WITH_USER:
                 this.Message.receiveMessageFromMe({
