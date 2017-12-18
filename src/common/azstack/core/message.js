@@ -107,7 +107,7 @@ class Message {
                             type: message.type,
                             url: message.url
                         };
-                    case this.serviceTypes.MESSAGE_HAS_NEW_WITH_GROUP_TYPE_TEXT:
+                    case this.serviceTypes.MESSAGE_HAS_NEW_WITH_GROUP:
                         unreadMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
                         unreadMessage.text = message.msg;
                         break;
@@ -253,7 +253,7 @@ class Message {
                             type: message.type,
                             url: message.url
                         };
-                    case this.serviceTypes.MESSAGE_HAS_NEW_WITH_GROUP_TYPE_TEXT:
+                    case this.serviceTypes.MESSAGE_HAS_NEW_WITH_GROUP:
                         modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
                         modifiedMessage.text = message.msg;
                         break;
@@ -586,7 +586,7 @@ class Message {
                 }
             }
             if (options.chatType === this.chatConstants.CHAT_TYPE_GROUP) {
-                if (options.messageType === this.chatConstants.MESSAGE_TYPE_TEXT) {
+                if (options.body.msg) {
                     newMessage = {
                         chatType: this.chatConstants.CHAT_TYPE_GROUP,
                         chatId: options.body.group,
@@ -599,6 +599,25 @@ class Message {
                         created: options.body.created,
                         modified: options.body.created,
                         text: options.body.msg
+                    };
+                }
+                if (options.body.imgName) {
+                    newMessage = {
+                        chatType: this.chatConstants.CHAT_TYPE_GROUP,
+                        chatId: options.body.group,
+                        senderId: options.body.from,
+                        receiverId: options.body.group,
+                        msgId: options.body.msgId,
+                        type: this.chatConstants.MESSAGE_TYPE_STICKER,
+                        status: this.chatConstants.MESSAGE_STATUS_SENT,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
+                        created: options.body.created,
+                        modified: options.body.created,
+                        sticker: {
+                            name: options.body.imgName,
+                            catId: options.body.catId,
+                            url: options.body.url
+                        }
                     };
                 }
             }
