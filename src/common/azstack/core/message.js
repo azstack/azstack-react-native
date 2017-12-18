@@ -107,6 +107,10 @@ class Message {
                             type: message.type,
                             url: message.url
                         };
+                    case this.serviceTypes.MESSAGE_HAS_NEW_WITH_GROUP_TYPE_TEXT:
+                        unreadMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
+                        unreadMessage.text = message.msg;
+                        break;
                     case this.serviceTypes.ON_GROUP_CREATED:
                         unreadMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_CREATED;
                         unreadMessage.createdGroup = {
@@ -249,6 +253,10 @@ class Message {
                             type: message.type,
                             url: message.url
                         };
+                    case this.serviceTypes.MESSAGE_HAS_NEW_WITH_GROUP_TYPE_TEXT:
+                        modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
+                        modifiedMessage.text = message.msg;
+                        break;
                     case this.serviceTypes.ON_GROUP_CREATED:
                         modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_CREATED;
                         modifiedMessage.createdGroup = {
