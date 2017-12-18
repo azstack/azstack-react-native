@@ -537,7 +537,9 @@ class AZStack {
                         this.addUncallTemporary(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, result.purpose, 'list', result, this.uncallConstants.UNCALL_TEMPORARY_TYPE_ARRAY);
                     }
                 }).catch((error) => {
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, 'default', error, null);
+                    let requestKey = error.purpose;
+                    delete error.purpose;
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_USERS_INFORMATION, requestKey, error, null);
                 });
                 break;
 

@@ -69,6 +69,7 @@ class User {
                     message: 'Server response with error, get users information fail'
                 });
                 reject({
+                    purpose: body.purpose,
                     code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
                     message: 'Server response with error, get users information fail'
                 });
