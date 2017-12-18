@@ -51,6 +51,7 @@ class AppMain extends React.Component {
         this.deleteMessageWithUser = this.deleteMessageWithUser.bind(this);
 
         this.sendTypingWithUser = this.sendTypingWithUser.bind(this);
+        this.sendTypingWithGroup = this.sendTypingWithGroup.bind(this);
 
         this.getUsersInfomationWithId = this.getUsersInfomationWithId.bind(this);
         this.getUsersInfomationWithAzstackUserId = this.getUsersInfomationWithAzstackUserId.bind(this);
@@ -231,6 +232,12 @@ class AppMain extends React.Component {
             chatId: 387212
         }).then(() => { }).catch(() => { });
     };
+    sendTypingWithGroup() {
+        this.AZStack.sendTyping({
+            chatType: this.AZStack.chatConstants.CHAT_TYPE_GROUP,
+            chatId: 7436
+        }).then(() => { }).catch(() => { });
+    };
 
     getUsersInfomationWithId() {
         this.AZStack.getUsersInformation({
@@ -325,6 +332,7 @@ class AppMain extends React.Component {
                     <Button onPress={this.deleteMessageWithUser} title="Delete message with user" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.sendTypingWithUser} title="Send typing with user" />
+                    <Button onPress={this.sendTypingWithGroup} title="Send typing with group" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.getUsersInfomationWithId} title="Get users onformation with id" />
                     <Button onPress={this.getUsersInfomationWithAzstackUserId} title="Get users onformation with azStackUserId" />

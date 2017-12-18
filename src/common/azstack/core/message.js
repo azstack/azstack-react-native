@@ -847,10 +847,13 @@ class Message {
                     to: options.chatId
                 };
             } else if (options.chatType === this.chatConstants.CHAT_TYPE_GROUP) {
-
+                typingPacketService = this.serviceTypes.MESSAGE_TYPING_WITH_GROUP;
+                typingPacketBody = {
+                    group: options.chatId
+                };
             }
 
-            const newMessagePacket = {
+            const typingPacket = {
                 service: typingPacketService,
                 body: JSON.stringify(typingPacketBody)
             };
@@ -859,9 +862,9 @@ class Message {
             });
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
                 message: 'Typing packet',
-                payload: newMessagePacket
+                payload: typingPacket
             });
-            this.sendPacketFunction(newMessagePacket).then(() => {
+            this.sendPacketFunction(typingPacket).then(() => {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                     message: 'Send typing packet successfully'
                 });
