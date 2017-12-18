@@ -108,18 +108,17 @@ class Message {
                             url: message.url
                         };
                     case this.serviceTypes.MESSAGE_HAS_NEW_WITH_GROUP:
-                    if (message.msg) {
-                        unreadMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
-                        unreadMessage.text = message.msg;
-                    }
-                    if (message.imgName) {
-                        unreadMessage.type = this.chatConstants.MESSAGE_TYPE_STICKER;
-                        unreadMessage.sticker = {
-                            name: message.imgName,
-                            catId: message.catId,
-                            url: message.url
-                        };
-                    }
+                        if (message.msg) {
+                            unreadMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
+                            unreadMessage.text = message.msg;
+                        } else if (message.imgName) {
+                            unreadMessage.type = this.chatConstants.MESSAGE_TYPE_STICKER;
+                            unreadMessage.sticker = {
+                                name: message.imgName,
+                                catId: message.catId,
+                                url: message.url
+                            };
+                        }
                         break;
                     case this.serviceTypes.ON_GROUP_CREATED:
                         unreadMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_CREATED;
@@ -267,8 +266,7 @@ class Message {
                         if (message.msg) {
                             modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
                             modifiedMessage.text = message.msg;
-                        }
-                        if (message.imgName) {
+                        } else if (message.imgName) {
                             modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_STICKER;
                             modifiedMessage.sticker = {
                                 name: message.imgName,
@@ -352,7 +350,7 @@ class Message {
                         text: options.text
                     };
                 }
-                if (options.sticker) {
+                else if (options.sticker) {
                     newMessagePacketService = this.serviceTypes.MESSAGE_WITH_USER_TYPE_STICKER;
                     newMessagePacketBody = {
                         id: options.msgId,
@@ -380,7 +378,7 @@ class Message {
                         }
                     };
                 }
-                if (options.file) {
+                else if (options.file) {
                     newMessagePacketService = this.serviceTypes.MESSAGE_WITH_USER_TYPE_FILE;
                     newMessagePacketBody = {
                         id: options.msgId,
@@ -433,7 +431,7 @@ class Message {
                         text: options.text
                     };
                 }
-                if (options.sticker) {
+                else if (options.sticker) {
                     newMessagePacketService = this.serviceTypes.MESSAGE_NEW_WITH_GROUP;
                     newMessagePacketBody = {
                         type: 3,
@@ -565,8 +563,7 @@ class Message {
                         modified: options.body.time,
                         text: options.body.msg
                     };
-                }
-                if (options.messageType === this.chatConstants.MESSAGE_TYPE_STICKER) {
+                } else if (options.messageType === this.chatConstants.MESSAGE_TYPE_STICKER) {
                     newMessage = {
                         chatType: this.chatConstants.CHAT_TYPE_USER,
                         chatId: options.body.from,
@@ -584,8 +581,7 @@ class Message {
                             url: options.body.url
                         }
                     };
-                }
-                if (options.messageType === this.chatConstants.MESSAGE_TYPE_FILE) {
+                } else if (options.messageType === this.chatConstants.MESSAGE_TYPE_FILE) {
                     newMessage = {
                         chatType: this.chatConstants.CHAT_TYPE_USER,
                         chatId: options.body.from,
@@ -606,7 +602,7 @@ class Message {
                     };
                 }
             }
-            if (options.chatType === this.chatConstants.CHAT_TYPE_GROUP) {
+            else if (options.chatType === this.chatConstants.CHAT_TYPE_GROUP) {
                 if (options.body.msg) {
                     newMessage = {
                         chatType: this.chatConstants.CHAT_TYPE_GROUP,
@@ -621,8 +617,7 @@ class Message {
                         modified: options.body.created,
                         text: options.body.msg
                     };
-                }
-                if (options.body.imgName) {
+                } else if (options.body.imgName) {
                     newMessage = {
                         chatType: this.chatConstants.CHAT_TYPE_GROUP,
                         chatId: options.body.group,
@@ -685,8 +680,7 @@ class Message {
                         modified: options.body.time,
                         text: options.body.msg
                     };
-                }
-                if (options.body.imgName) {
+                } else if (options.body.imgName) {
                     messageFromMe = {
                         chatType: this.chatConstants.CHAT_TYPE_USER,
                         chatId: options.body.to,
@@ -704,8 +698,7 @@ class Message {
                             url: options.body.url
                         }
                     };
-                }
-                if (options.body.fileName) {
+                } else if (options.body.fileName) {
                     messageFromMe = {
                         chatType: this.chatConstants.CHAT_TYPE_USER,
                         chatId: options.body.to,
@@ -744,8 +737,7 @@ class Message {
                         to: options.chatId,
                         msgId: options.msgId
                     };
-                }
-                if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_SEEN) {
+                } else if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_SEEN) {
                     messageReportPacketService = this.serviceTypes.MESSAGE_STATUS_CHANGE_SEEN;
                     messageReportPacketBody = {
                         type: options.chatType,
@@ -753,8 +745,7 @@ class Message {
                         senderId: options.messageSenderId,
                         msgId: options.msgId
                     };
-                }
-                if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_CANCELLED) {
+                } else if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_CANCELLED) {
                     messageReportPacketService = this.serviceTypes.MESSAGE_STATUS_CHANGE_CANCELLED_WITH_USER;
                     messageReportPacketBody = {
                         type: options.chatType,
@@ -827,8 +818,7 @@ class Message {
                         msgId: options.body.msgId,
                         messageStatus: this.chatConstants.MESSAGE_STATUS_DELIVERED
                     };
-                }
-                if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_SEEN) {
+                } else if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_SEEN) {
                     if (options.body.r !== undefined && options.body.r !== this.errorCodes.CHANGE_STATUS_MESSAGE_SUCCESS_FROM_SERVER && options.body.r !== this.errorCodes.REQUEST_SUCCESS_FROM_SERVER) {
                         this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                             message: 'Server response with error, change message to seen fail'
@@ -849,8 +839,7 @@ class Message {
                         msgId: options.body.msgId,
                         messageStatus: this.chatConstants.MESSAGE_STATUS_SEEN
                     };
-                }
-                if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_CANCELLED) {
+                } else if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_CANCELLED) {
                     if (options.body.r !== undefined && options.body.r !== this.errorCodes.CHANGE_STATUS_MESSAGE_SUCCESS_FROM_SERVER && options.body.r !== this.errorCodes.REQUEST_SUCCESS_FROM_SERVER) {
                         this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                             message: 'Server response with error, change message to cancelled fail'
@@ -1024,8 +1013,7 @@ class Message {
                     senderId: options.body.from,
                     receiverId: 0
                 };
-            }
-            if (options.chatType === this.chatConstants.CHAT_TYPE_GROUP) {
+            } else if (options.chatType === this.chatConstants.CHAT_TYPE_GROUP) {
                 typing = {
                     chatType: this.chatConstants.CHAT_TYPE_GROUP,
                     chatId: options.body.group,

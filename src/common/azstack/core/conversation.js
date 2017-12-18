@@ -104,8 +104,7 @@ class Conversation {
                         if (conversation.lastMsg.msg) {
                             modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
                             modifiedConversation.lastMessage.text = conversation.lastMsg.msg;
-                        }
-                        if (conversation.lastMsg.msgType === 3) {
+                        } else if (conversation.lastMsg.msgType === 3) {
                             modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_STICKER;
                             modifiedConversation.lastMessage.sticker = {};
                         }
