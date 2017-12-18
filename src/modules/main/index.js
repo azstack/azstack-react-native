@@ -50,6 +50,9 @@ class AppMain extends React.Component {
         this.changeMessageStatusDeliveredWithUser = this.changeMessageStatusDeliveredWithUser.bind(this);
         this.changeMessageStatusSeenWithUser = this.changeMessageStatusSeenWithUser.bind(this);
         this.changeMessageStatusCancelledWithUser = this.changeMessageStatusCancelledWithUser.bind(this);
+        this.changeMessageStatusDeliveredWithGroup = this.changeMessageStatusDeliveredWithGroup.bind(this);
+        this.changeMessageStatusSeenWithGroup = this.changeMessageStatusSeenWithGroup.bind(this);
+        this.changeMessageStatusCancelledWithGroup = this.changeMessageStatusCancelledWithGroup.bind(this);
 
         this.deleteMessageWithUser = this.deleteMessageWithUser.bind(this);
 
@@ -249,6 +252,33 @@ class AppMain extends React.Component {
             msgId: 1512989141
         }).then(() => { }).catch(() => { });
     };
+    changeMessageStatusDeliveredWithGroup() {
+        this.AZStack.changeMessageStatus({
+            chatType: this.AZStack.chatConstants.CHAT_TYPE_GROUP,
+            chatId: 7436,
+            messageSenderId: 387212,
+            messageStatus: this.AZStack.chatConstants.MESSAGE_STATUS_DELIVERED,
+            msgId: 1513566057
+        }).then(() => { }).catch(() => { });
+    };
+    changeMessageStatusSeenWithGroup() {
+        this.AZStack.changeMessageStatus({
+            chatType: this.AZStack.chatConstants.CHAT_TYPE_GROUP,
+            chatId: 7436,
+            messageSenderId: 387212,
+            messageStatus: this.AZStack.chatConstants.MESSAGE_STATUS_SEEN,
+            msgId: 1513566057
+        }).then(() => { }).catch(() => { });
+    };
+    changeMessageStatusCancelledWithGroup() {
+        this.AZStack.changeMessageStatus({
+            chatType: this.AZStack.chatConstants.CHAT_TYPE_GROUP,
+            chatId: 7436,
+            messageSenderId: 381032,
+            messageStatus: this.AZStack.chatConstants.MESSAGE_STATUS_CANCELLED,
+            msgId: 1513584232
+        }).then(() => { }).catch(() => { });
+    };
 
     deleteMessageWithUser() {
         this.AZStack.deleteMessage({
@@ -364,6 +394,9 @@ class AppMain extends React.Component {
                     <Button onPress={this.changeMessageStatusDeliveredWithUser} title="Change message status delivered with user" />
                     <Button onPress={this.changeMessageStatusSeenWithUser} title="Change message status seen with user" />
                     <Button onPress={this.changeMessageStatusCancelledWithUser} title="Change message status cancelled with user" />
+                    <Button onPress={this.changeMessageStatusDeliveredWithGroup} title="Change message status delivered with group" />
+                    <Button onPress={this.changeMessageStatusSeenWithGroup} title="Change message status seen with group" />
+                    <Button onPress={this.changeMessageStatusCancelledWithGroup} title="Change message status cancelled with group" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.deleteMessageWithUser} title="Delete message with user" />
                     <Text>{'\n'}{'\n'}</Text>

@@ -413,7 +413,6 @@ class AZStack {
                     messageStatus: this.chatConstants.MESSAGE_STATUS_SEEN,
                     body: body
                 }).then((result) => {
-                    result.receiverId = this.authenticatedUser.userId;
                     let isReturn = result.isReturn;
                     delete result.isReturn;
                     if (!isReturn) {
@@ -432,6 +431,38 @@ class AZStack {
             case this.serviceTypes.MESSAGE_STATUS_CHANGE_CANCELLED_WITH_USER:
                 this.Message.receiveMessageStatusChanged({
                     chatType: this.chatConstants.CHAT_TYPE_USER,
+                    messageStatus: this.chatConstants.MESSAGE_STATUS_CANCELLED,
+                    body: body
+                }).then((result) => {
+                    let isReturn = result.isReturn;
+                    delete result.isReturn;
+                    if (!isReturn) {
+                        if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED] === 'function') {
+                            this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED](null, result);
+                        }
+                    } else {
+                        this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, this.chatConstants.MESSAGE_STATUS_CANCELLED + '_' + result.msgId, null, null);
+                    }
+                }).catch((error) => {
+                    let msgId = error.msgId;
+                    delete error.msgId;
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, this.chatConstants.MESSAGE_STATUS_CANCELLED + '_' + msgId, error, null);
+                });
+                break;
+            case this.serviceTypes.MESSAGE_STATUS_CHANGE_DELIVERED_WITH_GROUP:
+                this.Message.receiveMessageStatusChanged({
+                    chatType: this.chatConstants.CHAT_TYPE_GROUP,
+                    messageStatus: this.chatConstants.MESSAGE_STATUS_DELIVERED,
+                    body: body
+                }).then((result) => {
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED](null, result);
+                    }
+                }).catch();
+                break;
+            case this.serviceTypes.MESSAGE_STATUS_CHANGE_CANCELLED_WITH_GROUP:
+                this.Message.receiveMessageStatusChanged({
+                    chatType: this.chatConstants.CHAT_TYPE_GROUP,
                     messageStatus: this.chatConstants.MESSAGE_STATUS_CANCELLED,
                     body: body
                 }).then((result) => {

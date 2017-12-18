@@ -869,7 +869,30 @@ class Message {
                     };
                 }
             } else if (options.chatType === this.chatConstants.CHAT_TYPE_GROUP) {
-
+                if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_DELIVERED) {
+                    messageReportPacketService = this.serviceTypes.MESSAGE_STATUS_CHANGE_DELIVERED_WITH_GROUP;
+                    messageReportPacketBody = {
+                        group: options.chatId,
+                        msgId: options.msgId,
+                        msgSender: options.messageSenderId
+                    };
+                } else if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_SEEN) {
+                    messageReportPacketService = this.serviceTypes.MESSAGE_STATUS_CHANGE_SEEN;
+                    messageReportPacketBody = {
+                        type: options.chatType,
+                        chatId: options.chatId,
+                        senderId: options.messageSenderId,
+                        msgId: options.msgId
+                    };
+                } else if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_CANCELLED) {
+                    messageReportPacketService = this.serviceTypes.MESSAGE_STATUS_CHANGE_CANCELLED_WITH_GROUP;
+                    messageReportPacketBody = {
+                        type: options.chatType,
+                        chatId: options.chatId,
+                        group: options.chatId,
+                        msgId: options.msgId
+                    };
+                }
             }
 
             const changeMessageStatusPacket = {
@@ -949,7 +972,7 @@ class Message {
                         chatType: this.chatConstants.CHAT_TYPE_USER,
                         chatId: options.body.from,
                         senderId: options.body.from,
-                        receiverId: 0,
+                        receiverId: options.body.senderId,
                         msgId: options.body.msgId,
                         messageStatus: this.chatConstants.MESSAGE_STATUS_SEEN
                     };
@@ -972,6 +995,59 @@ class Message {
                         senderId: options.body.from,
                         receiverId: options.body.to,
                         msgId: options.body.id,
+                        messageStatus: this.chatConstants.MESSAGE_STATUS_CANCELLED
+                    };
+                }
+            } else if (options.chatType === this.chatConstants.CHAT_TYPE_GROUP) {
+                if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_DELIVERED) {
+                    onMessageStatusChanged = {
+                        chatType: this.chatConstants.CHAT_TYPE_GROUP,
+                        chatId: options.body.group,
+                        senderId: options.body.from,
+                        receiverId: options.body.group,
+                        msgId: options.body.msgId,
+                        messageStatus: this.chatConstants.MESSAGE_STATUS_DELIVERED
+                    };
+                } else if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_SEEN) {
+                    if (options.body.r !== undefined && options.body.r !== this.errorCodes.CHANGE_STATUS_MESSAGE_SUCCESS_FROM_SERVER && options.body.r !== this.errorCodes.REQUEST_SUCCESS_FROM_SERVER) {
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                            message: 'Server response with error, change message to seen fail'
+                        });
+                        reject({
+                            code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                            message: 'Server response with error, change message to seen fail',
+                            msgId: options.body.msgId
+                        });
+                        return;
+                    }
+                    onMessageStatusChanged = {
+                        isReturn: options.body.r === undefined ? false : true,
+                        chatType: this.chatConstants.CHAT_TYPE_GROUP,
+                        chatId: options.body.chatId,
+                        senderId: options.body.from,
+                        receiverId: options.body.chatId,
+                        msgId: options.body.msgId,
+                        messageStatus: this.chatConstants.MESSAGE_STATUS_SEEN
+                    };
+                } else if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_CANCELLED) {
+                    if (options.body.r !== undefined && options.body.r !== this.errorCodes.CHANGE_STATUS_MESSAGE_SUCCESS_FROM_SERVER && options.body.r !== this.errorCodes.REQUEST_SUCCESS_FROM_SERVER) {
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                            message: 'Server response with error, change message to cancelled fail'
+                        });
+                        reject({
+                            code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                            message: 'Server response with error, change message to cancelled fail',
+                            msgId: options.body.msgId
+                        });
+                        return;
+                    }
+                    onMessageStatusChanged = {
+                        isReturn: options.body.r === undefined ? false : true,
+                        chatType: this.chatConstants.CHAT_TYPE_GROUP,
+                        chatId: options.body.group,
+                        senderId: options.body.from,
+                        receiverId: options.body.group,
+                        msgId: options.body.msgId,
                         messageStatus: this.chatConstants.MESSAGE_STATUS_CANCELLED
                     };
                 }
