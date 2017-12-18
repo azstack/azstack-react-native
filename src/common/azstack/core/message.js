@@ -779,6 +779,59 @@ class Message {
                         }
                     };
                 }
+            } else if (options.chatType === this.chatConstants.CHAT_TYPE_GROUP) {
+                if (options.body.msg) {
+                    messageFromMe = {
+                        chatType: this.chatConstants.CHAT_TYPE_GROUP,
+                        chatId: options.body.group,
+                        senderId: options.body.from,
+                        receiverId: options.body.group,
+                        msgId: options.body.msgId,
+                        type: this.chatConstants.MESSAGE_TYPE_TEXT,
+                        status: this.chatConstants.MESSAGE_STATUS_SENT,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
+                        created: options.body.created,
+                        modified: options.body.created,
+                        text: options.body.msg
+                    };
+                } else if (options.body.imgName) {
+                    messageFromMe = {
+                        chatType: this.chatConstants.CHAT_TYPE_GROUP,
+                        chatId: options.body.group,
+                        senderId: options.body.from,
+                        receiverId: options.body.group,
+                        msgId: options.body.msgId,
+                        type: this.chatConstants.MESSAGE_TYPE_STICKER,
+                        status: this.chatConstants.MESSAGE_STATUS_SENT,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
+                        created: options.body.created,
+                        modified: options.body.created,
+                        sticker: {
+                            name: options.body.imgName,
+                            catId: options.body.catId,
+                            url: options.body.url
+                        }
+                    };
+                } else if (options.body.fileName) {
+                    messageFromMe = {
+                        chatType: this.chatConstants.CHAT_TYPE_GROUP,
+                        chatId: options.body.group,
+                        senderId: options.body.from,
+                        receiverId: options.body.group,
+                        msgId: options.body.msgId,
+                        type: this.chatConstants.MESSAGE_TYPE_FILE,
+                        status: this.chatConstants.MESSAGE_STATUS_SENT,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
+                        created: options.body.created,
+                        modified: options.body.created,
+                        file: {
+                            name: options.body.fileName,
+                            length: options.body.fileLength,
+                            type: options.body.type,
+                            url: options.body.url
+                        }
+                    };
+                }
             }
 
             resolve(messageFromMe);
