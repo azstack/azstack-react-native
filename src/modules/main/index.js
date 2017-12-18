@@ -55,6 +55,7 @@ class AppMain extends React.Component {
         this.changeMessageStatusCancelledWithGroup = this.changeMessageStatusCancelledWithGroup.bind(this);
 
         this.deleteMessageWithUser = this.deleteMessageWithUser.bind(this);
+        this.deleteMessageWithGroup = this.deleteMessageWithGroup.bind(this);
 
         this.sendTypingWithUser = this.sendTypingWithUser.bind(this);
         this.sendTypingWithGroup = this.sendTypingWithGroup.bind(this);
@@ -288,6 +289,14 @@ class AppMain extends React.Component {
             msgId: 1512987550
         }).then(() => { }).catch(() => { });
     };
+    deleteMessageWithGroup() {
+        this.AZStack.deleteMessage({
+            chatType: this.AZStack.chatConstants.CHAT_TYPE_GROUP,
+            chatId: 7436,
+            messageSenderId: 381032,
+            msgId: 1513571274
+        }).then(() => { }).catch(() => { });
+    };
 
     sendTypingWithUser() {
         this.AZStack.sendTyping({
@@ -399,6 +408,7 @@ class AppMain extends React.Component {
                     <Button onPress={this.changeMessageStatusCancelledWithGroup} title="Change message status cancelled with group" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.deleteMessageWithUser} title="Delete message with user" />
+                    <Button onPress={this.deleteMessageWithGroup} title="Delete message with group" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.sendTypingWithUser} title="Send typing with user" />
                     <Button onPress={this.sendTypingWithGroup} title="Send typing with group" />
