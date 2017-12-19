@@ -10,6 +10,101 @@ class Group {
         this.sendPacketFunction = options.sendPacketFunction;
     };
 
+    sendGetListGroups(options) {
+        return new Promise((resolve, reject) => {
+
+            let getGroupsPacketService = 0;
+            if (options.groupType === this.groupConstants.GROUP_TYPE_PRIVATE) {
+                getGroupsPacketService = this.serviceTypes.GROUP_GET_LIST_PRIVATE;
+            } else if (options.groupType === this.groupConstants.GROUP_TYPE_PUBLIC) {
+                getGroupsPacketService = this.serviceTypes.GROUP_GET_LIST_PUBLIC;
+            }
+            const getGroupsPacket = {
+                service: getGroupsPacketService,
+                body: JSON.stringify({})
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send get groups packet'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Get groups packet',
+                payload: getGroupsPacket
+            });
+            this.sendPacketFunction(getGroupsPacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send get groups packet successfully'
+                });
+                resolve();
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send get groups data, get groups fail'
+                });
+                reject({
+                    code: error.code,
+                    message: 'Cannot send get groups data, get groups fail'
+                });
+            });
+        });
+    };
+    receiveListGroups(options) {
+        return new Promise((resolve, reject) => {
+            if (!options.body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect groups list, ignored'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Cannot detect groups list, get groups fail'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got groups list'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Groups list data',
+                payload: options.body
+            });
+
+            let listGroups = {
+                list: []
+            };
+
+            if (options.groupType === this.groupConstants.GROUP_TYPE_PRIVATE) {
+                listGroups.done = this.listConstants.GET_LIST_DONE;
+                options.body.map((group) => {
+                    let privateGroup = {
+                        type: this.groupConstants.GROUP_TYPE_PRIVATE,
+                        groupId: group.groupId,
+                        name: group.name,
+                        adminId: group.admin,
+                        membersCount: group.members.length,
+                        isIn: this.groupConstants.GROUP_IS_IN,
+                        isAutojoin: this.groupConstants.GROUP_IS_AUTO_JOIN
+                    };
+                    listGroups.list.push(privateGroup);
+                });
+            } else if (options.groupType === this.groupConstants.GROUP_TYPE_PUBLIC) {
+                listGroups.done = options.body.done;
+                options.body.list.map((group) => {
+                    let publicGroup = {
+                        type: this.groupConstants.GROUP_TYPE_PUBLIC,
+                        groupId: group.groupId,
+                        name: group.name,
+                        adminId: group.admin,
+                        membersCount: group.count,
+                        isIn: group.inGroup,
+                        isAutojoin: group.autoJoin
+                    };
+                    listGroups.list.push(publicGroup);
+                });
+            }
+
+            resolve(listGroups);
+        });
+    };
+
     sendGroupCreate(options) {
         return new Promise((resolve, reject) => {
 

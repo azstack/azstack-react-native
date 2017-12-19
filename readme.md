@@ -22,6 +22,7 @@
         * [3.6.1. User status](#361-user-status)
     * [3.7. Group constants](#37-group-constants)
         * [3.7.1. Group types](#371-group-types)
+        * [3.7.2. Group is in](#372-group-is-in)
 * [4. Connection](#4-connection)
     * [4.1. Connect](#41-connect)
     * [4.2. Disconnect](#42-disconnect)
@@ -69,6 +70,7 @@
         * [9.1.5. Change admin group](#915-change-admin-group)
     * [9.2. Get functions](#92-get-functions)
         * [9.2.1. Get group details](#921-get-group-details)
+        * [9.2.2. Get groups list](#922-get-groups-list)
     * [9.3. Delegates](#92-delegates)
         * [9.3.1. On group created](#931-on-group-created)
         * [9.3.2. On group invited](#932-on-group-invited)
@@ -243,6 +245,14 @@ azstack.config({
 #### 3.7.1. Group types
 > - GROUP_TYPE_PRIVATE(0): private group
 > - GROUP_TYPE_PUBLIC(1): public group
+
+#### 3.7.2. Group is in
+> - GROUP_IS_NOT_IN(0): not in group
+> - GROUP_IS_IN(1): in group
+
+#### 3.7.2. Group is auto join
+> - GROUP_IS_NOT_AUTO_JOIN(0): group is not auto join
+> - GROUP_IS_AUTO_JOIN(1): group is auto join
 
 
 
@@ -1804,6 +1814,7 @@ this.AZStack.getDetailsGroup({
 #### result:
 > - type: type of group
 > - groupId: id of group
+> - adminId: id of group admin
 > - name: name of group
 > - memberIds: array of member user ids
 > - members: array of members
@@ -1811,6 +1822,58 @@ this.AZStack.getDetailsGroup({
 >   - azStackUserId: unique string of user
 >   - fullname: fullname of user
 >   - status: status of user
+
+#### 9.2.2. Get groups list
+
+```javascript 
+this.AZStack.getListGroups({
+    groupType: this.AZStack.groupConstants.GROUP_TYPE_PRIVATE
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.getListGroups({
+    groupType: this.AZStack.groupConstants.GROUP_TYPE_PRIVATE
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.onGroupGetListReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStack.getListGroups({
+    groupType: this.AZStack.groupConstants.GROUP_TYPE_PRIVATE
+});
+```
+
+#### params
+> - groupType(required): group type
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - done: is done or not
+> - list: list of groups
+>   - type: type of group
+>   - groupId: id of group
+>   - adminId: id of group admin
+>   - name: name of group
+>   - membersCount: total members
+>   - isIn: is in group
+>   - isAutojoin: is group auto join
 
 ### 9.3. Delegates
 

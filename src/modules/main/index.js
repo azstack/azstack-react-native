@@ -73,6 +73,8 @@ class AppMain extends React.Component {
         this.changeAdminGroup = this.changeAdminGroup.bind(this);
 
         this.getDetailsGroup = this.getDetailsGroup.bind(this);
+        this.getListGroupsPrivate = this.getListGroupsPrivate.bind(this);
+        this.getListGroupsPublic = this.getListGroupsPublic.bind(this);
 
         this.AZStack = new AZStack();
         this.AZStack.config({
@@ -382,6 +384,16 @@ class AppMain extends React.Component {
             groupId: 7436
         }).then(() => { }).catch(() => { });
     };
+    getListGroupsPrivate() {
+        this.AZStack.getListGroups({
+            groupType: this.AZStack.groupConstants.GROUP_TYPE_PRIVATE
+        }).then(() => { }).catch(() => { });
+    };
+    getListGroupsPublic() {
+        this.AZStack.getListGroups({
+            groupType: this.AZStack.groupConstants.GROUP_TYPE_PUBLIC
+        }).then(() => { }).catch(() => { });
+    };
 
     render() {
         return (
@@ -448,6 +460,8 @@ class AppMain extends React.Component {
                     <Button onPress={this.changeAdminGroup} title="Change admin group" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.getDetailsGroup} title="Get details group" />
+                    <Button onPress={this.getListGroupsPrivate} title="Get list groups private" />
+                    <Button onPress={this.getListGroupsPublic} title="Get list groups public" />
                 </View>
             </ScrollView>
         );

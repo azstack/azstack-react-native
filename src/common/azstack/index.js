@@ -621,6 +621,30 @@ class AZStack {
                     this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, 'default', error, null);
                 });
                 break;
+            case this.serviceTypes.GROUP_GET_LIST_PRIVATE:
+                this.Group.receiveListGroups({
+                    groupType: this.groupConstants.GROUP_TYPE_PRIVATE,
+                    body: body
+                }).then((result) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_LIST, 'default', null, result);
+                }).catch((error) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_LIST, 'default', error, null);
+                });
+                break;
+            case this.serviceTypes.GROUP_GET_LIST_PUBLIC:
+                this.Group.receiveListGroups({
+                    groupType: this.groupConstants.GROUP_TYPE_PUBLIC,
+                    body: body
+                }).then((result) => {
+                    if (result.done === 1) {
+                        this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_LIST, 'default', null, result);
+                    } else {
+                        this.addUncallTemporary(this.uncallConstants.UNCALL_KEY_GROUP_GET_LIST, 'default', 'list', result, this.uncallConstants.UNCALL_TEMPORARY_TYPE_ARRAY);
+                    }
+                }).catch((error) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_LIST, 'default', error, null);
+                });
+                break;
 
             default:
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -2125,6 +2149,53 @@ class AZStack {
 
             }).catch((error) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, 'default', error, null);
+            });
+        });
+    };
+    getListGroups(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Get groups'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Get groups params',
+                payload: options
+            });
+
+            this.addUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_LIST, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_GROUP_GET_LIST_RETURN);
+
+            if (!options || typeof options !== 'object') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Missing groups params'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_LIST, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'Missing groups params'
+                }, null);
+                return;
+            }
+
+            let dataErrorMessage = this.Validator.check([{
+                name: 'groupType',
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.groupType,
+                in: [this.groupConstants.GROUP_TYPE_PRIVATE, this.groupConstants.GROUP_TYPE_PUBLIC]
+            }]);
+            if (dataErrorMessage) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: dataErrorMessage
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_LIST, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: dataErrorMessage
+                }, null);
+                return;
+            }
+
+            this.Group.sendGetListGroups({
+                groupType: options.groupType
+            }).then().catch((error) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_LIST, 'default', error, null);
             });
         });
     };

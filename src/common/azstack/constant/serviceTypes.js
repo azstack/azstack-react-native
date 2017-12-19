@@ -62,3 +62,5 @@ export const GROUP_CHANGE_ADMIN = 159;
 export const ON_GROUP_ADMIN_CHANGED = 160;
 
 export const GROUP_GET_DETAILS = 148;
+export const GROUP_GET_LIST_PRIVATE = 147;
+export const GROUP_GET_LIST_PUBLIC = 198;
