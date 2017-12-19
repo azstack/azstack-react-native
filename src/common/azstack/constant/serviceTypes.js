@@ -60,6 +60,7 @@ export const GROUP_RENAME = 150;
 export const ON_GROUP_RENAMED = 152;
 export const GROUP_CHANGE_ADMIN = 159;
 export const ON_GROUP_ADMIN_CHANGED = 160;
+export const GROUP_JOIN_PUBLIC = 197;
 
 export const GROUP_GET_DETAILS = 148;
 export const GROUP_GET_LIST_PRIVATE = 147;

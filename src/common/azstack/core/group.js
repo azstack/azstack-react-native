@@ -690,6 +690,122 @@ class Group {
         });
     };
 
+    sendGroupJoinPublic(options) {
+        return new Promise((resolve, reject) => {
+
+            const joinPublicGroupPacket = {
+                service: this.serviceTypes.GROUP_JOIN_PUBLIC,
+                body: JSON.stringify({
+                    msgId: options.msgId,
+                    group: options.groupId
+                })
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send join public group packet'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Join public group packet',
+                payload: joinPublicGroupPacket
+            });
+            this.sendPacketFunction(joinPublicGroupPacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send join public group packet successfully'
+                });
+                resolve();
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send join public group data, send join public group fail'
+                });
+                reject({
+                    code: error.code,
+                    message: 'Cannot send join public group data, send join public group fail'
+                });
+            });
+        });
+    };
+    receiveGroupPublicJoined(body) {
+        return new Promise((resolve, reject) => {
+            if (!body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect public joined group, ignored'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Cannot detect public joined group'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got public joined group'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Public joined group data',
+                payload: body
+            });
+
+            if (body.r !== undefined && body.r !== this.errorCodes.GROUP_JOIN_PUBLIC_SUCCESS_FROM_SERVER) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Server response with error, join public group fail'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Server response with error, join public group fail'
+                });
+                return;
+            }
+
+            let onGroupPublicJoined = {};
+
+            if (body.r !== undefined) {
+                onGroupPublicJoined = {
+                    isReturn: true,
+                    return: {
+                        groupId: body.group,
+                        msgId: body.msgId,
+                        joinId: 0,
+                        created: body.created
+                    },
+                    event: {
+                        chatType: this.chatConstants.CHAT_TYPE_GROUP,
+                        chatId: body.group,
+                        senderId: 0,
+                        receiverId: body.group,
+                        msgId: body.msgId,
+                        type: this.chatConstants.MESSAGE_TYPE_GROUP_PUBLIC_JOINED,
+                        status: this.chatConstants.MESSAGE_STATUS_SENT,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
+                        created: body.created,
+                        modified: body.created,
+                        joined: {
+                            groupId: body.group,
+                            joinId: 0
+                        }
+                    }
+                };
+            } else {
+                onGroupPublicJoined = {
+                    chatType: this.chatConstants.CHAT_TYPE_GROUP,
+                    chatId: body.group,
+                    senderId: body.from,
+                    receiverId: body.group,
+                    msgId: body.msgId,
+                    type: this.chatConstants.MESSAGE_TYPE_GROUP_PUBLIC_JOINED,
+                    status: this.chatConstants.MESSAGE_STATUS_SENT,
+                    deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
+                    created: body.created,
+                    modified: body.created,
+                    joined: {
+                        groupId: body.group,
+                        joinId: body.from
+                    }
+                };
+            }
+
+            resolve(onGroupPublicJoined);
+        });
+    };
+
     sendGroupGetDetails(options) {
         return new Promise((resolve, reject) => {
 

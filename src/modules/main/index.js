@@ -71,6 +71,8 @@ class AppMain extends React.Component {
         this.leaveGroup = this.leaveGroup.bind(this);
         this.renameGroup = this.renameGroup.bind(this);
         this.changeAdminGroup = this.changeAdminGroup.bind(this);
+        this.leavePublicGroup = this.leavePublicGroup.bind(this);
+        this.joinPublicGroup = this.joinPublicGroup.bind(this);
 
         this.getDetailsGroup = this.getDetailsGroup.bind(this);
         this.getListGroupsPrivate = this.getListGroupsPrivate.bind(this);
@@ -158,7 +160,7 @@ class AppMain extends React.Component {
         this.AZStack.getUnreadMessages({
             page: 1,
             chatType: this.AZStack.chatConstants.CHAT_TYPE_GROUP,
-            chatId: 7436
+            chatId: 7437
         }).then(() => { }).catch(() => { });
     };
     getModifiedMessagesTypeGroup() {
@@ -378,6 +380,17 @@ class AppMain extends React.Component {
             newAdminId: 387212
         }).then(() => { }).catch(() => { });
     };
+    leavePublicGroup() {
+        this.AZStack.leaveGroup({
+            groupId: 7437,
+            leaveId: 381032
+        }).then(() => { }).catch(() => { });
+    };
+    joinPublicGroup() {
+        this.AZStack.joinPublicGroup({
+            groupId: 7437
+        }).then(() => { }).catch(() => { });
+    };
 
     getDetailsGroup() {
         this.AZStack.getDetailsGroup({
@@ -458,6 +471,8 @@ class AppMain extends React.Component {
                     <Button onPress={this.leaveGroup} title="Leave group" />
                     <Button onPress={this.renameGroup} title="Rename group" />
                     <Button onPress={this.changeAdminGroup} title="Change admin group" />
+                    <Button onPress={this.leavePublicGroup} title="Leave public group" />
+                    <Button onPress={this.joinPublicGroup} title="Join public group" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.getDetailsGroup} title="Get details group" />
                     <Button onPress={this.getListGroupsPrivate} title="Get list groups private" />

@@ -68,6 +68,7 @@
         * [9.1.3. Leave group](#913-leave-group)
         * [9.1.4. Rename group](#914-rename-group)
         * [9.1.5. Change admin group](#915-change-admin-group)
+        * [9.1.6. Join public group](#916-join-public-group)
     * [9.2. Get functions](#92-get-functions)
         * [9.2.1. Get group details](#921-get-group-details)
         * [9.2.2. Get groups list](#922-get-groups-list)
@@ -77,6 +78,7 @@
         * [9.3.3. On group left](#933-on-group-left)
         * [9.3.4. On group renamed](#934-on-group-renamed)
         * [9.3.5. On group admin changed](#935-on-group-admin-changed)
+        * [9.3.6. On group public joined](#936-on-group-public-joined)
 
 
 
@@ -209,6 +211,7 @@ azstack.config({
 > - MESSAGE_TYPE_GROUP_LEFT(6): leave group message
 > - MESSAGE_TYPE_GROUP_RENAMED(7): rename group message
 > - MESSAGE_TYPE_GROUP_ADMIN_CHANGED(8): change admin group message
+> - MESSAGE_TYPE_GROUP_PUBLIC_JOINED(9): join public group message
 
 #### 3.5.3. Message Statuses
 > - MESSAGE_STATUS_SENDING(0): status sending
@@ -765,6 +768,7 @@ this.AZStack.getModifiedConversations({
 >       - chatType: chat type
 >       - chatId: chat id
 >       - senderId: id of sender
+>       - receiverId: id of receiver
 >       - msgId: id of message
 >       - type: type of message
 >       - status: status of message
@@ -793,6 +797,9 @@ this.AZStack.getModifiedConversations({
 >       - adminChanged: admin changed data
 >           - groupId: id of group
 >           - newAdminId: new admin id
+>       - joined: joined data
+>           - groupId: id of group
+>           - joinId: join id
 
 
 
@@ -894,6 +901,9 @@ this.AZStack.onGetUnreadMessagesReturn({
 >   - adminChanged: admin changed data
 >       - groupId: id of group
 >       - newAdminId: new admin id
+>   - joined: joined data
+>       - groupId: id of group
+>       - joinId: join id
 
 #### 7.1.2 Get modified messages
 
@@ -993,6 +1003,9 @@ this.AZStack.getModifiedMessages({
 >   - adminChanged: admin changed data
 >       - groupId: id of group
 >       - newAdminId: new admin id
+>   - joined: joined data
+>       - groupId: id of group
+>       - joinId: join id
 
 #### 7.1.3 Get modified files
 
@@ -1768,6 +1781,53 @@ this.AZStack.changeAdminGroup({
 > - newAdminId: new admin id
 > - created: created time
 
+#### 9.1.6. Join public group
+
+```javascript 
+this.AZStack.joinPublicGroup({
+    groupId: 1234
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.joinPublicGroup({
+    groupId: 1234
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStack.Delegates.onGroupJoinPublicReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStack.joinPublicGroup({
+    groupId: 1234
+});
+```
+
+#### params
+> - groupId(required): id of group
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - groupId: id of group
+> - msgId: id of create group message
+> - joinId: join id
+> - created: created time
+
 ### 9.2. Get functions
 
 #### 9.2.1. Get group details
@@ -2016,3 +2076,30 @@ this.AZStack.Delegates.onGroupAdminChanged = (error, result) => {
 > - adminChanged: admin changed data
 >   - groupId: id of group
 >   - newAdminId: new admin id
+
+#### 9.3.6. On group public joined
+
+```javascript 
+this.AZStack.Delegates.onGroupPublicJoined = (error, result) => {
+    console.log(error, result);
+};
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - chatType: chat type
+> - chatId: chat id
+> - senderId: id of sender
+> - receiverId: id of receiverId
+> - msgId: id of message
+> - type: type of message
+> - status: status of message
+> - deleted: message deleted
+> - created: created time
+> - modified: modified time
+> - joined: joined data
+>   - groupId: id of group
+>   - joinId: join id

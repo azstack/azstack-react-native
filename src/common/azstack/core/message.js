@@ -163,6 +163,12 @@ class Message {
                             groupId: message.group,
                             newAdminId: message.newAdmin
                         };
+                    case this.serviceTypes.GROUP_JOIN_PUBLIC:
+                        unreadMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_PUBLIC_JOINED;
+                        unreadMessage.joined = {
+                            groupId: message.group,
+                            joinId: message.from
+                        };
                     default:
                         break;
                 }
@@ -325,6 +331,12 @@ class Message {
                         modifiedMessage.adminChanged = {
                             groupId: message.group,
                             newAdminId: message.newAdmin
+                        };
+                    case this.serviceTypes.GROUP_JOIN_PUBLIC:
+                        modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_PUBLIC_JOINED;
+                        modifiedMessage.joined = {
+                            groupId: message.group,
+                            joinId: message.from
                         };
                     default:
                         break;

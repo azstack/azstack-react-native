@@ -78,6 +78,7 @@ class Conversation {
                         chatType: conversation.type,
                         chatId: conversation.chatId,
                         senderId: conversation.lastMsg.sender,
+                        receiverId: conversation.chatId,
                         msgId: conversation.lastMsg.msgId,
                         type: 0,
                         status: conversation.lastMsg.status,
@@ -146,6 +147,12 @@ class Conversation {
                         modifiedConversation.lastMessage.adminChanged = {
                             groupId: conversation.chatId,
                             newAdminId: conversation.lastMsg.newAdmin
+                        };
+                    case this.serviceTypes.GROUP_JOIN_PUBLIC:
+                        modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_PUBLIC_JOINED;
+                        modifiedConversation.lastMessage.joined = {
+                            groupId: conversation.chatId,
+                            joinId: conversation.lastMsg.sender
                         };
                     default:
                         break;
