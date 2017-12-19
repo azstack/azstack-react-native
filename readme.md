@@ -2,83 +2,84 @@
 # Table of Contents
 
 * [1. Requirements](#1-requirements)
-* [2. Setup](#2-setup)
-* [3. Constants](#3-constants)
-    * [3.1. Log levels](#31-log-levels)
-    * [3.2. Error codes](#32-error-codes)
-    * [3.3. Call constants](#33-call-constants)
-        * [3.3.1. Callout](#331-callout)
-        * [3.3.2. Callin](#332-callin)
-        * [3.3.3. Paid call log](#333-paid-call-log)
-    * [3.4. List constants](#34-list-constants)
-        * [3.4.1. Done](#341-done)
-    * [3.5. Chat constants](#35-chat-constants)
-        * [3.5.1. Chat Types](#351-chat-types)
-        * [3.5.2. Message Types](#352-message-types)
-        * [3.5.3. Message Statuses](#353-message-statuses)
-        * [3.5.4. Message Deleted](#354-message-deleted)
-        * [3.5.5. Message file types](#355-message-file-types)
-    * [3.6. User constants](#36-user-constants)
-        * [3.6.1. User status](#361-user-status)
-    * [3.7. Group constants](#37-group-constants)
-        * [3.7.1. Group types](#371-group-types)
-        * [3.7.2. Group is in](#372-group-is-in)
-* [4. Connection](#4-connection)
-    * [4.1. Connect](#41-connect)
-    * [4.2. Disconnect](#42-disconnect)
-* [5. Calls](#5-calls)
-    * [5.1 Callout](#51-callout)
-        * [5.1.1. Start function](#511-start-function)
-        * [5.1.2. Stop function](#512-stop-function)
-        * [5.1.3. Delegates](#513-delegates)
-    * [5.2 Callin](#52-callin)
-        * [5.2.1. Answer function](#521-answer-function)
-        * [5.2.2. Reject function](#522-reject-function)
-        * [5.2.3. Not Answered function](#523-not-answered-function)
-        * [5.2.4. Stop function](#524-stop-function)
-        * [5.2.5. Delegates](#525-delegates)
-    * [5.3. Ultilities](#53-ultilities)
-        * [5.3.1. Toggle audio state function](#531-toggle-audio-state-function)
-    * [5.4. Paid call logs](#54-paid-call-logs)
-        * [5.4.1. Get paid call logs](#541-get-paid-call-logs)
-        * [5.4.2. Delegates](#542-delegates)
-* [6. Conversations](#6-conversations)
-    * [6.1 Get modified conversations](#61-get-modified-conversations)
-* [7. Messages](#7-messages)
-    * [7.1. Get list](#71-get-list)
-        * [7.1.1 Get unread messages](#711-get-unread-messages)
-        * [7.1.2 Get modified messages](#712-get-modified-messages)
-        * [7.1.3 Get modified files](#713-get-modified-files)
-    * [7.2. Sending](#72-sending)
-        * [7.2.1. New message](#721-new-message)
-        * [7.2.2. Change message status](#722-change-message-status)
-        * [7.2.3. Delete message](#723-delete-message)
-        * [7.2.4. Send typing](#724-send-typing)
-    * [7.3. Delegates](#73-delegates)
-        * [7.3.1. On new message](#731-on-new-message)
-        * [7.3.2. On message from me](#732-on-message-from-me)
-        * [7.3.3. On message status changed](#733-on-message-status-changed)
-        * [7.3.4. On typing](#734-on-typing)
-* [8. User](#8-user)
-    * [8.1. Get users information](#81-get-users-information)
-* [9. Group](#9-group)
-    * [9.1. Group actions](#91-group-actions)
-        * [9.1.1. Create group](#911-create-group)
-        * [9.1.2. Invite group](#912-invite-group)
-        * [9.1.3. Leave group](#913-leave-group)
-        * [9.1.4. Rename group](#914-rename-group)
-        * [9.1.5. Change admin group](#915-change-admin-group)
-        * [9.1.6. Join public group](#916-join-public-group)
-    * [9.2. Get functions](#92-get-functions)
-        * [9.2.1. Get group details](#921-get-group-details)
-        * [9.2.2. Get groups list](#922-get-groups-list)
-    * [9.3. Delegates](#92-delegates)
-        * [9.3.1. On group created](#931-on-group-created)
-        * [9.3.2. On group invited](#932-on-group-invited)
-        * [9.3.3. On group left](#933-on-group-left)
-        * [9.3.4. On group renamed](#934-on-group-renamed)
-        * [9.3.5. On group admin changed](#935-on-group-admin-changed)
-        * [9.3.6. On group public joined](#936-on-group-public-joined)
+* [3. Core](#3-core)
+    * [3.2. Initial](#32-initial)
+    * [3.3. Constants](#33-constants)
+        * [3.3.1. Log levels](#331-log-levels)
+        * [3.3.2. Error codes](#332-error-codes)
+        * [3.3.3. Call constants](#333-call-constants)
+            * [3.3.3.1. Callout](#3331-callout)
+            * [3.3.3.2. Callin](#3332-callin)
+            * [3.3.3.3. Paid call log](#3333-paid-call-log)
+        * [3.3.4. List constants](#334-list-constants)
+            * [3.3.4.1. Done](#3341-done)
+        * [3.3.5. Chat constants](#335-chat-constants)
+            * [3.3.5.1. Chat Types](#3351-chat-types)
+            * [3.3.5.2. Message Types](#3352-message-types)
+            * [3.3.5.3. Message Statuses](#3353-message-statuses)
+            * [3.3.5.4. Message Deleted](#3354-message-deleted)
+            * [3.3.5.5. Message file types](#3355-message-file-types)
+        * [3.3.6. User constants](#336-user-constants)
+            * [3.3.6.1. User status](#3361-user-status)
+        * [3.3.7. Group constants](#337-group-constants)
+            * [3.3.7.1. Group types](#3371-group-types)
+            * [3.3.7.2. Group is in](#3372-group-is-in)
+    * [3.4. Connection](#34-connection)
+        * [3.4.1. Connect](#341-connect)
+        * [3.4.2. Disconnect](#342-disconnect)
+    * [3.5. Calls](#35-calls)
+        * [3.5.1 Callout](#351-callout)
+            * [3.5.1.1. Start function](#3511-start-function)
+            * [3.5.1.2. Stop function](#3512-stop-function)
+            * [3.5.1.3. Delegates](#3513-delegates)
+        * [3.5.2 Callin](#352-callin)
+            * [3.5.2.1. Answer function](#3521-answer-function)
+            * [3.5.2.2. Reject function](#3522-reject-function)
+            * [3.5.2.3. Not Answered function](#3523-not-answered-function)
+            * [3.5.2.4. Stop function](#3524-stop-function)
+            * [3.5.2.5. Delegates](#3525-delegates)
+        * [3.5.3. Ultilities](#353-ultilities)
+            * [3.5.3.1. Toggle audio state function](#3531-toggle-audio-state-function)
+        * [3.5.4. Paid call logs](#354-paid-call-logs)
+            * [3.5.4.1. Get paid call logs](#3541-get-paid-call-logs)
+            * [3.5.4.2. Delegates](#3542-delegates)
+    * [3.6. Conversations](#36-conversations)
+        * [3.6.1 Get modified conversations](#361-get-modified-conversations)
+    * [3.7. Messages](#37-messages)
+        * [3.7.1. Get list](#371-get-list)
+            * [3.7.1.1 Get unread messages](#3711-get-unread-messages)
+            * [3.7.1.2 Get modified messages](#3712-get-modified-messages)
+            * [3.7.1.3 Get modified files](#3713-get-modified-files)
+        * [3.7.2. Sending](#372-sending)
+            * [3.7.2.1. New message](#3721-new-message)
+            * [3.7.2.2. Change message status](#3722-change-message-status)
+            * [3.7.2.3. Delete message](#3723-delete-message)
+            * [3.7.2.4. Send typing](#3724-send-typing)
+        * [3.7.3. Delegates](#373-delegates)
+            * [3.7.3.1. On new message](#3731-on-new-message)
+            * [3.7.3.2. On message from me](#3732-on-message-from-me)
+            * [3.7.3.3. On message status changed](#3733-on-message-status-changed)
+            * [3.7.3.4. On typing](#3734-on-typing)
+    * [3.8. User](#38-user)
+        * [3.8.1. Get users information](#381-get-users-information)
+    * [3.9. Group](#39-group)
+        * [3.9.1. Group actions](#391-group-actions)
+            * [3.9.1.1. Create group](#3911-create-group)
+            * [3.9.1.2. Invite group](#3912-invite-group)
+            * [3.9.1.3. Leave group](#3913-leave-group)
+            * [3.9.1.4. Rename group](#3914-rename-group)
+            * [3.9.1.5. Change admin group](#3915-change-admin-group)
+            * [3.9.1.6. Join public group](#3916-join-public-group)
+        * [3.9.2. Get functions](#392-get-functions)
+            * [3.9.2.1. Get group details](#3921-get-group-details)
+            * [3.9.2.2. Get groups list](#3922-get-groups-list)
+        * [3.9.3. Delegates](#392-delegates)
+            * [3.9.3.1. On group created](#3931-on-group-created)
+            * [3.9.3.2. On group invited](#3932-on-group-invited)
+            * [3.9.3.3. On group left](#3933-on-group-left)
+            * [3.9.3.4. On group renamed](#3934-on-group-renamed)
+            * [3.9.3.5. On group admin changed](#3935-on-group-admin-changed)
+            * [3.9.3.6. On group public joined](#3936-on-group-public-joined)
 
 
 
@@ -91,15 +92,17 @@
 
 
 
-# 2. Setup 
+# 3. Core 
 
-### 2.1. Import our sdk 
+## 3.2. Initial 
+
+### 3.2.1. Import our core 
 
 ```javascript 
 import { AZStackCore } from '{path_to_libs}/azstack/';
 ```
 
-### 2.2. Config 
+### 3.2.2. Config 
 
 ```javascript 
 this.AZStackCore = new AZStackCore();
@@ -140,15 +143,15 @@ this.AZStackCore.config({
 
 
 
-# 3. Constants
+## 3.3. Constants
 
-### 3.1. Log levels
+### 3.3.1. Log levels
 > - LOG_LEVEL_NONE: no log
 > - LOG_LEVEL_ERROR: just when error occur
 > - LOG_LEVEL_INFO: log the error and info of porocess running
 > - LOG_LEVEL_DEBUG: log the error, infor and data send/receiced
 
-### 3.2. Error codes:
+### 3.3.2. Error codes:
 > - ERR_SOCKET_CONNECT: cannot connect to socket
 > - ERR_SOCKET_PARSE_BODY: cannot parse socket packet's body
 > - ERR_SOCKET_UNKNOWN_SERVICE: unknow socket packet's service
@@ -158,9 +161,9 @@ this.AZStackCore.config({
 > - ERR_UNEXPECTED_SEND_DATA: some params invalid in send data
 > - ERR_UNEXPECTED_RECEIVED_DATA: some params invalid in received data
 
-### 3.3. Call constants
+### 3.3.3. Call constants
 
-#### 3.3.1. Callout
+#### 3.3.3.1. Callout
 > - CALL_STATUS_CALLOUT_INITIAL_BUSY(-3): initial busy;
 > - CALL_STATUS_CALLOUT_INITIAL_NOT_ENOUGH_BALANCE(-4): initial not enough balance;
 > - CALL_STATUS_CALLOUT_INITIAL_INVALID_NUMBER(-5): initial invalid number;
@@ -173,7 +176,7 @@ this.AZStackCore.config({
 > - CALL_STATUS_CALLOUT_STATUS_STOP(700): status stop;
 > - CALL_STATUS_CALLOUT_STATUS_NOT_ENOUGH_BALANCE(702): status not enough balance;
 
-#### 3.3.2. Callin
+#### 3.3.3.2. Callin
 > - CALL_STATUS_CALLIN_STATUS_UNKNOWN(0): status unknown;
 > - CALL_STATUS_CALLIN_STATUS_RINGING(183): status ringing;
 > - CALL_STATUS_CALLIN_STATUS_ANSWERED(200): status answered;
@@ -182,7 +185,7 @@ this.AZStackCore.config({
 > - CALL_STATUS_CALLIN_STATUS_RINGING_STOP(702): status ringing stop;
 > - CALL_STATUS_CALLIN_STATUS_STOP(700): status stop;
 
-#### 3.3.3. Paid call log
+#### 3.3.3.3. Paid call log
 > - CALL_PAID_LOG_CALL_TYPE_CALLOUT(1): callout type
 > - CALL_PAID_LOG_CALL_TYPE_CALLIN(2): callin type
 
@@ -190,19 +193,19 @@ this.AZStackCore.config({
 > - CALL_PAID_LOG_CALL_STATUS_REJECTED(1): status rejected
 > - CALL_PAID_LOG_CALL_STATUS_NOT_ANSWERED(2): status not answered
 
-### 3.4. List constants
+### 3.3.4. List constants
 
-#### 3.4.1. Done
+#### 3.3.4.1. Done
 > - GET_LIST_DONE(1): done
 > - GET_LIST_UNDONE(0): undone
 
-### 3.5. Chat constants
+### 3.3.5. Chat constants
 
-#### 3.5.1. Chat Types
+#### 3.3.5.1. Chat Types
 > - CHAT_TYPE_USER(1): chat with user
 > - CHAT_TYPE_GROUP(2): chat with group
 
-#### 3.5.2. Message Types
+#### 3.3.5.2. Message Types
 > - MESSAGE_TYPE_TEXT(1): text message
 > - MESSAGE_TYPE_STICKER(2): sticker message
 > - MESSAGE_TYPE_FILE(3): file message
@@ -213,18 +216,18 @@ this.AZStackCore.config({
 > - MESSAGE_TYPE_GROUP_ADMIN_CHANGED(8): change admin group message
 > - MESSAGE_TYPE_GROUP_PUBLIC_JOINED(9): join public group message
 
-#### 3.5.3. Message Statuses
+#### 3.3.5.3. Message Statuses
 > - MESSAGE_STATUS_SENDING(0): status sending
 > - MESSAGE_STATUS_SENT(1): status sent
 > - MESSAGE_STATUS_DELIVERED(2): status delivered
 > - MESSAGE_STATUS_SEEN(3): status seen
 > - MESSAGE_STATUS_CANCELLED(6): status cancelled
 
-#### 3.5.4. Message Deleted
+#### 3.3.5.4. Message Deleted
 > - MESSAGE_DELETED_FALSE(0): not deleted
 > - MESSAGE_DELETED_TRUE(1): deleted
 
-#### 3.5.5. Message file types
+#### 3.3.5.5. Message file types
 > - MESSAGE_FILE_TYPE_UNKNOWN(0): file type unknown
 > - MESSAGE_FILE_TYPE_IMAGE(1): file type image
 > - MESSAGE_FILE_TYPE_AUDIO(2): file type audio
@@ -237,32 +240,32 @@ this.AZStackCore.config({
 > - MESSAGE_FILE_TYPE_CODE(9): file type code
 > - MESSAGE_FILE_TYPE_ARCHIVE(10): file type archive
 
-### 3.6. User constants
+### 3.3.6. User constants
 
-#### 3.6.1. User status
+#### 3.3.6.1. User status
 > - USER_STATUS_ONLINE(1): online
 > - USER_STATUS_NOT_ONLINE(0): not online
 
-### 3.7. Group constants
+### 3.3.7. Group constants
 
-#### 3.7.1. Group types
+#### 3.3.7.1. Group types
 > - GROUP_TYPE_PRIVATE(0): private group
 > - GROUP_TYPE_PUBLIC(1): public group
 
-#### 3.7.2. Group is in
+#### 3.3.7.2. Group is in
 > - GROUP_IS_NOT_IN(0): not in group
 > - GROUP_IS_IN(1): in group
 
-#### 3.7.2. Group is auto join
+#### 3.3.7.2. Group is auto join
 > - GROUP_IS_NOT_AUTO_JOIN(0): group is not auto join
 > - GROUP_IS_AUTO_JOIN(1): group is auto join
 
 
 
 
-# 4. Connection 
+## 3.4. Connection 
 
-### 4.1. Connect
+### 3.4.1. Connect
 
 ```javascript 
 this.AZStackCore.connect({}, (error, result) => {
@@ -299,7 +302,7 @@ this.AZStackCore.connect({});
 > - userId: userId of user in azstack
 > - fullname: fullname of user
 
-### 4.2. Disconnect
+### 3.4.2. Disconnect
 
 ```javascript 
 this.AZStackCore.disconnect({}, (error, result) => {
@@ -333,11 +336,11 @@ this.AZStackCore.disconnect({});
 
 
 
-# 5. Calls 
+## 3.5. Calls 
 
-### 5.1. Callout
+### 3.5.1. Callout
 
-#### 5.1.1. Start function
+#### 3.5.1.1. Start function
 
 ```javascript 
 this.AZStackCore.startCallout({
@@ -379,7 +382,7 @@ this.AZStackCore.startCallout({
 > - status: callout status
 > - message: error message
 
-#### 5.1.2. Stop function
+#### 3.5.1.2. Stop function
 
 ```javascript 
 this.AZStackCore.stopCallout({}, (error, result) => {
@@ -411,7 +414,7 @@ this.AZStackCore.stopCallout({});
 > - code: error code
 > - message: error message
 
-#### 5.1.3. Delegates
+#### 3.5.1.3. Delegates
 
 ```javascript 
 this.AZStackCore.Delegates.onCalloutStatusChanged = (error, result) => {
@@ -426,9 +429,9 @@ this.AZStackCore.Delegates.onCalloutStatusChanged = (error, result) => {
 > - status: call status
 > - message: status message
 
-### 5.2. Callin
+### 3.5.2. Callin
 
-#### 5.2.1. Answer function
+#### 3.5.2.1. Answer function
 
 ```javascript 
 this.AZStackCore.answerCallin({}, (error, result) => {
@@ -460,7 +463,7 @@ this.AZStackCore.answerCallin({});
 > - code: error code
 > - message: error message
 
-#### 5.2.2. Reject function
+#### 3.5.2.2. Reject function
 
 ```javascript 
 this.AZStackCore.rejectCallin({}, (error, result) => {
@@ -492,7 +495,7 @@ this.AZStackCore.rejectCallin({});
 > - code: error code
 > - message: error message
 
-#### 5.2.3. Not Answered function
+#### 3.5.2.3. Not Answered function
 
 ```javascript 
 this.AZStackCore.notAnsweredCallin({}, (error, result) => {
@@ -524,7 +527,7 @@ this.AZStackCore.notAnsweredCallin({});
 > - code: error code
 > - message: error message
 
-#### 5.2.4. Stop function
+#### 3.5.2.4. Stop function
 
 ```javascript 
 this.AZStackCore.stopCallin({}, (error, result) => {
@@ -556,7 +559,7 @@ this.AZStackCore.stopCallin({});
 > - code: error code
 > - message: error message
 
-#### 5.2.5. Delegates
+#### 3.5.2.5. Delegates
 
 ```javascript 
 this.AZStackCore.Delegates.onCallinStart = (error, result) => {
@@ -599,9 +602,9 @@ this.AZStackCore.Delegates.onCallinStatusChangedByMe = (error, result) => {
 > - status: call status by me
 > - message: status message
 
-### 5.3. Ultilities
+### 3.5.3. Ultilities
 
-#### 5.3.1. Toggle audio state function
+#### 3.5.3.1. Toggle audio state function
 
 ```javascript 
 this.AZStackCore.toggleAudioState({
@@ -642,9 +645,9 @@ this.AZStackCore.toggleAudioState({
 > - code: error code
 > - message: error message
 
-### 5.4. Paid call logs
+### 3.5.4. Paid call logs
 
-#### 5.4.1. Get paid call logs
+#### 3.5.4.1. Get paid call logs
 
 ```javascript 
 this.AZStackCore.getPaidCallLogs({}, (error, result) => {
@@ -686,7 +689,7 @@ this.AZStackCore.getPaidCallLogs({});
 > - recordTime: recording time
 > - recordUrl: recording url
 
-#### 5.4.2. Delegates
+#### 3.5.4.2. Delegates
 
 ```javascript 
 this.AZStackCore.Delegates.onPaidCallLogReturn = (error, result) => {
@@ -710,9 +713,9 @@ this.AZStackCore.Delegates.onPaidCallLogReturn = (error, result) => {
 
 
 
-# 6. Conversations
+## 3.6. Conversations
 
-#### 6.1 Get modified conversations
+### 3.6.1 Get modified conversations
 
 ```javascript 
 this.AZStackCore.getModifiedConversations({
@@ -803,11 +806,11 @@ this.AZStackCore.getModifiedConversations({
 
 
 
-# 7. Messages
+## 3.7. Messages
 
-### 7.1. Get list
+### 3.7.1. Get list
 
-#### 7.1.1. Get unread messages
+#### 3.7.1.1. Get unread messages
 
 ```javascript 
 this.AZStackCore.getUnreadMessages({
@@ -905,7 +908,7 @@ this.AZStackCore.onGetUnreadMessagesReturn({
 >       - groupId: id of group
 >       - joinId: join id
 
-#### 7.1.2 Get modified messages
+#### 3.7.1.2 Get modified messages
 
 ```javascript 
 this.AZStackCore.getModifiedMessages({
@@ -1007,7 +1010,7 @@ this.AZStackCore.getModifiedMessages({
 >       - groupId: id of group
 >       - joinId: join id
 
-#### 7.1.3 Get modified files
+#### 3.7.1.3 Get modified files
 
 ```javascript 
 this.AZStackCore.getModifiedFiles({
@@ -1074,9 +1077,9 @@ this.AZStackCore.getModifiedFiles({
 >       - type: type
 >       - url: url
 
-### 7.2. Sending
+### 3.7.2. Sending
 
-### 7.2.1. New message
+#### 3.7.2.1. New message
 
 ```javascript 
 this.AZStackCore.newMessage({
@@ -1188,7 +1191,7 @@ this.AZStackCore.newMessage({
 >   - type: type
 >   - url: url
 
-### 7.2.2. Change message status
+#### 3.7.2.2. Change message status
 
 ```javascript 
 this.AZStackCore.changeMessageStatus({
@@ -1245,7 +1248,7 @@ this.AZStackCore.changeMessageStatus({
 > - code: error code
 > - message: error message
 
-### 7.2.3. Delete message
+#### 3.7.2.3. Delete message
 
 ```javascript 
 this.AZStackCore.deleteMessage({
@@ -1298,7 +1301,7 @@ this.AZStackCore.deleteMessage({
 > - code: error code
 > - message: error message
 
-### 7.2.4. Send typing
+#### 3.7.2.4. Send typing
 
 ```javascript 
 this.AZStackCore.sendTyping({
@@ -1343,9 +1346,9 @@ this.AZStackCore.sendTyping({
 > - code: error code
 > - message: error message
 
-### 7.3. Delegates
+### 3.7.3. Delegates
 
-#### 7.3.1. On new message
+#### 3.7.3.1. On new message
 
 ```javascript 
 this.AZStackCore.Delegates.onHasNewMessage = (error, result) => {
@@ -1379,7 +1382,7 @@ this.AZStackCore.Delegates.onHasNewMessage = (error, result) => {
 >   - type: type
 >   - url: url
 
-#### 7.3.2. On message from me
+#### 3.7.3.2. On message from me
 
 ```javascript 
 this.AZStackCore.Delegates.onMessageFromMe = (error, result) => {
@@ -1413,7 +1416,7 @@ this.AZStackCore.Delegates.onMessageFromMe = (error, result) => {
 >   - type: type
 >   - url: url
 
-#### 7.3.3. On message status changed
+#### 3.7.3.3. On message status changed
 
 ```javascript 
 this.AZStackCore.Delegates.onMessageStatusChanged = (error, result) => {
@@ -1433,7 +1436,7 @@ this.AZStackCore.Delegates.onMessageStatusChanged = (error, result) => {
 > - msgId: id of message
 > - messageStatus: status of message
 
-#### 7.3.4. On typing
+#### 3.7.3.4. On typing
 
 ```javascript 
 this.AZStackCore.Delegates.onTyping = (error, result) => {
@@ -1453,9 +1456,9 @@ this.AZStackCore.Delegates.onTyping = (error, result) => {
 
 
 
-# 8. User
+## 3.8. User
 
-### 8.1. Get users information
+### 3.8.1. Get users information
 
 ```javascript 
 this.AZStackCore.getUsersInformation({
@@ -1511,11 +1514,11 @@ this.AZStackCore.getUsersInformation({
 
 
 
-# 9. Group
+## 3.9. Group
 
-### 9.1. Group actions
+### 3.9.1. Group actions
 
-#### 9.1.1. Create group
+#### 3.9.1.1. Create group
 
 ```javascript 
 this.AZStackCore.createGroup({
@@ -1573,7 +1576,7 @@ this.AZStackCore.createGroup({
 > - memberIds: ids of members
 > - created: created time
 
-#### 9.1.2. Invite group
+#### 3.9.1.2. Invite group
 
 ```javascript 
 this.AZStackCore.inviteGroup({
@@ -1624,7 +1627,7 @@ this.AZStackCore.inviteGroup({
 > - inviteIds: id of inviteds
 > - created: created time
 
-#### 9.1.3. Leave group
+#### 3.9.1.3. Leave group
 
 ```javascript 
 this.AZStackCore.leaveGroup({
@@ -1679,7 +1682,7 @@ this.AZStackCore.leaveGroup({
 > - leaveId: id of leaver
 > - created: created time
 
-#### 9.1.4. Rename group
+#### 3.9.1.4. Rename group
 
 ```javascript 
 this.AZStackCore.renameGroup({
@@ -1730,7 +1733,7 @@ this.AZStackCore.renameGroup({
 > - newName: new name
 > - created: created time
 
-#### 9.1.5. Change admin group
+#### 3.9.1.5. Change admin group
 
 ```javascript 
 this.AZStackCore.changeAdminGroup({
@@ -1781,7 +1784,7 @@ this.AZStackCore.changeAdminGroup({
 > - newAdminId: new admin id
 > - created: created time
 
-#### 9.1.6. Join public group
+#### 3.9.1.6. Join public group
 
 ```javascript 
 this.AZStackCore.joinPublicGroup({
@@ -1828,9 +1831,9 @@ this.AZStackCore.joinPublicGroup({
 > - joinId: join id
 > - created: created time
 
-### 9.2. Get functions
+### 3.9.2. Get functions
 
-#### 9.2.1. Get group details
+#### 3.9.2.1. Get group details
 
 ```javascript 
 this.AZStackCore.getDetailsGroup({
@@ -1883,7 +1886,7 @@ this.AZStackCore.getDetailsGroup({
 >   - fullname: fullname of user
 >   - status: status of user
 
-#### 9.2.2. Get groups list
+#### 3.9.2.2. Get groups list
 
 ```javascript 
 this.AZStackCore.getListGroups({
@@ -1935,9 +1938,9 @@ this.AZStackCore.getListGroups({
 >   - isIn: is in group
 >   - isAutojoin: is group auto join
 
-### 9.3. Delegates
+### 3.9.3. Delegates
 
-#### 9.3.1. On group created
+#### 3.9.3.1. On group created
 
 ```javascript 
 this.AZStackCore.Delegates.onGroupCreated = (error, result) => {
@@ -1968,7 +1971,7 @@ this.AZStackCore.Delegates.onGroupCreated = (error, result) => {
 >   - memberIds: ids of members
 >   - created: created time
 
-#### 9.3.2. On group invited
+#### 3.9.3.2. On group invited
 
 ```javascript 
 this.AZStackCore.Delegates.onGroupInvited = (error, result) => {
@@ -1995,7 +1998,7 @@ this.AZStackCore.Delegates.onGroupInvited = (error, result) => {
 >   - groupId: id of group
 >   - inviteIds: id of inviteds
 
-#### 9.3.3. On group left
+#### 3.9.3.3. On group left
 
 ```javascript 
 this.AZStackCore.Delegates.onGroupLeft = (error, result) => {
@@ -2023,7 +2026,7 @@ this.AZStackCore.Delegates.onGroupLeft = (error, result) => {
 >   - leaveId: id of leaver
 >   - newAdminId: id of new admin
 
-#### 9.3.4. On group renamed
+#### 3.9.3.4. On group renamed
 
 ```javascript 
 this.AZStackCore.Delegates.onGroupRenamed = (error, result) => {
@@ -2050,7 +2053,7 @@ this.AZStackCore.Delegates.onGroupRenamed = (error, result) => {
 >   - groupId: id of group
 >   - newName: new name
 
-#### 9.3.5. On group admin changed
+#### 3.9.3.5. On group admin changed
 
 ```javascript 
 this.AZStackCore.Delegates.onGroupAdminChanged = (error, result) => {
@@ -2077,7 +2080,7 @@ this.AZStackCore.Delegates.onGroupAdminChanged = (error, result) => {
 >   - groupId: id of group
 >   - newAdminId: new admin id
 
-#### 9.3.6. On group public joined
+#### 3.9.3.6. On group public joined
 
 ```javascript 
 this.AZStackCore.Delegates.onGroupPublicJoined = (error, result) => {
