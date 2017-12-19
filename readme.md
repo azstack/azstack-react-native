@@ -96,14 +96,14 @@
 ### 2.1. Import our sdk 
 
 ```javascript 
-import AZStack from '{path_to_libs}/azstack/';
+import { AZStackCore } from '{path_to_libs}/azstack/';
 ```
 
 ### 2.2. Config 
 
 ```javascript 
-const azstack = new AZStack();
-azstack.config({
+this.AZStackCore = new AZStackCore();
+this.AZStackCore.config({
     requestTimeout: 60000,
     intervalPingTime: 60000,
     logLevel: azstack.logLevelConstants.LOG_LEVEL_NONE,
@@ -265,7 +265,7 @@ azstack.config({
 ### 4.1. Connect
 
 ```javascript 
-this.AZStack.connect({}, (error, result) => {
+this.AZStackCore.connect({}, (error, result) => {
     console.log(error);
     console.log(result);
 });
@@ -274,7 +274,7 @@ this.AZStack.connect({}, (error, result) => {
 OR
 
 ```javascript 
-this.AZStack.connect({}).then((result) => {
+this.AZStackCore.connect({}).then((result) => {
     console.log(result);
 }).catch((error) => {
     console.log(error);
@@ -284,10 +284,10 @@ this.AZStack.connect({}).then((result) => {
 OR
 
 ```javascript 
-this.AZStack.Delegates.onAuthencationReturn = (error, result) => {
+this.AZStackCore.Delegates.onAuthencationReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.connect({});
+this.AZStackCore.connect({});
 ```
 
 #### error:
@@ -302,7 +302,7 @@ this.AZStack.connect({});
 ### 4.2. Disconnect
 
 ```javascript 
-this.AZStack.disconnect({}, (error, result) => {
+this.AZStackCore.disconnect({}, (error, result) => {
     console.log(error);
     console.log(result);
 });
@@ -311,7 +311,7 @@ this.AZStack.disconnect({}, (error, result) => {
 OR
 
 ```javascript 
-this.AZStack.disconnect({}).then((result) => {
+this.AZStackCore.disconnect({}).then((result) => {
     console.log(result);
 }).catch((error) => {
     console.log(error);
@@ -321,10 +321,10 @@ this.AZStack.disconnect({}).then((result) => {
 OR
 
 ```javascript 
-this.AZStack.Delegates.onDisconnectReturn = (error, result) => {
+this.AZStackCore.Delegates.onDisconnectReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.disconnect({});
+this.AZStackCore.disconnect({});
 ```
 
 #### error:
@@ -340,7 +340,7 @@ this.AZStack.disconnect({});
 #### 5.1.1. Start function
 
 ```javascript 
-this.AZStack.startCallout({
+this.AZStackCore.startCallout({
     toPhoneNumber: '123456789'
 }, (error, result) => {
     console.log(error);
@@ -351,7 +351,7 @@ this.AZStack.startCallout({
 OR
 
 ```javascript 
-this.AZStack.startCallout({
+this.AZStackCore.startCallout({
     toPhoneNumber: '123456789'
 }).then((result) => {
     console.log(result);
@@ -363,10 +363,10 @@ this.AZStack.startCallout({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onStartCalloutReturn = (error, result) => {
+this.AZStackCore.Delegates.onStartCalloutReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.startCallout({
+this.AZStackCore.startCallout({
     toPhoneNumber: '123456789'
 });
 ```
@@ -382,7 +382,7 @@ this.AZStack.startCallout({
 #### 5.1.2. Stop function
 
 ```javascript 
-this.AZStack.stopCallout({}, (error, result) => {
+this.AZStackCore.stopCallout({}, (error, result) => {
     console.log(error);
     console.log(result);
 });
@@ -391,7 +391,7 @@ this.AZStack.stopCallout({}, (error, result) => {
 OR
 
 ```javascript 
-this.AZStack.stopCallout({}).then((result) => {
+this.AZStackCore.stopCallout({}).then((result) => {
     console.log(result);
 }).catch((error) => {
     console.log(error);
@@ -401,10 +401,10 @@ this.AZStack.stopCallout({}).then((result) => {
 OR
 
 ```javascript 
-this.AZStack.Delegates.onStopCalloutReturn = (error, result) => {
+this.AZStackCore.Delegates.onStopCalloutReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.stopCallout({});
+this.AZStackCore.stopCallout({});
 ```
 
 #### error:
@@ -414,7 +414,7 @@ this.AZStack.stopCallout({});
 #### 5.1.3. Delegates
 
 ```javascript 
-this.AZStack.Delegates.onCalloutStatusChanged = (error, result) => {
+this.AZStackCore.Delegates.onCalloutStatusChanged = (error, result) => {
     console.log(error, result);
 };
 ```
@@ -431,7 +431,7 @@ this.AZStack.Delegates.onCalloutStatusChanged = (error, result) => {
 #### 5.2.1. Answer function
 
 ```javascript 
-this.AZStack.answerCallin({}, (error, result) => {
+this.AZStackCore.answerCallin({}, (error, result) => {
     console.log(error);
     console.log(result);
 });
@@ -440,7 +440,7 @@ this.AZStack.answerCallin({}, (error, result) => {
 OR
 
 ```javascript 
-this.AZStack.answerCallin({}).then((result) => {
+this.AZStackCore.answerCallin({}).then((result) => {
     console.log(result);
 }).catch((error) => {
     console.log(error);
@@ -450,10 +450,10 @@ this.AZStack.answerCallin({}).then((result) => {
 OR
 
 ```javascript 
-this.AZStack.Delegates.onAnswerCallinReturn = (error, result) => {
+this.AZStackCore.Delegates.onAnswerCallinReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.answerCallin({});
+this.AZStackCore.answerCallin({});
 ```
 
 #### error:
@@ -463,7 +463,7 @@ this.AZStack.answerCallin({});
 #### 5.2.2. Reject function
 
 ```javascript 
-this.AZStack.rejectCallin({}, (error, result) => {
+this.AZStackCore.rejectCallin({}, (error, result) => {
     console.log(error);
     console.log(result);
 });
@@ -472,7 +472,7 @@ this.AZStack.rejectCallin({}, (error, result) => {
 OR
 
 ```javascript 
-this.AZStack.rejectCallin({}).then((result) => {
+this.AZStackCore.rejectCallin({}).then((result) => {
     console.log(result);
 }).catch((error) => {
     console.log(error);
@@ -482,10 +482,10 @@ this.AZStack.rejectCallin({}).then((result) => {
 OR
 
 ```javascript 
-this.AZStack.Delegates.onRejectCallinReturn = (error, result) => {
+this.AZStackCore.Delegates.onRejectCallinReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.rejectCallin({});
+this.AZStackCore.rejectCallin({});
 ```
 
 #### error:
@@ -495,7 +495,7 @@ this.AZStack.rejectCallin({});
 #### 5.2.3. Not Answered function
 
 ```javascript 
-this.AZStack.notAnsweredCallin({}, (error, result) => {
+this.AZStackCore.notAnsweredCallin({}, (error, result) => {
     console.log(error);
     console.log(result);
 });
@@ -504,7 +504,7 @@ this.AZStack.notAnsweredCallin({}, (error, result) => {
 OR
 
 ```javascript 
-this.AZStack.notAnsweredCallin({}).then((result) => {
+this.AZStackCore.notAnsweredCallin({}).then((result) => {
     console.log(result);
 }).catch((error) => {
     console.log(error);
@@ -514,10 +514,10 @@ this.AZStack.notAnsweredCallin({}).then((result) => {
 OR
 
 ```javascript 
-this.AZStack.Delegates.onNotAnsweredCallinReturn = (error, result) => {
+this.AZStackCore.Delegates.onNotAnsweredCallinReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.notAnsweredCallin({});
+this.AZStackCore.notAnsweredCallin({});
 ```
 
 #### error:
@@ -527,7 +527,7 @@ this.AZStack.notAnsweredCallin({});
 #### 5.2.4. Stop function
 
 ```javascript 
-this.AZStack.stopCallin({}, (error, result) => {
+this.AZStackCore.stopCallin({}, (error, result) => {
     console.log(error);
     console.log(result);
 });
@@ -536,7 +536,7 @@ this.AZStack.stopCallin({}, (error, result) => {
 OR
 
 ```javascript 
-this.AZStack.stopCallin({}).then((result) => {
+this.AZStackCore.stopCallin({}).then((result) => {
     console.log(result);
 }).catch((error) => {
     console.log(error);
@@ -546,10 +546,10 @@ this.AZStack.stopCallin({}).then((result) => {
 OR
 
 ```javascript 
-this.AZStack.Delegates.onStopCallinReturn = (error, result) => {
+this.AZStackCore.Delegates.onStopCallinReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.stopCallin({});
+this.AZStackCore.stopCallin({});
 ```
 
 #### error:
@@ -559,7 +559,7 @@ this.AZStack.stopCallin({});
 #### 5.2.5. Delegates
 
 ```javascript 
-this.AZStack.Delegates.onCallinStart = (error, result) => {
+this.AZStackCore.Delegates.onCallinStart = (error, result) => {
     console.log(error, result);
 };
 ```
@@ -572,7 +572,7 @@ this.AZStack.Delegates.onCallinStart = (error, result) => {
 > - toPhoneNumber: to phone number
 
 ```javascript 
-this.AZStack.Delegates.onCallinStatusChanged = (error, result) => {
+this.AZStackCore.Delegates.onCallinStatusChanged = (error, result) => {
     console.log(error, result);
 };
 ```
@@ -586,7 +586,7 @@ this.AZStack.Delegates.onCallinStatusChanged = (error, result) => {
 > - message: status message
 
 ```javascript 
-this.AZStack.Delegates.onCallinStatusChangedByMe = (error, result) => {
+this.AZStackCore.Delegates.onCallinStatusChangedByMe = (error, result) => {
     console.log(error, result);
 };
 ```
@@ -604,7 +604,7 @@ this.AZStack.Delegates.onCallinStatusChangedByMe = (error, result) => {
 #### 5.3.1. Toggle audio state function
 
 ```javascript 
-this.AZStack.toggleAudioState({
+this.AZStackCore.toggleAudioState({
     state: false
 }, (error, result) => {
     console.log(error);
@@ -615,7 +615,7 @@ this.AZStack.toggleAudioState({
 OR
 
 ```javascript 
-this.AZStack.toggleAudioState({
+this.AZStackCore.toggleAudioState({
     state: false
 }).then((result) => {
     console.log(result);
@@ -627,10 +627,10 @@ this.AZStack.toggleAudioState({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onToggleAudioStateReturn = (error, result) => {
+this.AZStackCore.Delegates.onToggleAudioStateReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.toggleAudioState({
+this.AZStackCore.toggleAudioState({
     state: false
 });
 ```
@@ -647,7 +647,7 @@ this.AZStack.toggleAudioState({
 #### 5.4.1. Get paid call logs
 
 ```javascript 
-this.AZStack.getPaidCallLogs({}, (error, result) => {
+this.AZStackCore.getPaidCallLogs({}, (error, result) => {
     console.log(error);
     console.log(result);
 });
@@ -656,7 +656,7 @@ this.AZStack.getPaidCallLogs({}, (error, result) => {
 OR
 
 ```javascript 
-this.AZStack.getPaidCallLogs({}).then((result) => {
+this.AZStackCore.getPaidCallLogs({}).then((result) => {
     console.log(result);
 }).catch((error) => {
     console.log(error);
@@ -666,10 +666,10 @@ this.AZStack.getPaidCallLogs({}).then((result) => {
 OR
 
 ```javascript 
-this.AZStack.Delegates.onGetPaidCallLogsReturn = (error, result) => {
+this.AZStackCore.Delegates.onGetPaidCallLogsReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.getPaidCallLogs({});
+this.AZStackCore.getPaidCallLogs({});
 ```
 
 #### error:
@@ -689,7 +689,7 @@ this.AZStack.getPaidCallLogs({});
 #### 5.4.2. Delegates
 
 ```javascript 
-this.AZStack.Delegates.onPaidCallLogReturn = (error, result) => {
+this.AZStackCore.Delegates.onPaidCallLogReturn = (error, result) => {
     console.log(error, result);
 };
 ```
@@ -715,7 +715,7 @@ this.AZStack.Delegates.onPaidCallLogReturn = (error, result) => {
 #### 6.1 Get modified conversations
 
 ```javascript 
-this.AZStack.getModifiedConversations({
+this.AZStackCore.getModifiedConversations({
     page: 1,
     lastCreated: new Date().getTime()
 }, (error, result) => {
@@ -727,7 +727,7 @@ this.AZStack.getModifiedConversations({
 OR
 
 ```javascript 
-this.AZStack.getModifiedConversations({
+this.AZStackCore.getModifiedConversations({
     page: 1,
     lastCreated: new Date().getTime()
 }).then((result) => {
@@ -740,10 +740,10 @@ this.AZStack.getModifiedConversations({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onGetModifiedConversationsReturn = (error, result) => {
+this.AZStackCore.Delegates.onGetModifiedConversationsReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.getModifiedConversations({
+this.AZStackCore.getModifiedConversations({
     page: 1,
     lastCreated: new Date().getTime()
 });
@@ -810,9 +810,9 @@ this.AZStack.getModifiedConversations({
 #### 7.1.1. Get unread messages
 
 ```javascript 
-this.AZStack.getUnreadMessages({
+this.AZStackCore.getUnreadMessages({
     page: 1,
-    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
     chatId: 12345
 }, (error, result) => {
     console.log(error);
@@ -823,9 +823,9 @@ this.AZStack.getUnreadMessages({
 OR
 
 ```javascript 
-this.AZStack.getUnreadMessages({
+this.AZStackCore.getUnreadMessages({
     page: 1,
-    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
     chatId: 12345
 }).then((result) => {
     console.log(result);
@@ -837,12 +837,12 @@ this.AZStack.getUnreadMessages({
 OR
 
 ```javascript 
-this.AZStack.Delegates.getUnreadMessages = (error, result) => {
+this.AZStackCore.Delegates.getUnreadMessages = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.onGetUnreadMessagesReturn({
+this.AZStackCore.onGetUnreadMessagesReturn({
     page: 1,
-    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
     chatId: 12345
 });
 ```
@@ -908,10 +908,10 @@ this.AZStack.onGetUnreadMessagesReturn({
 #### 7.1.2 Get modified messages
 
 ```javascript 
-this.AZStack.getModifiedMessages({
+this.AZStackCore.getModifiedMessages({
     page: 1,
     lastCreated: new Date().getTime(),
-    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
     chatId: 12345
 }, (error, result) => {
     console.log(error);
@@ -922,10 +922,10 @@ this.AZStack.getModifiedMessages({
 OR
 
 ```javascript 
-this.AZStack.getModifiedMessages({
+this.AZStackCore.getModifiedMessages({
     page: 1,
     lastCreated: new Date().getTime(),
-    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
     chatId: 12345
 }).then((result) => {
     console.log(result);
@@ -937,13 +937,13 @@ this.AZStack.getModifiedMessages({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onGetModifiedMessagesReturn = (error, result) => {
+this.AZStackCore.Delegates.onGetModifiedMessagesReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.getModifiedMessages({
+this.AZStackCore.getModifiedMessages({
     page: 1,
     lastCreated: new Date().getTime(),
-    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
     chatId: 12345
 });
 ```
@@ -1010,9 +1010,9 @@ this.AZStack.getModifiedMessages({
 #### 7.1.3 Get modified files
 
 ```javascript 
-this.AZStack.getModifiedFiles({
+this.AZStackCore.getModifiedFiles({
     lastCreated: new Date().getTime(),
-    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
     chatId: 12345
 }, (error, result) => {
     console.log(error);
@@ -1023,9 +1023,9 @@ this.AZStack.getModifiedFiles({
 OR
 
 ```javascript 
-this.AZStack.getModifiedFiles({
+this.AZStackCore.getModifiedFiles({
     lastCreated: new Date().getTime(),
-    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
     chatId: 12345
 }).then((result) => {
     console.log(result);
@@ -1037,12 +1037,12 @@ this.AZStack.getModifiedFiles({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onGetModifiedFilesReturn = (error, result) => {
+this.AZStackCore.Delegates.onGetModifiedFilesReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.getModifiedFiles({
+this.AZStackCore.getModifiedFiles({
     lastCreated: new Date().getTime(),
-    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
     chatId: 12345
 });
 ```
@@ -1079,8 +1079,8 @@ this.AZStack.getModifiedFiles({
 ### 7.2.1. New message
 
 ```javascript 
-this.AZStack.newMessage({
-    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+this.AZStackCore.newMessage({
+    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
     chatId: 12345,
     text: 'text',
     sticker: {
@@ -1103,8 +1103,8 @@ this.AZStack.newMessage({
 OR
 
 ```javascript 
-this.AZStack.newMessage({
-    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+this.AZStackCore.newMessage({
+    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
     chatId: 12345,
     text: 'text',
     sticker: {
@@ -1128,11 +1128,11 @@ this.AZStack.newMessage({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onNewMessageReturn = (error, result) => {
+this.AZStackCore.Delegates.onNewMessageReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.newMessage({
-    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+this.AZStackCore.newMessage({
+    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
     chatId: 12345,
     text: 'text',
     sticker: {
@@ -1191,11 +1191,11 @@ this.AZStack.newMessage({
 ### 7.2.2. Change message status
 
 ```javascript 
-this.AZStack.changeMessageStatus({
-    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+this.AZStackCore.changeMessageStatus({
+    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
     chatId: 12345,
     messageSenderId: 1111,
-    messageStatus: this.AZStack.chatConstants.MESSAGE_STATUS_DELIVERED,
+    messageStatus: this.AZStackCore.chatConstants.MESSAGE_STATUS_DELIVERED,
     msgId: 54321
 }, (error, result) => {
     console.log(error);
@@ -1206,11 +1206,11 @@ this.AZStack.changeMessageStatus({
 OR
 
 ```javascript 
-this.AZStack.changeMessageStatus({
-    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+this.AZStackCore.changeMessageStatus({
+    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
     chatId: 12345,
     messageSenderId: 1111,
-    messageStatus: this.AZStack.chatConstants.MESSAGE_STATUS_DELIVERED,
+    messageStatus: this.AZStackCore.chatConstants.MESSAGE_STATUS_DELIVERED,
     msgId: 54321
 }).then((result) => {
     console.log(result);
@@ -1222,14 +1222,14 @@ this.AZStack.changeMessageStatus({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onChangeMessageStatusReturn = (error, result) => {
+this.AZStackCore.Delegates.onChangeMessageStatusReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.changeMessageStatus({
-    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+this.AZStackCore.changeMessageStatus({
+    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
     chatId: 12345,
     messageSenderId: 1111,
-    messageStatus: this.AZStack.chatConstants.MESSAGE_STATUS_DELIVERED,
+    messageStatus: this.AZStackCore.chatConstants.MESSAGE_STATUS_DELIVERED,
     msgId: 54321
 });
 ```
@@ -1248,8 +1248,8 @@ this.AZStack.changeMessageStatus({
 ### 7.2.3. Delete message
 
 ```javascript 
-this.AZStack.deleteMessage({
-    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+this.AZStackCore.deleteMessage({
+    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
     chatId: 12345,
     messageSenderId: 1111,
     msgId: 54321
@@ -1262,8 +1262,8 @@ this.AZStack.deleteMessage({
 OR
 
 ```javascript 
-this.AZStack.deleteMessage({
-    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+this.AZStackCore.deleteMessage({
+    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
     chatId: 12345,
     messageSenderId: 1111,
     msgId: 54321
@@ -1277,11 +1277,11 @@ this.AZStack.deleteMessage({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onMessageDeleted = (error, result) => {
+this.AZStackCore.Delegates.onMessageDeleted = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.deleteMessage({
-    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+this.AZStackCore.deleteMessage({
+    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
     chatId: 12345,
     messageSenderId: 1111,
     msgId: 54321
@@ -1301,8 +1301,8 @@ this.AZStack.deleteMessage({
 ### 7.2.4. Send typing
 
 ```javascript 
-this.AZStack.sendTyping({
-    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+this.AZStackCore.sendTyping({
+    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
     chatId: 12345
 }, (error, result) => {
     console.log(error);
@@ -1313,8 +1313,8 @@ this.AZStack.sendTyping({
 OR
 
 ```javascript 
-this.AZStack.sendTyping({
-    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+this.AZStackCore.sendTyping({
+    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
     chatId: 12345
 }).then((result) => {
     console.log(result);
@@ -1326,11 +1326,11 @@ this.AZStack.sendTyping({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onSendTypingReturn = (error, result) => {
+this.AZStackCore.Delegates.onSendTypingReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.sendTyping({
-    chatType: this.AZStack.chatConstants.CHAT_TYPE_USER,
+this.AZStackCore.sendTyping({
+    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
     chatId: 12345
 });
 ```
@@ -1348,7 +1348,7 @@ this.AZStack.sendTyping({
 #### 7.3.1. On new message
 
 ```javascript 
-this.AZStack.Delegates.onHasNewMessage = (error, result) => {
+this.AZStackCore.Delegates.onHasNewMessage = (error, result) => {
     console.log(error, result);
 };
 ```
@@ -1382,7 +1382,7 @@ this.AZStack.Delegates.onHasNewMessage = (error, result) => {
 #### 7.3.2. On message from me
 
 ```javascript 
-this.AZStack.Delegates.onMessageFromMe = (error, result) => {
+this.AZStackCore.Delegates.onMessageFromMe = (error, result) => {
     console.log(error, result);
 };
 ```
@@ -1416,7 +1416,7 @@ this.AZStack.Delegates.onMessageFromMe = (error, result) => {
 #### 7.3.3. On message status changed
 
 ```javascript 
-this.AZStack.Delegates.onMessageStatusChanged = (error, result) => {
+this.AZStackCore.Delegates.onMessageStatusChanged = (error, result) => {
     console.log(error, result);
 };
 ```
@@ -1436,7 +1436,7 @@ this.AZStack.Delegates.onMessageStatusChanged = (error, result) => {
 #### 7.3.4. On typing
 
 ```javascript 
-this.AZStack.Delegates.onTyping = (error, result) => {
+this.AZStackCore.Delegates.onTyping = (error, result) => {
     console.log(error, result);
 };
 ```
@@ -1458,7 +1458,7 @@ this.AZStack.Delegates.onTyping = (error, result) => {
 ### 8.1. Get users information
 
 ```javascript 
-this.AZStack.getUsersInformation({
+this.AZStackCore.getUsersInformation({
     userIds: [123],
     azStackUserIds: ['abcd']
 }, (error, result) => {
@@ -1470,7 +1470,7 @@ this.AZStack.getUsersInformation({
 OR
 
 ```javascript 
-this.AZStack.getUsersInformation({
+this.AZStackCore.getUsersInformation({
     userIds: [123],
     azStackUserIds: ['abcd']
 }).then((result) => {
@@ -1483,10 +1483,10 @@ this.AZStack.getUsersInformation({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onGetUsersInformationReturn = (error, result) => {
+this.AZStackCore.Delegates.onGetUsersInformationReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.getUsersInformation({
+this.AZStackCore.getUsersInformation({
     userIds: [123],
     azStackUserIds: ['abcd']
 });
@@ -1518,8 +1518,8 @@ this.AZStack.getUsersInformation({
 #### 9.1.1. Create group
 
 ```javascript 
-this.AZStack.createGroup({
-    type: this.AZStack.groupConstants.GROUP_TYPE_PRIVATE,
+this.AZStackCore.createGroup({
+    type: this.AZStackCore.groupConstants.GROUP_TYPE_PRIVATE,
     name: 'Group name',
     memberIds: [1234, 4321]
 }, (error, result) => {
@@ -1531,8 +1531,8 @@ this.AZStack.createGroup({
 OR
 
 ```javascript 
-this.AZStack.createGroup({
-    type: this.AZStack.groupConstants.GROUP_TYPE_PRIVATE,
+this.AZStackCore.createGroup({
+    type: this.AZStackCore.groupConstants.GROUP_TYPE_PRIVATE,
     name: 'Group name',
     memberIds: [1234, 4321]
 }).then((result) => {
@@ -1545,11 +1545,11 @@ this.AZStack.createGroup({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onGroupCreateReturn = (error, result) => {
+this.AZStackCore.Delegates.onGroupCreateReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.createGroup({
-    type: this.AZStack.groupConstants.GROUP_TYPE_PRIVATE,
+this.AZStackCore.createGroup({
+    type: this.AZStackCore.groupConstants.GROUP_TYPE_PRIVATE,
     name: 'Group name',
     memberIds: [1234, 4321]
 });
@@ -1576,7 +1576,7 @@ this.AZStack.createGroup({
 #### 9.1.2. Invite group
 
 ```javascript 
-this.AZStack.inviteGroup({
+this.AZStackCore.inviteGroup({
     groupId: 1234,
     inviteIds: [4321]
 }, (error, result) => {
@@ -1588,7 +1588,7 @@ this.AZStack.inviteGroup({
 OR
 
 ```javascript 
-this.AZStack.inviteGroup({
+this.AZStackCore.inviteGroup({
     groupId: 1234,
     inviteIds: [4321]
 }).then((result) => {
@@ -1601,10 +1601,10 @@ this.AZStack.inviteGroup({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onGroupInviteReturn = (error, result) => {
+this.AZStackCore.Delegates.onGroupInviteReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.inviteGroup({
+this.AZStackCore.inviteGroup({
     groupId: 1234,
     inviteIds: [4321]
 });
@@ -1627,7 +1627,7 @@ this.AZStack.inviteGroup({
 #### 9.1.3. Leave group
 
 ```javascript 
-this.AZStack.leaveGroup({
+this.AZStackCore.leaveGroup({
     groupId: 1234,
     leaveId: 4321,
     newAdminId: 1122
@@ -1640,7 +1640,7 @@ this.AZStack.leaveGroup({
 OR
 
 ```javascript 
-this.AZStack.leaveGroup({
+this.AZStackCore.leaveGroup({
     groupId: 1234,
     leaveId: 4321,
     newAdminId: 1122
@@ -1654,10 +1654,10 @@ this.AZStack.leaveGroup({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onGroupLeaveReturn = (error, result) => {
+this.AZStackCore.Delegates.onGroupLeaveReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.leaveGroup({
+this.AZStackCore.leaveGroup({
     groupId: 1234,
     leaveId: 4321,
     newAdminId: 1122
@@ -1682,7 +1682,7 @@ this.AZStack.leaveGroup({
 #### 9.1.4. Rename group
 
 ```javascript 
-this.AZStack.renameGroup({
+this.AZStackCore.renameGroup({
     groupId: 1234,
     newName: 'Test Group'
 }, (error, result) => {
@@ -1694,7 +1694,7 @@ this.AZStack.renameGroup({
 OR
 
 ```javascript 
-this.AZStack.renameGroup({
+this.AZStackCore.renameGroup({
     groupId: 1234,
     newName: 'Test Group'
 }).then((result) => {
@@ -1707,10 +1707,10 @@ this.AZStack.renameGroup({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onGroupRenameReturn = (error, result) => {
+this.AZStackCore.Delegates.onGroupRenameReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.renameGroup({
+this.AZStackCore.renameGroup({
     groupId: 1234,
     newName: 'Test Group'
 });
@@ -1733,7 +1733,7 @@ this.AZStack.renameGroup({
 #### 9.1.5. Change admin group
 
 ```javascript 
-this.AZStack.changeAdminGroup({
+this.AZStackCore.changeAdminGroup({
     groupId: 1234,
     newAdminId: 4321
 }, (error, result) => {
@@ -1745,7 +1745,7 @@ this.AZStack.changeAdminGroup({
 OR
 
 ```javascript 
-this.AZStack.changeAdminGroup({
+this.AZStackCore.changeAdminGroup({
     groupId: 1234,
     newAdminId: 4321
 }).then((result) => {
@@ -1758,10 +1758,10 @@ this.AZStack.changeAdminGroup({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onGroupAdminChangeReturn = (error, result) => {
+this.AZStackCore.Delegates.onGroupAdminChangeReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.changeAdminGroup({
+this.AZStackCore.changeAdminGroup({
     groupId: 1234,
     newAdminId: 4321
 });
@@ -1784,7 +1784,7 @@ this.AZStack.changeAdminGroup({
 #### 9.1.6. Join public group
 
 ```javascript 
-this.AZStack.joinPublicGroup({
+this.AZStackCore.joinPublicGroup({
     groupId: 1234
 }, (error, result) => {
     console.log(error);
@@ -1795,7 +1795,7 @@ this.AZStack.joinPublicGroup({
 OR
 
 ```javascript 
-this.AZStack.joinPublicGroup({
+this.AZStackCore.joinPublicGroup({
     groupId: 1234
 }).then((result) => {
     console.log(result);
@@ -1807,10 +1807,10 @@ this.AZStack.joinPublicGroup({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onGroupJoinPublicReturn = (error, result) => {
+this.AZStackCore.Delegates.onGroupJoinPublicReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.joinPublicGroup({
+this.AZStackCore.joinPublicGroup({
     groupId: 1234
 });
 ```
@@ -1833,7 +1833,7 @@ this.AZStack.joinPublicGroup({
 #### 9.2.1. Get group details
 
 ```javascript 
-this.AZStack.getDetailsGroup({
+this.AZStackCore.getDetailsGroup({
     groupId: 1234
 }, (error, result) => {
     console.log(error);
@@ -1844,7 +1844,7 @@ this.AZStack.getDetailsGroup({
 OR
 
 ```javascript 
-this.AZStack.getDetailsGroup({
+this.AZStackCore.getDetailsGroup({
     groupId: 1234
 }).then((result) => {
     console.log(result);
@@ -1856,10 +1856,10 @@ this.AZStack.getDetailsGroup({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onGroupGetDetailsReturn = (error, result) => {
+this.AZStackCore.Delegates.onGroupGetDetailsReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.getDetailsGroup({
+this.AZStackCore.getDetailsGroup({
     groupId: 1234
 });
 ```
@@ -1886,8 +1886,8 @@ this.AZStack.getDetailsGroup({
 #### 9.2.2. Get groups list
 
 ```javascript 
-this.AZStack.getListGroups({
-    groupType: this.AZStack.groupConstants.GROUP_TYPE_PRIVATE
+this.AZStackCore.getListGroups({
+    groupType: this.AZStackCore.groupConstants.GROUP_TYPE_PRIVATE
 }, (error, result) => {
     console.log(error);
     console.log(result);
@@ -1897,8 +1897,8 @@ this.AZStack.getListGroups({
 OR
 
 ```javascript 
-this.AZStack.getListGroups({
-    groupType: this.AZStack.groupConstants.GROUP_TYPE_PRIVATE
+this.AZStackCore.getListGroups({
+    groupType: this.AZStackCore.groupConstants.GROUP_TYPE_PRIVATE
 }).then((result) => {
     console.log(result);
 }).catch((error) => {
@@ -1909,11 +1909,11 @@ this.AZStack.getListGroups({
 OR
 
 ```javascript 
-this.AZStack.Delegates.onGroupGetListReturn = (error, result) => {
+this.AZStackCore.Delegates.onGroupGetListReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStack.getListGroups({
-    groupType: this.AZStack.groupConstants.GROUP_TYPE_PRIVATE
+this.AZStackCore.getListGroups({
+    groupType: this.AZStackCore.groupConstants.GROUP_TYPE_PRIVATE
 });
 ```
 
@@ -1940,7 +1940,7 @@ this.AZStack.getListGroups({
 #### 9.3.1. On group created
 
 ```javascript 
-this.AZStack.Delegates.onGroupCreated = (error, result) => {
+this.AZStackCore.Delegates.onGroupCreated = (error, result) => {
     console.log(error, result);
 };
 ```
@@ -1971,7 +1971,7 @@ this.AZStack.Delegates.onGroupCreated = (error, result) => {
 #### 9.3.2. On group invited
 
 ```javascript 
-this.AZStack.Delegates.onGroupInvited = (error, result) => {
+this.AZStackCore.Delegates.onGroupInvited = (error, result) => {
     console.log(error, result);
 };
 ```
@@ -1998,7 +1998,7 @@ this.AZStack.Delegates.onGroupInvited = (error, result) => {
 #### 9.3.3. On group left
 
 ```javascript 
-this.AZStack.Delegates.onGroupLeft = (error, result) => {
+this.AZStackCore.Delegates.onGroupLeft = (error, result) => {
     console.log(error, result);
 };
 ```
@@ -2026,7 +2026,7 @@ this.AZStack.Delegates.onGroupLeft = (error, result) => {
 #### 9.3.4. On group renamed
 
 ```javascript 
-this.AZStack.Delegates.onGroupRenamed = (error, result) => {
+this.AZStackCore.Delegates.onGroupRenamed = (error, result) => {
     console.log(error, result);
 };
 ```
@@ -2053,7 +2053,7 @@ this.AZStack.Delegates.onGroupRenamed = (error, result) => {
 #### 9.3.5. On group admin changed
 
 ```javascript 
-this.AZStack.Delegates.onGroupAdminChanged = (error, result) => {
+this.AZStackCore.Delegates.onGroupAdminChanged = (error, result) => {
     console.log(error, result);
 };
 ```
@@ -2080,7 +2080,7 @@ this.AZStack.Delegates.onGroupAdminChanged = (error, result) => {
 #### 9.3.6. On group public joined
 
 ```javascript 
-this.AZStack.Delegates.onGroupPublicJoined = (error, result) => {
+this.AZStackCore.Delegates.onGroupPublicJoined = (error, result) => {
     console.log(error, result);
 };
 ```
