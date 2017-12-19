@@ -23,6 +23,7 @@ class Call {
             toPhoneNumber: null,
             callinType: null,
             webRTC: {
+                audioState: null,
                 peerConnection: null,
                 localIceCandidates: [],
                 localSessionDescription: null,
@@ -41,6 +42,11 @@ class Call {
             this.callData[field] = options[field];
         }
     };
+    setWebRTCCallData(options) {
+        for (let field in options) {
+            this.callData.webRTC[field] = options[field];
+        }
+    };
     clearCallData() {
         this.callData.isCaller = null;
         this.callData.callType = null;
@@ -48,6 +54,7 @@ class Call {
         this.callData.fromPhoneNumber = null;
         this.callData.toPhoneNumber = null;
         this.callData.callinType = null;
+        this.callData.webRTC.audioState = null;
         this.callData.webRTC.peerConnection = null;
         this.callData.webRTC.localIceCandidates = [];
         this.callData.webRTC.localSessionDescription = null;
@@ -320,26 +327,37 @@ class Call {
                 audioTracks.map((audioTrack) => {
                     audioTrack.enabled = options.state
                 });
+                if (audioTracks[0].enabled) {
+                    this.callData.webRTC.audioState = this.callConstants.CALL_WEBRTC_AUDIO_STATE_ON;
+                } else {
+                    this.callData.webRTC.audioState = this.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF;
+                }
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                     message: 'Set audio state done'
                 });
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
                     message: 'Audio state',
-                    payload: audioTracks[0].enabled ? 'on' : 'off'
+                    payload: this.callData.webRTC.audioState
                 });
             } else {
                 audioTracks.map((audioTrack) => {
                     audioTrack.enabled = !audioTrack.enabled
                 });
+                if (audioTracks[0].enabled) {
+                    this.callData.webRTC.audioState = this.callConstants.CALL_WEBRTC_AUDIO_STATE_ON;
+                } else {
+                    this.callData.webRTC.audioState = this.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF;
+                }
+
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                     message: 'Toggle audio state done'
                 });
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
                     message: 'Audio state',
-                    payload: audioTracks[0].enabled ? 'on' : 'off'
+                    payload: this.callData.webRTC.audioState
                 });
             }
-            resolve();
+            resolve({ audioState: this.callData.webRTC.audioState });
         });
     };
 
@@ -365,6 +383,9 @@ class Call {
                 callType: this.callConstants.CALL_TYPE_CALLOUT,
                 callId: options.callId,
                 toPhoneNumber: options.toPhoneNumber
+            });
+            this.setWebRTCCallData({
+                audioState: this.callConstants.CALL_WEBRTC_AUDIO_STATE_ON
             });
 
             const startCalloutPacket = {
@@ -776,6 +797,10 @@ class Call {
                 fromPhoneNumber: body.from,
                 toPhoneNumber: body.to
             });
+            this.setWebRTCCallData({
+                audioState: this.callConstants.CALL_WEBRTC_AUDIO_STATE_ON
+            });
+
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Got remote session description and ice candidates'
             });

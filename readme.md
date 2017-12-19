@@ -11,6 +11,7 @@
             * [3.3.3.1. Callout](#3331-callout)
             * [3.3.3.2. Callin](#3332-callin)
             * [3.3.3.3. Paid call log](#3333-paid-call-log)
+            * [3.3.3.4. WebRTC](#3334-webrtc)
         * [3.3.4. List constants](#334-list-constants)
             * [3.3.4.1. Done](#3341-done)
         * [3.3.5. Chat constants](#335-chat-constants)
@@ -192,6 +193,10 @@ this.AZStackCore.config({
 > - CALL_PAID_LOG_CALL_STATUS_ANSWERED(0): status answered
 > - CALL_PAID_LOG_CALL_STATUS_REJECTED(1): status rejected
 > - CALL_PAID_LOG_CALL_STATUS_NOT_ANSWERED(2): status not answered
+
+#### 3.3.3.4. WebRTC
+> - CALL_WEBRTC_AUDIO_STATE_OFF(0): audio off
+> - CALL_WEBRTC_AUDIO_STATE_ON(1): audio on
 
 ### 3.3.4. List constants
 
@@ -644,6 +649,9 @@ this.AZStackCore.toggleAudioState({
 #### error:
 > - code: error code
 > - message: error message
+
+#### result:
+> - audioState: audio state
 
 ### 3.5.4. Paid call logs
 

@@ -877,7 +877,7 @@ export class AZStackCore {
             this.Call.toggleAudioState({
                 state: options.state
             }).then((result) => {
-                this.callUncall(this.uncallConstants.UNCALL_KEY_TOGGLE_AUDIO_STATE, 'default', null, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_TOGGLE_AUDIO_STATE, 'default', null, result);
             }).catch((error) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_TOGGLE_AUDIO_STATE, 'default', error, null);
             });
