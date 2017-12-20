@@ -1,6 +1,7 @@
 import {
     RTCPeerConnection,
     RTCSessionDescription,
+    RTCIceCandidate,
     getUserMedia
 } from 'react-native-webrtc';
 
@@ -16,10 +17,12 @@ class Call {
 
         this.iceServers = null;
         this.callData = {
-            hasVideo: null,
+            mediaType: null,
             isCaller: null,
             callType: null,
             callId: null,
+            fromUserId: null,
+            toUserId: null,
             fromPhoneNumber: null,
             toPhoneNumber: null,
             callinType: null,
@@ -49,10 +52,12 @@ class Call {
         }
     };
     clearCallData() {
-        this.callData.hasVideo = null;
+        this.callData.mediaType = null;
         this.callData.isCaller = null;
         this.callData.callType = null;
         this.callData.callId = null;
+        this.callData.fromUserId = null;
+        this.callData.toUserId = null;
         this.callData.fromPhoneNumber = null;
         this.callData.toPhoneNumber = null;
         this.callData.callinType = null;
@@ -155,6 +160,38 @@ class Call {
                     payload: event.candidate
                 });
                 this.callData.webRTC.localIceCandidates.push(event.candidate);
+
+                if (this.callData.callType === this.callConstants.CALL_TYPE_FREE_CALL) {
+                    const freeCallDataPacket = {
+                        service: this.serviceTypes.FREE_CALL_DATA,
+                        body: JSON.stringify({
+                            callId: this.callData.callId,
+                            type: this.callConstants.CALL_WEBRTC_DATA_TYPE_ICE_CANDIDATE,
+                            to: this.callData.toUserId,
+                            data: {
+                                sdpMid: event.candidate.sdpMid,
+                                sdpMLineIndex: event.candidate.sdpMLineIndex,
+                                sdp: event.candidate.candidate
+                            }
+                        })
+                    };
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Send free call data packet'
+                    });
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                        message: 'Free call data packet',
+                        payload: freeCallDataPacket
+                    });
+                    this.sendPacketFunction(freeCallDataPacket).then(() => {
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                            message: 'Send free call data packet successfully'
+                        });
+                    }).catch((error) => {
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                            message: 'Cannot send free call data data, free call data fail'
+                        });
+                    });
+                }
             };
             this.callData.webRTC.peerConnection.onaddstream = (event) => {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
@@ -269,6 +306,43 @@ class Call {
                 if (this.callData.callType === this.callConstants.CALL_TYPE_CALLOUT) {
                     resolve();
                 }
+                if (this.callData.callType === this.callConstants.CALL_TYPE_FREE_CALL) {
+                    if (this.callData.isCaller) {
+                        const startFreeCallPacket = {
+                            service: this.serviceTypes.FREE_CALL_START,
+                            body: JSON.stringify({
+                                callId: this.callData.callId,
+                                mediaType: this.callData.mediaType,
+                                to: this.callData.toUserId,
+                                sdp: this.callData.webRTC.localSessionDescription
+                            })
+                        };
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                            message: 'Send start free call packet'
+                        });
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                            message: 'Start free call packet',
+                            payload: startFreeCallPacket
+                        });
+                        this.sendPacketFunction(startFreeCallPacket).then(() => {
+                            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                                message: 'Send start free call packet successfully'
+                            });
+                            resolve();
+                        }).catch((error) => {
+                            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                                message: 'Cannot send start free call data, start free call fail'
+                            });
+                            this.clearCallData();
+                            reject({
+                                code: error.code,
+                                message: 'Cannot send start free call data, start free call fail'
+                            });
+                        });
+                    } else {
+
+                    }
+                }
             };
             const peerConnectionInitConnectionError = (error) => {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
@@ -363,6 +437,406 @@ class Call {
         });
     };
 
+    sendStartFreeCall(options) {
+        return new Promise((resolve, reject) => {
+            if (this.callData.callId) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot start free call when currently on call'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot start free call when currently on call'
+                });
+                return;
+            }
+
+            this.setCallData({
+                mediaType: options.mediaType,
+                isCaller: true,
+                callType: this.callConstants.CALL_TYPE_FREE_CALL,
+                callId: options.callId,
+                fromUserId: options.fromUserId,
+                toUserId: options.toUserId
+            });
+            this.setWebRTCCallData({
+                audioState: this.callConstants.CALL_WEBRTC_AUDIO_STATE_ON
+            });
+
+            return this.initWebRTC().then(() => {
+                resolve();
+            }).catch((error) => {
+                reject(error);
+            });
+        });
+    };
+    receiveFreeCallData(body) {
+        return new Promise((resolve, reject) => {
+            if (!body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect free call data, ignored'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got free call data'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Free call data',
+                payload: body
+            });
+
+            if (this.callData.callId !== body.callId) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Ignore free call packet when callId not matched'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                return;
+            }
+
+            if (body.type === this.callConstants.CALL_WEBRTC_DATA_TYPE_SESSION_DESCRIPTION) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Got remote session description'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Remote session description',
+                    payload: body.data
+                });
+
+                this.callData.webRTC.remoteSessionDescription = new RTCSessionDescription(body.data);
+
+                if (this.callData.webRTC.peerConnection) {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Set remote session description to peer connection'
+                    });
+                    this.callData.webRTC.peerConnection.setRemoteDescription(this.callData.webRTC.remoteSessionDescription).then(() => {
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                            message: 'Set remote session description success'
+                        });
+                    }).catch((error) => {
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                            message: 'Set remote session description fail'
+                        });
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                            message: 'Set remote session description error',
+                            payload: error
+                        });
+                    });
+                }
+            }
+
+            if (body.type === this.callConstants.CALL_WEBRTC_DATA_TYPE_ICE_CANDIDATE) {
+                let originalIceCandidate = new RTCIceCandidate({
+                    candidate: body.data.sdp,
+                    sdpMid: body.data.sdpMid,
+                    sdpMLineIndex: body.data.sdpMLineIndex
+                });
+
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Got remote ice candidate'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Remote ice candidate',
+                    payload: originalIceCandidate
+                });
+
+                this.callData.webRTC.remoteIceCandidates.push(originalIceCandidate);
+
+                if (this.callData.webRTC.peerConnection) {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Add remote ice candidate to peer connection'
+                    });
+                    this.callData.webRTC.peerConnection.addIceCandidate(originalIceCandidate).then(() => {
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                            message: 'Add remote ice candidate success'
+                        });
+                    }).catch((error) => {
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                            message: 'Add remote ice candidate fail'
+                        });
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                            message: 'Add remote ice candidate error',
+                            payload: error
+                        });
+                    });
+                }
+            }
+        });
+    };
+    receiveFreeCallStatusChanged(body) {
+        return new Promise((resolve, reject) => {
+            if (!body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect free call status, ignored'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got free call status changed data'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Free call status changed data',
+                payload: body
+            });
+
+            if (this.callData.callId !== body.callId) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Ignore free call status changed packet when callId not matched'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                return;
+            }
+
+            switch (body.status) {
+                case this.callConstants.CALL_STATUS_FREE_CALL_CONNECTING:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Free call status changed to connecting'
+                    });
+                    resolve({
+                        status: this.callConstants.CALL_STATUS_FREE_CALL_CONNECTING,
+                        message: 'Free call status changed to connecting'
+                    });
+                    break;
+                case this.callConstants.CALL_STATUS_FREE_CALL_RINGING:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Free call status changed to ringing'
+                    });
+                    resolve({
+                        status: this.callConstants.CALL_STATUS_FREE_CALL_RINGING,
+                        message: 'Free call status changed to ringing'
+                    });
+                    break;
+                case this.callConstants.CALL_STATUS_FREE_CALL_ANSWERED:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Free call status changed to answered'
+                    });
+                    resolve({
+                        status: this.callConstants.CALL_STATUS_FREE_CALL_ANSWERED,
+                        message: 'Free call status changed to answered'
+                    });
+                    break;
+                case this.callConstants.CALL_STATUS_FREE_CALL_BUSY:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Free call status changed to busy, free call end'
+                    });
+                    this.clearCallData();
+                    resolve({
+                        status: this.callConstants.CALL_STATUS_FREE_CALL_BUSY,
+                        message: 'Free call status changed to busy, free call end'
+                    });
+                    break;
+                case this.callConstants.CALL_STATUS_FREE_CALL_REJECTED:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Free call status changed to rejected, free call end'
+                    });
+                    this.clearCallData();
+                    resolve({
+                        status: this.callConstants.CALL_STATUS_FREE_CALL_REJECTED,
+                        message: 'Free call status changed to rejected, free call end'
+                    });
+                    break;
+                case this.callConstants.CALL_STATUS_FREE_CALL_STOP:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Free call status changed to stop, free call end'
+                    });
+                    this.clearCallData();
+                    resolve({
+                        status: this.callConstants.CALL_STATUS_FREE_CALL_STOP,
+                        message: 'Free call status changed to stop, free call end'
+                    });
+                    break;
+                case this.callConstants.CALL_STATUS_FREE_CALL_NOT_ANSWERED:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Free call status changed to not answered, free call end'
+                    });
+                    this.clearCallData();
+                    resolve({
+                        status: this.callConstants.CALL_STATUS_FREE_CALL_NOT_ANSWERED,
+                        message: 'Free call status changed to not answered, free call end'
+                    });
+                    break;
+                default:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Free call status changed to unknown'
+                    });
+                    resolve({
+                        status: this.callConstants.CALL_STATUS_FREE_CALL_UNKNOWN,
+                        message: 'Free call status changed to unknown'
+                    });
+                    break;
+            }
+        });
+    };
+    receiveFreeCallStatusChangedByMe(body) {
+        return new Promise((resolve, reject) => {
+            if (!body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect free call status by me, ignored'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got free call status by me changed data'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Free call status by me changed data',
+                payload: body
+            });
+
+            if (this.callData.callId !== body.callId) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Ignore free call status by me changed packet when callId not matched'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                return;
+            }
+
+            switch (body.status) {
+                case this.callConstants.CALL_STATUS_FREE_CALL_CONNECTING:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Free call status changed to connecting by me'
+                    });
+                    resolve({
+                        status: this.callConstants.CALL_STATUS_FREE_CALL_CONNECTING,
+                        message: 'Free call status changed to connecting by me'
+                    });
+                    break;
+                case this.callConstants.CALL_STATUS_FREE_CALL_RINGING:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Free call status changed to ringing by me'
+                    });
+                    resolve({
+                        status: this.callConstants.CALL_STATUS_FREE_CALL_RINGING,
+                        message: 'Free call status changed to ringing by me'
+                    });
+                    break;
+                case this.callConstants.CALL_STATUS_FREE_CALL_ANSWERED:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Free call status changed to answered by me, free call end'
+                    });
+                    this.clearCallData();
+                    resolve({
+                        status: this.callConstants.CALL_STATUS_FREE_CALL_ANSWERED,
+                        message: 'Free call status changed to answered by me, free call end'
+                    });
+                    break;
+                case this.callConstants.CALL_STATUS_FREE_CALL_BUSY:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Free call status changed to busy by me, free call end'
+                    });
+                    this.clearCallData();
+                    resolve({
+                        status: this.callConstants.CALL_STATUS_FREE_CALL_BUSY,
+                        message: 'Free call status changed to busy by me, free call end'
+                    });
+                    break;
+                case this.callConstants.CALL_STATUS_FREE_CALL_REJECTED:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Free call status changed to rejected by me, free call end'
+                    });
+                    this.clearCallData();
+                    resolve({
+                        status: this.callConstants.CALL_STATUS_FREE_CALL_REJECTED,
+                        message: 'Free call status changed to rejected by me, free call end'
+                    });
+                    break;
+                case this.callConstants.CALL_STATUS_FREE_CALL_STOP:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Free call status changed to stop by me, free call end'
+                    });
+                    this.clearCallData();
+                    resolve({
+                        status: this.callConstants.CALL_STATUS_FREE_CALL_STOP,
+                        message: 'Free call status changed to stop by me, free call end'
+                    });
+                    break;
+                case this.callConstants.CALL_STATUS_FREE_CALL_NOT_ANSWERED:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Free call status changed to not answered by me, free call end'
+                    });
+                    this.clearCallData();
+                    resolve({
+                        status: this.callConstants.CALL_STATUS_FREE_CALL_NOT_ANSWERED,
+                        message: 'Free call status changed to not answered by me, free call end'
+                    });
+                    break;
+                default:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Free call status changed to unknown by me'
+                    });
+                    resolve({
+                        status: this.callConstants.CALL_STATUS_FREE_CALL_UNKNOWN,
+                        message: 'Free call status changed to unknown by me'
+                    });
+                    break;
+            }
+        });
+    };
+    sendStopFreeCall(options) {
+        return new Promise((resolve, reject) => {
+            if (!this.callData.callId || this.callData.callType !== this.callConstants.CALL_TYPE_FREE_CALL) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot stop free call when not currently on free call'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot stop free call when not currently on free call'
+                });
+                return;
+            }
+
+            const stopFreeCallPacket = {
+                service: this.serviceTypes.FREE_CALL_STATUS_CHANGED,
+                body: JSON.stringify({
+                    callId: this.callData.callId,
+                    to: this.callData.toUserId,
+                    status: this.callConstants.CALL_STATUS_FREE_CALL_STOP
+                })
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send stop free call packet'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Stop free call packet',
+                payload: stopFreeCallPacket
+            });
+            this.sendPacketFunction(stopFreeCallPacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send stop free call packet successfully'
+                });
+                this.clearCallData();
+                resolve();
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send stop free call data, stop free call fail'
+                });
+                reject({
+                    code: error.code,
+                    message: 'Cannot send stop free call data, stop free call fail'
+                });
+            });
+        });
+    };
+
     sendStartCallout(options) {
         return new Promise((resolve, reject) => {
             if (this.callData.callId) {
@@ -381,7 +855,7 @@ class Call {
             }
 
             this.setCallData({
-                hasVideo: false,
+                mediaType: this.callConstants.CALL_MEDIA_TYPE_AUDIO,
                 isCaller: true,
                 callType: this.callConstants.CALL_TYPE_CALLOUT,
                 callId: options.callId,
@@ -520,7 +994,7 @@ class Call {
             }
 
             return this.initWebRTC().then(() => {
-                resolve()
+                resolve();
             }).catch((error) => {
                 reject(error);
             });
@@ -793,7 +1267,7 @@ class Call {
             });
 
             this.setCallData({
-                hasVideo: false,
+                mediaType: this.callConstants.CALL_MEDIA_TYPE_AUDIO,
                 isCaller: false,
                 callType: this.callConstants.CALL_TYPE_CALLIN,
                 callId: body.callId,
@@ -1002,7 +1476,7 @@ class Call {
             }
 
             return this.initWebRTC().then(() => {
-                resolve()
+                resolve();
             }).catch((error) => {
                 reject(error);
             });

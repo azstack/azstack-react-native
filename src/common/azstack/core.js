@@ -219,6 +219,24 @@ export class AZStackCore {
                 });
                 break;
 
+            case this.serviceTypes.FREE_CALL_DATA:
+                this.Call.receiveFreeCallData(body).then(() => { }).catch();
+                break;
+            case this.serviceTypes.FREE_CALL_STATUS_CHANGED:
+                this.Call.receiveFreeCallStatusChanged(body).then((result) => {
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_FREE_CALL_STAUTUS_CHANGED] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_FREE_CALL_STAUTUS_CHANGED](null, result);
+                    }
+                }).catch();
+                break;
+            case this.serviceTypes.FREE_CALL_STATUS_CHANGED_BY_ME:
+                this.Call.receiveFreeCallStatusChangedByMe(body).then((result) => {
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_FREE_CALL_STAUTUS_CHANGED_BY_ME] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_FREE_CALL_STAUTUS_CHANGED_BY_ME](null, result);
+                    }
+                }).catch();
+                break;
+
             case this.serviceTypes.CALLOUT_START_INITIAL:
                 this.Call.receiveStartCalloutInitial(body).then(() => { }).catch((error) => {
                     this.callUncall(this.uncallConstants.UNCALL_KEY_START_CALLOUT, 'default', error, null);
@@ -880,6 +898,80 @@ export class AZStackCore {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_TOGGLE_AUDIO_STATE, 'default', null, result);
             }).catch((error) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_TOGGLE_AUDIO_STATE, 'default', error, null);
+            });
+        });
+    };
+
+    startFreeCall(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Start free call'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Free call data',
+                payload: options
+            });
+            this.addUncall(this.uncallConstants.UNCALL_KEY_START_FREE_CALL, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_START_FREE_CALL_RETURN);
+
+            if (!options || typeof options !== 'object') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Missing free call data'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_START_FREE_CALL, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'Missing free call data'
+                }, null);
+                return;
+            }
+
+            let dataErrorMessage = this.Validator.check([{
+                name: 'mediaType',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.mediaType,
+                in: [this.callConstants.CALL_MEDIA_TYPE_AUDIO, this.callConstants.CALL_MEDIA_TYPE_VIDEO]
+            }, {
+                name: 'toUserId',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.toUserId,
+                notEqual: 0
+            }]);
+            if (dataErrorMessage) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: dataErrorMessage
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_START_FREE_CALL, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: dataErrorMessage
+                }, null);
+                return;
+            }
+
+            this.newUniqueId();
+            this.Call.sendStartFreeCall({
+                mediaType: options.mediaType,
+                callId: this.uniqueId,
+                fromUserId: this.authenticatedUser.userId,
+                toUserId: options.toUserId
+            }).then(() => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_START_FREE_CALL, 'default', null, null);
+            }).catch((error) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_START_FREE_CALL, 'default', error, null);
+            });
+        });
+    };
+    stopFreeCall(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Stop free call'
+            });
+            this.addUncall(this.uncallConstants.UNCALL_KEY_STOP_FREE_CALL, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_STOP_FREE_CALL_RETURN);
+
+            this.Call.sendStopFreeCall({}).then((result) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_STOP_FREE_CALL, 'default', null, null);
+            }).catch((error) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_STOP_FREE_CALL, 'default', error, null);
             });
         });
     };

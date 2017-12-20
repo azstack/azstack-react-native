@@ -3,6 +3,11 @@ export const DELEGATE_ON_DISCONNECT_RETURN = 'onDisconnectReturn';
 
 export const DELEGATE_ON_TOGGLE_AUDIO_STATE_RETURN = 'onToggleAudioStateReturn';
 
+export const DELEGATE_ON_START_FREE_CALL_RETURN = 'onStartFreeCallReturn';
+export const DELEGATE_ON_FREE_CALL_STAUTUS_CHANGED = 'onFreeCallStatusChanged';
+export const DELEGATE_ON_FREE_CALL_STAUTUS_CHANGED_BY_ME = 'onFreeCallStatusChangedByMe';
+export const DELEGATE_ON_STOP_FREE_CALL_RETURN = 'onStopFreeCallReturn';
+
 export const DELEGATE_ON_START_CALLOUT_RETURN = 'onStartCalloutReturn';
 export const DELEGATE_ON_STOP_CALLOUT_RETURN = 'onStopCalloutReturn';
 export const DELEGATE_CALLOUT_STAUTUS_CHANGED = 'onCalloutStatusChanged';

@@ -8,10 +8,12 @@
         * [3.3.1. Log levels](#331-log-levels)
         * [3.3.2. Error codes](#332-error-codes)
         * [3.3.3. Call constants](#333-call-constants)
-            * [3.3.3.1. Callout](#3331-callout)
-            * [3.3.3.2. Callin](#3332-callin)
-            * [3.3.3.3. Paid call log](#3333-paid-call-log)
-            * [3.3.3.4. WebRTC](#3334-webrtc)
+            * [3.3.3.1. WebRTC](#3331-webrtc)
+            * [3.3.3.2. Media type](#3332-media-type)
+            * [3.3.3.3. Free call](#3333-free-call)
+            * [3.3.3.4. Callout](#3334-callout)
+            * [3.3.3.5. Callin](#3335-callin)
+            * [3.3.3.6. Paid call log](#3336-paid-call-log)
         * [3.3.4. List constants](#334-list-constants)
             * [3.3.4.1. Done](#3341-done)
         * [3.3.5. Chat constants](#335-chat-constants)
@@ -29,21 +31,25 @@
         * [3.4.1. Connect](#341-connect)
         * [3.4.2. Disconnect](#342-disconnect)
     * [3.5. Calls](#35-calls)
-        * [3.5.1 Callout](#351-callout)
+        * [3.5.1. Free call](#351-free-call)
             * [3.5.1.1. Start function](#3511-start-function)
             * [3.5.1.2. Stop function](#3512-stop-function)
-            * [3.5.1.3. Delegates](#3513-delegates)
-        * [3.5.2 Callin](#352-callin)
-            * [3.5.2.1. Answer function](#3521-answer-function)
-            * [3.5.2.2. Reject function](#3522-reject-function)
-            * [3.5.2.3. Not Answered function](#3523-not-answered-function)
-            * [3.5.2.4. Stop function](#3524-stop-function)
-            * [3.5.2.5. Delegates](#3525-delegates)
-        * [3.5.3. Ultilities](#353-ultilities)
-            * [3.5.3.1. Toggle audio state function](#3531-toggle-audio-state-function)
-        * [3.5.4. Paid call logs](#354-paid-call-logs)
-            * [3.5.4.1. Get paid call logs](#3541-get-paid-call-logs)
-            * [3.5.4.2. Delegates](#3542-delegates)
+            * [3.5.1.6. Delegates](#3516-delegates)
+        * [3.5.2 Callout](#352-callout)
+            * [3.5.2.1. Start function](#3521-start-function)
+            * [3.5.2.2. Stop function](#3522-stop-function)
+            * [3.5.2.3. Delegates](#3523-delegates)
+        * [3.5.3 Callin](#353-callin)
+            * [3.5.3.1. Answer function](#3531-answer-function)
+            * [3.5.3.2. Reject function](#3532-reject-function)
+            * [3.5.3.3. Not Answered function](#3533-not-answered-function)
+            * [3.5.3.4. Stop function](#3534-stop-function)
+            * [3.5.3.5. Delegates](#3535-delegates)
+        * [3.5.4. Ultilities](#354-ultilities)
+            * [3.5.4.1. Toggle audio state function](#3541-toggle-audio-state-function)
+        * [3.5.5. Paid call logs](#355-paid-call-logs)
+            * [3.5.5.1. Get paid call logs](#3551-get-paid-call-logs)
+            * [3.5.5.2. Delegates](#3552-delegates)
     * [3.6. Conversations](#36-conversations)
         * [3.6.1 Get modified conversations](#361-get-modified-conversations)
     * [3.7. Messages](#37-messages)
@@ -164,7 +170,25 @@ this.AZStackCore.config({
 
 ### 3.3.3. Call constants
 
-#### 3.3.3.1. Callout
+#### 3.3.3.1. WebRTC
+> - CALL_WEBRTC_AUDIO_STATE_OFF(0): audio off
+> - CALL_WEBRTC_AUDIO_STATE_ON(1): audio on
+
+#### 3.3.3.2. Media type
+> - CALL_MEDIA_TYPE_AUDIO(1): audio
+> - CALL_MEDIA_TYPE_VIDEO(2): video
+
+#### 3.3.3.3. Free call
+> - CALL_STATUS_FREE_CALL_UNKNOWN(0): initial busy;
+> - CALL_STATUS_FREE_CALL_CONNECTING(100): status connecting;
+> - CALL_STATUS_FREE_CALL_RINGING(180): status ringing;
+> - CALL_STATUS_FREE_CALL_ANSWERED(200): status answered;
+> - CALL_STATUS_FREE_CALL_BUSY(600): status busy;
+> - CALL_STATUS_FREE_CALL_REJECTED(603): status rejected;
+> - CALL_STATUS_FREE_CALL_STOP(700): status stop;
+> - CALL_STATUS_FREE_CALL_NOT_ANSWERED(400): status not answered;
+
+#### 3.3.3.4. Callout
 > - CALL_STATUS_CALLOUT_INITIAL_BUSY(-3): initial busy;
 > - CALL_STATUS_CALLOUT_INITIAL_NOT_ENOUGH_BALANCE(-4): initial not enough balance;
 > - CALL_STATUS_CALLOUT_INITIAL_INVALID_NUMBER(-5): initial invalid number;
@@ -177,7 +201,7 @@ this.AZStackCore.config({
 > - CALL_STATUS_CALLOUT_STATUS_STOP(700): status stop;
 > - CALL_STATUS_CALLOUT_STATUS_NOT_ENOUGH_BALANCE(702): status not enough balance;
 
-#### 3.3.3.2. Callin
+#### 3.3.3.5. Callin
 > - CALL_STATUS_CALLIN_STATUS_UNKNOWN(0): status unknown;
 > - CALL_STATUS_CALLIN_STATUS_RINGING(183): status ringing;
 > - CALL_STATUS_CALLIN_STATUS_ANSWERED(200): status answered;
@@ -186,17 +210,13 @@ this.AZStackCore.config({
 > - CALL_STATUS_CALLIN_STATUS_RINGING_STOP(702): status ringing stop;
 > - CALL_STATUS_CALLIN_STATUS_STOP(700): status stop;
 
-#### 3.3.3.3. Paid call log
+#### 3.3.3.6. Paid call log
 > - CALL_PAID_LOG_CALL_TYPE_CALLOUT(1): callout type
 > - CALL_PAID_LOG_CALL_TYPE_CALLIN(2): callin type
 
 > - CALL_PAID_LOG_CALL_STATUS_ANSWERED(0): status answered
 > - CALL_PAID_LOG_CALL_STATUS_REJECTED(1): status rejected
 > - CALL_PAID_LOG_CALL_STATUS_NOT_ANSWERED(2): status not answered
-
-#### 3.3.3.4. WebRTC
-> - CALL_WEBRTC_AUDIO_STATE_OFF(0): audio off
-> - CALL_WEBRTC_AUDIO_STATE_ON(1): audio on
 
 ### 3.3.4. List constants
 
@@ -343,9 +363,119 @@ this.AZStackCore.disconnect({});
 
 ## 3.5. Calls 
 
-### 3.5.1. Callout
+### 3.5.1. Free call
 
 #### 3.5.1.1. Start function
+
+```javascript 
+this.AZStackCore.startFreeCall({
+    mediaType: this.AZStackCore.callConstants.CALL_MEDIA_TYPE_AUDIO,
+    toUserId: 1234
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.startFreeCall({
+    mediaType: this.AZStackCore.callConstants.CALL_MEDIA_TYPE_AUDIO,
+    toUserId: 1234
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.Delegates.onStartFreeCallReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStackCore.startFreeCall({
+    mediaType: this.AZStackCore.callConstants.CALL_MEDIA_TYPE_AUDIO,
+    toUserId: 1234
+});
+```
+
+#### params(required):
+> - mediaType(required): media type
+> - toUserId(required): target user id
+
+#### error:
+> - code: error code
+> - status: callout status
+> - message: error message
+
+#### 3.5.1.2. Stop function
+
+```javascript 
+this.AZStackCore.stopFreeCall({}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.stopFreeCall({}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.Delegates.onStopFreeCallReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStackCore.stopFreeCall({});
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### 3.5.1.6. Delegates
+
+```javascript 
+this.AZStackCore.Delegates.onFreeCallStatusChanged = (error, result) => {
+    console.log(error, result);
+};
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - status: call status
+> - message: status message
+
+```javascript 
+this.AZStackCore.Delegates.onFreeCallStatusChangedByMe = (error, result) => {
+    console.log(error, result);
+};
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - status: call status
+> - message: status message
+
+### 3.5.2. Callout
+
+#### 3.5.2.1. Start function
 
 ```javascript 
 this.AZStackCore.startCallout({
@@ -387,7 +517,7 @@ this.AZStackCore.startCallout({
 > - status: callout status
 > - message: error message
 
-#### 3.5.1.2. Stop function
+#### 3.5.2.2. Stop function
 
 ```javascript 
 this.AZStackCore.stopCallout({}, (error, result) => {
@@ -419,7 +549,7 @@ this.AZStackCore.stopCallout({});
 > - code: error code
 > - message: error message
 
-#### 3.5.1.3. Delegates
+#### 3.5.2.3. Delegates
 
 ```javascript 
 this.AZStackCore.Delegates.onCalloutStatusChanged = (error, result) => {
@@ -434,9 +564,9 @@ this.AZStackCore.Delegates.onCalloutStatusChanged = (error, result) => {
 > - status: call status
 > - message: status message
 
-### 3.5.2. Callin
+### 3.5.3. Callin
 
-#### 3.5.2.1. Answer function
+#### 3.5.3.1. Answer function
 
 ```javascript 
 this.AZStackCore.answerCallin({}, (error, result) => {
@@ -468,7 +598,7 @@ this.AZStackCore.answerCallin({});
 > - code: error code
 > - message: error message
 
-#### 3.5.2.2. Reject function
+#### 3.5.3.2. Reject function
 
 ```javascript 
 this.AZStackCore.rejectCallin({}, (error, result) => {
@@ -500,7 +630,7 @@ this.AZStackCore.rejectCallin({});
 > - code: error code
 > - message: error message
 
-#### 3.5.2.3. Not Answered function
+#### 3.5.3.3. Not Answered function
 
 ```javascript 
 this.AZStackCore.notAnsweredCallin({}, (error, result) => {
@@ -532,7 +662,7 @@ this.AZStackCore.notAnsweredCallin({});
 > - code: error code
 > - message: error message
 
-#### 3.5.2.4. Stop function
+#### 3.5.3.4. Stop function
 
 ```javascript 
 this.AZStackCore.stopCallin({}, (error, result) => {
@@ -564,7 +694,7 @@ this.AZStackCore.stopCallin({});
 > - code: error code
 > - message: error message
 
-#### 3.5.2.5. Delegates
+#### 3.5.3.5. Delegates
 
 ```javascript 
 this.AZStackCore.Delegates.onCallinStart = (error, result) => {
@@ -607,9 +737,9 @@ this.AZStackCore.Delegates.onCallinStatusChangedByMe = (error, result) => {
 > - status: call status by me
 > - message: status message
 
-### 3.5.3. Ultilities
+### 3.5.4. Ultilities
 
-#### 3.5.3.1. Toggle audio state function
+#### 3.5.4.1. Toggle audio state function
 
 ```javascript 
 this.AZStackCore.toggleAudioState({
@@ -653,9 +783,9 @@ this.AZStackCore.toggleAudioState({
 #### result:
 > - audioState: audio state
 
-### 3.5.4. Paid call logs
+### 3.5.5. Paid call logs
 
-#### 3.5.4.1. Get paid call logs
+#### 3.5.5.1. Get paid call logs
 
 ```javascript 
 this.AZStackCore.getPaidCallLogs({}, (error, result) => {
@@ -697,7 +827,7 @@ this.AZStackCore.getPaidCallLogs({});
 > - recordTime: recording time
 > - recordUrl: recording url
 
-#### 3.5.4.2. Delegates
+#### 3.5.5.2. Delegates
 
 ```javascript 
 this.AZStackCore.Delegates.onPaidCallLogReturn = (error, result) => {

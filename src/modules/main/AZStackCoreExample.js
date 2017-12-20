@@ -23,6 +23,9 @@ class AZStackCoreExample extends React.Component {
 
         this.toggleAutioState = this.toggleAutioState.bind(this);
 
+        this.startFreeCallVoice = this.startFreeCallVoice.bind(this);
+        this.stopFreeCall = this.stopFreeCall.bind(this);
+        
         this.startCallout = this.startCallout.bind(this);
         this.stopCallout = this.stopCallout.bind(this);
 
@@ -106,6 +109,16 @@ class AZStackCoreExample extends React.Component {
 
     toggleAutioState() {
         this.AZStackCore.toggleAutioState({}).then(() => { }).catch(() => { });
+    };
+
+    startFreeCallVoice() {
+        this.AZStackCore.startFreeCall({
+            mediaType: this.AZStackCore.callConstants.CALL_MEDIA_TYPE_AUDIO,
+            toUserId: 387212
+        }).then(() => { }).catch(() => { });
+    };
+    stopFreeCall() {
+        this.AZStackCore.stopFreeCall({}).then(() => { }).catch(() => { });
     };
 
     startCallout() {
@@ -418,6 +431,9 @@ class AZStackCoreExample extends React.Component {
                     <Button onPress={this.disconnect} title="Disconnect" />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.toggleAutioState} title="Toggle Audio State" />
+                    <Text>{'\n'}{'\n'}</Text>
+                    <Button onPress={this.startFreeCallVoice} title="Start free call voice" />
+                    <Button onPress={this.stopFreeCall} title="Stop free call" />
                     <Text>{'\n'}{'\n'}</Text>
                     <TextInput
                         placeholder="Callout toPhoneNumber"
