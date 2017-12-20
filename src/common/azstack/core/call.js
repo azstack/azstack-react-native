@@ -16,6 +16,7 @@ class Call {
 
         this.iceServers = null;
         this.callData = {
+            hasVideo: null,
             isCaller: null,
             callType: null,
             callId: null,
@@ -48,6 +49,7 @@ class Call {
         }
     };
     clearCallData() {
+        this.callData.hasVideo = null;
         this.callData.isCaller = null;
         this.callData.callType = null;
         this.callData.callId = null;
@@ -379,6 +381,7 @@ class Call {
             }
 
             this.setCallData({
+                hasVideo: false,
                 isCaller: true,
                 callType: this.callConstants.CALL_TYPE_CALLOUT,
                 callId: options.callId,
@@ -790,6 +793,7 @@ class Call {
             });
 
             this.setCallData({
+                hasVideo: false,
                 isCaller: false,
                 callType: this.callConstants.CALL_TYPE_CALLIN,
                 callId: body.callId,
