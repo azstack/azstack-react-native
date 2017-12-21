@@ -51,6 +51,7 @@
         * [3.5.4. Ultilities](#354-ultilities)
             * [3.5.4.1. Toggle audio state function](#3541-toggle-audio-state-function)
             * [3.5.4.2. Toggle video state function](#3542-toggle-video-state-function)
+            * [3.5.4.3. Switch camera type function](#3543-switch-camera-type-function)
         * [3.5.5. Paid call logs](#355-paid-call-logs)
             * [3.5.5.1. Get paid call logs](#3551-get-paid-call-logs)
             * [3.5.5.2. Delegates](#3552-delegates)
@@ -180,6 +181,9 @@ this.AZStackCore.config({
 
 > - CALL_WEBRTC_VIDEO_STATE_OFF(0): video off
 > - CALL_WEBRTC_VIDEO_STATE_ON(1): video on
+
+> - CALL_WEBRTC_CAMERA_TYPE_FRONT('user'): camera front
+> - CALL_WEBRTC_CAMERA_TYPE_BACK('environment): camera back
 
 #### 3.3.3.2. Media type
 > - CALL_MEDIA_TYPE_AUDIO(1): audio
@@ -970,6 +974,41 @@ this.AZStackCore.toggleVideoState({
 
 #### result:
 > - videoState: video state
+
+#### 3.5.4.3. Switch camera type function
+
+```javascript 
+this.AZStackCore.switchCameraType({}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.switchCameraType({}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.Delegates.onSwitchCameraTypeReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStackCore.switchCameraType({});
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - cameraType: camera type
 
 ### 3.5.5. Paid call logs
 

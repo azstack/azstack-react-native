@@ -3,6 +3,7 @@ export const DELEGATE_ON_DISCONNECT_RETURN = 'onDisconnectReturn';
 
 export const DELEGATE_ON_TOGGLE_AUDIO_STATE_RETURN = 'onToggleAudioStateReturn';
 export const DELEGATE_ON_TOGGLE_VIDEO_STATE_RETURN = 'onToggleVideoStateReturn';
+export const DELEGATE_ON_SWITCH_CAMERA_TYPE_RETURN = 'onSwitchCameraTypeReturn';
 
 export const DELEGATE_ON_START_FREE_CALL_RETURN = 'onStartFreeCallReturn';
 export const DELEGATE_ON_FREE_CALL_START = 'onFreeCallStart';

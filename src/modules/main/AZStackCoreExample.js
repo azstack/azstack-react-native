@@ -30,6 +30,7 @@ class AZStackCoreExample extends React.Component {
 
         this.toggleAutioState = this.toggleAutioState.bind(this);
         this.toggleVideoState = this.toggleVideoState.bind(this);
+        this.switchCameraType = this.switchCameraType.bind(this);
 
         this.startFreeCallVoice = this.startFreeCallVoice.bind(this);
         this.startFreeCallVideo = this.startFreeCallVideo.bind(this);
@@ -135,6 +136,9 @@ class AZStackCoreExample extends React.Component {
     };
     toggleVideoState() {
         this.AZStackCore.toggleVideoState({}).then(() => { }).catch(() => { });
+    };
+    switchCameraType() {
+        this.AZStackCore.switchCameraType({}).then(() => { }).catch(() => { });
     };
 
     startFreeCallVoice() {
@@ -473,6 +477,7 @@ class AZStackCoreExample extends React.Component {
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.toggleAutioState} title='Toggle Audio State' />
                     <Button onPress={this.toggleVideoState} title='Toggle Video State' />
+                    <Button onPress={this.switchCameraType} title='Switch Camera State' />
                     <Text>{'\n'}{'\n'}</Text>
                     <RTCView streamURL={this.state.freeCall.localVideoUrl}  />
                     <RTCView streamURL={this.state.freeCall.remoteVideoUrl}  />

@@ -1005,6 +1005,24 @@ export class AZStackCore {
             });
         });
     };
+    switchCameraType(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Switch camera type'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Switch camera type data',
+                payload: options
+            });
+            this.addUncall(this.uncallConstants.UNCALL_KEY_SWITCH_CAMERA_TYPE, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_SWITCH_CAMERA_TYPE_RETURN);
+
+            this.Call.switchCameraType({}).then((result) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_SWITCH_CAMERA_TYPE, 'default', null, result);
+            }).catch((error) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_SWITCH_CAMERA_TYPE, 'default', error, null);
+            });
+        });
+    };
 
     startFreeCall(options, callback) {
         return new Promise((resolve, reject) => {

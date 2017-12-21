@@ -31,6 +31,7 @@ class Call {
             webRTC: {
                 audioState: null,
                 videoState: null,
+                cameraType: null,
                 peerConnection: null,
                 localIceCandidates: [],
                 localSessionDescription: null,
@@ -66,6 +67,7 @@ class Call {
         this.callData.callinType = null;
         this.callData.webRTC.audioState = null;
         this.callData.webRTC.videoState = null;
+        this.callData.webRTC.cameraType = null;
         this.callData.webRTC.peerConnection = null;
         this.callData.webRTC.localIceCandidates = [];
         this.callData.webRTC.localSessionDescription = null;
@@ -619,6 +621,75 @@ class Call {
             resolve({ videoState: this.callData.webRTC.videoState });
         });
     };
+    switchCameraType(options) {
+        return new Promise((resolve, reject) => {
+            if (!this.callData.callId) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot switch camera type when not currently on call'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot switch camera type when not currently on call'
+                });
+                return;
+            }
+            if (!this.callData.webRTC.localStream) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot switch camera type, local stream not found'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot switch camera type, local stream not found'
+                });
+                return;
+            }
+            if (this.callData.mediaType !== this.callConstants.CALL_MEDIA_TYPE_VIDEO) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot switch camera type, no video used'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot switch camera type, no video used'
+                });
+                return;
+            }
+
+            const videoTracks = this.callData.webRTC.localStream.getVideoTracks();
+            if (videoTracks.length === 0) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot toggle video state, no video stream found'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot toggle video state, no video stream found'
+                });
+                return;
+            }
+
+            videoTracks.map((videoTrack) => {
+                videoTrack._switchCamera();
+            });
+
+            if(this.callData.webRTC.cameraType === this.callConstants.CALL_WEBRTC_CAMERA_TYPE_FRONT) {
+                this.callData.webRTC.cameraType = this.callConstants.CALL_WEBRTC_CAMERA_TYPE_BACK;
+            } else if(this.callData.webRTC.cameraType === this.callConstants.CALL_WEBRTC_CAMERA_TYPE_BACK) {
+                this.callData.webRTC.cameraType = this.callConstants.CALL_WEBRTC_CAMERA_TYPE_FRONT;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Switch camera type done'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Switch camera type',
+                payload: this.callData.webRTC.cameraType
+            });
+            resolve({ cameraType: this.callData.webRTC.cameraType });
+        });
+    };
 
     sendStartFreeCall(options) {
         return new Promise((resolve, reject) => {
@@ -647,7 +718,8 @@ class Call {
             });
             this.setWebRTCCallData({
                 audioState: this.callConstants.CALL_WEBRTC_AUDIO_STATE_ON,
-                videoState: options.mediaType === this.callConstants.CALL_MEDIA_TYPE_VIDEO ? this.callConstants.CALL_WEBRTC_VIDEO_STATE_ON : null
+                videoState: options.mediaType === this.callConstants.CALL_MEDIA_TYPE_VIDEO ? this.callConstants.CALL_WEBRTC_VIDEO_STATE_ON : null,
+                cameraType: options.mediaType === this.callConstants.CALL_MEDIA_TYPE_VIDEO ? this.callConstants.CALL_WEBRTC_CAMERA_TYPE_FRONT : null
             });
 
             return this.initWebRTC().then(() => {
@@ -745,7 +817,8 @@ class Call {
             });
             this.setWebRTCCallData({
                 audioState: this.callConstants.CALL_WEBRTC_AUDIO_STATE_ON,
-                videoState: body.mediaType === this.callConstants.CALL_MEDIA_TYPE_VIDEO ? this.callConstants.CALL_WEBRTC_VIDEO_STATE_ON : null
+                videoState: body.mediaType === this.callConstants.CALL_MEDIA_TYPE_VIDEO ? this.callConstants.CALL_WEBRTC_VIDEO_STATE_ON : null,
+                cameraType: body.mediaType === this.callConstants.CALL_MEDIA_TYPE_VIDEO ? this.callConstants.CALL_WEBRTC_CAMERA_TYPE_FRONT : null
             });
 
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
