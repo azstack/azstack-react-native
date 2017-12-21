@@ -587,6 +587,32 @@ this.AZStackCore.Delegates.onFreeCallStatusChangedByMe = (error, result) => {
 > - status: call status
 > - message: status message
 
+```javascript 
+this.AZStackCore.Delegates.onLocalStreamArrived = (error, result) => {
+    console.log(error, result);
+};
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - stream: call media stream
+
+```javascript 
+this.AZStackCore.Delegates.onLocalStreamArrived = (error, result) => {
+    console.log(error, result);
+};
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - stream: call media stream
+
 ### 3.5.2. Callout
 
 #### 3.5.2.1. Start function

@@ -6,6 +6,9 @@ import {
     TextInput,
     Button
 } from 'react-native';
+import {
+    RTCView
+} from 'react-native-webrtc';
 
 import { AZStackCore } from '../../common/azstack/';
 
@@ -16,7 +19,11 @@ class AZStackCoreExample extends React.Component {
 
         this.state = {
             authenticatedUser: null,
-            calloutToPhoneNumber: ''
+            calloutToPhoneNumber: '',
+            freeCall: {
+                localVideoUrl: null,
+                remoteVideoUrl: null
+            }
         };
 
         this.disconnect = this.disconnect.bind(this);
@@ -24,11 +31,12 @@ class AZStackCoreExample extends React.Component {
         this.toggleAutioState = this.toggleAutioState.bind(this);
 
         this.startFreeCallVoice = this.startFreeCallVoice.bind(this);
+        this.startFreeCallVideo = this.startFreeCallVideo.bind(this);
         this.stopFreeCall = this.stopFreeCall.bind(this);
         this.answerFreeCall = this.answerFreeCall.bind(this);
         this.rejectFreeCall = this.rejectFreeCall.bind(this);
         this.notAnswerFreeCall = this.notAnswerFreeCall.bind(this);
-        
+
         this.startCallout = this.startCallout.bind(this);
         this.stopCallout = this.stopCallout.bind(this);
 
@@ -104,6 +112,18 @@ class AZStackCoreExample extends React.Component {
         this.AZStackCore.connect({}).then((authenticatedUser) => {
             this.setState({ authenticatedUser: authenticatedUser })
         }).catch((error) => { });
+
+        this.AZStackCore.Delegates.onLocalStreamArrived = (error, result) => {
+            this.setState({
+                localVideoUrl: result.stream.toURL()
+            });
+        };
+        this.AZStackCore.Delegates.onRemoteStreamArrived = (error, result) => {
+            this.setState({
+                remoteVideoUrl: result.stream.toURL()
+            });
+            console.log(this.state);
+        };
     };
 
     disconnect() {
@@ -117,6 +137,12 @@ class AZStackCoreExample extends React.Component {
     startFreeCallVoice() {
         this.AZStackCore.startFreeCall({
             mediaType: this.AZStackCore.callConstants.CALL_MEDIA_TYPE_AUDIO,
+            toUserId: 387212
+        }).then(() => { }).catch(() => { });
+    };
+    startFreeCallVideo() {
+        this.AZStackCore.startFreeCall({
+            mediaType: this.AZStackCore.callConstants.CALL_MEDIA_TYPE_VIDEO,
             toUserId: 387212
         }).then(() => { }).catch(() => { });
     };
@@ -440,74 +466,77 @@ class AZStackCoreExample extends React.Component {
                     <Text>
                         {this.state.authenticatedUser ? `Connected, user ${this.state.authenticatedUser.fullname}` : 'Connecting'}
                     </Text>
-                    <Button onPress={this.disconnect} title="Disconnect" />
+                    <Button onPress={this.disconnect} title='Disconnect' />
                     <Text>{'\n'}{'\n'}</Text>
-                    <Button onPress={this.toggleAutioState} title="Toggle Audio State" />
+                    <Button onPress={this.toggleAutioState} title='Toggle Audio State' />
                     <Text>{'\n'}{'\n'}</Text>
-                    <Button onPress={this.startFreeCallVoice} title="Start free call voice" />
-                    <Button onPress={this.stopFreeCall} title="Stop free call" />
-                    <Button onPress={this.answerFreeCall} title="Answer free call" />
-                    <Button onPress={this.rejectFreeCall} title="Reject free call" />
-                    <Button onPress={this.notAnswerFreeCall} title="Not answer free call" />
+                    <RTCView streamURL={this.state.freeCall.localVideoUrl}  />
+                    <RTCView streamURL={this.state.freeCall.remoteVideoUrl}  />
+                    <Button onPress={this.startFreeCallVoice} title='Start free call voice' />
+                    <Button onPress={this.startFreeCallVideo} title='Start free call video' />
+                    <Button onPress={this.stopFreeCall} title='Stop free call' />
+                    <Button onPress={this.answerFreeCall} title='Answer free call' />
+                    <Button onPress={this.rejectFreeCall} title='Reject free call' />
+                    <Button onPress={this.notAnswerFreeCall} title='Not answer free call' />
                     <Text>{'\n'}{'\n'}</Text>
                     <TextInput
-                        placeholder="Callout toPhoneNumber"
+                        placeholder='Callout toPhoneNumber'
                         onChangeText={(text) => this.setState({ calloutToPhoneNumber: text })}
                     />
-                    <Button onPress={this.startCallout} title="Start Callout" />
-                    <Button onPress={this.stopCallout} title="Stop Callout" />
+                    <Button onPress={this.startCallout} title='Start Callout' />
+                    <Button onPress={this.stopCallout} title='Stop Callout' />
                     <Text>{'\n'}{'\n'}</Text>
-                    <Button onPress={this.answerCallin} title="Anwser Callin" />
-                    <Button onPress={this.rejectCallin} title="Reject Callin" />
-                    <Button onPress={this.notAnsweredCallin} title="Not answer Callin" />
-                    <Button onPress={this.stopCallin} title="Stop Callin" />
+                    <Button onPress={this.answerCallin} title='Anwser Callin' />
+                    <Button onPress={this.rejectCallin} title='Reject Callin' />
+                    <Button onPress={this.notAnsweredCallin} title='Not answer Callin' />
+                    <Button onPress={this.stopCallin} title='Stop Callin' />
                     <Text>{'\n'}{'\n'}</Text>
-                    <Button onPress={this.getPaidCallLogs} title="Get paid call logs" />
+                    <Button onPress={this.getPaidCallLogs} title='Get paid call logs' />
                     <Text>{'\n'}{'\n'}</Text>
-                    <Button onPress={this.getModifiedConversations} title="Get modified conversations" />
+                    <Button onPress={this.getModifiedConversations} title='Get modified conversations' />
                     <Text>{'\n'}{'\n'}</Text>
-                    <Button onPress={this.getUnreadMessagesTypeUser} title="Get unread messages type user" />
-                    <Button onPress={this.getModifiedMessagesTypeUser} title="Get modified messages type user" />
-                    <Button onPress={this.getUnreadMessagesTypeGroup} title="Get unread messages type group" />
-                    <Button onPress={this.getModifiedMessagesTypeGroup} title="Get modified messages type group" />
-                    <Button onPress={this.getModifiedFilesAll} title="Get modified files all" />
-                    <Button onPress={this.getModifiedFilesOfUser} title="Get modified files of user" />
-                    <Button onPress={this.getModifiedFilesOfGroup} title="Get modified files of group" />
+                    <Button onPress={this.getUnreadMessagesTypeUser} title='Get unread messages type user' />
+                    <Button onPress={this.getModifiedMessagesTypeUser} title='Get modified messages type user' />
+                    <Button onPress={this.getUnreadMessagesTypeGroup} title='Get unread messages type group' />
+                    <Button onPress={this.getModifiedMessagesTypeGroup} title='Get modified messages type group' />
+                    <Button onPress={this.getModifiedFilesAll} title='Get modified files all' />
+                    <Button onPress={this.getModifiedFilesOfUser} title='Get modified files of user' />
+                    <Button onPress={this.getModifiedFilesOfGroup} title='Get modified files of group' />
                     <Text>{'\n'}{'\n'}</Text>
-                    <Button onPress={this.newMessageWithUserTypeText} title="New message with user type text" />
-                    <Button onPress={this.newMessageWithUserTypeSticker} title="New message with user type sticker" />
-                    <Button onPress={this.newMessageWithUserTypeFile} title="New message with user type file" />
-                    <Button onPress={this.newMessageWithGroupTypeText} title="New message with group type text" />
-                    <Button onPress={this.newMessageWithGroupTypeSticker} title="New message with group type sticker" />
-                    <Button onPress={this.newMessageWithGroupTypeFile} title="New message with group type file" />
+                    <Button onPress={this.newMessageWithUserTypeText} title='New message with user type text' />
+                    <Button onPress={this.newMessageWithUserTypeSticker} title='New message with user type sticker' />
+                    <Button onPress={this.newMessageWithUserTypeFile} title='New message with user type file' />
+                    <Button onPress={this.newMessageWithGroupTypeText} title='New message with group type text' />
+                    <Button onPress={this.newMessageWithGroupTypeSticker} title='New message with group type sticker' />
+                    <Button onPress={this.newMessageWithGroupTypeFile} title='New message with group type file' />
                     <Text>{'\n'}{'\n'}</Text>
-                    <Button onPress={this.changeMessageStatusDeliveredWithUser} title="Change message status delivered with user" />
-                    <Button onPress={this.changeMessageStatusSeenWithUser} title="Change message status seen with user" />
-                    <Button onPress={this.changeMessageStatusCancelledWithUser} title="Change message status cancelled with user" />
-                    <Button onPress={this.changeMessageStatusDeliveredWithGroup} title="Change message status delivered with group" />
-                    <Button onPress={this.changeMessageStatusSeenWithGroup} title="Change message status seen with group" />
-                    <Button onPress={this.changeMessageStatusCancelledWithGroup} title="Change message status cancelled with group" />
+                    <Button onPress={this.changeMessageStatusDeliveredWithUser} title='Change message status delivered with user' />
+                    <Button onPress={this.changeMessageStatusSeenWithUser} title='Change message status seen with user' />
+                    <Button onPress={this.changeMessageStatusCancelledWithUser} title='Change message status cancelled with user' />
+                    <Button onPress={this.changeMessageStatusDeliveredWithGroup} title='Change message status delivered with group' />
+                    <Button onPress={this.changeMessageStatusSeenWithGroup} title='Change message status seen with group' />
+                    <Button onPress={this.changeMessageStatusCancelledWithGroup} title='Change message status cancelled with group' />
                     <Text>{'\n'}{'\n'}</Text>
-                    <Button onPress={this.deleteMessageWithUser} title="Delete message with user" />
-                    <Button onPress={this.deleteMessageWithGroup} title="Delete message with group" />
+                    <Button onPress={this.deleteMessageWithUser} title='Delete message with user' />
+                    <Button onPress={this.deleteMessageWithGroup} title='Delete message with group' />
                     <Text>{'\n'}{'\n'}</Text>
-                    <Button onPress={this.sendTypingWithUser} title="Send typing with user" />
-                    <Button onPress={this.sendTypingWithGroup} title="Send typing with group" />
+                    <Button onPress={this.sendTypingWithUser} title='Send typing with user' />
+                    <Button onPress={this.sendTypingWithGroup} title='Send typing with group' />
                     <Text>{'\n'}{'\n'}</Text>
-                    <Button onPress={this.getUsersInfomationWithId} title="Get users onformation with id" />
-                    <Button onPress={this.getUsersInfomationWithAzstackUserId} title="Get users onformation with azStackUserId" />
+                    <Button onPress={this.getUsersInfomationWithId} title='Get users onformation with id' />
+                    <Button onPress={this.getUsersInfomationWithAzstackUserId} title='Get users onformation with azStackUserId' />
                     <Text>{'\n'}{'\n'}</Text>
-                    <Button onPress={this.createGroup} title="Create group" />
-                    <Button onPress={this.inviteGroup} title="Invite group" />
-                    <Button onPress={this.leaveGroup} title="Leave group" />
-                    <Button onPress={this.renameGroup} title="Rename group" />
-                    <Button onPress={this.changeAdminGroup} title="Change admin group" />
-                    <Button onPress={this.leavePublicGroup} title="Leave public group" />
-                    <Button onPress={this.joinPublicGroup} title="Join public group" />
+                    <Button onPress={this.createGroup} title='Create group' />
+                    <Button onPress={this.inviteGroup} title='Invite group' />
+                    <Button onPress={this.leaveGroup} title='Leave group' />
+                    <Button onPress={this.renameGroup} title='Rename group' />
+                    <Button onPress={this.changeAdminGroup} title='Change admin group' />
+                    <Button onPress={this.leavePublicGroup} title='Leave public group' />
+                    <Button onPress={this.joinPublicGroup} title='Join public group' />
                     <Text>{'\n'}{'\n'}</Text>
-                    <Button onPress={this.getDetailsGroup} title="Get details group" />
-                    <Button onPress={this.getListGroupsPrivate} title="Get list groups private" />
-                    <Button onPress={this.getListGroupsPublic} title="Get list groups public" />
+                    <Button onPress={this.getDetailsGroup} title='Get details group' />
+                    <Button onPress={this.getListGroupsPrivate} title='Get list groups private' />
+                    <Button onPress={this.getListGroupsPublic} title='Get list groups public' />
                 </View>
             </ScrollView>
         );

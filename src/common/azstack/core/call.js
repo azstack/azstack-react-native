@@ -14,6 +14,8 @@ class Call {
         this.listConstants = options.listConstants;
         this.Logger = options.Logger;
         this.sendPacketFunction = options.sendPacketFunction;
+        this.onLocalStreamArrived = options.onLocalStreamArrived;
+        this.onRemoteStreamArrived = options.onRemoteStreamArrived;
 
         this.iceServers = null;
         this.callData = {
@@ -202,11 +204,22 @@ class Call {
                     payload: event.stream
                 });
                 this.callData.webRTC.remoteStream = event.stream;
+
+                if (this.callData.mediaType === this.callConstants.CALL_MEDIA_TYPE_VIDEO) {
+                    this.onRemoteStreamArrived({ stream: event.stream });
+                }
             };
 
             const mediaConstraints = {
                 audio: true,
-                video: false
+                video: this.callData.mediaType === this.callConstants.CALL_MEDIA_TYPE_AUDIO ? false : {
+                    mandatory: {
+                        minWidth: 500,
+                        minHeight: 300,
+                        minFrameRate: 30
+                    },
+                    facingMode: this.callConstants.CALL_WEBRTC_CAMERA_TYPE_FRONT
+                }
             };
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Get user media'
@@ -235,9 +248,13 @@ class Call {
                 });
                 this.callData.webRTC.peerConnection.addStream(stream);
 
+                if (this.callData.mediaType === this.callConstants.CALL_MEDIA_TYPE_VIDEO) {
+                    this.onLocalStreamArrived({ stream: stream });
+                }
+
                 const peerConnectionMandatory = {
                     OfferToReceiveAudio: true,
-                    OfferToReceiveVideo: false
+                    OfferToReceiveVideo: this.callData.mediaType === this.callConstants.CALL_MEDIA_TYPE_AUDIO ? false : true
                 };
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                     message: 'Peer connection init'

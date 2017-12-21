@@ -11,6 +11,8 @@ export const DELEGATE_ON_STOP_FREE_CALL_RETURN = 'onStopFreeCallReturn';
 export const DELEGATE_ON_ANSWER_FREE_CALL_RETURN = 'onAnswerFreeCallReturn';
 export const DELEGATE_ON_REJECT_FREE_CALL_RETURN = 'onRejectFreeCallReturn';
 export const DELEGATE_ON_NOT_ANSWER_FREE_CALL_RETURN = 'onNotAnswerFreeCallReturn';
+export const DELEGATE_ON_LOCAL_STREAM_ARRIVED = 'onLocalStreamArrived';
+export const DELEGATE_ON_REMOTE_STREAM_ARRIVED = 'onRemoteStreamArrived';
 
 export const DELEGATE_ON_START_CALLOUT_RETURN = 'onStartCalloutReturn';
 export const DELEGATE_ON_STOP_CALLOUT_RETURN = 'onStopCalloutReturn';
