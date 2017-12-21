@@ -25,6 +25,9 @@ class AZStackCoreExample extends React.Component {
 
         this.startFreeCallVoice = this.startFreeCallVoice.bind(this);
         this.stopFreeCall = this.stopFreeCall.bind(this);
+        this.answerFreeCall = this.answerFreeCall.bind(this);
+        this.rejectFreeCall = this.rejectFreeCall.bind(this);
+        this.notAnswerFreeCall = this.notAnswerFreeCall.bind(this);
         
         this.startCallout = this.startCallout.bind(this);
         this.stopCallout = this.stopCallout.bind(this);
@@ -119,6 +122,15 @@ class AZStackCoreExample extends React.Component {
     };
     stopFreeCall() {
         this.AZStackCore.stopFreeCall({}).then(() => { }).catch(() => { });
+    };
+    answerFreeCall() {
+        this.AZStackCore.answerFreeCall({}).then(() => { }).catch(() => { });
+    };
+    rejectFreeCall() {
+        this.AZStackCore.rejectFreeCall({}).then(() => { }).catch(() => { });
+    };
+    notAnswerFreeCall() {
+        this.AZStackCore.notAnswerFreeCall({}).then(() => { }).catch(() => { });
     };
 
     startCallout() {
@@ -434,6 +446,9 @@ class AZStackCoreExample extends React.Component {
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.startFreeCallVoice} title="Start free call voice" />
                     <Button onPress={this.stopFreeCall} title="Stop free call" />
+                    <Button onPress={this.answerFreeCall} title="Answer free call" />
+                    <Button onPress={this.rejectFreeCall} title="Reject free call" />
+                    <Button onPress={this.notAnswerFreeCall} title="Not answer free call" />
                     <Text>{'\n'}{'\n'}</Text>
                     <TextInput
                         placeholder="Callout toPhoneNumber"

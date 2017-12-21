@@ -34,6 +34,9 @@
         * [3.5.1. Free call](#351-free-call)
             * [3.5.1.1. Start function](#3511-start-function)
             * [3.5.1.2. Stop function](#3512-stop-function)
+            * [3.5.1.3. Answer function](#3513-answer-function)
+            * [3.5.1.4. Reject function](#3514-reject-function)
+            * [3.5.1.5. Not answer function](#3515-not-answer-function)
             * [3.5.1.6. Delegates](#3516-delegates)
         * [3.5.2 Callout](#352-callout)
             * [3.5.2.1. Start function](#3521-start-function)
@@ -443,7 +446,118 @@ this.AZStackCore.stopFreeCall({});
 > - code: error code
 > - message: error message
 
+#### 3.5.1.3. Answer function
+
+```javascript 
+this.AZStackCore.answerFreeCall({}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.answerFreeCall({}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.Delegates.onAnswerFreeCallReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStackCore.answerFreeCall({});
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### 3.5.1.4. Reject function
+
+```javascript 
+this.AZStackCore.rejectFreeCall({}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.rejectFreeCall({}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.Delegates.onRejectFreeCallReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStackCore.rejectFreeCall({});
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### 3.5.1.5. Not answer function
+
+```javascript 
+this.AZStackCore.notAnswerFreeCall({}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.notAnswerFreeCall({}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.Delegates.onNotAnswerFreeCallReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStackCore.notAnswerFreeCall({});
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
 #### 3.5.1.6. Delegates
+
+```javascript 
+this.AZStackCore.Delegates.onFreeCallStart = (error, result) => {
+    console.log(error, result);
+};
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - mediaType: media type
+> - fromUserId: from user id
+> - toUserId: to user id
 
 ```javascript 
 this.AZStackCore.Delegates.onFreeCallStatusChanged = (error, result) => {

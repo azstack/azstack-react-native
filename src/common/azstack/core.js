@@ -219,6 +219,13 @@ export class AZStackCore {
                 });
                 break;
 
+            case this.serviceTypes.FREE_CALL_START:
+                this.Call.receiveFreeCallStart(body).then((result) => {
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_FREE_CALL_START] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_FREE_CALL_START](null, result);
+                    }
+                }).catch();
+                break;
             case this.serviceTypes.FREE_CALL_DATA:
                 this.Call.receiveFreeCallData(body).then(() => { }).catch();
                 break;
@@ -972,6 +979,48 @@ export class AZStackCore {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_STOP_FREE_CALL, 'default', null, null);
             }).catch((error) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_STOP_FREE_CALL, 'default', error, null);
+            });
+        });
+    };
+    answerFreeCall(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Answer free call'
+            });
+            this.addUncall(this.uncallConstants.UNCALL_KEY_ANSWER_FREE_CALL, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_ANSWER_FREE_CALL_RETURN);
+
+            this.Call.sendAnswerFreeCall({}).then((result) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_ANSWER_FREE_CALL, 'default', null, null);
+            }).catch((error) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_ANSWER_FREE_CALL, 'default', error, null);
+            });
+        });
+    };
+    rejectFreeCall(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Reject free call'
+            });
+            this.addUncall(this.uncallConstants.UNCALL_KEY_REJECT_FREE_CALL, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_REJECT_FREE_CALL_RETURN);
+
+            this.Call.sendRejectFreeCall({}).then((result) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_REJECT_FREE_CALL, 'default', null, null);
+            }).catch((error) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_REJECT_FREE_CALL, 'default', error, null);
+            });
+        });
+    };
+    notAnswerFreeCall(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Not answer free call'
+            });
+            this.addUncall(this.uncallConstants.UNCALL_KEY_NOT_ANSWER_FREE_CALL, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_NOT_ANSWER_FREE_CALL_RETURN);
+
+            this.Call.sendNotAnswerFreeCall({}).then((result) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NOT_ANSWER_FREE_CALL, 'default', null, null);
+            }).catch((error) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NOT_ANSWER_FREE_CALL, 'default', error, null);
             });
         });
     };

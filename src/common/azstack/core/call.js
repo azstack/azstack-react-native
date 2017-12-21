@@ -167,7 +167,7 @@ class Call {
                         body: JSON.stringify({
                             callId: this.callData.callId,
                             type: this.callConstants.CALL_WEBRTC_DATA_TYPE_ICE_CANDIDATE,
-                            to: this.callData.toUserId,
+                            to: this.callData.isCaller ? this.callData.toUserId : this.callData.fromUserId,
                             data: {
                                 sdpMid: event.candidate.sdpMid,
                                 sdpMLineIndex: event.candidate.sdpMLineIndex,
@@ -255,22 +255,76 @@ class Call {
                         peerConnectionInitConnectionError(error);
                     });
                 } else {
+                    if (this.callData.callType === this.callConstants.CALL_TYPE_FREE_CALL) {
+                        const answerFreeCallPacket = {
+                            service: this.serviceTypes.FREE_CALL_STATUS_CHANGED,
+                            body: JSON.stringify({
+                                callId: this.callData.callId,
+                                to: this.callData.fromUserId,
+                                status: this.callConstants.CALL_STATUS_FREE_CALL_ANSWERED
+                            })
+                        };
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                            message: 'Send answer free call packet'
+                        });
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                            message: 'Answer free call packet',
+                            payload: answerFreeCallPacket
+                        });
+                        this.sendPacketFunction(answerFreeCallPacket).then(() => {
+                            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                                message: 'Send answer free call packet successfully'
+                            });
+                            resolve();
+                        }).catch((error) => {
+                            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                                message: 'Cannot send answer free call data, answer free call fail'
+                            });
+                            this.clearCallData();
+                            reject({
+                                code: error.code,
+                                message: 'Cannot send answer free call data, answer free call fail'
+                            });
+                        });
+                    }
+
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                        message: 'Set remote session description and ice candidates to peer connection'
+                        message: 'Set remote session description to peer connection'
                     });
                     this.callData.webRTC.peerConnection.setRemoteDescription(this.callData.webRTC.remoteSessionDescription).then(() => {
                         this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                            message: 'Set remote session description and ice candidates success'
+                            message: 'Set remote session description success'
                         });
                     }).catch((error) => {
                         this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                            message: 'Set remote session description and ice candidates fail'
+                            message: 'Set remote session description fail'
                         });
                         this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                            message: 'Set remote session description and ice candidates error',
+                            message: 'Set remote session description error',
                             payload: error
                         });
                     });
+
+                    let totalUnAddedIceCandidates = this.callData.webRTC.remoteIceCandidates.length;
+                    for (let i = 0; i < totalUnAddedIceCandidates; i++) {
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                            message: 'Add remote ice candidate to peer connection'
+                        });
+                        this.callData.webRTC.peerConnection.addIceCandidate(this.callData.webRTC.remoteIceCandidates[i]).then(() => {
+                            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                                message: 'Add remote ice candidate success'
+                            });
+                        }).catch((error) => {
+                            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                                message: 'Add remote ice candidate fail'
+                            });
+                            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                                message: 'Add remote ice candidate error',
+                                payload: error
+                            });
+                        });
+                    }
+
                     this.callData.webRTC.peerConnection.createAnswer({
                         mandatory: peerConnectionMandatory
                     }).then(this.callData.webRTC.peerConnection.setLocalDescription).then(() => {
@@ -340,7 +394,31 @@ class Call {
                             });
                         });
                     } else {
-
+                        const freeCallDataPacket = {
+                            service: this.serviceTypes.FREE_CALL_DATA,
+                            body: JSON.stringify({
+                                callId: this.callData.callId,
+                                to: this.callData.fromUserId,
+                                type: this.callConstants.CALL_WEBRTC_DATA_TYPE_SESSION_DESCRIPTION,
+                                data: this.callData.webRTC.localSessionDescription
+                            })
+                        };
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                            message: 'Send free call data packet'
+                        });
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                            message: 'Free call data packet',
+                            payload: freeCallDataPacket
+                        });
+                        this.sendPacketFunction(freeCallDataPacket).then(() => {
+                            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                                message: 'Send free call data packet successfully'
+                            });
+                        }).catch((error) => {
+                            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                                message: 'Cannot send free call data packet'
+                            });
+                        });
                     }
                 }
             };
@@ -470,6 +548,112 @@ class Call {
                 resolve();
             }).catch((error) => {
                 reject(error);
+            });
+        });
+    };
+    receiveFreeCallStart(body) {
+        return new Promise((resolve, reject) => {
+            if (!body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect free call start request, ignored'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got free call start request data'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Callin start request data',
+                payload: body
+            });
+
+            if (this.callData.callId) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot receive free call when currently on call'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+
+                const responseBusyFreeCallPacket = {
+                    service: this.serviceTypes.FREE_CALL_STATUS_CHANGED,
+                    body: JSON.stringify({
+                        callId: body.callId,
+                        to: body.from,
+                        status: this.callConstants.CALL_STATUS_FREE_CALL_BUSY
+                    })
+                };
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send response busy free call packet'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Response busy free call packet',
+                    payload: responseBusyFreeCallPacket
+                });
+                this.sendPacketFunction(responseBusyFreeCallPacket).then(() => {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Send response busy free call packet successfully'
+                    });
+                }).catch((error) => {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                        message: 'Cannot send response busy free call data'
+                    });
+                });
+                return;
+            }
+
+            const responseRingingFreeCallPacket = {
+                service: this.serviceTypes.FREE_CALL_STATUS_CHANGED,
+                body: JSON.stringify({
+                    callId: body.callId,
+                    to: body.from,
+                    status: this.callConstants.CALL_STATUS_FREE_CALL_RINGING
+                })
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send response ringing free call packet'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Response ringing free call packet',
+                payload: responseRingingFreeCallPacket
+            });
+            this.sendPacketFunction(responseRingingFreeCallPacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send response ringing free call packet successfully'
+                });
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send response ringing free call data'
+                });
+            });
+
+            this.setCallData({
+                mediaType: body.mediaType,
+                isCaller: false,
+                callType: this.callConstants.CALL_TYPE_FREE_CALL,
+                callId: body.callId,
+                fromUserId: body.from,
+                toUserId: body.to
+            });
+            this.setWebRTCCallData({
+                audioState: this.callConstants.CALL_WEBRTC_AUDIO_STATE_ON
+            });
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got remote session description'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Remote session description',
+                payload: body.sdp
+            });
+            this.callData.webRTC.remoteSessionDescription = new RTCSessionDescription(body.sdp);
+
+            resolve({
+                mediaType: body.mediaType,
+                fromUserId: body.from,
+                toUserId: body.to
             });
         });
     };
@@ -808,7 +992,7 @@ class Call {
                 service: this.serviceTypes.FREE_CALL_STATUS_CHANGED,
                 body: JSON.stringify({
                     callId: this.callData.callId,
-                    to: this.callData.toUserId,
+                    to: this.callData.isCaller ? this.callData.toUserId : this.callData.fromUserId,
                     status: this.callConstants.CALL_STATUS_FREE_CALL_STOP
                 })
             };
@@ -832,6 +1016,173 @@ class Call {
                 reject({
                     code: error.code,
                     message: 'Cannot send stop free call data, stop free call fail'
+                });
+            });
+        });
+    };
+    sendAnswerFreeCall(options) {
+        return new Promise((resolve, reject) => {
+            if (!this.callData.callId || this.callData.callType !== this.callConstants.CALL_TYPE_FREE_CALL) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot answer free call when not currently on free call'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot answer free call when not currently on free call'
+                });
+                return;
+            }
+
+            if (this.callData.isCaller) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot answer free call when is caller'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot answer free call when is caller'
+                });
+                return;
+            }
+
+            return this.initWebRTC().then(() => {
+                resolve();
+            }).catch((error) => {
+                reject(error);
+            });
+        });
+    };
+    sendRejectFreeCall(options) {
+        return new Promise((resolve, reject) => {
+            if (!this.callData.callId || this.callData.callType !== this.callConstants.CALL_TYPE_FREE_CALL) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot reject free call when not currently on free call'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot reject free call when not currently on free call'
+                });
+                return;
+            }
+
+            if (this.callData.isCaller) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot reject free call when is caller'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot reject free call when is caller'
+                });
+                return;
+            }
+
+            const rejectFreeCallPacket = {
+                service: this.serviceTypes.FREE_CALL_STATUS_CHANGED,
+                body: JSON.stringify({
+                    callId: this.callData.callId,
+                    to: this.callData.fromUserId,
+                    status: this.callConstants.CALL_STATUS_FREE_CALL_REJECTED
+                })
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send reject free call packet'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Reject free call packet',
+                payload: rejectFreeCallPacket
+            });
+            this.sendPacketFunction(rejectFreeCallPacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send reject free call packet successfully'
+                });
+                this.clearCallData();
+                resolve();
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send reject free call data, reject free call fail'
+                });
+                reject({
+                    code: error.code,
+                    message: 'Cannot send reject free call data, reject free call fail'
+                });
+            });
+        });
+    };
+    sendNotAnswerFreeCall(options) {
+        return new Promise((resolve, reject) => {
+            if (!this.callData.callId || this.callData.callType !== this.callConstants.CALL_TYPE_FREE_CALL) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot not answer free call when not currently on free call'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot not answer free call when not currently on free call'
+                });
+                return;
+            }
+
+            if (this.callData.isCaller) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot not answer free call when is caller'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot not answer free call when is caller'
+                });
+                return;
+            }
+
+            const notAnswerFreeCallPacket = {
+                service: this.serviceTypes.FREE_CALL_STATUS_CHANGED,
+                body: JSON.stringify({
+                    callId: this.callData.callId,
+                    to: this.callData.fromUserId,
+                    status: this.callConstants.CALL_STATUS_FREE_CALL_NOT_ANSWERED
+                })
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send not answer free call packet'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Not answer free call packet',
+                payload: notAnswerFreeCallPacket
+            });
+            this.sendPacketFunction(notAnswerFreeCallPacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send not answer free call packet successfully'
+                });
+                this.clearCallData();
+                resolve();
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send not answer free call data, not answer free call fail'
+                });
+                reject({
+                    code: error.code,
+                    message: 'Cannot send not answer free call data, not answer free call fail'
                 });
             });
         });
@@ -1052,10 +1403,10 @@ class Call {
                         message: 'Callout status changed to answered'
                     });
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                        message: 'Got remote session description and ice candidates'
+                        message: 'Got remote session description'
                     });
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                        message: 'Remote session description and ice candidates',
+                        message: 'Remote session description',
                         payload: body.sdp_candidate
                     });
                     this.callData.webRTC.remoteSessionDescription = new RTCSessionDescription({
@@ -1063,18 +1414,18 @@ class Call {
                         type: 'answer'
                     });
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                        message: 'Set remote session description and ice candidates to peer connection'
+                        message: 'Set remote session description to peer connection'
                     });
                     this.callData.webRTC.peerConnection.setRemoteDescription(this.callData.webRTC.remoteSessionDescription).then(() => {
                         this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                            message: 'Set remote session description and ice candidates success'
+                            message: 'Set remote session description success'
                         });
                     }).catch((error) => {
                         this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                            message: 'Set remote session description and ice candidates fail'
+                            message: 'Set remote session description fail'
                         });
                         this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                            message: 'Set remote session description and ice candidates error',
+                            message: 'Set remote session description error',
                             payload: error
                         });
                     });
@@ -1280,10 +1631,10 @@ class Call {
             });
 
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                message: 'Got remote session description and ice candidates'
+                message: 'Got remote session description'
             });
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                message: 'Remote session description and ice candidates',
+                message: 'Remote session description',
                 payload: body.sdp_candidate
             });
             this.callData.webRTC.remoteSessionDescription = new RTCSessionDescription({
