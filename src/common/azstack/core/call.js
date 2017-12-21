@@ -496,9 +496,9 @@ class Call {
                 return;
             }
 
-            if (options && typeof options.state === 'boolean') {
+            if (options.state !== undefined) {
                 audioTracks.map((audioTrack) => {
-                    audioTrack.enabled = options.state
+                    audioTrack.enabled = options.state === this.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF ? false : true;
                 });
                 if (audioTracks[0].enabled) {
                     this.callData.webRTC.audioState = this.callConstants.CALL_WEBRTC_AUDIO_STATE_ON;
@@ -582,9 +582,9 @@ class Call {
                 return;
             }
 
-            if (options && typeof options.state === 'boolean') {
+            if (options.state !== undefined) {
                 videoTracks.map((videoTrack) => {
-                    videoTrack.enabled = options.state
+                    videoTrack.enabled = options.state === this.callConstants.CALL_WEBRTC_VIDEO_STATE_OFF ? false : true;
                 });
                 if (videoTracks[0].enabled) {
                     this.callData.webRTC.videoState = this.callConstants.CALL_WEBRTC_VIDEO_STATE_ON;

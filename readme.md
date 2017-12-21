@@ -887,7 +887,7 @@ this.AZStackCore.Delegates.onCallinStatusChangedByMe = (error, result) => {
 
 ```javascript 
 this.AZStackCore.toggleAudioState({
-    state: false
+    state: this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
 }, (error, result) => {
     console.log(error);
     console.log(result);
@@ -898,7 +898,7 @@ OR
 
 ```javascript 
 this.AZStackCore.toggleAudioState({
-    state: false
+    state: this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
 }).then((result) => {
     console.log(result);
 }).catch((error) => {
@@ -913,12 +913,12 @@ this.AZStackCore.Delegates.onToggleAudioStateReturn = (error, result) => {
     console.log(error, result);
 };
 this.AZStackCore.toggleAudioState({
-    state: false
+    state: this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
 });
 ```
 
 #### options(optional):
-> - state(optional): boolean for on or off
+> - state(optional): audio state
 
 #### error:
 > - code: error code
@@ -931,7 +931,7 @@ this.AZStackCore.toggleAudioState({
 
 ```javascript 
 this.AZStackCore.toggleVideoState({
-    state: false
+    state: this.AZStackCore.callConstants.CALL_WEBRTC_VIDEO_STATE_OFF
 }, (error, result) => {
     console.log(error);
     console.log(result);
@@ -942,7 +942,7 @@ OR
 
 ```javascript 
 this.AZStackCore.toggleVideoState({
-    state: false
+    state: this.AZStackCore.callConstants.CALL_WEBRTC_VIDEO_STATE_OFF
 }).then((result) => {
     console.log(result);
 }).catch((error) => {
@@ -957,19 +957,19 @@ this.AZStackCore.Delegates.onToggleVideoStateReturn = (error, result) => {
     console.log(error, result);
 };
 this.AZStackCore.toggleVideoState({
-    state: false
+    state: this.AZStackCore.callConstants.CALL_WEBRTC_VIDEO_STATE_OFF
 });
 ```
 
 #### options(optional):
-> - state(optional): boolean for on or off
+> - state(optional): video state
 
 #### error:
 > - code: error code
 > - message: error message
 
 #### result:
-> - videoState: audio state
+> - videoState: video state
 
 ### 3.5.5. Paid call logs
 

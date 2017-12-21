@@ -115,15 +115,14 @@ class AZStackCoreExample extends React.Component {
         }).catch((error) => { });
 
         this.AZStackCore.Delegates.onLocalStreamArrived = (error, result) => {
-            this.setState({
-                localVideoUrl: result.stream.toURL()
-            });
+            // this.setState({
+            //     localVideoUrl: result.stream.toURL()
+            // });
         };
         this.AZStackCore.Delegates.onRemoteStreamArrived = (error, result) => {
-            this.setState({
-                remoteVideoUrl: result.stream.toURL()
-            });
-            console.log(this.state);
+            // this.setState({
+            //     remoteVideoUrl: result.stream.toURL()
+            // });
         };
     };
 

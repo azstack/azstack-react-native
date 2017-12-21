@@ -941,8 +941,9 @@ export class AZStackCore {
             if (options && typeof options === 'object') {
                 let dataErrorMessage = this.Validator.check([{
                     name: 'state',
-                    dataType: this.dataTypes.DATA_TYPE_BOOLEAN,
-                    data: options.state
+                    dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                    data: options.state,
+                    in: [this.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF, this.callConstants.CALL_WEBRTC_AUDIO_STATE_ON]
                 }]);
                 if (dataErrorMessage) {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -979,8 +980,9 @@ export class AZStackCore {
             if (options && typeof options === 'object') {
                 let dataErrorMessage = this.Validator.check([{
                     name: 'state',
-                    dataType: this.dataTypes.DATA_TYPE_BOOLEAN,
-                    data: options.state
+                    dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                    data: options.state,
+                    in: [this.callConstants.CALL_WEBRTC_VIDEO_STATE_OFF, this.callConstants.CALL_WEBRTC_VIDEO_STATE_ON]
                 }]);
                 if (dataErrorMessage) {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
