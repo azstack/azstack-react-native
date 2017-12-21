@@ -30,6 +30,7 @@ class Call {
             callinType: null,
             webRTC: {
                 audioState: null,
+                videoState: null,
                 peerConnection: null,
                 localIceCandidates: [],
                 localSessionDescription: null,
@@ -64,6 +65,7 @@ class Call {
         this.callData.toPhoneNumber = null;
         this.callData.callinType = null;
         this.callData.webRTC.audioState = null;
+        this.callData.webRTC.videoState = null;
         this.callData.webRTC.peerConnection = null;
         this.callData.webRTC.localIceCandidates = [];
         this.callData.webRTC.localSessionDescription = null;
@@ -531,6 +533,92 @@ class Call {
             resolve({ audioState: this.callData.webRTC.audioState });
         });
     };
+    toggleVideoState(options) {
+        return new Promise((resolve, reject) => {
+            if (!this.callData.callId) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot toggle video state when not currently on call'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot toggle video state when not currently on call'
+                });
+                return;
+            }
+            if (!this.callData.webRTC.localStream) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot toggle video state, local stream not found'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot toggle video state, local stream not found'
+                });
+                return;
+            }
+            if (this.callData.mediaType !== this.callConstants.CALL_MEDIA_TYPE_VIDEO) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot toggle video state, no video used'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot toggle video state, no video used'
+                });
+                return;
+            }
+
+            const videoTracks = this.callData.webRTC.localStream.getVideoTracks();
+            if (videoTracks.length === 0) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot toggle video state, no video stream found'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot toggle video state, no video stream found'
+                });
+                return;
+            }
+
+            if (options && typeof options.state === 'boolean') {
+                videoTracks.map((videoTrack) => {
+                    videoTrack.enabled = options.state
+                });
+                if (videoTracks[0].enabled) {
+                    this.callData.webRTC.videoState = this.callConstants.CALL_WEBRTC_VIDEO_STATE_ON;
+                } else {
+                    this.callData.webRTC.videoState = this.callConstants.CALL_WEBRTC_VIDEO_STATE_OFF;
+                }
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Set video state done'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Video state',
+                    payload: this.callData.webRTC.videoState
+                });
+            } else {
+                videoTracks.map((videoTrack) => {
+                    videoTrack.enabled = !videoTrack.enabled
+                });
+                if (videoTracks[0].enabled) {
+                    this.callData.webRTC.videoState = this.callConstants.CALL_WEBRTC_VIDEO_STATE_ON;
+                } else {
+                    this.callData.webRTC.videoState = this.callConstants.CALL_WEBRTC_VIDEO_STATE_OFF;
+                }
+
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Toggle video state done'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Video state',
+                    payload: this.callData.webRTC.videoState
+                });
+            }
+            resolve({ videoState: this.callData.webRTC.videoState });
+        });
+    };
 
     sendStartFreeCall(options) {
         return new Promise((resolve, reject) => {
@@ -558,7 +646,8 @@ class Call {
                 toUserId: options.toUserId
             });
             this.setWebRTCCallData({
-                audioState: this.callConstants.CALL_WEBRTC_AUDIO_STATE_ON
+                audioState: this.callConstants.CALL_WEBRTC_AUDIO_STATE_ON,
+                videoState: options.mediaType === this.callConstants.CALL_MEDIA_TYPE_VIDEO ? this.callConstants.CALL_WEBRTC_VIDEO_STATE_ON : null
             });
 
             return this.initWebRTC().then(() => {
@@ -655,7 +744,8 @@ class Call {
                 toUserId: body.to
             });
             this.setWebRTCCallData({
-                audioState: this.callConstants.CALL_WEBRTC_AUDIO_STATE_ON
+                audioState: this.callConstants.CALL_WEBRTC_AUDIO_STATE_ON,
+                videoState: body.mediaType === this.callConstants.CALL_MEDIA_TYPE_VIDEO ? this.callConstants.CALL_WEBRTC_VIDEO_STATE_ON : null
             });
 
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {

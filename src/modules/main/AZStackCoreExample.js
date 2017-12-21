@@ -29,6 +29,7 @@ class AZStackCoreExample extends React.Component {
         this.disconnect = this.disconnect.bind(this);
 
         this.toggleAutioState = this.toggleAutioState.bind(this);
+        this.toggleVideoState = this.toggleVideoState.bind(this);
 
         this.startFreeCallVoice = this.startFreeCallVoice.bind(this);
         this.startFreeCallVideo = this.startFreeCallVideo.bind(this);
@@ -132,6 +133,9 @@ class AZStackCoreExample extends React.Component {
 
     toggleAutioState() {
         this.AZStackCore.toggleAutioState({}).then(() => { }).catch(() => { });
+    };
+    toggleVideoState() {
+        this.AZStackCore.toggleVideoState({}).then(() => { }).catch(() => { });
     };
 
     startFreeCallVoice() {
@@ -469,6 +473,7 @@ class AZStackCoreExample extends React.Component {
                     <Button onPress={this.disconnect} title='Disconnect' />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.toggleAutioState} title='Toggle Audio State' />
+                    <Button onPress={this.toggleVideoState} title='Toggle Video State' />
                     <Text>{'\n'}{'\n'}</Text>
                     <RTCView streamURL={this.state.freeCall.localVideoUrl}  />
                     <RTCView streamURL={this.state.freeCall.remoteVideoUrl}  />

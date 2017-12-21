@@ -965,6 +965,44 @@ export class AZStackCore {
             });
         });
     };
+    toggleVideoState(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Toggle video state'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Toggle video state data',
+                payload: options
+            });
+            this.addUncall(this.uncallConstants.UNCALL_KEY_TOGGLE_VIDEO_STATE, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_TOGGLE_VIDEO_STATE_RETURN);
+
+            if (options && typeof options === 'object') {
+                let dataErrorMessage = this.Validator.check([{
+                    name: 'state',
+                    dataType: this.dataTypes.DATA_TYPE_BOOLEAN,
+                    data: options.state
+                }]);
+                if (dataErrorMessage) {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                        message: dataErrorMessage
+                    });
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_TOGGLE_VIDEO_STATE, 'default', {
+                        code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                        message: dataErrorMessage
+                    }, null);
+                    return;
+                }
+            }
+
+            this.Call.toggleVideoState({
+                state: options.state
+            }).then((result) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_TOGGLE_VIDEO_STATE, 'default', null, result);
+            }).catch((error) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_TOGGLE_VIDEO_STATE, 'default', error, null);
+            });
+        });
+    };
 
     startFreeCall(options, callback) {
         return new Promise((resolve, reject) => {

@@ -50,6 +50,7 @@
             * [3.5.3.5. Delegates](#3535-delegates)
         * [3.5.4. Ultilities](#354-ultilities)
             * [3.5.4.1. Toggle audio state function](#3541-toggle-audio-state-function)
+            * [3.5.4.2. Toggle video state function](#3542-toggle-video-state-function)
         * [3.5.5. Paid call logs](#355-paid-call-logs)
             * [3.5.5.1. Get paid call logs](#3551-get-paid-call-logs)
             * [3.5.5.2. Delegates](#3552-delegates)
@@ -176,6 +177,9 @@ this.AZStackCore.config({
 #### 3.3.3.1. WebRTC
 > - CALL_WEBRTC_AUDIO_STATE_OFF(0): audio off
 > - CALL_WEBRTC_AUDIO_STATE_ON(1): audio on
+
+> - CALL_WEBRTC_VIDEO_STATE_OFF(0): video off
+> - CALL_WEBRTC_VIDEO_STATE_ON(1): video on
 
 #### 3.3.3.2. Media type
 > - CALL_MEDIA_TYPE_AUDIO(1): audio
@@ -922,6 +926,50 @@ this.AZStackCore.toggleAudioState({
 
 #### result:
 > - audioState: audio state
+
+#### 3.5.4.2. Toggle video state function
+
+```javascript 
+this.AZStackCore.toggleVideoState({
+    state: false
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.toggleVideoState({
+    state: false
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.Delegates.onToggleVideoStateReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStackCore.toggleVideoState({
+    state: false
+});
+```
+
+#### options(optional):
+> - state(optional): boolean for on or off
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - videoState: audio state
 
 ### 3.5.5. Paid call logs
 
