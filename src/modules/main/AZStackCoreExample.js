@@ -116,14 +116,14 @@ class AZStackCoreExample extends React.Component {
         }).catch((error) => { });
 
         this.AZStackCore.Delegates.onLocalStreamArrived = (error, result) => {
-            // this.setState({
-            //     localVideoUrl: result.stream.toURL()
-            // });
+            this.setState({
+                localVideoUrl: result.stream.toURL()
+            });
         };
         this.AZStackCore.Delegates.onRemoteStreamArrived = (error, result) => {
-            // this.setState({
-            //     remoteVideoUrl: result.stream.toURL()
-            // });
+            this.setState({
+                remoteVideoUrl: result.stream.toURL()
+            });
         };
     };
 
@@ -477,10 +477,10 @@ class AZStackCoreExample extends React.Component {
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.toggleAutioState} title='Toggle Audio State' />
                     <Button onPress={this.toggleVideoState} title='Toggle Video State' />
-                    <Button onPress={this.switchCameraType} title='Switch Camera State' />
+                    <Button onPress={this.switchCameraType} title='Switch Camera Type' />
                     <Text>{'\n'}{'\n'}</Text>
-                    <RTCView streamURL={this.state.freeCall.localVideoUrl}  />
-                    <RTCView streamURL={this.state.freeCall.remoteVideoUrl}  />
+                    <RTCView streamURL={this.state.freeCall.localVideoUrl} style={{width: 200,height: 150}} />
+                    <RTCView streamURL={this.state.freeCall.remoteVideoUrl} style={{width: 200,height: 150}}  />
                     <Button onPress={this.startFreeCallVoice} title='Start free call voice' />
                     <Button onPress={this.startFreeCallVideo} title='Start free call video' />
                     <Button onPress={this.stopFreeCall} title='Stop free call' />
