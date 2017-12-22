@@ -1,4 +1,4 @@
-import * as enTexts from './enTexts';
+import * as enTexts from './text/en';
 
 class Language {
     constructor(options) {
