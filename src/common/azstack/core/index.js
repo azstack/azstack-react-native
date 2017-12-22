@@ -13,13 +13,13 @@ import * as groupConstants from './constant/groupConstants';
 import Tool from './helper/tool';
 import Validator from './helper/validator';
 import Logger from './helper/logger';
-import Delegates from './core/delegate';
-import Authentication from './core/authentication';
-import Call from './core/call';
-import Conversation from './core/conversation';
-import Message from './core/message';
-import User from './core/user';
-import Group from './core/group';
+import Delegates from './handler/delegate';
+import Authentication from './handler/authentication';
+import Call from './handler/call';
+import Conversation from './handler/conversation';
+import Message from './handler/message';
+import User from './handler/user';
+import Group from './handler/group';
 
 export class AZStackCore {
     constructor() {
