@@ -755,7 +755,7 @@ export class AZStackCore {
                 message: 'Cannot connect to slave socket'
             }, null);
         });
-        this.slaveSocket.on(this.uncallConstants.UNCALL_KEY_DISCONNECT, () => {
+        this.slaveSocket.on('disconnect', () => {
             this.slaveSocketConnected = false;
             this.slaveAddress = null;
             this.authenticatedUser = null;
@@ -768,7 +768,12 @@ export class AZStackCore {
             if (this.slaveSocketDisconnecting) {
                 this.slaveSocketDisconnecting = false;
                 this.callUncall(this.uncallConstants.UNCALL_KEY_DISCONNECT, 'default', null, null);
+            } else {
+                if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_DISCONNECTED] === 'function') {
+                    this.Delegates[this.delegateConstants.DELEGATE_ON_DISCONNECTED](null, null);
+                }
             }
+
         });
         this.slaveSocket.on('WebPacket', (packet) => {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {

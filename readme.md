@@ -30,6 +30,7 @@
     * [3.4. Connection](#34-connection)
         * [3.4.1. Connect](#341-connect)
         * [3.4.2. Disconnect](#342-disconnect)
+        * [3.4.3. Delegates](#343-delegates)
     * [3.5. Calls](#35-calls)
         * [3.5.1. Free call](#351-free-call)
             * [3.5.1.1. Start function](#3511-start-function)
@@ -369,6 +370,14 @@ this.AZStackCore.disconnect({});
 #### error:
 > - code: error code
 > - message: error message
+
+### 3.4.3. Delegates
+
+```javascript 
+this.AZStackCore.Delegates.onDisconnected = (error, result) => {
+    console.log(error, result);
+};
+```
 
 
 
