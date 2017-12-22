@@ -1,8 +1,13 @@
 import React from 'react';
+import {
+    View
+} from 'react-native';
 import AZStackCoreExample from './AZStackCoreExample';
+import AZStackComponentExample from './AZStackComponentExample';
 
 class AppMain extends React.Component {
     render() {
+        let exampleType = 'component';
         let azstackConfig = {
             requestTimeout: 60000,
             intervalPingTime: 60000,
@@ -20,7 +25,12 @@ class AppMain extends React.Component {
         //user 2: test_user_2 387212
         //user 3: test_user_3 391658
 
-        return <AZStackCoreExample azstackConfig={azstackConfig} />;
+        return (
+            <View>
+                {exampleType === 'core' && <AZStackCoreExample azstackConfig={azstackConfig} />}
+                {exampleType === 'component' && <AZStackComponentExample azstackConfig={azstackConfig} />}
+            </View>
+        );
     };
 };
 
