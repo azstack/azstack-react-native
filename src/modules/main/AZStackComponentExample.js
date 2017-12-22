@@ -9,7 +9,7 @@ class AZStackComponentExample extends React.Component {
 
     render() {
         return (
-            <AZStackComponent azstackConfig={this.props.azstackConfig} />
+            <AZStackComponent azstackConfig={this.props.azstackConfig} languageCode={this.props.languageCode} />
         );
     };
 };

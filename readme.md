@@ -2,6 +2,7 @@
 # Table of Contents
 
 * [1. Requirements](#1-requirements)
+* [2. Component](#2-component)
 * [3. Core](#3-core)
     * [3.2. Initial](#32-initial)
     * [3.3. Constants](#33-constants)
@@ -98,10 +99,58 @@
 
 # 1. Requirements
 
-### 1.1. Get our sdk
-### 1.2. Install socket.io-client https://github.com/socketio/socket.io-client
-### 1.3. Install jsencrypt https://github.com/travist/jsencrypt
-### 1.4. Install react-native-webrtc https://github.com/oney/react-native-webrtc
+## 1.1. Get our sdk
+## 1.2. Install socket.io-client https://github.com/socketio/socket.io-client
+## 1.3. Install jsencrypt https://github.com/travist/jsencrypt
+## 1.4. Install react-native-webrtc https://github.com/oney/react-native-webrtc
+
+
+
+
+# 2. Component
+
+```javascript
+import { AZStackComponent } from '{path_to_libs}/azstack/';
+```
+
+```javascript
+
+    let azstackConfig = {
+        requestTimeout: 60000,
+        intervalPingTime: 60000,
+        logLevel: 'DEBUG',
+        authenticatingData: {
+            appId: 'bd7095762179b886c094c31b8f5e4646',
+            publicKey: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs1XFclMmD+l83OY3oOqN2a4JH4PkFvi9O/SOAnASmgfjXliWm7XeVMHeTfNKWKcEZKzWp8rFdwVlO5dXqKquLmcmnr4gb+yvakXNnRm6z135BQDQKCAvrDyEuzr31mmtk935+Yxms8Lfiuxmi5hWZszfTyJDBp2xokeOXbDLjqhunMO3wfxs+lao0qxWxfk4Eb0847/3sY+Zt7hMIceZEYhg7rwdnkl+zNJusPnWYFsf5povE1/qke+KCAL5z2Xte7xcpSv3b29Tl5W4iMfGOqh4ikytfRL/OTRXH3U0wuLuxSDsD7Lms0foAEPCdRJzbGnoNmsV/ongwKRrONitFQIDAQAB',
+            azStackUserId: 'test_user_1',
+            userCredentials: '',
+            fullname: 'Test User 1',
+            namespace: ''
+        }
+    };
+    let languageCode = 'EN';
+
+    <AZStackComponent azstackConfig={azstackConfig} languageCode={languageCode} />
+```
+
+#### Props
+> - azstackConfig(required): config of azstack
+>   - requestTimeout(optional): must be number, default 60000
+>   - intervalPingTime(optional): must be number, default 60000
+>   - logLevel(optional): can be one of
+>       - NONE: no log (default)
+>       - ERROR: just when error occur
+>       - INFO: log the error and info of porocess running
+>       - DEBUG: log the error, infor and data send/receiced
+>   - authenticatingData(required):
+>       - appId(required): the id of your azstack application
+>       - publicKey(required): the public key of ypur azstack application
+>       - azStackUserId(required): an unique string for authenticating user in your application
+>       - userCredentials(optional): the creadentials of authenticating user
+>       - fullname(required): the name of authenticating user
+>       - namespace(optional): the namespace of authenticating user
+> - languageCode(optional): language code, default is 'EN', can be 'EN'
+
 
 
 

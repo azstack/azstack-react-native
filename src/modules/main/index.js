@@ -20,7 +20,7 @@ class AppMain extends React.Component {
                 fullname: 'Test User 1',
                 namespace: ''
             }
-        }
+        };
         //user 1: test_user_1 381032
         //user 2: test_user_2 387212
         //user 3: test_user_3 391658
@@ -28,7 +28,7 @@ class AppMain extends React.Component {
         return (
             <View>
                 {exampleType === 'core' && <AZStackCoreExample azstackConfig={azstackConfig} />}
-                {exampleType === 'component' && <AZStackComponentExample azstackConfig={azstackConfig} />}
+                {exampleType === 'component' && <AZStackComponentExample azstackConfig={azstackConfig} languageCode='EN' />}
             </View>
         );
     };
