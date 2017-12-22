@@ -128,9 +128,10 @@ import { AZStackComponent } from '{path_to_libs}/azstack/';
             namespace: ''
         }
     };
-    let languageCode = 'EN';
+    let languageCode = 'en';
+    let themeName = 'classic';
 
-    <AZStackComponent azstackConfig={azstackConfig} languageCode={languageCode} />
+    <AZStackComponent azstackConfig={azstackConfig} languageCode={languageCode} themeName={themeName}/>
 ```
 
 #### Props
@@ -149,7 +150,8 @@ import { AZStackComponent } from '{path_to_libs}/azstack/';
 >       - userCredentials(optional): the creadentials of authenticating user
 >       - fullname(required): the name of authenticating user
 >       - namespace(optional): the namespace of authenticating user
-> - languageCode(optional): language code, default is 'EN', can be 'EN'
+> - languageCode(optional): language code, default is 'en', can be 'en'
+> - themeName(optional): theme name, default is 'classic', can be 'classic'
 
 
 

@@ -2,11 +2,11 @@ import * as enTexts from './text/en';
 
 class Language {
     constructor(options) {
-        this.codes = ['EN'];
+        this.codes = ['en'];
         this.texts = {
-            EN: enTexts
+            en: enTexts
         };
-        this.selectedCode = this.codes.indexOf(options.languageCode) > -1 ? options.languageCode : 'EN';
+        this.selectedCode = this.codes.indexOf(options.languageCode) > -1 ? options.languageCode : 'en';
     };
 
     getText(key) {

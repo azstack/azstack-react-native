@@ -28,7 +28,7 @@ class AppMain extends React.Component {
         return (
             <View>
                 {exampleType === 'core' && <AZStackCoreExample azstackConfig={azstackConfig} />}
-                {exampleType === 'component' && <AZStackComponentExample azstackConfig={azstackConfig} languageCode='EN' />}
+                {exampleType === 'component' && <AZStackComponentExample azstackConfig={azstackConfig} languageCode='en' themeName='classic'/>}
             </View>
         );
     };

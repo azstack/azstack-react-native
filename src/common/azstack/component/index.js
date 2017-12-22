@@ -8,12 +8,14 @@ import {
 import { AZStackCore } from '../core/';
 
 import Language from './language/';
+import CustomStyle from './style/';
 
 export class AZStackComponent extends React.Component {
     constructor(props) {
         super(props);
 
         this.Language = new Language({ languageCode: this.props.languageCode });
+        this.CustomStyle = new CustomStyle({ themeName: this.props.themeName });
 
         this.AZStackCore = new AZStackCore();
         this.AZStackCore.config(this.props.azstackConfig);
@@ -37,7 +39,7 @@ export class AZStackComponent extends React.Component {
     render() {
         return (
             <View>
-                <Text>Hello world</Text>
+                <Text style={this.CustomStyle.getStyle('MAIN_HELLO_WORLD_TEXT_STYLE')}>Hello world</Text>
             </View>
         );
     };
