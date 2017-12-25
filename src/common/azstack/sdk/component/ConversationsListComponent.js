@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Animated,
     View,
     Text,
     TouchableOpacity,
@@ -11,16 +12,57 @@ class ConversationsListComponent extends React.Component {
         super(props);
 
         this.state = {
+            opacityAnimated: new Animated.Value(0),
+            marginLeftAnimated: new Animated.Value(-this.props.Sizes.height),
             conversations: []
         };
     };
 
+    componentDidMount() {
+        Animated.parallel([
+            Animated.timing(
+                this.state.opacityAnimated,
+                {
+                    toValue: 1,
+                    duration: 1000,
+                }
+            ),
+            Animated.timing(
+                this.state.marginLeftAnimated,
+                {
+                    toValue: 0,
+                    duration: 1000,
+                }
+            )
+        ]).start();
+    };
+    componentWillUnmount() {
+        Animated.parallel([
+            Animated.timing(
+                this.state.opacityAnimated,
+                {
+                    toValue: 0,
+                    duration: 1000,
+                }
+            ),
+            Animated.timing(
+                this.state.marginLeftAnimated,
+                {
+                    toValue: -this.props.Sizes.height,
+                    duration: 1000,
+                }
+            )
+        ]).start();
+    }
+
     render() {
         return (
-            <View
+            <Animated.View
                 style={{
                     ...this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_BLOCK_STYLE'),
-                    ...this.props.Sizes
+                    ...this.props.Sizes,
+                    opacity: this.state.opacityAnimated,
+                    marginLeft: this.state.marginLeftAnimated
                 }}
             >
                 <View
@@ -53,7 +95,7 @@ class ConversationsListComponent extends React.Component {
                         </Text>
                     </View>
                 }
-            </View >
+            </Animated.View >
         );
     };
 };
