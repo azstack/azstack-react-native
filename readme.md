@@ -171,8 +171,7 @@ import { AZStackCore } from '{path_to_libs}/azstack/';
 ### 3.2.2. Config 
 
 ```javascript 
-this.AZStackCore = new AZStackCore();
-this.AZStackCore.config({
+this.AZStackCore = new AZStackCore({
     requestTimeout: 60000,
     intervalPingTime: 60000,
     logLevel: azstack.logLevelConstants.LOG_LEVEL_NONE,

@@ -9,8 +9,7 @@ export class AZStackSdk {
         this.Language = new Language({ languageCode: options.languageCode });
         this.CustomStyle = new CustomStyle({ themeName: options.themeName });
 
-        this.AZStackCore = new AZStackCore();
-        this.AZStackCore.config(options.azstackConfig);
+        this.AZStackCore = new AZStackCore(options.azstackConfig);
         this.AZStackCore.connect();
     };
 };

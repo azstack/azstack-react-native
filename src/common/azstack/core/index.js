@@ -22,7 +22,7 @@ import User from './handler/user';
 import Group from './handler/group';
 
 export class AZStackCore {
-    constructor() {
+    constructor(options) {
         this.sdkVersion = '0.0.1';
         this.masterSocketUri = 'https://www.azhub.xyz:9199';
         this.uncallConstants = uncallConstants;
@@ -55,6 +55,27 @@ export class AZStackCore {
         this.intervalSendPing = null;
 
         this.uniqueId = Math.round(new Date().getTime() / 1000);
+
+        if (!this.Validator.isObject(options)) {
+            return;
+        }
+        if (options.requestTimeout && this.Validator.isNumber(options.requestTimeout)) {
+            this.requestTimeout = options.requestTimeout;
+        }
+        if (options.intervalPingTime && this.Validator.isNumber(options.intervalPingTime)) {
+            this.intervalPingTime = options.intervalPingTime;
+        }
+        if (options.logLevel && this.Validator.isString(options.logLevel)) {
+            this.logLevel = options.logLevel;
+        }
+        if (options.authenticatingData && this.Validator.isObject(options.authenticatingData)) {
+            this.authenticatingData.appId = this.Validator.isString(options.authenticatingData.appId) ? options.authenticatingData.appId : '';
+            this.authenticatingData.publicKey = this.Validator.isString(options.authenticatingData.publicKey) ? options.authenticatingData.publicKey : '';
+            this.authenticatingData.azStackUserId = this.Validator.isString(options.authenticatingData.azStackUserId) ? options.authenticatingData.azStackUserId : '';
+            this.authenticatingData.userCredentials = this.Validator.isString(options.authenticatingData.userCredentials) ? options.authenticatingData.userCredentials : '';
+            this.authenticatingData.fullname = this.Validator.isString(options.authenticatingData.fullname) ? options.authenticatingData.fullname : '';
+            this.authenticatingData.namespace = this.Validator.isString(options.authenticatingData.namespace) ? options.authenticatingData.namespace : '';
+        }
     };
 
     newUniqueId() {
@@ -785,28 +806,6 @@ export class AZStackCore {
             });
             this.receiveSlavePacket(packet);
         });
-    };
-    config(options) {
-        if (!this.Validator.isObject(options)) {
-            return;
-        }
-        if (options.requestTimeout && this.Validator.isNumber(options.requestTimeout)) {
-            this.requestTimeout = options.requestTimeout;
-        }
-        if (options.intervalPingTime && this.Validator.isNumber(options.intervalPingTime)) {
-            this.intervalPingTime = options.intervalPingTime;
-        }
-        if (options.logLevel && this.Validator.isString(options.logLevel)) {
-            this.logLevel = options.logLevel;
-        }
-        if (options.authenticatingData && this.Validator.isObject(options.authenticatingData)) {
-            this.authenticatingData.appId = this.Validator.isString(options.authenticatingData.appId) ? options.authenticatingData.appId : '';
-            this.authenticatingData.publicKey = this.Validator.isString(options.authenticatingData.publicKey) ? options.authenticatingData.publicKey : '';
-            this.authenticatingData.azStackUserId = this.Validator.isString(options.authenticatingData.azStackUserId) ? options.authenticatingData.azStackUserId : '';
-            this.authenticatingData.userCredentials = this.Validator.isString(options.authenticatingData.userCredentials) ? options.authenticatingData.userCredentials : '';
-            this.authenticatingData.fullname = this.Validator.isString(options.authenticatingData.fullname) ? options.authenticatingData.fullname : '';
-            this.authenticatingData.namespace = this.Validator.isString(options.authenticatingData.namespace) ? options.authenticatingData.namespace : '';
-        }
     };
     init() {
         this.Logger.setLogLevel(this.logLevel);

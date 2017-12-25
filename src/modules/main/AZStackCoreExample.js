@@ -94,8 +94,7 @@ class AZStackCoreExample extends React.Component {
         this.getListGroupsPrivate = this.getListGroupsPrivate.bind(this);
         this.getListGroupsPublic = this.getListGroupsPublic.bind(this);
 
-        this.AZStackCore = new AZStackCore();
-        this.AZStackCore.config(this.props.azstackConfig);
+        this.AZStackCore = new AZStackCore(this.props.azstackConfig);
 
         this.AZStackCore.connect({}).then((authenticatedUser) => {
             this.setState({ authenticatedUser: authenticatedUser })
@@ -465,8 +464,8 @@ class AZStackCoreExample extends React.Component {
                     <Button onPress={this.toggleVideoState} title='Toggle Video State' />
                     <Button onPress={this.switchCameraType} title='Switch Camera Type' />
                     <Text>{'\n'}{'\n'}</Text>
-                    <RTCView streamURL={this.state.freeCall.localVideoUrl} style={{width: 200,height: 150}} />
-                    <RTCView streamURL={this.state.freeCall.remoteVideoUrl} style={{width: 200,height: 150}}  />
+                    <RTCView streamURL={this.state.freeCall.localVideoUrl} style={{ width: 200, height: 150 }} />
+                    <RTCView streamURL={this.state.freeCall.remoteVideoUrl} style={{ width: 200, height: 150 }} />
                     <Button onPress={this.startFreeCallVoice} title='Start free call voice' />
                     <Button onPress={this.startFreeCallVideo} title='Start free call video' />
                     <Button onPress={this.stopFreeCall} title='Stop free call' />
