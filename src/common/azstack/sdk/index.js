@@ -10,6 +10,5 @@ export class AZStackSdk {
         this.CustomStyle = new CustomStyle({ themeName: options.themeName });
 
         this.AZStackCore = new AZStackCore(options.azstackConfig);
-        this.AZStackCore.connect();
     };
 };

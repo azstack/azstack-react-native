@@ -1,5 +1,3 @@
-import { StyleSheet } from 'react-native';
-
 import * as classicTheme from './theme/classic';
 
 class CustomStyle {
@@ -12,9 +10,7 @@ class CustomStyle {
     };
 
     getStyle(key) {
-        return StyleSheet.create({
-            style: this.themes[this.selectedTheme][key]
-        }).style;
+        return this.themes[this.selectedTheme][key];
     };
 };
 

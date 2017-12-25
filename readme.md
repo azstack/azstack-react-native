@@ -134,6 +134,7 @@ import { AZStackSdk } from '{path_to_libs}/azstack/';
         languageCode: 'en',
         themeName: 'classic'
     });
+    this.AZStackSdk.AZStackCore.connect();
 ```
 
 #### Configs
