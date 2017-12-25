@@ -4,6 +4,7 @@
 * [1. Requirements](#1-requirements)
 * [2. Sdk](#2-sdk)
     * [2.1. Initial](#21-initial)
+    * [2.2. Render Conversations List](#22-render-conversations-list)
 * [3. Core](#3-core)
     * [3.2. Initial](#32-initial)
     * [3.3. Constants](#33-constants)
@@ -155,6 +156,18 @@ import { AZStackSdk } from '{path_to_libs}/azstack/';
 >       - namespace(optional): the namespace of authenticating user
 > - languageCode(optional): language code, default is 'en', can be 'en'
 > - themeName(optional): theme name, default is 'classic', can be 'classic'
+
+## 2.2. Render Conversations List
+
+```javascript
+this.AZStackSdk.renderConversationsList({
+    onBackButtonPressed: () => {}
+})
+```
+
+#### params
+> - onBackButtonPressed: on back button clicked function
+
 
 
 
