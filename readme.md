@@ -2,7 +2,8 @@
 # Table of Contents
 
 * [1. Requirements](#1-requirements)
-* [2. Component](#2-component)
+* [2. Sdk](#2-sdk)
+    * [2.1. Initial](#21-initial)
 * [3. Core](#3-core)
     * [3.2. Initial](#32-initial)
     * [3.3. Constants](#33-constants)
@@ -107,34 +108,35 @@
 
 
 
-# 2. Component
+# 2. Sdk
+
+## 2.1. Initial
 
 ```javascript
-import { AZStackComponent } from '{path_to_libs}/azstack/';
+import { AZStackSdk } from '{path_to_libs}/azstack/';
 ```
 
 ```javascript
-
-    let azstackConfig = {
-        requestTimeout: 60000,
-        intervalPingTime: 60000,
-        logLevel: 'DEBUG',
-        authenticatingData: {
-            appId: 'bd7095762179b886c094c31b8f5e4646',
-            publicKey: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs1XFclMmD+l83OY3oOqN2a4JH4PkFvi9O/SOAnASmgfjXliWm7XeVMHeTfNKWKcEZKzWp8rFdwVlO5dXqKquLmcmnr4gb+yvakXNnRm6z135BQDQKCAvrDyEuzr31mmtk935+Yxms8Lfiuxmi5hWZszfTyJDBp2xokeOXbDLjqhunMO3wfxs+lao0qxWxfk4Eb0847/3sY+Zt7hMIceZEYhg7rwdnkl+zNJusPnWYFsf5povE1/qke+KCAL5z2Xte7xcpSv3b29Tl5W4iMfGOqh4ikytfRL/OTRXH3U0wuLuxSDsD7Lms0foAEPCdRJzbGnoNmsV/ongwKRrONitFQIDAQAB',
-            azStackUserId: 'test_user_1',
-            userCredentials: '',
-            fullname: 'Test User 1',
-            namespace: ''
-        }
-    };
-    let languageCode = 'en';
-    let themeName = 'classic';
-
-    <AZStackComponent azstackConfig={azstackConfig} languageCode={languageCode} themeName={themeName}/>
+    this.AZStackSdk = new AZStackSdk({
+        azstackConfig: {
+            requestTimeout: 60000,
+            intervalPingTime: 60000,
+            logLevel: 'DEBUG',
+            authenticatingData: {
+                appId: 'bd7095762179b886c094c31b8f5e4646',
+                publicKey: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs1XFclMmD+l83OY3oOqN2a4JH4PkFvi9O/SOAnASmgfjXliWm7XeVMHeTfNKWKcEZKzWp8rFdwVlO5dXqKquLmcmnr4gb+yvakXNnRm6z135BQDQKCAvrDyEuzr31mmtk935+Yxms8Lfiuxmi5hWZszfTyJDBp2xokeOXbDLjqhunMO3wfxs+lao0qxWxfk4Eb0847/3sY+Zt7hMIceZEYhg7rwdnkl+zNJusPnWYFsf5povE1/qke+KCAL5z2Xte7xcpSv3b29Tl5W4iMfGOqh4ikytfRL/OTRXH3U0wuLuxSDsD7Lms0foAEPCdRJzbGnoNmsV/ongwKRrONitFQIDAQAB',
+                azStackUserId: 'test_user_1',
+                userCredentials: '',
+                fullname: 'Test User 1',
+                namespace: ''
+            }
+        },
+        languageCode: 'en',
+        themeName: 'classic'
+    });
 ```
 
-#### Props
+#### Configs
 > - azstackConfig(required): config of azstack
 >   - requestTimeout(optional): must be number, default 60000
 >   - intervalPingTime(optional): must be number, default 60000

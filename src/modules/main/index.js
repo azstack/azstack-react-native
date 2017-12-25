@@ -3,11 +3,11 @@ import {
     View
 } from 'react-native';
 import AZStackCoreExample from './AZStackCoreExample';
-import AZStackComponentExample from './AZStackComponentExample';
+import AZStackSdkExample from './AZStackSdkExample';
 
 class AppMain extends React.Component {
     render() {
-        let exampleType = 'component';
+        let exampleType = 'sdk';
         let azstackConfig = {
             requestTimeout: 60000,
             intervalPingTime: 60000,
@@ -28,7 +28,7 @@ class AppMain extends React.Component {
         return (
             <View>
                 {exampleType === 'core' && <AZStackCoreExample azstackConfig={azstackConfig} />}
-                {exampleType === 'component' && <AZStackComponentExample azstackConfig={azstackConfig} languageCode='en' themeName='classic'/>}
+                {exampleType === 'sdk' && <AZStackSdkExample azstackConfig={azstackConfig} languageCode='en' themeName='classic'/>}
             </View>
         );
     };
