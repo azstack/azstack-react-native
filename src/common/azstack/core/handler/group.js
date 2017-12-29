@@ -864,6 +864,7 @@ class Group {
                     message: 'Server response with error, get details group fail'
                 });
                 reject({
+                    groupId: body.group,
                     code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
                     message: 'Server response with error, get details group fail'
                 });

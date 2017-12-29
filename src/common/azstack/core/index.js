@@ -684,9 +684,11 @@ export class AZStackCore {
 
             case this.serviceTypes.GROUP_GET_DETAILS:
                 this.Group.receiveGroupDetailsGetResult(body).then((result) => {
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, 'default', null, result);
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, result.groupId, null, result);
                 }).catch((error) => {
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, 'default', error, null);
+                    let groupId = error.groupId;
+                    delete error.groupId;
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, groupId, error, null);
                 });
                 break;
             case this.serviceTypes.GROUP_GET_LIST_PRIVATE:
@@ -2445,13 +2447,15 @@ export class AZStackCore {
                 payload: options
             });
 
-            this.addUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_GROUP_GET_DETAILS_RETURN);
+            let requestKey = this.Validator.isObject(options) ? options.groupId : this.Tool.generateRequestPurpose();
+
+            this.addUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, requestKey, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_GROUP_GET_DETAILS_RETURN);
 
             if (!options || typeof options !== 'object') {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Missing get details group params'
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, 'default', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, requestKey, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'Missing get details group params'
                 }, null);
@@ -2469,7 +2473,7 @@ export class AZStackCore {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: dataErrorMessage
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, 'default', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, requestKey, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: dataErrorMessage
                 }, null);
@@ -2482,7 +2486,7 @@ export class AZStackCore {
             }).then((result) => {
 
             }).catch((error) => {
-                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, 'default', error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, requestKey, error, null);
             });
         });
     };
