@@ -4,7 +4,11 @@
 * [1. Requirements](#1-requirements)
 * [2. Sdk](#2-sdk)
     * [2.1. Initial](#21-initial)
-    * [2.2. Render Conversations List](#22-render-conversations-list)
+    * [2.2. Connection ](#22-connection)
+        * [2.2.1. Connect ](#221-connect)
+        * [2.2.2. Disconnect ](#222-disconnect)
+    * [2.3. Render](#23-render)
+        * [2.3.1. Conversations List](#231-conversations-list)
 * [3. Core](#3-core)
     * [3.2. Initial](#32-initial)
     * [3.3. Constants](#33-constants)
@@ -157,16 +161,79 @@ import { AZStackSdk } from '{path_to_libs}/azstack/';
 > - languageCode(optional): language code, default is 'en', can be 'en'
 > - themeName(optional): theme name, default is 'classic', can be 'classic'
 
-## 2.2. Render Conversations List
+
+
+## 2.2. Connection 
+
+### 2.2.1. Connect
+
+```javascript 
+this.AZStackSdk.connect({}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackSdk.connect({}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - azStackUserId: unique key string of users
+> - userId: userId of user in azstack
+> - fullname: fullname of user
+
+### 2.2.2. Disconnect
+
+```javascript 
+this.AZStackSdk.disconnect({}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackSdk.disconnect({}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
+
+
+
+## 2.3. Render
+
+### 2.3.1. Conversations List
 
 ```javascript
 this.AZStackSdk.renderConversationsList({
     onBackButtonPressed: () => {}
-})
+});
 ```
 
 #### params
 > - onBackButtonPressed: on back button clicked function
+
+#### result
+> - Conversations component
 
 
 

@@ -13,7 +13,7 @@ class ConversationsListComponent extends React.Component {
 
         this.state = {
             opacityAnimated: new Animated.Value(0),
-            marginLeftAnimated: new Animated.Value(-this.props.Sizes.height),
+            marginLeftAnimated: new Animated.Value(-this.props.Sizes.width),
             conversations: []
         };
     };
@@ -48,7 +48,7 @@ class ConversationsListComponent extends React.Component {
             Animated.timing(
                 this.state.marginLeftAnimated,
                 {
-                    toValue: -this.props.Sizes.height,
+                    toValue: -this.props.Sizes.width,
                     duration: 1000,
                 }
             )

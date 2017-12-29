@@ -27,6 +27,13 @@ export class AZStackSdk {
         this.renderConversationsList = this.renderConversationsList.bind(this);
     };
 
+    connect() {
+        return this.AZStackCore.connect();
+    };
+    disconnect() {
+        return this.AZStackCore.disconnect();
+    };
+
     renderConversationsList(options) {
         return <ConversationsListComponent
             Language={this.Language}

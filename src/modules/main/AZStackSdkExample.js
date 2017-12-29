@@ -29,7 +29,7 @@ class AZStackSdkExample extends React.Component {
             languageCode: this.props.languageCode,
             themeName: this.props.themeName
         });
-        this.AZStackSdk.AZStackCore.connect().then((result) => {
+        this.AZStackSdk.connect().then((result) => {
             this.setState({ authenticatedUser: result });
         }).catch({});
     };
