@@ -1723,13 +1723,15 @@ export class AZStackCore {
                 payload: options
             });
 
-            this.addUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, options.messageStatus + '_' + options.msgId, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_CHANGE_MESSAGE_STATUS_RETURN);
+            let requestKey = this.Validator.isObject(options) ? (options.messageStatus + '_' + options.msgId) : this.Tool.generateRequestPurpose();
+
+            this.addUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, requestKey, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_CHANGE_MESSAGE_STATUS_RETURN);
 
             if (!options || typeof options !== 'object') {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Missing send change message status params'
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, options.messageStatus + '_' + options.msgId, {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, requestKey, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'Missing send change message status params'
                 }, null);
@@ -1771,7 +1773,7 @@ export class AZStackCore {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: dataErrorMessage
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, options.messageStatus + '_' + options.msgId, {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, requestKey, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: dataErrorMessage
                 }, null);
@@ -1786,10 +1788,10 @@ export class AZStackCore {
                 msgId: options.msgId
             }).then((result) => {
                 if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_DELIVERED) {
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, options.messageStatus + '_' + options.msgId, null, null);
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, requestKey, null, null);
                 }
             }).catch((error) => {
-                this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, options.messageStatus + '_' + options.msgId, error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, requestKey, error, null);
             });
         });
     };
