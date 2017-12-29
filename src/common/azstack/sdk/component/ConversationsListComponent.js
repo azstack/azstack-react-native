@@ -53,7 +53,7 @@ class ConversationsListComponent extends React.Component {
                 }
             )
         ]).start();
-    }
+    };
 
     render() {
         return (

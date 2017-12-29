@@ -96,10 +96,6 @@ class AZStackCoreExample extends React.Component {
 
         this.AZStackCore = new AZStackCore(this.props.azstackConfig);
 
-        this.AZStackCore.connect({}).then((authenticatedUser) => {
-            this.setState({ authenticatedUser: authenticatedUser })
-        }).catch((error) => { });
-
         this.AZStackCore.Delegates.onLocalStreamArrived = (error, result) => {
             this.setState({
                 localVideoUrl: result.stream.toURL()
@@ -110,6 +106,17 @@ class AZStackCoreExample extends React.Component {
                 remoteVideoUrl: result.stream.toURL()
             });
         };
+    };
+
+    componentDidMount() {
+        this.AZStackCore.connect({}).then((authenticatedUser) => {
+            this.setState({ authenticatedUser: authenticatedUser })
+        }).catch((error) => { });
+    };
+    componentWillUnmount() {
+        this.AZStackCore.disconnect({}).then(() => {
+            this.setState({ authenticatedUser: null });
+        }).catch(() => { });
     };
 
     disconnect() {
