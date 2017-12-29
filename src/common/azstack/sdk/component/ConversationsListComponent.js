@@ -12,6 +12,12 @@ class ConversationsListComponent extends React.Component {
         super(props);
 
         this.subscriptions = {};
+        this.pagination = {
+            page: 1,
+            lastCreated: new Date().getTime(),
+            loading: false,
+            done: false
+        };
 
         this.state = {
             opacityAnimated: new Animated.Value(0),
@@ -25,12 +31,71 @@ class ConversationsListComponent extends React.Component {
             if (error) {
                 return;
             }
+            this.getConversations();
         });
     };
     clearSubscriptions() {
         for (let subscriptionName in this.subscriptions) {
             this.subscriptions[subscriptionName].remove();
         }
+    };
+
+    getConversations() {
+        if (!this.props.AZStackCore.slaveSocketConnected) {
+            return;
+        }
+        if (this.pagination.loading) {
+            return;
+        }
+
+        this.pagination.loading = true;
+        this.props.AZStackCore.getModifiedConversations({
+            page: this.pagination.page,
+            lastCreated: this.pagination.lastCreated
+        }).then((result) => {
+            this.prepareConversations(result.list).then((preparedConversations) => {
+                this.pagination.loading = false;
+                if (result.done === this.props.AZStackCore.listConstants.GET_LIST_DONE) {
+                    this.pagination.done = true;
+                }
+                this.setState({conversations: this.state.conversations.concat(preparedConversations)});
+            }).catch((error) => {
+                console.log(error);
+            });
+        }).catch((error) => {
+            this.pagination.loading = false;
+        });
+    };
+    prepareConversations(conversations) {
+        return Promise.all(
+            conversations.map((conversation) => {
+                return new Promise((resolve, reject) => {
+                    if (conversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER) {
+                        this.props.AZStackCore.getUsersInformation({
+                            userIds: [conversation.chatId]
+                        }).then((result) => {
+                            conversation.user = result.list[0];
+                            resolve(conversation);
+                        }).catch((error) => {
+                            conversation.user = {};
+                            resolve(conversation);
+                        });
+                    } else if (conversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
+                        this.props.AZStackCore.getDetailsGroup({
+                            groupId: conversation.chatId
+                        }).then((result) => {
+                            conversation.group = result;
+                            resolve(conversation);
+                        }).catch((error) => {
+                            conversation.group = {};
+                            resolve(conversation);
+                        });
+                    } else {
+                        resolve(conversation);
+                    }
+                });
+            })
+        );
     };
 
     componentDidMount() {
@@ -52,6 +117,7 @@ class ConversationsListComponent extends React.Component {
         ]).start();
 
         this.addSubscriptions();
+        this.getConversations();
     };
 
     componentWillUnmount() {
