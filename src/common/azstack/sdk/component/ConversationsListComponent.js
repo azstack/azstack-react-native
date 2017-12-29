@@ -75,7 +75,7 @@ class ConversationsListComponent extends React.Component {
                     >
                         <Image
                             style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_HEADER_BACK_BUTTON_IMAGE_STYLE')}
-                            source={require('../image/back.png')}
+                            source={require('../static/image/back.png')}
                         />
                     </TouchableOpacity>
                     <Text
