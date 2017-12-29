@@ -31,17 +31,6 @@ class AZStackSdkExample extends React.Component {
         });
     };
 
-    componentDidMount() {
-        this.AZStackSdk.connect().then((result) => {
-            this.setState({ authenticatedUser: result });
-        }).catch({});
-    };
-    componentWillUnmount() {
-        this.AZStackSdk.disconnect().then((result) => {
-            this.setState({ authenticatedUser: null });
-        }).catch({});
-    };
-
     showConversationsList() {
         this.setState({
             showings: Object.assign(this.state.showings, { conversationsList: true })
@@ -51,6 +40,18 @@ class AZStackSdkExample extends React.Component {
         this.setState({
             showings: Object.assign(this.state.showings, { conversationsList: false })
         });
+    };
+
+    componentDidMount() {
+        this.AZStackSdk.connect().then((result) => {
+            this.setState({ authenticatedUser: result });
+        }).catch({});
+    };
+
+    componentWillUnmount() {
+        this.AZStackSdk.disconnect().then((result) => {
+            this.setState({ authenticatedUser: null });
+        }).catch({});
     };
 
     render() {

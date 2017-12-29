@@ -11,11 +11,26 @@ class ConversationsListComponent extends React.Component {
     constructor(props) {
         super(props);
 
+        this.subscriptions = {};
+
         this.state = {
             opacityAnimated: new Animated.Value(0),
             marginLeftAnimated: new Animated.Value(-this.props.Sizes.width),
             conversations: []
         };
+    };
+
+    addSubscriptions() {
+        this.subscriptions.onAuthenticated = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_AUTHENTICATED_RETURN, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+        });
+    };
+    clearSubscriptions() {
+        for (let subscriptionName in this.subscriptions) {
+            this.subscriptions[subscriptionName].remove();
+        }
     };
 
     componentDidMount() {
@@ -35,7 +50,10 @@ class ConversationsListComponent extends React.Component {
                 }
             )
         ]).start();
+
+        this.addSubscriptions();
     };
+
     componentWillUnmount() {
         Animated.parallel([
             Animated.timing(
@@ -53,6 +71,8 @@ class ConversationsListComponent extends React.Component {
                 }
             )
         ]).start();
+
+        this.clearSubscriptions();
     };
 
     render() {

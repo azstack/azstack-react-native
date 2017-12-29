@@ -108,17 +108,6 @@ class AZStackCoreExample extends React.Component {
         };
     };
 
-    componentDidMount() {
-        this.AZStackCore.connect({}).then((authenticatedUser) => {
-            this.setState({ authenticatedUser: authenticatedUser })
-        }).catch((error) => { });
-    };
-    componentWillUnmount() {
-        this.AZStackCore.disconnect({}).then(() => {
-            this.setState({ authenticatedUser: null });
-        }).catch(() => { });
-    };
-
     disconnect() {
         this.AZStackCore.disconnect({}).then(() => { }).catch(() => { });
     };
@@ -456,6 +445,18 @@ class AZStackCoreExample extends React.Component {
         this.AZStackCore.getListGroups({
             groupType: this.AZStackCore.groupConstants.GROUP_TYPE_PUBLIC
         }).then(() => { }).catch(() => { });
+    };
+
+    componentDidMount() {
+        this.AZStackCore.connect({}).then((authenticatedUser) => {
+            this.setState({ authenticatedUser: authenticatedUser })
+        }).catch((error) => { });
+    };
+
+    componentWillUnmount() {
+        this.AZStackCore.disconnect({}).then(() => {
+            this.setState({ authenticatedUser: null });
+        }).catch(() => { });
     };
 
     render() {
