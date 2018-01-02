@@ -47,6 +47,9 @@ class ConversationsListComponent extends React.Component {
         if (this.pagination.loading) {
             return;
         }
+        if (this.pagination.done) {
+            return;
+        }
 
         this.pagination.loading = true;
         this.props.AZStackCore.getModifiedConversations({
@@ -54,14 +57,14 @@ class ConversationsListComponent extends React.Component {
             lastCreated: this.pagination.lastCreated
         }).then((result) => {
             this.prepareConversations(result.list).then((preparedConversations) => {
+                console.log(preparedConversations);
                 this.pagination.loading = false;
                 if (result.done === this.props.AZStackCore.listConstants.GET_LIST_DONE) {
                     this.pagination.done = true;
                 }
-                this.setState({conversations: this.state.conversations.concat(preparedConversations)});
-            }).catch((error) => {
-                console.log(error);
-            });
+                this.pagination.page += 1;
+                this.setState({ conversations: this.state.conversations.concat(preparedConversations) });
+            }).catch((error) => { });
         }).catch((error) => {
             this.pagination.loading = false;
         });
