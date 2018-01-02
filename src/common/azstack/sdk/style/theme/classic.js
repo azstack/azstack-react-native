@@ -31,6 +31,7 @@ export const CONVERSATIONS_LIST_HEADER_TITLE_TEXT_STYLE = {
     marginRight: 35
 };
 export const CONVERSATIONS_LIST_EMPTY_BLOCK_STYLE = {
+    paddingHorizontal: 15,
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -41,4 +42,49 @@ export const CONVERSATIONS_LIST_EMPTY_TEXT_STYLE = {
     fontWeight: '300',
     lineHeight: 30,
     color: '#BFBFBF'
+};
+export const CONVERSATIONS_LIST_SEARCH_BLOCK_STYLE = {
+    marginVertical: 10,
+    paddingHorizontal: 15,
+    position: 'relative'
+};
+export const CONVERSATIONS_LIST_SEARCH_INPUT_STYLE = {
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderColor: '#E1E5EC',
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 40,
+    lineHeight: 20,
+    fontSize: 16,
+    fontWeight: '300',
+    color: '#95A5A6'
+};
+export const CONVERSATIONS_LIST_SEARCH_INPUT_PROPS_STYLE = {
+    underlineColorAndroid: 'transparent',
+    placeholderTextColor: '#E1E5EC'
+}
+export const CONVERSATIONS_LIST_SEARCH_IMAGE_BLOCK_STYLE = {
+
+};
+export const CONVERSATIONS_LIST_SEARCH_IMAGE_STYLE = {
+    position: 'absolute',
+    top: 10,
+    left: 20,
+    width: 30,
+    height: 30
+};
+export const CONVERSATIONS_LIST_SEARCH_CLEAR_BUTTON_BLOCK_STYLE = {
+    position: 'absolute',
+    top: 7,
+    right: 20,
+    width: 30,
+    height: 30
+};
+export const CONVERSATIONS_LIST_SEARCH_CLEAR_BUTTON_TEXT_STYLE = {
+    fontSize: 30,
+    fontWeight: '400',
+    lineHeight: 30,
+    color: '#E1E5EC',
+    textAlign: 'center'
 };

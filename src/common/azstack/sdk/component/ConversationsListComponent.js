@@ -4,7 +4,8 @@ import {
     View,
     Text,
     TouchableOpacity,
-    Image
+    Image,
+    TextInput
 } from 'react-native';
 
 class ConversationsListComponent extends React.Component {
@@ -12,6 +13,9 @@ class ConversationsListComponent extends React.Component {
         super(props);
 
         this.subscriptions = {};
+        this.instanceRefs = {
+            searchText: null
+        };
         this.pagination = {
             page: 1,
             lastCreated: new Date().getTime(),
@@ -22,8 +26,13 @@ class ConversationsListComponent extends React.Component {
         this.state = {
             opacityAnimated: new Animated.Value(0),
             marginLeftAnimated: new Animated.Value(-this.props.Sizes.width),
-            conversations: []
+            conversations: [],
+            searchText: ''
         };
+
+        this.onSearchTextInitDone = this.onSearchTextInitDone.bind(this);
+        this.onSearchTextChange = this.onSearchTextChange.bind(this);
+        this.clearSearchText = this.clearSearchText.bind(this);
     };
 
     addSubscriptions() {
@@ -99,6 +108,17 @@ class ConversationsListComponent extends React.Component {
                 });
             })
         );
+    };
+
+    onSearchTextInitDone(searchTextRef) {
+        this.instanceRefs.searchText = searchTextRef;
+    };
+    onSearchTextChange(newText) {
+        this.setState({ searchText: newText });
+    };
+    clearSearchText() {
+        this.setState({ searchText: '' });
+        this.instanceRefs.searchText.blur();
     };
 
     componentDidMount() {
@@ -182,6 +202,38 @@ class ConversationsListComponent extends React.Component {
                         >
                             {this.props.Language.getText('CONVERSATIONS_LIST_EMPTY_TEXT')}
                         </Text>
+                    </View>
+                }
+                {
+                    this.state.conversations.length > 0 && <View
+                        style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_BLOCK_STYLE')}
+                    >
+                        <TextInput
+                            ref={this.onSearchTextInitDone}
+                            style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_INPUT_STYLE')}
+                            onChangeText={this.onSearchTextChange}
+                            value={this.state.searchText}
+                            placeholder={this.props.Language.getText('CONVERSATIONS_LIST_SEARCH_PLACEHOLDER_TEXT')}
+                            returnKeyType='done'
+                            {
+                            ...this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_INPUT_PROPS_STYLE')
+                            }
+                        />
+                        <Image
+                            style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_IMAGE_STYLE')}
+                            source={require('../static/image/search.png')}
+                        />
+                        {
+                            !!this.state.searchText && <TouchableOpacity
+                                style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_CLEAR_BUTTON_BLOCK_STYLE')}
+                                activeOpacity={0.5}
+                                onPress={this.clearSearchText}
+                            >
+                                <Text
+                                    style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_CLEAR_BUTTON_TEXT_STYLE')}
+                                >×</Text>
+                            </TouchableOpacity>
+                        }
                     </View>
                 }
             </Animated.View >
