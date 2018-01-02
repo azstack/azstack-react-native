@@ -30,19 +30,6 @@ export const CONVERSATIONS_LIST_HEADER_TITLE_TEXT_STYLE = {
     textAlign: 'center',
     marginRight: 35
 };
-export const CONVERSATIONS_LIST_EMPTY_BLOCK_STYLE = {
-    paddingHorizontal: 15,
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
-};
-export const CONVERSATIONS_LIST_EMPTY_TEXT_STYLE = {
-    fontSize: 25,
-    fontWeight: '300',
-    lineHeight: 30,
-    color: '#BFBFBF'
-};
 export const CONVERSATIONS_LIST_SEARCH_BLOCK_STYLE = {
     marginVertical: 10,
     paddingHorizontal: 15,
@@ -87,4 +74,42 @@ export const CONVERSATIONS_LIST_SEARCH_CLEAR_BUTTON_TEXT_STYLE = {
     lineHeight: 30,
     color: '#E1E5EC',
     textAlign: 'center'
+};
+export const CONVERSATIONS_LIST_EMPTY_BLOCK_STYLE = {
+    paddingHorizontal: 15,
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+};
+export const CONVERSATIONS_LIST_EMPTY_TEXT_STYLE = {
+    fontSize: 25,
+    fontWeight: '300',
+    lineHeight: 30,
+    color: '#BFBFBF'
+};
+export const CONVERSATIONS_LIST_ITEMS_STYLE = {
+    paddingHorizontal: 15,
+    flex: 1,
+    marginBottom: 10
+};
+export const CONVERSATIONS_LIST_ITEM_STYLE = {
+    flexDirection: 'row',
+    borderStyle: 'dashed',
+    borderRadius: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E1E5EC',
+    paddingVertical: 10
+};
+export const CONVERSATIONS_LIST_ITEM_AVATAR_BLOCK_STYLE_STYLE = {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const CONVERSATIONS_LIST_ITEM_AVATAR_TEXT_STYLE_STYLE = {
+    fontSize: 50,
+    fontWeight: '500',
+    color: '#fff'
 };
