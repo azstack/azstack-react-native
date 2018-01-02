@@ -51,6 +51,8 @@ class AZStackCoreExample extends React.Component {
 
         this.getModifiedConversations = this.getModifiedConversations.bind(this);
 
+        this.deleteConversation = this.deleteConversation.bind(this);
+
         this.getUnreadMessagesTypeUser = this.getUnreadMessagesTypeUser.bind(this);
         this.getModifiedMessagesTypeUser = this.getModifiedMessagesTypeUser.bind(this);
         this.getUnreadMessagesTypeGroup = this.getUnreadMessagesTypeGroup.bind(this);
@@ -177,6 +179,13 @@ class AZStackCoreExample extends React.Component {
         this.AZStackCore.getModifiedConversations({
             page: 1,
             lastCreated: new Date().getTime()
+        }).then(() => { }).catch(() => { });
+    };
+
+    deleteConversation() {
+        this.AZStackCore.deleteConversation({
+            chatType: this.AZStackCore.chatConstants.CHAT_TYPE_GROUP,
+            chatId: 7433
         }).then(() => { }).catch(() => { });
     };
 
@@ -496,6 +505,8 @@ class AZStackCoreExample extends React.Component {
                     <Button onPress={this.getPaidCallLogs} title='Get paid call logs' />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.getModifiedConversations} title='Get modified conversations' />
+                    <Text>{'\n'}{'\n'}</Text>
+                    <Button onPress={this.deleteConversation} title='Delete conversation' />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.getUnreadMessagesTypeUser} title='Get unread messages type user' />
                     <Button onPress={this.getModifiedMessagesTypeUser} title='Get modified messages type user' />

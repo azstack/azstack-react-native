@@ -25,10 +25,11 @@
             * [3.3.4.1. Done](#3341-done)
         * [3.3.5. Chat constants](#335-chat-constants)
             * [3.3.5.1. Chat Types](#3351-chat-types)
-            * [3.3.5.2. Message Types](#3352-message-types)
-            * [3.3.5.3. Message Statuses](#3353-message-statuses)
-            * [3.3.5.4. Message Deleted](#3354-message-deleted)
-            * [3.3.5.5. Message file types](#3355-message-file-types)
+            * [3.3.5.2. Conversation Deleted](#3352-conversation-deleted)
+            * [3.3.5.3. Message Types](#3353-message-types)
+            * [3.3.5.4. Message Statuses](#3354-message-statuses)
+            * [3.3.5.5. Message Deleted](#3355-message-deleted)
+            * [3.3.5.6. Message file types](#3356-message-file-types)
         * [3.3.6. User constants](#336-user-constants)
             * [3.3.6.1. User status](#3361-user-status)
         * [3.3.7. Group constants](#337-group-constants)
@@ -65,6 +66,7 @@
             * [3.5.5.2. Delegates](#3552-delegates)
     * [3.6. Conversations](#36-conversations)
         * [3.6.1 Get modified conversations](#361-get-modified-conversations)
+        * [3.6.2 Delete conversation](#362-delete-conversation)
     * [3.7. Messages](#37-messages)
         * [3.7.1. Get list](#371-get-list)
             * [3.7.1.1 Get unread messages](#3711-get-unread-messages)
@@ -375,7 +377,11 @@ this.AZStackCore = new AZStackCore({
 > - CHAT_TYPE_USER(1): chat with user
 > - CHAT_TYPE_GROUP(2): chat with group
 
-#### 3.3.5.2. Message Types
+#### 3.3.5.2. Conversation Deleted
+> - CONVERSATION_DELETED_FALSE(0): not deleted
+> - CONVERSATION_DELETED_TRUE(1): deleted
+
+#### 3.3.5.3. Message Types
 > - MESSAGE_TYPE_TEXT(1): text message
 > - MESSAGE_TYPE_STICKER(2): sticker message
 > - MESSAGE_TYPE_FILE(3): file message
@@ -386,18 +392,18 @@ this.AZStackCore = new AZStackCore({
 > - MESSAGE_TYPE_GROUP_ADMIN_CHANGED(8): change admin group message
 > - MESSAGE_TYPE_GROUP_PUBLIC_JOINED(9): join public group message
 
-#### 3.3.5.3. Message Statuses
+#### 3.3.5.4. Message Statuses
 > - MESSAGE_STATUS_SENDING(0): status sending
 > - MESSAGE_STATUS_SENT(1): status sent
 > - MESSAGE_STATUS_DELIVERED(2): status delivered
 > - MESSAGE_STATUS_SEEN(3): status seen
 > - MESSAGE_STATUS_CANCELLED(6): status cancelled
 
-#### 3.3.5.4. Message Deleted
+#### 3.3.5.5. Message Deleted
 > - MESSAGE_DELETED_FALSE(0): not deleted
 > - MESSAGE_DELETED_TRUE(1): deleted
 
-#### 3.3.5.5. Message file types
+#### 3.3.5.6. Message file types
 > - MESSAGE_FILE_TYPE_UNKNOWN(0): file type unknown
 > - MESSAGE_FILE_TYPE_IMAGE(1): file type image
 > - MESSAGE_FILE_TYPE_AUDIO(2): file type audio
@@ -1274,6 +1280,7 @@ this.AZStackCore.getModifiedConversations({
 >   - chatId: chat id
 >   - modified: modified date time stamp
 >   - unread: number of unread message
+>   - deleted: deleted or not
 >   - lastMessage: last message 
 >       - chatType: chat type
 >       - chatId: chat id
@@ -1310,6 +1317,55 @@ this.AZStackCore.getModifiedConversations({
 >       - joined: joined data
 >           - groupId: id of group
 >           - joinId: join id
+
+### 3.6.2 Delete conversation
+
+```javascript 
+this.AZStackCore.deleteConversation({
+    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_GROUP,
+    chatId: 1234
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.deleteConversation({
+    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_GROUP,
+    chatId: 1234
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.Delegates.onDeleteConversationReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStackCore.deleteConversation({
+    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_GROUP,
+    chatId: 1234
+});
+```
+#### params
+> - chatType(required): chat type
+> - chatId(required): chat id
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - chatType: chat type
+> - chatId: chat id
+
 
 
 

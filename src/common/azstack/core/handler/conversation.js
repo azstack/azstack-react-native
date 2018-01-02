@@ -74,6 +74,7 @@ class Conversation {
                     chatId: conversation.chatId,
                     modified: conversation.modified,
                     unread: conversation.unread,
+                    deleted: this.chatConstants.CONVERSATION_DELETED_FALSE,
                     lastMessage: {
                         chatType: conversation.type,
                         chatId: conversation.chatId,
@@ -169,6 +170,79 @@ class Conversation {
             });
 
             resolve(modifiedConversations);
+        });
+    };
+
+    sendDeleteConversation(options) {
+        return new Promise((resolve, reject) => {
+
+            const deleteConversationPacket = {
+                service: this.serviceTypes.CONVERSATION_DELETE,
+                body: JSON.stringify({
+                    chatId: options.chatId,
+                    type: options.chatType,
+                    lastTimeCreated: options.lastCreated
+                })
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send delete conversation packet'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Delete conversation packet',
+                payload: deleteConversationPacket
+            });
+            this.sendPacketFunction(deleteConversationPacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send delete conversation packet successfully'
+                });
+                resolve();
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send delete conversation data, delete modified conversation fail'
+                });
+                reject({
+                    code: error.code,
+                    message: 'Cannot send delete conversation data, delete modified conversation fail'
+                });
+            });
+        });
+    };
+    receiveDeletedConversation(body) {
+        return new Promise((resolve, reject) => {
+            if (!body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect deleted conversation, ignored'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Cannot detect deleted conversation, delete conversations fail'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got deleted conversation'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Deleted conversation data',
+                payload: body
+            });
+
+            if (body.r !== this.errorCodes.DELETE_CONVERSATION_SUCCESS_FROM_SERVER) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Server response with error, delete conversation fail'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Server response with error, delete conversation fail'
+                });
+                return;
+            }
+
+            resolve({
+                chatType: body.type,
+                chatId: body.chatId
+            });
         });
     };
 };

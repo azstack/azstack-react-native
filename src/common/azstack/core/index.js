@@ -329,6 +329,13 @@ export class AZStackCore {
                     this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_CONVERSATIONS, 'default', error, null);
                 });
                 break;
+            case this.serviceTypes.CONVERSATION_DELETE:
+                this.Conversation.receiveDeletedConversation(body).then((result) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_DELETE_CONVERSATION, 'default', null, result);
+                }).catch((error) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_DELETE_CONVERSATION, 'default', error, null);
+                });
+                break;
 
             case this.serviceTypes.MESSAGE_GET_LIST_UNREAD:
                 this.Message.receiveUnreadMessages(body).then((result) => {
@@ -1332,6 +1339,63 @@ export class AZStackCore {
                 lastCreated: options.lastCreated
             }).then().catch((error) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_GET_MODIFIED_CONVERSATIONS, 'default', error, null);
+            });
+        });
+    };
+
+    deleteConversation(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Delete conversation'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Delete conversation params',
+                payload: options
+            });
+
+            this.addUncall(this.uncallConstants.UNCALL_KEY_DELETE_CONVERSATION, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_DELETE_CONVERSATION_RETURN);
+
+            if (!options || typeof options !== 'object') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Missing delete conversation params'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_DELETE_CONVERSATION, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'Missing delete conversation params'
+                }, null);
+                return;
+            }
+
+            let dataErrorMessage = this.Validator.check([{
+                name: 'chatType',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.chatType,
+                in: [this.chatConstants.CHAT_TYPE_USER, this.chatConstants.CHAT_TYPE_GROUP]
+            }, {
+                name: 'chatId',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.chatId,
+                notEqual: 0
+            }]);
+            if (dataErrorMessage) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: dataErrorMessage
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_DELETE_CONVERSATION, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: dataErrorMessage
+                }, null);
+                return;
+            }
+
+            this.Conversation.sendDeleteConversation({
+                chatType: options.chatType,
+                chatId: options.chatId,
+                lastCreated: new Date().getTime()
+            }).then().catch((error) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_DELETE_CONVERSATION, 'default', error, null);
             });
         });
     };
