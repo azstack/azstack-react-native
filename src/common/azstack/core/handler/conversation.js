@@ -101,6 +101,7 @@ class Conversation {
                         modifiedConversation.lastMessage.file = {
                             type: conversation.lastMsg.msgType
                         };
+                        break;
                     case this.serviceTypes.MESSAGE_HAS_NEW_WITH_GROUP:
                         if (conversation.lastMsg.msg) {
                             modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
@@ -123,12 +124,14 @@ class Conversation {
                             name: conversation.lastMsg.name,
                             created: conversation.lastMsg.created
                         };
+                        break;
                     case this.serviceTypes.ON_GROUP_INVITED:
                         modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_INVITED;
                         modifiedConversation.lastMessage.invited = {
                             groupId: conversation.chatId,
                             inviteIds: conversation.lastMsg.invitedMembers
                         };
+                        break;
                     case this.serviceTypes.ON_GROUP_LEFT:
                         modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_LEFT;
                         modifiedConversation.lastMessage.left = {
@@ -136,24 +139,28 @@ class Conversation {
                             leaveId: conversation.lastMsg.leaveUser,
                             newAdminId: conversation.lastMsg.newAdmin
                         };
+                        break;
                     case this.serviceTypes.ON_GROUP_RENAMED:
                         modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_RENAMED;
                         modifiedConversation.lastMessage.renamed = {
                             groupId: conversation.chatId,
                             newName: conversation.lastMsg.newGroupName
                         };
+                        break;
                     case this.serviceTypes.ON_GROUP_ADMIN_CHANGED:
                         modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_ADMIN_CHANGED;
                         modifiedConversation.lastMessage.adminChanged = {
                             groupId: conversation.chatId,
                             newAdminId: conversation.lastMsg.newAdmin
                         };
+                        break;
                     case this.serviceTypes.GROUP_JOIN_PUBLIC:
                         modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_PUBLIC_JOINED;
                         modifiedConversation.lastMessage.joined = {
                             groupId: conversation.chatId,
                             joinId: conversation.lastMsg.sender
                         };
+                        break;
                     default:
                         break;
                 }

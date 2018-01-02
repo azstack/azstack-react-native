@@ -107,6 +107,7 @@ class Message {
                             type: message.type,
                             url: message.url
                         };
+                        break;
                     case this.serviceTypes.MESSAGE_HAS_NEW_WITH_GROUP:
                         if (message.msg) {
                             unreadMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
@@ -138,12 +139,14 @@ class Message {
                             memberIds: message.members,
                             created: message.created
                         };
+                        break;
                     case this.serviceTypes.ON_GROUP_INVITED:
                         unreadMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_INVITED;
                         unreadMessage.invited = {
                             groupId: message.group,
                             inviteIds: message.invited
                         };
+                        break;
                     case this.serviceTypes.ON_GROUP_LEFT:
                         unreadMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_LEFT;
                         unreadMessage.left = {
@@ -151,18 +154,21 @@ class Message {
                             leaveId: message.leaveUser,
                             newAdminId: message.newAdmin
                         };
+                        break;
                     case this.serviceTypes.ON_GROUP_RENAMED:
                         unreadMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_RENAMED;
                         unreadMessage.renamed = {
                             groupId: message.group,
                             newName: message.name
                         };
+                        break;
                     case this.serviceTypes.ON_GROUP_ADMIN_CHANGED:
                         unreadMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_ADMIN_CHANGED;
                         unreadMessage.adminChanged = {
                             groupId: message.group,
                             newAdminId: message.newAdmin
                         };
+                        break;
                     case this.serviceTypes.GROUP_JOIN_PUBLIC:
                         unreadMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_PUBLIC_JOINED;
                         unreadMessage.joined = {
@@ -276,6 +282,7 @@ class Message {
                             type: message.type,
                             url: message.url
                         };
+                        break;
                     case this.serviceTypes.MESSAGE_HAS_NEW_WITH_GROUP:
                         if (message.msg) {
                             modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
@@ -307,12 +314,14 @@ class Message {
                             memberIds: message.members,
                             created: message.created
                         };
+                        break;
                     case this.serviceTypes.ON_GROUP_INVITED:
                         modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_INVITED;
                         modifiedMessage.invited = {
                             groupId: message.group,
                             inviteIds: message.invited
                         };
+                        break;
                     case this.serviceTypes.ON_GROUP_LEFT:
                         modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_LEFT;
                         modifiedMessage.left = {
@@ -320,24 +329,28 @@ class Message {
                             leaveId: message.leaveUser,
                             newAdminId: message.newAdmin
                         };
+                        break;
                     case this.serviceTypes.ON_GROUP_RENAMED:
                         modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_RENAMED;
                         modifiedMessage.renamed = {
                             groupId: message.group,
                             newName: message.name
                         };
+                        break;
                     case this.serviceTypes.ON_GROUP_ADMIN_CHANGED:
                         modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_ADMIN_CHANGED;
                         modifiedMessage.adminChanged = {
                             groupId: message.group,
                             newAdminId: message.newAdmin
                         };
+                        break;
                     case this.serviceTypes.GROUP_JOIN_PUBLIC:
                         modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_GROUP_PUBLIC_JOINED;
                         modifiedMessage.joined = {
                             groupId: message.group,
                             joinId: message.from
                         };
+                        break;
                     default:
                         break;
                 }
