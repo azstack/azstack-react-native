@@ -126,7 +126,24 @@ export const CONVERSATION_AVATAR_BLOCK_STYLE = {
 };
 export const CONVERSATION_INFORMATION_BLOCK_STYLE = {
     flex: 1,
-    marginLeft: 20
+    marginLeft: 20,
+    position: 'relative'
+};
+export const CONVERSATION_UNREAD_BLOCK_STYLE = {
+    width: 25,
+    height: 25,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F2784B',
+    position: 'absolute',
+    top: 10,
+    right: 10
+};
+export const CONVERSATION_UNREAD_TEXT_STYLE = {
+    fontSize: 14,
+    fontWeight: '400',
+    color: '#fff'
 };
 export const CONVERSATION_NAME_TEXT_STYLE = {
     fontSize: 18,

@@ -49,6 +49,21 @@ class ConversationBlockComponent extends React.Component {
                         AZStackCore={this.props.AZStackCore}
                         lastMessage={this.props.conversation.lastMessage}
                     />
+                    {
+                        this.props.conversation.unread > 0 && (
+                            <View
+                                style={this.props.CustomStyle.getStyle('CONVERSATION_UNREAD_BLOCK_STYLE')}
+                            >
+
+                                <Text
+                                    style={this.props.CustomStyle.getStyle('CONVERSATION_UNREAD_TEXT_STYLE')}
+                                >
+                                    {this.props.conversation.unread > 9 ? '9+' : this.props.conversation.unread}
+                                </Text>
+
+                            </View>
+                        )
+                    }
                 </View>
             </TouchableOpacity>
         );
