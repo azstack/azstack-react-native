@@ -13,10 +13,25 @@ class ConversationBlockComponent extends React.Component {
         super(props);
 
         this.onConversationClicked = this.onConversationClicked.bind(this);
+        this.isConversationOnline = this.isConversationOnline.bind(this);
     };
 
     onConversationClicked() {
         this.props.onConversationClicked(this.props.conversation);
+    };
+
+    isConversationOnline() {
+        if (this.props.conversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER) {
+            return this.props.conversation.chatTarget.status === this.props.AZStackCore.userConstants.USER_STATUS_ONLINE;
+        }
+        let aUserOnline = false;
+        for (let i = 0; i < this.props.conversation.chatTarget.members.length; i++) {
+            if (this.props.conversation.chatTarget.members[i].userId !== this.props.AZStackCore.authenticatedUser.userId && this.props.conversation.chatTarget.members[i].status === this.props.AZStackCore.userConstants.USER_STATUS_ONLINE) {
+                aUserOnline = true;
+                break;
+            }
+        }
+        return aUserOnline;
     };
 
     render() {
@@ -33,6 +48,12 @@ class ConversationBlockComponent extends React.Component {
                         CustomStyle={this.props.CustomStyle}
                         chatType={this.props.conversation.chatType}
                         chatTarget={this.props.conversation.chatTarget}
+                    />
+                    <View
+                        style={[
+                            this.props.CustomStyle.getStyle('CONVERSATION_STATUS_BLOCK_STYLE'),
+                            (this.isConversationOnline() ? this.props.CustomStyle.getStyle('CONVERSATION_STATUS_ONLINE_STYLE') : {})
+                        ]}
                     />
                 </View>
                 <View

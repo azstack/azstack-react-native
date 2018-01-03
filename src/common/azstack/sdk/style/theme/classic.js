@@ -122,7 +122,20 @@ export const CONVERSATION_BLOCK_STYLE = {
 };
 export const CONVERSATION_AVATAR_BLOCK_STYLE = {
     width: 100,
-    height: 100
+    height: 100,
+    position: 'relative'
+};
+export const CONVERSATION_STATUS_BLOCK_STYLE = {
+    width: 15,
+    height: 15,
+    borderRadius: 50,
+    backgroundColor: '#95A5A6',
+    position: 'absolute',
+    top: 8,
+    right: 8
+};
+export const CONVERSATION_STATUS_ONLINE_STYLE = {
+    backgroundColor: '#578EBE'
 };
 export const CONVERSATION_INFORMATION_BLOCK_STYLE = {
     flex: 1,
