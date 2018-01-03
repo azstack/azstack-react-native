@@ -11,6 +11,7 @@ import EmptyBlockComponent from './part/common/EmptyBlockComponent';
 import SearchBlockComponent from './part/common/SearchBlockComponent';
 
 import ConversationBlockComponent from './part/conversation/ConversationBlockComponent';
+import conversation from '../../core/handler/conversation';
 
 class ConversationsListComponent extends React.Component {
     constructor(props) {
@@ -84,28 +85,147 @@ class ConversationsListComponent extends React.Component {
                         this.props.AZStackCore.getUsersInformation({
                             userIds: [conversation.chatId]
                         }).then((result) => {
-                            conversation.user = result.list[0];
+                            conversation.chatTarget = result.list[0];
                             resolve(conversation);
                         }).catch((error) => {
-                            conversation.user = {};
+                            conversation.chatTarget = { userId: conversation.chatId };
                             resolve(conversation);
                         });
                     } else if (conversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
                         this.props.AZStackCore.getDetailsGroup({
                             groupId: conversation.chatId
                         }).then((result) => {
-                            conversation.group = result;
+                            conversation.chatTarget = result;
                             resolve(conversation);
                         }).catch((error) => {
-                            conversation.group = {};
+                            conversation.chatTarget = { groupId: conversation.chatId };
                             resolve(conversation);
                         });
                     } else {
+                        conversation.chatTarget = {};
                         resolve(conversation);
                     }
                 });
             })
-        );
+        ).then((conversations) => {
+            return Promise.all(
+                conversations.map((conversation) => {
+                    return new Promise((resolve, reject) => {
+                        conversation.lastMessage.receiver = conversation.chatTarget;
+                        this.props.AZStackCore.getUsersInformation({
+                            userIds: [conversation.lastMessage.senderId]
+                        }).then((result) => {
+                            conversation.lastMessage.sender = result.list[0];
+                            resolve(conversation);
+                        }).catch((error) => {
+                            conversation.lastMessage.sender = { userId: conversation.lastMessage.senderId };
+                            resolve(conversation);
+                        });
+                    });
+                })
+            );
+        }).then((conversations) => {
+            return Promise.all(
+                conversations.map((conversation) => {
+                    return new Promise((resolve, reject) => {
+                        switch (conversation.lastMessage.type) {
+                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_CREATED:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_RENAMED:
+                                resolve(conversation);
+                                break;
+                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_INVITED:
+                                conversation.lastMessage.invited.invites = [];
+                                Promise.all(
+                                    conversation.lastMessage.invited.inviteIds.map((inviteId) => {
+                                        return new Promise((resolve, reject) => {
+                                            this.props.AZStackCore.getUsersInformation({
+                                                userIds: [inviteId]
+                                            }).then((result) => {
+                                                conversation.lastMessage.invited.invites.push(result.list[0]);
+                                                resolve(conversation);
+                                            }).catch((error) => {
+                                                conversation.lastMessage.invited.invites.push({ userId: inviteId });
+                                                resolve(conversation);
+                                            });
+                                        });
+                                    })
+                                ).then(() => {
+                                    resolve(conversation);
+                                }).catch(() => {
+                                    resolve(conversation);
+                                });
+                                break;
+                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_LEFT:
+                                let PromiseTasks = [];
+                                PromiseTasks.push(
+                                    new Promise((resolve, reject) => {
+                                        this.props.AZStackCore.getUsersInformation({
+                                            userIds: [conversation.lastMessage.left.leaveId]
+                                        }).then((result) => {
+                                            conversation.lastMessage.left.leave = result.list[0];
+                                            resolve(conversation);
+                                        }).catch((error) => {
+                                            conversation.lastMessage.left.leave = { userId: conversation.lastMessage.adminChanged.leaveId }
+                                            resolve(conversation);
+                                        });
+                                    })
+                                );
+                                if (conversation.lastMessage.left.newAdminId) {
+                                    PromiseTasks.push(
+                                        new Promise((resolve, reject) => {
+                                            this.props.AZStackCore.getUsersInformation({
+                                                userIds: [conversation.lastMessage.left.newAdminId]
+                                            }).then((result) => {
+                                                conversation.lastMessage.left.newAdmin = result.list[0];
+                                                resolve(conversation);
+                                            }).catch((error) => {
+                                                conversation.lastMessage.left.newAdmin = { userId: conversation.lastMessage.adminChanged.newAdminId }
+                                                resolve(conversation);
+                                            });
+                                        })
+                                    );
+                                }
+                                Promise.all(
+                                    PromiseTasks
+                                ).then(() => {
+                                    resolve(conversation);
+                                }).catch(() => {
+                                    resolve(conversation);
+                                });
+                                break;
+                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_ADMIN_CHANGED:
+                                this.props.AZStackCore.getUsersInformation({
+                                    userIds: [conversation.lastMessage.adminChanged.newAdminId]
+                                }).then((result) => {
+                                    conversation.lastMessage.adminChanged.newAdmin = result.list[0];
+                                    resolve(conversation);
+                                }).catch((error) => {
+                                    conversation.lastMessage.adminChanged.newAdmin = { userId: conversation.lastMessage.adminChanged.newAdminId }
+                                    resolve(conversation);
+                                });
+                                break;
+                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_PUBLIC_JOINED:
+                                this.props.AZStackCore.getUsersInformation({
+                                    userIds: [conversation.lastMessage.joined.joinId]
+                                }).then((result) => {
+                                    conversation.lastMessage.joined.join = result.list[0];
+                                    resolve(conversation);
+                                }).catch((error) => {
+                                    conversation.lastMessage.joined.join = { userId: conversation.lastMessage.adminChanged.joinId }
+                                    resolve(conversation);
+                                });
+                                break;
+                            default:
+                                resolve(conversation);
+                                break;
+                        }
+                    });
+                })
+            );
+        });
     };
 
     onSearchTextChanged(newText) { };
@@ -160,6 +280,7 @@ class ConversationsListComponent extends React.Component {
                             renderItem={({ item }) => {
                                 return (
                                     <ConversationBlockComponent
+                                        Language={this.props.Language}
                                         CustomStyle={this.props.CustomStyle}
                                         AZStackCore={this.props.AZStackCore}
                                         conversation={item}

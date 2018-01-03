@@ -1,10 +1,12 @@
 import React from 'react';
 import {
     View,
-    TouchableOpacity
+    TouchableOpacity,
+    Text
 } from 'react-native';
 
 import ChatAvatarBlockComponent from '../common/ChatAvatarBlockComponent';
+import ConversationLastMessageBlockComponent from './ConversationLastMessageBlockComponent';
 
 class ConversationBlockComponent extends React.Component {
     constructor(props) {
@@ -30,7 +32,22 @@ class ConversationBlockComponent extends React.Component {
                     <ChatAvatarBlockComponent
                         CustomStyle={this.props.CustomStyle}
                         chatType={this.props.conversation.chatType}
-                        chatTarget={this.props.conversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER ? this.props.conversation.user : this.props.conversation.group}
+                        chatTarget={this.props.conversation.chatTarget}
+                    />
+                </View>
+                <View
+                    style={this.props.CustomStyle.getStyle('CONVERSATION_INFORMATION_BLOCK_STYLE')}
+                >
+                    <Text
+                        style={this.props.CustomStyle.getStyle('CONVERSATION_NAME_TEXT_STYLE')}
+                    >
+                        {this.props.conversation.chatTarget.fullname ? this.props.conversation.chatTarget.fullname : this.props.conversation.chatTarget.name}
+                    </Text>
+                    <ConversationLastMessageBlockComponent
+                        Language={this.props.Language}
+                        CustomStyle={this.props.CustomStyle}
+                        AZStackCore={this.props.AZStackCore}
+                        lastMessage={this.props.conversation.lastMessage}
                     />
                 </View>
             </TouchableOpacity>

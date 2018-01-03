@@ -124,3 +124,22 @@ export const CONVERSATION_AVATAR_BLOCK_STYLE = {
     width: 100,
     height: 100
 };
+export const CONVERSATION_INFORMATION_BLOCK_STYLE = {
+    flex: 1,
+    marginLeft: 20
+};
+export const CONVERSATION_NAME_TEXT_STYLE = {
+    fontSize: 18,
+    fontWeight: '500',
+    lineHeight: 30,
+    color: '#2F353B'
+};
+export const CONVERSATION_LAST_MESSAGE_BLOCK_STYLE = {
+    fontSize: 16,
+    fontWeight: '400',
+    lineHeight: 30,
+    color: '#2F353B'
+};
+export const CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE = {
+    fontWeight: '500'
+};
