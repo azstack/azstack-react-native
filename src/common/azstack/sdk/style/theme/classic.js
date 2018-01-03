@@ -103,7 +103,7 @@ export const AVATAR_TEXT_STYLE = {
 };
 
 
-export const CONVERSATIONS_SEARCH_BLOCK_STYLE = {
+export const CONVERSATIONS_LIST_SEARCH_BLOCK_STYLE = {
     marginVertical: 10,
     marginHorizontal: 15,
 };
@@ -112,7 +112,7 @@ export const CONVERSATIONS_LIST_ITEMS_STYLE = {
     flex: 1,
     marginBottom: 10
 };
-export const CONVERSATIONS_LIST_ITEM_STYLE = {
+export const CONVERSATION_BLOCK_STYLE = {
     flexDirection: 'row',
     borderStyle: 'dashed',
     borderRadius: 5,
@@ -120,7 +120,7 @@ export const CONVERSATIONS_LIST_ITEM_STYLE = {
     borderBottomColor: '#E1E5EC',
     paddingVertical: 10
 };
-export const CONVERSATIONS_LIST_ITEM_AVATAR_BLOCK_STYLE = {
+export const CONVERSATION_AVATAR_BLOCK_STYLE = {
     width: 100,
     height: 100
 };

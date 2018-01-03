@@ -1,10 +1,6 @@
 import React from 'react';
 import {
     View,
-    Text,
-    TouchableOpacity,
-    Image,
-    TextInput,
     FlatList
 } from 'react-native';
 
@@ -13,7 +9,8 @@ import ScreenHeaderBlockComponent from './part/screen/ScreenHeaderBlockComponent
 import ScreenBodyBlockComponent from './part/screen/ScreenBodyBlockComponent';
 import EmptyBlockComponent from './part/common/EmptyBlockComponent';
 import SearchBlockComponent from './part/common/SearchBlockComponent';
-import ChatAvatarBlockComponent from './part/common/ChatAvatarBlockComponent';
+
+import ConversationBlockComponent from './part/conversation/ConversationBlockComponent';
 
 class ConversationsListComponent extends React.Component {
     constructor(props) {
@@ -136,7 +133,7 @@ class ConversationsListComponent extends React.Component {
                     CustomStyle={this.props.CustomStyle}
                 >
                     <View
-                        style={this.props.CustomStyle.getStyle('CONVERSATIONS_SEARCH_BLOCK_STYLE')}
+                        style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_BLOCK_STYLE')}
                     >
                         <SearchBlockComponent
                             CustomStyle={this.props.CustomStyle}
@@ -158,26 +155,14 @@ class ConversationsListComponent extends React.Component {
                             keyExtractor={(item, index) => (item.chatType + '_' + item.chatId)}
                             renderItem={({ item }) => {
                                 return (
-                                    <TouchableOpacity
-                                        style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_ITEM_STYLE')}
-                                        activeOpacity={0.5}
-                                        onPress={() => { }}
-                                    >
-                                        <View
-                                            style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_ITEM_AVATAR_BLOCK_STYLE')}
-                                        >
-                                            <ChatAvatarBlockComponent
-                                                CustomStyle={this.props.CustomStyle}
-                                                chatType={item.chatType}
-                                                chatTarget={item.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER ? item.user : item.group}
-                                            />
-                                        </View>
-                                    </TouchableOpacity>
+                                    <ConversationBlockComponent
+                                        CustomStyle={this.props.CustomStyle}
+                                        AZStackCore={this.props.AZStackCore}
+                                        conversation={item}
+                                    />
                                 );
                             }}
-                        >
-
-                        </FlatList>
+                        />
                     }
                 </ScreenBodyBlockComponent>
             </ScreenBlockComponent>
