@@ -89,6 +89,19 @@ export const SEARCH_CLEAR_BUTTON_TEXT_STYLE = {
     color: '#E1E5EC',
     textAlign: 'center'
 };
+export const AVATAR_BLOCK_STYLE = {
+    width: '100%',
+    height: '100%',
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const AVATAR_TEXT_STYLE = {
+    fontSize: 50,
+    fontWeight: '500',
+    color: '#fff'
+};
+
 
 export const CONVERSATIONS_SEARCH_BLOCK_STYLE = {
     marginVertical: 10,
@@ -107,15 +120,7 @@ export const CONVERSATIONS_LIST_ITEM_STYLE = {
     borderBottomColor: '#E1E5EC',
     paddingVertical: 10
 };
-export const CONVERSATIONS_LIST_ITEM_AVATAR_BLOCK_STYLE_STYLE = {
+export const CONVERSATIONS_LIST_ITEM_AVATAR_BLOCK_STYLE = {
     width: 100,
-    height: 100,
-    borderRadius: 50,
-    justifyContent: 'center',
-    alignItems: 'center'
-};
-export const CONVERSATIONS_LIST_ITEM_AVATAR_TEXT_STYLE_STYLE = {
-    fontSize: 50,
-    fontWeight: '500',
-    color: '#fff'
+    height: 100
 };

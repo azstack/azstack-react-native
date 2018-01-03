@@ -13,6 +13,7 @@ import ScreenHeaderBlockComponent from './part/screen/ScreenHeaderBlockComponent
 import ScreenBodyBlockComponent from './part/screen/ScreenBodyBlockComponent';
 import EmptyBlockComponent from './part/common/EmptyBlockComponent';
 import SearchBlockComponent from './part/common/SearchBlockComponent';
+import ChatAvatarBlockComponent from './part/common/ChatAvatarBlockComponent';
 
 class ConversationsListComponent extends React.Component {
     constructor(props) {
@@ -163,18 +164,13 @@ class ConversationsListComponent extends React.Component {
                                         onPress={() => { }}
                                     >
                                         <View
-                                            style={{
-                                                ...this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_ITEM_AVATAR_BLOCK_STYLE_STYLE'),
-                                                backgroundColor: this.props.ChatAvatar.getColor({ text: conversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER ? conversation.user.fullname : conversation.group.name })
-                                            }}
+                                            style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_ITEM_AVATAR_BLOCK_STYLE')}
                                         >
-                                            <Text
-                                                style={{
-                                                    ...this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_ITEM_AVATAR_TEXT_STYLE_STYLE')
-                                                }}
-                                            >
-                                                {this.props.ChatAvatar.getFirstLetters({ text: conversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER ? conversation.user.fullname : conversation.group.name, getNumber: conversation.chatType })}
-                                            </Text>
+                                            <ChatAvatarBlockComponent
+                                                CustomStyle={this.props.CustomStyle}
+                                                chatType={conversation.chatType}
+                                                chatTarget={conversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER ? conversation.user : conversation.group}
+                                            />
                                         </View>
                                     </TouchableOpacity>
                                 );

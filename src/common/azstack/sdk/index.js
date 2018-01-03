@@ -6,7 +6,6 @@ import {
 import EventEmitter from 'EventEmitter';
 
 import * as eventConstants from './constant/eventConstants';
-import chatColors from './constant/chatColors';
 
 import Language from './language/';
 import CustomStyle from './style/';
@@ -14,7 +13,6 @@ import CustomStyle from './style/';
 import { AZStackCore } from '../core/';
 
 import Event from './handler/event';
-import ChatAvatar from './helper/chatAvatar';
 
 import ConversationsListComponent from './component/ConversationsListComponent';
 
@@ -28,7 +26,6 @@ export class AZStackSdk {
         };
 
         this.eventConstants = eventConstants;
-        this.chatColors = chatColors;
 
         this.Language = new Language({ languageCode: options.languageCode });
         this.CustomStyle = new CustomStyle({ themeName: options.themeName });
@@ -42,8 +39,6 @@ export class AZStackSdk {
             EventEmitter: this.EventEmitter
         });
         this.Event.delegatesToEvents();
-
-        this.ChatAvatar = new ChatAvatar({ chatColors: this.chatColors });
 
         this.renderConversationsList = this.renderConversationsList.bind(this);
     };
@@ -63,7 +58,6 @@ export class AZStackSdk {
             eventConstants={this.eventConstants}
             AZStackCore={this.AZStackCore}
             EventEmitter={this.EventEmitter}
-            ChatAvatar={this.ChatAvatar}
             onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => { }}
         />;
     };
