@@ -30,6 +30,10 @@ export const SCREEN_HEADER_TITLE_TEXT_STYLE = {
     textAlign: 'center',
     marginRight: 35
 };
+export const SCREEN_BODY_BLOCK_STYLE = {
+    flex: 1,
+    flexDirection: 'column'
+};
 export const CONVERSATIONS_LIST_SEARCH_BLOCK_STYLE = {
     marginVertical: 10,
     paddingHorizontal: 15,

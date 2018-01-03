@@ -8,8 +8,9 @@ import {
     FlatList
 } from 'react-native';
 
-import ScreenBlockComponent from './part/ScreenBlockComponent';
-import ScreenHeaderBlockComponent from './part/ScreenHeaderBlockComponent';
+import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
+import ScreenHeaderBlockComponent from './part/screen/ScreenHeaderBlockComponent';
+import ScreenBodyBlockComponent from './part/screen/ScreenBodyBlockComponent';
 
 class ConversationsListComponent extends React.Component {
     constructor(props) {
@@ -141,80 +142,84 @@ class ConversationsListComponent extends React.Component {
                     onBackButtonPressed={this.props.onBackButtonPressed}
                     title={this.props.Language.getText('CONVERSATIONS_LIST_HEADER_TITLE_TEXT')}
                 />
-                <View
-                    style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_BLOCK_STYLE')}
+                <ScreenBodyBlockComponent
+                    CustomStyle={this.props.CustomStyle}
                 >
-                    <TextInput
-                        ref={this.onSearchTextInitDone}
-                        style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_INPUT_STYLE')}
-                        onChangeText={this.onSearchTextChange}
-                        value={this.state.searchText}
-                        placeholder={this.props.Language.getText('CONVERSATIONS_LIST_SEARCH_PLACEHOLDER_TEXT')}
-                        returnKeyType='done'
+                    <View
+                        style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_BLOCK_STYLE')}
+                    >
+                        <TextInput
+                            ref={this.onSearchTextInitDone}
+                            style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_INPUT_STYLE')}
+                            onChangeText={this.onSearchTextChange}
+                            value={this.state.searchText}
+                            placeholder={this.props.Language.getText('CONVERSATIONS_LIST_SEARCH_PLACEHOLDER_TEXT')}
+                            returnKeyType='done'
+                            {
+                            ...this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_INPUT_PROPS_STYLE')
+                            }
+                        />
+                        <Image
+                            style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_IMAGE_STYLE')}
+                            source={require('../static/image/search.png')}
+                        />
                         {
-                        ...this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_INPUT_PROPS_STYLE')
+                            !!this.state.searchText && <TouchableOpacity
+                                style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_CLEAR_BUTTON_BLOCK_STYLE')}
+                                activeOpacity={0.5}
+                                onPress={this.clearSearchText}
+                            >
+                                <Text
+                                    style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_CLEAR_BUTTON_TEXT_STYLE')}
+                                >×</Text>
+                            </TouchableOpacity>
                         }
-                    />
-                    <Image
-                        style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_IMAGE_STYLE')}
-                        source={require('../static/image/search.png')}
-                    />
+                    </View>
                     {
-                        !!this.state.searchText && <TouchableOpacity
-                            style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_CLEAR_BUTTON_BLOCK_STYLE')}
-                            activeOpacity={0.5}
-                            onPress={this.clearSearchText}
+                        this.state.conversations.length === 0 && <View
+                            style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_EMPTY_BLOCK_STYLE')}
                         >
                             <Text
-                                style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_CLEAR_BUTTON_TEXT_STYLE')}
-                            >×</Text>
-                        </TouchableOpacity>
+                                style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_EMPTY_TEXT_STYLE')}
+                            >
+                                {this.props.Language.getText('CONVERSATIONS_LIST_EMPTY_TEXT')}
+                            </Text>
+                        </View>
                     }
-                </View>
-                {
-                    this.state.conversations.length === 0 && <View
-                        style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_EMPTY_BLOCK_STYLE')}
-                    >
-                        <Text
-                            style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_EMPTY_TEXT_STYLE')}
-                        >
-                            {this.props.Language.getText('CONVERSATIONS_LIST_EMPTY_TEXT')}
-                        </Text>
-                    </View>
-                }
-                {
-                    this.state.conversations.length > 0 && <FlatList
-                        style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_ITEMS_STYLE')}
-                        data={this.state.conversations}
-                        renderItem={(itemInstance) => {
-                            let conversation = itemInstance.item;
-                            return (
-                                <TouchableOpacity
-                                    style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_ITEM_STYLE')}
-                                    activeOpacity={0.5}
-                                    onPress={() => { }}
-                                >
-                                    <View
-                                        style={{
-                                            ...this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_ITEM_AVATAR_BLOCK_STYLE_STYLE'),
-                                            backgroundColor: this.props.ChatAvatar.getColor({ text: conversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER ? conversation.user.fullname : conversation.group.name })
-                                        }}
+                    {
+                        this.state.conversations.length > 0 && <FlatList
+                            style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_ITEMS_STYLE')}
+                            data={this.state.conversations}
+                            renderItem={(itemInstance) => {
+                                let conversation = itemInstance.item;
+                                return (
+                                    <TouchableOpacity
+                                        style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_ITEM_STYLE')}
+                                        activeOpacity={0.5}
+                                        onPress={() => { }}
                                     >
-                                        <Text
+                                        <View
                                             style={{
-                                                ...this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_ITEM_AVATAR_TEXT_STYLE_STYLE')
+                                                ...this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_ITEM_AVATAR_BLOCK_STYLE_STYLE'),
+                                                backgroundColor: this.props.ChatAvatar.getColor({ text: conversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER ? conversation.user.fullname : conversation.group.name })
                                             }}
                                         >
-                                            {this.props.ChatAvatar.getFirstLetters({ text: conversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER ? conversation.user.fullname : conversation.group.name, getNumber: conversation.chatType })}
-                                        </Text>
-                                    </View>
-                                </TouchableOpacity>
-                            );
-                        }}
-                    >
+                                            <Text
+                                                style={{
+                                                    ...this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_ITEM_AVATAR_TEXT_STYLE_STYLE')
+                                                }}
+                                            >
+                                                {this.props.ChatAvatar.getFirstLetters({ text: conversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER ? conversation.user.fullname : conversation.group.name, getNumber: conversation.chatType })}
+                                            </Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                );
+                            }}
+                        >
 
-                    </FlatList>
-                }
+                        </FlatList>
+                    }
+                </ScreenBodyBlockComponent>
             </ScreenBlockComponent>
         );
     };
