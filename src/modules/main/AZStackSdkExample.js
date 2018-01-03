@@ -45,13 +45,13 @@ class AZStackSdkExample extends React.Component {
     componentDidMount() {
         this.AZStackSdk.connect().then((result) => {
             this.setState({ authenticatedUser: result });
-        }).catch({});
+        }).catch((error) => { });
     };
 
     componentWillUnmount() {
         this.AZStackSdk.disconnect().then((result) => {
             this.setState({ authenticatedUser: null });
-        }).catch({});
+        }).catch((error) => { });
     };
 
     render() {
