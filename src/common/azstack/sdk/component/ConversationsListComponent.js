@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import ScreenBlockComponent from './part/ScreenBlockComponent';
+import ScreenHeaderBlockComponent from './part/ScreenHeaderBlockComponent';
 
 class ConversationsListComponent extends React.Component {
     constructor(props) {
@@ -135,25 +136,11 @@ class ConversationsListComponent extends React.Component {
                 Sizes={this.props.Sizes}
                 CustomStyle={this.props.CustomStyle}
             >
-                <View
-                    style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_HEADER_BLOCK_STYLE')}
-                >
-                    <TouchableOpacity
-                        style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_HEADER_BACK_BUTTON_STYLE')}
-                        activeOpacity={0.5}
-                        onPress={this.props.onBackButtonPressed}
-                    >
-                        <Image
-                            style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_HEADER_BACK_BUTTON_IMAGE_STYLE')}
-                            source={require('../static/image/back.png')}
-                        />
-                    </TouchableOpacity>
-                    <Text
-                        style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_HEADER_TITLE_TEXT_STYLE')}
-                    >
-                        {this.props.Language.getText('CONVERSATIONS_LIST_HEADER_TITLE_TEXT')}
-                    </Text>
-                </View>
+                <ScreenHeaderBlockComponent
+                    CustomStyle={this.props.CustomStyle}
+                    onBackButtonPressed={this.props.onBackButtonPressed}
+                    title={this.props.Language.getText('CONVERSATIONS_LIST_HEADER_TITLE_TEXT')}
+                />
                 <View
                     style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_BLOCK_STYLE')}
                 >

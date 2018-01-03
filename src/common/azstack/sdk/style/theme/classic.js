@@ -5,23 +5,23 @@ export const SCREEN_BLOCK_STYLE = {
     backgroundColor: '#fff',
     flexDirection: 'column'
 };
-export const CONVERSATIONS_LIST_HEADER_BLOCK_STYLE = {
+export const SCREEN_HEADER_BLOCK_STYLE = {
     paddingVertical: 15,
     flexDirection: 'row',
     borderStyle: 'solid',
     borderBottomWidth: 1,
     borderBottomColor: '#E1E5EC'
 };
-export const CONVERSATIONS_LIST_HEADER_BACK_BUTTON_STYLE = {
+export const SCREEN_HEADER_BACK_BUTTON_STYLE = {
     width: 25,
     height: 25,
     marginLeft: 10
 };
-export const CONVERSATIONS_LIST_HEADER_BACK_BUTTON_IMAGE_STYLE = {
+export const SCREEN_HEADER_BACK_BUTTON_IMAGE_STYLE = {
     width: '100%',
     height: '100%'
 };
-export const CONVERSATIONS_LIST_HEADER_TITLE_TEXT_STYLE = {
+export const SCREEN_HEADER_TITLE_TEXT_STYLE = {
     flex: 1,
     fontSize: 20,
     fontWeight: '400',
