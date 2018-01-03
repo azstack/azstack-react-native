@@ -1,4 +1,4 @@
-export const CONVERSATIONS_LIST_BLOCK_STYLE = {
+export const SCREEN_BLOCK_STYLE = {
     position: 'absolute',
     top: 0,
     left: 0,

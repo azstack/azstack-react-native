@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-    Animated,
     View,
     Text,
     TouchableOpacity,
@@ -8,6 +7,8 @@ import {
     TextInput,
     FlatList
 } from 'react-native';
+
+import ScreenBlockComponent from './part/ScreenBlockComponent';
 
 class ConversationsListComponent extends React.Component {
     constructor(props) {
@@ -25,8 +26,6 @@ class ConversationsListComponent extends React.Component {
         };
 
         this.state = {
-            opacityAnimated: new Animated.Value(0),
-            marginLeftAnimated: new Animated.Value(-this.props.Sizes.width),
             conversations: [],
             searchText: ''
         };
@@ -122,57 +121,19 @@ class ConversationsListComponent extends React.Component {
     };
 
     componentDidMount() {
-        Animated.parallel([
-            Animated.timing(
-                this.state.opacityAnimated,
-                {
-                    toValue: 1,
-                    duration: 1000,
-                }
-            ),
-            Animated.timing(
-                this.state.marginLeftAnimated,
-                {
-                    toValue: 0,
-                    duration: 1000,
-                }
-            )
-        ]).start();
-
         this.addSubscriptions();
         this.getConversations();
     };
 
     componentWillUnmount() {
-        Animated.parallel([
-            Animated.timing(
-                this.state.opacityAnimated,
-                {
-                    toValue: 0,
-                    duration: 1000,
-                }
-            ),
-            Animated.timing(
-                this.state.marginLeftAnimated,
-                {
-                    toValue: -this.props.Sizes.width,
-                    duration: 1000,
-                }
-            )
-        ]).start();
-
         this.clearSubscriptions();
     };
 
     render() {
         return (
-            <Animated.View
-                style={{
-                    ...this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_BLOCK_STYLE'),
-                    ...this.props.Sizes,
-                    opacity: this.state.opacityAnimated,
-                    marginLeft: this.state.marginLeftAnimated
-                }}
+            <ScreenBlockComponent
+                Sizes={this.props.Sizes}
+                CustomStyle={this.props.CustomStyle}
             >
                 <View
                     style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_HEADER_BLOCK_STYLE')}
@@ -267,7 +228,7 @@ class ConversationsListComponent extends React.Component {
 
                     </FlatList>
                 }
-            </Animated.View >
+            </ScreenBlockComponent>
         );
     };
 };
