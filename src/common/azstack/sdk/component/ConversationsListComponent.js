@@ -11,6 +11,7 @@ import {
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
 import ScreenHeaderBlockComponent from './part/screen/ScreenHeaderBlockComponent';
 import ScreenBodyBlockComponent from './part/screen/ScreenBodyBlockComponent';
+import EmptyBlockComponent from './part/common/EmptyBlockComponent';
 
 class ConversationsListComponent extends React.Component {
     constructor(props) {
@@ -176,15 +177,10 @@ class ConversationsListComponent extends React.Component {
                         }
                     </View>
                     {
-                        this.state.conversations.length === 0 && <View
-                            style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_EMPTY_BLOCK_STYLE')}
-                        >
-                            <Text
-                                style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_EMPTY_TEXT_STYLE')}
-                            >
-                                {this.props.Language.getText('CONVERSATIONS_LIST_EMPTY_TEXT')}
-                            </Text>
-                        </View>
+                        this.state.conversations.length === 0 && <EmptyBlockComponent
+                            CustomStyle={this.props.CustomStyle}
+                            emptyText={this.props.Language.getText('CONVERSATIONS_LIST_EMPTY_TEXT')}
+                        />
                     }
                     {
                         this.state.conversations.length > 0 && <FlatList

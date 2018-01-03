@@ -34,6 +34,21 @@ export const SCREEN_BODY_BLOCK_STYLE = {
     flex: 1,
     flexDirection: 'column'
 };
+
+export const EMPTY_BLOCK_STYLE = {
+    paddingHorizontal: 15,
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+};
+export const EMPTY_TEXT_STYLE = {
+    fontSize: 25,
+    fontWeight: '300',
+    lineHeight: 30,
+    color: '#BFBFBF'
+};
+
 export const CONVERSATIONS_LIST_SEARCH_BLOCK_STYLE = {
     marginVertical: 10,
     paddingHorizontal: 15,
@@ -78,19 +93,6 @@ export const CONVERSATIONS_LIST_SEARCH_CLEAR_BUTTON_TEXT_STYLE = {
     lineHeight: 30,
     color: '#E1E5EC',
     textAlign: 'center'
-};
-export const CONVERSATIONS_LIST_EMPTY_BLOCK_STYLE = {
-    paddingHorizontal: 15,
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
-};
-export const CONVERSATIONS_LIST_EMPTY_TEXT_STYLE = {
-    fontSize: 25,
-    fontWeight: '300',
-    lineHeight: 30,
-    color: '#BFBFBF'
 };
 export const CONVERSATIONS_LIST_ITEMS_STYLE = {
     paddingHorizontal: 15,
