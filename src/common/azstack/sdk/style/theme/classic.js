@@ -35,6 +35,7 @@ export const SCREEN_BODY_BLOCK_STYLE = {
     flexDirection: 'column'
 };
 
+
 export const EMPTY_BLOCK_STYLE = {
     paddingHorizontal: 15,
     flex: 1,
@@ -48,13 +49,10 @@ export const EMPTY_TEXT_STYLE = {
     lineHeight: 30,
     color: '#BFBFBF'
 };
-
-export const CONVERSATIONS_LIST_SEARCH_BLOCK_STYLE = {
-    marginVertical: 10,
-    paddingHorizontal: 15,
+export const SEARCH_BLOCK_STYLE = {
     position: 'relative'
 };
-export const CONVERSATIONS_LIST_SEARCH_INPUT_STYLE = {
+export const SEARCH_INPUT_STYLE = {
     borderStyle: 'solid',
     borderWidth: 1,
     borderColor: '#E1E5EC',
@@ -66,33 +64,35 @@ export const CONVERSATIONS_LIST_SEARCH_INPUT_STYLE = {
     fontWeight: '300',
     color: '#95A5A6'
 };
-export const CONVERSATIONS_LIST_SEARCH_INPUT_PROPS_STYLE = {
+export const SEARCH_INPUT_PROPS_STYLE = {
     underlineColorAndroid: 'transparent',
     placeholderTextColor: '#E1E5EC'
 }
-export const CONVERSATIONS_LIST_SEARCH_IMAGE_BLOCK_STYLE = {
-
-};
-export const CONVERSATIONS_LIST_SEARCH_IMAGE_STYLE = {
+export const SEARCH_IMAGE_STYLE = {
     position: 'absolute',
     top: 10,
-    left: 20,
+    left: 5,
     width: 30,
     height: 30
 };
-export const CONVERSATIONS_LIST_SEARCH_CLEAR_BUTTON_BLOCK_STYLE = {
+export const SEARCH_CLEAR_BUTTON_BLOCK_STYLE = {
     position: 'absolute',
     top: 7,
-    right: 20,
+    right: 5,
     width: 30,
     height: 30
 };
-export const CONVERSATIONS_LIST_SEARCH_CLEAR_BUTTON_TEXT_STYLE = {
+export const SEARCH_CLEAR_BUTTON_TEXT_STYLE = {
     fontSize: 30,
     fontWeight: '400',
     lineHeight: 30,
     color: '#E1E5EC',
     textAlign: 'center'
+};
+
+export const CONVERSATIONS_SEARCH_BLOCK_STYLE = {
+    marginVertical: 10,
+    marginHorizontal: 15,
 };
 export const CONVERSATIONS_LIST_ITEMS_STYLE = {
     paddingHorizontal: 15,

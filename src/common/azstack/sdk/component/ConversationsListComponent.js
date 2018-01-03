@@ -12,15 +12,13 @@ import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
 import ScreenHeaderBlockComponent from './part/screen/ScreenHeaderBlockComponent';
 import ScreenBodyBlockComponent from './part/screen/ScreenBodyBlockComponent';
 import EmptyBlockComponent from './part/common/EmptyBlockComponent';
+import SearchBlockComponent from './part/common/SearchBlockComponent';
 
 class ConversationsListComponent extends React.Component {
     constructor(props) {
         super(props);
 
         this.subscriptions = {};
-        this.instanceRefs = {
-            searchText: null
-        };
         this.pagination = {
             page: 1,
             lastCreated: new Date().getTime(),
@@ -29,13 +27,11 @@ class ConversationsListComponent extends React.Component {
         };
 
         this.state = {
-            conversations: [],
-            searchText: ''
+            conversations: []
         };
 
-        this.onSearchTextInitDone = this.onSearchTextInitDone.bind(this);
         this.onSearchTextChange = this.onSearchTextChange.bind(this);
-        this.clearSearchText = this.clearSearchText.bind(this);
+        this.onSearchTextClear = this.onSearchTextClear.bind(this);
     };
 
     addSubscriptions() {
@@ -112,16 +108,8 @@ class ConversationsListComponent extends React.Component {
         );
     };
 
-    onSearchTextInitDone(searchTextRef) {
-        this.instanceRefs.searchText = searchTextRef;
-    };
-    onSearchTextChange(newText) {
-        this.setState({ searchText: newText });
-    };
-    clearSearchText() {
-        this.setState({ searchText: '' });
-        this.instanceRefs.searchText.blur();
-    };
+    onSearchTextChange(newText) { };
+    onSearchTextClear() { };
 
     componentDidMount() {
         this.addSubscriptions();
@@ -147,34 +135,14 @@ class ConversationsListComponent extends React.Component {
                     CustomStyle={this.props.CustomStyle}
                 >
                     <View
-                        style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_BLOCK_STYLE')}
+                        style={this.props.CustomStyle.getStyle('CONVERSATIONS_SEARCH_BLOCK_STYLE')}
                     >
-                        <TextInput
-                            ref={this.onSearchTextInitDone}
-                            style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_INPUT_STYLE')}
-                            onChangeText={this.onSearchTextChange}
-                            value={this.state.searchText}
+                        <SearchBlockComponent
+                            CustomStyle={this.props.CustomStyle}
+                            onSearchTextChange={this.onSearchTextChange}
+                            onSearchTextClear={this.onSearchTextClear}
                             placeholder={this.props.Language.getText('CONVERSATIONS_LIST_SEARCH_PLACEHOLDER_TEXT')}
-                            returnKeyType='done'
-                            {
-                            ...this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_INPUT_PROPS_STYLE')
-                            }
                         />
-                        <Image
-                            style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_IMAGE_STYLE')}
-                            source={require('../static/image/search.png')}
-                        />
-                        {
-                            !!this.state.searchText && <TouchableOpacity
-                                style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_CLEAR_BUTTON_BLOCK_STYLE')}
-                                activeOpacity={0.5}
-                                onPress={this.clearSearchText}
-                            >
-                                <Text
-                                    style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_CLEAR_BUTTON_TEXT_STYLE')}
-                                >×</Text>
-                            </TouchableOpacity>
-                        }
                     </View>
                     {
                         this.state.conversations.length === 0 && <EmptyBlockComponent
