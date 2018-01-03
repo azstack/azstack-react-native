@@ -28,8 +28,10 @@ class ConversationsListComponent extends React.Component {
             conversations: []
         };
 
-        this.onSearchTextChange = this.onSearchTextChange.bind(this);
-        this.onSearchTextClear = this.onSearchTextClear.bind(this);
+        this.onSearchTextChanged = this.onSearchTextChanged.bind(this);
+        this.onSearchTextCleared = this.onSearchTextCleared.bind(this);
+
+        this.onConversationClicked = this.onConversationClicked.bind(this);
     };
 
     addSubscriptions() {
@@ -106,8 +108,10 @@ class ConversationsListComponent extends React.Component {
         );
     };
 
-    onSearchTextChange(newText) { };
-    onSearchTextClear() { };
+    onSearchTextChanged(newText) { };
+    onSearchTextCleared() { };
+
+    onConversationClicked(conversation) { };
 
     componentDidMount() {
         this.addSubscriptions();
@@ -137,8 +141,8 @@ class ConversationsListComponent extends React.Component {
                     >
                         <SearchBlockComponent
                             CustomStyle={this.props.CustomStyle}
-                            onSearchTextChange={this.onSearchTextChange}
-                            onSearchTextClear={this.onSearchTextClear}
+                            onSearchTextChanged={this.onSearchTextChanged}
+                            onSearchTextCleared={this.onSearchTextCleared}
                             placeholder={this.props.Language.getText('CONVERSATIONS_LIST_SEARCH_PLACEHOLDER_TEXT')}
                         />
                     </View>
@@ -159,6 +163,7 @@ class ConversationsListComponent extends React.Component {
                                         CustomStyle={this.props.CustomStyle}
                                         AZStackCore={this.props.AZStackCore}
                                         conversation={item}
+                                        onConversationClicked={this.onConversationClicked}
                                     />
                                 );
                             }}

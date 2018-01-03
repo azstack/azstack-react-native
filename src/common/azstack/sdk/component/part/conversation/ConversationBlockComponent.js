@@ -9,6 +9,12 @@ import ChatAvatarBlockComponent from '../common/ChatAvatarBlockComponent';
 class ConversationBlockComponent extends React.Component {
     constructor(props) {
         super(props);
+
+        this.onConversationClicked = this.onConversationClicked.bind(this);
+    };
+
+    onConversationClicked() {
+        this.props.onConversationClicked(this.props.conversation);
     };
 
     render() {
@@ -16,7 +22,7 @@ class ConversationBlockComponent extends React.Component {
             <TouchableOpacity
                 style={this.props.CustomStyle.getStyle('CONVERSATION_BLOCK_STYLE')}
                 activeOpacity={0.5}
-                onPress={() => { }}
+                onPress={this.onConversationClicked}
             >
                 <View
                     style={this.props.CustomStyle.getStyle('CONVERSATION_AVATAR_BLOCK_STYLE')}

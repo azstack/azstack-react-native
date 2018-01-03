@@ -18,21 +18,21 @@ class SearchBlockComponent extends React.Component {
         };
 
         this.onTextInputInitDone = this.onTextInputInitDone.bind(this);
-        this.onSearchTextChange = this.onSearchTextChange.bind(this);
+        this.onSearchTextChanged = this.onSearchTextChanged.bind(this);
         this.clearSearchText = this.clearSearchText.bind(this);
     }
 
     onTextInputInitDone(textInputRef) {
         this.textInputRef = textInputRef;
     };
-    onSearchTextChange(newText) {
+    onSearchTextChanged(newText) {
         this.setState({ searchText: newText });
-        this.props.onSearchTextChange(newText);
+        this.props.onSearchTextChanged(newText);
     };
     clearSearchText() {
         this.setState({ searchText: '' });
-        this.textInputRef.blur();
-        this.props.onSearchTextClear();
+        // this.textInputRef.blur();
+        this.props.onSearchTextCleared();
     };
 
     render() {
@@ -43,7 +43,7 @@ class SearchBlockComponent extends React.Component {
                 <TextInput
                     ref={this.onTextInputInitDone}
                     style={this.props.CustomStyle.getStyle('SEARCH_INPUT_STYLE')}
-                    onChangeText={this.onSearchTextChange}
+                    onChangeText={this.onSearchTextChanged}
                     value={this.state.searchText}
                     placeholder={this.props.placeholder}
                     returnKeyType='done'
