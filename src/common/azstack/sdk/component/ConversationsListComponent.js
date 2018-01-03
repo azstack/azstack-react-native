@@ -155,8 +155,8 @@ class ConversationsListComponent extends React.Component {
                         this.state.conversations.length > 0 && <FlatList
                             style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_ITEMS_STYLE')}
                             data={this.state.conversations}
-                            renderItem={(itemInstance) => {
-                                let conversation = itemInstance.item;
+                            keyExtractor={(item, index) => (item.chatType + '_' + item.chatId)}
+                            renderItem={({ item }) => {
                                 return (
                                     <TouchableOpacity
                                         style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_ITEM_STYLE')}
@@ -168,8 +168,8 @@ class ConversationsListComponent extends React.Component {
                                         >
                                             <ChatAvatarBlockComponent
                                                 CustomStyle={this.props.CustomStyle}
-                                                chatType={conversation.chatType}
-                                                chatTarget={conversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER ? conversation.user : conversation.group}
+                                                chatType={item.chatType}
+                                                chatTarget={item.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER ? item.user : item.group}
                                             />
                                         </View>
                                     </TouchableOpacity>
