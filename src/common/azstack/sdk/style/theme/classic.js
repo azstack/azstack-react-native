@@ -128,9 +128,12 @@ export const CONVERSATION_BLOCK_STYLE = {
     paddingVertical: 10
 };
 export const CONVERSATION_AVATAR_BLOCK_STYLE = {
-    width: 100,
-    height: 100,
+    width: 70,
+    height: 70,
     position: 'relative'
+};
+export const CONVERSATION_AVATAR_TEXT_STYLE = {
+    fontSize: 30
 };
 export const CONVERSATION_STATUS_BLOCK_STYLE = {
     width: 15,
@@ -138,8 +141,8 @@ export const CONVERSATION_STATUS_BLOCK_STYLE = {
     borderRadius: 50,
     backgroundColor: '#95A5A6',
     position: 'absolute',
-    top: 8,
-    right: 8
+    top: 4,
+    right: 4
 };
 export const CONVERSATION_STATUS_ONLINE_STYLE = {
     backgroundColor: '#578EBE'

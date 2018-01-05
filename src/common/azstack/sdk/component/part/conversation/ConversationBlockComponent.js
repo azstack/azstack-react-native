@@ -49,6 +49,7 @@ class ConversationBlockComponent extends React.Component {
                         CustomStyle={this.props.CustomStyle}
                         chatType={this.props.conversation.chatType}
                         chatTarget={this.props.conversation.chatTarget}
+                        textStyle={this.props.CustomStyle.getStyle('CONVERSATION_AVATAR_TEXT_STYLE')}
                     />
                     <View
                         style={[
