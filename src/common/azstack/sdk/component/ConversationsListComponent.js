@@ -86,6 +86,9 @@ class ConversationsListComponent extends React.Component {
         return Promise.all(
             conversations.map((conversation) => {
                 return new Promise((resolve, reject) => {
+                    if (conversation.prepared) {
+                        return resolve(conversation);
+                    }
                     if (conversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER) {
                         this.props.AZStackCore.getUsersInformation({
                             userIds: [conversation.chatId]
@@ -116,6 +119,9 @@ class ConversationsListComponent extends React.Component {
             return Promise.all(
                 conversations.map((conversation) => {
                     return new Promise((resolve, reject) => {
+                        if (conversation.prepared) {
+                            return resolve(conversation);
+                        }
                         conversation.lastMessage.receiver = conversation.chatTarget;
                         this.props.AZStackCore.getUsersInformation({
                             userIds: [conversation.lastMessage.senderId]
@@ -133,6 +139,10 @@ class ConversationsListComponent extends React.Component {
             return Promise.all(
                 conversations.map((conversation) => {
                     return new Promise((resolve, reject) => {
+                        if (conversation.prepared) {
+                            return resolve(conversation);
+                        }
+                        conversation.prepared = true;
                         switch (conversation.lastMessage.type) {
                             case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT:
                             case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
