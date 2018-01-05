@@ -50,7 +50,8 @@ class ChatAvatarBlockComponent extends React.Component {
             >
                 <Text
                     style={{
-                        ...this.props.CustomStyle.getStyle('AVATAR_TEXT_STYLE')
+                        ...this.props.CustomStyle.getStyle('AVATAR_TEXT_STYLE'),
+                        ...this.props.textStyle
                     }}
                 >
                     {this.getFirstLetters({ text: this.props.chatTarget.fullname ? this.props.chatTarget.fullname : this.props.chatTarget.name, getNumber: this.props.chatType })}

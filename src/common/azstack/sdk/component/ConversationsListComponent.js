@@ -53,10 +53,10 @@ class ConversationsListComponent extends React.Component {
         if (!this.props.AZStackCore.slaveSocketConnected) {
             return;
         }
-        if (this.pagination.loading) {
+        if (this.pagination.done) {
             return;
         }
-        if (this.pagination.done) {
+        if (this.pagination.loading) {
             return;
         }
 
@@ -66,12 +66,17 @@ class ConversationsListComponent extends React.Component {
             lastCreated: this.pagination.lastCreated
         }).then((result) => {
             this.prepareConversations(result.list).then((preparedConversations) => {
-                this.pagination.loading = false;
+                this.pagination.page += 1;
+                let unorderConversations = this.state.conversations.concat(preparedConversations);
+                this.setState({
+                    conversations: unorderConversations.sort((a, b) => {
+                        return a.lastMessage.created > b.lastMessage.created ? -1 : 1
+                    })
+                });
                 if (result.done === this.props.AZStackCore.listConstants.GET_LIST_DONE) {
                     this.pagination.done = true;
                 }
-                this.pagination.page += 1;
-                this.setState({ conversations: this.state.conversations.concat(preparedConversations) });
+                this.pagination.loading = false;
             }).catch((error) => { });
         }).catch((error) => {
             this.pagination.loading = false;
@@ -81,6 +86,9 @@ class ConversationsListComponent extends React.Component {
         return Promise.all(
             conversations.map((conversation) => {
                 return new Promise((resolve, reject) => {
+                    if (conversation.prepared) {
+                        return resolve(conversation);
+                    }
                     if (conversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER) {
                         this.props.AZStackCore.getUsersInformation({
                             userIds: [conversation.chatId]
@@ -111,6 +119,9 @@ class ConversationsListComponent extends React.Component {
             return Promise.all(
                 conversations.map((conversation) => {
                     return new Promise((resolve, reject) => {
+                        if (conversation.prepared) {
+                            return resolve(conversation);
+                        }
                         conversation.lastMessage.receiver = conversation.chatTarget;
                         this.props.AZStackCore.getUsersInformation({
                             userIds: [conversation.lastMessage.senderId]
@@ -128,6 +139,10 @@ class ConversationsListComponent extends React.Component {
             return Promise.all(
                 conversations.map((conversation) => {
                     return new Promise((resolve, reject) => {
+                        if (conversation.prepared) {
+                            return resolve(conversation);
+                        }
+                        conversation.prepared = true;
                         switch (conversation.lastMessage.type) {
                             case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT:
                             case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:

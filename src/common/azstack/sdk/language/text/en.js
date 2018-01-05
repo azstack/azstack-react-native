@@ -1,3 +1,18 @@
+export const FROM_NOW_FUTURE_TEXT = 'in';
+export const FROM_NOW_PAST_TEXT = 'ago';
+export const FROM_NOW_SECOND_TEXT = 'second';
+export const FROM_NOW_SECOND_MANY_TEXT = 'seconds';
+export const FROM_NOW_MINUTE_TEXT = 'minute';
+export const FROM_NOW_MINUTE_MANY_TEXT = 'minutes';
+export const FROM_NOW_HOUR_TEXT = 'hour';
+export const FROM_NOW_HOUR_MANY_TEXT = 'hours';
+export const FROM_NOW_DAY_TEXT = 'day';
+export const FROM_NOW_DAY_MANY_TEXT = 'days';
+export const FROM_NOW_MONTH_TEXT = 'month';
+export const FROM_NOW_MONTH_MANY_TEXT = 'months';
+export const FROM_NOW_YEAR_TEXT = 'year';
+export const FROM_NOW_YEAR_MANY_TEXT = 'years';
+
 export const CONVERSATIONS_LIST_HEADER_TITLE_TEXT = 'Conversations';
 export const CONVERSATIONS_LIST_EMPTY_TEXT = 'No Conversation';
 export const CONVERSATIONS_LIST_SEARCH_PLACEHOLDER_TEXT = 'Search...';
