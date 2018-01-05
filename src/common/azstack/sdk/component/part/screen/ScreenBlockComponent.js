@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Keyboard,
     Animated
 } from 'react-native';
 
@@ -9,7 +10,13 @@ class ScreenBlockComponent extends React.Component {
 
         this.state = {
             opacityAnimated: new Animated.Value(0),
-            marginLeftAnimated: new Animated.Value(-this.props.Sizes.width)
+            marginLeftAnimated: new Animated.Value(-this.props.Sizes.width),
+            heightAnimated: new Animated.Value(this.props.Sizes.height)
+        };
+
+        this.keyboardListeners = {
+            onShowed: null,
+            onHided: null
         };
     };
 
@@ -30,6 +37,25 @@ class ScreenBlockComponent extends React.Component {
                 }
             )
         ]).start();
+
+        this.keyboardListeners.onShowed = Keyboard.addListener('keyboardDidShow', (event) => {
+            Animated.timing(
+                this.state.heightAnimated,
+                {
+                    toValue: this.props.Sizes.height - event.endCoordinates.height,
+                    duration: 500,
+                }
+            ).start();
+        });
+        this.keyboardListeners.onHided = Keyboard.addListener('keyboardDidHide', (event) => {
+            Animated.timing(
+                this.state.heightAnimated,
+                {
+                    toValue: this.props.Sizes.height,
+                    duration: 500,
+                }
+            ).start();
+        });
     };
 
     componentWillUnmount() {
@@ -49,6 +75,9 @@ class ScreenBlockComponent extends React.Component {
                 }
             )
         ]).start();
+
+        this.keyboardListeners.onShowed.remove();
+        this.keyboardListeners.onHided.remove();
     };
 
     render() {
@@ -58,7 +87,8 @@ class ScreenBlockComponent extends React.Component {
                     ...this.props.CustomStyle.getStyle('SCREEN_BLOCK_STYLE'),
                     ...this.props.Sizes,
                     opacity: this.state.opacityAnimated,
-                    marginLeft: this.state.marginLeftAnimated
+                    marginLeft: this.state.marginLeftAnimated,
+                    height: this.state.heightAnimated
                 }}
             >
                 {this.props.children}
