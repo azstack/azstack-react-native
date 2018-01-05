@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 
 import ChatAvatarBlockComponent from '../common/ChatAvatarBlockComponent';
+import TimeFromNowBlockComponent from '../common/TimeFromNowBlockComponent';
 import ConversationLastMessageBlockComponent from './ConversationLastMessageBlockComponent';
 
 class ConversationBlockComponent extends React.Component {
@@ -70,6 +71,11 @@ class ConversationBlockComponent extends React.Component {
                         AZStackCore={this.props.AZStackCore}
                         lastMessage={this.props.conversation.lastMessage}
                     />
+                    <TimeFromNowBlockComponent
+                        Language={this.props.Language}
+                        CustomStyle={this.props.CustomStyle}
+                        time={this.props.conversation.lastMessage.created}
+                    />
                     {
                         this.props.conversation.unread > 0 && (
                             <View
@@ -81,7 +87,6 @@ class ConversationBlockComponent extends React.Component {
                                 >
                                     {this.props.conversation.unread > 9 ? '9+' : this.props.conversation.unread}
                                 </Text>
-
                             </View>
                         )
                     }

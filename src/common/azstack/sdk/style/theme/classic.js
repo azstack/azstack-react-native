@@ -101,6 +101,13 @@ export const AVATAR_TEXT_STYLE = {
     fontWeight: '500',
     color: '#fff'
 };
+export const FROM_NOW_TIME_TEXT_STYLE = {
+    fontSize: 15,
+    fontWeight: '300',
+    lineHeight: 30,
+    color: '#2F353B',
+    textAlign: 'right'
+};
 
 
 export const CONVERSATIONS_LIST_SEARCH_BLOCK_STYLE = {
