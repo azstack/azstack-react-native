@@ -153,8 +153,8 @@ export const CONVERSATION_INFORMATION_BLOCK_STYLE = {
     position: 'relative'
 };
 export const CONVERSATION_UNREAD_BLOCK_STYLE = {
-    width: 25,
-    height: 25,
+    width: 20,
+    height: 20,
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
@@ -164,7 +164,7 @@ export const CONVERSATION_UNREAD_BLOCK_STYLE = {
     right: 10
 };
 export const CONVERSATION_UNREAD_TEXT_STYLE = {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '400',
     color: '#fff'
 };
