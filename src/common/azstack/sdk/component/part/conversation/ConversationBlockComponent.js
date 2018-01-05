@@ -7,6 +7,7 @@ import {
 
 import ChatAvatarBlockComponent from '../common/ChatAvatarBlockComponent';
 import TimeFromNowBlockComponent from '../common/TimeFromNowBlockComponent';
+import MessageStatusBlockComponent from '../common/MessageStatusBlockComponent';
 import ConversationLastMessageBlockComponent from './ConversationLastMessageBlockComponent';
 
 class ConversationBlockComponent extends React.Component {
@@ -88,6 +89,27 @@ class ConversationBlockComponent extends React.Component {
                                 >
                                     {this.props.conversation.unread > 9 ? '9+' : this.props.conversation.unread}
                                 </Text>
+                            </View>
+                        )
+                    }
+                    {
+                        this.props.conversation.lastMessage.sender.userId === this.props.AZStackCore.authenticatedUser.userId &&
+                        [
+                            this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT,
+                            this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER,
+                            this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE
+                        ].indexOf(this.props.conversation.lastMessage.type) > -1 &&
+                        this.props.conversation.lastMessage.status !== this.props.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED &&
+                        (
+                            <View
+                                style={this.props.CustomStyle.getStyle('CONVERSATION_MESSAGE_STATUS_BLOCK_STYLE')}
+                            >
+                                <MessageStatusBlockComponent
+                                    CustomStyle={this.props.CustomStyle}
+                                    AZStackCore={this.props.AZStackCore}
+                                    textStyle={this.props.CustomStyle.getStyle('CONVERSATION_MESSAGE_STATUS_TEXT_STYLE')}
+                                    status={this.props.conversation.lastMessage.status}
+                                />
                             </View>
                         )
                     }
