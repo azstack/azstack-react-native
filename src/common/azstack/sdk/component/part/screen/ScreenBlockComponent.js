@@ -19,14 +19,14 @@ class ScreenBlockComponent extends React.Component {
                 this.state.opacityAnimated,
                 {
                     toValue: 1,
-                    duration: 1000,
+                    duration: 500,
                 }
             ),
             Animated.timing(
                 this.state.marginLeftAnimated,
                 {
                     toValue: 0,
-                    duration: 1000,
+                    duration: 500,
                 }
             )
         ]).start();
@@ -38,14 +38,14 @@ class ScreenBlockComponent extends React.Component {
                 this.state.opacityAnimated,
                 {
                     toValue: 0,
-                    duration: 1000,
+                    duration: 500,
                 }
             ),
             Animated.timing(
                 this.state.marginLeftAnimated,
                 {
                     toValue: -this.props.Sizes.width,
-                    duration: 1000,
+                    duration: 500,
                 }
             )
         ]).start();

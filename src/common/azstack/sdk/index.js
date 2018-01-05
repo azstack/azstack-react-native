@@ -15,6 +15,9 @@ import { AZStackCore } from '../core/';
 import Event from './handler/event';
 
 import ConversationsListComponent from './component/ConversationsListComponent';
+import OnCallComponent from './component/OnCallComponent';
+import ContactComponent from './component/ContactComponent';
+import NumberPadComponent from './component/NumberPadComponent';
 
 export class AZStackSdk {
     constructor(options) {
@@ -61,4 +64,40 @@ export class AZStackSdk {
             onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => { }}
         />;
     };
+
+    renderOnCall(options) {
+        return <OnCallComponent
+            Sizes={this.Sizes}
+            Language={this.Language}
+            CustomStyle={this.CustomStyle}
+            eventConstants={this.eventConstants}
+            AZStackCore={this.AZStackCore}
+            EventEmitter={this.EventEmitter}
+            onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => { }}
+        />;
+    }
+
+    renderContact(options) {
+        return <ContactComponent
+            Sizes={this.Sizes}
+            Language={this.Language}
+            CustomStyle={this.CustomStyle}
+            eventConstants={this.eventConstants}
+            AZStackCore={this.AZStackCore}
+            EventEmitter={this.EventEmitter}
+            onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => { }}
+        />;
+    }
+
+    renderNumberPad(options) {
+        return <NumberPadComponent
+            Sizes={this.Sizes}
+            Language={this.Language}
+            CustomStyle={this.CustomStyle}
+            eventConstants={this.eventConstants}
+            AZStackCore={this.AZStackCore}
+            EventEmitter={this.EventEmitter}
+            onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => { }}
+        />;
+    }
 };

@@ -279,8 +279,8 @@ export class AZStackCore {
                 break;
             case this.serviceTypes.CALLOUT_DATA_STATUS_CHANGED:
                 this.Call.receiveCalloutStatusChanged(body).then((result) => {
-                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_CALLOUT_STAUTUS_CHANGED] === 'function') {
-                        this.Delegates[this.delegateConstants.DELEGATE_CALLOUT_STAUTUS_CHANGED](null, result);
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_CALLOUT_STAUTUS_CHANGED] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_CALLOUT_STAUTUS_CHANGED](null, result);
                     }
                 }).catch();
                 break;

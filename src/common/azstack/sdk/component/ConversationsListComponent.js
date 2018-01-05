@@ -1,7 +1,7 @@
 import React from 'react';
 import {
     View,
-    FlatList
+    FlatList,
 } from 'react-native';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';

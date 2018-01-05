@@ -19,7 +19,7 @@ export const DELEGATE_ON_REMOTE_STREAM_ARRIVED = 'onRemoteStreamArrived';
 
 export const DELEGATE_ON_START_CALLOUT_RETURN = 'onStartCalloutReturn';
 export const DELEGATE_ON_STOP_CALLOUT_RETURN = 'onStopCalloutReturn';
-export const DELEGATE_CALLOUT_STAUTUS_CHANGED = 'onCalloutStatusChanged';
+export const DELEGATE_ON_CALLOUT_STAUTUS_CHANGED = 'onCalloutStatusChanged';
 
 export const DELEGATE_ON_CALLIN_START = 'onCallinStart';
 export const DELEGATE_ON_CALLIN_STATUS_CHANGED = 'onCallinStatusChanged';
