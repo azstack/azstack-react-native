@@ -14,12 +14,15 @@ class SearchBlockComponent extends React.Component {
         this.textInputRef = null;
 
         this.state = {
-            searchText: ''
+            searchText: '',
+            textInputFocused: false
         };
 
         this.onTextInputInitDone = this.onTextInputInitDone.bind(this);
         this.onSearchTextChanged = this.onSearchTextChanged.bind(this);
         this.clearSearchText = this.clearSearchText.bind(this);
+        this.onTextInputFocused = this.onTextInputFocused.bind(this);
+        this.onTextInputBlured = this.onTextInputBlured.bind(this);
     }
 
     onTextInputInitDone(textInputRef) {
@@ -34,6 +37,12 @@ class SearchBlockComponent extends React.Component {
         // this.textInputRef.blur();
         this.props.onSearchTextCleared();
     };
+    onTextInputFocused() {
+        this.setState({ textInputFocused: true });
+    };
+    onTextInputBlured() {
+        this.setState({ textInputFocused: false });
+    };
 
     render() {
         return (
@@ -42,8 +51,13 @@ class SearchBlockComponent extends React.Component {
             >
                 <TextInput
                     ref={this.onTextInputInitDone}
-                    style={this.props.CustomStyle.getStyle('SEARCH_INPUT_STYLE')}
+                    style={[
+                        this.props.CustomStyle.getStyle('SEARCH_INPUT_STYLE'),
+                        (this.state.textInputFocused ? this.props.CustomStyle.getStyle('SEARCH_INPUT_FOCUS_STYLE') : {})
+                    ]}
                     onChangeText={this.onSearchTextChanged}
+                    onFocus={this.onTextInputFocused}
+                    onBlur={this.onTextInputBlured}
                     value={this.state.searchText}
                     placeholder={this.props.placeholder}
                     returnKeyType='done'

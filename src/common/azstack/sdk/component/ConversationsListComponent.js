@@ -26,11 +26,13 @@ class ConversationsListComponent extends React.Component {
         };
 
         this.state = {
-            conversations: []
+            conversations: [],
+            searchText: ''
         };
 
         this.onSearchTextChanged = this.onSearchTextChanged.bind(this);
         this.onSearchTextCleared = this.onSearchTextCleared.bind(this);
+        this.getFilteredConversations = this.getFilteredConversations.bind(this);
 
         this.onConversationClicked = this.onConversationClicked.bind(this);
     };
@@ -94,6 +96,7 @@ class ConversationsListComponent extends React.Component {
                             userIds: [conversation.chatId]
                         }).then((result) => {
                             conversation.chatTarget = result.list[0];
+                            conversation.searchString = result.list[0].fullname.toLocaleLowerCase();
                             resolve(conversation);
                         }).catch((error) => {
                             conversation.chatTarget = { userId: conversation.chatId };
@@ -104,6 +107,10 @@ class ConversationsListComponent extends React.Component {
                             groupId: conversation.chatId
                         }).then((result) => {
                             conversation.chatTarget = result;
+                            conversation.searchString = result.name.toLocaleLowerCase();
+                            result.members.map((member) => {
+                                conversation.searchString += ` ${member.fullname.toLocaleLowerCase()}`;
+                            });
                             resolve(conversation);
                         }).catch((error) => {
                             conversation.chatTarget = { groupId: conversation.chatId };
@@ -243,8 +250,28 @@ class ConversationsListComponent extends React.Component {
         });
     };
 
-    onSearchTextChanged(newText) { };
-    onSearchTextCleared() { };
+    onSearchTextChanged(newText) {
+        this.setState({ searchText: newText });
+    };
+    onSearchTextCleared() {
+        this.setState({ searchText: '' });
+    };
+    getFilteredConversations() {
+        if (!this.state.searchText) {
+            return this.state.conversations;
+        }
+        let searchParts = this.state.searchText.toLocaleLowerCase().split(' ');
+        return this.state.conversations.filter((conversation) => {
+            let matched = false;
+            for (let i = 0; i < searchParts.length; i++) {
+                if (conversation.searchString.indexOf(searchParts[i]) > -1) {
+                    matched = true;
+                    break;
+                }
+            }
+            return matched;
+        });
+    };
 
     onConversationClicked(conversation) { };
 
@@ -282,15 +309,15 @@ class ConversationsListComponent extends React.Component {
                         />
                     </View>
                     {
-                        this.state.conversations.length === 0 && <EmptyBlockComponent
+                        this.getFilteredConversations().length === 0 && <EmptyBlockComponent
                             CustomStyle={this.props.CustomStyle}
                             emptyText={this.props.Language.getText('CONVERSATIONS_LIST_EMPTY_TEXT')}
                         />
                     }
                     {
-                        this.state.conversations.length > 0 && <FlatList
+                        this.getFilteredConversations().length > 0 && <FlatList
                             style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_ITEMS_STYLE')}
-                            data={this.state.conversations}
+                            data={this.getFilteredConversations()}
                             keyExtractor={(item, index) => (item.chatType + '_' + item.chatId)}
                             renderItem={({ item }) => {
                                 return (
