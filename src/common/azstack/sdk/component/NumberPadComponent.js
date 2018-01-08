@@ -32,6 +32,8 @@ class NumberPadComponent extends React.Component {
 		super(props);
 		this.state = {
 			phoneNumber: '',
+			onCall: null,
+
 		};
 	}
 
@@ -47,7 +49,19 @@ class NumberPadComponent extends React.Component {
 		this.props.AZStackCore.startCallout({
 			toPhoneNumber: this.state.phoneNumber
 		}).then((result) => {
-			console.log(result);
+		});
+		
+		this.setState({
+			onCall: this.props.onCallout({
+				onEndCall: () => {
+					this.setState({onCall: null});
+				},
+				info: {
+					name: '',
+					phoneNumber: this.state.phoneNumber,
+					avatar: '',
+				}
+			})
 		});
 	}
 
@@ -165,6 +179,9 @@ class NumberPadComponent extends React.Component {
 						</View>
 					</View>
 				</View>
+                {
+                    this.state.onCall
+                }
             </ScreenBlockComponent>
 		);
 	}

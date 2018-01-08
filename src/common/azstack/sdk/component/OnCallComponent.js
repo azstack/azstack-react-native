@@ -26,12 +26,58 @@ const call_bg = require('../static/image/call_bg.jpg');
 
 class OnCallComponent extends React.Component {
 	constructor(props) {
-		super(props);
+		super(props);        
+		this.subscriptions = {};
 		this.state = {
+			calloutStatus: null,
+			calloutMessage: '',
+
 		};
 	}
 
+    addSubscriptions() {
+        this.subscriptions.onCalloutStatusChanged = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_CALLOUT_STATUS_CHANGED_RETURN, ({ error, result }) => {
+            if (error) {
+                return;
+			}
+
+			this.setState({calloutStatus: result.status, calloutMessage: result.message});
+			
+			if(result.status === this.props.AZStackCore.callConstants.CALL_STATUS_CALLOUT_INITIAL_BUSY ||
+				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_CALLOUT_INITIAL_NOT_ENOUGH_BALANCE ||
+				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_CALLOUT_INITIAL_INVALID_NUMBER ||
+				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_STOP ||
+				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_BUSY ||
+				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_NOT_ANSWERED ||
+				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_NOT_ENOUGH_BALANCE) {
+				setTimeout(() => {
+					this.props.onBackButtonPressed();
+				}, 1500);
+			}
+		});
+		
+        this.subscriptions.onCallinStatusChanged = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_CALLIN_STATUS_CHANGED_RETURN, ({ error, result }) => {
+            if (error) {
+                return;
+			}
+			
+			setTimeout(() => {
+				this.props.onBackButtonPressed();
+			}, 500);
+        });
+	};
+	
+    clearSubscriptions() {
+        for (let subscriptionName in this.subscriptions) {
+            this.subscriptions[subscriptionName].remove();
+        }
+    };
+
 	componentWillMount() {
+	}
+
+	componentDidMount() {
+        this.addSubscriptions();
 	}
 
 	onPressAnswer() {
@@ -47,7 +93,13 @@ class OnCallComponent extends React.Component {
 	}
 
 	onPressEndCall() {
-		this.props.onBackButtonPressed();
+		this.props.AZStackCore.stopCallout().then((result) => {
+			setTimeout(() => {
+				// this.props.onBackButtonPressed();
+				this.props.onEndCall();
+			}, 500);
+		});
+		
 	}
 
 	renderStatus() {
@@ -106,8 +158,8 @@ class OnCallComponent extends React.Component {
 				<View style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: 'rgba(0,0,0,0)'}}>
 					<View style={{height: (height - 20) * 2 / 5}}>
 						<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-							<Text style={{color: '#fff', fontSize: 30}}>Anonymous</Text>
-							<Text style={{color: '#e3e2e1', fontSize: 18,}}>{"Đang gọi"}</Text>
+							<Text style={{color: '#fff', fontSize: 30}}>{this.props.info.name || this.props.info.phoneNumber}</Text>
+							<Text style={{color: '#e3e2e1', fontSize: 18,}}>{this.state.calloutMessage}</Text>
 						</View>
 					</View>
 					<View style={{height: (height - 20) * 3 / 5, justifyContent: 'flex-end', paddingBottom: 60}}>

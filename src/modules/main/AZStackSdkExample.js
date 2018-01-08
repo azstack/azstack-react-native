@@ -44,6 +44,16 @@ class AZStackSdkExample extends React.Component {
         this.setState({
             showings: Object.assign(this.state.showings, { onCall: true })
         });
+        
+        this.AZStackSdk.startFreeCall({
+            mediaType: this.AZStackSdk.getConstants('callConstants').CALL_MEDIA_TYPE_AUDIO,
+            info: {
+                name: 'User 2',
+                phoneNumber: '',
+                userId: 387212, // must be number
+            },
+            onEndCall: () => {},
+        });
     };
 
     showContact() {
@@ -109,7 +119,7 @@ class AZStackSdkExample extends React.Component {
                     <Text>{this.state.authenticatedUser ? 'Connected, ' + this.state.authenticatedUser.fullname : 'Connecting...'}</Text>
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.showConversationsList} title='Show conversations list'></Button>
-                    <Button onPress={() => this.showOnCall()} title='Call User 1'></Button>
+                    <Button onPress={() => this.showOnCall()} title='Call User 2'></Button>
                     <Button onPress={() => this.showContact()} title='Contact List'></Button>
                     <Button onPress={() => this.showNumberPad()} title='Callout'></Button>
                 </ScrollView>
@@ -120,7 +130,12 @@ class AZStackSdkExample extends React.Component {
                 }
                 {
                     this.state.showings.onCall && this.AZStackSdk.renderOnCall({
-                        onBackButtonPressed: () => this.onOnCallBackButtonPressed()
+                        onBackButtonPressed: () => this.onOnCallBackButtonPressed(),
+                        info: {
+                            name: 'User 2',
+                            phoneNumber: '',
+                            avatar: '',
+                        }
                     })
                 }
                 {

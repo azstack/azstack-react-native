@@ -53,6 +53,39 @@ export class AZStackSdk {
         return this.AZStackCore.disconnect();
     };
 
+    getConstants(constantGroup) {
+        return this.AZStackCore[constantGroup];
+    }
+
+    onCallout(options) {
+        return this.renderOnCall(options);
+    }
+
+    onFreeCall(otpions) {
+        return this.renderOnCall(options);
+    }
+
+    startCallout(options) {
+        this.AZStackCore.startCallout({
+            toPhoneNumber: options.info.phoneNumber
+        }).then((result) => {
+
+        });
+
+        return this.renderOnCall(options);
+    }
+
+    startFreeCall(options) {
+        this.AZStackCore.startFreeCall({
+            mediaType: options.mediaType,
+            toUserId: options.info.userId,
+        }).then((result) => {
+
+        });
+
+        return this.renderOnCall(options);
+    }
+
     renderConversationsList(options) {
         return <ConversationsListComponent
             Sizes={this.Sizes}
@@ -73,7 +106,8 @@ export class AZStackSdk {
             eventConstants={this.eventConstants}
             AZStackCore={this.AZStackCore}
             EventEmitter={this.EventEmitter}
-            onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => { }}
+            info={options.info}
+            onEndCall={options.onEndCall ? options.onEndCall : () => { }}
         />;
     }
 
@@ -97,6 +131,7 @@ export class AZStackSdk {
             eventConstants={this.eventConstants}
             AZStackCore={this.AZStackCore}
             EventEmitter={this.EventEmitter}
+            onCallout={(options) => this.startCallout(options)}
             onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => { }}
         />;
     }
