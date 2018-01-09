@@ -69,7 +69,7 @@ export class AZStackSdk {
         this.AZStackCore.startCallout({
             toPhoneNumber: options.info.phoneNumber
         }).then((result) => {
-
+            console.log(result);
         });
 
         return this.renderOnCall(options);
@@ -84,6 +84,11 @@ export class AZStackSdk {
         });
 
         return this.renderOnCall(options);
+    }
+
+    stopFreeCall(options) {
+		this.AZStackCore.stopCallout().then((result) => {
+		});
     }
 
     renderConversationsList(options) {

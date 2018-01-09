@@ -8,7 +8,10 @@ import {
     Button
 } from 'react-native';
 
-import { AZStackSdk } from '../../common/azstack/';
+import { 
+    AZStackSdk, 
+    AZStackSdkComponent, 
+} from '../../common/azstack/';
 
 class AZStackSdkExample extends React.Component {
     constructor(props) {
@@ -16,84 +19,51 @@ class AZStackSdkExample extends React.Component {
 
         this.state = {
             authenticatedUser: null,
-            showings: {
-                conversationsList: false,
-                onCall: false,
-                contact: false,
-                numberPad: false,
-            }
         };
-
-        this.showConversationsList = this.showConversationsList.bind(this);
-        this.onConversationsListBackButtonPressed = this.onConversationsListBackButtonPressed.bind(this);
-
-        this.AZStackSdk = new AZStackSdk({
-            azstackConfig: this.props.azstackConfig,
-            languageCode: this.props.languageCode,
-            themeName: this.props.themeName
-        });
     };
 
     showConversationsList() {
-        this.setState({
-            showings: Object.assign(this.state.showings, { conversationsList: true })
-        });
+        this.refs.AZStackSdk.navigate(this.refs.AZStackSdk.getNavigation().ConversationsListComponent, {});
     };
 
-    showOnCall() {
-        this.setState({
-            showings: Object.assign(this.state.showings, { onCall: true })
-        });
-        
-        this.AZStackSdk.startFreeCall({
-            mediaType: this.AZStackSdk.getConstants('callConstants').CALL_MEDIA_TYPE_AUDIO,
+    showContact() {
+        this.refs.AZStackSdk.navigate(this.refs.AZStackSdk.getNavigation().ContactComponent, {});
+    }
+
+    showNumberPad() {
+        this.refs.AZStackSdk.navigate(this.refs.AZStackSdk.getNavigation().NumberPadComponent, {});
+    }
+
+    audioCall() {
+        this.refs.AZStackSdk.startFreeCall({
+            mediaType: this.refs.AZStackSdk.getConstants('callConstants').CALL_MEDIA_TYPE_AUDIO,
             info: {
                 name: 'User 2',
                 phoneNumber: '',
                 userId: 387212, // must be number
             },
-            onEndCall: () => {},
+            onEndCall: () => {
+                // or whatever you want here
+            },
         });
     };
 
-    showContact() {
-        this.setState({
-            showings: Object.assign(this.state.showings, { contact: true })
-        });
-    }
-
-    showNumberPad() {
-        this.setState({
-            showings: Object.assign(this.state.showings, { numberPad: true })
-        });
-    }
-
-    onConversationsListBackButtonPressed() {
-        this.setState({
-            showings: Object.assign(this.state.showings, { conversationsList: false })
-        });
-    };
-    
-    onOnCallBackButtonPressed() {
-        this.setState({
-            showings: Object.assign(this.state.showings, { onCall: false })
-        });
-    };
-
-    onContactButtonPress() {
-        this.setState({
-            showings: Object.assign(this.state.showings, { contact: false })
-        });
-    }
-
-    onNumberPadButtonPress() {
-        this.setState({
-            showings: Object.assign(this.state.showings, { numberPad: false })
+    videoCall() {
+        this.refs.AZStackSdk.startFreeCall({
+            mediaType: this.refs.AZStackSdk.getConstants('callConstants').CALL_MEDIA_TYPE_VIDEO,
+            info: {
+                name: 'User 2',
+                phoneNumber: '',
+                userId: 387212, // must be number
+            },
+            onEndCall: () => {
+                // or whatever you want here
+            },
         });
     }
 
     componentDidMount() {
-        this.AZStackSdk.connect().then((result) => {
+        this.refs.AZStackSdk.connect().then((result) => {
             this.setState({ authenticatedUser: result });
         }).catch((error) => {
             console.log(error);
@@ -101,7 +71,7 @@ class AZStackSdkExample extends React.Component {
     };
 
     componentWillUnmount() {
-        this.AZStackSdk.disconnect().then((result) => {
+        this.refs.AZStackSdk.disconnect().then((result) => {
             this.setState({ authenticatedUser: null });
         }).catch((error) => { });
     };
@@ -118,36 +88,20 @@ class AZStackSdkExample extends React.Component {
                 <ScrollView>
                     <Text>{this.state.authenticatedUser ? 'Connected, ' + this.state.authenticatedUser.fullname : 'Connecting...'}</Text>
                     <Text>{'\n'}{'\n'}</Text>
-                    <Button onPress={this.showConversationsList} title='Show conversations list'></Button>
-                    <Button onPress={() => this.showOnCall()} title='Call User 2'></Button>
+                    <Button onPress={() => this.showConversationsList()} title='Show conversations list'></Button>
+                    <Button onPress={() => this.audioCall()} title='Call User 2'></Button>
+                    <Button onPress={() => this.videoCall()} title='Video Call User 2'></Button>
                     <Button onPress={() => this.showContact()} title='Contact List'></Button>
                     <Button onPress={() => this.showNumberPad()} title='Callout'></Button>
                 </ScrollView>
-                {
-                    this.state.showings.conversationsList && this.AZStackSdk.renderConversationsList({
-                        onBackButtonPressed: this.onConversationsListBackButtonPressed
-                    })
-                }
-                {
-                    this.state.showings.onCall && this.AZStackSdk.renderOnCall({
-                        onBackButtonPressed: () => this.onOnCallBackButtonPressed(),
-                        info: {
-                            name: 'User 2',
-                            phoneNumber: '',
-                            avatar: '',
-                        }
-                    })
-                }
-                {
-                    this.state.showings.contact && this.AZStackSdk.renderContact({
-                        onBackButtonPressed: () => this.onContactButtonPress()
-                    })
-                }
-                {
-                    this.state.showings.numberPad && this.AZStackSdk.renderNumberPad({
-                        onBackButtonPressed: () => this.onNumberPadButtonPress()
-                    })
-                }
+                <AZStackSdkComponent 
+                    ref={"AZStackSdk"} 
+                    options={{
+                        azstackConfig: this.props.azstackConfig,
+                        languageCode: this.props.languageCode,
+                        themeName: this.props.themeName
+                    }} 
+                />
             </View>
         );
     };

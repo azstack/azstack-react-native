@@ -46,11 +46,6 @@ class NumberPadComponent extends React.Component {
 	}
 
 	onCall() {
-		this.props.AZStackCore.startCallout({
-			toPhoneNumber: this.state.phoneNumber
-		}).then((result) => {
-		});
-		
 		this.setState({
 			onCall: this.props.onCallout({
 				onEndCall: () => {

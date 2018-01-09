@@ -3,7 +3,7 @@ export const SCREEN_BLOCK_STYLE = {
     top: 0,
     left: 0,
     backgroundColor: '#fff',
-    flexDirection: 'column'
+    flexDirection: 'column',
 };
 export const SCREEN_HEADER_BLOCK_STYLE = {
     paddingVertical: 15,
@@ -32,7 +32,7 @@ export const SCREEN_HEADER_TITLE_TEXT_STYLE = {
 };
 export const SCREEN_BODY_BLOCK_STYLE = {
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
 };
 
 
@@ -41,7 +41,7 @@ export const EMPTY_BLOCK_STYLE = {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
 };
 export const EMPTY_TEXT_STYLE = {
     fontSize: 25,

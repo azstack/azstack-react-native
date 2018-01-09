@@ -31,7 +31,8 @@ class OnCallComponent extends React.Component {
 		this.state = {
 			calloutStatus: null,
 			calloutMessage: '',
-
+			callinStatus: null,
+			callinMessage: '',
 		};
 	}
 
@@ -51,7 +52,7 @@ class OnCallComponent extends React.Component {
 				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_NOT_ANSWERED ||
 				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_NOT_ENOUGH_BALANCE) {
 				setTimeout(() => {
-					this.props.onBackButtonPressed();
+					this.props.onCallEnded();
 				}, 1500);
 			}
 		});
@@ -60,10 +61,17 @@ class OnCallComponent extends React.Component {
             if (error) {
                 return;
 			}
-			
-			setTimeout(() => {
-				this.props.onBackButtonPressed();
-			}, 500);
+
+			this.setState({callinStatus: result.status, callinMessage: result.message});
+
+			if(result.status === this.props.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_STOP ||
+				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING_STOP ||
+				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_BUSY ||
+				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_NOT_ANSWERED) {
+				setTimeout(() => {
+					this.props.onCallEnded();
+				}, 1500);
+			}
         });
 	};
 	
@@ -78,28 +86,6 @@ class OnCallComponent extends React.Component {
 
 	componentDidMount() {
         this.addSubscriptions();
-	}
-
-	onPressAnswer() {
-
-	}
-
-	onPressEndCallin() {
-
-	}
-
-	onPressEndCallout() {
-
-	}
-
-	onPressEndCall() {
-		this.props.AZStackCore.stopCallout().then((result) => {
-			setTimeout(() => {
-				// this.props.onBackButtonPressed();
-				this.props.onEndCall();
-			}, 500);
-		});
-		
 	}
 
 	renderStatus() {
@@ -184,13 +170,15 @@ class OnCallComponent extends React.Component {
 		);
 	}
 
-	onPressEndCallout() {
-	}
-
-	onPressEndCallin() {
+	onPressEndCall() {
+		this.props.onEndCall();
 	}
 
 	onPressAnswer() {
+	}
+
+	onPressReject() {
+		
 	}
 
 }
