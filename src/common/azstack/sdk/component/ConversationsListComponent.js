@@ -52,6 +52,12 @@ class ConversationsListComponent extends React.Component {
             }
             this.onHasNewMessage(result);
         });
+        this.subscriptions.onMessageFromMe = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_MESSAGE_FROM_ME, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onMessageFromMe(result);
+        });
     };
     clearSubscriptions() {
         for (let subscriptionName in this.subscriptions) {
@@ -306,6 +312,45 @@ class ConversationsListComponent extends React.Component {
                 unread: 1,
                 deleted: this.props.AZStackCore.chatConstants.CONVERSATION_DELETED_FALSE,
                 modified: newMessage.modified,
+                prepared: true
+            };
+            if (newConversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER) {
+                conversation.searchString = newConversation.chatTarget.fullname.toLowerCase();
+            } else if (newConversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
+                conversation.searchString = newConversation.chatTarget.name.toLowerCase();
+                newConversation.chatTarget.members.map((member) => {
+                    conversation.searchString += ` ${member.fullname.toLowerCase()}`;
+                });
+            }
+            unorderConversations.push(newConversation);
+        }
+        this.setState({
+            conversations: unorderConversations.sort((a, b) => {
+                return a.lastMessage.created > b.lastMessage.created ? -1 : 1
+            })
+        });
+    };
+    onMessageFromMe(myMessage) {
+        let foundConversation = false;
+        for (let i = 0; i < this.state.conversations.length; i++) {
+            let conversation = this.state.conversations[i];
+            if (conversation.chatType === myMessage.chatType && conversation.chatId === myMessage.chatId) {
+                foundConversation = true;
+                conversation.lastMessage = myMessage;
+                conversation.unread = 0;
+                break;
+            }
+        }
+        let unorderConversations = [].concat(this.state.conversations);
+        if (!foundConversation) {
+            let newConversation = {
+                chatType: myMessage.chatType,
+                chatId: myMessage.chatId,
+                chatTarget: myMessage.receiver,
+                lastMessage: myMessage,
+                unread: 0,
+                deleted: this.props.AZStackCore.chatConstants.CONVERSATION_DELETED_FALSE,
+                modified: myMessage.modified,
                 prepared: true
             };
             if (newConversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER) {
