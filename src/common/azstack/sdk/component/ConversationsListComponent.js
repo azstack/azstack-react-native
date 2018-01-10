@@ -30,6 +30,8 @@ class ConversationsListComponent extends React.Component {
             searchText: ''
         };
 
+        this.handleLoadMore = this.handleLoadMore.bind(this);
+
         this.onSearchTextChanged = this.onSearchTextChanged.bind(this);
         this.onSearchTextCleared = this.onSearchTextCleared.bind(this);
         this.getFilteredConversations = this.getFilteredConversations.bind(this);
@@ -256,6 +258,10 @@ class ConversationsListComponent extends React.Component {
         });
     };
 
+    handleLoadMore() {
+        this.getConversations();
+    };
+
     onSearchTextChanged(newText) {
         this.setState({ searchText: newText });
     };
@@ -376,6 +382,8 @@ class ConversationsListComponent extends React.Component {
                                     />
                                 );
                             }}
+                            onEndReached={this.handleLoadMore}
+                            onEndReachedThreshold={100}
                         />
                     }
                 </ScreenBodyBlockComponent>
