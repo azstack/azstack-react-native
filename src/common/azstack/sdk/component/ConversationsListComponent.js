@@ -44,6 +44,12 @@ class ConversationsListComponent extends React.Component {
             }
             this.getConversations();
         });
+        this.subscriptions.onHasNewMessage = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_NEW_MESSAGE, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onHasNewMessage(result);
+        });
     };
     clearSubscriptions() {
         for (let subscriptionName in this.subscriptions) {
@@ -270,6 +276,46 @@ class ConversationsListComponent extends React.Component {
                 }
             }
             return matched;
+        });
+    };
+
+    onHasNewMessage(newMessage) {
+        let foundConversation = false;
+        for (let i = 0; i < this.state.conversations.length; i++) {
+            let conversation = this.state.conversations[i];
+            if (conversation.chatType === newMessage.chatType && conversation.chatId === newMessage.chatId) {
+                foundConversation = true;
+                conversation.lastMessage = newMessage;
+                conversation.unread += 1;
+                break;
+            }
+        }
+        let unorderConversations = [].concat(this.state.conversations);
+        if (!foundConversation) {
+            let newConversation = {
+                chatType: newMessage.chatType,
+                chatId: newMessage.chatId,
+                chatTarget: newMessage.receiver,
+                lastMessage: newMessage,
+                unread: 1,
+                deleted: this.props.AZStackCore.chatConstants.CONVERSATION_DELETED_FALSE,
+                modified: newMessage.modified,
+                prepared: true
+            };
+            if (newConversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER) {
+                conversation.searchString = newConversation.chatTarget.fullname.toLocaleLowerCase();
+            } else if (newConversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
+                conversation.searchString = newConversation.chatTarget.name.toLocaleLowerCase();
+                newConversation.chatTarget.members.map((member) => {
+                    conversation.searchString += ` ${member.fullname.toLocaleLowerCase()}`;
+                });
+            }
+            unorderConversations.push(newConversation);
+        }
+        this.setState({
+            conversations: unorderConversations.sort((a, b) => {
+                return a.lastMessage.created > b.lastMessage.created ? -1 : 1
+            })
         });
     };
 

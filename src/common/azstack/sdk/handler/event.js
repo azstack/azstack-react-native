@@ -21,6 +21,54 @@ class Event {
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_CALLOUT_STAUTUS_CHANGED] = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_CALLOUT_STATUS_CHANGED_RETURN, { error, result });
         };
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_HAS_NEW_MESSAGE] = (error, result) => {
+            if (error) {
+                this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_NEW_MESSAGE, { error, result: null });
+                return;
+            }
+            let newMessage = result;
+            Promise.all([
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.getUsersInformation({
+                        userIds: [newMessage.senderId]
+                    }).then((result) => {
+                        newMessage.sender = result.list[0];
+                        resolve(null);
+                    }).catch((error) => {
+                        newMessage.sender = { userId: newMessage.senderId };
+                        resolve(null);
+                    });
+                }),
+                new Promise((resolve, reject) => {
+                    if (newMessage.chatType === this.AZStackCore.chatConstants.CHAT_TYPE_USER) {
+                        this.AZStackCore.getUsersInformation({
+                            userIds: [newMessage.receiverId]
+                        }).then((result) => {
+                            newMessage.receiver = result.list[0];
+                            resolve(null);
+                        }).catch((error) => {
+                            newMessage.receiver = { userId: newMessage.receiverId };
+                            resolve(null);
+                        });
+                    } else if (newMessage.chatType === this.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
+                        this.AZStackCore.getDetailsGroup({
+                            groupId: newMessage.receiverId
+                        }).then((result) => {
+                            newMessage.receiver = result;
+                            resolve(null);
+                        }).catch((error) => {
+                            newMessage.receiver = { groupId: newMessage.receiverId };
+                            resolve(null);
+                        });
+                    } else {
+                        newMessage.receiver = {};
+                        resolve(null);
+                    }
+                })
+            ]).then(() => {
+                this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_NEW_MESSAGE, { error: null, result: newMessage });
+            }).catch((error) => { });
+        };
     };
 };
 
