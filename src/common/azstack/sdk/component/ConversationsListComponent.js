@@ -58,6 +58,12 @@ class ConversationsListComponent extends React.Component {
             }
             this.onMessageFromMe(result);
         });
+        this.subscriptions.onMessageStatusChanged = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_MESSAGE_STATUS_CHANGED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onMessageStatusChanged(result);
+        });
     };
     clearSubscriptions() {
         for (let subscriptionName in this.subscriptions) {
@@ -368,6 +374,17 @@ class ConversationsListComponent extends React.Component {
                 return a.lastMessage.created > b.lastMessage.created ? -1 : 1
             })
         });
+    };
+    onMessageStatusChanged(newStatus) {
+        let newConversations = [...this.state.conversations];
+        for (let i = 0; i < newConversations.length; i++) {
+            if (newConversations[i].chatType === newStatus.chatType && newConversations[i].chatId === newStatus.chatId && newConversations[i].lastMessage.msgId === newStatus.msgId) {
+                newConversations[i].lastMessage.status = newStatus.messageStatus;
+                break;
+            }
+        }
+        console.log(newConversations);
+        this.setState({ conversations: newConversations });
     };
 
     onConversationClicked(conversation) { };

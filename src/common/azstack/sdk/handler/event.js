@@ -117,6 +117,9 @@ class Event {
                 this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_MESSAGE_FROM_ME, { error: null, result: myMessage });
             }).catch((error) => { });
         };
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED] = (error, result) => {
+            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_MESSAGE_STATUS_CHANGED, { error, result });
+        };
     };
 };
 
