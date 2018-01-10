@@ -102,7 +102,7 @@ class ConversationsListComponent extends React.Component {
                             userIds: [conversation.chatId]
                         }).then((result) => {
                             conversation.chatTarget = result.list[0];
-                            conversation.searchString = result.list[0].fullname.toLocaleLowerCase();
+                            conversation.searchString = result.list[0].fullname.toLowerCase();
                             resolve(conversation);
                         }).catch((error) => {
                             conversation.chatTarget = { userId: conversation.chatId };
@@ -113,9 +113,9 @@ class ConversationsListComponent extends React.Component {
                             groupId: conversation.chatId
                         }).then((result) => {
                             conversation.chatTarget = result;
-                            conversation.searchString = result.name.toLocaleLowerCase();
+                            conversation.searchString = result.name.toLowerCase();
                             result.members.map((member) => {
-                                conversation.searchString += ` ${member.fullname.toLocaleLowerCase()}`;
+                                conversation.searchString += ` ${member.fullname.toLowerCase()}`;
                             });
                             resolve(conversation);
                         }).catch((error) => {
@@ -266,7 +266,7 @@ class ConversationsListComponent extends React.Component {
         if (!this.state.searchText) {
             return this.state.conversations;
         }
-        let searchParts = this.state.searchText.toLocaleLowerCase().split(' ');
+        let searchParts = this.state.searchText.toLowerCase().split(' ');
         return this.state.conversations.filter((conversation) => {
             let matched = false;
             for (let i = 0; i < searchParts.length; i++) {
@@ -303,11 +303,11 @@ class ConversationsListComponent extends React.Component {
                 prepared: true
             };
             if (newConversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER) {
-                conversation.searchString = newConversation.chatTarget.fullname.toLocaleLowerCase();
+                conversation.searchString = newConversation.chatTarget.fullname.toLowerCase();
             } else if (newConversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
-                conversation.searchString = newConversation.chatTarget.name.toLocaleLowerCase();
+                conversation.searchString = newConversation.chatTarget.name.toLowerCase();
                 newConversation.chatTarget.members.map((member) => {
-                    conversation.searchString += ` ${member.fullname.toLocaleLowerCase()}`;
+                    conversation.searchString += ` ${member.fullname.toLowerCase()}`;
                 });
             }
             unorderConversations.push(newConversation);
