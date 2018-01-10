@@ -32,7 +32,25 @@ class ConversationLastMessageBlockComponent extends React.Component {
                 {
                     this.props.lastMessage.status === this.props.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED && (
                         <Text>
-                            {`[ ${this.props.Language.getText('MESSAGE_STATUS_CANCEL_TEXT')} ]`}
+                            <Text
+                                style={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE')}
+                            >
+                                {this.getNameSender(this.props.lastMessage.sender)}
+                            </Text>
+                            <Text
+                                style={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE')}
+                            >
+                                {
+                                    [
+                                        this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT,
+                                        this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER,
+                                        this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE
+                                    ].indexOf(this.props.lastMessage.type) > -1 ? ':' : ''
+                                }
+                            </Text>
+                            <Text>
+                                {`[ ${this.props.Language.getText('MESSAGE_STATUS_CANCEL_TEXT')} ]`}
+                            </Text>
                         </Text>
                     )
                 }

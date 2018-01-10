@@ -383,7 +383,6 @@ class ConversationsListComponent extends React.Component {
                 break;
             }
         }
-        console.log(newConversations);
         this.setState({ conversations: newConversations });
     };
 
