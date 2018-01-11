@@ -76,6 +76,7 @@ class ConversationBlockComponent extends React.Component {
                     <TimeFromNowBlockComponent
                         Language={this.props.Language}
                         CustomStyle={this.props.CustomStyle}
+                        textStyle={this.props.CustomStyle.getStyle('CONVERSATION_FROM_NOW_TEXT_STYLE')}
                         time={this.props.conversation.lastMessage.created}
                     />
                     {

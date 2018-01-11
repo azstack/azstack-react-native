@@ -221,6 +221,9 @@ export const CONVERSATION_LAST_MESSAGE_BLOCK_STYLE = {
     lineHeight: 30,
     color: '#2F353B'
 };
+export const CONVERSATION_FROM_NOW_TEXT_STYLE = {
+    fontSize: 15
+};
 export const CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE = {
     fontWeight: '500'
 };

@@ -97,7 +97,10 @@ class TimeFromNowBlockComponent extends React.Component {
     render() {
         return (
             <Text
-                style={this.props.CustomStyle.getStyle('FROM_NOW_TIME_TEXT_STYLE')}
+                style={[
+                    this.props.CustomStyle.getStyle('FROM_NOW_TIME_TEXT_STYLE'),
+                    (this.props.textStyle ? this.props.textStyle : {})
+                ]}
             >
                 {this.calculateFromNow()}
             </Text>
