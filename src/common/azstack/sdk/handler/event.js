@@ -129,6 +129,7 @@ class Event {
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_TYPING] = (error, result) => {
             if (error) {
                 this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_TYPING, { error, result: null });
+                return;
             }
             let typingDetails = result;
             new Promise.all([
@@ -146,6 +147,151 @@ class Event {
             ]).then(() => {
                 this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_TYPING, { error: null, result: typingDetails });
             }).catch(() => { });
+        };
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_GROUP_CREATED] = (error, result) => {
+            if (error) {
+                this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_GROUP_CREATED, { error, result: null });
+                return;
+            }
+            let newMessage = result;
+            Promise.all([
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.getUsersInformation({
+                        userIds: [newMessage.senderId]
+                    }).then((result) => {
+                        newMessage.sender = result.list[0];
+                        resolve(null);
+                    }).catch((error) => {
+                        newMessage.sender = { userId: newMessage.senderId };
+                        resolve(null);
+                    });
+                }),
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.getDetailsGroup({
+                        groupId: newMessage.receiverId
+                    }).then((result) => {
+                        newMessage.receiver = result;
+                        resolve(null);
+                    }).catch((error) => {
+                        newMessage.receiver = { groupId: newMessage.receiverId };
+                        resolve(null);
+                    });
+                })
+            ]).then(() => {
+                this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_GROUP_CREATED, { error: null, result: newMessage });
+            }).catch((error) => { });
+        };
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_GROUP_INVITED] = (error, result) => {
+            if (error) {
+                this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_GROUP_INVITED, { error, result: null });
+                return;
+            }
+            let newMessage = result;
+            newMessage.invited.invites = [];
+            Promise.all([
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.getUsersInformation({
+                        userIds: [newMessage.senderId]
+                    }).then((result) => {
+                        newMessage.sender = result.list[0];
+                        resolve(null);
+                    }).catch((error) => {
+                        newMessage.sender = { userId: newMessage.senderId };
+                        resolve(null);
+                    });
+                }),
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.getDetailsGroup({
+                        groupId: newMessage.receiverId
+                    }).then((result) => {
+                        newMessage.receiver = result;
+                        resolve(null);
+                    }).catch((error) => {
+                        newMessage.receiver = { groupId: newMessage.receiverId };
+                        resolve(null);
+                    });
+                }),
+                Promise.all(
+                    newMessage.invited.inviteIds.map((inviteId) => {
+                        return new Promise((resolve, reject) => {
+                            this.AZStackCore.getUsersInformation({
+                                userIds: [inviteId]
+                            }).then((result) => {
+                                newMessage.invited.invites.push(result.list[0]);
+                                resolve(null);
+                            }).catch((error) => {
+                                newMessage.invited.invites.push({ userId: inviteId });
+                                resolve(null);
+                            });
+                        })
+                    })
+                )
+            ]).then(() => {
+                this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_GROUP_INVITED, { error: null, result: newMessage });
+            }).catch((error) => {
+                console.log(error);
+            });
+        };
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_GROUP_LEFT] = (error, result) => {
+            if (error) {
+                this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_GROUP_LEFT, { error, result: null });
+                return;
+            }
+            let newMessage = result;
+            Promise.all([
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.getUsersInformation({
+                        userIds: [newMessage.senderId]
+                    }).then((result) => {
+                        newMessage.sender = result.list[0];
+                        resolve(null);
+                    }).catch((error) => {
+                        newMessage.sender = { userId: newMessage.senderId };
+                        resolve(null);
+                    });
+                }),
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.getDetailsGroup({
+                        groupId: newMessage.receiverId
+                    }).then((result) => {
+                        newMessage.receiver = result;
+                        resolve(null);
+                    }).catch((error) => {
+                        newMessage.receiver = { groupId: newMessage.receiverId };
+                        resolve(null);
+                    });
+                }),
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.getUsersInformation({
+                        userIds: [newMessage.left.leaveId]
+                    }).then((result) => {
+                        newMessage.left.leave = result.list[0];
+                        resolve(null);
+                    }).catch((error) => {
+                        newMessage.left.leave = { userId: newMessage.left.leaveId }
+                        resolve(null);
+                    });
+                }),
+                new Promise((resolve, reject) => {
+                    if (!newMessage.left.newAdminId) {
+                        resolve(null);
+                        return;
+                    }
+                    this.AZStackCore.getUsersInformation({
+                        userIds: [newMessage.left.newAdminId]
+                    }).then((result) => {
+                        newMessage.left.newAdmin = result.list[0];
+                        resolve(null);
+                    }).catch((error) => {
+                        newMessage.left.newAdmin = { userId: newMessage.left.newAdminId }
+                        resolve(null);
+                    });
+                })
+            ]).then(() => {
+                this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_GROUP_LEFT, { error: null, result: newMessage });
+            }).catch((error) => {
+                console.log(error);
+            });
         };
     };
 };
