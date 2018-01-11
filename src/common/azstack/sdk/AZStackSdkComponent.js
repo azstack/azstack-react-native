@@ -15,34 +15,13 @@ import { AZStackCore } from '../core/';
 
 import Event from './handler/event';
 
-import ScreenBlockComponent from './component/part/screen/ScreenBlockComponent';
-import ScreenHeaderBlockComponent from './component/part/screen/ScreenHeaderBlockComponent';
-import ScreenBodyBlockComponent from './component/part/screen/ScreenBodyBlockComponent';
-import EmptyBlockComponent from './component/part/common/EmptyBlockComponent';
+import AZStackBaseComponent from './component/AZStackBaseComponent';
 
-import ConversationsListComponent from './component/ConversationsListComponent';
-import OnCallComponent from './component/OnCallComponent';
-import ContactComponent from './component/ContactComponent';
-import NumberPadComponent from './component/NumberPadComponent';
-
-const NavigationEnum = {
-    ConversationsListComponent: 'ConversationsListComponent',
-    OnCallComponent: 'OnCallComponent',
-    ContactComponent: 'ContactComponent',
-    NumberPadComponent: 'NumberPadComponent'
-}
-
-export class AZStackSdkComponent extends React.Component {
+export class AZStackSdkComponent extends AZStackBaseComponent {
     constructor(props) {
         super(props);
         this.state = {
-            currentScreen: '',
-            options: null,
-        };
-        const { width, height } = Dimensions.get('window');
-        this.Sizes = {
-            width,
-            height: height - StatusBar.currentHeight
+            navigation: [],
         };
 
         this.eventConstants = eventConstants;
@@ -64,21 +43,7 @@ export class AZStackSdkComponent extends React.Component {
         this.Event.delegatesToEvents();
     };
 
-    render() {
-        switch(this.state.currentScreen) {
-            case 'ConversationsListComponent': 
-                return this.renderConversationsList(this.state.options);
-            case 'OnCallComponent': 
-                return this.renderOnCall(this.state.options);
-            case 'ContactComponent': 
-                return this.renderContact(this.state.options);
-            case 'NumberPadComponent': 
-                return this.renderNumberPad(this.state.options);
-            default: 
-                return null;
-        }
-    }
-
+    /* AZStack functions */
     connect() {
         return this.AZStackCore.connect();
     };
@@ -88,10 +53,6 @@ export class AZStackSdkComponent extends React.Component {
 
     getConstants(constantGroup) {
         return this.AZStackCore[constantGroup];
-    }
-
-    getNavigation() {
-        return NavigationEnum;
     }
 
     onCallout(options) {
@@ -177,77 +138,5 @@ export class AZStackSdkComponent extends React.Component {
                 }
             },
         })
-    }
-
-    navigate(screen, options) {
-        this.setState({
-            currentScreen: screen,
-            options: {
-                ...options,
-                moreOption: ':D'
-            }
-        })
-    }
-
-    dismiss() {
-        this.setState({
-            currentScreen: '',
-            options: null,
-        })
-    }
-
-    renderConversationsList(options) {
-        return <ConversationsListComponent
-            Sizes={this.Sizes}
-            Language={this.Language}
-            CustomStyle={this.CustomStyle}
-            eventConstants={this.eventConstants}
-            AZStackCore={this.AZStackCore}
-            EventEmitter={this.EventEmitter}
-            onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => {
-                this.setState({currentScreen: '', options: null})
-            }}
-        />;
-    };
-
-    renderOnCall(options) {
-        return <OnCallComponent
-            Sizes={this.Sizes}
-            Language={this.Language}
-            CustomStyle={this.CustomStyle}
-            eventConstants={this.eventConstants}
-            AZStackCore={this.AZStackCore}
-            EventEmitter={this.EventEmitter}
-            {...options}
-        />;
-    }
-
-    renderContact(options) {
-        return <ContactComponent
-            Sizes={this.Sizes}
-            Language={this.Language}
-            CustomStyle={this.CustomStyle}
-            eventConstants={this.eventConstants}
-            AZStackCore={this.AZStackCore}
-            EventEmitter={this.EventEmitter}
-            onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => {
-                this.setState({currentScreen: '', options: null})
-            }}
-        />;
-    }
-
-    renderNumberPad(options) {
-        return <NumberPadComponent
-            Sizes={this.Sizes}
-            Language={this.Language}
-            CustomStyle={this.CustomStyle}
-            eventConstants={this.eventConstants}
-            AZStackCore={this.AZStackCore}
-            EventEmitter={this.EventEmitter}
-            onCallout={(options) => this.startCallout(options)}
-            onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => {
-                this.setState({currentScreen: '', options: null})
-            }}
-        />;
     }
 };
