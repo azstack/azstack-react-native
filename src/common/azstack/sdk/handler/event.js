@@ -10,16 +10,22 @@ class Event {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_AUTHENTICATED_RETURN, { error, result });
         };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_FREE_CALL_STAUTUS_CHANGED] = (error, result) => {
-            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_FREE_CALL_STATUS_CHANGED_RETURN, { error, result });
+            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_FREE_CALL_STATUS_CHANGED, { error, result });
         };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_FREE_CALL_STAUTUS_CHANGED_BY_ME] = (error, result) => {
-            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_FREE_CALL_STATUS_CHANGED_BY_ME_RETURN, { error, result });
+            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_FREE_CALL_STATUS_CHANGED_BY_ME, { error, result });
         };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_CALLIN_STATUS_CHANGED] = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_CALLIN_STATUS_CHANGED_RETURN, { error, result });
         };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_CALLOUT_STAUTUS_CHANGED] = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_CALLOUT_STATUS_CHANGED_RETURN, { error, result });
+        };
+        this.AZStackCore.Delegates.onLocalStreamArrived = (error, result) => {
+            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_LOCAL_STREAM_ARRIVED, { error, result });
+        };
+        this.AZStackCore.Delegates.onRemoteStreamArrived = (error, result) => {
+            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_REMOTE_STREAM_ARRIVED, { error, result });
         };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_HAS_NEW_MESSAGE] = (error, result) => {
             if (error) {

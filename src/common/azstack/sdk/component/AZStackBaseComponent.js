@@ -9,12 +9,14 @@ import ConversationsListComponent from './ConversationsListComponent';
 import OnCallComponent from './OnCallComponent';
 import ContactComponent from './ContactComponent';
 import NumberPadComponent from './NumberPadComponent';
+import VideoCallComponent from './VideoCallComponent';
 
 const NavigationEnum = {
     ConversationsListComponent: 'ConversationsListComponent',
     OnCallComponent: 'OnCallComponent',
     ContactComponent: 'ContactComponent',
-    NumberPadComponent: 'NumberPadComponent'
+    NumberPadComponent: 'NumberPadComponent',
+    VideoCallComponent: 'VideoCallComponent',
 }
 
 export default class AZStackBaseComponent extends React.Component {
@@ -46,6 +48,9 @@ export default class AZStackBaseComponent extends React.Component {
                     break;
                 case 'NumberPadComponent': 
                     screens.push(this.renderNumberPad(value.options, index));
+                    break;
+                case 'VideoCallComponent': 
+                    screens.push(this.renderVideoCall(value.options, index));
                     break;
                 default: 
                     break;
@@ -142,6 +147,21 @@ export default class AZStackBaseComponent extends React.Component {
             AZStackCore={this.AZStackCore}
             EventEmitter={this.EventEmitter}
             onCallout={(options) => this.startCallout(options)}
+            onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => {
+                this.pop();
+            }}
+        />;
+    }
+
+    renderVideoCall(options, key) {
+        return <VideoCallComponent
+            key={key}
+            Sizes={this.Sizes}
+            Language={this.Language}
+            CustomStyle={this.CustomStyle}
+            eventConstants={this.eventConstants}
+            AZStackCore={this.AZStackCore}
+            EventEmitter={this.EventEmitter}
             onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => {
                 this.pop();
             }}

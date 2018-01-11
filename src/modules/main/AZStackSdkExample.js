@@ -35,8 +35,7 @@ class AZStackSdkExample extends React.Component {
     }
 
     audioCall() {
-        this.refs.AZStackSdk.startFreeCall({
-            mediaType: this.refs.AZStackSdk.getConstants('callConstants').CALL_MEDIA_TYPE_AUDIO,
+        this.refs.AZStackSdk.startAudioCall({
             info: {
                 name: 'User 2',
                 phoneNumber: '',
@@ -49,8 +48,7 @@ class AZStackSdkExample extends React.Component {
     };
 
     videoCall() {
-        this.refs.AZStackSdk.startFreeCall({
-            mediaType: this.refs.AZStackSdk.getConstants('callConstants').CALL_MEDIA_TYPE_VIDEO,
+        this.refs.AZStackSdk.startVideoCall({
             info: {
                 name: 'User 2',
                 phoneNumber: '',

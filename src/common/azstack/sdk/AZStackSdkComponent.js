@@ -55,14 +55,6 @@ export class AZStackSdkComponent extends AZStackBaseComponent {
         return this.AZStackCore[constantGroup];
     }
 
-    onCallout(options) {
-        return this.renderOnCall(options);
-    }
-
-    onFreeCall(otpions) {
-        return this.renderOnCall(options);
-    }
-
     onCallinStart(error, result) {
         this.navigate(NavigationEnum.OnCallComponent, {
             info: {
@@ -99,44 +91,67 @@ export class AZStackSdkComponent extends AZStackBaseComponent {
 
         });
 
-        this.setState({
-            currentScreen: NavigationEnum.OnCallComponent,
-            options: {
-                ...options,
+        this.navigate(
+            this.getNavigation().NumberPadComponent, 
+            {
+                ...options, 
                 onEndCall: () => {
                     if(options.onEndCall) {
                         options.onEndCall()
                     }
                     this.AZStackCore.stopCallout().then((result) => {
                         setTimeout(() => {
-                            this.dismiss();
+                            this.pop();
                         }, 1500);
                     });
                 }
-            },
-        })
+            }
+        );
     }
 
-    startFreeCall(options) {
+    startAudioCall(options) {
         this.AZStackCore.startFreeCall({
-            mediaType: options.mediaType,
+            mediaType: this.AZStackCore.callConstants.CALL_MEDIA_TYPE_AUDIO,
             toUserId: options.info.userId,
         }).then((result) => {
 
         });
 
-        this.setState({
-            currentScreen: NavigationEnum.OnCallComponent,
-            options: {
-                ...options,
+        this.navigate(
+            this.getNavigation().OnCallComponent, 
+            {
+                ...options, 
                 onEndCall: () => {
                     if(options.onEndCall) {
                         options.onEndCall()
                     }
 
-                    this.dismiss();
+                    this.pop();
                 }
-            },
-        })
+            }
+        );
+    }
+
+    startVideoCall(options) {
+        this.AZStackCore.startFreeCall({
+            mediaType: this.AZStackCore.callConstants.CALL_MEDIA_TYPE_VIDEO,
+            toUserId: options.info.userId,
+        }).then((result) => {
+
+        });
+
+        this.navigate(
+            this.getNavigation().VideoCallComponent, 
+            {
+                ...options, 
+                onEndCall: () => {
+                    if(options.onEndCall) {
+                        options.onEndCall()
+                    }
+
+                    this.pop();
+                }
+            }
+        );
     }
 };
