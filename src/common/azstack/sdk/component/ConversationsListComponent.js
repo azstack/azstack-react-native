@@ -376,14 +376,15 @@ class ConversationsListComponent extends React.Component {
         });
     };
     onMessageStatusChanged(newStatus) {
-        let newConversations = [...this.state.conversations];
-        for (let i = 0; i < newConversations.length; i++) {
-            if (newConversations[i].chatType === newStatus.chatType && newConversations[i].chatId === newStatus.chatId && newConversations[i].lastMessage.msgId === newStatus.msgId) {
-                newConversations[i].lastMessage.status = newStatus.messageStatus;
+        let conversations = [].concat(this.state.conversations);
+        for (let i = 0; i < conversations.length; i++) {
+            let conversation = conversations[i];
+            if (conversation.chatType === newStatus.chatType && conversation.chatId === newStatus.chatId && conversation.lastMessage.msgId === newStatus.msgId) {
+                conversation.lastMessage.status = newStatus.messageStatus;
                 break;
             }
         }
-        this.setState({ conversations: newConversations });
+        this.setState({ conversations: conversations });
     };
 
     onConversationClicked(conversation) { };

@@ -11,30 +11,24 @@ class SearchBlockComponent extends React.Component {
     constructor(props) {
         super(props);
 
-        this.textInputRef = null;
-
         this.state = {
             searchText: '',
             textInputFocused: false
         };
 
-        this.onTextInputInitDone = this.onTextInputInitDone.bind(this);
         this.onSearchTextChanged = this.onSearchTextChanged.bind(this);
         this.clearSearchText = this.clearSearchText.bind(this);
         this.onTextInputFocused = this.onTextInputFocused.bind(this);
         this.onTextInputBlured = this.onTextInputBlured.bind(this);
     }
 
-    onTextInputInitDone(textInputRef) {
-        this.textInputRef = textInputRef;
-    };
     onSearchTextChanged(newText) {
         this.setState({ searchText: newText });
         this.props.onSearchTextChanged(newText);
     };
     clearSearchText() {
         this.setState({ searchText: '' });
-        // this.textInputRef.blur();
+        // this.refs.TextInput.blur();
         this.props.onSearchTextCleared();
     };
     onTextInputFocused() {
@@ -50,7 +44,7 @@ class SearchBlockComponent extends React.Component {
                 style={this.props.CustomStyle.getStyle('SEARCH_BLOCK_STYLE')}
             >
                 <TextInput
-                    ref={this.onTextInputInitDone}
+                    ref={'TextInput'}
                     style={[
                         this.props.CustomStyle.getStyle('SEARCH_INPUT_STYLE'),
                         (this.state.textInputFocused ? this.props.CustomStyle.getStyle('SEARCH_INPUT_FOCUS_STYLE') : {})
