@@ -70,6 +70,12 @@ class ConversationsListComponent extends React.Component {
             }
             this.onTyping(result);
         });
+        this.subscriptions.onGroupCreated = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_GROUP_CREATED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onGroupCreated(result);
+        });
     };
     clearSubscriptions() {
         for (let subscriptionName in this.subscriptions) {
@@ -327,11 +333,11 @@ class ConversationsListComponent extends React.Component {
                 prepared: true
             };
             if (newConversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER) {
-                conversation.searchString = newConversation.chatTarget.fullname.toLowerCase();
+                newConversation.searchString = newConversation.chatTarget.fullname.toLowerCase();
             } else if (newConversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
-                conversation.searchString = newConversation.chatTarget.name.toLowerCase();
+                newConversation.searchString = newConversation.chatTarget.name.toLowerCase();
                 newConversation.chatTarget.members.map((member) => {
-                    conversation.searchString += ` ${member.fullname.toLowerCase()}`;
+                    newConversation.searchString += ` ${member.fullname.toLowerCase()}`;
                 });
             }
             unorderConversations.push(newConversation);
@@ -366,11 +372,11 @@ class ConversationsListComponent extends React.Component {
                 prepared: true
             };
             if (newConversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER) {
-                conversation.searchString = newConversation.chatTarget.fullname.toLowerCase();
+                newConversation.searchString = newConversation.chatTarget.fullname.toLowerCase();
             } else if (newConversation.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
-                conversation.searchString = newConversation.chatTarget.name.toLowerCase();
+                newConversation.searchString = newConversation.chatTarget.name.toLowerCase();
                 newConversation.chatTarget.members.map((member) => {
-                    conversation.searchString += ` ${member.fullname.toLowerCase()}`;
+                    newConversation.searchString += ` ${member.fullname.toLowerCase()}`;
                 });
             }
             unorderConversations.push(newConversation);
@@ -434,6 +440,29 @@ class ConversationsListComponent extends React.Component {
             }
         }
         this.setState({ conversations: conversations });
+    };
+    onGroupCreated(newMessage) {
+        let unorderConversations = [].concat(this.state.conversations);
+        let newConversation = {
+            chatType: newMessage.chatType,
+            chatId: newMessage.chatId,
+            chatTarget: newMessage.receiver,
+            lastMessage: newMessage,
+            unread: 1,
+            deleted: this.props.AZStackCore.chatConstants.CONVERSATION_DELETED_FALSE,
+            modified: newMessage.modified,
+            prepared: true
+        };
+        newConversation.searchString = newConversation.chatTarget.name.toLowerCase();
+        newConversation.chatTarget.members.map((member) => {
+            newConversation.searchString += ` ${member.fullname.toLowerCase()}`;
+        });
+        unorderConversations.push(newConversation);
+        this.setState({
+            conversations: unorderConversations.sort((a, b) => {
+                return a.lastMessage.created > b.lastMessage.created ? -1 : 1
+            })
+        });
     };
 
     onConversationClicked(conversation) { };

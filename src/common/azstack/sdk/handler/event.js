@@ -123,6 +123,7 @@ class Event {
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_TYPING] = (error, result) => {
             if (error) {
                 this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_TYPING, { error, result: null });
+                return;
             }
             let typingDetails = result;
             new Promise.all([
@@ -140,6 +141,39 @@ class Event {
             ]).then(() => {
                 this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_TYPING, { error: null, result: typingDetails });
             }).catch(() => { });
+        };
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_GROUP_CREATED] = (error, result) => {
+            if (error) {
+                this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_GROUP_CREATED, { error, result: null });
+                return;
+            }
+            let newMessage = result;
+            Promise.all([
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.getUsersInformation({
+                        userIds: [newMessage.senderId]
+                    }).then((result) => {
+                        newMessage.sender = result.list[0];
+                        resolve(null);
+                    }).catch((error) => {
+                        newMessage.sender = { userId: newMessage.senderId };
+                        resolve(null);
+                    });
+                }),
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.getDetailsGroup({
+                        groupId: newMessage.receiverId
+                    }).then((result) => {
+                        newMessage.receiver = result;
+                        resolve(null);
+                    }).catch((error) => {
+                        newMessage.receiver = { groupId: newMessage.receiverId };
+                        resolve(null);
+                    });
+                })
+            ]).then(() => {
+                this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_GROUP_CREATED, { error: null, result: newMessage });
+            }).catch((error) => { });
         };
     };
 };
