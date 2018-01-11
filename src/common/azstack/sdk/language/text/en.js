@@ -13,6 +13,10 @@ export const FROM_NOW_MONTH_MANY_TEXT = 'months';
 export const FROM_NOW_YEAR_TEXT = 'year';
 export const FROM_NOW_YEAR_MANY_TEXT = 'years';
 
+export const TYPING_PREPOSITION_TEXT = 'is';
+export const TYPING_PREPOSITION_MANY_TEXT = 'are';
+export const TYPING_TEXT = 'typing...';
+
 export const CONVERSATIONS_LIST_HEADER_TITLE_TEXT = 'Conversations';
 export const CONVERSATIONS_LIST_EMPTY_TEXT = 'No Conversation';
 export const CONVERSATIONS_LIST_SEARCH_PLACEHOLDER_TEXT = 'Search...';

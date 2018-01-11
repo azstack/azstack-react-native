@@ -104,6 +104,15 @@ export const AVATAR_TEXT_STYLE = {
     fontWeight: '500',
     color: '#fff'
 };
+export const TYPING_BLOCK_STYLE = {
+    fontSize: 16,
+    fontWeight: '400',
+    lineHeight: 30,
+    color: '#2F353B'
+};
+export const TYPING_BLOCK_BOLD_STYLE = {
+    fontWeight: '500'
+}
 export const FROM_NOW_TIME_TEXT_STYLE = {
     fontSize: 15,
     fontWeight: '300',
@@ -220,6 +229,9 @@ export const CONVERSATION_LAST_MESSAGE_BLOCK_STYLE = {
     fontWeight: '400',
     lineHeight: 30,
     color: '#2F353B'
+};
+export const CONVERSATION_TYPING_TEXT_STYLE = {
+    fontSize: 16
 };
 export const CONVERSATION_FROM_NOW_TEXT_STYLE = {
     fontSize: 15

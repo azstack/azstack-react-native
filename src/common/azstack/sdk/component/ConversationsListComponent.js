@@ -64,6 +64,12 @@ class ConversationsListComponent extends React.Component {
             }
             this.onMessageStatusChanged(result);
         });
+        this.subscriptions.onTyping = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_TYPING, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onTyping(result);
+        });
     };
     clearSubscriptions() {
         for (let subscriptionName in this.subscriptions) {
@@ -381,6 +387,49 @@ class ConversationsListComponent extends React.Component {
             let conversation = conversations[i];
             if (conversation.chatType === newStatus.chatType && conversation.chatId === newStatus.chatId && conversation.lastMessage.msgId === newStatus.msgId) {
                 conversation.lastMessage.status = newStatus.messageStatus;
+                break;
+            }
+        }
+        this.setState({ conversations: conversations });
+    };
+    onTyping(typingDetails) {
+        let conversations = [].concat(this.state.conversations);
+        for (let i = 0; i < conversations.length; i++) {
+            let conversation = conversations[i];
+            if (conversation.chatType === typingDetails.chatType && conversation.chatId === typingDetails.chatId) {
+                if (!conversation.typing) {
+                    conversation.typing = {
+                        senders: [],
+                        clears: {}
+                    };
+                }
+                if (conversation.typing.clears[typingDetails.sender.userId]) {
+                    clearTimeout(conversation.typing.clears[typingDetails.sender.userId]);
+                } else {
+                    conversation.typing.senders.push(typingDetails.sender);
+                }
+                conversation.typing.clears[typingDetails.sender.userId] = setTimeout(() => {
+                    let conversations = [].concat(this.state.conversations);
+                    for (let i = 0; i < conversations.length; i++) {
+                        let conversation = conversations[i];
+                        if (conversation.chatType === typingDetails.chatType && conversation.chatId === typingDetails.chatId) {
+                            let foundIndex = -1;
+                            for (let j = 0; j < conversation.typing.senders.length; j++) {
+                                let sender = conversation.typing.senders[j];
+                                if (sender.userId === typingDetails.sender.userId) {
+                                    foundIndex = j;
+                                    break;
+                                }
+                            }
+                            if (foundIndex > -1) {
+                                conversation.typing.senders.splice(foundIndex, 1);
+                                delete conversation.typing.clears[typingDetails.sender.userId];
+                            }
+                            break;
+                        }
+                    }
+                    this.setState({ conversations: conversations });
+                }, 5000)
                 break;
             }
         }

@@ -120,6 +120,27 @@ class Event {
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED] = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_MESSAGE_STATUS_CHANGED, { error, result });
         };
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_TYPING] = (error, result) => {
+            if (error) {
+                this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_TYPING, { error, result: null });
+            }
+            let typingDetails = result;
+            new Promise.all([
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.getUsersInformation({
+                        userIds: [typingDetails.senderId]
+                    }).then((result) => {
+                        typingDetails.sender = result.list[0];
+                        resolve(null);
+                    }).catch((error) => {
+                        typingDetails.sender = { userId: myMessage.senderId };
+                        resolve(null);
+                    });
+                })
+            ]).then(() => {
+                this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_TYPING, { error: null, result: typingDetails });
+            }).catch(() => { });
+        };
     };
 };
 

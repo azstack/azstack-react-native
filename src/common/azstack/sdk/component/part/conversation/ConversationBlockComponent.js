@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 
 import ChatAvatarBlockComponent from '../common/ChatAvatarBlockComponent';
+import TypingBlockComponent from '../common/TypingBlockComponent';
 import TimeFromNowBlockComponent from '../common/TimeFromNowBlockComponent';
 import MessageStatusBlockComponent from '../common/MessageStatusBlockComponent';
 import ConversationLastMessageBlockComponent from './ConversationLastMessageBlockComponent';
@@ -67,12 +68,24 @@ class ConversationBlockComponent extends React.Component {
                     >
                         {this.props.conversation.chatTarget.fullname ? this.props.conversation.chatTarget.fullname : this.props.conversation.chatTarget.name}
                     </Text>
-                    <ConversationLastMessageBlockComponent
-                        Language={this.props.Language}
-                        CustomStyle={this.props.CustomStyle}
-                        AZStackCore={this.props.AZStackCore}
-                        lastMessage={this.props.conversation.lastMessage}
-                    />
+                    {
+                        (!this.props.conversation.typing || this.props.conversation.typing.senders.length === 0) &&
+                        <ConversationLastMessageBlockComponent
+                            Language={this.props.Language}
+                            CustomStyle={this.props.CustomStyle}
+                            AZStackCore={this.props.AZStackCore}
+                            lastMessage={this.props.conversation.lastMessage}
+                        />
+                    }
+                    {
+                        this.props.conversation.typing && this.props.conversation.typing.senders.length > 0 &&
+                        <TypingBlockComponent
+                            Language={this.props.Language}
+                            CustomStyle={this.props.CustomStyle}
+                            textStyle={this.props.CustomStyle.getStyle('CONVERSATION_TYPING_TEXT_STYLE')}
+                            typing={this.props.conversation.typing}
+                        />
+                    }
                     <TimeFromNowBlockComponent
                         Language={this.props.Language}
                         CustomStyle={this.props.CustomStyle}
