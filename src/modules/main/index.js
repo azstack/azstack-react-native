@@ -7,7 +7,7 @@ import AZStackSdkExample from './AZStackSdkExample';
 
 class AppMain extends React.Component {
     render() {
-        let exampleType = 'core';
+        let exampleType = 'sdk';
         let azstackConfig = {
             requestTimeout: 60000,
             intervalPingTime: 60000,

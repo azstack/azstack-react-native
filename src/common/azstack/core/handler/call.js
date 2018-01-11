@@ -56,6 +56,14 @@ class Call {
         }
     };
     clearCallData() {
+
+        if (this.callData.webRTC.peerConnection) {
+            this.callData.webRTC.peerConnection.close();
+        }
+        if (this.callData.webRTC.localStream) {
+            this.callData.webRTC.localStream.release();
+        }
+
         this.callData.mediaType = null;
         this.callData.isCaller = null;
         this.callData.callType = null;
@@ -674,9 +682,9 @@ class Call {
                 videoTrack._switchCamera();
             });
 
-            if(this.callData.webRTC.cameraType === this.callConstants.CALL_WEBRTC_CAMERA_TYPE_FRONT) {
+            if (this.callData.webRTC.cameraType === this.callConstants.CALL_WEBRTC_CAMERA_TYPE_FRONT) {
                 this.callData.webRTC.cameraType = this.callConstants.CALL_WEBRTC_CAMERA_TYPE_BACK;
-            } else if(this.callData.webRTC.cameraType === this.callConstants.CALL_WEBRTC_CAMERA_TYPE_BACK) {
+            } else if (this.callData.webRTC.cameraType === this.callConstants.CALL_WEBRTC_CAMERA_TYPE_BACK) {
                 this.callData.webRTC.cameraType = this.callConstants.CALL_WEBRTC_CAMERA_TYPE_FRONT;
             }
 
