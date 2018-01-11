@@ -76,6 +76,18 @@ class ConversationsListComponent extends React.Component {
             }
             this.onGroupCreated(result);
         });
+        this.subscriptions.onGroupInvited = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_GROUP_INVITED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onGroupInvited(result);
+        });
+        this.subscriptions.onGroupLeft = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_GROUP_LEFT, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onGroupLeft(result);
+        });
     };
     clearSubscriptions() {
         for (let subscriptionName in this.subscriptions) {
@@ -222,7 +234,7 @@ class ConversationsListComponent extends React.Component {
                                             conversation.lastMessage.left.leave = result.list[0];
                                             resolve(conversation);
                                         }).catch((error) => {
-                                            conversation.lastMessage.left.leave = { userId: conversation.lastMessage.adminChanged.leaveId }
+                                            conversation.lastMessage.left.leave = { userId: conversation.lastMessage.left.leaveId }
                                             resolve(conversation);
                                         });
                                     })
@@ -236,7 +248,7 @@ class ConversationsListComponent extends React.Component {
                                                 conversation.lastMessage.left.newAdmin = result.list[0];
                                                 resolve(conversation);
                                             }).catch((error) => {
-                                                conversation.lastMessage.left.newAdmin = { userId: conversation.lastMessage.adminChanged.newAdminId }
+                                                conversation.lastMessage.left.newAdmin = { userId: conversation.lastMessage.left.newAdminId }
                                                 resolve(conversation);
                                             });
                                         })
@@ -268,7 +280,7 @@ class ConversationsListComponent extends React.Component {
                                     conversation.lastMessage.joined.join = result.list[0];
                                     resolve(conversation);
                                 }).catch((error) => {
-                                    conversation.lastMessage.joined.join = { userId: conversation.lastMessage.adminChanged.joinId }
+                                    conversation.lastMessage.joined.join = { userId: conversation.lastMessage.joined.joinId }
                                     resolve(conversation);
                                 });
                                 break;
@@ -458,6 +470,86 @@ class ConversationsListComponent extends React.Component {
             newConversation.searchString += ` ${member.fullname.toLowerCase()}`;
         });
         unorderConversations.push(newConversation);
+        this.setState({
+            conversations: unorderConversations.sort((a, b) => {
+                return a.lastMessage.created > b.lastMessage.created ? -1 : 1
+            })
+        });
+    };
+    onGroupInvited(newMessage) {
+        let foundConversation = false;
+        for (let i = 0; i < this.state.conversations.length; i++) {
+            let conversation = this.state.conversations[i];
+            if (conversation.chatType === newMessage.chatType && conversation.chatId === newMessage.chatId) {
+                foundConversation = true;
+                conversation.chatTarget = newMessage.receiver;
+                conversation.searchString = conversation.chatTarget.name.toLowerCase();
+                conversation.chatTarget.members.map((member) => {
+                    conversation.searchString += ` ${member.fullname.toLowerCase()}`;
+                });
+                conversation.lastMessage = newMessage;
+                conversation.unread += 1;
+                break;
+            }
+        }
+        let unorderConversations = [].concat(this.state.conversations);
+        if (!foundConversation) {
+            let newConversation = {
+                chatType: newMessage.chatType,
+                chatId: newMessage.chatId,
+                chatTarget: newMessage.receiver,
+                lastMessage: newMessage,
+                unread: 1,
+                deleted: this.props.AZStackCore.chatConstants.CONVERSATION_DELETED_FALSE,
+                modified: newMessage.modified,
+                prepared: true
+            };
+            newConversation.searchString = newConversation.chatTarget.name.toLowerCase();
+            newConversation.chatTarget.members.map((member) => {
+                newConversation.searchString += ` ${member.fullname.toLowerCase()}`;
+            });
+            unorderConversations.push(newConversation);
+        }
+        this.setState({
+            conversations: unorderConversations.sort((a, b) => {
+                return a.lastMessage.created > b.lastMessage.created ? -1 : 1
+            })
+        });
+    };
+    onGroupLeft(newMessage) {
+        let foundConversation = false;
+        for (let i = 0; i < this.state.conversations.length; i++) {
+            let conversation = this.state.conversations[i];
+            if (conversation.chatType === newMessage.chatType && conversation.chatId === newMessage.chatId) {
+                foundConversation = true;
+                conversation.chatTarget = newMessage.receiver;
+                conversation.searchString = conversation.chatTarget.name.toLowerCase();
+                conversation.chatTarget.members.map((member) => {
+                    conversation.searchString += ` ${member.fullname.toLowerCase()}`;
+                });
+                conversation.lastMessage = newMessage;
+                conversation.unread += 1;
+                break;
+            }
+        }
+        let unorderConversations = [].concat(this.state.conversations);
+        if (!foundConversation) {
+            let newConversation = {
+                chatType: newMessage.chatType,
+                chatId: newMessage.chatId,
+                chatTarget: newMessage.receiver,
+                lastMessage: newMessage,
+                unread: 1,
+                deleted: this.props.AZStackCore.chatConstants.CONVERSATION_DELETED_FALSE,
+                modified: newMessage.modified,
+                prepared: true
+            };
+            newConversation.searchString = newConversation.chatTarget.name.toLowerCase();
+            newConversation.chatTarget.members.map((member) => {
+                newConversation.searchString += ` ${member.fullname.toLowerCase()}`;
+            });
+            unorderConversations.push(newConversation);
+        }
         this.setState({
             conversations: unorderConversations.sort((a, b) => {
                 return a.lastMessage.created > b.lastMessage.created ? -1 : 1
