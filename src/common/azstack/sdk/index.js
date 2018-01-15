@@ -1,7 +1,8 @@
 import React from 'react';
 import {
     StatusBar,
-    Dimensions
+    Dimensions,
+    View,
 } from 'react-native';
 import EventEmitter from 'EventEmitter';
 
@@ -14,26 +15,24 @@ import { AZStackCore } from '../core/';
 
 import Event from './handler/event';
 
-import ConversationsListComponent from './component/ConversationsListComponent';
-import OnCallComponent from './component/OnCallComponent';
-import ContactComponent from './component/ContactComponent';
-import NumberPadComponent from './component/NumberPadComponent';
+import AZStackBaseComponent from './component/AZStackBaseComponent';
 
-export class AZStackSdk {
-    constructor(options) {
-
-        const { width, height } = Dimensions.get('window');
-        this.Sizes = {
-            width,
-            height: height - StatusBar.currentHeight
+export class AZStackSdk extends AZStackBaseComponent {
+    constructor(props) {
+        super(props);
+        this.state = {
+            navigation: [],
         };
 
         this.eventConstants = eventConstants;
 
-        this.Language = new Language({ languageCode: options.languageCode });
-        this.CustomStyle = new CustomStyle({ themeName: options.themeName });
+        this.Language = new Language({ languageCode: props.options.languageCode });
+        this.CustomStyle = new CustomStyle({ themeName: props.options.themeName });
 
-        this.AZStackCore = new AZStackCore(options.azstackConfig);
+        this.AZStackCore = new AZStackCore(props.options.azstackConfig);
+        this.AZStackCore.Delegates.onCallinStart = (error, result) => {
+            this.onCallinStart(error, result);
+        };
 
         this.EventEmitter = new EventEmitter();
         this.Event = new Event({
@@ -42,10 +41,9 @@ export class AZStackSdk {
             EventEmitter: this.EventEmitter
         });
         this.Event.delegatesToEvents();
-
-        this.renderConversationsList = this.renderConversationsList.bind(this);
     };
 
+    /* AZStack functions */
     connect() {
         return this.AZStackCore.connect();
     };
@@ -57,87 +55,152 @@ export class AZStackSdk {
         return this.AZStackCore[constantGroup];
     }
 
-    onCallout(options) {
-        return this.renderOnCall(options);
-    }
-
-    onFreeCall(otpions) {
-        return this.renderOnCall(options);
+    onCallinStart(error, result) {
+        this.navigate(NavigationEnum.OnCallComponent, {
+            info: {
+                phoneNumber: result.fromPhoneNumber
+            },
+            onCallEnded: () => {
+                setTimeout(() => {
+                    this.dismiss();
+                }, 1500);
+            },
+            onEndCall: () => {
+                this.AZStackCore.stopCallin({}, (error, result) => {
+                });
+            },
+            onReject: () => {
+                this.AZStackCore.rejectCallin({}, (error, result) => {
+                });
+            },
+            onAnswer: () => {
+                this.AZStackCore.answerCallin({}, (error, result) => {
+                });
+            },
+            onTimeout: () => {
+                this.AZStackCore.notAnsweredCallin({}, (error, result) => {
+                });
+            }
+        });
     }
 
     startCallout(options) {
         this.AZStackCore.startCallout({
             toPhoneNumber: options.info.phoneNumber
         }).then((result) => {
-            console.log(result);
+
         });
 
-        return this.renderOnCall(options);
+        this.navigate(
+            this.getNavigation().OnCallComponent, 
+            {
+                ...options, 
+                onEndCall: () => {
+                    if(options.onEndCall) {
+                        options.onEndCall()
+                    }
+                    this.AZStackCore.stopCallout().then((result) => {
+                        setTimeout(() => {
+                            this.pop();
+                        }, 1500);
+                    });
+                },
+            }
+        );
     }
 
-    startFreeCall(options) {
+    startAudioCall(options) {
         this.AZStackCore.startFreeCall({
-            mediaType: options.mediaType,
+            mediaType: this.AZStackCore.callConstants.CALL_MEDIA_TYPE_AUDIO,
             toUserId: options.info.userId,
         }).then((result) => {
 
         });
 
-        return this.renderOnCall(options);
+        this.navigate(
+            this.getNavigation().OnCallComponent, 
+            {
+                ...options, 
+                onEndCall: () => {
+                    if(options.onEndCall) {
+                        options.onEndCall()
+                    }
+
+                    this.AZStackCore.stopFreeCall().then((result) => {
+                        setTimeout(() => {
+                            this.pop();
+                        }, 1000);
+                    });
+                }, 
+                onCallEnded: () => {
+                    setTimeout(() => {
+                        this.pop();
+                    }, 1000);
+                }
+            }
+        );
     }
 
-    stopFreeCall(options) {
-		this.AZStackCore.stopCallout().then((result) => {
-		});
+    startVideoCall(options) {
+        this.AZStackCore.startFreeCall({
+            mediaType: this.AZStackCore.callConstants.CALL_MEDIA_TYPE_VIDEO,
+            toUserId: options.info.userId,
+        }).then((result) => {
+
+        });
+
+        this.navigate(
+            this.getNavigation().VideoCallComponent, 
+            {
+                ...options, 
+                onEndCall: () => {
+                    if(options.onEndCall) {
+                        options.onEndCall()
+                    }
+
+                    this.AZStackCore.stopFreeCall().then((result) => {
+                        setTimeout(() => {
+                            this.pop();
+                        }, 1000);
+                    });
+                },
+                onCallEnded: () => {
+                    setTimeout(() => {
+                        this.pop();
+                    }, 1000);
+                }
+            }
+        );
     }
 
-    renderConversationsList(options) {
-        return <ConversationsListComponent
-            Sizes={this.Sizes}
-            Language={this.Language}
-            CustomStyle={this.CustomStyle}
-            eventConstants={this.eventConstants}
-            AZStackCore={this.AZStackCore}
-            EventEmitter={this.EventEmitter}
-            onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => { }}
-        />;
-    };
-
-    renderOnCall(options) {
-        return <OnCallComponent
-            Sizes={this.Sizes}
-            Language={this.Language}
-            CustomStyle={this.CustomStyle}
-            eventConstants={this.eventConstants}
-            AZStackCore={this.AZStackCore}
-            EventEmitter={this.EventEmitter}
-            info={options.info}
-            onEndCall={options.onEndCall ? options.onEndCall : () => { }}
-        />;
+    showNumberPad() {
+        this.navigate(
+            this.getNavigation().NumberPadComponent, 
+            {
+                onCallout: (options) => {
+                    this.startCallout(options);
+                },
+                onBackButtonPressed: () => {
+                    this.pop();
+                }
+            }
+        );
     }
 
-    renderContact(options) {
-        return <ContactComponent
-            Sizes={this.Sizes}
-            Language={this.Language}
-            CustomStyle={this.CustomStyle}
-            eventConstants={this.eventConstants}
-            AZStackCore={this.AZStackCore}
-            EventEmitter={this.EventEmitter}
-            onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => { }}
-        />;
-    }
-
-    renderNumberPad(options) {
-        return <NumberPadComponent
-            Sizes={this.Sizes}
-            Language={this.Language}
-            CustomStyle={this.CustomStyle}
-            eventConstants={this.eventConstants}
-            AZStackCore={this.AZStackCore}
-            EventEmitter={this.EventEmitter}
-            onCallout={(options) => this.startCallout(options)}
-            onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => { }}
-        />;
+    showContacts() {
+        this.navigate(
+            this.getNavigation().ContactComponent, 
+            {
+                onVideoCall: (options) => {
+                    this.startVideoCall(options);
+                },
+                onAudioCall: (options) => {
+                    this.startAudioCall(options);
+                },
+                onCallout: (options) => {
+                    this.startCallout(options);
+                }
+            }
+        );
     }
 };

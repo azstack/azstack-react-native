@@ -60,7 +60,9 @@ class VideoCallComponent extends React.Component {
         this.subscriptions.onFreeCallStatusChanged = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_FREE_CALL_STATUS_CHANGED, ({ error, result }) => {
             if (error) {
                 return;
-            }
+			}
+			
+			console.log(result);
             
 			if(result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_REJECTED ||
 				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_STOP ||
@@ -74,7 +76,9 @@ class VideoCallComponent extends React.Component {
             if (error) {
                 return;
             }
-            
+			
+			console.log(result);
+
 			if(result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_REJECTED ||
 				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_STOP ||
 				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_NOT_ANSWERED) {
@@ -119,7 +123,7 @@ class VideoCallComponent extends React.Component {
                 Sizes={this.props.Sizes}
                 CustomStyle={this.props.CustomStyle}
             >
-                <View style={{flex: 1, backgroundColor: '#fafafa', justifyContent: 'center', alignItems: 'center'}}>
+                <View style={styles.userCamera}>
                     {
                         this.state.remoteVideoUrl !== null && <RTCView streamURL={this.state.remoteVideoUrl} style={{width: width, height: height}} objectFit={"cover"} />
                     }
@@ -127,8 +131,8 @@ class VideoCallComponent extends React.Component {
                         this.state.remoteVideoUrl === null && <Text>User camera off</Text>
                     }
                 </View>
-                <View style={{position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, justifyContent: 'flex-end'}}>
-                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.5)', padding: 20,}}>
+                <View style={styles.bottomActionBlock}>
+                    <View style={styles.bottomActionBlockWrapper}>
                         <TouchableOpacity onPress={() => this.onPressEndCall()}>
                             <View style={[styles.button, {backgroundColor: 'red'}]}>
                                 <Image source={ic_action_hangup} style={styles.buttonIcon} resizeMode={'contain'} />
@@ -136,9 +140,9 @@ class VideoCallComponent extends React.Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{position: 'absolute', top: 0, right: 0, backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center'}}>
+                <View style={styles.myCamera}>
                     {
-                        this.state.localVideoUrl !== null && <RTCView streamURL={this.state.localVideoUrl} style={{height: 200, width: 150}} objectFit={"cover"} />
+                        this.state.localVideoUrl !== null && <RTCView streamURL={this.state.localVideoUrl} style={{height: 150, width: 100}} objectFit={"cover"} />
                     }
                     {
                         this.state.localVideoUrl === null && <Text>Your camera off</Text>
@@ -157,6 +161,34 @@ export default VideoCallComponent;
 
 
 const styles = {
+	userCamera: {
+		flex: 1, 
+		backgroundColor: '#fafafa', 
+		justifyContent: 'center', 
+		alignItems: 'center',
+	},
+	myCamera: {
+		position: 'absolute', 
+		top: 0, 
+		right: 0, 
+		backgroundColor: '#fff', 
+		justifyContent: 'center', 
+		alignItems: 'center'
+	},
+	bottomActionBlock: {
+		position: 'absolute', 
+		top: 0, 
+		right: 0, 
+		left: 0, 
+		bottom: 0, 
+		justifyContent: 'flex-end'
+	},
+	bottomActionBlockWrapper: {
+		flexDirection: 'row', 
+		alignItems: 'center', 
+		justifyContent: 'center', 
+		padding: 15,
+	},
 	button: {
 		width: 60, 
 		height: 60, 

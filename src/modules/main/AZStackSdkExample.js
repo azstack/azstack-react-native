@@ -10,7 +10,6 @@ import {
 
 import { 
     AZStackSdk, 
-    AZStackSdkComponent, 
 } from '../../common/azstack/';
 
 class AZStackSdkExample extends React.Component {
@@ -92,7 +91,7 @@ class AZStackSdkExample extends React.Component {
                     <Button onPress={() => this.showContact()} title='Contact List'></Button>
                     <Button onPress={() => this.showNumberPad()} title='Callout'></Button>
                 </ScrollView>
-                <AZStackSdkComponent 
+                <AZStackSdk 
                     ref={"AZStackSdk"} 
                     options={{
                         azstackConfig: this.props.azstackConfig,
