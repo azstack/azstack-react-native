@@ -131,7 +131,8 @@ export default class AZStackBaseComponent extends React.Component {
             eventConstants={this.eventConstants}
             AZStackCore={this.AZStackCore}
             EventEmitter={this.EventEmitter}
-            onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => {         
+            {...options}
+            onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => {
                 this.pop();
             }}
         />;
@@ -147,6 +148,9 @@ export default class AZStackBaseComponent extends React.Component {
             AZStackCore={this.AZStackCore}
             EventEmitter={this.EventEmitter}
             {...options}
+            onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => {
+                this.pop();
+            }}
         />;
     }
 
@@ -159,6 +163,7 @@ export default class AZStackBaseComponent extends React.Component {
             eventConstants={this.eventConstants}
             AZStackCore={this.AZStackCore}
             EventEmitter={this.EventEmitter}
+            {...options}
             onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => {
                 this.pop();
             }}

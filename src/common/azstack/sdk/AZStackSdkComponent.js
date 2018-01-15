@@ -126,7 +126,16 @@ export class AZStackSdkComponent extends AZStackBaseComponent {
                         options.onEndCall()
                     }
 
-                    this.pop();
+                    this.AZStackCore.stopFreeCall().then((result) => {
+                        setTimeout(() => {
+                            this.pop();
+                        }, 1000);
+                    });
+                }, 
+                onCallEnded: () => {
+                    setTimeout(() => {
+                        this.pop();
+                    }, 1000);
                 }
             }
         );
@@ -149,7 +158,16 @@ export class AZStackSdkComponent extends AZStackBaseComponent {
                         options.onEndCall()
                     }
 
-                    this.pop();
+                    this.AZStackCore.stopFreeCall().then((result) => {
+                        setTimeout(() => {
+                            this.pop();
+                        }, 1000);
+                    });
+                },
+                onCallEnded: () => {
+                    setTimeout(() => {
+                        this.pop();
+                    }, 1000);
                 }
             }
         );
@@ -174,13 +192,13 @@ export class AZStackSdkComponent extends AZStackBaseComponent {
             this.getNavigation().ContactComponent, 
             {
                 onVideoCall: (options) => {
-
+                    this.startVideoCall(options);
                 },
                 onAudioCall: (options) => {
-
+                    this.startAudioCall(options);
                 },
                 onCallout: (options) => {
-
+                    this.startCallout(options);
                 }
             }
         );

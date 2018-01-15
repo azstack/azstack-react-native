@@ -33,6 +33,8 @@ class OnCallComponent extends React.Component {
 			calloutMessage: '',
 			callinStatus: null,
 			callinMessage: '',
+			freeCallStatus: null,
+			freeCallMessage: '',
 		};
 	}
 
@@ -51,9 +53,8 @@ class OnCallComponent extends React.Component {
 				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_BUSY ||
 				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_NOT_ANSWERED ||
 				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_NOT_ENOUGH_BALANCE) {
-				setTimeout(() => {
-					this.props.onCallEnded();
-				}, 1500);
+				
+				this.props.onCallEnded();
 			}
 		});
 		
@@ -68,9 +69,38 @@ class OnCallComponent extends React.Component {
 				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING_STOP ||
 				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_BUSY ||
 				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_NOT_ANSWERED) {
-				setTimeout(() => {
-					this.props.onCallEnded();
-				}, 1500);
+					
+				this.props.onCallEnded();
+			}
+        });
+		
+        this.subscriptions.onFreeCallStatusChanged = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_FREE_CALL_STATUS_CHANGED, ({ error, result }) => {
+            if (error) {
+                return;
+			}
+
+			this.setState({freeCallStatus: result.status, freeCallMessage: result.message});
+
+			if(result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_REJECTED ||
+				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_STOP ||
+				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_NOT_ANSWERED) {
+					
+				this.props.onCallEnded();
+			}
+        });
+		
+        this.subscriptions.onFreeCallStatusChangedByMe = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_FREE_CALL_STATUS_CHANGED_BY_ME, ({ error, result }) => {
+            if (error) {
+                return;
+			}
+
+			this.setState({freeCallStatus: result.status, freeCallMessage: result.message});
+
+			if(result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_REJECTED ||
+				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_STOP ||
+				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_NOT_ANSWERED) {
+					
+				this.props.onCallEnded();
 			}
         });
 	};

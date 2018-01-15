@@ -6,29 +6,33 @@ export const SCREEN_BLOCK_STYLE = {
     flexDirection: 'column',
 };
 export const SCREEN_HEADER_BLOCK_STYLE = {
-    paddingVertical: 15,
-    flexDirection: 'row',
     borderStyle: 'solid',
     borderBottomWidth: 1,
-    borderBottomColor: '#E1E5EC'
+    borderBottomColor: '#E1E5EC',
+    height: 54,
+    justifyContent: 'center',
+    alignItems: 'center',
 };
 export const SCREEN_HEADER_BACK_BUTTON_STYLE = {
-    width: 25,
-    height: 25,
-    marginLeft: 10
+    position: 'absolute',
+    top: 0, 
+    left: 0,
+    bottom: 0,
+    width: 54,
+    height: 54,
+    marginLeft: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
 };
 export const SCREEN_HEADER_BACK_BUTTON_IMAGE_STYLE = {
-    width: '100%',
-    height: '100%'
+    width: 25,
+    height: 25
 };
 export const SCREEN_HEADER_TITLE_TEXT_STYLE = {
-    flex: 1,
     fontSize: 20,
     fontWeight: '400',
     lineHeight: 25,
     color: '#2F353B',
-    textAlign: 'center',
-    marginRight: 35
 };
 export const SCREEN_BODY_BLOCK_STYLE = {
     flex: 1,

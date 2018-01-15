@@ -64,9 +64,9 @@ class NumberPadComponent extends React.Component {
 				<ScreenHeaderBlockComponent
 					CustomStyle={this.props.CustomStyle}
 					onBackButtonPressed={() => this.props.onBackButtonPressed()}
-					title={this.props.Language.getText('CONVERSATIONS_LIST_HEADER_TITLE_TEXT')}
+					title={"Callout"}
 				/>
-				<View style={{ flex: 1, backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center'}}>
+				<View style={{backgroundColor: '#fff', justifyContent: 'flex-end', alignItems: 'center'}}>
 					<View style={{width: 270, alignSelf: 'center', flexDirection: 'row', justifyContent: 'flex-end', backgroundColor: '#fff', alignItems: 'center', height: 50}}>
 						<View style={{ marginRight: 20, width: width - 60, alignItems: 'flex-end'}}>
 							<Text style={{fontSize: 30}}>{this.state.phoneNumber}</Text>
@@ -77,7 +77,7 @@ class NumberPadComponent extends React.Component {
 							</TouchableOpacity>
 						</View>
 					</View>
-					<View style={{width: width, height: height - 70, justifyContent: 'center', alignItems: 'center'}}>
+					<View style={{width: width, justifyContent: 'center', alignItems: 'center'}}>
 						<View style={{width: 270, alignSelf: 'center'}}>
 							<View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
 								<TouchableOpacity onPress={() => {this.onClickNumber('1')}}>

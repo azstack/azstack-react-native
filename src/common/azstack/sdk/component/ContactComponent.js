@@ -10,24 +10,85 @@ import ScreenBodyBlockComponent from './part/screen/ScreenBodyBlockComponent';
 import EmptyBlockComponent from './part/common/EmptyBlockComponent';
 import SearchBlockComponent from './part/common/SearchBlockComponent';
 
+import ContactItem from './part/contact/ContactItem';
+
 
 class ContactComponent extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            contact: [],
+            contact: [
+                {
+                    name: "User 2",
+                    userId: 387212,
+                    phoneNumber: '01672848892'
+                },
+                {
+                    name: "User 3",
+                    userId: 387212,
+                    phoneNumber: '01672848892'
+                },
+                {
+                    name: "User 4",
+                    userId: 387212,
+                    phoneNumber: '01672848892'
+                },
+                {
+                    name: "User 5",
+                    userId: 387212,
+                    phoneNumber: '01672848892'
+                }
+            ],
+            showItemActions: null,
         };
-    };
+    }
 
     componentDidMount() {
-        this.getContact();
-    };
+        console.log(this.props);
+    }
 
     componentWillUnmount() {
-    };
+    }
 
-    getContact() {
+    renderItem(item, index) {
+        return (
+            <ContactItem
+                contact={item}
+                onPress={() => this.onItemPress(item, index)}
+                showActions={this.state.showItemActions === index}
+                onVideoCall={(options) => {
+                    this.props.onVideoCall(options);
+                }}
+                onAudioCall={(options) => {
+                    this.props.onAudioCall(options);
+                }}
+                onCallout={(options) => {
+                    this.props.onCallout(options);
+                }}
+            />
+        );
+    }
+
+    renderContent() {
+        if(this.state.contact.length === 0) {
+            return (
+                <EmptyBlockComponent
+                    CustomStyle={this.props.CustomStyle}
+                    emptyText={"No contact"}
+                />
+            );
+        }
+
+        return (
+            <FlatList
+                data={this.state.contact}
+                keyExtractor={(item, index) => index}
+                renderItem={({ item, index}) => this.renderItem(item, index)}
+                onEndReached={() => this.onEndReached()}
+                onEndReachedThreshold={0.2}
+            />
+        );
     }
 
     render() {
@@ -39,7 +100,7 @@ class ContactComponent extends React.Component {
                 <ScreenHeaderBlockComponent
                     CustomStyle={this.props.CustomStyle}
                     onBackButtonPressed={() => this.props.onBackButtonPressed()}
-                    title={this.props.Language.getText('CONVERSATIONS_LIST_HEADER_TITLE_TEXT')}
+                    title={'Contact'}
                 />
                 <ScreenBodyBlockComponent
                     CustomStyle={this.props.CustomStyle}
@@ -54,16 +115,24 @@ class ContactComponent extends React.Component {
                             placeholder={this.props.Language.getText('CONVERSATIONS_LIST_SEARCH_PLACEHOLDER_TEXT')}
                         />
                     </View>
-                    {
-                        this.state.contact.length === 0 && <EmptyBlockComponent
-                            CustomStyle={this.props.CustomStyle}
-                            emptyText={this.props.Language.getText('CONVERSATIONS_LIST_EMPTY_TEXT')}
-                        />
-                    }
+                    {this.renderContent()}
                 </ScreenBodyBlockComponent>
             </ScreenBlockComponent>
         );
-    };
+    }
+
+    onEndReached() {
+
+    }
+
+    onItemPress(contact, index) {
+        if(this.state.showItemActions === index) {
+            this.setState({showItemActions: null});
+        } else {
+            this.setState({showItemActions: index});
+        }
+        
+    }
 };
 
 export default ContactComponent;

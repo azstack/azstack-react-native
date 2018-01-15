@@ -56,6 +56,32 @@ class VideoCallComponent extends React.Component {
                 remoteVideoUrl: result.stream.toURL()
             });
 		});
+		
+        this.subscriptions.onFreeCallStatusChanged = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_FREE_CALL_STATUS_CHANGED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            
+			if(result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_REJECTED ||
+				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_STOP ||
+				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_NOT_ANSWERED) {
+					
+				this.props.onCallEnded();
+			}
+        });
+		
+        this.subscriptions.onFreeCallStatusChangedByMe = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_FREE_CALL_STATUS_CHANGED_BY_ME, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            
+			if(result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_REJECTED ||
+				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_STOP ||
+				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_NOT_ANSWERED) {
+					
+				this.props.onCallEnded();
+			}
+        });
 	};
 	
     clearSubscriptions() {
@@ -93,7 +119,7 @@ class VideoCallComponent extends React.Component {
                 Sizes={this.props.Sizes}
                 CustomStyle={this.props.CustomStyle}
             >
-                <View style={{flex: 1, backgroundColor: '#000'}}>
+                <View style={{flex: 1, backgroundColor: '#fafafa', justifyContent: 'center', alignItems: 'center'}}>
                     {
                         this.state.remoteVideoUrl !== null && <RTCView streamURL={this.state.remoteVideoUrl} style={{width: width, height: height}} objectFit={"cover"} />
                     }
@@ -101,26 +127,16 @@ class VideoCallComponent extends React.Component {
                         this.state.remoteVideoUrl === null && <Text>User camera off</Text>
                     }
                 </View>
-                <View style={{position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, justifyContent: 'flex-end', backgroundColor: '#rgba(0,0,0,0)'}}>
-                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(255,255,255,0.5)', padding: 20,}}>
-                        <TouchableOpacity onPress={() => this.onPressEndCall()}>
-                            <View style={{ marginHorizontal: 20, borderWidth: 1, borderColor: '#fff', width: 70, height: 70, backgroundColor: '#fff', alignContent: 'center'}}>
-                                <Image source={ic_video_call_bubble} style={styles.buttonIcon} resizeMode={'contain'} />
-                            </View>
-                        </TouchableOpacity>
+                <View style={{position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, justifyContent: 'flex-end'}}>
+                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.5)', padding: 20,}}>
                         <TouchableOpacity onPress={() => this.onPressEndCall()}>
                             <View style={[styles.button, {backgroundColor: 'red'}]}>
                                 <Image source={ic_action_hangup} style={styles.buttonIcon} resizeMode={'contain'} />
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.onPressEndCall()}>
-                            <View style={{marginHorizontal: 20, borderWidth: 1, borderColor: '#fff', width: 70, height: 70}}>
-                                <Image source={ic_voice} style={styles.buttonIcon} resizeMode={'contain'} />
-                            </View>
-                        </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{position: 'absolute', top: 0, right: 0, backgroundColor: '#fff'}}>
+                <View style={{position: 'absolute', top: 0, right: 0, backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center'}}>
                     {
                         this.state.localVideoUrl !== null && <RTCView streamURL={this.state.localVideoUrl} style={{height: 200, width: 150}} objectFit={"cover"} />
                     }
@@ -142,8 +158,8 @@ export default VideoCallComponent;
 
 const styles = {
 	button: {
-		width: 70, 
-		height: 70, 
+		width: 60, 
+		height: 60, 
 		justifyContent: 'center', 
 		alignItems: 'center', 
         borderRadius: 35,
