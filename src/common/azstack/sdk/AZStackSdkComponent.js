@@ -92,7 +92,7 @@ export class AZStackSdkComponent extends AZStackBaseComponent {
         });
 
         this.navigate(
-            this.getNavigation().NumberPadComponent, 
+            this.getNavigation().OnCallComponent, 
             {
                 ...options, 
                 onEndCall: () => {
@@ -104,7 +104,7 @@ export class AZStackSdkComponent extends AZStackBaseComponent {
                             this.pop();
                         }, 1500);
                     });
-                }
+                },
             }
         );
     }
@@ -150,6 +150,37 @@ export class AZStackSdkComponent extends AZStackBaseComponent {
                     }
 
                     this.pop();
+                }
+            }
+        );
+    }
+
+    showNumberPad() {
+        this.navigate(
+            this.getNavigation().NumberPadComponent, 
+            {
+                onCallout: (options) => {
+                    this.startCallout(options);
+                },
+                onBackButtonPressed: () => {
+                    this.pop();
+                }
+            }
+        );
+    }
+
+    showContacts() {
+        this.navigate(
+            this.getNavigation().ContactComponent, 
+            {
+                onVideoCall: (options) => {
+
+                },
+                onAudioCall: (options) => {
+
+                },
+                onCallout: (options) => {
+
                 }
             }
         );

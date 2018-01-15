@@ -27,11 +27,11 @@ class AZStackSdkExample extends React.Component {
     };
 
     showContact() {
-        this.refs.AZStackSdk.navigate(this.refs.AZStackSdk.getNavigation().ContactComponent, {});
+        this.refs.AZStackSdk.showContacts();
     }
 
     showNumberPad() {
-        this.refs.AZStackSdk.navigate(this.refs.AZStackSdk.getNavigation().NumberPadComponent, {});
+        this.refs.AZStackSdk.showNumberPad();
     }
 
     audioCall() {

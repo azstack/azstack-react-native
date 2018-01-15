@@ -25,6 +25,7 @@ const { height, width } = Dimensions.get('window');
 
 const ic_action_hangup = require('../static/image/ic_action_hangup.png');
 const ic_video_overlay = require('../static/image/ic_video_overlay.png');
+const ic_video_call_bubble = require('../static/image/ic_video_call_bubble.png');
 const ic_voice = require('../static/image/ic_voice.png');
 
 class VideoCallComponent extends React.Component {
@@ -92,17 +93,19 @@ class VideoCallComponent extends React.Component {
                 Sizes={this.props.Sizes}
                 CustomStyle={this.props.CustomStyle}
             >
-                <View style={{flex: 1, borderWidth: 1}}>
-                    <RTCView streamURL={this.state.remoteVideoUrl} style={{ width: '100%', height: '100%' }} />
+                <View style={{flex: 1, backgroundColor: '#000'}}>
+                    {
+                        this.state.remoteVideoUrl !== null && <RTCView streamURL={this.state.remoteVideoUrl} style={{width: width, height: height}} objectFit={"cover"} />
+                    }
                     {
                         this.state.remoteVideoUrl === null && <Text>User camera off</Text>
                     }
                 </View>
                 <View style={{position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, justifyContent: 'flex-end', backgroundColor: '#rgba(0,0,0,0)'}}>
-                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.4)', padding: 20,}}>
+                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(255,255,255,0.5)', padding: 20,}}>
                         <TouchableOpacity onPress={() => this.onPressEndCall()}>
-                            <View style={{ marginHorizontal: 20, borderWidth: 1, borderColor: '#fff', width: 70, height: 70}}>
-                                <Image source={ic_action_hangup} style={styles.buttonIcon} resizeMode={'contain'} />
+                            <View style={{ marginHorizontal: 20, borderWidth: 1, borderColor: '#fff', width: 70, height: 70, backgroundColor: '#fff', alignContent: 'center'}}>
+                                <Image source={ic_video_call_bubble} style={styles.buttonIcon} resizeMode={'contain'} />
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.onPressEndCall()}>
@@ -117,8 +120,13 @@ class VideoCallComponent extends React.Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{position: 'absolute', top: 0, right: 0, }}>
-                    <RTCView streamURL={this.state.localVideoUrl} style={{ width: 200, height: 150 }} />
+                <View style={{position: 'absolute', top: 0, right: 0, backgroundColor: '#fff'}}>
+                    {
+                        this.state.localVideoUrl !== null && <RTCView streamURL={this.state.localVideoUrl} style={{height: 200, width: 150}} objectFit={"cover"} />
+                    }
+                    {
+                        this.state.localVideoUrl === null && <Text>Your camera off</Text>
+                    }
                 </View>
             </ScreenBlockComponent>
 		);

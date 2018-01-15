@@ -46,17 +46,12 @@ class NumberPadComponent extends React.Component {
 	}
 
 	onCall() {
-		this.setState({
-			onCall: this.props.onCallout({
-				onEndCall: () => {
-					this.setState({onCall: null});
-				},
-				info: {
-					name: '',
-					phoneNumber: this.state.phoneNumber,
-					avatar: '',
-				}
-			})
+		this.props.onCallout({
+			info: {
+				name: '',
+				phoneNumber: this.state.phoneNumber,
+				avatar: '',
+			}
 		});
 	}
 
