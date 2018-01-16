@@ -38,10 +38,16 @@ export const MESSAGE_STATUS_CANCEL_TEXT = 'Cancel';
 export const GROUP_TEXT = 'group';
 export const GROUP_TYPE_PRIVATE = 'private';
 export const GROUP_TYPE_PUBLIC = 'public';
+export const GROUP_MEMBER_TEXT = 'member';
+export const GROUP_MEMBER_MANY_TEXT = 'members';
+
+export const USER_ONLINE_TEXT = 'Online';
+export const USER_OFFLINE_TEXT = 'Last seen';
 
 export const CONVERSATIONS_HEADER_TITLE_TEXT = 'Conversations';
 export const CONVERSATIONS_SEARCH_PLACEHOLDER_TEXT = 'Search...';
 export const CONVERSATIONS_LIST_EMPTY_TEXT = 'No Conversation';
 
-export const CHAT_HEADER_TITLE_TEXT = 'Messages';
+export const CHAT_HEADER_TITLE_TEXT = 'Chat';
+export const CHAT_INPUT_DISABLED_TEXT = 'You can\'t not reply to this conversation';
 export const MESSAGES_LIST_EMPTY_TEXT = 'No Message';

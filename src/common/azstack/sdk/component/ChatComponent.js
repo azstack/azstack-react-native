@@ -8,6 +8,8 @@ import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
 import ScreenHeaderBlockComponent from './part/screen/ScreenHeaderBlockComponent';
 import ScreenBodyBlockComponent from './part/screen/ScreenBodyBlockComponent';
 import EmptyBlockComponent from './part/common/EmptyBlockComponent';
+import ChatHeaderComponent from './part/chat/ChatHeaderComponent';
+import ChatInputDisabledComponent from './part/chat/ChatInputDisabledComponent';
 
 class ChatComponent extends React.Component {
     constructor(props) {
@@ -15,7 +17,6 @@ class ChatComponent extends React.Component {
 
         this.subscriptions = {};
         this.pagination = {
-            target: null,
             page: 1,
             lastCreated: new Date().getTime(),
             loading: false,
@@ -23,6 +24,7 @@ class ChatComponent extends React.Component {
         };
 
         this.state = {
+            chatTarget: null,
             messages: []
         };
     };
@@ -32,6 +34,7 @@ class ChatComponent extends React.Component {
             if (error) {
                 return;
             }
+            this.getChatTarget();
         });
 
     };
@@ -41,8 +44,34 @@ class ChatComponent extends React.Component {
         }
     };
 
+    getChatTarget() {
+        if (!this.props.AZStackCore.slaveSocketConnected) {
+            return;
+        }
+
+        if (this.props.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER) {
+            this.props.AZStackCore.getUsersInformation({
+                userIds: [this.props.chatId]
+            }).then((result) => {
+                this.setState({ chatTarget: result.list[0] });
+                this.getMessages();
+            }).catch((error) => { })
+        } else if (this.props.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
+            this.props.AZStackCore.getDetailsGroup({
+                groupId: this.props.chatId
+            }).then((result) => {
+                this.setState({ chatTarget: result });
+                this.getMessages();
+            }).catch((error) => { });
+        }
+    };
+    getMessages() {
+        console.log(this.state.chatTarget);
+    };
+
     componentDidMount() {
         this.addSubscriptions();
+        this.getChatTarget();
     };
 
     componentWillUnmount() {
@@ -55,11 +84,23 @@ class ChatComponent extends React.Component {
                 Sizes={this.props.Sizes}
                 CustomStyle={this.props.CustomStyle}
             >
-                <ScreenHeaderBlockComponent
-                    CustomStyle={this.props.CustomStyle}
-                    onBackButtonPressed={this.props.onBackButtonPressed}
-                    title={this.props.Language.getText('CHAT_HEADER_TITLE_TEXT')}
-                />
+                {
+                    !this.state.chatTarget && <ScreenHeaderBlockComponent
+                        CustomStyle={this.props.CustomStyle}
+                        onBackButtonPressed={this.props.onBackButtonPressed}
+                        title={this.props.Language.getText('CHAT_HEADER_TITLE_TEXT')}
+                    />
+                }
+                {
+                    !!this.state.chatTarget && <ChatHeaderComponent
+                        CustomStyle={this.props.CustomStyle}
+                        Language={this.props.Language}
+                        AZStackCore={this.props.AZStackCore}
+                        onBackButtonPressed={this.props.onBackButtonPressed}
+                        chatType={this.props.chatType}
+                        chatTarget={this.state.chatTarget}
+                    />
+                }
                 <ScreenBodyBlockComponent
                     CustomStyle={this.props.CustomStyle}
                 >
@@ -70,6 +111,10 @@ class ChatComponent extends React.Component {
                         />
                     }
                 </ScreenBodyBlockComponent>
+                <ChatInputDisabledComponent
+                    CustomStyle={this.props.CustomStyle}
+                    Language={this.props.Language}
+                />
             </ScreenBlockComponent>
         );
     };

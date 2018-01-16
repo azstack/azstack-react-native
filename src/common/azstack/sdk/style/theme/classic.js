@@ -15,7 +15,7 @@ export const SCREEN_HEADER_BLOCK_STYLE = {
 };
 export const SCREEN_HEADER_BACK_BUTTON_STYLE = {
     position: 'absolute',
-    top: 0, 
+    top: 0,
     left: 0,
     bottom: 0,
     width: 54,
@@ -252,4 +252,80 @@ export const CONVERSATION_MESSAGE_STATUS_BLOCK_STYLE = {
 };
 export const CONVERSATION_MESSAGE_STATUS_TEXT_STYLE = {
     fontSize: 8
+};
+
+export const CHAT_HEADER_BLOCK_STYLE = {
+    padding: 10,
+    borderStyle: 'solid',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E1E5EC',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row'
+};
+export const CHAT_HEADER_BACK_BUTTON_STYLE = {
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+};
+export const CHAT_HEADER_BACK_BUTTON_IMAGE_STYLE = {
+    width: 25,
+    height: 25
+};
+export const CHAT_HEADER_INFO_BLOCK_STYLE = {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const CHAT_HEADER_AVATAR_BLOCK_STYLE = {
+    width: 40,
+    height: 40
+};
+export const CHAT_HEADER_AVATAR_TEXT_STYLE = {
+    fontSize: 18
+};
+export const CHAT_HEADER_TEXT_BLOCK_STYLE = {
+    flex: 1,
+    paddingLeft: 10
+};
+export const CHAT_HEADER_NAME_TEXT_STYLE = {
+    fontSize: 15,
+    fontWeight: '400',
+    lineHeight: 20,
+    color: '#2F353B',
+};
+export const CHAT_HEADER_OFFLINE_TEXT_STYLE = {
+    fontSize: 14,
+    fontWeight: '300',
+    lineHeight: 20,
+    color: '#95A5A6',
+    textAlign: 'left'
+};
+export const CHAT_HEADER_ONLINE_TEXT_STYLE = {
+    fontSize: 14,
+    fontWeight: '300',
+    lineHeight: 20,
+    color: '#1BBC9B'
+};
+export const CHAT_HEADER_MEMBERS_TEXT_STYLE = {
+    fontSize: 14,
+    fontWeight: '300',
+    lineHeight: 20,
+    color: '#95A5A6'
+};
+export const CHAT_INPUT_DISABLED_BLOCK_STYLE = {
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    backgroundColor: '#F2784B',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const CHAT_INPUT_DISABLED_TEXT_STYLE = {
+    fontSize: 15,
+    lineHeight: 20,
+    fontWeight: '500',
+    color: '#fff'
 };

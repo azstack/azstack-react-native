@@ -123,6 +123,8 @@ export default class AZStackBaseComponent extends React.Component {
             eventConstants={this.eventConstants}
             AZStackCore={this.AZStackCore}
             EventEmitter={this.EventEmitter}
+            chatType={options.chatType}
+            chatId={options.chatId}
             onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => {
                 this.pop();
             }}
