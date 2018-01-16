@@ -189,7 +189,9 @@ class ConversationLastMessageBlockComponent extends React.Component {
                                         <Text>
                                             {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_RENAMED_PREPOSITION_TEXT')}`}
                                         </Text>
-                                        <Text>
+                                        <Text
+                                            style={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE')}
+                                        >
                                             {` ${this.props.lastMessage.renamed.newName}`}
                                         </Text>
                                     </Text>
@@ -207,7 +209,9 @@ class ConversationLastMessageBlockComponent extends React.Component {
                                         <Text>
                                             {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_CHANGED_ADMIN_PREPOSITION_TEXT')}`}
                                         </Text>
-                                        <Text>
+                                        <Text
+                                            style={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE')}
+                                        >
                                             {` ${this.getNameReceiver(this.props.lastMessage.adminChanged.newAdmin)}`}
                                         </Text>
                                     </Text>
