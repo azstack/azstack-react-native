@@ -1,0 +1,27 @@
+{
+  "name": "azstack",
+  "version": "1.0.3",
+  "description": "React native SDK for AZSTACK Communication Platform",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "sdk",
+    "azstack",
+    "videocall",
+    "callout",
+    "callin",
+    "voicecall",
+    "chat",
+    "webrtc",
+    "socketio"
+  ],
+  "author": "AZSTACK Team (https://azstack.com)",
+  "license": "ISC",
+  "dependencies": {
+		"jsencrypt": "^2.3.1",
+		"react-native-webrtc": "^1.58.3",
+		"socket.io-client": "^2.0.4"
+  }
+}
