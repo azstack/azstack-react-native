@@ -11,9 +11,8 @@ import EmptyBlockComponent from './part/common/EmptyBlockComponent';
 import SearchBlockComponent from './part/common/SearchBlockComponent';
 
 import ConversationBlockComponent from './part/conversation/ConversationBlockComponent';
-import conversation from '../../core/handler/conversation';
 
-class ConversationsListComponent extends React.Component {
+class ConversationsComponent extends React.Component {
     constructor(props) {
         super(props);
 
@@ -87,6 +86,24 @@ class ConversationsListComponent extends React.Component {
                 return;
             }
             this.onGroupLeft(result);
+        });
+        this.subscriptions.onGroupRenamed = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_GROUP_RENAMED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onGroupRenamed(result);
+        });
+        this.subscriptions.onGroupAdminChanged = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_GROUP_ADMIN_CHANGED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onGroupAdminChanged(result);
+        });
+        this.subscriptions.onGroupPublicJoined = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_GROUP_PUBLIC_JOINED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onGroupPublicJoined(result);
         });
     };
     clearSubscriptions() {
@@ -556,6 +573,126 @@ class ConversationsListComponent extends React.Component {
             })
         });
     };
+    onGroupRenamed(newMessage) {
+        let foundConversation = false;
+        for (let i = 0; i < this.state.conversations.length; i++) {
+            let conversation = this.state.conversations[i];
+            if (conversation.chatType === newMessage.chatType && conversation.chatId === newMessage.chatId) {
+                foundConversation = true;
+                conversation.chatTarget = newMessage.receiver;
+                conversation.searchString = conversation.chatTarget.name.toLowerCase();
+                conversation.chatTarget.members.map((member) => {
+                    conversation.searchString += ` ${member.fullname.toLowerCase()}`;
+                });
+                conversation.lastMessage = newMessage;
+                conversation.unread += 1;
+                break;
+            }
+        }
+        let unorderConversations = [].concat(this.state.conversations);
+        if (!foundConversation) {
+            let newConversation = {
+                chatType: newMessage.chatType,
+                chatId: newMessage.chatId,
+                chatTarget: newMessage.receiver,
+                lastMessage: newMessage,
+                unread: 1,
+                deleted: this.props.AZStackCore.chatConstants.CONVERSATION_DELETED_FALSE,
+                modified: newMessage.modified,
+                prepared: true
+            };
+            newConversation.searchString = newConversation.chatTarget.name.toLowerCase();
+            newConversation.chatTarget.members.map((member) => {
+                newConversation.searchString += ` ${member.fullname.toLowerCase()}`;
+            });
+            unorderConversations.push(newConversation);
+        }
+        this.setState({
+            conversations: unorderConversations.sort((a, b) => {
+                return a.lastMessage.created > b.lastMessage.created ? -1 : 1
+            })
+        });
+    };
+    onGroupAdminChanged(newMessage) {
+        let foundConversation = false;
+        for (let i = 0; i < this.state.conversations.length; i++) {
+            let conversation = this.state.conversations[i];
+            if (conversation.chatType === newMessage.chatType && conversation.chatId === newMessage.chatId) {
+                foundConversation = true;
+                conversation.chatTarget = newMessage.receiver;
+                conversation.searchString = conversation.chatTarget.name.toLowerCase();
+                conversation.chatTarget.members.map((member) => {
+                    conversation.searchString += ` ${member.fullname.toLowerCase()}`;
+                });
+                conversation.lastMessage = newMessage;
+                conversation.unread += 1;
+                break;
+            }
+        }
+        let unorderConversations = [].concat(this.state.conversations);
+        if (!foundConversation) {
+            let newConversation = {
+                chatType: newMessage.chatType,
+                chatId: newMessage.chatId,
+                chatTarget: newMessage.receiver,
+                lastMessage: newMessage,
+                unread: 1,
+                deleted: this.props.AZStackCore.chatConstants.CONVERSATION_DELETED_FALSE,
+                modified: newMessage.modified,
+                prepared: true
+            };
+            newConversation.searchString = newConversation.chatTarget.name.toLowerCase();
+            newConversation.chatTarget.members.map((member) => {
+                newConversation.searchString += ` ${member.fullname.toLowerCase()}`;
+            });
+            unorderConversations.push(newConversation);
+        }
+        this.setState({
+            conversations: unorderConversations.sort((a, b) => {
+                return a.lastMessage.created > b.lastMessage.created ? -1 : 1
+            })
+        });
+    };
+    onGroupPublicJoined(newMessage) {
+        let foundConversation = false;
+        for (let i = 0; i < this.state.conversations.length; i++) {
+            let conversation = this.state.conversations[i];
+            if (conversation.chatType === newMessage.chatType && conversation.chatId === newMessage.chatId) {
+                foundConversation = true;
+                conversation.chatTarget = newMessage.receiver;
+                conversation.searchString = conversation.chatTarget.name.toLowerCase();
+                conversation.chatTarget.members.map((member) => {
+                    conversation.searchString += ` ${member.fullname.toLowerCase()}`;
+                });
+                conversation.lastMessage = newMessage;
+                conversation.unread += 1;
+                break;
+            }
+        }
+        let unorderConversations = [].concat(this.state.conversations);
+        if (!foundConversation) {
+            let newConversation = {
+                chatType: newMessage.chatType,
+                chatId: newMessage.chatId,
+                chatTarget: newMessage.receiver,
+                lastMessage: newMessage,
+                unread: 1,
+                deleted: this.props.AZStackCore.chatConstants.CONVERSATION_DELETED_FALSE,
+                modified: newMessage.modified,
+                prepared: true
+            };
+            newConversation.searchString = newConversation.chatTarget.name.toLowerCase();
+            newConversation.chatTarget.members.map((member) => {
+                newConversation.searchString += ` ${member.fullname.toLowerCase()}`;
+            });
+            unorderConversations.push(newConversation);
+        }
+        this.setState({
+            conversations: unorderConversations.sort((a, b) => {
+                return a.lastMessage.created > b.lastMessage.created ? -1 : 1
+            })
+        });
+    };
 
     onConversationClicked(conversation) { };
 
@@ -577,19 +714,19 @@ class ConversationsListComponent extends React.Component {
                 <ScreenHeaderBlockComponent
                     CustomStyle={this.props.CustomStyle}
                     onBackButtonPressed={this.props.onBackButtonPressed}
-                    title={this.props.Language.getText('CONVERSATIONS_LIST_HEADER_TITLE_TEXT')}
+                    title={this.props.Language.getText('CONVERSATIONS_HEADER_TITLE_TEXT')}
                 />
                 <ScreenBodyBlockComponent
                     CustomStyle={this.props.CustomStyle}
                 >
                     <View
-                        style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_BLOCK_STYLE')}
+                        style={this.props.CustomStyle.getStyle('CONVERSATIONS_SEARCH_BLOCK_STYLE')}
                     >
                         <SearchBlockComponent
                             CustomStyle={this.props.CustomStyle}
                             onSearchTextChanged={this.onSearchTextChanged}
                             onSearchTextCleared={this.onSearchTextCleared}
-                            placeholder={this.props.Language.getText('CONVERSATIONS_LIST_SEARCH_PLACEHOLDER_TEXT')}
+                            placeholder={this.props.Language.getText('CONVERSATIONS_SEARCH_PLACEHOLDER_TEXT')}
                         />
                     </View>
                     {
@@ -600,7 +737,7 @@ class ConversationsListComponent extends React.Component {
                     }
                     {
                         this.getFilteredConversations().length > 0 && <FlatList
-                            style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_ITEMS_STYLE')}
+                            style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_STYLE')}
                             data={this.getFilteredConversations()}
                             keyExtractor={(item, index) => (item.chatType + '_' + item.chatId)}
                             renderItem={({ item }) => {
@@ -624,4 +761,4 @@ class ConversationsListComponent extends React.Component {
     };
 };
 
-export default ConversationsListComponent;
+export default ConversationsComponent;

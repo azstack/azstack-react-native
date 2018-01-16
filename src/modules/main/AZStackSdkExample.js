@@ -8,8 +8,8 @@ import {
     Button
 } from 'react-native';
 
-import { 
-    AZStackSdk, 
+import {
+    AZStackSdk,
 } from '../../common/azstack/';
 
 class AZStackSdkExample extends React.Component {
@@ -21,8 +21,12 @@ class AZStackSdkExample extends React.Component {
         };
     };
 
-    showConversationsList() {
-        this.refs.AZStackSdk.navigate(this.refs.AZStackSdk.getNavigation().ConversationsListComponent, {});
+    showConversations() {
+        this.refs.AZStackSdk.navigate(this.refs.AZStackSdk.getNavigation().ConversationsComponent, {});
+    };
+
+    showChat() {
+        this.refs.AZStackSdk.navigate(this.refs.AZStackSdk.getNavigation().ChatComponent, {});
     };
 
     showContact() {
@@ -85,19 +89,20 @@ class AZStackSdkExample extends React.Component {
                 <ScrollView>
                     <Text>{this.state.authenticatedUser ? 'Connected, ' + this.state.authenticatedUser.fullname : 'Connecting...'}</Text>
                     <Text>{'\n'}{'\n'}</Text>
-                    <Button onPress={() => this.showConversationsList()} title='Show conversations list'></Button>
+                    <Button onPress={() => this.showConversations()} title='Show conversations'></Button>
+                    <Button onPress={() => this.showChat()} title='Show chat'></Button>
                     <Button onPress={() => this.audioCall()} title='Call User 2'></Button>
                     <Button onPress={() => this.videoCall()} title='Video Call User 2'></Button>
                     <Button onPress={() => this.showContact()} title='Contact List'></Button>
                     <Button onPress={() => this.showNumberPad()} title='Callout'></Button>
                 </ScrollView>
-                <AZStackSdk 
-                    ref={"AZStackSdk"} 
+                <AZStackSdk
+                    ref={"AZStackSdk"}
                     options={{
                         azstackConfig: this.props.azstackConfig,
                         languageCode: this.props.languageCode,
                         themeName: this.props.themeName
-                    }} 
+                    }}
                 />
             </View>
         );

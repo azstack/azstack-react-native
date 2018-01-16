@@ -231,9 +231,7 @@ class Event {
                 )
             ]).then(() => {
                 this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_GROUP_INVITED, { error: null, result: newMessage });
-            }).catch((error) => {
-                console.log(error);
-            });
+            }).catch((error) => { });
         };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_GROUP_LEFT] = (error, result) => {
             if (error) {
@@ -292,9 +290,128 @@ class Event {
                 })
             ]).then(() => {
                 this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_GROUP_LEFT, { error: null, result: newMessage });
-            }).catch((error) => {
-                console.log(error);
-            });
+            }).catch((error) => { });
+        };
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_GROUP_RENAMED] = (error, result) => {
+            if (error) {
+                this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_GROUP_RENAMED, { error, result: null });
+                return;
+            }
+            let newMessage = result;
+            Promise.all([
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.getUsersInformation({
+                        userIds: [newMessage.senderId]
+                    }).then((result) => {
+                        newMessage.sender = result.list[0];
+                        resolve(null);
+                    }).catch((error) => {
+                        newMessage.sender = { userId: newMessage.senderId };
+                        resolve(null);
+                    });
+                }),
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.getDetailsGroup({
+                        groupId: newMessage.receiverId
+                    }).then((result) => {
+                        newMessage.receiver = result;
+                        resolve(null);
+                    }).catch((error) => {
+                        newMessage.receiver = { groupId: newMessage.receiverId };
+                        resolve(null);
+                    });
+                })
+            ]).then(() => {
+                this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_GROUP_RENAMED, { error: null, result: newMessage });
+            }).catch((error) => { });
+        };
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_GROUP_ADMIN_CHANGED] = (error, result) => {
+            if (error) {
+                this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_GROUP_ADMIN_CHANGED, { error, result: null });
+                return;
+            }
+            let newMessage = result;
+            Promise.all([
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.getUsersInformation({
+                        userIds: [newMessage.senderId]
+                    }).then((result) => {
+                        newMessage.sender = result.list[0];
+                        resolve(null);
+                    }).catch((error) => {
+                        newMessage.sender = { userId: newMessage.senderId };
+                        resolve(null);
+                    });
+                }),
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.getDetailsGroup({
+                        groupId: newMessage.receiverId
+                    }).then((result) => {
+                        newMessage.receiver = result;
+                        resolve(null);
+                    }).catch((error) => {
+                        newMessage.receiver = { groupId: newMessage.receiverId };
+                        resolve(null);
+                    });
+                }),
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.getUsersInformation({
+                        userIds: [newMessage.adminChanged.newAdminId]
+                    }).then((result) => {
+                        newMessage.adminChanged.newAdmin = result.list[0];
+                        resolve(null);
+                    }).catch((error) => {
+                        newMessage.adminChanged.newAdmin = { userId: newMessage.adminChanged.newAdminId }
+                        resolve(null);
+                    });
+                })
+            ]).then(() => {
+                this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_GROUP_ADMIN_CHANGED, { error: null, result: newMessage });
+            }).catch((error) => { });
+        };
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_GROUP_PUBLIC_JOINED] = (error, result) => {
+            if (error) {
+                this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_GROUP_PUBLIC_JOINED, { error, result: null });
+                return;
+            }
+            let newMessage = result;
+            Promise.all([
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.getUsersInformation({
+                        userIds: [newMessage.senderId]
+                    }).then((result) => {
+                        newMessage.sender = result.list[0];
+                        resolve(null);
+                    }).catch((error) => {
+                        newMessage.sender = { userId: newMessage.senderId };
+                        resolve(null);
+                    });
+                }),
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.getDetailsGroup({
+                        groupId: newMessage.receiverId
+                    }).then((result) => {
+                        newMessage.receiver = result;
+                        resolve(null);
+                    }).catch((error) => {
+                        newMessage.receiver = { groupId: newMessage.receiverId };
+                        resolve(null);
+                    });
+                }),
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.getUsersInformation({
+                        userIds: [newMessage.joined.joinId]
+                    }).then((result) => {
+                        newMessage.joined.join = result.list[0];
+                        resolve(null);
+                    }).catch((error) => {
+                        newMessage.joined.join = { userId: newMessage.joined.joinId }
+                        resolve(null);
+                    });
+                })
+            ]).then(() => {
+                this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_GROUP_PUBLIC_JOINED, { error: null, result: newMessage });
+            }).catch((error) => { });
         };
     };
 };

@@ -17,10 +17,6 @@ export const TYPING_PREPOSITION_TEXT = 'is';
 export const TYPING_PREPOSITION_MANY_TEXT = 'are';
 export const TYPING_TEXT = 'typing...';
 
-export const CONVERSATIONS_LIST_HEADER_TITLE_TEXT = 'Conversations';
-export const CONVERSATIONS_LIST_EMPTY_TEXT = 'No Conversation';
-export const CONVERSATIONS_LIST_SEARCH_PLACEHOLDER_TEXT = 'Search...';
-
 export const MESSAGE_SENDER_ME_TEXT = 'You';
 export const MESSAGE_RECEIVER_ME_TEXT = 'you';
 export const MESSAGE_TYPE_STICKER_TEXT = 'Sticker';
@@ -42,3 +38,10 @@ export const MESSAGE_STATUS_CANCEL_TEXT = 'Cancel';
 export const GROUP_TEXT = 'group';
 export const GROUP_TYPE_PRIVATE = 'private';
 export const GROUP_TYPE_PUBLIC = 'public';
+
+export const CONVERSATIONS_HEADER_TITLE_TEXT = 'Conversations';
+export const CONVERSATIONS_SEARCH_PLACEHOLDER_TEXT = 'Search...';
+export const CONVERSATIONS_LIST_EMPTY_TEXT = 'No Conversation';
+
+export const CHAT_HEADER_TITLE_TEXT = 'Messages';
+export const MESSAGES_LIST_EMPTY_TEXT = 'No Message';
