@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 
 import ConversationsListComponent from './ConversationsListComponent';
+import ChatComponent from './ChatComponent';
 import OnCallComponent from './OnCallComponent';
 import ContactComponent from './ContactComponent';
 import NumberPadComponent from './NumberPadComponent';
@@ -13,6 +14,7 @@ import VideoCallComponent from './VideoCallComponent';
 
 const NavigationEnum = {
     ConversationsListComponent: 'ConversationsListComponent',
+    ChatComponent: 'ChatComponent',
     OnCallComponent: 'OnCallComponent',
     ContactComponent: 'ContactComponent',
     NumberPadComponent: 'NumberPadComponent',
@@ -36,39 +38,42 @@ export default class AZStackBaseComponent extends React.Component {
     render() {
         let screens = [];
         this.state.navigation.map((value, index) => {
-            switch(value.screen) {
-                case 'ConversationsListComponent': 
+            switch (value.screen) {
+                case 'ConversationsListComponent':
                     screens.push(this.renderConversationsList(value.options, index));
                     break;
-                case 'OnCallComponent': 
+                case 'ChatComponent':
+                    screens.push(this.renderChat(value.options, index));
+                    break;
+                case 'OnCallComponent':
                     screens.push(this.renderOnCall(value.options, index));
                     break;
-                case 'ContactComponent': 
+                case 'ContactComponent':
                     screens.push(this.renderContact(value.options, index));
                     break;
-                case 'NumberPadComponent': 
+                case 'NumberPadComponent':
                     screens.push(this.renderNumberPad(value.options, index));
                     break;
-                case 'VideoCallComponent': 
+                case 'VideoCallComponent':
                     screens.push(this.renderVideoCall(value.options, index));
                     break;
-                default: 
+                default:
                     break;
             }
         });
 
-        if(screens.length === 0) {
+        if (screens.length === 0) {
             return null;
         }
 
         return screens;
     }
 
-    /* Navigation functions */ 
+    /* Navigation functions */
     navigate(screen, options) {
         let newNavigation = [...this.state.navigation];
-        newNavigation.push({screen, options});
-        this.setState({navigation: newNavigation});
+        newNavigation.push({ screen, options });
+        this.setState({ navigation: newNavigation });
     }
 
     dismiss() {
@@ -84,18 +89,33 @@ export default class AZStackBaseComponent extends React.Component {
     pop() {
         let newNavigation = [...this.state.navigation];
         newNavigation.splice(-1, 1);
-        this.setState({navigation: newNavigation});
+        this.setState({ navigation: newNavigation });
     }
 
     push(screen, options) {
         let newNavigation = [...this.state.navigation];
-        newNavigation.push({screen, options});
-        this.setState({navigation: newNavigation});
+        newNavigation.push({ screen, options });
+        this.setState({ navigation: newNavigation });
     }
 
     /* Render component */
     renderConversationsList(options, key) {
         return <ConversationsListComponent
+            key={key}
+            Sizes={this.Sizes}
+            Language={this.Language}
+            CustomStyle={this.CustomStyle}
+            eventConstants={this.eventConstants}
+            AZStackCore={this.AZStackCore}
+            EventEmitter={this.EventEmitter}
+            onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => {
+                this.pop();
+            }}
+        />;
+    };
+
+    renderChat(options, key) {
+        return <ChatComponent
             key={key}
             Sizes={this.Sizes}
             Language={this.Language}

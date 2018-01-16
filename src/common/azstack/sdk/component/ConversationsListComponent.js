@@ -11,7 +11,6 @@ import EmptyBlockComponent from './part/common/EmptyBlockComponent';
 import SearchBlockComponent from './part/common/SearchBlockComponent';
 
 import ConversationBlockComponent from './part/conversation/ConversationBlockComponent';
-import conversation from '../../core/handler/conversation';
 
 class ConversationsListComponent extends React.Component {
     constructor(props) {
