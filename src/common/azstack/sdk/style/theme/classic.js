@@ -307,7 +307,7 @@ export const CHAT_HEADER_ONLINE_TEXT_STYLE = {
     fontSize: 14,
     fontWeight: '300',
     lineHeight: 20,
-    color: '#1BBC9B'
+    color: '#578EBE'
 };
 export const CHAT_HEADER_MEMBERS_TEXT_STYLE = {
     fontSize: 14,
