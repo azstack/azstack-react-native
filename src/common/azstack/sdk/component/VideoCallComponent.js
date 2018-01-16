@@ -27,14 +27,23 @@ const ic_action_hangup = require('../static/image/ic_action_hangup.png');
 const ic_video_overlay = require('../static/image/ic_video_overlay.png');
 const ic_video_call_bubble = require('../static/image/ic_video_call_bubble.png');
 const ic_voice = require('../static/image/ic_voice.png');
+const ic_avatar = require('../static/image/ic_avatar.png');
+const ic_switch_camera = require('../static/image/ic_switch_camera.png');
 
 class VideoCallComponent extends React.Component {
 	constructor(props) {
 		super(props);        
 		this.subscriptions = {};
 		this.state = {
+			// ux
+			showAction: false,
+			touchTimeout: null,
+			callTime: 0,
+			// az
             localVideoUrl: null,
-            remoteVideoUrl: null,
+			remoteVideoUrl: null,
+			status: -1,
+			message: '',
 		};
 	}
 
@@ -56,16 +65,25 @@ class VideoCallComponent extends React.Component {
                 remoteVideoUrl: result.stream.toURL()
             });
 		});
+        
+        this.subscriptions.onSwitchCameraTypeReturn = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_SWITCH_CAMERA_TYPE_RETURN, ({ error, result }) => {
+            if (error) {
+                return;
+			}
+			
+			// currently do nothing
+		});
 		
         this.subscriptions.onFreeCallStatusChanged = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_FREE_CALL_STATUS_CHANGED, ({ error, result }) => {
             if (error) {
                 return;
 			}
-			
-			console.log(result);
+
+			this.setState({status: result.status, message: result.message});
             
 			if(result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_REJECTED ||
 				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_STOP ||
+				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_BUSY ||
 				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_NOT_ANSWERED) {
 					
 				this.props.onCallEnded();
@@ -81,6 +99,7 @@ class VideoCallComponent extends React.Component {
 
 			if(result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_REJECTED ||
 				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_STOP ||
+				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_BUSY ||
 				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_NOT_ANSWERED) {
 					
 				this.props.onCallEnded();
@@ -101,20 +120,112 @@ class VideoCallComponent extends React.Component {
         this.addSubscriptions();
 	}
 
-	renderStatus() {
-		if(this.props.callType === CallConstant.CALL_TYPE_CALLIN) {
+	componentWillUnmount() {
+		this.clearSubscriptions();
+	}
+
+	renderBackgroundContent() {
+		if(this.state.status !== 200) {
 			return (
-				<View style={{ position: 'absolute', top: 0, left: 0, }}>
-					<Text style={{color: "#fff"}}>{this.props.callinStatus}</Text>
-				</View>
-			);
-		} else {
-			return (
-				<View style={{ position: 'absolute', top: 0, left: 0, }}>
-					<Text style={{color: "#fff"}}>{this.props.calloutStatus}</Text>
+				<View style={styles.userCamera}>
+					{
+						this.state.localVideoUrl !== null && <RTCView streamURL={this.state.localVideoUrl} style={{width: width, height: height}} objectFit={"cover"} />
+					}
+					{
+						this.state.localVideoUrl === null && <Text>User camera off</Text>
+					}
+					<View style={styles.userInfoCenter}>
+						<View style={{paddingBottom: 160, alignItems: 'center'}}>
+							<Image source={ic_avatar} style={{width: 90, height: 90, borderRadius: 45}} />
+							<View style={{alignItems: 'center'}}>
+								<Text style={{color: '#fff', marginVertical: 10, fontSize: 20}}>{this.props.info.name}</Text>
+								<Text style={{color: '#8f8f8f'}}>{this.state.message}</Text>
+							</View>
+						</View>
+					</View>
 				</View>
 			);
 		}
+		return (
+			<View style={styles.userCamera}>
+				{
+					this.state.remoteVideoUrl !== null && <RTCView streamURL={this.state.remoteVideoUrl} style={{width: width, height: height}} objectFit={"cover"} />
+				}
+				{
+					this.state.remoteVideoUrl === null && <Text>User camera off</Text>
+				}
+			</View>
+		);
+	}
+
+	renderMyCamera() {
+		if(this.state.status !== 200) {
+			return null;
+		}
+		return (
+			<View style={styles.myCamera}>
+				{
+					this.state.localVideoUrl !== null && <RTCView streamURL={this.state.localVideoUrl} style={{height: 150, width: 100}} objectFit={"cover"} />
+				}
+				{
+					this.state.localVideoUrl === null && <Text>Your camera off</Text>
+				}
+				<TouchableWithoutFeedback onPress={() => this.onPressMyCameraTouchLayer()}>
+					<View style={styles.myCameraTouchLayer}>
+
+					</View>
+				</TouchableWithoutFeedback>
+			</View>
+		);
+	}
+
+	renderBottomActions() {
+		return (
+			<View style={[styles.bottomActionBlock, {opacity: this.state.showAction === false && this.state.status === 200 ? 0 : 1}]}>
+				<View style={styles.bottomActionBlockWrapper}>
+					<TouchableOpacity onPress={() => this.onPressEndCall()}>
+						<View style={[styles.button, {backgroundColor: 'red'}]}>
+							<Image source={ic_action_hangup} style={styles.buttonIcon} resizeMode={'contain'} />
+						</View>
+					</TouchableOpacity>
+				</View>
+			</View>
+		);
+	}
+
+	renderUserInfoTop() {
+		if(this.state.status !== 200) {
+			return null;
+		}
+		return (
+			<View style={[styles.userInfoTop, {opacity:  this.state.showAction === false ? 0 : 1}]}>
+				<View style={styles.userInfoTopWrapper}>
+					<View>
+						<Image source={ic_avatar} style={{width: 60, height: 60, borderRadius: 45, marginRight: 10}} />
+					</View>
+					<View style={{flex: 1}}>
+						<Text style={{color: '#fff', fontSize: 16}}>{this.props.info.name || "Anonymous"}</Text>
+						<Timer />
+					</View>
+					<View style={{ position: 'absolute', top: 0, right: 0}}>
+						<TouchableOpacity onPress={() => this.onPressChangeDeviceCamera()}>
+							<View style={{ height: 60, width: 60, justifyContent: 'center', alignItems: 'center'}}>
+								<Image source={ic_switch_camera} style={{width: 30, height: 30}} resizeMode={'contain'} />
+							</View>
+						</TouchableOpacity>
+					</View>
+				</View>
+			</View>
+		);
+	}
+
+	renderTouchLayer() {
+		return (
+			<TouchableWithoutFeedback onPress={() => this.onPressTouchLayer()}>
+				<View style={styles.touchLayer}>
+				</View>
+			</TouchableWithoutFeedback>
+		);
 	}
 
 	render() {
@@ -122,34 +233,34 @@ class VideoCallComponent extends React.Component {
             <ScreenBlockComponent
                 Sizes={this.props.Sizes}
                 CustomStyle={this.props.CustomStyle}
-            >
-                <View style={styles.userCamera}>
-                    {
-                        this.state.remoteVideoUrl !== null && <RTCView streamURL={this.state.remoteVideoUrl} style={{width: width, height: height}} objectFit={"cover"} />
-                    }
-                    {
-                        this.state.remoteVideoUrl === null && <Text>User camera off</Text>
-                    }
-                </View>
-                <View style={styles.bottomActionBlock}>
-                    <View style={styles.bottomActionBlockWrapper}>
-                        <TouchableOpacity onPress={() => this.onPressEndCall()}>
-                            <View style={[styles.button, {backgroundColor: 'red'}]}>
-                                <Image source={ic_action_hangup} style={styles.buttonIcon} resizeMode={'contain'} />
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <View style={styles.myCamera}>
-                    {
-                        this.state.localVideoUrl !== null && <RTCView streamURL={this.state.localVideoUrl} style={{height: 150, width: 100}} objectFit={"cover"} />
-                    }
-                    {
-                        this.state.localVideoUrl === null && <Text>Your camera off</Text>
-                    }
-                </View>
+            >	
+				{/* Beware the order, do not change it */}
+				{this.renderBackgroundContent()}
+				{this.renderTouchLayer()}
+				{this.renderBottomActions()}
+				{this.renderUserInfoTop()}
+				{this.renderMyCamera()}
             </ScreenBlockComponent>
 		);
+	}
+
+	onPressTouchLayer() {
+		this.setState({showAction: true});
+		let touchTimer = setTimeout(() => {
+			this.setState({showAction: false});
+		}, 5000);
+		if(this.state.touchTimeout !== null) {
+			clearTimeout(this.state.touchTimeout);
+			this.setState({touchTimeout: touchTimer});
+		}
+	}
+
+	onPressChangeDeviceCamera() {
+		this.props.onSwitchCameraType();
+	}
+
+	onPressMyCameraTouchLayer() {
+		this.setState({remoteVideoUrl: this.state.localVideoUrl, localVideoUrl: this.state.remoteVideoUrl});
 	}
 
 	onPressEndCall() {
@@ -160,6 +271,35 @@ class VideoCallComponent extends React.Component {
 export default VideoCallComponent;
 
 
+class Timer extends React.Component {
+	state = {
+		time: 0,
+		interval: null,
+	}
+
+	componentWillMount() {
+		var interval = setInterval(() => {
+			this.setState({time: this.state.time + 1});
+		}, 1000);
+
+		this.setState({interval: interval});
+	}
+
+	componentWillUnmount() {
+		clearInterval(this.state.interval);
+	}
+
+	render() {
+		return (
+			<Text style={{color: '#fff'}}>{this.pad(Math.floor(this.state.time / 60))}:{this.pad(this.state.time % 60)}</Text>
+		);
+	}
+
+    pad(d) {
+        return (d < 10) ? '0' + d.toString() : d.toString();
+    }
+}
+
 const styles = {
 	userCamera: {
 		flex: 1, 
@@ -167,27 +307,61 @@ const styles = {
 		justifyContent: 'center', 
 		alignItems: 'center',
 	},
+	touchLayer: {
+		position: 'absolute', 
+		bottom: 0,
+		right: 0, 
+		left: 0, 
+		top: 0, 
+	},
+	userInfoTop: {
+		position: 'absolute', 
+		right: 0, 
+		left: 0, 
+		top: 0, 
+		justifyContent: 'flex-start',
+	},
+	userInfoTopWrapper: {
+		flexDirection: 'row',
+		padding: 10,
+	},
+	userInfoCenter: {
+		position: 'absolute',
+		top: 0,
+		bottom: 0,
+		left: 0,
+		right: 0,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
 	myCamera: {
 		position: 'absolute', 
-		top: 0, 
-		right: 0, 
+		top: 60, 
+		right: 10, 
 		backgroundColor: '#fff', 
 		justifyContent: 'center', 
 		alignItems: 'center'
 	},
+	myCameraTouchLayer: {
+		position: 'absolute',
+		top: 0,
+		bottom: 0, 
+		left: 0,
+		right: 0,
+	},
 	bottomActionBlock: {
 		position: 'absolute', 
-		top: 0, 
 		right: 0, 
 		left: 0, 
 		bottom: 0, 
-		justifyContent: 'flex-end'
+		justifyContent: 'flex-end',
 	},
 	bottomActionBlockWrapper: {
 		flexDirection: 'row', 
 		alignItems: 'center', 
 		justifyContent: 'center', 
 		padding: 15,
+		paddingBottom: 40,
 	},
 	button: {
 		width: 60, 

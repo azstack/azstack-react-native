@@ -27,6 +27,9 @@ class Event {
         this.AZStackCore.Delegates.onRemoteStreamArrived = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_REMOTE_STREAM_ARRIVED, { error, result });
         };
+        this.AZStackCore.Delegates.onSwitchCameraTypeReturn = (error, result) => {
+            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_SWITCH_CAMERA_TYPE_RETURN, { error, result });
+        };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_HAS_NEW_MESSAGE] = (error, result) => {
             if (error) {
                 this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_NEW_MESSAGE, { error, result: null });

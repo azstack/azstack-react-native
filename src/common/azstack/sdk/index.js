@@ -129,13 +129,13 @@ export class AZStackSdk extends AZStackBaseComponent {
                     this.AZStackCore.stopFreeCall().then((result) => {
                         setTimeout(() => {
                             this.pop();
-                        }, 1000);
+                        }, 1500);
                     });
                 }, 
                 onCallEnded: () => {
                     setTimeout(() => {
                         this.pop();
-                    }, 1000);
+                    }, 1500);
                 }
             }
         );
@@ -161,13 +161,16 @@ export class AZStackSdk extends AZStackBaseComponent {
                     this.AZStackCore.stopFreeCall().then((result) => {
                         setTimeout(() => {
                             this.pop();
-                        }, 1000);
+                        }, 1500);
                     });
                 },
                 onCallEnded: () => {
                     setTimeout(() => {
                         this.pop();
-                    }, 1000);
+                    }, 1500);
+                },
+                onSwitchCameraType: () => {
+                    this.AZStackCore.switchCameraType({});
                 }
             }
         );
