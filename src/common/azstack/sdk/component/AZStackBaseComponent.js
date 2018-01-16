@@ -5,7 +5,7 @@ import {
     View,
 } from 'react-native';
 
-import ConversationsListComponent from './ConversationsListComponent';
+import ConversationsComponent from './ConversationsComponent';
 import ChatComponent from './ChatComponent';
 import OnCallComponent from './OnCallComponent';
 import ContactComponent from './ContactComponent';
@@ -13,7 +13,7 @@ import NumberPadComponent from './NumberPadComponent';
 import VideoCallComponent from './VideoCallComponent';
 
 const NavigationEnum = {
-    ConversationsListComponent: 'ConversationsListComponent',
+    ConversationsComponent: 'ConversationsComponent',
     ChatComponent: 'ChatComponent',
     OnCallComponent: 'OnCallComponent',
     ContactComponent: 'ContactComponent',
@@ -39,8 +39,8 @@ export default class AZStackBaseComponent extends React.Component {
         let screens = [];
         this.state.navigation.map((value, index) => {
             switch (value.screen) {
-                case 'ConversationsListComponent':
-                    screens.push(this.renderConversationsList(value.options, index));
+                case 'ConversationsComponent':
+                    screens.push(this.renderConversations(value.options, index));
                     break;
                 case 'ChatComponent':
                     screens.push(this.renderChat(value.options, index));
@@ -99,8 +99,8 @@ export default class AZStackBaseComponent extends React.Component {
     }
 
     /* Render component */
-    renderConversationsList(options, key) {
-        return <ConversationsListComponent
+    renderConversations(options, key) {
+        return <ConversationsComponent
             key={key}
             Sizes={this.Sizes}
             Language={this.Language}

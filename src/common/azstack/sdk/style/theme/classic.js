@@ -164,11 +164,11 @@ export const MESSAGE_STATUS_TEXT_SEEN_STYLE = {
 };
 
 
-export const CONVERSATIONS_LIST_SEARCH_BLOCK_STYLE = {
+export const CONVERSATIONS_SEARCH_BLOCK_STYLE = {
     marginVertical: 10,
     marginHorizontal: 15,
 };
-export const CONVERSATIONS_LIST_ITEMS_STYLE = {
+export const CONVERSATIONS_LIST_STYLE = {
     paddingHorizontal: 15,
     flex: 1,
     marginBottom: 10

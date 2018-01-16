@@ -12,7 +12,7 @@ import SearchBlockComponent from './part/common/SearchBlockComponent';
 
 import ConversationBlockComponent from './part/conversation/ConversationBlockComponent';
 
-class ConversationsListComponent extends React.Component {
+class ConversationsComponent extends React.Component {
     constructor(props) {
         super(props);
 
@@ -714,19 +714,19 @@ class ConversationsListComponent extends React.Component {
                 <ScreenHeaderBlockComponent
                     CustomStyle={this.props.CustomStyle}
                     onBackButtonPressed={this.props.onBackButtonPressed}
-                    title={this.props.Language.getText('CONVERSATIONS_LIST_HEADER_TITLE_TEXT')}
+                    title={this.props.Language.getText('CONVERSATIONS_HEADER_TITLE_TEXT')}
                 />
                 <ScreenBodyBlockComponent
                     CustomStyle={this.props.CustomStyle}
                 >
                     <View
-                        style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_BLOCK_STYLE')}
+                        style={this.props.CustomStyle.getStyle('CONVERSATIONS_SEARCH_BLOCK_STYLE')}
                     >
                         <SearchBlockComponent
                             CustomStyle={this.props.CustomStyle}
                             onSearchTextChanged={this.onSearchTextChanged}
                             onSearchTextCleared={this.onSearchTextCleared}
-                            placeholder={this.props.Language.getText('CONVERSATIONS_LIST_SEARCH_PLACEHOLDER_TEXT')}
+                            placeholder={this.props.Language.getText('CONVERSATIONS_SEARCH_PLACEHOLDER_TEXT')}
                         />
                     </View>
                     {
@@ -737,7 +737,7 @@ class ConversationsListComponent extends React.Component {
                     }
                     {
                         this.getFilteredConversations().length > 0 && <FlatList
-                            style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_ITEMS_STYLE')}
+                            style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_STYLE')}
                             data={this.getFilteredConversations()}
                             keyExtractor={(item, index) => (item.chatType + '_' + item.chatId)}
                             renderItem={({ item }) => {
@@ -761,4 +761,4 @@ class ConversationsListComponent extends React.Component {
     };
 };
 
-export default ConversationsListComponent;
+export default ConversationsComponent;
