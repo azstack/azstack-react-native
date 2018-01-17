@@ -86,8 +86,7 @@ class AZStackSdkExample extends React.Component {
         return (
             <View
                 style={{
-                    width,
-                    height: height - StatusBar.currentHeight,
+                    flex: 1,
                 }}
             >
                 <ScrollView>

@@ -26,7 +26,7 @@ class AppMain extends React.Component {
         //user 3: test_user_3 391658
 
         return (
-            <View>
+            <View style={{flex: 1}}>
                 {exampleType === 'core' && <AZStackCoreExample azstackConfig={azstackConfig} />}
                 {exampleType === 'sdk' && <AZStackSdkExample azstackConfig={azstackConfig} languageCode='en' themeName='classic'/>}
             </View>

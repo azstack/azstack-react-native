@@ -249,7 +249,7 @@ class OnCallComponent extends React.Component {
 	render() {
 		return (
             <ScreenBlockComponent
-                Sizes={this.props.Sizes}
+				fullScreen={true}
                 CustomStyle={this.props.CustomStyle}
             >
 				<Image source={call_bg} style={{width: width, height: height}} />

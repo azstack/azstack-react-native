@@ -1,8 +1,13 @@
 import React from 'react';
 import {
     Keyboard,
-    Animated
+    Animated,
+    Platform,
+    Dimensions,
 } from 'react-native';
+import CustomStatusBar from '../common/CustomStatusBar';
+
+const {height, width} = Dimensions.get('window');
 
 class ScreenBlockComponent extends React.Component {
     constructor(props) {
@@ -10,8 +15,8 @@ class ScreenBlockComponent extends React.Component {
 
         this.state = {
             opacityAnimated: new Animated.Value(0),
-            marginLeftAnimated: new Animated.Value(-this.props.Sizes.width),
-            heightAnimated: new Animated.Value(this.props.Sizes.height)
+            marginLeftAnimated: new Animated.Value(-width),
+            heightAnimated: new Animated.Value(height)
         };
 
         this.keyboardListeners = {
@@ -42,7 +47,7 @@ class ScreenBlockComponent extends React.Component {
             Animated.timing(
                 this.state.heightAnimated,
                 {
-                    toValue: this.props.Sizes.height - event.endCoordinates.height,
+                    toValue: height - event.endCoordinates.height,
                     duration: 500,
                 }
             ).start();
@@ -51,7 +56,7 @@ class ScreenBlockComponent extends React.Component {
             Animated.timing(
                 this.state.heightAnimated,
                 {
-                    toValue: this.props.Sizes.height,
+                    toValue: height,
                     duration: 500,
                 }
             ).start();
@@ -70,7 +75,7 @@ class ScreenBlockComponent extends React.Component {
             Animated.timing(
                 this.state.marginLeftAnimated,
                 {
-                    toValue: -this.props.Sizes.width,
+                    toValue: -width,
                     duration: 500,
                 }
             )
@@ -84,8 +89,12 @@ class ScreenBlockComponent extends React.Component {
         return (
             <Animated.View
                 style={{
+                    ...Platform.select({
+                        ios: {
+                            paddingTop: this.props.fullScreen === true ? 0 : 20,
+                        }
+                    }),
                     ...this.props.CustomStyle.getStyle('SCREEN_BLOCK_STYLE'),
-                    ...this.props.Sizes,
                     opacity: this.state.opacityAnimated,
                     marginLeft: this.state.marginLeftAnimated,
                     height: this.state.heightAnimated

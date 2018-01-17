@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-    StatusBar,
     Dimensions,
     View,
 } from 'react-native';

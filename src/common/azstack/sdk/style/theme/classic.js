@@ -2,8 +2,12 @@ export const SCREEN_BLOCK_STYLE = {
     position: 'absolute',
     top: 0,
     left: 0,
+    right: 0,
+    bottom: 0,
     backgroundColor: '#fff',
     flexDirection: 'column',
+    borderWidth: 1,
+    borderColor: 'red'
 };
 export const SCREEN_HEADER_BLOCK_STYLE = {
     borderStyle: 'solid',
