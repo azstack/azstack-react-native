@@ -255,7 +255,8 @@ export const CONVERSATION_MESSAGE_STATUS_TEXT_STYLE = {
 };
 
 export const CHAT_HEADER_BLOCK_STYLE = {
-    padding: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     borderStyle: 'solid',
     borderBottomWidth: 1,
     borderBottomColor: '#E1E5EC',
@@ -317,7 +318,7 @@ export const CHAT_HEADER_MEMBERS_TEXT_STYLE = {
 };
 export const CHAT_INPUT_DISABLED_BLOCK_STYLE = {
     paddingVertical: 15,
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
     backgroundColor: '#F2784B',
     flexDirection: 'row',
     justifyContent: 'center',

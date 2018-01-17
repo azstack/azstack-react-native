@@ -147,7 +147,7 @@ class ChatComponent extends React.Component {
                 }, () => {
                     console.log(this.state.messages);
                 });
-            }).catch((error) => {});
+            }).catch((error) => { });
 
         }).catch((error) => { });
     };
@@ -189,8 +189,6 @@ class ChatComponent extends React.Component {
                             return resolve(message);
                         }
 
-                        message.prepared = true;
-
                         if (message.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER) {
                             if (message.senderId === message.chatId) {
                                 message.sender = this.state.chatTarget;
@@ -229,6 +227,114 @@ class ChatComponent extends React.Component {
                                 message.sender = { userId: message.senderId };
                                 resolve(message);
                             })
+                        }
+                    });
+                })
+            );
+        }).then((messages) => {
+            return Promise.all(
+                messages.map((message) => {
+                    return new Promise((resolve, reject) => {
+
+                        if (message.prepared) {
+                            return resolve(message);
+                        }
+
+                        message.prepared = true;
+
+                        switch (message.type) {
+                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_CREATED:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_RENAMED:
+                                resolve(message);
+                                break;
+                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_INVITED:
+                                message.invited.invites = [];
+                                Promise.all(
+                                    message.invited.inviteIds.map((inviteId) => {
+                                        return new Promise((resolve, reject) => {
+                                            this.props.AZStackCore.getUsersInformation({
+                                                userIds: [inviteId]
+                                            }).then((result) => {
+                                                message.invited.invites.push(result.list[0]);
+                                                resolve(message);
+                                            }).catch((error) => {
+                                                message.invited.invites.push({ userId: inviteId });
+                                                resolve(message);
+                                            });
+                                        });
+                                    })
+                                ).then(() => {
+                                    resolve(message);
+                                }).catch(() => {
+                                    resolve(message);
+                                });
+                                break;
+                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_LEFT:
+                                let PromiseTasks = [];
+                                PromiseTasks.push(
+                                    new Promise((resolve, reject) => {
+                                        this.props.AZStackCore.getUsersInformation({
+                                            userIds: [message.left.leaveId]
+                                        }).then((result) => {
+                                            message.left.leave = result.list[0];
+                                            resolve(message);
+                                        }).catch((error) => {
+                                            message.left.leave = { userId: message.left.leaveId }
+                                            resolve(message);
+                                        });
+                                    })
+                                );
+                                if (message.left.newAdminId) {
+                                    PromiseTasks.push(
+                                        new Promise((resolve, reject) => {
+                                            this.props.AZStackCore.getUsersInformation({
+                                                userIds: [message.left.newAdminId]
+                                            }).then((result) => {
+                                                message.left.newAdmin = result.list[0];
+                                                resolve(message);
+                                            }).catch((error) => {
+                                                message.left.newAdmin = { userId: message.left.newAdminId }
+                                                resolve(message);
+                                            });
+                                        })
+                                    );
+                                }
+                                Promise.all(
+                                    PromiseTasks
+                                ).then(() => {
+                                    resolve(message);
+                                }).catch(() => {
+                                    resolve(message);
+                                });
+                                break;
+                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_ADMIN_CHANGED:
+                                this.props.AZStackCore.getUsersInformation({
+                                    userIds: [message.adminChanged.newAdminId]
+                                }).then((result) => {
+                                    message.adminChanged.newAdmin = result.list[0];
+                                    resolve(message);
+                                }).catch((error) => {
+                                    message.adminChanged.newAdmin = { userId: message.adminChanged.newAdminId }
+                                    resolve(message);
+                                });
+                                break;
+                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_PUBLIC_JOINED:
+                                this.props.AZStackCore.getUsersInformation({
+                                    userIds: [message.joined.joinId]
+                                }).then((result) => {
+                                    message.joined.join = result.list[0];
+                                    resolve(message);
+                                }).catch((error) => {
+                                    message.joined.join = { userId: message.joined.joinId }
+                                    resolve(message);
+                                });
+                                break;
+                            default:
+                                resolve(message);
+                                break;
                         }
                     });
                 })
