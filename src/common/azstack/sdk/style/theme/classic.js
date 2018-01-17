@@ -19,7 +19,7 @@ export const SCREEN_HEADER_BLOCK_STYLE = {
 };
 export const SCREEN_HEADER_BACK_BUTTON_STYLE = {
     position: 'absolute',
-    top: 0, 
+    top: 0,
     left: 0,
     bottom: 0,
 };
@@ -258,4 +258,170 @@ export const CONVERSATION_MESSAGE_STATUS_BLOCK_STYLE = {
 };
 export const CONVERSATION_MESSAGE_STATUS_TEXT_STYLE = {
     fontSize: 8
+};
+
+export const CHAT_HEADER_BLOCK_STYLE = {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderStyle: 'solid',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E1E5EC',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row'
+};
+export const CHAT_HEADER_BACK_BUTTON_STYLE = {
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+};
+export const CHAT_HEADER_BACK_BUTTON_IMAGE_STYLE = {
+    width: 25,
+    height: 25
+};
+export const CHAT_HEADER_INFO_BLOCK_STYLE = {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const CHAT_HEADER_AVATAR_BLOCK_STYLE = {
+    width: 40,
+    height: 40
+};
+export const CHAT_HEADER_AVATAR_TEXT_STYLE = {
+    fontSize: 18
+};
+export const CHAT_HEADER_TEXT_BLOCK_STYLE = {
+    flex: 1,
+    paddingLeft: 10
+};
+export const CHAT_HEADER_NAME_TEXT_STYLE = {
+    fontSize: 15,
+    fontWeight: '400',
+    lineHeight: 20,
+    color: '#2F353B',
+};
+export const CHAT_HEADER_OFFLINE_TEXT_STYLE = {
+    fontSize: 14,
+    fontWeight: '300',
+    lineHeight: 20,
+    color: '#95A5A6',
+    textAlign: 'left'
+};
+export const CHAT_HEADER_ONLINE_TEXT_STYLE = {
+    fontSize: 14,
+    fontWeight: '300',
+    lineHeight: 20,
+    color: '#578EBE'
+};
+export const CHAT_HEADER_MEMBERS_TEXT_STYLE = {
+    fontSize: 14,
+    fontWeight: '300',
+    lineHeight: 20,
+    color: '#95A5A6'
+};
+export const CHAT_INPUT_DISABLED_BLOCK_STYLE = {
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+    backgroundColor: '#F2784B',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const CHAT_INPUT_DISABLED_TEXT_STYLE = {
+    fontSize: 15,
+    lineHeight: 20,
+    fontWeight: '500',
+    color: '#fff'
+};
+export const MESSAGES_LIST_STYLE = {
+    paddingHorizontal: 15,
+    flex: 1
+};
+
+export const MESSAGE_BLOCK_STYLE = {
+    marginVertical: 5
+};
+export const MESSAGE_TIME_MARK_TEXT_STYLE = {
+    fontSize: 12,
+    lineHeight: 15,
+    fontWeight: '600',
+    color: '#95A5A6',
+    marginBottom: 5
+};
+export const MESSAGE_TYPE_ACTION_TEXT_STYLE = {
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    fontSize: 15,
+    lineHeight: 20,
+    fontWeight: '300',
+    color: '#555555',
+    backgroundColor: '#E9EDEF',
+    borderRadius: 5,
+    textAlign: 'center'
+};
+export const MESSAGE_TYPE_ACTION_BOLD_TEXT_STYLE = {
+    fontWeight: '500'
+};
+export const MESSAGE_TYPE_ACTION_TIME_TEXT_STYLE = {
+    fontSize: 12,
+    lineHeight: 20,
+    fontWeight: '400',
+    color: '#95A5A6'
+};
+export const MESSAGE_TYPE_MEDIA_BLOCK_STYLE = {};
+export const MESSAGE_TYPE_MEDIA_SENDER_BLOCK_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center'
+};
+export const MESSAGE_TYPE_MEDIA_SENDER_AVATAR_BLOCK_STYLE = {
+    width: 30,
+    height: 30
+};
+export const MESSAGE_TYPE_MEDIA_SENDER_AVATAR_TEXT_STYLE = {
+    fontSize: 12
+};
+export const MESSAGE_TYPE_MEDIA_SENDER_TEXT_STYLE = {
+    fontSize: 14,
+    lineHeight: 20,
+    fontWeight: '500',
+    color: '#2F353B',
+    marginLeft: 10
+};
+export const MESSAGE_TYPE_MEDIA_CONTENT_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-end',
+    marginLeft: 40
+};
+export const MESSAGE_TYPE_MEDIA_CONTENT_FROM_ME_STYLE = {
+    justifyContent: 'flex-end',
+    marginLeft: 0
+};
+export const MESSAGE_TYPE_MEDIA_TEXT_STYLE = {
+    fontSize: 16,
+    lineHeight: 20,
+    fontWeight: '400',
+    color: '#2F353B'
+};
+export const MESSAGE_TYPE_MEDIA_TEXT_FROM_ME_STYLE = {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    color: '#fff',
+    borderRadius: 5,
+    backgroundColor: '#F2784B'
+};
+export const MESSAGE_TYPE_MEDIA_STICKER_STYLE = {
+    width: 50,
+    height: 50
+};
+export const MESSAGE_TYPE_MEDIA_TIME_TEXT_STYLE = {
+    marginHorizontal: 5,
+    fontSize: 12,
+    lineHeight: 20,
+    fontWeight: '400',
+    color: '#95A5A6'
 };
