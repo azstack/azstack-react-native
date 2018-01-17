@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-    View,
     FlatList,
 } from 'react-native';
 
@@ -9,6 +8,7 @@ import ScreenHeaderBlockComponent from './part/screen/ScreenHeaderBlockComponent
 import ScreenBodyBlockComponent from './part/screen/ScreenBodyBlockComponent';
 import EmptyBlockComponent from './part/common/EmptyBlockComponent';
 import ChatHeaderComponent from './part/chat/ChatHeaderComponent';
+import MessageBlockComponent from './part/chat/MessageBlockComponent';
 import ChatInputDisabledComponent from './part/chat/ChatInputDisabledComponent';
 
 class ChatComponent extends React.Component {
@@ -48,6 +48,41 @@ class ChatComponent extends React.Component {
         for (let subscriptionName in this.subscriptions) {
             this.subscriptions[subscriptionName].remove();
         }
+    };
+
+    shouldRenderTimeMark(index) {
+        if (index === 0) {
+            return true;
+        }
+        let currentMessage = this.state.messages[index];
+        let prevMessage = this.state.messages[index - 1];
+
+        if (!currentMessage.created) {
+            return false;
+        }
+        if (new Date(currentMessage.created) === 'Invalid Date' || isNaN(new Date(currentMessage.created))) {
+            return false;
+        }
+        if (!prevMessage.created) {
+            return false;
+        }
+        if (new Date(prevMessage.created) === 'Invalid Date' || isNaN(new Date(prevMessage.created))) {
+            return false;
+        }
+
+        let currentMessageDate = new Date(currentMessage.created);
+        let currentMesssageYear = currentMessageDate.getFullYear();
+        let currentMesssageMonth = currentMessageDate.getMonth();
+        let currentMesssageDay = currentMessageDate.getDate();
+        let prevMessageDate = new Date(prevMessage.created);
+        let prevMesssageYear = prevMessageDate.getFullYear();
+        let prevMesssageMonth = prevMessageDate.getMonth();
+        let prevMesssageDay = prevMessageDate.getDate();
+
+        if (currentMesssageYear !== prevMesssageYear || currentMesssageMonth !== prevMesssageMonth || currentMesssageDay !== prevMesssageDay) {
+            return true;
+        }
+        return false;
     };
 
     getChatTarget() {
@@ -381,6 +416,24 @@ class ChatComponent extends React.Component {
                         this.state.messages.length === 0 && <EmptyBlockComponent
                             CustomStyle={this.props.CustomStyle}
                             emptyText={this.props.Language.getText('MESSAGES_LIST_EMPTY_TEXT')}
+                        />
+                    }
+                    {
+                        this.state.messages.length > 0 && <FlatList
+                            style={this.props.CustomStyle.getStyle('MESSAGES_LIST_STYLE')}
+                            data={this.state.messages}
+                            keyExtractor={(item, index) => (item.msgId)}
+                            renderItem={({ item, index }) => {
+                                return (
+                                    <MessageBlockComponent
+                                        Language={this.props.Language}
+                                        CustomStyle={this.props.CustomStyle}
+                                        AZStackCore={this.props.AZStackCore}
+                                        message={item}
+                                        shouldRenderTimeMark={this.shouldRenderTimeMark(index)}
+                                    />
+                                );
+                            }}
                         />
                     }
                 </ScreenBodyBlockComponent>

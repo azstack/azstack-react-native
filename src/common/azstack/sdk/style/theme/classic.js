@@ -330,3 +330,37 @@ export const CHAT_INPUT_DISABLED_TEXT_STYLE = {
     fontWeight: '500',
     color: '#fff'
 };
+export const MESSAGES_LIST_STYLE = {
+    paddingHorizontal: 15,
+    flex: 1
+};
+
+export const MESSAGE_BLOCK_STYLE = {
+    marginVertical: 5
+};
+export const MESSAGE_TIME_MARK_TEXT_STYLE = {
+    fontSize: 12,
+    lineHeight: 15,
+    fontWeight: '600',
+    color: '#95A5A6',
+    marginBottom: 5
+}
+export const MESSAGE_TYPE_ACTION_TEXT_STYLE = {
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    fontSize: 15,
+    lineHeight: 20,
+    fontWeight: '300',
+    color: '#555555',
+    backgroundColor: '#E9EDEF',
+    textAlign: 'center'
+}
+export const MESSAGE_TYPE_ACTION_BOLD__TEXTSTYLE = {
+    fontWeight: '500'
+}
+export const MESSAGE_TYPE_ACTION_TIME_TEXT_STYLE = {
+    fontSize: 12,
+    lineHeight: 20,
+    fontWeight: '400',
+    color: '#95A5A6'
+}

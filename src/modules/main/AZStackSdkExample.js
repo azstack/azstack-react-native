@@ -27,8 +27,8 @@ class AZStackSdkExample extends React.Component {
 
     showChat() {
         this.refs.AZStackSdk.navigate(this.refs.AZStackSdk.getNavigation().ChatComponent, {
-            chatType: this.refs.AZStackSdk.AZStackCore.chatConstants.CHAT_TYPE_USER,
-            chatId: 387212
+            chatType: this.refs.AZStackSdk.AZStackCore.chatConstants.CHAT_TYPE_GROUP,
+            chatId: 7436
         });
     };
 
