@@ -31,7 +31,6 @@ export class AZStackSdk extends AZStackBaseComponent {
 
         this.AZStackCore = new AZStackCore(props.options.azstackConfig);
         this.AZStackCore.Delegates.onCallinStart = (error, result) => {
-            console.log(result);
             this.onCallinStart(error, result);
         };
         this.AZStackCore.Delegates.onFreeCallStart = (error, result) => {
@@ -64,6 +63,7 @@ export class AZStackSdk extends AZStackBaseComponent {
             info: {
                 phoneNumber: result.fromPhoneNumber
             },
+            isIncomingCall: true,
             onCallEnded: () => {
                 setTimeout(() => {
                     this.pop();
@@ -85,9 +85,6 @@ export class AZStackSdk extends AZStackBaseComponent {
             },
             onAnswer: () => {
                 this.AZStackCore.answerCallin({}, (error, result) => {
-                    setTimeout(() => {
-                        this.pop();
-                    }, 1500);
                 });
             },
             onTimeout: () => {
@@ -278,10 +275,11 @@ export class AZStackSdk extends AZStackBaseComponent {
         );
     }
 
-    showNumberPad() {
+    showNumberPad(options,) {
         this.navigate(
             this.getNavigation().NumberPadComponent, 
             {
+                ...options,
                 onCallout: (options) => {
                     this.startCallout(options);
                 },
@@ -292,10 +290,29 @@ export class AZStackSdk extends AZStackBaseComponent {
         );
     }
 
-    showContacts() {
+    showContacts(options) {
         this.navigate(
             this.getNavigation().ContactComponent, 
             {
+                ...options,
+                onVideoCall: (options) => {
+                    this.startVideoCall(options);
+                },
+                onAudioCall: (options) => {
+                    this.startAudioCall(options);
+                },
+                onCallout: (options) => {
+                    this.startCallout(options);
+                }
+            }
+        );
+    }
+
+    showCallLogs(options) {
+        this.navigate(
+            this.getNavigation().CallLogsComponent, 
+            {
+                ...options,
                 onVideoCall: (options) => {
                     this.startVideoCall(options);
                 },

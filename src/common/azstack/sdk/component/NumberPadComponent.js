@@ -66,16 +66,16 @@ class NumberPadComponent extends React.Component {
 					onBackButtonPressed={() => this.props.onBackButtonPressed()}
 					title={"Callout"}
 				/>
-				<View style={{backgroundColor: '#fff', justifyContent: 'flex-end', alignItems: 'center'}}>
-					<View style={{width: 270, alignSelf: 'center', flexDirection: 'row', justifyContent: 'flex-end', backgroundColor: '#fff', alignItems: 'center', height: 50}}>
-						<View style={{ marginRight: 20, width: width - 60, alignItems: 'flex-end'}}>
-							<Text style={{fontSize: 30}}>{this.state.phoneNumber}</Text>
+				<View style={{backgroundColor: '#fff', justifyContent: 'flex-end', alignItems: 'center', flex: 1, paddingBottom: 40}}>
+					<View style={{width: 270, alignSelf: 'center', flexDirection: 'row', justifyContent: 'flex-end', backgroundColor: '#fff', alignItems: 'center', height: 50, marginBottom: 20}}>
+						<View style={{ alignItems: 'flex-end'}}>
+							<Text style={{fontSize: this.state.phoneNumber.length <= 10 ? 40 : this.state.phoneNumber.length <= 13 ? 30 : 20 }}>{this.state.phoneNumber}</Text>
 						</View>
-						<View style={{justifyContent: 'center', alignItems: 'flex-end'}}>
-							<TouchableOpacity onPress={() => this.onClear()}>
+						<TouchableOpacity onPress={() => this.onClear()}>
+							<View style={{justifyContent: 'center', alignItems: 'flex-end', width: 40, height: 50}}>
 								<Image source={ic_input_back} style={{width: 25, height: 19}} />
-							</TouchableOpacity>
-						</View>
+							</View>
+						</TouchableOpacity>
 					</View>
 					<View style={{width: width, justifyContent: 'center', alignItems: 'center'}}>
 						<View style={{width: 270, alignSelf: 'center'}}>
@@ -146,7 +146,7 @@ class NumberPadComponent extends React.Component {
 										<Text style={{fontSize: 10}}> </Text>
 									</View>
 								</TouchableOpacity>
-								<TouchableOpacity onPress={() => {this.onClickNumber('0')}}>
+								<TouchableOpacity onPress={() => {this.onClickNumber('0')}} onLongPress={() => this.onClickNumber('+')}>
 									<View style={styles.number}>
 										<Text style={{fontSize: 34}}>0</Text>
 										<Text style={{fontSize: 10}}>+</Text>

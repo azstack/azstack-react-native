@@ -30,7 +30,7 @@ class AZStackSdkExample extends React.Component {
     };
 
     showContact() {
-        this.refs.AZStackSdk.showContacts();
+        this.refs.AZStackSdk.showContacts({});
     }
 
     showNumberPad() {
@@ -61,6 +61,10 @@ class AZStackSdkExample extends React.Component {
                 // or whatever you want here
             },
         });
+    }
+
+    showCallLogs() {
+        this.refs.AZStackSdk.showCallLogs({});
     }
 
     componentDidMount() {
@@ -95,6 +99,7 @@ class AZStackSdkExample extends React.Component {
                     <Button onPress={() => this.videoCall()} title='Video Call User 2'></Button>
                     <Button onPress={() => this.showContact()} title='Contact List'></Button>
                     <Button onPress={() => this.showNumberPad()} title='Callout'></Button>
+                    <Button onPress={() => this.showCallLogs()} title='Show call logs'></Button>
                 </ScrollView>
                 <AZStackSdk
                     ref={"AZStackSdk"}

@@ -40,7 +40,7 @@ class OnCallComponent extends React.Component {
 	}
 
     addSubscriptions() {
-        this.subscriptions.onCalloutStatusChanged = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_CALLOUT_STATUS_CHANGED_RETURN, ({ error, result }) => {
+        this.subscriptions.onCalloutStatusChanged = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_CALLOUT_STATUS_CHANGED, ({ error, result }) => {
             if (error) {
                 return;
 			}
@@ -59,7 +59,7 @@ class OnCallComponent extends React.Component {
 			}
 		});
 		
-        this.subscriptions.onCallinStatusChanged = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_CALLIN_STATUS_CHANGED_RETURN, ({ error, result }) => {
+        this.subscriptions.onCallinStatusChanged = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_CALLIN_STATUS_CHANGED, ({ error, result }) => {
             if (error) {
                 return;
 			}
@@ -73,7 +73,18 @@ class OnCallComponent extends React.Component {
 					
 				this.props.onCallEnded();
 			}
-        });
+		});
+		
+		this.subscriptions.onCallinStatusChangedByMe = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_CALLIN_STATUS_CHANGED_BY_ME, ({error, result}) => {
+
+			if (error) {
+                return;
+			}
+
+			if(result.status === this.props.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING) {
+				this.props.onCallEnded();
+			}
+		});
 		
         this.subscriptions.onFreeCallStatusChanged = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_FREE_CALL_STATUS_CHANGED, ({ error, result }) => {
             if (error) {
