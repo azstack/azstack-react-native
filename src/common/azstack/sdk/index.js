@@ -31,7 +31,11 @@ export class AZStackSdk extends AZStackBaseComponent {
 
         this.AZStackCore = new AZStackCore(props.options.azstackConfig);
         this.AZStackCore.Delegates.onCallinStart = (error, result) => {
+            console.log(result);
             this.onCallinStart(error, result);
+        };
+        this.AZStackCore.Delegates.onFreeCallStart = (error, result) => {
+            this.onFreeCallStart(error, result);
         };
 
         this.EventEmitter = new EventEmitter();
@@ -56,31 +60,124 @@ export class AZStackSdk extends AZStackBaseComponent {
     }
 
     onCallinStart(error, result) {
-        this.navigate(NavigationEnum.OnCallComponent, {
+        this.navigate(this.getNavigation().OnCallComponent, {
             info: {
                 phoneNumber: result.fromPhoneNumber
             },
             onCallEnded: () => {
                 setTimeout(() => {
-                    this.dismiss();
+                    this.pop();
                 }, 1500);
             },
             onEndCall: () => {
                 this.AZStackCore.stopCallin({}, (error, result) => {
+                    setTimeout(() => {
+                        this.pop();
+                    }, 1500);
                 });
             },
             onReject: () => {
                 this.AZStackCore.rejectCallin({}, (error, result) => {
+                    setTimeout(() => {
+                        this.pop();
+                    }, 1500);
                 });
             },
             onAnswer: () => {
                 this.AZStackCore.answerCallin({}, (error, result) => {
+                    setTimeout(() => {
+                        this.pop();
+                    }, 1500);
                 });
             },
             onTimeout: () => {
                 this.AZStackCore.notAnsweredCallin({}, (error, result) => {
+                    setTimeout(() => {
+                        this.pop();
+                    }, 1500);
                 });
             }
+        });
+    }
+
+    onFreeCallStart(error, result) {
+        this.AZStackCore.getUsersInformation({
+            userIds: [result.fromUserId]
+        }).then((resultUser) => {
+            if(resultUser.list.length > 0) {
+                if(result.mediaType === this.AZStackCore.callConstants.CALL_MEDIA_TYPE_AUDIO) {
+                    this.navigate(this.getNavigation().OnCallComponent, {
+                        info: {
+                            name: resultUser.list[0].fullname,
+                            userId: resultUser.list[0].userId,
+                        },
+                        isIncomingCall: true,
+                        onCallEnded: () => {
+                            setTimeout(() => {
+                                this.pop();
+                            }, 1500);
+                        },
+                        onEndCall: () => {
+                            this.AZStackCore.stopFreeCall({}, (error, result) => {
+                                setTimeout(() => {
+                                    this.pop();
+                                }, 1500);
+                            });
+                        },
+                        onReject: () => {
+                            this.AZStackCore.rejectFreeCall({}, (error, result) => {
+                                setTimeout(() => {
+                                    this.pop();
+                                }, 1500);
+                            });
+                        },
+                        onAnswer: () => {
+                            this.AZStackCore.answerFreeCall({}, (error, result) => {});
+                        },
+                        onTimeout: () => {
+                            this.AZStackCore.notAnswerFreeCall({}, (error, result) => {});
+                        }
+                    });
+                } else if(result.mediaType === this.AZStackCore.callConstants.CALL_MEDIA_TYPE_VIDEO) {
+                    this.navigate(this.getNavigation().VideoCallComponent, {
+                        info: {
+                            name: resultUser.list[0].fullname,
+                            userId: resultUser.list[0].userId,
+                        },
+                        isIncomingCall: true,
+                        onCallEnded: () => {
+                            setTimeout(() => {
+                                this.pop();
+                            }, 1500);
+                        },
+                        onEndCall: () => {
+                            this.AZStackCore.stopFreeCall({}, (error, result) => {
+                                setTimeout(() => {
+                                    this.pop();
+                                }, 1500);
+                            });
+                        },
+                        onReject: () => {
+                            this.AZStackCore.rejectFreeCall({}, (error, result) => {
+                                setTimeout(() => {
+                                    this.pop();
+                                }, 1500);
+                            });
+                        },
+                        onAnswer: () => {
+                            this.AZStackCore.answerFreeCall({}, (error, result) => {});
+                        },
+                        onTimeout: () => {
+                            this.AZStackCore.notAnswerFreeCall({}, (error, result) => {});
+                        },
+                        onSwitchCameraType: () => {
+                            this.AZStackCore.switchCameraType({});
+                        }
+                    });
+                }
+            }
+        }).catch((error) => {
+            console.log(error);
         });
     }
 
@@ -104,6 +201,11 @@ export class AZStackSdk extends AZStackBaseComponent {
                             this.pop();
                         }, 1500);
                     });
+                },
+                onCallEnded: () => {
+                    setTimeout(() => {
+                        this.pop();
+                    }, 1500);
                 },
             }
         );
@@ -185,7 +287,7 @@ export class AZStackSdk extends AZStackBaseComponent {
                 },
                 onBackButtonPressed: () => {
                     this.pop();
-                }
+                },
             }
         );
     }

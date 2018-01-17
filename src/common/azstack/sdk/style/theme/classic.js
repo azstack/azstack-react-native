@@ -18,12 +18,14 @@ export const SCREEN_HEADER_BACK_BUTTON_STYLE = {
     top: 0, 
     left: 0,
     bottom: 0,
-    width: 54,
-    height: 54,
-    marginLeft: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
 };
+export const SCREEN_HEADER_BACK_BUTTON_CONTAINER_STYLE = {
+    height: 54, 
+    justifyContent: 'center', 
+    alignItems: 'flex-end', 
+    paddingRight: 20,
+    paddingLeft: 10,
+}
 export const SCREEN_HEADER_BACK_BUTTON_IMAGE_STYLE = {
     width: 25,
     height: 25

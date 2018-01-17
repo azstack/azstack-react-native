@@ -12,7 +12,7 @@ class Event {
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_FREE_CALL_STAUTUS_CHANGED] = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_FREE_CALL_STATUS_CHANGED, { error, result });
         };
-        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_FREE_CALL_STAUTUS_CHANGED_BY_ME] = (error, result) => {
+        this.AZStackCore.Delegates.onFreeCallStatusChangedByMe = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_FREE_CALL_STATUS_CHANGED_BY_ME, { error, result });
         };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_CALLIN_STATUS_CHANGED] = (error, result) => {

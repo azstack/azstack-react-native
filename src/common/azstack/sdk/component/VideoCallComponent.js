@@ -20,6 +20,7 @@ import {
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
 import ScreenHeaderBlockComponent from './part/screen/ScreenHeaderBlockComponent';
+import Timer from './part/common/Timer';
 
 const { height, width } = Dimensions.get('window');
 
@@ -29,6 +30,9 @@ const ic_video_call_bubble = require('../static/image/ic_video_call_bubble.png')
 const ic_voice = require('../static/image/ic_voice.png');
 const ic_avatar = require('../static/image/ic_avatar.png');
 const ic_switch_camera = require('../static/image/ic_switch_camera.png');
+const ic_cancel = require('../static/image/ic_cancel.png');
+const ic_video_camera_white = require('../static/image/ic_video_camera_white.png');
+const call_bg = require('../static/image/call_bg.jpg');
 
 class VideoCallComponent extends React.Component {
 	constructor(props) {
@@ -39,6 +43,7 @@ class VideoCallComponent extends React.Component {
 			showAction: false,
 			touchTimeout: null,
 			callTime: 0,
+			isIncomingCall: false,
 			// az
             localVideoUrl: null,
 			remoteVideoUrl: null,
@@ -78,7 +83,7 @@ class VideoCallComponent extends React.Component {
             if (error) {
                 return;
 			}
-
+			
 			this.setState({status: result.status, message: result.message});
             
 			if(result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_REJECTED ||
@@ -95,9 +100,10 @@ class VideoCallComponent extends React.Component {
                 return;
             }
 			
-			console.log(result);
+			this.setState({status: result.status, message: result.message});
 
 			if(result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_REJECTED ||
+				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_ANSWERED ||
 				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_STOP ||
 				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_BUSY ||
 				result.status === this.props.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_NOT_ANSWERED) {
@@ -114,6 +120,9 @@ class VideoCallComponent extends React.Component {
     };
 
 	componentWillMount() {
+		if(this.props.isIncomingCall) {
+			this.setState({isIncomingCall: this.props.isIncomingCall, message: 'Ringing'});
+		}
 	}
 
 	componentDidMount() {
@@ -228,18 +237,52 @@ class VideoCallComponent extends React.Component {
 		);
 	}
 
+	renderIncomingCall() {
+		return (
+			<View>
+				<Image source={call_bg} style={{width: '100%', height: '100%'}} />
+				<View style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0}}>
+					<View style={styles.userInfoCenter}>
+						<View style={{paddingBottom: 160, alignItems: 'center'}}>
+							<Image source={ic_avatar} style={{width: 90, height: 90, borderRadius: 45}} />
+							<View style={{alignItems: 'center'}}>
+								<Text style={{color: '#fff', marginVertical: 10, fontSize: 20}}>{this.props.info.name}</Text>
+								<Text style={{color: '#8f8f8f'}}>{this.state.message}</Text>
+							</View>
+						</View>
+					</View>
+				</View>
+				<View style={[styles.bottomActionBlock, {}]}>
+					<View style={styles.bottomActionBlockWrapper}>
+						<TouchableOpacity onPress={() => this.onPressAnswer()}>
+							<View style={[styles.button, {backgroundColor: 'green', marginHorizontal: 60}]}>
+								<Image source={ic_video_camera_white} style={{width: 30, height: 30}} resizeMode={'contain'} />
+							</View>
+						</TouchableOpacity>
+						<TouchableOpacity onPress={() => this.props.onReject()}>
+							<View style={[styles.button, {backgroundColor: 'red', marginHorizontal: 60}]}>
+								<Image source={ic_cancel} style={{width: 30, height: 30}} resizeMode={'contain'} />
+							</View>
+						</TouchableOpacity>
+					</View>
+				</View>
+			</View>
+		);
+	}
+
 	render() {
 		return (
             <ScreenBlockComponent
                 Sizes={this.props.Sizes}
                 CustomStyle={this.props.CustomStyle}
             >	
+				{this.state.isIncomingCall === true && this.renderIncomingCall()}
 				{/* Beware the order, do not change it */}
-				{this.renderBackgroundContent()}
-				{this.renderTouchLayer()}
-				{this.renderBottomActions()}
-				{this.renderUserInfoTop()}
-				{this.renderMyCamera()}
+				{this.state.isIncomingCall === false && this.renderBackgroundContent()}
+				{this.state.isIncomingCall === false && this.renderTouchLayer()}
+				{this.state.isIncomingCall === false && this.renderBottomActions()}
+				{this.state.isIncomingCall === false && this.renderUserInfoTop()}
+				{this.state.isIncomingCall === false && this.renderMyCamera()}
             </ScreenBlockComponent>
 		);
 	}
@@ -266,39 +309,14 @@ class VideoCallComponent extends React.Component {
 	onPressEndCall() {
 		this.props.onEndCall();
 	}
+
+	onPressAnswer() {
+		this.props.onAnswer();
+		this.setState({isIncomingCall: false, status: 200});
+	}
 }
 
 export default VideoCallComponent;
-
-
-class Timer extends React.Component {
-	state = {
-		time: 0,
-		interval: null,
-	}
-
-	componentWillMount() {
-		var interval = setInterval(() => {
-			this.setState({time: this.state.time + 1});
-		}, 1000);
-
-		this.setState({interval: interval});
-	}
-
-	componentWillUnmount() {
-		clearInterval(this.state.interval);
-	}
-
-	render() {
-		return (
-			<Text style={{color: '#fff'}}>{this.pad(Math.floor(this.state.time / 60))}:{this.pad(this.state.time % 60)}</Text>
-		);
-	}
-
-    pad(d) {
-        return (d < 10) ? '0' + d.toString() : d.toString();
-    }
-}
 
 const styles = {
 	userCamera: {
