@@ -147,7 +147,7 @@ class ChatComponent extends React.Component {
                 }, () => {
                     console.log(this.state.messages);
                 });
-            }).catch(() => { });
+            }).catch((error) => {});
 
         }).catch((error) => { });
     };
@@ -161,51 +161,79 @@ class ChatComponent extends React.Component {
                         return resolve(message);
                     }
 
-                    message.prepared = true;
-
-                    if (message.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER) {
-                        if (message.senderId === message.chatId) {
-                            message.sender = this.state.chatTarget;
-                            message.receiver = this.props.AZStackCore.authenticatedUser;
-                        } else if (message.receiverId === message.chatId) {
-                            message.sender = this.props.AZStackCore.authenticatedUser;
-                            message.receiver = this.state.chatTarget;
-                        }
-                        resolve(message);
-                    } else if (message.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
-                        message.receiver = this.state.chatTarget;
-                        let foundSender = false;
-                        if (message.senderId === this.props.AZStackCore.authenticatedUser.userId) {
-                            foundSender = true;
-                            message.sender = this.props.AZStackCore.authenticatedUser
-                        } else {
-                            for (let i = 0; i < this.state.chatTarget.members.length; i++) {
-                                let member = this.state.chatTarget.members[i];
-                                if (message.senderId === member.userId) {
-                                    foundSender = true;
-                                    message.sender = member;
-                                    break;
-                                }
-                            }
-                        }
-                        if (foundSender) {
-                            resolve(message);
-                            return;
-                        }
-
-                        this.props.AZStackCore.getUsersInformation({
-                            userIds: [message.senderId]
+                    if (message.senderId !== this.props.AZStackCore.authenticatedUser.userId && message.status !== this.props.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN && message.status !== this.props.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED) {
+                        this.props.AZStackCore.changeMessageStatus({
+                            chatType: message.chatType,
+                            chatId: message.chatId,
+                            messageSenderId: message.senderId,
+                            messageStatus: this.props.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN,
+                            msgId: message.msgId
                         }).then((result) => {
-                            message.sender = result.list[0];
+                            message.status = this.props.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN;
                             resolve(message);
                         }).catch((error) => {
-                            message.sender = { userId: message.senderId };
                             resolve(message);
-                        })
+                        });
+                        return;
                     }
+
+                    resolve(message);
                 });
             })
-        );
+        ).then((messages) => {
+            return Promise.all(
+                messages.map((message) => {
+                    return new Promise((resolve, reject) => {
+
+                        if (message.prepared) {
+                            return resolve(message);
+                        }
+
+                        message.prepared = true;
+
+                        if (message.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER) {
+                            if (message.senderId === message.chatId) {
+                                message.sender = this.state.chatTarget;
+                                message.receiver = this.props.AZStackCore.authenticatedUser;
+                            } else if (message.receiverId === message.chatId) {
+                                message.sender = this.props.AZStackCore.authenticatedUser;
+                                message.receiver = this.state.chatTarget;
+                            }
+                            resolve(message);
+                        } else if (message.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
+                            message.receiver = this.state.chatTarget;
+                            let foundSender = false;
+                            if (message.senderId === this.props.AZStackCore.authenticatedUser.userId) {
+                                foundSender = true;
+                                message.sender = this.props.AZStackCore.authenticatedUser
+                            } else {
+                                for (let i = 0; i < this.state.chatTarget.members.length; i++) {
+                                    let member = this.state.chatTarget.members[i];
+                                    if (message.senderId === member.userId) {
+                                        foundSender = true;
+                                        message.sender = member;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (foundSender) {
+                                return resolve(message);
+                            }
+
+                            this.props.AZStackCore.getUsersInformation({
+                                userIds: [message.senderId]
+                            }).then((result) => {
+                                message.sender = result.list[0];
+                                resolve(message);
+                            }).catch((error) => {
+                                message.sender = { userId: message.senderId };
+                                resolve(message);
+                            })
+                        }
+                    });
+                })
+            );
+        });
     };
 
     componentDidMount() {
