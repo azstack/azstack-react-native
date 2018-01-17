@@ -38,6 +38,20 @@ class Event {
             let newMessage = result;
             Promise.all([
                 new Promise((resolve, reject) => {
+                    this.AZStackCore.changeMessageStatus({
+                        chatType: newMessage.chatType,
+                        chatId: newMessage.chatId,
+                        messageSenderId: newMessage.senderId,
+                        messageStatus: this.AZStackCore.chatConstants.MESSAGE_STATUS_DELIVERED,
+                        msgId: newMessage.msgId
+                    }).then((result) => {
+                        newMessage.status = this.AZStackCore.chatConstants.MESSAGE_STATUS_DELIVERED;
+                        resolve(null);
+                    }).catch((error) => {
+                        resolve(null);
+                    });
+                }),
+                new Promise((resolve, reject) => {
                     this.AZStackCore.getUsersInformation({
                         userIds: [newMessage.senderId]
                     }).then((result) => {
@@ -159,6 +173,20 @@ class Event {
             let newMessage = result;
             Promise.all([
                 new Promise((resolve, reject) => {
+                    this.AZStackCore.changeMessageStatus({
+                        chatType: newMessage.chatType,
+                        chatId: newMessage.chatId,
+                        messageSenderId: newMessage.senderId,
+                        messageStatus: this.AZStackCore.chatConstants.MESSAGE_STATUS_DELIVERED,
+                        msgId: newMessage.msgId
+                    }).then((result) => {
+                        newMessage.status = this.AZStackCore.chatConstants.MESSAGE_STATUS_DELIVERED;
+                        resolve(null);
+                    }).catch((error) => {
+                        resolve(null);
+                    });
+                }),
+                new Promise((resolve, reject) => {
                     this.AZStackCore.getUsersInformation({
                         userIds: [newMessage.senderId]
                     }).then((result) => {
@@ -192,6 +220,20 @@ class Event {
             let newMessage = result;
             newMessage.invited.invites = [];
             Promise.all([
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.changeMessageStatus({
+                        chatType: newMessage.chatType,
+                        chatId: newMessage.chatId,
+                        messageSenderId: newMessage.senderId,
+                        messageStatus: this.AZStackCore.chatConstants.MESSAGE_STATUS_DELIVERED,
+                        msgId: newMessage.msgId
+                    }).then((result) => {
+                        newMessage.status = this.AZStackCore.chatConstants.MESSAGE_STATUS_DELIVERED;
+                        resolve(null);
+                    }).catch((error) => {
+                        resolve(null);
+                    });
+                }),
                 new Promise((resolve, reject) => {
                     this.AZStackCore.getUsersInformation({
                         userIds: [newMessage.senderId]
@@ -240,6 +282,20 @@ class Event {
             }
             let newMessage = result;
             Promise.all([
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.changeMessageStatus({
+                        chatType: newMessage.chatType,
+                        chatId: newMessage.chatId,
+                        messageSenderId: newMessage.senderId,
+                        messageStatus: this.AZStackCore.chatConstants.MESSAGE_STATUS_DELIVERED,
+                        msgId: newMessage.msgId
+                    }).then((result) => {
+                        newMessage.status = this.AZStackCore.chatConstants.MESSAGE_STATUS_DELIVERED;
+                        resolve(null);
+                    }).catch((error) => {
+                        resolve(null);
+                    });
+                }),
                 new Promise((resolve, reject) => {
                     this.AZStackCore.getUsersInformation({
                         userIds: [newMessage.senderId]
@@ -300,6 +356,20 @@ class Event {
             let newMessage = result;
             Promise.all([
                 new Promise((resolve, reject) => {
+                    this.AZStackCore.changeMessageStatus({
+                        chatType: newMessage.chatType,
+                        chatId: newMessage.chatId,
+                        messageSenderId: newMessage.senderId,
+                        messageStatus: this.AZStackCore.chatConstants.MESSAGE_STATUS_DELIVERED,
+                        msgId: newMessage.msgId
+                    }).then((result) => {
+                        newMessage.status = this.AZStackCore.chatConstants.MESSAGE_STATUS_DELIVERED;
+                        resolve(null);
+                    }).catch((error) => {
+                        resolve(null);
+                    });
+                }),
+                new Promise((resolve, reject) => {
                     this.AZStackCore.getUsersInformation({
                         userIds: [newMessage.senderId]
                     }).then((result) => {
@@ -332,6 +402,20 @@ class Event {
             }
             let newMessage = result;
             Promise.all([
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.changeMessageStatus({
+                        chatType: newMessage.chatType,
+                        chatId: newMessage.chatId,
+                        messageSenderId: newMessage.senderId,
+                        messageStatus: this.AZStackCore.chatConstants.MESSAGE_STATUS_DELIVERED,
+                        msgId: newMessage.msgId
+                    }).then((result) => {
+                        newMessage.status = this.AZStackCore.chatConstants.MESSAGE_STATUS_DELIVERED;
+                        resolve(null);
+                    }).catch((error) => {
+                        resolve(null);
+                    });
+                }),
                 new Promise((resolve, reject) => {
                     this.AZStackCore.getUsersInformation({
                         userIds: [newMessage.senderId]
@@ -376,6 +460,20 @@ class Event {
             }
             let newMessage = result;
             Promise.all([
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.changeMessageStatus({
+                        chatType: newMessage.chatType,
+                        chatId: newMessage.chatId,
+                        messageSenderId: newMessage.senderId,
+                        messageStatus: this.AZStackCore.chatConstants.MESSAGE_STATUS_DELIVERED,
+                        msgId: newMessage.msgId
+                    }).then((result) => {
+                        newMessage.status = this.AZStackCore.chatConstants.MESSAGE_STATUS_DELIVERED;
+                        resolve(null);
+                    }).catch((error) => {
+                        resolve(null);
+                    });
+                }),
                 new Promise((resolve, reject) => {
                     this.AZStackCore.getUsersInformation({
                         userIds: [newMessage.senderId]
