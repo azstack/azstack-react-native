@@ -84,6 +84,33 @@ class ChatComponent extends React.Component {
         }
         return false;
     };
+    shouldRenderSender(index) {
+        if (index === 0) {
+            return true;
+        }
+
+        let currentMessage = this.state.messages[index];
+        let prevMessage = this.state.messages[index - 1];
+
+        let groupActionMessageTypes = [
+            this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_CREATED,
+            this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_INVITED,
+            this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_LEFT,
+            this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_RENAMED,
+            this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_ADMIN_CHANGED,
+            this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_PUBLIC_JOINED
+        ];
+
+        if (groupActionMessageTypes.indexOf(prevMessage.type) > -1) {
+            return true;
+        }
+
+        if (currentMessage.senderId !== this.props.AZStackCore.authenticatedUser.userId && currentMessage.senderId !== prevMessage.senderId) {
+            return true;
+        }
+
+        return false;
+    };
 
     getChatTarget() {
         if (!this.props.AZStackCore.slaveSocketConnected) {
@@ -431,6 +458,7 @@ class ChatComponent extends React.Component {
                                         AZStackCore={this.props.AZStackCore}
                                         message={item}
                                         shouldRenderTimeMark={this.shouldRenderTimeMark(index)}
+                                        shouldRenderSender={this.shouldRenderSender(index)}
                                     />
                                 );
                             }}

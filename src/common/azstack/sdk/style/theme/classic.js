@@ -344,7 +344,7 @@ export const MESSAGE_TIME_MARK_TEXT_STYLE = {
     fontWeight: '600',
     color: '#95A5A6',
     marginBottom: 5
-}
+};
 export const MESSAGE_TYPE_ACTION_TEXT_STYLE = {
     paddingVertical: 5,
     paddingHorizontal: 15,
@@ -353,14 +353,69 @@ export const MESSAGE_TYPE_ACTION_TEXT_STYLE = {
     fontWeight: '300',
     color: '#555555',
     backgroundColor: '#E9EDEF',
+    borderRadius: 5,
     textAlign: 'center'
-}
-export const MESSAGE_TYPE_ACTION_BOLD__TEXTSTYLE = {
+};
+export const MESSAGE_TYPE_ACTION_BOLD_TEXT_STYLE = {
     fontWeight: '500'
-}
+};
 export const MESSAGE_TYPE_ACTION_TIME_TEXT_STYLE = {
     fontSize: 12,
     lineHeight: 20,
     fontWeight: '400',
     color: '#95A5A6'
-}
+};
+export const MESSAGE_TYPE_MEDIA_BLOCK_STYLE = {};
+export const MESSAGE_TYPE_MEDIA_SENDER_BLOCK_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center'
+};
+export const MESSAGE_TYPE_MEDIA_SENDER_AVATAR_BLOCK_STYLE = {
+    width: 30,
+    height: 30
+};
+export const MESSAGE_TYPE_MEDIA_SENDER_AVATAR_TEXT_STYLE = {
+    fontSize: 12
+};
+export const MESSAGE_TYPE_MEDIA_SENDER_TEXT_STYLE = {
+    fontSize: 14,
+    lineHeight: 20,
+    fontWeight: '500',
+    color: '#2F353B',
+    marginLeft: 10
+};
+export const MESSAGE_TYPE_MEDIA_CONTENT_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-end',
+    marginLeft: 40
+};
+export const MESSAGE_TYPE_MEDIA_CONTENT_FROM_ME_STYLE = {
+    justifyContent: 'flex-end',
+    marginLeft: 0
+};
+export const MESSAGE_TYPE_MEDIA_TEXT_STYLE = {
+    fontSize: 16,
+    lineHeight: 20,
+    fontWeight: '400',
+    color: '#2F353B'
+};
+export const MESSAGE_TYPE_MEDIA_TEXT_FROM_ME_STYLE = {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    color: '#fff',
+    borderRadius: 5,
+    backgroundColor: '#F2784B'
+};
+export const MESSAGE_TYPE_MEDIA_STICKER_STYLE = {
+    width: 50,
+    height: 50
+};
+export const MESSAGE_TYPE_MEDIA_TIME_TEXT_STYLE = {
+    marginHorizontal: 5,
+    fontSize: 12,
+    lineHeight: 20,
+    fontWeight: '400',
+    color: '#95A5A6'
+};

@@ -1,8 +1,12 @@
 import React from 'react';
 import {
     View,
-    Text
+    Text,
+    Image
 } from 'react-native';
+
+import ChatAvatarBlockComponent from '../common/ChatAvatarBlockComponent';
+import MessageStatusBlockComponent from '../common/MessageStatusBlockComponent';
 
 class MessageBlockComponent extends React.Component {
     constructor(props) {
@@ -76,7 +80,7 @@ class MessageBlockComponent extends React.Component {
                             style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_ACTION_TEXT_STYLE')}
                         >
                             <Text
-                                style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_ACTION_BOLD__TEXTSTYLE')}
+                                style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_ACTION_BOLD_TEXT_STYLE')}
                             >
                                 {this.getNameSender(this.props.message.sender)}
                             </Text>
@@ -102,7 +106,7 @@ class MessageBlockComponent extends React.Component {
                                             {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_INVITED_ACTION_TEXT')}`}
                                         </Text>
                                         <Text
-                                            style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_ACTION_BOLD__TEXTSTYLE')}
+                                            style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_ACTION_BOLD_TEXT_STYLE')}
                                         >
                                             {` ${
                                                 this.props.message.invited.invites.map((invite) => {
@@ -128,7 +132,7 @@ class MessageBlockComponent extends React.Component {
                                         {
                                             this.props.message.sender.userId !== this.props.message.left.leave.userId && (
                                                 <Text
-                                                    style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_ACTION_BOLD__TEXTSTYLE')}
+                                                    style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_ACTION_BOLD_TEXT_STYLE')}
                                                 >
                                                     {` ${this.getNameReceiver(this.props.message.left.leave)}`}
                                                 </Text>
@@ -153,7 +157,7 @@ class MessageBlockComponent extends React.Component {
                                                         {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_CHANGED_ADMIN_PREPOSITION_TEXT')}`}
                                                     </Text>
                                                     <Text
-                                                        style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_ACTION_BOLD__TEXTSTYLE')}
+                                                        style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_ACTION_BOLD_TEXT_STYLE')}
                                                     >
                                                         {` ${this.getNameReceiver(this.props.message.left.newAdmin)}`}
                                                     </Text>
@@ -176,7 +180,7 @@ class MessageBlockComponent extends React.Component {
                                             {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_RENAMED_PREPOSITION_TEXT')}`}
                                         </Text>
                                         <Text
-                                            style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_ACTION_BOLD__TEXTSTYLE')}
+                                            style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_ACTION_BOLD_TEXT_STYLE')}
                                         >
                                             {` ${this.props.message.renamed.newName}`}
                                         </Text>
@@ -196,7 +200,7 @@ class MessageBlockComponent extends React.Component {
                                             {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_CHANGED_ADMIN_PREPOSITION_TEXT')}`}
                                         </Text>
                                         <Text
-                                            style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_ACTION_BOLD__TEXTSTYLE')}
+                                            style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_ACTION_BOLD_TEXT_STYLE')}
                                         >
                                             {` ${this.getNameReceiver(this.props.message.adminChanged.newAdmin)}`}
                                         </Text>
@@ -223,15 +227,89 @@ class MessageBlockComponent extends React.Component {
                         </Text>
                     )
                 }
-                {/* {
+                {
                     [
                         this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT,
                         this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER,
                         this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE
                     ].indexOf(this.props.message.type) > -1 && (
-                        <Text></Text>
+                        <View
+                            style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_BLOCK_STYLE')}
+                        >
+                            {
+                                this.props.message.sender.userId !== this.props.AZStackCore.authenticatedUser.userId &&
+                                this.props.shouldRenderSender && (
+                                    <View
+                                        style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_SENDER_BLOCK_STYLE')}
+                                    >
+                                        <View
+                                            style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_SENDER_AVATAR_BLOCK_STYLE')}
+                                        >
+                                            <ChatAvatarBlockComponent
+                                                CustomStyle={this.props.CustomStyle}
+                                                chatType={this.props.AZStackCore.chatConstants.CHAT_TYPE_USER}
+                                                chatTarget={this.props.message.sender}
+                                                textStyle={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_SENDER_AVATAR_TEXT_STYLE')}
+                                            />
+                                        </View>
+                                        <Text
+                                            style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_SENDER_TEXT_STYLE')}
+                                        >
+                                            {this.getNameSender(this.props.message.sender)}
+                                        </Text>
+                                    </View>
+                                )
+                            }
+                            <View
+                                style={[
+                                    this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_CONTENT_STYLE'),
+                                    (this.props.message.sender.userId === this.props.AZStackCore.authenticatedUser.userId ? this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_CONTENT_FROM_ME_STYLE') : {})
+                                ]}
+                            >
+                                {
+                                    this.props.message.sender.userId === this.props.AZStackCore.authenticatedUser.userId && (
+                                        <Text
+                                            style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_TIME_TEXT_STYLE')}
+                                        >
+                                            {this.toTimeString(this.props.message.created)}
+                                        </Text>
+                                    )
+                                }
+                                {
+                                    this.props.message.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT && (
+                                        <Text
+                                            style={[
+                                                this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_TEXT_STYLE'),
+                                                (this.props.message.sender.userId === this.props.AZStackCore.authenticatedUser.userId ? this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_TEXT_FROM_ME_STYLE') : {})
+                                            ]}
+                                        >
+                                            {this.props.message.text}
+                                        </Text>
+                                    )
+                                }
+                                {
+                                    this.props.message.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER && (
+                                        <Image
+                                            style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_STICKER_STYLE')}
+                                            source={{
+                                                uri: this.props.message.sticker.url
+                                            }}
+                                        />
+                                    )
+                                }
+                                {
+                                    this.props.message.sender.userId !== this.props.AZStackCore.authenticatedUser.userId && (
+                                        <Text
+                                            style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_TIME_TEXT_STYLE')}
+                                        >
+                                            {this.toTimeString(this.props.message.created)}
+                                        </Text>
+                                    )
+                                }
+                            </View>
+                        </View>
                     )
-                } */}
+                }
             </View>
         );
     };
