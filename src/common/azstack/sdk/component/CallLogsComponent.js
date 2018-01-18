@@ -2,6 +2,8 @@ import React from 'react';
 import {
     View,
     FlatList,
+    Platform,
+    TextInput,
 } from 'react-native';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
@@ -18,42 +20,17 @@ class CallLogsComponent extends React.Component {
         super(props);
 
         this.state = {
-            contact: [
-                {
-                    name: "User 2",
-                    userId: 387212,
-                    phoneNumber: '01672848892'
-                },
-                {
-                    name: "User 3",
-                    userId: 387212,
-                    phoneNumber: '01672848892'
-                },
-                {
-                    name: "User 4",
-                    userId: 387212,
-                    phoneNumber: '01672848892'
-                },
-                {
-                    name: "User 5",
-                    userId: 387212,
-                    phoneNumber: '01672848892'
-                }
-            ],
             logs: [
 
             ],
             done: 0,
+            loading: false,
             showItemActions: null,
         };
     }
 
     componentWillMount() {
-        this.props.AZStackCore.getPaidCallLogs({}).then((result) => {
-            this.setState({logs: result.list, done: result.done});
-        }).catch((error) => {
-            console.log(error);
-        });
+        this.getCallLogs();
     }
 
     componentDidMount() {
@@ -82,11 +59,20 @@ class CallLogsComponent extends React.Component {
     }
 
     renderContent() {
-        if(this.state.contact.length === 0) {
+        if(this.state.loading === true) {
             return (
                 <EmptyBlockComponent
                     CustomStyle={this.props.CustomStyle}
-                    emptyText={"No contact"}
+                    emptyText={"Loading"}
+                />
+            );
+        }
+
+        if(this.state.logs.length === 0) {
+            return (
+                <EmptyBlockComponent
+                    CustomStyle={this.props.CustomStyle}
+                    emptyText={"No recently call"}
                 />
             );
         }
@@ -98,6 +84,13 @@ class CallLogsComponent extends React.Component {
                 renderItem={({ item, index}) => this.renderItem(item, index)}
                 onEndReached={() => this.onEndReached()}
                 onEndReachedThreshold={0.2}
+                onRefresh={() => this.onRefresh()}
+                refreshing={this.state.loading}
+                onMomentumScrollBegin={() => { console.log('begin'); this.onEndReachedCalledDuringMomentum = false; }}
+                onMomentumScrollEnd={() => { console.log('end'); this.onEndReachedCalledDuringMomentum = true; }}
+                contentContainerStyle={{paddingBottom: 15}}
+                keyboardDismissMode={Platform.select({ios: 'interactive', android: 'on-drag'})}
+                centerContent={true}
             />
         );
     }
@@ -122,8 +115,35 @@ class CallLogsComponent extends React.Component {
         );
     }
 
-    onEndReached() {
+    getCallLogs() {
+        this.setState({loading: true});
+        this.props.AZStackCore.getPaidCallLogs({}).then((result) => {
+            this.setState({loading: false});
+            this.setState({logs: this.state.logs.concat(result.list), done: result.done});
+        }).catch((error) => {
+            this.setState({loading: false});
+            console.log(error);
+        });
+    }
 
+    onEndReached() {
+		if(this.state.done === this.props.AZStackCore.listConstants.GET_LIST_DONE) {
+			return;
+		}
+
+		if(this.state.loading === true) {
+			return;
+		}
+        if (this.onEndReachedCalledDuringMomentum) { // mean scrolling
+			return;
+        }
+        
+        this.getCallLogs();
+		this.onEndReachedCalledDuringMomentum = true;
+    }
+
+    onRefresh() {
+        this.getCallLogs();
     }
 
     onItemPress(contact, index) {
