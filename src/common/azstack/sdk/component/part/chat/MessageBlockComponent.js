@@ -312,22 +312,11 @@ class MessageBlockComponent extends React.Component {
                                         />
                                     )
                                 }
-                                {/* {
-                                    this.props.message.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE &&
-                                    this.props.message.file.type === this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE && (
-                                        <Image
-                                            style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_IMAGE_STYLE')}
-                                            source={{
-                                                uri: this.props.message.file.url
-                                            }}
-                                        />
-                                    )
-                                } */}
                                 {
                                     this.props.message.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE &&
                                     [
                                         this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_UNKNOWN,
-                                        this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE,
+                                        // this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE,
                                         this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_AUDIO,
                                         this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_VIDEO,
                                         this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_EXCEL,
@@ -378,6 +367,20 @@ class MessageBlockComponent extends React.Component {
                                                 </View>
                                             </TouchableOpacity>
                                         </View>
+                                    )
+                                }
+                                {
+                                    this.props.message.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE &&
+                                    this.props.message.file.type === this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE && (
+                                        <Image
+                                            style={[
+                                                this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_IMAGE_STYLE'),
+                                                (this.props.message.file.height && this.props.message.file.width ? { height: this.props.message.file.height, width: this.props.message.file.width } : {})
+                                            ]}
+                                            source={{
+                                                uri: this.props.message.file.url
+                                            }}
+                                        />
                                     )
                                 }
                                 {

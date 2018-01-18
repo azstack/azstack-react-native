@@ -1,6 +1,7 @@
 import React from 'react';
 import {
     FlatList,
+    Image
 } from 'react-native';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
@@ -307,10 +308,35 @@ class ChatComponent extends React.Component {
                         switch (message.type) {
                             case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT:
                             case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE:
                             case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_CREATED:
                             case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_RENAMED:
                                 resolve(message);
+                                break;
+                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE:
+                                switch (message.file.type) {
+                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE:
+                                        Image.getSize(message.file.url, (width, height) => {
+                                            message.file.width = width;
+                                            message.file.height = height;
+                                            resolve(message);
+                                        }, (error) => {
+                                            resolve(message);
+                                        });
+                                        break;
+                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_AUDIO:
+                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_VIDEO:
+                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_EXCEL:
+                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_WORD:
+                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_POWERPOINT:
+                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_PDF:
+                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_TEXT:
+                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_CODE:
+                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_ARCHIVE:
+                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_UNKNOWN:
+                                    default:
+                                        resolve(message);
+                                        break;
+                                }
                                 break;
                             case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_INVITED:
                                 message.invited.invites = [];
