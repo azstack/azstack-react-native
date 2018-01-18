@@ -320,6 +320,17 @@ export const CHAT_HEADER_MEMBERS_TEXT_STYLE = {
     lineHeight: 20,
     color: '#95A5A6'
 };
+export const CHAT_TYPING_BLOCK_STYLE = {
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    height: 20,
+    paddingHorizontal: 15
+};
+export const CHAT_TYPING_TEXT_STYLE = {
+    fontSize: 12,
+    lineHeight: 15,
+    color: '#95A5A6'
+};
 export const CHAT_INPUT_DISABLED_BLOCK_STYLE = {
     paddingVertical: 15,
     paddingHorizontal: 15,

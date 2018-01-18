@@ -78,7 +78,8 @@ class ConversationBlockComponent extends React.Component {
                         />
                     }
                     {
-                        this.props.conversation.typing && this.props.conversation.typing.senders.length > 0 &&
+                        !!this.props.conversation.typing &&
+                        this.props.conversation.typing.senders.length > 0 &&
                         <TypingBlockComponent
                             Language={this.props.Language}
                             CustomStyle={this.props.CustomStyle}

@@ -1,7 +1,9 @@
 import React from 'react';
 import {
     FlatList,
-    Image
+    Image,
+    View,
+    Text
 } from 'react-native';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
@@ -10,6 +12,7 @@ import ScreenBodyBlockComponent from './part/screen/ScreenBodyBlockComponent';
 import EmptyBlockComponent from './part/common/EmptyBlockComponent';
 import ChatHeaderComponent from './part/chat/ChatHeaderComponent';
 import MessageBlockComponent from './part/chat/MessageBlockComponent';
+import TypingBlockComponent from './part/common/TypingBlockComponent';
 import ChatInputDisabledComponent from './part/chat/ChatInputDisabledComponent';
 
 class ChatComponent extends React.Component {
@@ -31,6 +34,10 @@ class ChatComponent extends React.Component {
 
         this.state = {
             chatTarget: null,
+            typing: {
+                senders: [],
+                clears: {}
+            },
             unreads: [],
             messages: []
         };
@@ -42,6 +49,12 @@ class ChatComponent extends React.Component {
                 return;
             }
             this.getChatTarget();
+        });
+        this.subscriptions.onTyping = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_TYPING, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onTyping(result);
         });
 
     };
@@ -436,6 +449,39 @@ class ChatComponent extends React.Component {
         });
     };
 
+    onTyping(typingDetails) {
+
+        if (typingDetails.chatType !== this.props.chatType || typingDetails.chatId !== this.props.chatId) {
+            return;
+        }
+
+        let typing = { ...this.state.typing };
+
+        if (typing.clears[typingDetails.sender.userId]) {
+            clearTimeout(typing.clears[typingDetails.sender.userId]);
+        } else {
+            typing.senders.push(typingDetails.sender);
+        }
+        typing.clears[typingDetails.sender.userId] = setTimeout(() => {
+            let foundIndex = -1;
+            for (let j = 0; j < typing.senders.length; j++) {
+                let sender = typing.senders[j];
+                if (sender.userId === typingDetails.sender.userId) {
+                    foundIndex = j;
+                    break;
+                }
+            }
+            if (foundIndex > -1) {
+                typing.senders.splice(foundIndex, 1);
+                delete typing.clears[typingDetails.sender.userId];
+            }
+            this.setState({ typing: typing });
+        }, 5000);
+        this.setState({ typing: typing }, () => {
+            console.log(this.state.typing);
+        });
+    };
+
     componentDidMount() {
         this.addSubscriptions();
         this.getChatTarget();
@@ -497,6 +543,20 @@ class ChatComponent extends React.Component {
                         />
                     }
                 </ScreenBodyBlockComponent>
+                <View
+                    style={this.props.CustomStyle.getStyle('CHAT_TYPING_BLOCK_STYLE')}
+                >
+                    {
+                        this.state.typing.senders.length > 0 && (
+                            <TypingBlockComponent
+                                Language={this.props.Language}
+                                CustomStyle={this.props.CustomStyle}
+                                textStyle={this.props.CustomStyle.getStyle('CHAT_TYPING_TEXT_STYLE')}
+                                typing={this.state.typing}
+                            />
+                        )
+                    }
+                </View>
                 <ChatInputDisabledComponent
                     CustomStyle={this.props.CustomStyle}
                     Language={this.props.Language}
