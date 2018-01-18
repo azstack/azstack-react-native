@@ -6,8 +6,6 @@ export const SCREEN_BLOCK_STYLE = {
     bottom: 0,
     backgroundColor: '#fff',
     flexDirection: 'column',
-    borderWidth: 1,
-    borderColor: 'red'
 };
 export const SCREEN_HEADER_BLOCK_STYLE = {
     borderStyle: 'solid',

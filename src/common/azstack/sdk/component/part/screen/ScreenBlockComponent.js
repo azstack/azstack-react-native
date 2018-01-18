@@ -92,6 +92,9 @@ class ScreenBlockComponent extends React.Component {
                     ...Platform.select({
                         ios: {
                             paddingTop: this.props.fullScreen === true ? 0 : 20,
+                        },
+                        android: {
+                            paddingTop: 20,
                         }
                     }),
                     ...this.props.CustomStyle.getStyle('SCREEN_BLOCK_STYLE'),

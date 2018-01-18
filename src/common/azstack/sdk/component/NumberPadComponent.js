@@ -58,7 +58,7 @@ class NumberPadComponent extends React.Component {
 	render() {
 		return (
             <ScreenBlockComponent
-                Sizes={this.props.Sizes}
+				fullScreen={false}
                 CustomStyle={this.props.CustomStyle}
             >
 				<ScreenHeaderBlockComponent

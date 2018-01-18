@@ -94,8 +94,8 @@ class ContactComponent extends React.Component {
     render() {
         return (
             <ScreenBlockComponent
+                fullScreen={false}
                 CustomStyle={this.props.CustomStyle}
-                fullScreen={true}
             >
                 <ScreenHeaderBlockComponent
                     CustomStyle={this.props.CustomStyle}

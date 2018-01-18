@@ -105,7 +105,7 @@ class CallLogsComponent extends React.Component {
     render() {
         return (
             <ScreenBlockComponent
-                fullScreen={true}
+                fullScreen={false}
                 CustomStyle={this.props.CustomStyle}
             >
                 <ScreenHeaderBlockComponent

@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-    StatusBar,
     Dimensions,
     ScrollView,
     View,
@@ -11,6 +10,7 @@ import {
 import {
     AZStackSdk,
 } from '../../common/azstack/';
+import CustomStatusBar from '../../common/azstack/sdk/component/part/common/CustomStatusBar';
 
 class AZStackSdkExample extends React.Component {
     constructor(props) {
@@ -26,10 +26,7 @@ class AZStackSdkExample extends React.Component {
     };
 
     showChat() {
-        this.refs.AZStackSdk.navigate(this.refs.AZStackSdk.getNavigation().ChatComponent, {
-            chatType: this.refs.AZStackSdk.AZStackCore.chatConstants.CHAT_TYPE_GROUP,
-            chatId: 7436
-        });
+        this.refs.AZStackSdk.navigate(this.refs.AZStackSdk.getNavigation().ChatComponent, {});
     };
 
     showContact() {
@@ -92,6 +89,7 @@ class AZStackSdkExample extends React.Component {
                     flex: 1,
                 }}
             >
+                <CustomStatusBar backgroundColor="#fff" barStyle="dark-content"/>
                 <ScrollView>
                     <Text>{this.state.authenticatedUser ? 'Connected, ' + this.state.authenticatedUser.fullname : 'Connecting...'}</Text>
                     <Text>{'\n'}{'\n'}</Text>
