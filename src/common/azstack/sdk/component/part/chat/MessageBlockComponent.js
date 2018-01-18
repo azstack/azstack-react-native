@@ -320,6 +320,7 @@ class MessageBlockComponent extends React.Component {
                                 ]}
                             >
                                 {
+                                    this.props.message.status !== this.props.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED &&
                                     this.props.message.sender.userId === this.props.AZStackCore.authenticatedUser.userId && (
                                         <View
                                             style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_STATUS_BLOCK_STYLE')}
@@ -343,6 +344,16 @@ class MessageBlockComponent extends React.Component {
                                     )
                                 }
                                 {
+                                    this.props.message.status === this.props.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED && (
+                                        <Text
+                                            style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_CANCELED_STYLE')}
+                                        >
+                                            {`[${this.props.Language.getText('MESSAGE_STATUS_CANCEL_TEXT')}]`}
+                                        </Text>
+                                    )
+                                }
+                                {
+                                    this.props.message.status !== this.props.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED &&
                                     this.props.message.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT && (
                                         <Text
                                             style={[
@@ -355,6 +366,7 @@ class MessageBlockComponent extends React.Component {
                                     )
                                 }
                                 {
+                                    this.props.message.status !== this.props.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED &&
                                     this.props.message.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER && (
                                         <Image
                                             style={[
@@ -368,6 +380,7 @@ class MessageBlockComponent extends React.Component {
                                     )
                                 }
                                 {
+                                    this.props.message.status !== this.props.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED &&
                                     this.props.message.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE &&
                                     [
                                         this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_UNKNOWN,
@@ -425,6 +438,7 @@ class MessageBlockComponent extends React.Component {
                                     )
                                 }
                                 {
+                                    this.props.message.status !== this.props.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED &&
                                     this.props.message.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE &&
                                     this.props.message.file.type === this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE && (
                                         <Image

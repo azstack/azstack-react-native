@@ -411,6 +411,16 @@ export const MESSAGE_TYPE_MEDIA_CONTENT_FROM_ME_STYLE = {
     justifyContent: 'flex-end',
     marginLeft: 0
 };
+export const MESSAGE_TYPE_MEDIA_CANCELED_STYLE = {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    fontSize: 16,
+    lineHeight: 20,
+    fontWeight: '400',
+    color: '#555555',
+    borderRadius: 5,
+    backgroundColor: '#E9EDEF'
+};
 export const MESSAGE_TYPE_MEDIA_TEXT_STYLE = {
     fontSize: 16,
     lineHeight: 20,
