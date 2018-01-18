@@ -33,6 +33,31 @@ class Event {
         this.AZStackCore.Delegates.onSwitchCameraTypeReturn = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_SWITCH_CAMERA_TYPE_RETURN, { error, result });
         };
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_TYPING] = (error, result) => {
+            if (error) {
+                this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_TYPING, { error, result: null });
+                return;
+            }
+            let typingDetails = result;
+            new Promise.all([
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.getUsersInformation({
+                        userIds: [typingDetails.senderId]
+                    }).then((result) => {
+                        typingDetails.sender = result.list[0];
+                        resolve(null);
+                    }).catch((error) => {
+                        typingDetails.sender = { userId: myMessage.senderId };
+                        resolve(null);
+                    });
+                })
+            ]).then(() => {
+                this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_TYPING, { error: null, result: typingDetails });
+            }).catch(() => { });
+        };
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED] = (error, result) => {
+            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_MESSAGE_STATUS_CHANGED, { error, result });
+        };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_HAS_NEW_MESSAGE] = (error, result) => {
             if (error) {
                 this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_NEW_MESSAGE, { error, result: null });
@@ -142,31 +167,6 @@ class Event {
             ]).then(() => {
                 this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_MESSAGE_FROM_ME, { error: null, result: myMessage });
             }).catch((error) => { });
-        };
-        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED] = (error, result) => {
-            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_MESSAGE_STATUS_CHANGED, { error, result });
-        };
-        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_TYPING] = (error, result) => {
-            if (error) {
-                this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_TYPING, { error, result: null });
-                return;
-            }
-            let typingDetails = result;
-            new Promise.all([
-                new Promise((resolve, reject) => {
-                    this.AZStackCore.getUsersInformation({
-                        userIds: [typingDetails.senderId]
-                    }).then((result) => {
-                        typingDetails.sender = result.list[0];
-                        resolve(null);
-                    }).catch((error) => {
-                        typingDetails.sender = { userId: myMessage.senderId };
-                        resolve(null);
-                    });
-                })
-            ]).then(() => {
-                this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_TYPING, { error: null, result: typingDetails });
-            }).catch(() => { });
         };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_GROUP_CREATED] = (error, result) => {
             if (error) {
