@@ -22,9 +22,9 @@ export const SCREEN_HEADER_BACK_BUTTON_STYLE = {
     bottom: 0,
 };
 export const SCREEN_HEADER_BACK_BUTTON_CONTAINER_STYLE = {
-    height: 54, 
-    justifyContent: 'center', 
-    alignItems: 'flex-end', 
+    height: 54,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
     paddingRight: 20,
     paddingLeft: 10,
 }
@@ -413,8 +413,61 @@ export const MESSAGE_TYPE_MEDIA_TEXT_FROM_ME_STYLE = {
     backgroundColor: '#F2784B'
 };
 export const MESSAGE_TYPE_MEDIA_STICKER_STYLE = {
+    width: 70,
+    height: 70
+};
+export const MESSAGE_TYPE_MEDIA_FILE_BLOCK_STYLE = {
+    width: 200
+};
+export const MESSAGE_TYPE_MEDIA_FILE_IMAGE_BLOCK_STYLE = {
+    padding: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#E9EDEF',
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5
+};
+export const MESSAGE_TYPE_MEDIA_FILE_IMAGE_HOLDER_STYLE = {
     width: 50,
     height: 50
+};
+export const MESSAGE_TYPE_MEDIA_FILE_DOWNLOAD_BLOCK_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#E5E5E5',
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5
+};
+export const MESSAGE_TYPE_MEDIA_FILE_DOWNLOAD_INFO_BLOCK_STYLE = {
+    flex: 1,
+    padding: 5
+};
+export const MESSAGE_TYPE_MEDIA_FILE_DOWNLOAD_INFO_NAME_TEXT_STYLE = {
+    fontSize: 12,
+    lineHeight: 15,
+    fontWeight: '400',
+    color: '#95A5A6'
+};
+export const MESSAGE_TYPE_MEDIA_FILE_DOWNLOAD_INFO_SIZE_TEXT_STYLE = {
+    fontSize: 12,
+    lineHeight: 15,
+    fontWeight: '500',
+    color: '#95A5A6'
+};
+export const MESSAGE_TYPE_MEDIA_FILE_DOWNLOAD_IMAGE_BLOCK_STYLE = {
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const MESSAGE_TYPE_MEDIA_FILE_DOWNLOAD_IMAGE_HOLDER_STYLE = {
+    width: 20,
+    height: 20
+};
+export const MESSAGE_TYPE_MEDIA_FILE_IMAGE_STYLE = {
+    width: 200,
+    height: 200
 };
 export const MESSAGE_TYPE_MEDIA_TIME_TEXT_STYLE = {
     marginHorizontal: 5,

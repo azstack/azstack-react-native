@@ -2,7 +2,8 @@ import React from 'react';
 import {
     View,
     Text,
-    Image
+    Image,
+    TouchableOpacity
 } from 'react-native';
 
 import ChatAvatarBlockComponent from '../common/ChatAvatarBlockComponent';
@@ -25,7 +26,6 @@ class MessageBlockComponent extends React.Component {
         let minute = handleDate.getMinutes();
         return `${hour > 9 ? hour : '0' + hour}:${minute > 9 ? minute : '0' + minute}`;
     };
-
     toDayString(date) {
         if (!date) {
             return '';
@@ -38,6 +38,21 @@ class MessageBlockComponent extends React.Component {
         let month = handleDate.getMonth() + 1;
         let day = handleDate.getDate();
         return `${year}/${month > 9 ? month : '0' + month}/${day > 9 ? day : '0' + day}`;
+    };
+    toFileSizeString(bytes, si) {
+        var thresh = si ? 1000 : 1024;
+        if (Math.abs(bytes) < thresh) {
+            return bytes + ' B';
+        }
+        var units = si
+            ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+            : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+        var u = -1;
+        do {
+            bytes /= thresh;
+            ++u;
+        } while (Math.abs(bytes) >= thresh && u < units.length - 1);
+        return bytes.toFixed(1) + ' ' + units[u];
     };
 
     getNameSender(sender) {
@@ -295,6 +310,74 @@ class MessageBlockComponent extends React.Component {
                                                 uri: this.props.message.sticker.url
                                             }}
                                         />
+                                    )
+                                }
+                                {/* {
+                                    this.props.message.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE &&
+                                    this.props.message.file.type === this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE && (
+                                        <Image
+                                            style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_IMAGE_STYLE')}
+                                            source={{
+                                                uri: this.props.message.file.url
+                                            }}
+                                        />
+                                    )
+                                } */}
+                                {
+                                    this.props.message.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE &&
+                                    [
+                                        this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_UNKNOWN,
+                                        this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE,
+                                        this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_AUDIO,
+                                        this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_VIDEO,
+                                        this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_EXCEL,
+                                        this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_WORD,
+                                        this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_POWERPOINT,
+                                        this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_PDF,
+                                        this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_TEXT,
+                                        this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_CODE,
+                                        this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_ARCHIVE
+                                    ].indexOf(this.props.message.file.type) > -1 && (
+                                        <View
+                                            style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_BLOCK_STYLE')}
+                                        >
+                                            <View
+                                                style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_IMAGE_BLOCK_STYLE')}
+                                            >
+                                                <Image
+                                                    style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_IMAGE_HOLDER_STYLE')}
+                                                    source={require('../../../static/image/file.png')}
+                                                />
+                                            </View>
+                                            <TouchableOpacity
+                                                style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_DOWNLOAD_BLOCK_STYLE')}
+                                                activeOpacity={0.5}
+                                                onPress={() => { }}
+                                            >
+                                                <View
+                                                    style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_DOWNLOAD_INFO_BLOCK_STYLE')}
+                                                >
+                                                    <Text
+                                                        style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_DOWNLOAD_INFO_NAME_TEXT_STYLE')}
+                                                    >
+                                                        {this.props.message.file.name}
+                                                    </Text>
+                                                    <Text
+                                                        style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_DOWNLOAD_INFO_SIZE_TEXT_STYLE')}
+                                                    >
+                                                        {this.toFileSizeString(this.props.message.file.length)}
+                                                    </Text>
+                                                </View>
+                                                <View
+                                                    style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_DOWNLOAD_IMAGE_BLOCK_STYLE')}
+                                                >
+                                                    <Image
+                                                        style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_DOWNLOAD_IMAGE_HOLDER_STYLE')}
+                                                        source={require('../../../static/image/file.png')}
+                                                    />
+                                                </View>
+                                            </TouchableOpacity>
+                                        </View>
                                     )
                                 }
                                 {
