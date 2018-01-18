@@ -56,6 +56,12 @@ class ChatComponent extends React.Component {
             }
             this.onTyping(result);
         });
+        this.subscriptions.onMessageStatusChanged = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_MESSAGE_STATUS_CHANGED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onMessageStatusChanged(result);
+        });
 
     };
     clearSubscriptions() {
@@ -477,9 +483,18 @@ class ChatComponent extends React.Component {
             }
             this.setState({ typing: typing });
         }, 5000);
-        this.setState({ typing: typing }, () => {
-            console.log(this.state.typing);
-        });
+        this.setState({ typing: typing });
+    };
+    onMessageStatusChanged(newStatus) {
+        let messages = [].concat(this.state.messages);
+        for (let i = 0; i < messages.length; i++) {
+            let message = messages[i];
+            if (message.msgId === newStatus.msgId) {
+                message.status = newStatus.messageStatus;
+                break;
+            }
+        }
+        this.setState({ messages: messages });
     };
 
     componentDidMount() {
