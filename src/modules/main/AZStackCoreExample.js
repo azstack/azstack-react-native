@@ -28,7 +28,7 @@ class AZStackCoreExample extends React.Component {
 
         this.disconnect = this.disconnect.bind(this);
 
-        this.toggleAutioState = this.toggleAutioState.bind(this);
+        this.toggleAudioState = this.toggleAudioState.bind(this);
         this.toggleVideoState = this.toggleVideoState.bind(this);
         this.switchCameraType = this.switchCameraType.bind(this);
 
@@ -114,8 +114,8 @@ class AZStackCoreExample extends React.Component {
         this.AZStackCore.disconnect({}).then(() => { }).catch(() => { });
     };
 
-    toggleAutioState() {
-        this.AZStackCore.toggleAutioState({}).then(() => { }).catch(() => { });
+    toggleAudioState() {
+        this.AZStackCore.toggleAudioState({}).then(() => { }).catch(() => { });
     };
     toggleVideoState() {
         this.AZStackCore.toggleVideoState({}).then(() => { }).catch(() => { });
@@ -477,7 +477,7 @@ class AZStackCoreExample extends React.Component {
                     </Text>
                     <Button onPress={this.disconnect} title='Disconnect' />
                     <Text>{'\n'}{'\n'}</Text>
-                    <Button onPress={this.toggleAutioState} title='Toggle Audio State' />
+                    <Button onPress={this.toggleAudioState} title='Toggle Audio State' />
                     <Button onPress={this.toggleVideoState} title='Toggle Video State' />
                     <Button onPress={this.switchCameraType} title='Switch Camera Type' />
                     <Text>{'\n'}{'\n'}</Text>

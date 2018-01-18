@@ -8,7 +8,6 @@ export const SCREEN_BLOCK_STYLE = {
     flexDirection: 'column',
 };
 export const SCREEN_HEADER_BLOCK_STYLE = {
-    borderStyle: 'solid',
     borderBottomWidth: 1,
     borderBottomColor: '#E1E5EC',
     height: 54,
@@ -175,12 +174,9 @@ export const CONVERSATIONS_SEARCH_BLOCK_STYLE = {
 export const CONVERSATIONS_LIST_STYLE = {
     paddingHorizontal: 15,
     flex: 1,
-    marginBottom: 10
 };
 export const CONVERSATION_BLOCK_STYLE = {
     flexDirection: 'row',
-    borderStyle: 'dashed',
-    borderRadius: 5,
     borderBottomWidth: 1,
     borderBottomColor: '#E1E5EC',
     paddingVertical: 10

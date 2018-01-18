@@ -86,6 +86,16 @@ export class AZStackSdk extends AZStackBaseComponent {
                 this.AZStackCore.answerCallin({}, (error, result) => {
                 });
             },
+            onToggleAudio: (toOn) => {
+                this.AZStackCore.toggleAudioState({
+                    state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
+                }, (error, result) => {
+
+                });
+            },
+            onToggleSpeaker: () => {
+
+            },
             onTimeout: () => {
                 this.AZStackCore.notAnsweredCallin({}, (error, result) => {
                     setTimeout(() => {
@@ -130,6 +140,13 @@ export class AZStackSdk extends AZStackBaseComponent {
                         onAnswer: () => {
                             this.AZStackCore.answerFreeCall({}, (error, result) => {});
                         },
+                        onToggleAudio: (toOn) => {
+                            this.AZStackCore.toggleAudioState({
+                                state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
+                            }, (error, result) => {
+            
+                            });
+                        },
                         onTimeout: () => {
                             this.AZStackCore.notAnswerFreeCall({}, (error, result) => {});
                         }
@@ -162,6 +179,20 @@ export class AZStackSdk extends AZStackBaseComponent {
                         },
                         onAnswer: () => {
                             this.AZStackCore.answerFreeCall({}, (error, result) => {});
+                        },
+                        onToggleAudio: (toOn) => {
+                            this.AZStackCore.toggleAudioState({
+                                state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
+                            }, (error, result) => {
+            
+                            });
+                        },
+                        onToggleVideo: (toOn) => {
+                            this.AZStackCore.toggleVideoState({
+                                state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_VIDEO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_VIDEO_STATE_OFF
+                            }, (error, result) => {
+            
+                            });
                         },
                         onTimeout: () => {
                             this.AZStackCore.notAnswerFreeCall({}, (error, result) => {});
@@ -203,6 +234,13 @@ export class AZStackSdk extends AZStackBaseComponent {
                         this.pop();
                     }, 1500);
                 },
+                onToggleAudio: (toOn) => {
+                    this.AZStackCore.toggleAudioState({
+                        state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
+                    }, (error, result) => {
+    
+                    });
+                },
             }
         );
     }
@@ -234,7 +272,14 @@ export class AZStackSdk extends AZStackBaseComponent {
                     setTimeout(() => {
                         this.pop();
                     }, 1500);
-                }
+                },
+                onToggleAudio: (toOn) => {
+                    this.AZStackCore.toggleAudioState({
+                        state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
+                    }, (error, result) => {
+    
+                    });
+                },
             }
         );
     }
@@ -269,7 +314,21 @@ export class AZStackSdk extends AZStackBaseComponent {
                 },
                 onSwitchCameraType: () => {
                     this.AZStackCore.switchCameraType({});
-                }
+                },
+                onToggleAudio: (toOn) => {
+                    this.AZStackCore.toggleAudioState({
+                        state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
+                    }, (error, result) => {
+
+                    });
+                },
+                onToggleVideo: (toOn) => {
+                    this.AZStackCore.toggleVideoState({
+                        state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_VIDEO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_VIDEO_STATE_OFF
+                    }, (error, result) => {
+    
+                    });
+                },
             }
         );
     }

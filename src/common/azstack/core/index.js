@@ -940,7 +940,7 @@ export class AZStackCore {
         });
     };
 
-    toggleAutioState(options, callback) {
+    toggleAudioState(options, callback) {
         return new Promise((resolve, reject) => {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Toggle audio state'

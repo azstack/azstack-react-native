@@ -44,6 +44,8 @@ class VideoCallComponent extends React.Component {
 			touchTimeout: null,
 			callTime: 0,
 			isIncomingCall: false,
+			isAudioOn: true,
+			isVideoOn: true,
 			// az
             localVideoUrl: null,
 			remoteVideoUrl: null,
@@ -138,17 +140,17 @@ class VideoCallComponent extends React.Component {
 			return (
 				<View style={styles.userCamera}>
 					{
-						this.state.localVideoUrl !== null && <RTCView streamURL={this.state.localVideoUrl} style={{width: width, height: height}} objectFit={"cover"} />
+						this.state.localVideoUrl !== null && this.state.isVideoOn === true && <RTCView streamURL={this.state.localVideoUrl} style={{width: width, height: height}} objectFit={"cover"} />
 					}
 					{
-						this.state.localVideoUrl === null && <Text>User camera off</Text>
+						(this.state.localVideoUrl === null || this.state.isVideoOn) === false && <Text style={{color: '#8f8f8f'}}>Your camera off</Text>
 					}
 					<View style={styles.userInfoCenter}>
 						<View style={{paddingBottom: 160, alignItems: 'center'}}>
 							<Image source={ic_avatar} style={{width: 90, height: 90, borderRadius: 45}} />
 							<View style={{alignItems: 'center'}}>
 								<Text style={{color: '#fff', marginVertical: 10, fontSize: 20}}>{this.props.info.name}</Text>
-								<Text style={{color: '#8f8f8f'}}>{this.state.message}</Text>
+								<Text style={{color: '#2a2a2a'}}>{this.state.message}</Text>
 							</View>
 						</View>
 					</View>
@@ -172,7 +174,7 @@ class VideoCallComponent extends React.Component {
 			return null;
 		}
 		return (
-			<View style={styles.myCamera}>
+			<View style={[styles.myCamera, { top: this.state.showAction === true ? 60 : 10}]}>
 				{
 					this.state.localVideoUrl !== null && <RTCView streamURL={this.state.localVideoUrl} style={{height: 150, width: 100}} objectFit={"cover"} />
 				}
@@ -192,10 +194,26 @@ class VideoCallComponent extends React.Component {
 		return (
 			<View style={[styles.bottomActionBlock, {opacity: this.state.showAction === false && this.state.status === 200 ? 0 : 1}]}>
 				<View style={styles.bottomActionBlockWrapper}>
+					<TouchableOpacity onPress={() => this.onPressToggleVideo()}>
+						{this.state.isVideoOn === true && <View style={[styles.button, {backgroundColor: 'green'}]}>
+							<Text>Tắt</Text>
+						</View>}
+						{this.state.isVideoOn === false && <View style={[styles.button, {backgroundColor: '#fff'}]}>
+							<Text>Bật</Text>
+						</View>}
+					</TouchableOpacity>
 					<TouchableOpacity onPress={() => this.onPressEndCall()}>
 						<View style={[styles.button, {backgroundColor: 'red'}]}>
 							<Image source={ic_action_hangup} style={styles.buttonIcon} resizeMode={'contain'} />
 						</View>
+					</TouchableOpacity>
+					<TouchableOpacity onPress={() => this.onPressToggleAudio()}>
+						{this.state.isAudioOn === true && <View style={[styles.button, {backgroundColor: 'green'}]}>
+							<Text>Tắt</Text>
+						</View>}
+						{this.state.isAudioOn === false && <View style={[styles.button, {backgroundColor: '#fff'}]}>
+							<Text>Bật</Text>
+						</View>}
 					</TouchableOpacity>
 				</View>
 			</View>
@@ -273,7 +291,7 @@ class VideoCallComponent extends React.Component {
 	render() {
 		return (
             <ScreenBlockComponent
-				fullScreen={true}
+				fullScreen={false}
                 CustomStyle={this.props.CustomStyle}
             >	
 				{this.state.isIncomingCall === true && this.renderIncomingCall()}
@@ -314,6 +332,16 @@ class VideoCallComponent extends React.Component {
 		this.props.onAnswer();
 		this.setState({isIncomingCall: false, status: 200});
 	}
+
+	onPressToggleAudio() {
+		this.props.onToggleAudio(!this.state.isAudioOn);
+		this.setState({isAudioOn: !this.state.isAudioOn});
+	}
+
+	onPressToggleVideo() {
+		this.props.onToggleVideo(!this.state.isVideoOn);
+		this.setState({isVideoOn: !this.state.isVideoOn});
+	}
 }
 
 export default VideoCallComponent;
@@ -321,7 +349,7 @@ export default VideoCallComponent;
 const styles = {
 	userCamera: {
 		flex: 1, 
-		backgroundColor: '#fafafa', 
+		backgroundColor: 'rgba(0,0,0,0.4)', 
 		justifyContent: 'center', 
 		alignItems: 'center',
 	},
@@ -354,7 +382,7 @@ const styles = {
 	},
 	myCamera: {
 		position: 'absolute', 
-		top: 60, 
+		top: 10, 
 		right: 10, 
 		backgroundColor: '#fff', 
 		justifyContent: 'center', 
