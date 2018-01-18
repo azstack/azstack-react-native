@@ -81,7 +81,8 @@ class OnCallComponent extends React.Component {
                 return;
 			}
 
-			if(result.status === this.props.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING) {
+			console.log(result);
+			if(result.status !== this.props.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING) {
 				this.props.onCallEnded();
 			}
 		});

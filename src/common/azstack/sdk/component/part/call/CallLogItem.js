@@ -5,6 +5,9 @@ import {
     Text,
     Image
 } from 'react-native';
+import {
+    formatDate
+} from '../../../helper';
 
 import call_icon from '../../../static/image/call-icon.png';
 import ic_avatar from '../../../static/image/ic_avatar.png';
@@ -27,7 +30,7 @@ class CallLogItem extends React.Component {
                         </View>
                         <View style={{flex: 1, paddingRight: 60}}>
                             <Text numberOfLines={1}>{this.props.callLog.callType === 1 ? this.props.callLog.toPhoneNumber : this.props.callLog.fromPhoneNumber}</Text>
-                            <Text numberOfLines={1}>{this.props.callLog.callType}</Text>
+                            <Text numberOfLines={1}>{this.props.callLog.callType} <Text>{formatDate(this.props.callLog.recordTime, "YYYY/MM/DD HH:mm:ss")}</Text></Text>
                         </View>
                         <View style={styles.inlineActions}>
                             <TouchableOpacity onPress={() => this.callout()}>
