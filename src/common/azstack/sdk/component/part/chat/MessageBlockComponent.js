@@ -321,6 +321,20 @@ class MessageBlockComponent extends React.Component {
                             >
                                 {
                                     this.props.message.sender.userId === this.props.AZStackCore.authenticatedUser.userId && (
+                                        <View
+                                            style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_STATUS_BLOCK_STYLE')}
+                                        >
+                                            <MessageStatusBlockComponent
+                                                CustomStyle={this.props.CustomStyle}
+                                                AZStackCore={this.props.AZStackCore}
+                                                textStyle={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_STATUS_TEXT_STYLE')}
+                                                status={this.props.message.status}
+                                            />
+                                        </View>
+                                    )
+                                }
+                                {
+                                    this.props.message.sender.userId === this.props.AZStackCore.authenticatedUser.userId && (
                                         <Text
                                             style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_TIME_TEXT_STYLE')}
                                         >

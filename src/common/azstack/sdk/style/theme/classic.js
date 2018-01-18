@@ -477,3 +477,10 @@ export const MESSAGE_TYPE_MEDIA_TIME_TEXT_STYLE = {
     fontWeight: '400',
     color: '#95A5A6'
 };
+export const MESSAGE_TYPE_MEDIA_STATUS_BLOCK_STYLE = {
+    width: 15,
+    height: 15
+};
+export const MESSAGE_TYPE_MEDIA_STATUS_TEXT_STYLE = {
+    fontSize: 8
+};
