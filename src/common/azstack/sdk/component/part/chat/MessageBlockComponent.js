@@ -12,6 +12,17 @@ import MessageStatusBlockComponent from '../common/MessageStatusBlockComponent';
 class MessageBlockComponent extends React.Component {
     constructor(props) {
         super(props);
+
+        this.maxSizes = {
+            stickerImage: {
+                width: 60,
+                height: 60
+            },
+            fileImage: {
+                width: 200,
+                height: 200
+            }
+        };
     };
 
     toTimeString(date) {
@@ -66,6 +77,33 @@ class MessageBlockComponent extends React.Component {
             return this.props.Language.getText('MESSAGE_RECEIVER_ME_TEXT');
         }
         return receiver.fullname;
+    };
+    getImageSizes(file, maxSize) {
+        if (!file.width || !file.height) {
+            return {};
+        }
+        let returnSizes = {
+            width: 0,
+            height: 0
+        };
+        if (file.width > file.height) {
+            if (file.width > maxSize.width) {
+                returnSizes.width = maxSize.width;
+                returnSizes.height = maxSize.width / file.width * file.height;
+            } else {
+                returnSizes.width = file.width;
+                returnSizes.height = file.height;
+            }
+        } else {
+            if (file.height > maxSize.height) {
+                returnSizes.width = maxSize.height / file.height * file.width;
+                returnSizes.height = maxSize.height;
+            } else {
+                returnSizes.width = file.width;
+                returnSizes.height = file.height;
+            }
+        }
+        return returnSizes;
     };
 
     render() {
@@ -305,7 +343,10 @@ class MessageBlockComponent extends React.Component {
                                 {
                                     this.props.message.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER && (
                                         <Image
-                                            style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_STICKER_STYLE')}
+                                            style={[
+                                                this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_STICKER_STYLE'),
+                                                this.getImageSizes(this.props.message.sticker, this.maxSizes.stickerImage)
+                                            ]}
                                             source={{
                                                 uri: this.props.message.sticker.url
                                             }}
@@ -375,7 +416,7 @@ class MessageBlockComponent extends React.Component {
                                         <Image
                                             style={[
                                                 this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_IMAGE_STYLE'),
-                                                (this.props.message.file.height && this.props.message.file.width ? { height: this.props.message.file.height, width: this.props.message.file.width } : {})
+                                                this.getImageSizes(this.props.message.file, this.maxSizes.fileImage)
                                             ]}
                                             source={{
                                                 uri: this.props.message.file.url

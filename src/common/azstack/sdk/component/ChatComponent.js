@@ -207,8 +207,6 @@ class ChatComponent extends React.Component {
                     messages: unorderedMessages.sort((a, b) => {
                         return a.created < b.created ? -1 : 1
                     })
-                }, () => {
-                    console.log(this.state.messages);
                 });
             }).catch((error) => { });
 
@@ -307,10 +305,18 @@ class ChatComponent extends React.Component {
 
                         switch (message.type) {
                             case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
                             case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_CREATED:
                             case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_RENAMED:
                                 resolve(message);
+                                break;
+                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
+                                Image.getSize(message.sticker.url, (width, height) => {
+                                    message.sticker.width = width;
+                                    message.sticker.height = height;
+                                    resolve(message);
+                                }, (error) => {
+                                    resolve(message);
+                                });
                                 break;
                             case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE:
                                 switch (message.file.type) {

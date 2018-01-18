@@ -373,7 +373,8 @@ export const MESSAGE_TYPE_MEDIA_BLOCK_STYLE = {};
 export const MESSAGE_TYPE_MEDIA_SENDER_BLOCK_STYLE = {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 5
 };
 export const MESSAGE_TYPE_MEDIA_SENDER_AVATAR_BLOCK_STYLE = {
     width: 30,
