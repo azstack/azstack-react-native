@@ -1,6 +1,9 @@
 import React from 'react';
 import {
     FlatList,
+    Image,
+    View,
+    Text
 } from 'react-native';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
@@ -9,6 +12,7 @@ import ScreenBodyBlockComponent from './part/screen/ScreenBodyBlockComponent';
 import EmptyBlockComponent from './part/common/EmptyBlockComponent';
 import ChatHeaderComponent from './part/chat/ChatHeaderComponent';
 import MessageBlockComponent from './part/chat/MessageBlockComponent';
+import TypingBlockComponent from './part/common/TypingBlockComponent';
 import ChatInputDisabledComponent from './part/chat/ChatInputDisabledComponent';
 
 class ChatComponent extends React.Component {
@@ -30,6 +34,10 @@ class ChatComponent extends React.Component {
 
         this.state = {
             chatTarget: null,
+            typing: {
+                senders: [],
+                clears: {}
+            },
             unreads: [],
             messages: []
         };
@@ -41,6 +49,18 @@ class ChatComponent extends React.Component {
                 return;
             }
             this.getChatTarget();
+        });
+        this.subscriptions.onTyping = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_TYPING, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onTyping(result);
+        });
+        this.subscriptions.onMessageStatusChanged = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_MESSAGE_STATUS_CHANGED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onMessageStatusChanged(result);
         });
 
     };
@@ -206,8 +226,6 @@ class ChatComponent extends React.Component {
                     messages: unorderedMessages.sort((a, b) => {
                         return a.created < b.created ? -1 : 1
                     })
-                }, () => {
-                    console.log(this.state.messages);
                 });
             }).catch((error) => { });
 
@@ -306,11 +324,44 @@ class ChatComponent extends React.Component {
 
                         switch (message.type) {
                             case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE:
                             case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_CREATED:
                             case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_RENAMED:
                                 resolve(message);
+                                break;
+                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
+                                Image.getSize(message.sticker.url, (width, height) => {
+                                    message.sticker.width = width;
+                                    message.sticker.height = height;
+                                    resolve(message);
+                                }, (error) => {
+                                    resolve(message);
+                                });
+                                break;
+                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE:
+                                switch (message.file.type) {
+                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE:
+                                        Image.getSize(message.file.url, (width, height) => {
+                                            message.file.width = width;
+                                            message.file.height = height;
+                                            resolve(message);
+                                        }, (error) => {
+                                            resolve(message);
+                                        });
+                                        break;
+                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_AUDIO:
+                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_VIDEO:
+                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_EXCEL:
+                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_WORD:
+                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_POWERPOINT:
+                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_PDF:
+                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_TEXT:
+                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_CODE:
+                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_ARCHIVE:
+                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_UNKNOWN:
+                                    default:
+                                        resolve(message);
+                                        break;
+                                }
                                 break;
                             case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_INVITED:
                                 message.invited.invites = [];
@@ -404,6 +455,48 @@ class ChatComponent extends React.Component {
         });
     };
 
+    onTyping(typingDetails) {
+
+        if (typingDetails.chatType !== this.props.chatType || typingDetails.chatId !== this.props.chatId) {
+            return;
+        }
+
+        let typing = { ...this.state.typing };
+
+        if (typing.clears[typingDetails.sender.userId]) {
+            clearTimeout(typing.clears[typingDetails.sender.userId]);
+        } else {
+            typing.senders.push(typingDetails.sender);
+        }
+        typing.clears[typingDetails.sender.userId] = setTimeout(() => {
+            let foundIndex = -1;
+            for (let j = 0; j < typing.senders.length; j++) {
+                let sender = typing.senders[j];
+                if (sender.userId === typingDetails.sender.userId) {
+                    foundIndex = j;
+                    break;
+                }
+            }
+            if (foundIndex > -1) {
+                typing.senders.splice(foundIndex, 1);
+                delete typing.clears[typingDetails.sender.userId];
+            }
+            this.setState({ typing: typing });
+        }, 5000);
+        this.setState({ typing: typing });
+    };
+    onMessageStatusChanged(newStatus) {
+        let messages = [].concat(this.state.messages);
+        for (let i = 0; i < messages.length; i++) {
+            let message = messages[i];
+            if (message.msgId === newStatus.msgId) {
+                message.status = newStatus.messageStatus;
+                break;
+            }
+        }
+        this.setState({ messages: messages });
+    };
+
     componentDidMount() {
         this.addSubscriptions();
         this.getChatTarget();
@@ -465,6 +558,20 @@ class ChatComponent extends React.Component {
                         />
                     }
                 </ScreenBodyBlockComponent>
+                <View
+                    style={this.props.CustomStyle.getStyle('CHAT_TYPING_BLOCK_STYLE')}
+                >
+                    {
+                        this.state.typing.senders.length > 0 && (
+                            <TypingBlockComponent
+                                Language={this.props.Language}
+                                CustomStyle={this.props.CustomStyle}
+                                textStyle={this.props.CustomStyle.getStyle('CHAT_TYPING_TEXT_STYLE')}
+                                typing={this.state.typing}
+                            />
+                        )
+                    }
+                </View>
                 <ChatInputDisabledComponent
                     CustomStyle={this.props.CustomStyle}
                     Language={this.props.Language}

@@ -21,9 +21,9 @@ export const SCREEN_HEADER_BACK_BUTTON_STYLE = {
     bottom: 0,
 };
 export const SCREEN_HEADER_BACK_BUTTON_CONTAINER_STYLE = {
-    height: 54, 
-    justifyContent: 'center', 
-    alignItems: 'flex-end', 
+    height: 54,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
     paddingRight: 20,
     paddingLeft: 10,
 }
@@ -316,6 +316,17 @@ export const CHAT_HEADER_MEMBERS_TEXT_STYLE = {
     lineHeight: 20,
     color: '#95A5A6'
 };
+export const CHAT_TYPING_BLOCK_STYLE = {
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    height: 20,
+    paddingHorizontal: 15
+};
+export const CHAT_TYPING_TEXT_STYLE = {
+    fontSize: 12,
+    lineHeight: 15,
+    color: '#95A5A6'
+};
 export const CHAT_INPUT_DISABLED_BLOCK_STYLE = {
     paddingVertical: 15,
     paddingHorizontal: 15,
@@ -369,7 +380,8 @@ export const MESSAGE_TYPE_MEDIA_BLOCK_STYLE = {};
 export const MESSAGE_TYPE_MEDIA_SENDER_BLOCK_STYLE = {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 5
 };
 export const MESSAGE_TYPE_MEDIA_SENDER_AVATAR_BLOCK_STYLE = {
     width: 30,
@@ -395,6 +407,16 @@ export const MESSAGE_TYPE_MEDIA_CONTENT_FROM_ME_STYLE = {
     justifyContent: 'flex-end',
     marginLeft: 0
 };
+export const MESSAGE_TYPE_MEDIA_CANCELED_STYLE = {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    fontSize: 16,
+    lineHeight: 20,
+    fontWeight: '400',
+    color: '#555555',
+    borderRadius: 5,
+    backgroundColor: '#E9EDEF'
+};
 export const MESSAGE_TYPE_MEDIA_TEXT_STYLE = {
     fontSize: 16,
     lineHeight: 20,
@@ -409,8 +431,61 @@ export const MESSAGE_TYPE_MEDIA_TEXT_FROM_ME_STYLE = {
     backgroundColor: '#F2784B'
 };
 export const MESSAGE_TYPE_MEDIA_STICKER_STYLE = {
+    width: 70,
+    height: 70
+};
+export const MESSAGE_TYPE_MEDIA_FILE_BLOCK_STYLE = {
+    width: 200
+};
+export const MESSAGE_TYPE_MEDIA_FILE_IMAGE_BLOCK_STYLE = {
+    padding: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#E9EDEF',
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5
+};
+export const MESSAGE_TYPE_MEDIA_FILE_IMAGE_HOLDER_STYLE = {
     width: 50,
     height: 50
+};
+export const MESSAGE_TYPE_MEDIA_FILE_DOWNLOAD_BLOCK_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#E5E5E5',
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5
+};
+export const MESSAGE_TYPE_MEDIA_FILE_DOWNLOAD_INFO_BLOCK_STYLE = {
+    flex: 1,
+    padding: 5
+};
+export const MESSAGE_TYPE_MEDIA_FILE_DOWNLOAD_INFO_NAME_TEXT_STYLE = {
+    fontSize: 12,
+    lineHeight: 15,
+    fontWeight: '400',
+    color: '#95A5A6'
+};
+export const MESSAGE_TYPE_MEDIA_FILE_DOWNLOAD_INFO_SIZE_TEXT_STYLE = {
+    fontSize: 12,
+    lineHeight: 15,
+    fontWeight: '500',
+    color: '#95A5A6'
+};
+export const MESSAGE_TYPE_MEDIA_FILE_DOWNLOAD_IMAGE_BLOCK_STYLE = {
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const MESSAGE_TYPE_MEDIA_FILE_DOWNLOAD_IMAGE_HOLDER_STYLE = {
+    width: 20,
+    height: 20
+};
+export const MESSAGE_TYPE_MEDIA_FILE_IMAGE_STYLE = {
+    width: 200,
+    height: 200
 };
 export const MESSAGE_TYPE_MEDIA_TIME_TEXT_STYLE = {
     marginHorizontal: 5,
@@ -418,4 +493,11 @@ export const MESSAGE_TYPE_MEDIA_TIME_TEXT_STYLE = {
     lineHeight: 20,
     fontWeight: '400',
     color: '#95A5A6'
+};
+export const MESSAGE_TYPE_MEDIA_STATUS_BLOCK_STYLE = {
+    width: 15,
+    height: 15
+};
+export const MESSAGE_TYPE_MEDIA_STATUS_TEXT_STYLE = {
+    fontSize: 8
 };
