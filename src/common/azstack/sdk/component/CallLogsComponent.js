@@ -19,18 +19,22 @@ class CallLogsComponent extends React.Component {
     constructor(props) {
         super(props);
 
+        this.pagination = {
+            done: 0,
+            page: 1,
+            lastCreated: new Date().getTime()
+        }
         this.state = {
             logs: [
 
             ],
-            done: 0,
             loading: false,
             showItemActions: null,
         };
     }
 
     componentWillMount() {
-        this.getCallLogs();
+        this.getCallLogs({reload: true});
     }
 
     componentDidMount() {
@@ -115,19 +119,27 @@ class CallLogsComponent extends React.Component {
         );
     }
 
-    getCallLogs() {
+    getCallLogs({reload}) {
         this.setState({loading: true});
-        this.props.AZStackCore.getPaidCallLogs({}).then((result) => {
+        this.props.AZStackCore.getPaidCallLogs({
+            page: this.pagination.page,
+            lastCreated: this.pagination.lastCreated
+        }).then((result) => {
             this.setState({loading: false});
-            this.setState({logs: this.state.logs.concat(result.list), done: result.done});
+            this.pagination.page += 1;
+            this.pagination.done = result.done;
+            if(reload) {
+                this.setState({logs: result.list});
+            } else {
+                this.setState({logs: this.state.logs.concat(result.list)});
+            }
         }).catch((error) => {
             this.setState({loading: false});
-            console.log(error);
         });
     }
 
     onEndReached() {
-		if(this.state.done === this.props.AZStackCore.listConstants.GET_LIST_DONE) {
+		if(this.pagination.done === this.props.AZStackCore.listConstants.GET_LIST_DONE) {
 			return;
 		}
 
@@ -138,12 +150,12 @@ class CallLogsComponent extends React.Component {
 			return;
         }
         
-        this.getCallLogs();
+        this.getCallLogs({});
 		this.onEndReachedCalledDuringMomentum = true;
     }
 
     onRefresh() {
-        this.getCallLogs();
+        this.getCallLogs({reload: true});
     }
 
     onItemPress(contact, index) {

@@ -2,6 +2,7 @@ import React from 'react';
 import {
     View,
     FlatList,
+    Platform,
 } from 'react-native';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
@@ -120,12 +121,6 @@ class ConversationsComponent extends React.Component {
 
     getConversations() {
         if (!this.props.AZStackCore.slaveSocketConnected) {
-            return;
-        }
-        if (this.pagination.done) {
-            return;
-        }
-        if (this.pagination.loading) {
             return;
         }
 
@@ -318,8 +313,22 @@ class ConversationsComponent extends React.Component {
     };
 
     handleLoadMore() {
+		if(this.state.done === this.props.AZStackCore.listConstants.GET_LIST_DONE) {
+			return;
+		}
+        if (this.pagination.loading) {
+            return;
+        }
+        if (this.onEndReachedCalledDuringMomentum) { // mean scrolling
+			return;
+        }
         this.getConversations();
+		this.onEndReachedCalledDuringMomentum = true;
     };
+
+    onRefresh() {
+        this.getConversations();
+    }
 
     onSearchTextChanged(newText) {
         this.setState({ searchText: newText });
@@ -799,7 +808,12 @@ class ConversationsComponent extends React.Component {
                                 );
                             }}
                             onEndReached={this.handleLoadMore}
-                            onEndReachedThreshold={100}
+                            onEndReachedThreshold={0.1}
+                            onMomentumScrollBegin={() => { console.log('begin'); this.onEndReachedCalledDuringMomentum = false; }}
+                            onMomentumScrollEnd={() => { console.log('end'); this.onEndReachedCalledDuringMomentum = true; }}
+                            contentContainerStyle={{paddingBottom: 15}}
+                            keyboardDismissMode={Platform.select({ios: 'interactive', android: 'on-drag'})}
+                            centerContent={true}
                         />
                     }
                 </ScreenBodyBlockComponent>

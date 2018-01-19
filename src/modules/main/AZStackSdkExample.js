@@ -70,6 +70,10 @@ class AZStackSdkExample extends React.Component {
         this.refs.AZStackSdk.showCallLogs({});
     }
 
+    showGroup() {
+        this.refs.AZStackSdk.showGroup();
+    }
+
     componentDidMount() {
         this.refs.AZStackSdk.connect().then((result) => {
             this.setState({ authenticatedUser: result });
@@ -106,7 +110,8 @@ class AZStackSdkExample extends React.Component {
                     <Button onPress={() => this.videoCall()} title='Video Call User 2'></Button>
                     <Button onPress={() => this.showContact()} title='Contact List'></Button>
                     <Button onPress={() => this.showNumberPad()} title='Callout'></Button>
-                    <Button onPress={() => this.showCallLogs()} title='Show call logs asd ad'></Button>
+                    <Button onPress={() => this.showCallLogs()} title='Show call logs'></Button>
+                    <Button onPress={() => this.showGroup()} title='Create group'></Button>
                 </ScrollView>
                 <AZStackSdk
                     ref={"AZStackSdk"}

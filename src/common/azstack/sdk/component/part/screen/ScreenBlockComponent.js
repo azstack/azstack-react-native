@@ -15,7 +15,7 @@ class ScreenBlockComponent extends React.Component {
 
         this.state = {
             opacityAnimated: new Animated.Value(0),
-            marginLeftAnimated: new Animated.Value(-width),
+            marginLeftAnimated: new Animated.Value(width),
             heightAnimated: new Animated.Value(height)
         };
 
@@ -64,6 +64,11 @@ class ScreenBlockComponent extends React.Component {
     };
 
     componentWillUnmount() {
+        this.keyboardListeners.onShowed.remove();
+        this.keyboardListeners.onHided.remove();
+    };
+
+    dismiss() {
         Animated.parallel([
             Animated.timing(
                 this.state.opacityAnimated,
@@ -75,15 +80,12 @@ class ScreenBlockComponent extends React.Component {
             Animated.timing(
                 this.state.marginLeftAnimated,
                 {
-                    toValue: -width,
+                    toValue: width,
                     duration: 500,
                 }
             )
         ]).start();
-
-        this.keyboardListeners.onShowed.remove();
-        this.keyboardListeners.onHided.remove();
-    };
+    }
 
     render() {
         return (
