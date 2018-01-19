@@ -12,6 +12,7 @@ import ContactComponent from './ContactComponent';
 import NumberPadComponent from './NumberPadComponent';
 import VideoCallComponent from './VideoCallComponent';
 import CallLogsComponent from './CallLogsComponent';
+import GroupComponent from './GroupComponent';
 
 const NavigationEnum = {
     ConversationsComponent: 'ConversationsComponent',
@@ -21,6 +22,7 @@ const NavigationEnum = {
     NumberPadComponent: 'NumberPadComponent',
     VideoCallComponent: 'VideoCallComponent',
     CallLogsComponent: 'CallLogsComponent',
+    GroupComponent: 'GroupComponent',
 }
 
 export default class AZStackBaseComponent extends React.Component {
@@ -61,6 +63,9 @@ export default class AZStackBaseComponent extends React.Component {
                     break;
                 case 'CallLogsComponent':
                     screens.push(this.renderCallLogs(value.options, index));
+                    break;
+                case 'GroupComponent':
+                    screens.push(this.renderGroup(value.options, index));
                     break;
                 default:
                     break;
@@ -200,6 +205,22 @@ export default class AZStackBaseComponent extends React.Component {
 
     renderCallLogs(options, key) {
         return <CallLogsComponent
+            key={key}
+            Sizes={this.Sizes}
+            Language={this.Language}
+            CustomStyle={this.CustomStyle}
+            eventConstants={this.eventConstants}
+            AZStackCore={this.AZStackCore}
+            EventEmitter={this.EventEmitter}
+            {...options}
+            onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => {
+                this.pop();
+            }}
+        />;
+    }
+
+    renderGroup(options, key) {
+        return <GroupComponent
             key={key}
             Sizes={this.Sizes}
             Language={this.Language}

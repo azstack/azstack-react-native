@@ -175,7 +175,7 @@ class OnCallComponent extends React.Component {
 				<View style={styles.userInfoCenter}>
 					<View style={{paddingBottom: 160, alignItems: 'center'}}>
 						<Image source={ic_avatar} style={{width: 90, height: 90, borderRadius: 45}} />
-						<View style={{alignItems: 'center'}}>
+						<View style={{alignItems: 'center', backgroundColor: 'rgba(0,0,0,0)'}}>
 							<Text style={{color: '#fff', marginVertical: 10, fontSize: 20}}>{this.props.info.name || this.props.info.phoneNumber}</Text>
 							<Text style={{color: '#8f8f8f'}}>{this.state.message}</Text>
 						</View>
