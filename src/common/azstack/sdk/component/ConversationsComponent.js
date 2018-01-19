@@ -694,7 +694,9 @@ class ConversationsComponent extends React.Component {
         });
     };
 
-    onConversationClicked(conversation) { };
+    onConversationClicked(conversation) {
+        this.props.onPressConversation(conversation);
+    };
 
     componentDidMount() {
         this.addSubscriptions();

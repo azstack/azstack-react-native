@@ -89,20 +89,13 @@ class ScreenBlockComponent extends React.Component {
         return (
             <Animated.View
                 style={{
-                    ...Platform.select({
-                        ios: {
-                            paddingTop: this.props.fullScreen === true ? 0 : 20,
-                        },
-                        android: {
-                            paddingTop: 20,
-                        }
-                    }),
                     ...this.props.CustomStyle.getStyle('SCREEN_BLOCK_STYLE'),
                     opacity: this.state.opacityAnimated,
                     marginLeft: this.state.marginLeftAnimated,
                     height: this.state.heightAnimated
                 }}
             >
+                <CustomStatusBar backgroundColor="#fff" barStyle="dark-content" hidden={this.props.fullScreen === true} />
                 {this.props.children}
             </Animated.View >
         );

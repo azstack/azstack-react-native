@@ -4,13 +4,13 @@ import {
     ScrollView,
     View,
     Text,
-    Button
+    Button,
+    Platform
 } from 'react-native';
 
 import {
     AZStackSdk,
 } from '../../common/azstack/';
-import CustomStatusBar from '../../common/azstack/sdk/component/part/common/CustomStatusBar';
 
 class AZStackSdkExample extends React.Component {
     constructor(props) {
@@ -22,11 +22,11 @@ class AZStackSdkExample extends React.Component {
     };
 
     showConversations() {
-        this.refs.AZStackSdk.navigate(this.refs.AZStackSdk.getNavigation().ConversationsComponent, {});
+        this.refs.AZStackSdk.showConversations({});
     };
 
     showChat() {
-        this.refs.AZStackSdk.navigate(this.refs.AZStackSdk.getNavigation().ChatComponent, {
+        this.refs.AZStackSdk.startChat({
             chatType: this.refs.AZStackSdk.AZStackCore.chatConstants.CHAT_TYPE_GROUP,
             chatId: 7436
         });
@@ -90,19 +90,23 @@ class AZStackSdkExample extends React.Component {
             <View
                 style={{
                     flex: 1,
+                    ...Platform.select({
+                        ios: {
+                            paddingTop: 20
+                        }
+                    }),
                 }}
             >
-                <CustomStatusBar backgroundColor="#fff" barStyle="dark-content" />
                 <ScrollView>
                     <Text>{this.state.authenticatedUser ? 'Connected, ' + this.state.authenticatedUser.fullname : 'Connecting...'}</Text>
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={() => this.showConversations()} title='Show conversations'></Button>
-                    <Button onPress={() => this.showChat()} title='Show chat'></Button>
+                    <Button onPress={() => this.showChat()} title='Chat with User 2'></Button>
                     <Button onPress={() => this.audioCall()} title='Call User 2'></Button>
                     <Button onPress={() => this.videoCall()} title='Video Call User 2'></Button>
                     <Button onPress={() => this.showContact()} title='Contact List'></Button>
                     <Button onPress={() => this.showNumberPad()} title='Callout'></Button>
-                    <Button onPress={() => this.showCallLogs()} title='Show call logs'></Button>
+                    <Button onPress={() => this.showCallLogs()} title='Show call logs asd ad'></Button>
                 </ScrollView>
                 <AZStackSdk
                     ref={"AZStackSdk"}

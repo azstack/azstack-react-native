@@ -383,4 +383,26 @@ export class AZStackSdk extends AZStackBaseComponent {
             }
         );
     }
+
+    startChat({ chatType, chatId, ...rest }) {
+        this.navigate(this.getNavigation().ChatComponent, { chatType, chatId, ...rest});
+    }
+
+    showConversations(options) {
+        this.navigate(this.getNavigation().ConversationsComponent, {
+            ...options,
+            onPressConversation: (conversation) => {
+                if(typeof options.onPressConversation === 'function') {
+                    options.onPressConversation();
+                }
+
+                if(options.prevenDefault !== true) {
+                    this.navigate(this.getNavigation().ChatComponent, {
+                        chatType: conversation.chatType,
+                        chatId: conversation.chatId,
+                    });
+                }
+            },
+        });
+    }
 };
