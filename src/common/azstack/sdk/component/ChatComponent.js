@@ -62,6 +62,12 @@ class ChatComponent extends React.Component {
             }
             this.onMessageStatusChanged(result);
         });
+        this.subscriptions.onHasNewMessage = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_NEW_MESSAGE, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onHasNewMessage(result);
+        });
 
     };
     clearSubscriptions() {
@@ -486,6 +492,11 @@ class ChatComponent extends React.Component {
         this.setState({ typing: typing });
     };
     onMessageStatusChanged(newStatus) {
+
+        if (newStatus.chatType !== this.props.chatType || newStatus.chatId !== this.props.chatId) {
+            return;
+        }
+
         let messages = [].concat(this.state.messages);
         for (let i = 0; i < messages.length; i++) {
             let message = messages[i];
@@ -495,6 +506,83 @@ class ChatComponent extends React.Component {
             }
         }
         this.setState({ messages: messages });
+    };
+    onHasNewMessage(newMessage) {
+
+        if (newMessage.chatType !== this.props.chatType || newMessage.chatId !== this.props.chatId) {
+            return;
+        }
+
+        Promise.all([
+            new Promise((resolve, reject) => {
+                this.props.AZStackCore.changeMessageStatus({
+                    chatType: newMessage.chatType,
+                    chatId: newMessage.chatId,
+                    messageSenderId: newMessage.senderId,
+                    messageStatus: this.props.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN,
+                    msgId: newMessage.msgId
+                }).then((result) => {
+                    newMessage.status = this.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN;
+                    resolve(null);
+                }).catch((error) => {
+                    resolve(null);
+                });
+            }),
+            new Promise((resolve, reject) => {
+                switch (newMessage.type) {
+                    case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT:
+                        resolve(null);
+                        break;
+                    case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
+                        Image.getSize(newMessage.sticker.url, (width, height) => {
+                            newMessage.sticker.width = width;
+                            newMessage.sticker.height = height;
+                            resolve(null);
+                        }, (error) => {
+                            resolve(null);
+                        });
+                        break;
+                    case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE:
+                        switch (newMessage.file.type) {
+                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE:
+                                Image.getSize(newMessage.file.url, (width, height) => {
+                                    newMessage.file.width = width;
+                                    newMessage.file.height = height;
+                                    resolve(null);
+                                }, (error) => {
+                                    resolve(null);
+                                });
+                                break;
+                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_AUDIO:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_VIDEO:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_EXCEL:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_WORD:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_POWERPOINT:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_PDF:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_TEXT:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_CODE:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_ARCHIVE:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_UNKNOWN:
+                            default:
+                                resolve(null);
+                                break;
+                        }
+                        break;
+                    default:
+                        resolve(null);
+                        break;
+                }
+            })
+        ]).then(() => {
+            newMessage.prepared = true;
+            let messages = [].concat(this.state.messages);
+            messages.push(newMessage);
+            this.setState({
+                messages: messages.sort((a, b) => {
+                    return a.created < b.created ? -1 : 1
+                })
+            });
+        }).catch((error) => { });
     };
 
     componentDidMount() {
