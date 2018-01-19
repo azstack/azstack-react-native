@@ -50,4 +50,5 @@ export const CONVERSATIONS_LIST_EMPTY_TEXT = 'No Conversation';
 
 export const CHAT_HEADER_TITLE_TEXT = 'Chat';
 export const CHAT_INPUT_DISABLED_TEXT = 'You can\'t not reply to this conversation';
+export const CHAT_INPUT_TEXT_INPUT_PLACEHOLDER_TEXT = 'Enter text...';
 export const MESSAGES_LIST_EMPTY_TEXT = 'No Message';

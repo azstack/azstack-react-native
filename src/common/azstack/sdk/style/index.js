@@ -12,6 +12,10 @@ class CustomStyle {
     getStyle(key) {
         return this.themes[this.selectedTheme][key];
     };
+
+    getImage(key) {
+        return this.themes[this.selectedTheme][key];
+    };
 };
 
 export default CustomStyle;

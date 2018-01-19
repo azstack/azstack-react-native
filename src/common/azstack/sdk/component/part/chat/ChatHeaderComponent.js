@@ -42,7 +42,7 @@ class ChatHeaderComponent extends React.Component {
                     >
                         <Image
                             style={this.props.CustomStyle.getStyle('CHAT_HEADER_BACK_BUTTON_IMAGE_STYLE')}
-                            source={require('../../../static/image/back.png')}
+                            source={this.props.CustomStyle.getImage('IMAGE_BACK')}
                         />
                     </TouchableOpacity>
                 </View>

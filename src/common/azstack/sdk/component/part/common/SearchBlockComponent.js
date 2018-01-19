@@ -61,7 +61,7 @@ class SearchBlockComponent extends React.Component {
                 />
                 <Image
                     style={this.props.CustomStyle.getStyle('SEARCH_IMAGE_STYLE')}
-                    source={require('../../../static/image/search.png')}
+                    source={this.props.CustomStyle.getImage('IMAGE_SEARCH')}
                 />
                 {
                     !!this.state.searchText && <TouchableOpacity
