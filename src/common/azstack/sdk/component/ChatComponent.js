@@ -14,6 +14,7 @@ import ChatHeaderComponent from './part/chat/ChatHeaderComponent';
 import MessageBlockComponent from './part/chat/MessageBlockComponent';
 import TypingBlockComponent from './part/common/TypingBlockComponent';
 import ChatInputDisabledComponent from './part/chat/ChatInputDisabledComponent';
+import ChatInputComponentBlock from './part/chat/ChatInputComponentBlock';
 
 class ChatComponent extends React.Component {
     constructor(props) {
@@ -942,10 +943,25 @@ class ChatComponent extends React.Component {
                         )
                     }
                 </View>
-                <ChatInputDisabledComponent
-                    CustomStyle={this.props.CustomStyle}
-                    Language={this.props.Language}
-                />
+                {
+                    !this.state.chatTarget && (
+                        <ChatInputDisabledComponent
+                            CustomStyle={this.props.CustomStyle}
+                            Language={this.props.Language}
+                        />
+                    )
+                }
+                {
+                    !!this.state.chatTarget && (
+                        <ChatInputComponentBlock
+                            CustomStyle={this.props.CustomStyle}
+                            Language={this.props.Language}
+                            AZStackCore={this.props.AZStackCore}
+                            chatType={this.props.chatType}
+                            chatId={this.props.chatId}
+                        />
+                    )
+                }
             </ScreenBlockComponent>
         );
     };
