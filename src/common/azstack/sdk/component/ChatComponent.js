@@ -68,6 +68,12 @@ class ChatComponent extends React.Component {
             }
             this.onHasNewMessage(result);
         });
+        this.subscriptions.onMessageFromMe = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_MESSAGE_FROM_ME, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onMessageFromMe(result);
+        });
 
     };
     clearSubscriptions() {
@@ -577,6 +583,68 @@ class ChatComponent extends React.Component {
             newMessage.prepared = true;
             let messages = [].concat(this.state.messages);
             messages.push(newMessage);
+            this.setState({
+                messages: messages.sort((a, b) => {
+                    return a.created < b.created ? -1 : 1
+                })
+            });
+        }).catch((error) => { });
+    };
+    onMessageFromMe(myMessage) {
+        if (myMessage.chatType !== this.props.chatType || myMessage.chatId !== this.props.chatId) {
+            return;
+        }
+
+        Promise.all([
+            new Promise((resolve, reject) => {
+                switch (myMessage.type) {
+                    case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT:
+                        resolve(null);
+                        break;
+                    case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
+                        Image.getSize(myMessage.sticker.url, (width, height) => {
+                            myMessage.sticker.width = width;
+                            myMessage.sticker.height = height;
+                            resolve(null);
+                        }, (error) => {
+                            resolve(null);
+                        });
+                        break;
+                    case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE:
+                        switch (myMessage.file.type) {
+                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE:
+                                Image.getSize(myMessage.file.url, (width, height) => {
+                                    myMessage.file.width = width;
+                                    myMessage.file.height = height;
+                                    resolve(null);
+                                }, (error) => {
+                                    resolve(null);
+                                });
+                                break;
+                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_AUDIO:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_VIDEO:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_EXCEL:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_WORD:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_POWERPOINT:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_PDF:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_TEXT:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_CODE:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_ARCHIVE:
+                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_UNKNOWN:
+                            default:
+                                resolve(null);
+                                break;
+                        }
+                        break;
+                    default:
+                        resolve(null);
+                        break;
+                }
+            })
+        ]).then(() => {
+            myMessage.prepared = true;
+            let messages = [].concat(this.state.messages);
+            messages.push(myMessage);
             this.setState({
                 messages: messages.sort((a, b) => {
                     return a.created < b.created ? -1 : 1
