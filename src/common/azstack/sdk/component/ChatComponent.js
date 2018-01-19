@@ -74,7 +74,36 @@ class ChatComponent extends React.Component {
             }
             this.onMessageFromMe(result);
         });
-
+        this.subscriptions.onGroupInvited = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_GROUP_INVITED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onGroupInvited(result);
+        });
+        this.subscriptions.onGroupLeft = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_GROUP_LEFT, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onGroupLeft(result);
+        });
+        this.subscriptions.onGroupRenamed = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_GROUP_RENAMED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onGroupRenamed(result);
+        });
+        this.subscriptions.onGroupAdminChanged = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_GROUP_ADMIN_CHANGED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onGroupAdminChanged(result);
+        });
+        this.subscriptions.onGroupPublicJoined = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_GROUP_PUBLIC_JOINED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onGroupPublicJoined(result);
+        });
     };
     clearSubscriptions() {
         for (let subscriptionName in this.subscriptions) {
@@ -649,6 +678,191 @@ class ChatComponent extends React.Component {
                 messages: messages.sort((a, b) => {
                     return a.created < b.created ? -1 : 1
                 })
+            });
+        }).catch((error) => { });
+    };
+    onGroupInvited(newMessage) {
+        if (newMessage.chatType !== this.props.chatType || newMessage.chatId !== this.props.chatId) {
+            return;
+        }
+
+        Promise.all([
+            new Promise((resolve, reject) => {
+
+                if (newMessage.senderId === this.props.AZStackCore.authenticatedUser.userId) {
+                    return resolve(null);
+                }
+
+                this.props.AZStackCore.changeMessageStatus({
+                    chatType: newMessage.chatType,
+                    chatId: newMessage.chatId,
+                    messageSenderId: newMessage.senderId,
+                    messageStatus: this.props.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN,
+                    msgId: newMessage.msgId
+                }).then((result) => {
+                    newMessage.status = this.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN;
+                    resolve(null);
+                }).catch((error) => {
+                    resolve(null);
+                });
+            })
+        ]).then(() => {
+            newMessage.prepared = true;
+            let messages = [].concat(this.state.messages);
+            messages.push(newMessage);
+            this.setState({
+                messages: messages.sort((a, b) => {
+                    return a.created < b.created ? -1 : 1
+                }),
+                chatTarget: newMessage.receiver
+            });
+        }).catch((error) => { });
+    };
+    onGroupLeft(newMessage) {
+        if (newMessage.chatType !== this.props.chatType || newMessage.chatId !== this.props.chatId) {
+            return;
+        }
+
+        Promise.all([
+            new Promise((resolve, reject) => {
+
+                if (newMessage.senderId === this.props.AZStackCore.authenticatedUser.userId) {
+                    return resolve(null);
+                }
+
+                this.props.AZStackCore.changeMessageStatus({
+                    chatType: newMessage.chatType,
+                    chatId: newMessage.chatId,
+                    messageSenderId: newMessage.senderId,
+                    messageStatus: this.props.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN,
+                    msgId: newMessage.msgId
+                }).then((result) => {
+                    newMessage.status = this.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN;
+                    resolve(null);
+                }).catch((error) => {
+                    resolve(null);
+                });
+            })
+        ]).then(() => {
+            newMessage.prepared = true;
+            let messages = [].concat(this.state.messages);
+            messages.push(newMessage);
+            this.setState({
+                messages: messages.sort((a, b) => {
+                    return a.created < b.created ? -1 : 1
+                }),
+                chatTarget: newMessage.receiver
+            });
+        }).catch((error) => { });
+    };
+    onGroupRenamed(newMessage) {
+        if (newMessage.chatType !== this.props.chatType || newMessage.chatId !== this.props.chatId) {
+            return;
+        }
+
+        Promise.all([
+            new Promise((resolve, reject) => {
+
+                if (newMessage.senderId === this.props.AZStackCore.authenticatedUser.userId) {
+                    return resolve(null);
+                }
+
+                this.props.AZStackCore.changeMessageStatus({
+                    chatType: newMessage.chatType,
+                    chatId: newMessage.chatId,
+                    messageSenderId: newMessage.senderId,
+                    messageStatus: this.props.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN,
+                    msgId: newMessage.msgId
+                }).then((result) => {
+                    newMessage.status = this.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN;
+                    resolve(null);
+                }).catch((error) => {
+                    resolve(null);
+                });
+            })
+        ]).then(() => {
+            newMessage.prepared = true;
+            let messages = [].concat(this.state.messages);
+            messages.push(newMessage);
+            this.setState({
+                messages: messages.sort((a, b) => {
+                    return a.created < b.created ? -1 : 1
+                }),
+                chatTarget: newMessage.receiver
+            });
+        }).catch((error) => { });
+    };
+    onGroupAdminChanged(newMessage) {
+        if (newMessage.chatType !== this.props.chatType || newMessage.chatId !== this.props.chatId) {
+            return;
+        }
+
+        Promise.all([
+            new Promise((resolve, reject) => {
+
+                if (newMessage.senderId === this.props.AZStackCore.authenticatedUser.userId) {
+                    return resolve(null);
+                }
+
+                this.props.AZStackCore.changeMessageStatus({
+                    chatType: newMessage.chatType,
+                    chatId: newMessage.chatId,
+                    messageSenderId: newMessage.senderId,
+                    messageStatus: this.props.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN,
+                    msgId: newMessage.msgId
+                }).then((result) => {
+                    newMessage.status = this.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN;
+                    resolve(null);
+                }).catch((error) => {
+                    resolve(null);
+                });
+            })
+        ]).then(() => {
+            newMessage.prepared = true;
+            let messages = [].concat(this.state.messages);
+            messages.push(newMessage);
+            this.setState({
+                messages: messages.sort((a, b) => {
+                    return a.created < b.created ? -1 : 1
+                }),
+                chatTarget: newMessage.receiver
+            });
+        }).catch((error) => { });
+    };
+    onGroupPublicJoined(newMessage) {
+        if (newMessage.chatType !== this.props.chatType || newMessage.chatId !== this.props.chatId) {
+            return;
+        }
+
+        Promise.all([
+            new Promise((resolve, reject) => {
+
+                if (newMessage.senderId === this.props.AZStackCore.authenticatedUser.userId) {
+                    return resolve(null);
+                }
+
+                this.props.AZStackCore.changeMessageStatus({
+                    chatType: newMessage.chatType,
+                    chatId: newMessage.chatId,
+                    messageSenderId: newMessage.senderId,
+                    messageStatus: this.props.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN,
+                    msgId: newMessage.msgId
+                }).then((result) => {
+                    newMessage.status = this.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN;
+                    resolve(null);
+                }).catch((error) => {
+                    resolve(null);
+                });
+            })
+        ]).then(() => {
+            newMessage.prepared = true;
+            let messages = [].concat(this.state.messages);
+            messages.push(newMessage);
+            this.setState({
+                messages: messages.sort((a, b) => {
+                    return a.created < b.created ? -1 : 1
+                }),
+                chatTarget: newMessage.receiver
             });
         }).catch((error) => { });
     };
