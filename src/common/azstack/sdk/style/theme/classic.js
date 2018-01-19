@@ -1,3 +1,10 @@
+export const IMAGE_BACK = require('../../static/image/classic/back.png');
+export const IMAGE_SEARCH = require('../../static/image/classic/search.png');
+export const IMAGE_FILE = require('../../static/image/classic/file.png');
+export const IMAGE_STICKER = require('../../static/image/classic/sticker.png');
+export const IMAGE_ATTACH = require('../../static/image/classic/attach.png');
+export const IMAGE_SEND = require('../../static/image/classic/send.png');
+
 export const SCREEN_BLOCK_STYLE = {
     position: 'absolute',
     top: 0,

@@ -29,7 +29,7 @@ class ScreenHeaderBlockComponent extends React.Component {
                         <View style={this.props.CustomStyle.getStyle('SCREEN_HEADER_BACK_BUTTON_CONTAINER_STYLE')}>
                             <Image
                                 style={this.props.CustomStyle.getStyle('SCREEN_HEADER_BACK_BUTTON_IMAGE_STYLE')}
-                                source={require('../../../static/image/back.png')}
+                                source={this.props.CustomStyle.getImage('IMAGE_BACK')}
                             />
                         </View>
                     </TouchableOpacity>

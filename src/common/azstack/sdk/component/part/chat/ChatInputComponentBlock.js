@@ -38,7 +38,7 @@ class ChatInputComponentBlock extends React.Component {
                     >
                         <Image
                             style={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BUTTON_IMAGE_STYLE')}
-                            source={require('../../../static/image/sticker.png')}
+                            source={this.props.CustomStyle.getImage('IMAGE_STICKER')}
                         />
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -48,7 +48,7 @@ class ChatInputComponentBlock extends React.Component {
                     >
                         <Image
                             style={this.props.CustomStyle.getStyle('CHAT_INPUT_ATTACH_BUTTON_IMAGE_STYLE')}
-                            source={require('../../../static/image/attach.png')}
+                            source={this.props.CustomStyle.getImage('IMAGE_ATTACH')}
                         />
                     </TouchableOpacity>
                     <View
@@ -75,7 +75,7 @@ class ChatInputComponentBlock extends React.Component {
                     >
                         <Image
                             style={this.props.CustomStyle.getStyle('CHAT_INPUT_SEND_BUTTON_IMAGE_STYLE')}
-                            source={require('../../../static/image/send.png')}
+                            source={this.props.CustomStyle.getImage('IMAGE_SEND')}
                         />
                     </TouchableOpacity>
                 </View>

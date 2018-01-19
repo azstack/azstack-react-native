@@ -403,7 +403,7 @@ class MessageBlockComponent extends React.Component {
                                             >
                                                 <Image
                                                     style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_IMAGE_HOLDER_STYLE')}
-                                                    source={require('../../../static/image/file.png')}
+                                                    source={this.props.CustomStyle.getImage('IMAGE_FILE')}
                                                 />
                                             </View>
                                             <TouchableOpacity
@@ -430,7 +430,7 @@ class MessageBlockComponent extends React.Component {
                                                 >
                                                     <Image
                                                         style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_DOWNLOAD_IMAGE_HOLDER_STYLE')}
-                                                        source={require('../../../static/image/file.png')}
+                                                        source={this.props.CustomStyle.getImage('IMAGE_FILE')}
                                                     />
                                                 </View>
                                             </TouchableOpacity>
