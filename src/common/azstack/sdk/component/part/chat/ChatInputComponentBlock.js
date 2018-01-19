@@ -17,10 +17,25 @@ class ChatInputComponentBlock extends React.Component {
         };
 
         this.onMessageTextChanged = this.onMessageTextChanged.bind(this);
+        this.sendTextMessage = this.sendTextMessage.bind(this);
     }
 
     onMessageTextChanged(newText) {
         this.setState({ messageText: newText });
+    };
+
+    sendTextMessage() {
+        if (!this.state.messageText) {
+            return;
+        }
+
+        this.props.AZStackCore.newMessage({
+            chatType: this.props.chatType,
+            chatId: this.props.chatId,
+            text: this.state.messageText
+        }).then((result) => {
+            this.setState({ messageText: '' });
+        }).catch((error) => { });
     };
 
     render() {
@@ -71,7 +86,7 @@ class ChatInputComponentBlock extends React.Component {
                     <TouchableOpacity
                         style={this.props.CustomStyle.getStyle('CHAT_INPUT_SEND_BUTTON_BLOCK_STYLE')}
                         activeOpacity={0.5}
-                        onPress={() => { }}
+                        onPress={this.sendTextMessage}
                     >
                         <Image
                             style={this.props.CustomStyle.getStyle('CHAT_INPUT_SEND_BUTTON_IMAGE_STYLE')}
