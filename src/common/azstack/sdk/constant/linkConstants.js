@@ -1,0 +1,1 @@
+export const LINK_API_URL_STICKER = 'https://az1.azstack.com/sticker/';

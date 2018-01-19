@@ -1024,6 +1024,7 @@ class ChatComponent extends React.Component {
                         <ChatInputComponentBlock
                             CustomStyle={this.props.CustomStyle}
                             Language={this.props.Language}
+                            linkConstants={this.props.linkConstants}
                             AZStackCore={this.props.AZStackCore}
                             chatType={this.props.chatType}
                             chatId={this.props.chatId}

@@ -132,6 +132,7 @@ export default class AZStackBaseComponent extends React.Component {
             Language={this.Language}
             CustomStyle={this.CustomStyle}
             eventConstants={this.eventConstants}
+            linkConstants={this.linkConstants}
             AZStackCore={this.AZStackCore}
             EventEmitter={this.EventEmitter}
             chatType={options.chatType}

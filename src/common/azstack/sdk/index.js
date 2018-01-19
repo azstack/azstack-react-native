@@ -7,6 +7,7 @@ import {
 import EventEmitter from 'EventEmitter';
 
 import * as eventConstants from './constant/eventConstants';
+import * as linkConstants from './constant/linkConstants';
 
 import Language from './language/';
 import CustomStyle from './style/';
@@ -25,6 +26,7 @@ export class AZStackSdk extends AZStackBaseComponent {
         };
 
         this.eventConstants = eventConstants;
+        this.linkConstants = linkConstants;
 
         this.Language = new Language({ languageCode: props.options.languageCode });
         this.CustomStyle = new CustomStyle({ themeName: props.options.themeName });

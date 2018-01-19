@@ -349,12 +349,12 @@ export const CHAT_INPUT_DISABLED_TEXT_STYLE = {
     color: '#fff'
 };
 export const CHAT_INPUT_BLOCK_STYLE = {
-    paddingVertical: 5,
-    paddingHorizontal: 15,
     borderTopWidth: 1,
     borderTopColor: '#E1E5EC'
 };
 export const CHAT_INPUT_INPUT_BLOCK_STYLE = {
+    paddingVertical: 5,
+    paddingHorizontal: 15,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
@@ -404,6 +404,11 @@ export const CHAT_INPUT_TEXT_INPUT_PROPS_STYLE = {
     underlineColorAndroid: 'transparent',
     placeholderTextColor: '#E1E5EC',
     maxHeight: 70
+};
+export const CHAT_INPUT_STICKER_BOX_BLOCK_STYLE = {
+    height: 200,
+    borderTopWidth: 1,
+    borderTopColor: '#E1E5EC'
 };
 export const MESSAGES_LIST_STYLE = {
     paddingHorizontal: 15,
