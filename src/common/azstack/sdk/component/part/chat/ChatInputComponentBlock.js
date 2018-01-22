@@ -47,9 +47,10 @@ class ChatInputComponentBlock extends React.Component {
         this.onTextInputFocused = this.onTextInputFocused.bind(this);
         this.onTextInputBlured = this.onTextInputBlured.bind(this);
         this.showStickerBox = this.showStickerBox.bind(this);
+        this.changeStickerTab = this.changeStickerTab.bind(this);
         this.sendTextMessage = this.sendTextMessage.bind(this);
         this.sendStickerMessage = this.sendStickerMessage.bind(this);
-    }
+    };
 
     onTextInputChanged(newText) {
         this.setState({ text: Object.assign({}, this.state.text, { val: newText }) });
@@ -74,6 +75,14 @@ class ChatInputComponentBlock extends React.Component {
         }
 
         this.setState({ sticker: Object.assign({}, this.state.sticker, { showed: true }) });
+    };
+    changeStickerTab(index) {
+
+        if (this.state.sticker.selected === index) {
+            return;
+        }
+
+        this.setState({ sticker: Object.assign({}, this.state.sticker, { selected: index }) });
     };
 
     sendTextMessage() {
@@ -177,7 +186,7 @@ class ChatInputComponentBlock extends React.Component {
                                                     (this.state.sticker.selected === index ? this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_TABS_TAB_BUTTON_ACTIVE_STYLE') : {})
                                                 ]}
                                                 activeOpacity={0.5}
-                                                onPress={() => { }}
+                                                onPress={() => { this.changeStickerTab(index) }}
                                                 key={`sticker_tab_${item.catId}`}
                                             >
                                                 <Image
