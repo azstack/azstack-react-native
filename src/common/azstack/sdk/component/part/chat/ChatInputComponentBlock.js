@@ -29,7 +29,7 @@ class ChatInputComponentBlock extends React.Component {
                 style={this.props.CustomStyle.getStyle('CHAT_INPUT_BLOCK_STYLE')}
             >
                 <View
-                    style={this.props.CustomStyle.getStyle('CHAT_INPUT_INPUT_BLOCK_STYLE')}
+                    style={[this.props.CustomStyle.getStyle('CHAT_INPUT_INPUT_BLOCK_STYLE'), {borderWidth: 0}]}
                 >
                     <TouchableOpacity
                         style={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BUTTON_BLOCK_STYLE')}
@@ -52,17 +52,18 @@ class ChatInputComponentBlock extends React.Component {
                         />
                     </TouchableOpacity>
                     <View
-                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_TEXT_INPUT_BLOCK_STYLE')}
+                        style={[this.props.CustomStyle.getStyle('CHAT_INPUT_TEXT_INPUT_BLOCK_STYLE')]}
                     >
                         <TextInput
                             ref={'TextInput'}
-                            style={this.props.CustomStyle.getStyle('CHAT_INPUT_TEXT_INPUT_STYLE')}
+                            style={[this.props.CustomStyle.getStyle('CHAT_INPUT_TEXT_INPUT_STYLE'), { justifyContent: 'center', alignItems: 'center', textAlignVertical: 'top', paddingVertical: 5}]}
                             onChangeText={this.onMessageTextChanged}
                             value={this.state.messageText}
                             placeholder={this.props.Language.getText('CHAT_INPUT_TEXT_INPUT_PLACEHOLDER_TEXT')}
-                            returnKeyType='done'
-                            autogrow={true}
-                            multiline={true}
+                            returnKeyType={'done'}
+                            autoCapitalize={'none'}
+                            autogrow
+                            multiline
                             {
                             ...this.props.CustomStyle.getStyle('CHAT_INPUT_TEXT_INPUT_PROPS_STYLE')
                             }

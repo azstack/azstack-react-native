@@ -343,59 +343,61 @@ export const CHAT_INPUT_DISABLED_BLOCK_STYLE = {
     alignItems: 'center'
 };
 export const CHAT_INPUT_DISABLED_TEXT_STYLE = {
+    flex: 1,
     fontSize: 15,
     lineHeight: 20,
     fontWeight: '500',
-    color: '#fff'
+    color: '#fff',
 };
 export const CHAT_INPUT_BLOCK_STYLE = {
-    paddingVertical: 5,
     paddingHorizontal: 15,
     borderTopWidth: 1,
-    borderTopColor: '#E1E5EC'
+    borderTopColor: '#E1E5EC',
 };
 export const CHAT_INPUT_INPUT_BLOCK_STYLE = {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'flex-end',
 };
 export const CHAT_INPUT_STICKER_BUTTON_BLOCK_STYLE = {
     width: 30,
     height: 30,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginVertical: 10,
 };
 export const CHAT_INPUT_STICKER_BUTTON_IMAGE_STYLE = {
     width: 25,
-    height: 25
+    height: 25,
 };
 export const CHAT_INPUT_ATTACH_BUTTON_BLOCK_STYLE = {
     width: 30,
     height: 30,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginVertical: 10,
 };
 export const CHAT_INPUT_ATTACH_BUTTON_IMAGE_STYLE = {
     width: 25,
-    height: 25
+    height: 25,
 };
 export const CHAT_INPUT_SEND_BUTTON_BLOCK_STYLE = {
     width: 30,
     height: 30,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginVertical: 10,
 };
 export const CHAT_INPUT_SEND_BUTTON_IMAGE_STYLE = {
     width: 25,
     height: 25
 };
 export const CHAT_INPUT_TEXT_INPUT_BLOCK_STYLE = {
-    flex: 1
+    flex: 1,
 };
 export const CHAT_INPUT_TEXT_INPUT_STYLE = {
     paddingVertical: 5,
     paddingHorizontal: 10,
-    lineHeight: 20,
     fontSize: 16,
     fontWeight: '300',
     color: '#95A5A6'
@@ -403,7 +405,7 @@ export const CHAT_INPUT_TEXT_INPUT_STYLE = {
 export const CHAT_INPUT_TEXT_INPUT_PROPS_STYLE = {
     underlineColorAndroid: 'transparent',
     placeholderTextColor: '#E1E5EC',
-    maxHeight: 70
+    // minHeight: 100,
 };
 export const MESSAGES_LIST_STYLE = {
     paddingHorizontal: 15,

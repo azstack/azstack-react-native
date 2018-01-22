@@ -2,7 +2,7 @@ import React from 'react';
 import {
     View,
     FlatList,
-    Text,
+    TextInput,
 } from 'react-native';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
@@ -16,6 +16,7 @@ class GroupComponent extends React.Component {
         super(props);
 
         this.state = {
+            text: null,
         };
     }
 
@@ -36,7 +37,16 @@ class GroupComponent extends React.Component {
                     onBackButtonPressed={() => this.props.onBackButtonPressed()}
                     title={'Create group'}
                 />
-                <Text>Kaka</Text>
+                <TextInput
+                    onChangeText={(text) => {this.setState({text})}}
+                    value={this.state.text}
+                    placeholder={this.props.Language.getText('CHAT_INPUT_TEXT_INPUT_PLACEHOLDER_TEXT')}
+                    returnKeyType={'done'}
+                    autoCapitalize={'none'}
+                    autogrow
+                    multiline
+                    blurOnSubmit={false}
+                />
             </ScreenBlockComponent>
         );
     }

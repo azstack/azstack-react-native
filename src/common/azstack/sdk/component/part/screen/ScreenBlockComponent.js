@@ -31,14 +31,14 @@ class ScreenBlockComponent extends React.Component {
                 this.state.opacityAnimated,
                 {
                     toValue: 1,
-                    duration: 500,
+                    duration: 200,
                 }
             ),
             Animated.timing(
                 this.state.marginLeftAnimated,
                 {
                     toValue: 0,
-                    duration: 500,
+                    duration: 200,
                 }
             )
         ]).start();
@@ -48,7 +48,7 @@ class ScreenBlockComponent extends React.Component {
                 this.state.heightAnimated,
                 {
                     toValue: height - event.endCoordinates.height,
-                    duration: 500,
+                    duration: 200,
                 }
             ).start();
         });
@@ -57,7 +57,7 @@ class ScreenBlockComponent extends React.Component {
                 this.state.heightAnimated,
                 {
                     toValue: height,
-                    duration: 500,
+                    duration: 200,
                 }
             ).start();
         });
@@ -74,14 +74,14 @@ class ScreenBlockComponent extends React.Component {
                 this.state.opacityAnimated,
                 {
                     toValue: 0,
-                    duration: 500,
+                    duration: 200,
                 }
             ),
             Animated.timing(
                 this.state.marginLeftAnimated,
                 {
                     toValue: width,
-                    duration: 500,
+                    duration: 200,
                 }
             )
         ]).start();
