@@ -61,16 +61,25 @@ class ChatInputComponentBlock extends React.Component {
         this.setState({ text: Object.assign({}, this.state.text, { val: newText }) });
     };
     onTextInputFocused() {
+
+        let shouldEmitActive = true;
+
         if (this.state.sticker.showed) {
             this.setState({ sticker: Object.assign({}, this.state.sticker, { showed: false }) });
+            shouldEmitActive = false;
         }
         if (this.state.file.showed) {
             this.setState({ file: Object.assign({}, this.state.file, { showed: false }) });
+            shouldEmitActive = false;
         }
         this.setState({ text: Object.assign({}, this.state.text, { focused: true }) });
+        if (shouldEmitActive) {
+            this.props.onActive();
+        }
     };
     onTextInputBlured() {
         this.setState({ text: Object.assign({}, this.state.text, { focused: false }) });
+        this.props.onDisactive();
     };
 
     showStickerBox() {
@@ -78,15 +87,22 @@ class ChatInputComponentBlock extends React.Component {
             return;
         }
 
+        let shouldEmitActive = true;
+
         if (this.state.text.focused) {
             this.refs.TextInput.blur();
+            shouldEmitActive = false;
         }
 
         if (this.state.file.showed) {
             this.setState({ file: Object.assign({}, this.state.file, { showed: false }) });
+            shouldEmitActive = false;
         }
 
         this.setState({ sticker: Object.assign({}, this.state.sticker, { showed: true }) });
+        if (shouldEmitActive) {
+            this.props.onActive();
+        }
     };
     changeStickerTab(index) {
 
@@ -102,15 +118,22 @@ class ChatInputComponentBlock extends React.Component {
             return;
         }
 
+        let shouldEmitActive = true;
+
         if (this.state.text.focused) {
             this.refs.TextInput.blur();
+            shouldEmitActive = false;
         }
 
         if (this.state.sticker.showed) {
             this.setState({ sticker: Object.assign({}, this.state.sticker, { showed: false }) });
+            shouldEmitActive = false;
         }
 
         this.setState({ file: Object.assign({}, this.state.file, { showed: true }) });
+        if (shouldEmitActive) {
+            this.props.onActive();
+        }
     };
 
     sendTextMessage() {
