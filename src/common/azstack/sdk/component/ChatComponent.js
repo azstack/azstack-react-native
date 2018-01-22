@@ -43,7 +43,7 @@ class ChatComponent extends React.Component {
             messages: []
         };
 
-        this.onChatInputActive = this.onChatInputActive.bind(this);
+        this.onChatInputChangeSize = this.onChatInputChangeSize.bind(this);
     };
 
     addSubscriptions() {
@@ -505,7 +505,7 @@ class ChatComponent extends React.Component {
         });
     };
 
-    onChatInputActive() {
+    onChatInputChangeSize() {
     };
 
     onTyping(typingDetails) {
@@ -1033,7 +1033,7 @@ class ChatComponent extends React.Component {
                             AZStackCore={this.props.AZStackCore}
                             chatType={this.props.chatType}
                             chatId={this.props.chatId}
-                            onActive={this.onChatInputActive}
+                            onChangeSize={this.onChatInputChangeSize}
                         />
                     )
                 }
