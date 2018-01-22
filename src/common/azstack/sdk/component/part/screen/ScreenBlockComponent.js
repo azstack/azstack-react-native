@@ -48,7 +48,7 @@ class ScreenBlockComponent extends React.Component {
                 this.state.heightAnimated,
                 {
                     toValue: height - event.endCoordinates.height,
-                    duration: 200,
+                    duration: 100,
                 }
             ).start();
         });
@@ -57,7 +57,7 @@ class ScreenBlockComponent extends React.Component {
                 this.state.heightAnimated,
                 {
                     toValue: height,
-                    duration: 200,
+                    duration: 100,
                 }
             ).start();
         });
