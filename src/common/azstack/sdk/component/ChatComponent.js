@@ -638,6 +638,11 @@ class ChatComponent extends React.Component {
                 messages: messages.sort((a, b) => {
                     return a.created > b.created ? -1 : 1
                 })
+            }, () => {
+                this.refs.MessagesList.scrollToOffset({
+                    offset: 0,
+                    animated: true
+                });
             });
         }).catch((error) => { });
     };
@@ -700,6 +705,11 @@ class ChatComponent extends React.Component {
                 messages: messages.sort((a, b) => {
                     return a.created > b.created ? -1 : 1
                 })
+            }, () => {
+                this.refs.MessagesList.scrollToOffset({
+                    offset: 0,
+                    animated: true
+                });
             });
         }).catch((error) => { });
     };
@@ -762,6 +772,11 @@ class ChatComponent extends React.Component {
                 messages: messages.sort((a, b) => {
                     return a.created > b.created ? -1 : 1
                 })
+            }, () => {
+                this.refs.MessagesList.scrollToOffset({
+                    offset: 0,
+                    animated: true
+                });
             });
         }).catch((error) => { });
     };
@@ -799,6 +814,11 @@ class ChatComponent extends React.Component {
                     return a.created > b.created ? -1 : 1
                 }),
                 chatTarget: newMessage.receiver
+            }, () => {
+                this.refs.MessagesList.scrollToOffset({
+                    offset: 0,
+                    animated: true
+                });
             });
         }).catch((error) => { });
     };
@@ -836,6 +856,11 @@ class ChatComponent extends React.Component {
                     return a.created > b.created ? -1 : 1
                 }),
                 chatTarget: newMessage.receiver
+            }, () => {
+                this.refs.MessagesList.scrollToOffset({
+                    offset: 0,
+                    animated: true
+                });
             });
         }).catch((error) => { });
     };
@@ -873,6 +898,11 @@ class ChatComponent extends React.Component {
                     return a.created > b.created ? -1 : 1
                 }),
                 chatTarget: newMessage.receiver
+            }, () => {
+                this.refs.MessagesList.scrollToOffset({
+                    offset: 0,
+                    animated: true
+                });
             });
         }).catch((error) => { });
     };
@@ -910,6 +940,11 @@ class ChatComponent extends React.Component {
                     return a.created > b.created ? -1 : 1
                 }),
                 chatTarget: newMessage.receiver
+            }, () => {
+                this.refs.MessagesList.scrollToOffset({
+                    offset: 0,
+                    animated: true
+                });
             });
         }).catch((error) => { });
     };
@@ -947,6 +982,11 @@ class ChatComponent extends React.Component {
                     return a.created > b.created ? -1 : 1
                 }),
                 chatTarget: newMessage.receiver
+            }, () => {
+                this.refs.MessagesList.scrollToOffset({
+                    offset: 0,
+                    animated: true
+                });
             });
         }).catch((error) => { });
     };
