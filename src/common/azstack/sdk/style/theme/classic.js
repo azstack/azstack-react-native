@@ -407,7 +407,7 @@ export const CHAT_INPUT_TEXT_INPUT_STYLE = {
     fontSize: 16,
     fontWeight: '300',
     color: '#95A5A6',
-    textAlignVertical: 'top', 
+    textAlignVertical: 'top',
     height: 40,
 };
 export const CHAT_INPUT_TEXT_INPUT_PROPS_STYLE = {
@@ -538,7 +538,8 @@ export const MESSAGE_TIME_MARK_TEXT_STYLE = {
     lineHeight: 15,
     fontWeight: '600',
     color: '#95A5A6',
-    marginBottom: 5
+    marginBottom: 5,
+    textAlign: 'center'
 };
 export const MESSAGE_TYPE_ACTION_TEXT_STYLE = {
     paddingVertical: 5,
