@@ -4,6 +4,11 @@ export const IMAGE_FILE = require('../../static/image/classic/file.png');
 export const IMAGE_STICKER = require('../../static/image/classic/sticker.png');
 export const IMAGE_ATTACH = require('../../static/image/classic/attach.png');
 export const IMAGE_SEND = require('../../static/image/classic/send.png');
+export const IMAGE_GALLERY = require('../../static/image/classic/gallery.png');
+export const IMAGE_CAMERA = require('../../static/image/classic/camera.png');
+export const IMAGE_LOCATION = require('../../static/image/classic/location.png');
+export const IMAGE_VOICE = require('../../static/image/classic/voice.png');
+export const IMAGE_DRAWING = require('../../static/image/classic/drawing.png');
 
 export const SCREEN_BLOCK_STYLE = {
     position: 'absolute',
@@ -456,6 +461,39 @@ export const CHAT_INPUT_STICKER_BOX_STICKERS_STICKER_BUTTON_STYLE = {
 export const CHAT_INPUT_STICKER_BOX_STICKERS_STICKER_IMAGE_STYLE = {
     width: 60,
     height: 60
+};
+export const CHAT_INPUT_FILE_BOX_BLOCK_STYLE = {
+    height: 250,
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    borderTopWidth: 1,
+    borderTopColor: '#E1E5EC',
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const CHAT_INPUT_FILE_BOX_CONTENT_BLOCK_STYLE = {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE = {
+    width: '33%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 5,
+    paddingVertical: 15
+};
+export const CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE = {
+    width: 30,
+    height: 30
+};
+export const CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE = {
+    fontSize: 16,
+    lineHeight: 25,
+    fontWeight: '300',
+    color: '#95A5A6',
+    marginTop: 5
 };
 export const MESSAGES_LIST_STYLE = {
     paddingHorizontal: 15,
