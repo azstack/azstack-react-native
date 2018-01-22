@@ -121,11 +121,11 @@ class ChatComponent extends React.Component {
     };
 
     shouldRenderTimeMark(index) {
-        if (index === 0) {
+        if (index === this.state.messages.length - 1) {
             return true;
         }
         let currentMessage = this.state.messages[index];
-        let prevMessage = this.state.messages[index - 1];
+        let nextMessage = this.state.messages[index + 1];
 
         if (!currentMessage.created) {
             return false;
@@ -133,10 +133,10 @@ class ChatComponent extends React.Component {
         if (new Date(currentMessage.created) === 'Invalid Date' || isNaN(new Date(currentMessage.created))) {
             return false;
         }
-        if (!prevMessage.created) {
+        if (!nextMessage.created) {
             return false;
         }
-        if (new Date(prevMessage.created) === 'Invalid Date' || isNaN(new Date(prevMessage.created))) {
+        if (new Date(nextMessage.created) === 'Invalid Date' || isNaN(new Date(nextMessage.created))) {
             return false;
         }
 
@@ -144,23 +144,19 @@ class ChatComponent extends React.Component {
         let currentMesssageYear = currentMessageDate.getFullYear();
         let currentMesssageMonth = currentMessageDate.getMonth();
         let currentMesssageDay = currentMessageDate.getDate();
-        let prevMessageDate = new Date(prevMessage.created);
-        let prevMesssageYear = prevMessageDate.getFullYear();
-        let prevMesssageMonth = prevMessageDate.getMonth();
-        let prevMesssageDay = prevMessageDate.getDate();
+        let nextMessageDate = new Date(nextMessage.created);
+        let nextMesssageYear = nextMessageDate.getFullYear();
+        let nextMesssageMonth = nextMessageDate.getMonth();
+        let nextMesssageDay = nextMessageDate.getDate();
 
-        if (currentMesssageYear !== prevMesssageYear || currentMesssageMonth !== prevMesssageMonth || currentMesssageDay !== prevMesssageDay) {
+        if (currentMesssageYear !== nextMesssageYear || currentMesssageMonth !== nextMesssageMonth || currentMesssageDay !== nextMesssageDay) {
             return true;
         }
         return false;
     };
     shouldRenderSender(index) {
-        if (index === 0) {
-            return true;
-        }
 
         let currentMessage = this.state.messages[index];
-        let prevMessage = this.state.messages[index - 1];
 
         let groupActionMessageTypes = [
             this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_CREATED,
@@ -171,11 +167,21 @@ class ChatComponent extends React.Component {
             this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_PUBLIC_JOINED
         ];
 
-        if (groupActionMessageTypes.indexOf(prevMessage.type) > -1) {
+        if (groupActionMessageTypes.indexOf(currentMessage.type) > -1) {
+            return false;
+        }
+
+        if (index === this.state.messages.length - 1) {
             return true;
         }
 
-        if (currentMessage.senderId !== this.props.AZStackCore.authenticatedUser.userId && currentMessage.senderId !== prevMessage.senderId) {
+        let nextMessage = this.state.messages[index + 1];
+
+        if (groupActionMessageTypes.indexOf(nextMessage.type) > -1) {
+            return true;
+        }
+
+        if (currentMessage.senderId !== this.props.AZStackCore.authenticatedUser.userId && currentMessage.senderId !== nextMessage.senderId) {
             return true;
         }
 
@@ -274,7 +280,7 @@ class ChatComponent extends React.Component {
                 let unorderedMessages = this.state.messages.concat(preparedMessages);
                 this.setState({
                     messages: unorderedMessages.sort((a, b) => {
-                        return a.created < b.created ? -1 : 1
+                        return a.created > b.created ? -1 : 1
                     })
                 });
             }).catch((error) => { });
@@ -626,7 +632,7 @@ class ChatComponent extends React.Component {
             messages.push(newMessage);
             this.setState({
                 messages: messages.sort((a, b) => {
-                    return a.created < b.created ? -1 : 1
+                    return a.created > b.created ? -1 : 1
                 })
             });
         }).catch((error) => { });
@@ -688,7 +694,7 @@ class ChatComponent extends React.Component {
             messages.push(myMessage);
             this.setState({
                 messages: messages.sort((a, b) => {
-                    return a.created < b.created ? -1 : 1
+                    return a.created > b.created ? -1 : 1
                 })
             });
         }).catch((error) => { });
@@ -750,7 +756,7 @@ class ChatComponent extends React.Component {
             messages.push(myMessage);
             this.setState({
                 messages: messages.sort((a, b) => {
-                    return a.created < b.created ? -1 : 1
+                    return a.created > b.created ? -1 : 1
                 })
             });
         }).catch((error) => { });
@@ -786,7 +792,7 @@ class ChatComponent extends React.Component {
             messages.push(newMessage);
             this.setState({
                 messages: messages.sort((a, b) => {
-                    return a.created < b.created ? -1 : 1
+                    return a.created > b.created ? -1 : 1
                 }),
                 chatTarget: newMessage.receiver
             });
@@ -823,7 +829,7 @@ class ChatComponent extends React.Component {
             messages.push(newMessage);
             this.setState({
                 messages: messages.sort((a, b) => {
-                    return a.created < b.created ? -1 : 1
+                    return a.created > b.created ? -1 : 1
                 }),
                 chatTarget: newMessage.receiver
             });
@@ -860,7 +866,7 @@ class ChatComponent extends React.Component {
             messages.push(newMessage);
             this.setState({
                 messages: messages.sort((a, b) => {
-                    return a.created < b.created ? -1 : 1
+                    return a.created > b.created ? -1 : 1
                 }),
                 chatTarget: newMessage.receiver
             });
@@ -897,7 +903,7 @@ class ChatComponent extends React.Component {
             messages.push(newMessage);
             this.setState({
                 messages: messages.sort((a, b) => {
-                    return a.created < b.created ? -1 : 1
+                    return a.created > b.created ? -1 : 1
                 }),
                 chatTarget: newMessage.receiver
             });
@@ -934,7 +940,7 @@ class ChatComponent extends React.Component {
             messages.push(newMessage);
             this.setState({
                 messages: messages.sort((a, b) => {
-                    return a.created < b.created ? -1 : 1
+                    return a.created > b.created ? -1 : 1
                 }),
                 chatTarget: newMessage.receiver
             });
@@ -984,6 +990,8 @@ class ChatComponent extends React.Component {
                     }
                     {
                         this.state.messages.length > 0 && <FlatList
+                            ref={'MessagesList'}
+                            inverted={true}
                             style={this.props.CustomStyle.getStyle('MESSAGES_LIST_STYLE')}
                             data={this.state.messages}
                             keyExtractor={(item, index) => (item.msgId)}
