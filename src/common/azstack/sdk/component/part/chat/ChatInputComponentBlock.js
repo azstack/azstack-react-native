@@ -51,6 +51,8 @@ class ChatInputComponentBlock extends React.Component {
         this.onTextInputFocused = this.onTextInputFocused.bind(this);
         this.onTextInputBlured = this.onTextInputBlured.bind(this);
         this.showStickerBox = this.showStickerBox.bind(this);
+        this.closeStickerBox = this.closeStickerBox.bind(this);
+        this.closeFileBox = this.closeFileBox.bind(this);
         this.changeStickerTab = this.changeStickerTab.bind(this);
         this.showFileBox = this.showFileBox.bind(this);
         this.sendTextMessage = this.sendTextMessage.bind(this);
@@ -90,6 +92,9 @@ class ChatInputComponentBlock extends React.Component {
         this.setState({ sticker: Object.assign({}, this.state.sticker, { showed: true }) });
         this.props.onActive();
     };
+    closeStickerBox() {
+        this.setState({ sticker: Object.assign({}, this.state.sticker, { showed: false }) });
+    };
     changeStickerTab(index) {
 
         if (this.state.sticker.selected === index) {
@@ -114,6 +119,9 @@ class ChatInputComponentBlock extends React.Component {
 
         this.setState({ file: Object.assign({}, this.state.file, { showed: true }) });
         this.props.onActive();
+    };
+    closeFileBox() {
+        this.setState({ file: Object.assign({}, this.state.file, { showed: false }) });
     };
 
     sendTextMessage() {
@@ -206,36 +214,49 @@ class ChatInputComponentBlock extends React.Component {
                             style={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_BLOCK_STYLE')}
                         >
                             <View
-                                style={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_TABS_BLOCK_STYLE')}
+                                style={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_HEADER_BLOCK_STYLE')}
                             >
-                                {
-                                    this.state.sticker.items.map((item, index) => {
-                                        return (
-                                            <TouchableOpacity
-                                                style={[
-                                                    this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_TABS_TAB_BUTTON_STYLE'),
-                                                    (this.state.sticker.selected === index ? this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_TABS_TAB_BUTTON_ACTIVE_STYLE') : {})
-                                                ]}
-                                                activeOpacity={0.5}
-                                                onPress={() => { this.changeStickerTab(index) }}
-                                                key={`sticker_tab_${item.catId}`}
-                                            >
-                                                <Image
-                                                    style={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_TABS_TAB_IMAGE_STYLE')}
-                                                    source={{
-                                                        uri: `${this.props.linkConstants.LINK_API_URL_STICKER}${item.catId}/${item.iconName}`
-                                                    }}
-                                                />
-                                            </TouchableOpacity>
-                                        );
-                                    })
-                                }
+                                <View
+                                    style={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_TABS_BLOCK_STYLE')}
+                                >
+                                    {
+                                        this.state.sticker.items.map((item, index) => {
+                                            return (
+                                                <TouchableOpacity
+                                                    style={[
+                                                        this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_TABS_TAB_BUTTON_STYLE'),
+                                                        (this.state.sticker.selected === index ? this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_TABS_TAB_BUTTON_ACTIVE_STYLE') : {})
+                                                    ]}
+                                                    activeOpacity={0.5}
+                                                    onPress={() => { this.changeStickerTab(index) }}
+                                                    key={`sticker_tab_${item.catId}`}
+                                                >
+                                                    <Image
+                                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_TABS_TAB_IMAGE_STYLE')}
+                                                        source={{
+                                                            uri: `${this.props.linkConstants.LINK_API_URL_STICKER}${item.catId}/${item.iconName}`
+                                                        }}
+                                                    />
+                                                </TouchableOpacity>
+                                            );
+                                        })
+                                    }
+                                </View>
+                                <TouchableOpacity
+                                    style={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_CLOSE_BUTTON_BLOCK_STYLE')}
+                                    activeOpacity={0.5}
+                                    onPress={this.closeStickerBox}
+                                >
+                                    <Text
+                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_CLOSE_BUTTON_TEXT_STYLE')}
+                                    >×</Text>
+                                </TouchableOpacity>
                             </View>
                             <View
-                                style={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_STICKERS_BLOCK_STYLE')}
+                                style={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_BODY_BLOCK_STYLE')}
                             >
                                 <ScrollView
-                                    contentContainerStyle={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_STICKERS_ITEMS_BLOCK_STYLE')}
+                                    contentContainerStyle={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_STICKERS_BLOCK_STYLE')}
                                 >
                                     {
                                         this.state.sticker.items[this.state.sticker.selected].content.map((item) => {
@@ -360,6 +381,15 @@ class ChatInputComponentBlock extends React.Component {
                                     </Text>
                                 </TouchableOpacity>
                             </View>
+                            <TouchableOpacity
+                                style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_CLOSE_BUTTON_BLOCK_STYLE')}
+                                activeOpacity={0.5}
+                                onPress={this.closeFileBox}
+                            >
+                                <Text
+                                    style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_CLOSE_BUTTON_TEXT_STYLE')}
+                                >×</Text>
+                            </TouchableOpacity>
                         </View>
                     )
                 }

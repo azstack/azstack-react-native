@@ -418,12 +418,16 @@ export const CHAT_INPUT_STICKER_BOX_BLOCK_STYLE = {
     borderTopWidth: 1,
     borderTopColor: '#E1E5EC'
 };
-export const CHAT_INPUT_STICKER_BOX_TABS_BLOCK_STYLE = {
+export const CHAT_INPUT_STICKER_BOX_HEADER_BLOCK_STYLE = {
     paddingVertical: 5,
     paddingHorizontal: 15,
     flexDirection: 'row',
     borderBottomWidth: 1,
     borderBottomColor: '#E1E5EC'
+};
+export const CHAT_INPUT_STICKER_BOX_TABS_BLOCK_STYLE = {
+    flex: 1,
+    flexDirection: 'row'
 };
 export const CHAT_INPUT_STICKER_BOX_TABS_TAB_BUTTON_STYLE = {
     width: 40,
@@ -439,12 +443,23 @@ export const CHAT_INPUT_STICKER_BOX_TABS_TAB_IMAGE_STYLE = {
     width: 30,
     height: 30
 };
-export const CHAT_INPUT_STICKER_BOX_STICKERS_BLOCK_STYLE = {
+export const CHAT_INPUT_STICKER_BOX_CLOSE_BUTTON_BLOCK_STYLE = {
+    width: 40,
+    height: 40
+};
+export const CHAT_INPUT_STICKER_BOX_CLOSE_BUTTON_TEXT_STYLE = {
+    fontSize: 30,
+    fontWeight: '400',
+    lineHeight: 40,
+    color: '#95A5A6',
+    textAlign: 'center'
+};
+export const CHAT_INPUT_STICKER_BOX_BODY_BLOCK_STYLE = {
     flex: 1,
     paddingVertical: 5,
     paddingHorizontal: 15
 };
-export const CHAT_INPUT_STICKER_BOX_STICKERS_ITEMS_BLOCK_STYLE = {
+export const CHAT_INPUT_STICKER_BOX_STICKERS_BLOCK_STYLE = {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
@@ -461,6 +476,7 @@ export const CHAT_INPUT_STICKER_BOX_STICKERS_STICKER_IMAGE_STYLE = {
     height: 60
 };
 export const CHAT_INPUT_FILE_BOX_BLOCK_STYLE = {
+    position: 'relative',
     height: 250,
     paddingVertical: 5,
     paddingHorizontal: 15,
@@ -492,6 +508,20 @@ export const CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE = {
     fontWeight: '300',
     color: '#95A5A6',
     marginTop: 5
+};
+export const CHAT_INPUT_FILE_BOX_CLOSE_BUTTON_BLOCK_STYLE = {
+    position: 'absolute',
+    top: 15,
+    right: 15,
+    width: 30,
+    height: 30
+};
+export const CHAT_INPUT_FILE_BOX_CLOSE_BUTTON_TEXT_STYLE = {
+    fontSize: 30,
+    fontWeight: '400',
+    lineHeight: 30,
+    color: '#95A5A6',
+    textAlign: 'center'
 };
 export const MESSAGES_LIST_STYLE = {
     paddingHorizontal: 15,
