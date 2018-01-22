@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Platform,
     FlatList,
     Image,
     View,
@@ -43,6 +44,7 @@ class ChatComponent extends React.Component {
             messages: []
         };
 
+        this.onMessagesListEndReach = this.onMessagesListEndReach.bind(this);
         this.onChatInputChangeSize = this.onChatInputChangeSize.bind(this);
     };
 
@@ -251,6 +253,8 @@ class ChatComponent extends React.Component {
             return;
         }
 
+        console.log('get messages');
+
         this.pagination.modified.loading = true;
 
         let rawMessages = [];
@@ -269,6 +273,13 @@ class ChatComponent extends React.Component {
             rawMessages = rawMessages.concat(result.list);
             this.prepareMessages(rawMessages).then((preparedMessages) => {
 
+                let unorderedMessages = this.state.messages.concat(preparedMessages);
+                this.setState({
+                    messages: unorderedMessages.sort((a, b) => {
+                        return a.created > b.created ? -1 : 1
+                    })
+                });
+
                 if (result.done === this.props.AZStackCore.listConstants.GET_LIST_DONE) {
                     this.pagination.modified.done = true;
                 } else {
@@ -276,13 +287,6 @@ class ChatComponent extends React.Component {
                 }
 
                 this.pagination.modified.loading = false;
-
-                let unorderedMessages = this.state.messages.concat(preparedMessages);
-                this.setState({
-                    messages: unorderedMessages.sort((a, b) => {
-                        return a.created > b.created ? -1 : 1
-                    })
-                });
             }).catch((error) => { });
 
         }).catch((error) => { });
@@ -509,6 +513,10 @@ class ChatComponent extends React.Component {
                 })
             );
         });
+    };
+
+    onMessagesListEndReach() {
+        this.getModifiedMessages();
     };
 
     onChatInputChangeSize() {
@@ -1007,6 +1015,9 @@ class ChatComponent extends React.Component {
                                     />
                                 );
                             }}
+                            onEndReached={this.onMessagesListEndReach}
+                            onEndReachedThreshold={0.1}
+                            keyboardDismissMode={Platform.select({ ios: 'interactive', android: 'on-drag' })}
                         />
                     }
                 </ScreenBodyBlockComponent>

@@ -30,7 +30,7 @@ class ConversationsComponent extends React.Component {
             searchText: ''
         };
 
-        this.handleLoadMore = this.handleLoadMore.bind(this);
+        this.onConversationsListEndReach = this.onConversationsListEndReach.bind(this);
 
         this.onSearchTextChanged = this.onSearchTextChanged.bind(this);
         this.onSearchTextCleared = this.onSearchTextCleared.bind(this);
@@ -124,13 +124,20 @@ class ConversationsComponent extends React.Component {
             return;
         }
 
+        if (this.pagination.done) {
+            return;
+        }
+
+        if (this.pagination.loading) {
+            return;
+        }
+
         this.pagination.loading = true;
         this.props.AZStackCore.getModifiedConversations({
             page: this.pagination.page,
             lastCreated: this.pagination.lastCreated
         }).then((result) => {
             this.prepareConversations(result.list).then((preparedConversations) => {
-                this.pagination.page += 1;
                 let unorderConversations = this.state.conversations.concat(preparedConversations);
                 this.setState({
                     conversations: unorderConversations.sort((a, b) => {
@@ -139,6 +146,8 @@ class ConversationsComponent extends React.Component {
                 });
                 if (result.done === this.props.AZStackCore.listConstants.GET_LIST_DONE) {
                     this.pagination.done = true;
+                } else {
+                    this.pagination.page += 1;
                 }
                 this.pagination.loading = false;
             }).catch((error) => { });
@@ -312,23 +321,9 @@ class ConversationsComponent extends React.Component {
         });
     };
 
-    handleLoadMore() {
-		if(this.state.done === this.props.AZStackCore.listConstants.GET_LIST_DONE) {
-			return;
-		}
-        if (this.pagination.loading) {
-            return;
-        }
-        if (this.onEndReachedCalledDuringMomentum) { // mean scrolling
-			return;
-        }
+    onConversationsListEndReach() {
         this.getConversations();
-		this.onEndReachedCalledDuringMomentum = true;
     };
-
-    onRefresh() {
-        this.getConversations();
-    }
 
     onSearchTextChanged(newText) {
         this.setState({ searchText: newText });
@@ -807,13 +802,10 @@ class ConversationsComponent extends React.Component {
                                     />
                                 );
                             }}
-                            onEndReached={this.handleLoadMore}
+                            onEndReached={this.onConversationsListEndReach}
                             onEndReachedThreshold={0.1}
-                            onMomentumScrollBegin={() => { console.log('begin'); this.onEndReachedCalledDuringMomentum = false; }}
-                            onMomentumScrollEnd={() => { console.log('end'); this.onEndReachedCalledDuringMomentum = true; }}
-                            contentContainerStyle={{paddingBottom: 15}}
-                            keyboardDismissMode={Platform.select({ios: 'interactive', android: 'on-drag'})}
-                            centerContent={true}
+                            contentContainerStyle={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_CONTENT_CONTAINER_STYLE')}
+                            keyboardDismissMode={Platform.select({ ios: 'interactive', android: 'on-drag' })}
                         />
                     }
                 </ScreenBodyBlockComponent>

@@ -185,7 +185,10 @@ export const CONVERSATIONS_SEARCH_BLOCK_STYLE = {
 };
 export const CONVERSATIONS_LIST_STYLE = {
     paddingHorizontal: 15,
-    flex: 1,
+    flex: 1
+};
+export const CONVERSATIONS_LIST_CONTENT_CONTAINER_STYLE = {
+    paddingBottom: 15
 };
 export const CONVERSATION_BLOCK_STYLE = {
     flexDirection: 'row',
