@@ -149,6 +149,10 @@ class ChatInputComponentBlock extends React.Component {
         }).then((result) => { }).catch((error) => { });
     };
 
+    onInputContentChangeSize(e) {
+        console.log(e);
+    }
+
     render() {
         return (
             <View
@@ -182,7 +186,7 @@ class ChatInputComponentBlock extends React.Component {
                     >
                         <TextInput
                             ref={'TextInput'}
-                            style={this.props.CustomStyle.getStyle('CHAT_INPUT_TEXT_INPUT_STYLE')}
+                            style={[this.props.CustomStyle.getStyle('CHAT_INPUT_TEXT_INPUT_STYLE')]}
                             onChangeText={this.onTextInputChanged}
                             onFocus={this.onTextInputFocused}
                             onBlur={this.onTextInputBlured}
@@ -190,11 +194,12 @@ class ChatInputComponentBlock extends React.Component {
                             placeholder={this.props.Language.getText('CHAT_INPUT_TEXT_INPUT_PLACEHOLDER_TEXT')}
                             returnKeyType={'done'}
                             autoCapitalize={'none'}
-                            autogrow
+                            autoGrow
                             multiline
                             {
                             ...this.props.CustomStyle.getStyle('CHAT_INPUT_TEXT_INPUT_PROPS_STYLE')
                             }
+                            onContentSizeChange={(e) => this.onInputContentChangeSize(e)}
                         />
                     </View>
                     <TouchableOpacity

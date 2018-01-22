@@ -406,12 +406,14 @@ export const CHAT_INPUT_TEXT_INPUT_STYLE = {
     paddingHorizontal: 10,
     fontSize: 16,
     fontWeight: '300',
-    color: '#95A5A6'
+    color: '#95A5A6',
+    textAlignVertical: 'top', 
+    height: 40,
 };
 export const CHAT_INPUT_TEXT_INPUT_PROPS_STYLE = {
     underlineColorAndroid: 'transparent',
     placeholderTextColor: '#E1E5EC',
-    // minHeight: 100,
+    maxHeight: 70,
 };
 export const CHAT_INPUT_STICKER_BOX_BLOCK_STYLE = {
     height: 250,
