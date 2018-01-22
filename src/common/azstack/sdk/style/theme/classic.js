@@ -350,11 +350,12 @@ export const CHAT_INPUT_DISABLED_TEXT_STYLE = {
     color: '#fff',
 };
 export const CHAT_INPUT_BLOCK_STYLE = {
-    paddingHorizontal: 15,
     borderTopWidth: 1,
     borderTopColor: '#E1E5EC',
 };
 export const CHAT_INPUT_INPUT_BLOCK_STYLE = {
+    paddingVertical: 5,
+    paddingHorizontal: 15,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'flex-end',
@@ -406,6 +407,53 @@ export const CHAT_INPUT_TEXT_INPUT_PROPS_STYLE = {
     underlineColorAndroid: 'transparent',
     placeholderTextColor: '#E1E5EC',
     // minHeight: 100,
+};
+export const CHAT_INPUT_STICKER_BOX_BLOCK_STYLE = {
+    height: 250,
+    borderTopWidth: 1,
+    borderTopColor: '#E1E5EC'
+};
+export const CHAT_INPUT_STICKER_BOX_TABS_BLOCK_STYLE = {
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E1E5EC'
+};
+export const CHAT_INPUT_STICKER_BOX_TABS_TAB_BUTTON_STYLE = {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const CHAT_INPUT_STICKER_BOX_TABS_TAB_BUTTON_ACTIVE_STYLE = {
+    borderBottomWidth: 2,
+    borderBottomColor: '#F2784B'
+};
+export const CHAT_INPUT_STICKER_BOX_TABS_TAB_IMAGE_STYLE = {
+    width: 30,
+    height: 30
+};
+export const CHAT_INPUT_STICKER_BOX_STICKERS_BLOCK_STYLE = {
+    flex: 1,
+    paddingVertical: 5,
+    paddingHorizontal: 15
+};
+export const CHAT_INPUT_STICKER_BOX_STICKERS_ITEMS_BLOCK_STYLE = {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignItems: 'flex-start'
+};
+export const CHAT_INPUT_STICKER_BOX_STICKERS_STICKER_BUTTON_STYLE = {
+    width: 70,
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const CHAT_INPUT_STICKER_BOX_STICKERS_STICKER_IMAGE_STYLE = {
+    width: 60,
+    height: 60
 };
 export const MESSAGES_LIST_STYLE = {
     paddingHorizontal: 15,

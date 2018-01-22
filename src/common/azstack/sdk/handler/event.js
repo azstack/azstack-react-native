@@ -168,6 +168,54 @@ class Event {
                 this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_MESSAGE_FROM_ME, { error: null, result: myMessage });
             }).catch((error) => { });
         };
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_NEW_MESSAGE_RETURN] = (error, result) => {
+            if (error) {
+                this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error, result: null });
+                return;
+            }
+            let myMessage = result.newMessage;
+            Promise.all([
+                new Promise((resolve, reject) => {
+                    this.AZStackCore.getUsersInformation({
+                        userIds: [myMessage.senderId]
+                    }).then((result) => {
+                        myMessage.sender = result.list[0];
+                        resolve(null);
+                    }).catch((error) => {
+                        myMessage.sender = { userId: myMessage.senderId };
+                        resolve(null);
+                    });
+                }),
+                new Promise((resolve, reject) => {
+                    if (myMessage.chatType === this.AZStackCore.chatConstants.CHAT_TYPE_USER) {
+                        this.AZStackCore.getUsersInformation({
+                            userIds: [myMessage.receiverId]
+                        }).then((result) => {
+                            myMessage.receiver = result.list[0];
+                            resolve(null);
+                        }).catch((error) => {
+                            myMessage.receiver = { userId: myMessage.receiverId };
+                            resolve(null);
+                        });
+                    } else if (myMessage.chatType === this.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
+                        this.AZStackCore.getDetailsGroup({
+                            groupId: myMessage.receiverId
+                        }).then((result) => {
+                            myMessage.receiver = result;
+                            resolve(null);
+                        }).catch((error) => {
+                            myMessage.receiver = { groupId: myMessage.receiverId };
+                            resolve(null);
+                        });
+                    } else {
+                        myMessage.receiver = {};
+                        resolve(null);
+                    }
+                })
+            ]).then(() => {
+                this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: myMessage });
+            }).catch((error) => { });
+        };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_GROUP_CREATED] = (error, result) => {
             if (error) {
                 this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_GROUP_CREATED, { error, result: null });
