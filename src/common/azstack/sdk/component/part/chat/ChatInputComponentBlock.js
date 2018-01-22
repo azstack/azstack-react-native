@@ -70,7 +70,6 @@ class ChatInputComponentBlock extends React.Component {
             this.setState({ file: Object.assign({}, this.state.file, { showed: false }) });
         }
         this.setState({ text: Object.assign({}, this.state.text, { focused: true }) });
-        this.props.onChangeSize();
     };
     onTextInputBlured() {
         this.setState({ text: Object.assign({}, this.state.text, { focused: false }) });
@@ -90,7 +89,6 @@ class ChatInputComponentBlock extends React.Component {
         }
 
         this.setState({ sticker: Object.assign({}, this.state.sticker, { showed: true }) });
-        this.props.onChangeSize();
     };
     closeStickerBox() {
         this.setState({ sticker: Object.assign({}, this.state.sticker, { showed: false }) });
@@ -118,7 +116,6 @@ class ChatInputComponentBlock extends React.Component {
         }
 
         this.setState({ file: Object.assign({}, this.state.file, { showed: true }) });
-        this.props.onChangeSize();
     };
     closeFileBox() {
         this.setState({ file: Object.assign({}, this.state.file, { showed: false }) });
