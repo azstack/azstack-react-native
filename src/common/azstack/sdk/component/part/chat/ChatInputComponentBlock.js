@@ -4,7 +4,8 @@ import {
     TextInput,
     Image,
     TouchableOpacity,
-    ScrollView
+    ScrollView,
+    Text
 } from 'react-native';
 
 class ChatInputComponentBlock extends React.Component {
@@ -40,6 +41,9 @@ class ChatInputComponentBlock extends React.Component {
                         ]
                     }
                 ]
+            },
+            file: {
+                showed: false
             }
         };
 
@@ -48,6 +52,7 @@ class ChatInputComponentBlock extends React.Component {
         this.onTextInputBlured = this.onTextInputBlured.bind(this);
         this.showStickerBox = this.showStickerBox.bind(this);
         this.changeStickerTab = this.changeStickerTab.bind(this);
+        this.showFileBox = this.showFileBox.bind(this);
         this.sendTextMessage = this.sendTextMessage.bind(this);
         this.sendStickerMessage = this.sendStickerMessage.bind(this);
     };
@@ -58,6 +63,9 @@ class ChatInputComponentBlock extends React.Component {
     onTextInputFocused() {
         if (this.state.sticker.showed) {
             this.setState({ sticker: Object.assign({}, this.state.sticker, { showed: false }) });
+        }
+        if (this.state.file.showed) {
+            this.setState({ file: Object.assign({}, this.state.file, { showed: false }) });
         }
         this.setState({ text: Object.assign({}, this.state.text, { focused: true }) });
     };
@@ -74,6 +82,10 @@ class ChatInputComponentBlock extends React.Component {
             this.refs.TextInput.blur();
         }
 
+        if (this.state.file.showed) {
+            this.setState({ file: Object.assign({}, this.state.file, { showed: false }) });
+        }
+
         this.setState({ sticker: Object.assign({}, this.state.sticker, { showed: true }) });
     };
     changeStickerTab(index) {
@@ -83,6 +95,22 @@ class ChatInputComponentBlock extends React.Component {
         }
 
         this.setState({ sticker: Object.assign({}, this.state.sticker, { selected: index }) });
+    };
+
+    showFileBox() {
+        if (this.state.file.showed) {
+            return;
+        }
+
+        if (this.state.text.focused) {
+            this.refs.TextInput.blur();
+        }
+
+        if (this.state.sticker.showed) {
+            this.setState({ sticker: Object.assign({}, this.state.sticker, { showed: false }) });
+        }
+
+        this.setState({ file: Object.assign({}, this.state.file, { showed: true }) });
     };
 
     sendTextMessage() {
@@ -116,7 +144,7 @@ class ChatInputComponentBlock extends React.Component {
                 style={this.props.CustomStyle.getStyle('CHAT_INPUT_BLOCK_STYLE')}
             >
                 <View
-                    style={[this.props.CustomStyle.getStyle('CHAT_INPUT_INPUT_BLOCK_STYLE'), {borderWidth: 0}]}
+                    style={[this.props.CustomStyle.getStyle('CHAT_INPUT_INPUT_BLOCK_STYLE'), { borderWidth: 0 }]}
                 >
                     <TouchableOpacity
                         style={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BUTTON_BLOCK_STYLE')}
@@ -131,7 +159,7 @@ class ChatInputComponentBlock extends React.Component {
                     <TouchableOpacity
                         style={this.props.CustomStyle.getStyle('CHAT_INPUT_ATTACH_BUTTON_BLOCK_STYLE')}
                         activeOpacity={0.5}
-                        onPress={() => { }}
+                        onPress={this.showFileBox}
                     >
                         <Image
                             style={this.props.CustomStyle.getStyle('CHAT_INPUT_ATTACH_BUTTON_IMAGE_STYLE')}
@@ -226,6 +254,108 @@ class ChatInputComponentBlock extends React.Component {
                                         })
                                     }
                                 </ScrollView>
+                            </View>
+                        </View>
+                    )
+                }
+                {
+                    !!this.state.file.showed && (
+                        <View
+                            style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_BLOCK_STYLE')}
+                        >
+                            <View
+                                style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_CONTENT_BLOCK_STYLE')}
+                            >
+                                <TouchableOpacity
+                                    style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
+                                    activeOpacity={0.5}
+                                    onPress={() => { }}
+                                >
+                                    <Image
+                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
+                                        source={this.props.CustomStyle.getImage('IMAGE_GALLERY')}
+                                    />
+                                    <Text
+                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
+                                    >
+                                        {this.props.Language.getText('CHAT_INPUT_FILE_OPTION_GALLERY_TEXT')}
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
+                                    activeOpacity={0.5}
+                                    onPress={() => { }}
+                                >
+                                    <Image
+                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
+                                        source={this.props.CustomStyle.getImage('IMAGE_CAMERA')}
+                                    />
+                                    <Text
+                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
+                                    >
+                                        {this.props.Language.getText('CHAT_INPUT_FILE_OPTION_CAMERA_TEXT')}
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
+                                    activeOpacity={0.5}
+                                    onPress={() => { }}
+                                >
+                                    <Image
+                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
+                                        source={this.props.CustomStyle.getImage('IMAGE_FILE')}
+                                    />
+                                    <Text
+                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
+                                    >
+                                        {this.props.Language.getText('CHAT_INPUT_FILE_OPTION_FILE_TEXT')}
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
+                                    activeOpacity={0.5}
+                                    onPress={() => { }}
+                                >
+                                    <Image
+                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
+                                        source={this.props.CustomStyle.getImage('IMAGE_LOCATION')}
+                                    />
+                                    <Text
+                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
+                                    >
+                                        {this.props.Language.getText('CHAT_INPUT_FILE_OPTION_LOCATION_TEXT')}
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
+                                    activeOpacity={0.5}
+                                    onPress={() => { }}
+                                >
+                                    <Image
+                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
+                                        source={this.props.CustomStyle.getImage('IMAGE_VOICE')}
+                                    />
+                                    <Text
+                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
+                                    >
+                                        {this.props.Language.getText('CHAT_INPUT_FILE_OPTION_VOICE_TEXT')}
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
+                                    activeOpacity={0.5}
+                                    onPress={() => { }}
+                                >
+                                    <Image
+                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
+                                        source={this.props.CustomStyle.getImage('IMAGE_DRAWING')}
+                                    />
+                                    <Text
+                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
+                                    >
+                                        {this.props.Language.getText('CHAT_INPUT_FILE_OPTION_DRAWING_TEXT')}
+                                    </Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     )
