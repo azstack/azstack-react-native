@@ -366,25 +366,6 @@ export class AZStackCore {
                 });
                 break;
 
-            case this.serviceTypes.MESSAGE_NEW_WITH_USER_TYPE_TEXT:
-                this.Message.receiveNewMessageSent(body).then((result) => {
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, result.msgId, null, {});
-                }).catch((error) => {
-                    let msgId = error.msgId;
-                    delete error.msgId;
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, msgId, error, null);
-                });
-                break;
-            case this.serviceTypes.MESSAGE_NEW_WITH_GROUP:
-                this.Message.receiveNewMessageSent(body).then((result) => {
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, result.msgId, null, {});
-                }).catch((error) => {
-                    let msgId = error.msgId;
-                    delete error.msgId;
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, msgId, error, null);
-                });
-                break;
-
             case this.serviceTypes.MESSAGE_HAS_NEW_WITH_USER_TYPE_TEXT:
                 this.Message.receiveHasNewMessage({
                     chatType: this.chatConstants.CHAT_TYPE_USER,
@@ -462,6 +443,19 @@ export class AZStackCore {
                 }).catch();
                 break;
 
+            case this.serviceTypes.MESSAGE_NEW_WITH_USER_TYPE_TEXT:
+                this.Message.receiveMessageStatusChanged({
+                    chatType: this.chatConstants.CHAT_TYPE_USER,
+                    messageStatus: this.chatConstants.MESSAGE_STATUS_SENT,
+                    body: body
+                }).then((result) => {
+                    result.senderId = this.authenticatedUser.userId;
+                    result.receiverId = this.authenticatedUser.userId;
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED](null, result);
+                    }
+                }).catch((error) => { });
+                break;
             case this.serviceTypes.MESSAGE_STATUS_CHANGE_DELIVERED_WITH_USER:
                 this.Message.receiveMessageStatusChanged({
                     chatType: this.chatConstants.CHAT_TYPE_USER,
@@ -515,6 +509,18 @@ export class AZStackCore {
                     delete error.msgId;
                     this.callUncall(this.uncallConstants.UNCALL_KEY_CHANGE_MESSAGE_STATUS, this.chatConstants.MESSAGE_STATUS_CANCELLED + '_' + msgId, error, null);
                 });
+                break;
+            case this.serviceTypes.MESSAGE_NEW_WITH_GROUP:
+                this.Message.receiveMessageStatusChanged({
+                    chatType: this.chatConstants.CHAT_TYPE_GROUP,
+                    messageStatus: this.chatConstants.MESSAGE_STATUS_SENT,
+                    body: body
+                }).then((result) => {
+                    result.senderId = this.authenticatedUser.userId;
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED](null, result);
+                    }
+                }).catch((error) => { });
                 break;
             case this.serviceTypes.MESSAGE_STATUS_CHANGE_DELIVERED_WITH_GROUP:
                 this.Message.receiveMessageStatusChanged({
@@ -1770,7 +1776,7 @@ export class AZStackCore {
                 file: options.file
             }).then((result) => {
                 result.senderId = this.authenticatedUser.userId;
-                this.addUncallTemporary(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, newMsgId, 'newMessage', { newMessage: result }, this.uncallConstants.UNCALL_TEMPORARY_TYPE_OBJECT);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, newMsgId, null, result);
             }).catch((error) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, newMsgId, error, null);
             });

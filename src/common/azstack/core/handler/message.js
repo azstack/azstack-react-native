@@ -468,7 +468,7 @@ class Message {
                         receiverId: options.chatId,
                         msgId: options.msgId,
                         type: this.chatConstants.MESSAGE_TYPE_TEXT,
-                        status: this.chatConstants.MESSAGE_STATUS_SENT,
+                        status: this.chatConstants.MESSAGE_STATUS_SENDING,
                         deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
                         created: currentTimeStamp,
                         modified: currentTimeStamp,
@@ -491,7 +491,7 @@ class Message {
                         receiverId: options.chatId,
                         msgId: options.msgId,
                         type: this.chatConstants.MESSAGE_TYPE_STICKER,
-                        status: this.chatConstants.MESSAGE_STATUS_SENT,
+                        status: this.chatConstants.MESSAGE_STATUS_SENDING,
                         deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
                         created: currentTimeStamp,
                         modified: currentTimeStamp,
@@ -519,7 +519,7 @@ class Message {
                         receiverId: options.chatId,
                         msgId: options.msgId,
                         type: this.chatConstants.MESSAGE_TYPE_FILE,
-                        status: this.chatConstants.MESSAGE_STATUS_SENT,
+                        status: this.chatConstants.MESSAGE_STATUS_SENDING,
                         deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
                         created: currentTimeStamp,
                         modified: currentTimeStamp,
@@ -547,7 +547,7 @@ class Message {
                         receiverId: options.chatId,
                         msgId: options.msgId,
                         type: this.chatConstants.MESSAGE_TYPE_TEXT,
-                        status: this.chatConstants.MESSAGE_STATUS_SENT,
+                        status: this.chatConstants.MESSAGE_STATUS_SENDING,
                         deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
                         created: currentTimeStamp,
                         modified: currentTimeStamp,
@@ -571,7 +571,7 @@ class Message {
                         receiverId: options.chatId,
                         msgId: options.msgId,
                         type: this.chatConstants.MESSAGE_TYPE_STICKER,
-                        status: this.chatConstants.MESSAGE_STATUS_SENT,
+                        status: this.chatConstants.MESSAGE_STATUS_SENDING,
                         deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
                         created: currentTimeStamp,
                         modified: currentTimeStamp,
@@ -599,7 +599,7 @@ class Message {
                         receiverId: options.chatId,
                         msgId: options.msgId,
                         type: this.chatConstants.MESSAGE_TYPE_FILE,
-                        status: this.chatConstants.MESSAGE_STATUS_SENT,
+                        status: this.chatConstants.MESSAGE_STATUS_SENDING,
                         deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
                         created: currentTimeStamp,
                         modified: currentTimeStamp,
@@ -638,42 +638,6 @@ class Message {
                     message: 'Cannot send new message data, new message fail'
                 });
             });
-        });
-    };
-    receiveNewMessageSent(body) {
-        return new Promise((resolve, reject) => {
-            if (!body) {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'Cannot detect new message sent, ignored'
-                });
-                reject({
-                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
-                    message: 'Cannot detect new message sent'
-                });
-                return;
-            }
-
-            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                message: 'Got new message sent'
-            });
-            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                message: 'New message sent',
-                payload: body
-            });
-
-            if (body.r !== this.errorCodes.CHANGE_STATUS_MESSAGE_SUCCESS_FROM_SERVER && body.r !== this.errorCodes.REQUEST_SUCCESS_FROM_SERVER) {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'Server response with error, new message fail'
-                });
-                reject({
-                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
-                    message: 'Server response with error, new message fail',
-                    msgId: body.msgId
-                });
-                return;
-            }
-
-            resolve({ msgId: body.msgId });
         });
     };
     receiveHasNewMessage(options) {
@@ -1055,7 +1019,26 @@ class Message {
             let onMessageStatusChanged = {};
 
             if (options.chatType === this.chatConstants.CHAT_TYPE_USER) {
-                if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_DELIVERED) {
+                if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_SENT) {
+                    if (options.body.r !== this.errorCodes.CHANGE_STATUS_MESSAGE_SUCCESS_FROM_SERVER && options.body.r !== this.errorCodes.REQUEST_SUCCESS_FROM_SERVER) {
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                            message: 'Server response with error, send message fail'
+                        });
+                        reject({
+                            code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                            message: 'Server response with error, send message fail'
+                        });
+                        return;
+                    }
+                    onMessageStatusChanged = {
+                        chatType: this.chatConstants.CHAT_TYPE_USER,
+                        chatId: options.body.from,
+                        senderId: 0,
+                        receiverId: 0,
+                        msgId: options.body.msgId,
+                        messageStatus: this.chatConstants.MESSAGE_STATUS_SENT
+                    };
+                } else if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_DELIVERED) {
                     onMessageStatusChanged = {
                         chatType: this.chatConstants.CHAT_TYPE_USER,
                         chatId: options.body.from,
@@ -1108,7 +1091,26 @@ class Message {
                     };
                 }
             } else if (options.chatType === this.chatConstants.CHAT_TYPE_GROUP) {
-                if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_DELIVERED) {
+                if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_SENT) {
+                    if (options.body.r !== this.errorCodes.CHANGE_STATUS_MESSAGE_SUCCESS_FROM_SERVER && options.body.r !== this.errorCodes.REQUEST_SUCCESS_FROM_SERVER) {
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                            message: 'Server response with error, send message fail'
+                        });
+                        reject({
+                            code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                            message: 'Server response with error, send message fail'
+                        });
+                        return;
+                    }
+                    onMessageStatusChanged = {
+                        chatType: this.chatConstants.CHAT_TYPE_GROUP,
+                        chatId: options.body.group,
+                        senderId: 0,
+                        receiverId: options.body.group,
+                        msgId: options.body.msgId,
+                        messageStatus: this.chatConstants.MESSAGE_STATUS_SENT
+                    };
+                } else if (options.messageStatus === this.chatConstants.MESSAGE_STATUS_DELIVERED) {
                     onMessageStatusChanged = {
                         chatType: this.chatConstants.CHAT_TYPE_GROUP,
                         chatId: options.body.group,
