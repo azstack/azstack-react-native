@@ -13,8 +13,6 @@ class ChatInputComponentBlock extends React.Component {
 
         super(props);
 
-        this.subscriptions = {};
-
         this.state = {
             text: {
                 focused: false,
@@ -122,6 +120,11 @@ class ChatInputComponentBlock extends React.Component {
     };
 
     sendTextMessage() {
+
+        if (!this.props.AZStackCore.slaveSocketConnected) {
+            return;
+        }
+
         if (!this.state.text.val) {
             return;
         }
@@ -135,6 +138,11 @@ class ChatInputComponentBlock extends React.Component {
         }).catch((error) => { });
     };
     sendStickerMessage(itemName) {
+
+        if (!this.props.AZStackCore.slaveSocketConnected) {
+            return;
+        }
+
         this.props.AZStackCore.newMessage({
             chatType: this.props.chatType,
             chatId: this.props.chatId,
@@ -148,7 +156,7 @@ class ChatInputComponentBlock extends React.Component {
 
     onInputContentChangeSize(e) {
         console.log(e);
-    }
+    };
 
     render() {
         return (
