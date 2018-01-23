@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Alert,
     View,
     TextInput,
     Image,
@@ -135,7 +136,16 @@ class ChatInputComponentBlock extends React.Component {
             text: this.state.text.val
         }).then((result) => {
             this.setState({ text: Object.assign({}, this.state.text, { val: '' }) });
-        }).catch((error) => { });
+        }).catch((error) => {
+            Alert.alert(
+                this.props.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.props.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
+                [
+                    { text: this.props.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+        });
     };
     sendStickerMessage(itemName) {
 
@@ -151,7 +161,16 @@ class ChatInputComponentBlock extends React.Component {
                 catId: this.state.sticker.items[this.state.sticker.selected].catId,
                 url: `${this.props.linkConstants.LINK_API_URL_STICKER}${this.state.sticker.items[this.state.sticker.selected].catId}/${itemName}`
             }
-        }).then((result) => { }).catch((error) => { });
+        }).then((result) => { }).catch((error) => {
+            Alert.alert(
+                this.props.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.props.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
+                [
+                    { text: this.props.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+        });
     };
 
     onInputContentChangeSize(e) {

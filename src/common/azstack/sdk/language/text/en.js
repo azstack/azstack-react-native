@@ -1,3 +1,6 @@
+export const ALERT_TITLE_ERROR_TEXT = 'Error';
+export const ALERT_BUTTON_TITLE_OK_TEXT = 'OK';
+
 export const CONNECTTION_CONNECTING_TEXT = 'Connecting...';
 export const CONNECTTION_CONNECTED_TEXT = 'Connected';
 
@@ -52,6 +55,7 @@ export const CONVERSATIONS_SEARCH_PLACEHOLDER_TEXT = 'Search...';
 export const CONVERSATIONS_LIST_EMPTY_TEXT = 'No Conversation';
 
 export const CHAT_HEADER_TITLE_TEXT = 'Chat';
+export const CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT = 'Can\'t not send message, please try again later.';
 export const CHAT_INPUT_DISABLED_TEXT = 'You can\'t not reply to this conversation';
 export const CHAT_INPUT_TEXT_INPUT_PLACEHOLDER_TEXT = 'Enter text...';
 export const CHAT_INPUT_FILE_OPTION_GALLERY_TEXT = 'Gallery';
