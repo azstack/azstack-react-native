@@ -44,7 +44,13 @@ class ConversationsComponent extends React.Component {
             if (error) {
                 return;
             }
-            this.getConversations();
+            this.initRun();
+        });
+        this.subscriptions.onReconnected = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_AUTO_RECONNECTED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.initRun();
         });
         this.subscriptions.onTyping = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_TYPING, ({ error, result }) => {
             if (error) {
@@ -117,6 +123,15 @@ class ConversationsComponent extends React.Component {
         for (let subscriptionName in this.subscriptions) {
             this.subscriptions[subscriptionName].remove();
         }
+    };
+
+    initRun() {
+        this.state.conversations = [];
+        this.pagination.page = 1;
+        this.pagination.lastCreated = new Date().getTime();
+        this.pagination.loading = false;
+        this.pagination.done = false;
+        this.getConversations();
     };
 
     getConversations() {
@@ -749,7 +764,7 @@ class ConversationsComponent extends React.Component {
 
     componentDidMount() {
         this.addSubscriptions();
-        this.getConversations();
+        this.initRun();
     };
 
     componentWillUnmount() {

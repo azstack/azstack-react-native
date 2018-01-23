@@ -52,7 +52,13 @@ class ChatComponent extends React.Component {
             if (error) {
                 return;
             }
-            this.getChatTarget();
+            this.initRun()
+        });
+        this.subscriptions.onReconnected = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_AUTO_RECONNECTED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.initRun()
         });
         this.subscriptions.onTyping = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_TYPING, ({ error, result }) => {
             if (error) {
@@ -119,6 +125,18 @@ class ChatComponent extends React.Component {
         for (let subscriptionName in this.subscriptions) {
             this.subscriptions[subscriptionName].remove();
         }
+    };
+
+    initRun() {
+        this.pagination.unread.page = 1;
+        this.pagination.modified.page = 1;
+        this.pagination.modified.lastCreated = new Date().getTime();
+        this.pagination.modified.loading = false;
+        this.pagination.modified.done = false;
+        this.state.chatTarget = null;
+        this.state.unreads = [];
+        this.state.messages = [];
+        this.getChatTarget();
     };
 
     shouldRenderTimeMark(index) {
@@ -993,7 +1011,7 @@ class ChatComponent extends React.Component {
 
     componentDidMount() {
         this.addSubscriptions();
-        this.getChatTarget();
+        this.initRun();
     };
 
     componentWillUnmount() {
