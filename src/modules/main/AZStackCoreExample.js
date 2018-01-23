@@ -106,7 +106,6 @@ class AZStackCoreExample extends React.Component {
         };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED] = (error, result) => {
             if (error) {
-                console.log(error);
                 return;
             }
             this.setState({
@@ -481,7 +480,7 @@ class AZStackCoreExample extends React.Component {
     componentDidMount() {
         this.AZStackCore.connect({}).then((result) => {
             this.setState({ authenticatedUser: result });
-        }).catch((error) => { });
+        }).catch((error) => {});
     };
 
     componentWillUnmount() {

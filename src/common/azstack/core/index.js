@@ -49,14 +49,16 @@ export class AZStackCore {
         this.Delegates = new Delegates({ logLevelConstants: this.logLevelConstants, delegateConstants: this.delegateConstants, Logger: this.Logger });
 
         this.unCalls = {};
-        this.coreInited = false;
+        this.stateControls = {
+            coreInited: false,
+            connecting: false,
+            reconnecting: false,
+            autoReconnecting: false,
+            disconnecting: false
+        };
         this.slaveAddress = null;
         this.slaveSocket = null;
         this.slaveSocketConnected = false;
-        this.slaveSocketConnecting = false;
-        this.slaveSocketReconnecting = false;
-        this.slaveSocketAutoReconnecting = false;
-        this.slaveSocketDisconnecting = false;
         this.authenticatingData = {};
         this.authenticatedUser = null;
         this.intervalSendPing = null;
@@ -251,28 +253,28 @@ export class AZStackCore {
                         azStackUserId: result.username,
                         fullname: result.fullname
                     };
-                    if (this.slaveSocketConnecting) {
-                        this.slaveSocketConnecting = false;
+                    if (this.stateControls.connecting) {
+                        this.stateControls.connecting = false;
                         this.callUncall(this.uncallConstants.UNCALL_KEY_CONNECT, 'default', null, this.authenticatedUser);
-                    } else if (this.slaveSocketReconnecting) {
-                        this.slaveSocketReconnecting = false;
+                    } else if (this.stateControls.reconnecting) {
+                        this.stateControls.reconnecting = false;
                         this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', null, this.authenticatedUser);
-                    } else if (this.slaveSocketAutoReconnecting) {
-                        this.slaveSocketAutoReconnecting = false;
+                    } else if (this.stateControls.autoReconnecting) {
+                        this.stateControls.autoReconnecting = false;
                         this.autoReconnectTrieds = 0;
                         if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED] === 'function') {
                             this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED](null, this.authenticatedUser);
                         }
                     }
                 }).catch((error) => {
-                    if (this.slaveSocketConnecting) {
-                        this.slaveSocketConnecting = false;
+                    if (this.stateControls.connecting) {
+                        this.stateControls.connecting = false;
                         this.callUncall(this.uncallConstants.UNCALL_KEY_CONNECT, 'default', error, null);
-                    } else if (this.slaveSocketReconnecting) {
-                        this.slaveSocketReconnecting = false;
+                    } else if (this.stateControls.reconnecting) {
+                        this.stateControls.reconnecting = false;
                         this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', error, null);
-                    } else if (this.slaveSocketAutoReconnecting) {
-                        this.slaveSocketAutoReconnecting = false;
+                    } else if (this.stateControls.autoReconnecting) {
+                        this.stateControls.autoReconnecting = false;
                         this.autoReconnectTrieds = 0;
                         if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED] === 'function') {
                             this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED](error, null);
@@ -787,7 +789,7 @@ export class AZStackCore {
             message: 'Slave socket uri',
             payload: this.slaveSocket.io.uri
         });
-        this.slaveSocketConnecting = true;
+        this.stateControls.connecting = true;
         this.slaveSocket.open();
 
         this.slaveSocket.on('connect', () => {
@@ -800,14 +802,14 @@ export class AZStackCore {
                 slaveAddress: this.slaveAddress,
                 authenticatingData: this.authenticatingData
             }).then(() => { }).catch((error) => {
-                if (this.slaveSocketConnecting) {
-                    this.slaveSocketConnecting = false;
+                if (this.stateControls.connecting) {
+                    this.stateControls.connecting = false;
                     this.callUncall(this.uncallConstants.UNCALL_KEY_CONNECT, 'default', error, null);
-                } else if (this.slaveSocketReconnecting) {
-                    this.slaveSocketReconnecting = false;
+                } else if (this.stateControls.reconnecting) {
+                    this.stateControls.reconnecting = false;
                     this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', error, null);
-                } else if (this.slaveSocketAutoReconnecting) {
-                    this.slaveSocketAutoReconnecting = false;
+                } else if (this.stateControls.autoReconnecting) {
+                    this.stateControls.autoReconnecting = false;
                     this.autoReconnectTrieds = 0;
                     if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED] === 'function') {
                         this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED](error, null);
@@ -840,19 +842,22 @@ export class AZStackCore {
                 message: 'Slave socket connection error',
                 payload: error
             });
-            if (this.slaveSocketConnecting) {
-                this.slaveSocketConnecting = false;
+            if (this.stateControls.connecting) {
+                this.stateControls.connecting = false;
                 this.callUncall(this.uncallConstants.UNCALL_KEY_CONNECT, 'default', {
                     code: this.errorCodes.ERR_SOCKET_CONNECT,
                     message: 'Cannot connect to slave socket'
                 }, null);
-            } else if (this.slaveSocketReconnecting) {
-                this.slaveSocketReconnecting = false;
+                if (this.autoReconnect) {
+                    this.tryAutoReconnect();
+                }
+            } else if (this.stateControls.reconnecting) {
+                this.stateControls.reconnecting = false;
                 this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', {
                     code: this.errorCodes.ERR_SOCKET_CONNECT,
                     message: 'Cannot reconnect to slave socket'
                 }, null);
-            } else if (this.slaveSocketAutoReconnecting) {
+            } else if (this.stateControls.autoReconnecting) {
                 if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED] === 'function') {
                     this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED]({
                         code: this.errorCodes.ERR_SOCKET_CONNECT,
@@ -872,18 +877,17 @@ export class AZStackCore {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Disconnected to slave socket'
             });
-            if (this.slaveSocketDisconnecting) {
-                this.slaveSocketDisconnecting = false;
+            if (this.stateControls.disconnecting) {
+                this.stateControls.disconnecting = false;
                 this.callUncall(this.uncallConstants.UNCALL_KEY_DISCONNECT, 'default', null, null);
             } else {
                 if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_DISCONNECTED] === 'function') {
                     this.Delegates[this.delegateConstants.DELEGATE_ON_DISCONNECTED](null, null);
                 }
+                if (this.autoReconnect) {
+                    this.tryAutoReconnect();
+                }
             }
-            if (this.autoReconnect) {
-                this.tryAutoReconnect();
-            }
-
         });
         this.slaveSocket.on('WebPacket', (packet) => {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
@@ -972,7 +976,7 @@ export class AZStackCore {
 
             this.addUncall(this.uncallConstants.UNCALL_KEY_CONNECT, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_CONNECT_RETURN);
 
-            if (this.coreInited) {
+            if (this.stateControls.coreInited) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Cannot init core, already inited'
                 });
@@ -998,7 +1002,7 @@ export class AZStackCore {
                 return;
             }
 
-            this.coreInited = true;
+            this.stateControls.coreInited = true;
             this.init();
 
             this.Authentication.getSlaveSocket({
@@ -1032,7 +1036,7 @@ export class AZStackCore {
                 return;
             }
 
-            if (this.slaveSocketReconnecting || this.slaveSocketAutoReconnecting) {
+            if (this.stateControls.reconnecting || this.stateControls.autoReconnecting) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Cannot reconnect to slave server, already try reconnecting'
                 });
@@ -1054,7 +1058,7 @@ export class AZStackCore {
                 return;
             }
 
-            this.slaveSocketReconnecting = true;
+            this.stateControls.reconnecting = true;
             this.slaveSocket.open();
         });
     };
@@ -1089,7 +1093,7 @@ export class AZStackCore {
             });
 
             this.autoReconnectTrieds = 0;
-            this.slaveSocketAutoReconnecting = false;
+            this.stateControls.autoReconnecting = false;
             if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED] === 'function') {
                 this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED]({
                     code: this.errorCodes.ERR_UNEXPECTED_DATA,
@@ -1100,7 +1104,7 @@ export class AZStackCore {
             return;
         }
 
-        this.slaveSocketAutoReconnecting = true;
+        this.stateControls.autoReconnecting = true;
 
         setTimeout(() => {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
@@ -1139,7 +1143,7 @@ export class AZStackCore {
                 return;
             }
 
-            if (this.slaveSocketDisconnecting) {
+            if (this.stateControls.disconnecting) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Cannot disconnect to slave server, already try disconnecting'
                 });
@@ -1161,7 +1165,7 @@ export class AZStackCore {
                 return;
             }
 
-            this.slaveSocketDisconnecting = true;
+            this.stateControls.disconnecting = true;
             this.slaveSocket.disconnect();
         });
     };
