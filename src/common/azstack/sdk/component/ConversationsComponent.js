@@ -10,8 +10,8 @@ import ScreenHeaderBlockComponent from './part/screen/ScreenHeaderBlockComponent
 import ScreenBodyBlockComponent from './part/screen/ScreenBodyBlockComponent';
 import EmptyBlockComponent from './part/common/EmptyBlockComponent';
 import SearchBlockComponent from './part/common/SearchBlockComponent';
-
 import ConversationBlockComponent from './part/conversation/ConversationBlockComponent';
+import ConnectionBlockComponent from './part/common/ConnectionBlockComponent';
 
 class ConversationsComponent extends React.Component {
     constructor(props) {
@@ -825,6 +825,13 @@ class ConversationsComponent extends React.Component {
                             keyboardDismissMode={Platform.select({ ios: 'interactive', android: 'on-drag' })}
                         />
                     }
+                    <ConnectionBlockComponent
+                        Language={this.props.Language}
+                        CustomStyle={this.props.CustomStyle}
+                        eventConstants={this.props.eventConstants}
+                        AZStackCore={this.props.AZStackCore}
+                        EventEmitter={this.props.EventEmitter}
+                    />
                 </ScreenBodyBlockComponent>
             </ScreenBlockComponent>
         );

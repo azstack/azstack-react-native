@@ -1,3 +1,6 @@
+export const CONNECTTION_CONNECTING_TEXT = 'Connecting...';
+export const CONNECTTION_CONNECTED_TEXT = 'Connected';
+
 export const FROM_NOW_FUTURE_TEXT = 'in';
 export const FROM_NOW_PAST_TEXT = 'ago';
 export const FROM_NOW_SECOND_TEXT = 'second';

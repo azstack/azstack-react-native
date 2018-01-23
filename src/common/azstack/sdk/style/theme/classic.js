@@ -10,6 +10,7 @@ export const IMAGE_LOCATION = require('../../static/image/classic/location.png')
 export const IMAGE_VOICE = require('../../static/image/classic/voice.png');
 export const IMAGE_DRAWING = require('../../static/image/classic/drawing.png');
 
+
 export const SCREEN_BLOCK_STYLE = {
     position: 'absolute',
     top: 0,
@@ -52,8 +53,30 @@ export const SCREEN_HEADER_TITLE_TEXT_STYLE = {
 export const SCREEN_BODY_BLOCK_STYLE = {
     flex: 1,
     flexDirection: 'column',
+    position: 'relative'
 };
 
+export const CONNECTION_BLOCK_STYLE = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const CONNECTION_BLOCK_CONNECTING_STYLE = {
+    backgroundColor: '#F3C200'
+};
+export const CONNECTION_BLOCK_CONNECTED_STYLE = {
+    backgroundColor: '#26C281'
+};
+export const CONNECTION_TEXT_STYLE = {
+    fontSize: 15,
+    fontWeight: '400',
+    lineHeight: 20,
+    color: '#fff'
+};
 
 export const EMPTY_BLOCK_STYLE = {
     paddingHorizontal: 15,
@@ -68,6 +91,7 @@ export const EMPTY_TEXT_STYLE = {
     lineHeight: 30,
     color: '#BFBFBF'
 };
+
 export const SEARCH_BLOCK_STYLE = {
     position: 'relative'
 };
@@ -111,6 +135,7 @@ export const SEARCH_CLEAR_BUTTON_TEXT_STYLE = {
     color: '#E1E5EC',
     textAlign: 'center'
 };
+
 export const AVATAR_BLOCK_STYLE = {
     width: '100%',
     height: '100%',
@@ -123,6 +148,7 @@ export const AVATAR_TEXT_STYLE = {
     fontWeight: '500',
     color: '#fff'
 };
+
 export const TYPING_BLOCK_STYLE = {
     fontSize: 16,
     fontWeight: '400',
@@ -131,7 +157,8 @@ export const TYPING_BLOCK_STYLE = {
 };
 export const TYPING_BLOCK_BOLD_STYLE = {
     fontWeight: '500'
-}
+};
+
 export const FROM_NOW_TIME_TEXT_STYLE = {
     fontSize: 15,
     fontWeight: '300',
@@ -139,6 +166,7 @@ export const FROM_NOW_TIME_TEXT_STYLE = {
     color: '#2F353B',
     textAlign: 'right'
 };
+
 export const MESSAGE_STATUS_BLOCK_STYLE = {
     width: '100%',
     height: '100%',

@@ -16,6 +16,7 @@ import MessageBlockComponent from './part/chat/MessageBlockComponent';
 import TypingBlockComponent from './part/common/TypingBlockComponent';
 import ChatInputDisabledComponent from './part/chat/ChatInputDisabledComponent';
 import ChatInputComponentBlock from './part/chat/ChatInputComponentBlock';
+import ConnectionBlockComponent from './part/common/ConnectionBlockComponent';
 
 class ChatComponent extends React.Component {
     constructor(props) {
@@ -269,8 +270,6 @@ class ChatComponent extends React.Component {
         if (this.pagination.modified.loading) {
             return;
         }
-
-        console.log('get messages');
 
         this.pagination.modified.loading = true;
 
@@ -1075,6 +1074,13 @@ class ChatComponent extends React.Component {
                             keyboardDismissMode={Platform.select({ ios: 'interactive', android: 'on-drag' })}
                         />
                     }
+                    <ConnectionBlockComponent
+                        Language={this.props.Language}
+                        CustomStyle={this.props.CustomStyle}
+                        eventConstants={this.props.eventConstants}
+                        AZStackCore={this.props.AZStackCore}
+                        EventEmitter={this.props.EventEmitter}
+                    />
                 </ScreenBodyBlockComponent>
                 <View
                     style={this.props.CustomStyle.getStyle('CHAT_TYPING_BLOCK_STYLE')}
