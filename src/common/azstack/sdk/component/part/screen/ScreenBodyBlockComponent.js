@@ -9,9 +9,13 @@ class ScreenHeaderBlockComponent extends React.Component {
     }
 
     render() {
+        console.log(this.props.style);
         return (
             <View
-                style={this.props.CustomStyle.getStyle('SCREEN_BODY_BLOCK_STYLE')}
+                style={{
+                    ...this.props.CustomStyle.getStyle('SCREEN_BODY_BLOCK_STYLE'),
+                    ...this.props.style,
+                }}
             >
                 {this.props.children}
             </View>

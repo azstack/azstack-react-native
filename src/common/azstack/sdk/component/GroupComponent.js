@@ -31,12 +31,13 @@ class GroupComponent extends React.Component {
             <ScreenBlockComponent
                 fullScreen={false}
                 CustomStyle={this.props.CustomStyle}
+                style={this.props.style}
             >
-                <ScreenHeaderBlockComponent
+                {this.props.header !== 'hidden' && <ScreenHeaderBlockComponent
                     CustomStyle={this.props.CustomStyle}
                     onBackButtonPressed={() => this.props.onBackButtonPressed()}
                     title={'Create group'}
-                />
+                />}
                 <TextInput
                     onChangeText={(text) => {this.setState({text})}}
                     value={this.state.text}

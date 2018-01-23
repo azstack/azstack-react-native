@@ -96,14 +96,16 @@ class ContactComponent extends React.Component {
             <ScreenBlockComponent
                 fullScreen={false}
                 CustomStyle={this.props.CustomStyle}
+                style={this.props.style}
             >
-                <ScreenHeaderBlockComponent
+                {this.props.header !== 'hidden' && <ScreenHeaderBlockComponent
                     CustomStyle={this.props.CustomStyle}
                     onBackButtonPressed={() => this.props.onBackButtonPressed()}
                     title={'Contact'}
-                />
+                />}
                 <ScreenBodyBlockComponent
                     CustomStyle={this.props.CustomStyle}
+                    style={this.props.contentContainerStyle}
                 >
                     <View
                         style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_BLOCK_STYLE')}
