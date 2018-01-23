@@ -789,7 +789,7 @@ export class AZStackCore {
             message: 'Slave socket uri',
             payload: this.slaveSocket.io.uri
         });
-        this.stateControls.connecting = true;
+
         this.slaveSocket.open();
 
         this.slaveSocket.on('connect', () => {
@@ -1003,6 +1003,7 @@ export class AZStackCore {
             }
 
             this.stateControls.coreInited = true;
+            this.stateControls.connecting = true;
             this.init();
 
             this.Authentication.getSlaveSocket({
@@ -1012,7 +1013,11 @@ export class AZStackCore {
                 this.slaveAddress = result.slaveAddress;
                 this.setupSocket(result.slaveSocket);
             }).catch((error) => {
+                this.stateControls.connecting = false;
                 this.callUncall(this.uncallConstants.UNCALL_KEY_CONNECT, 'default', error, null);
+                if (this.autoReconnect) {
+                    this.tryAutoReconnect();
+                }
             });
         });
     };
@@ -1036,6 +1041,28 @@ export class AZStackCore {
                 return;
             }
 
+            if (!this.stateControls.coreInited) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot reconnect to slave server, core not inited'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot reconnect to slave server, core not inited'
+                }, null);
+                return;
+            }
+
+            if (this.stateControls.connecting) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot reconnect to slave server, already try connecting'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot reconnect to slave server, already try connecting'
+                }, null);
+                return;
+            }
+
             if (this.stateControls.reconnecting || this.stateControls.autoReconnecting) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Cannot reconnect to slave server, already try reconnecting'
@@ -1047,37 +1074,24 @@ export class AZStackCore {
                 return;
             }
 
-            if (!this.slaveSocket) {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'Cannot reconnect to slave server, slave socket is null'
-                });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', {
-                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
-                    message: 'Cannot reconnect to slave server, slave socket is null'
-                }, null);
-                return;
-            }
-
             this.stateControls.reconnecting = true;
-            this.slaveSocket.open();
+            if (this.slaveSocket) {
+                this.slaveSocket.open();
+            } else {
+                this.Authentication.getSlaveSocket({
+                    masterSocketUri: this.masterSocketUri,
+                    azStackUserId: this.authenticatingData.azStackUserId
+                }).then((result) => {
+                    this.slaveAddress = result.slaveAddress;
+                    this.setupSocket(result.slaveSocket);
+                }).catch((error) => {
+                    this.stateControls.reconnecting = false;
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', error, null);
+                });
+            }
         });
     };
     tryAutoReconnect() {
-
-        if (!this.slaveSocket) {
-            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                message: 'Stop auto reconnect to slave server, slave socket null'
-            });
-
-            if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED] === 'function') {
-                this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED]({
-                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
-                    message: 'Stop auto reconnect to slave server, slave socket null'
-                }, null);
-            }
-
-            return;
-        }
 
         if (this.autoReconnectLimitTries && this.autoReconnectTrieds >= this.autoReconnectLimitTries) {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -1120,7 +1134,22 @@ export class AZStackCore {
             });
 
             this.autoReconnectTrieds += 1;
-            this.slaveSocket.open();
+            if (this.slaveSocket) {
+                this.slaveSocket.open();
+            } else {
+                this.Authentication.getSlaveSocket({
+                    masterSocketUri: this.masterSocketUri,
+                    azStackUserId: this.authenticatingData.azStackUserId
+                }).then((result) => {
+                    this.slaveAddress = result.slaveAddress;
+                    this.setupSocket(result.slaveSocket);
+                }).catch((error) => {
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED](error, null);
+                    }
+                    this.tryAutoReconnect();
+                });
+            }
         }, this.autoReconnectIntervalTime);
     };
     disconnect(options, callback) {
