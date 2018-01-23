@@ -12,6 +12,9 @@ class AppMain extends React.Component {
         let azstackConfig = {
             requestTimeout: 60000,
             intervalPingTime: 60000,
+            autoReconnect: true,
+            autoReconnectLimitTries: 0,
+            autoReconnectIntervalTime: 5000,
             logLevel: 'ERROR',
             authenticatingData: {
                 appId: 'bd7095762179b886c094c31b8f5e4646',
@@ -27,9 +30,9 @@ class AppMain extends React.Component {
         //user 3: test_user_3 391658
 
         return (
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
                 {exampleType === 'core' && <AZStackCoreExample azstackConfig={azstackConfig} />}
-                {exampleType === 'sdk' && <AZStackSdkExample azstackConfig={azstackConfig} languageCode='en' themeName='classic'/>}
+                {exampleType === 'sdk' && <AZStackSdkExample azstackConfig={azstackConfig} languageCode='en' themeName='classic' />}
             </View>
         );
     };

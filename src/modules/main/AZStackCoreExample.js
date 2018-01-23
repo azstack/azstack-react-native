@@ -99,12 +99,26 @@ class AZStackCoreExample extends React.Component {
 
         this.AZStackCore = new AZStackCore(this.props.azstackConfig);
 
-        this.AZStackCore.Delegates.onLocalStreamArrived = (error, result) => {
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_DISCONNECTED] = (error, result) => {
+            this.setState({
+                authenticatedUser: null
+            });
+        };
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED] = (error, result) => {
+            if (error) {
+                console.log(error);
+                return;
+            }
+            this.setState({
+                authenticatedUser: result
+            });
+        };
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_LOCAL_STREAM_ARRIVED] = (error, result) => {
             this.setState({
                 freeCall: Object.assign({}, this.state.freeCall, { localVideoUrl: result.stream.toURL() })
             });
         };
-        this.AZStackCore.Delegates.onRemoteStreamArrived = (error, result) => {
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_REMOTE_STREAM_ARRIVED] = (error, result) => {
             this.setState({
                 freeCall: Object.assign({}, this.state.freeCall, { remoteVideoUrl: result.stream.toURL() })
             });

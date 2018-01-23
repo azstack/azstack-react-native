@@ -34,6 +34,7 @@
         * [3.4.2. Reconnect](#342-reconnect)
         * [3.4.3. Disconnect](#343-disconnect)
         * [3.4.4. Delegates](#344-delegates)
+            * [3.4.4.1. Auto reconnected ](#3441-auto-reconnected)
             * [3.4.4.2. Disconnected](#3442-disconnected)
     * [3.5. Calls](#35-calls)
         * [3.5.1. Free call](#351-free-call)
@@ -133,6 +134,9 @@ import { AZStackCore } from '{path_to_libs}/azstack/';
 this.AZStackCore = new AZStackCore({
     requestTimeout: 60000,
     intervalPingTime: 60000,
+    autoReconnect: false,
+    autoReconnectLimitTries: 0,
+    autoReconnectIntervalTime: 5000
     logLevel: 'NONE',
     authenticatingData: {
         appId: 'bd7095762179b886c094c31b8f5e4646',
@@ -150,6 +154,15 @@ this.AZStackCore = new AZStackCore({
 
 #### intervalPingTime(optional):
 > - must be number, default 60000
+
+#### autoReconnect(optional):
+> - must be boolean, default false
+
+#### autoReconnectLimitTries(optional):
+> - must be number, default 0 (unlimited)
+
+#### autoReconnectIntervalTime(optional):
+> - must be number, default 5000
 
 #### logLevel(optional):
 > - NONE: no log (default)
@@ -424,6 +437,18 @@ this.AZStackCore.disconnect({});
 > - message: error message
 
 ### 3.4.4. Delegates
+
+#### 3.4.4.1. Auto reconnected 
+
+```javascript 
+this.AZStackCore.Delegates.onAutoReconnected = (error, result) => {
+    console.log(error, result);
+};
+```
+
+#### error:
+> - code: error code
+> - message: error message
 
 #### 3.4.4.2. Disconnected
 

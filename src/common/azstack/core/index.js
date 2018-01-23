@@ -39,6 +39,9 @@ export class AZStackCore {
         this.logLevel = this.logLevelConstants.LOG_LEVEL_NONE;
         this.requestTimeout = 60000;
         this.intervalPingTime = 60000;
+        this.autoReconnect = false;
+        this.autoReconnectLimitTries = 0;
+        this.autoReconnectIntervalTime = 5000;
 
         this.Tool = new Tool();
         this.Validator = new Validator({ dataTypes: this.dataTypes });
@@ -52,10 +55,12 @@ export class AZStackCore {
         this.slaveSocketConnected = false;
         this.slaveSocketConnecting = false;
         this.slaveSocketReconnecting = false;
+        this.slaveSocketAutoReconnecting = false;
         this.slaveSocketDisconnecting = false;
         this.authenticatingData = {};
         this.authenticatedUser = null;
         this.intervalSendPing = null;
+        this.autoReconnectTrieds = 0;
 
         this.uniqueId = Math.round(new Date().getTime() / 1000);
 
@@ -67,6 +72,15 @@ export class AZStackCore {
         }
         if (options.intervalPingTime && this.Validator.isNumber(options.intervalPingTime)) {
             this.intervalPingTime = options.intervalPingTime;
+        }
+        if (options.autoReconnect !== undefined && this.Validator.isBoolean(options.autoReconnect)) {
+            this.autoReconnect = options.autoReconnect;
+        }
+        if (options.autoReconnectLimitTries && this.Validator.isNumber(options.autoReconnectLimitTries)) {
+            this.autoReconnectLimitTries = options.autoReconnectLimitTries;
+        }
+        if (options.autoReconnectIntervalTime && this.Validator.isNumber(options.autoReconnectIntervalTime)) {
+            this.autoReconnectIntervalTime = options.autoReconnectIntervalTime;
         }
         if (options.logLevel && this.Validator.isString(options.logLevel)) {
             this.logLevel = options.logLevel;
@@ -243,6 +257,12 @@ export class AZStackCore {
                     } else if (this.slaveSocketReconnecting) {
                         this.slaveSocketReconnecting = false;
                         this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', null, this.authenticatedUser);
+                    } else if (this.slaveSocketAutoReconnecting) {
+                        this.slaveSocketAutoReconnecting = false;
+                        this.autoReconnectTrieds = 0;
+                        if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED] === 'function') {
+                            this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED](null, this.authenticatedUser);
+                        }
                     }
                 }).catch((error) => {
                     if (this.slaveSocketConnecting) {
@@ -251,6 +271,12 @@ export class AZStackCore {
                     } else if (this.slaveSocketReconnecting) {
                         this.slaveSocketReconnecting = false;
                         this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', error, null);
+                    } else if (this.slaveSocketAutoReconnecting) {
+                        this.slaveSocketAutoReconnecting = false;
+                        this.autoReconnectTrieds = 0;
+                        if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED] === 'function') {
+                            this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED](error, null);
+                        }
                     }
                 });
                 break;
@@ -780,6 +806,12 @@ export class AZStackCore {
                 } else if (this.slaveSocketReconnecting) {
                     this.slaveSocketReconnecting = false;
                     this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', error, null);
+                } else if (this.slaveSocketAutoReconnecting) {
+                    this.slaveSocketAutoReconnecting = false;
+                    this.autoReconnectTrieds = 0;
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED](error, null);
+                    }
                 }
             });
             this.intervalSendPing = setInterval(() => {
@@ -818,8 +850,16 @@ export class AZStackCore {
                 this.slaveSocketReconnecting = false;
                 this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', {
                     code: this.errorCodes.ERR_SOCKET_CONNECT,
-                    message: 'Cannot connect to slave socket'
+                    message: 'Cannot reconnect to slave socket'
                 }, null);
+            } else if (this.slaveSocketAutoReconnecting) {
+                if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED] === 'function') {
+                    this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED]({
+                        code: this.errorCodes.ERR_SOCKET_CONNECT,
+                        message: 'Cannot auto reconnect to slave socket'
+                    }, null);
+                }
+                this.tryAutoReconnect();
             }
         });
         this.slaveSocket.on('disconnect', () => {
@@ -839,6 +879,9 @@ export class AZStackCore {
                 if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_DISCONNECTED] === 'function') {
                     this.Delegates[this.delegateConstants.DELEGATE_ON_DISCONNECTED](null, null);
                 }
+            }
+            if (this.autoReconnect) {
+                this.tryAutoReconnect();
             }
 
         });
@@ -989,7 +1032,7 @@ export class AZStackCore {
                 return;
             }
 
-            if (this.slaveSocketReconnecting) {
+            if (this.slaveSocketReconnecting || this.slaveSocketAutoReconnecting) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Cannot reconnect to slave server, already try reconnecting'
                 });
@@ -1014,6 +1057,67 @@ export class AZStackCore {
             this.slaveSocketReconnecting = true;
             this.slaveSocket.open();
         });
+    };
+    tryAutoReconnect() {
+
+        if (!this.slaveSocket) {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                message: 'Stop auto reconnect to slave server, slave socket null'
+            });
+
+            if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED] === 'function') {
+                this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED]({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Stop auto reconnect to slave server, slave socket null'
+                }, null);
+            }
+
+            return;
+        }
+
+        if (this.autoReconnectLimitTries && this.autoReconnectTrieds >= this.autoReconnectLimitTries) {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                message: 'Stop auto reconnect to slave server, trieds exceed limit'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Auto reconnect data',
+                payload: {
+                    limit: this.autoReconnectLimitTries,
+                    try: this.autoReconnectTrieds,
+                    intervalTime: this.autoReconnectIntervalTime
+                }
+            });
+
+            this.autoReconnectTrieds = 0;
+            this.slaveSocketAutoReconnecting = false;
+            if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED] === 'function') {
+                this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED]({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Stop auto reconnect to slave server, trieds exceed limit'
+                }, null);
+            }
+
+            return;
+        }
+
+        this.slaveSocketAutoReconnecting = true;
+
+        setTimeout(() => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Start auto reconnect to slave server'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Auto reconnect data',
+                payload: {
+                    limit: this.autoReconnectLimitTries,
+                    try: this.autoReconnectTrieds + 1,
+                    intervalTime: this.autoReconnectIntervalTime
+                }
+            });
+
+            this.autoReconnectTrieds += 1;
+            this.slaveSocket.open();
+        }, this.autoReconnectIntervalTime);
     };
     disconnect(options, callback) {
         return new Promise((resolve, reject) => {
