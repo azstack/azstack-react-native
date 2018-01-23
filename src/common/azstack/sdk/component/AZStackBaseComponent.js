@@ -39,44 +39,36 @@ export default class AZStackBaseComponent extends React.Component {
         };
     };
 
-    render() {
+    renderScreens() {
         let screens = [];
         this.state.navigation.map((value, index) => {
-            switch (value.screen) {
-                case 'ConversationsComponent':
-                    screens.push(this.renderConversations(value.options, index));
-                    break;
-                case 'ChatComponent':
-                    screens.push(this.renderChat(value.options, index));
-                    break;
-                case 'OnCallComponent':
-                    screens.push(this.renderOnCall(value.options, index));
-                    break;
-                case 'ContactComponent':
-                    screens.push(this.renderContact(value.options, index));
-                    break;
-                case 'NumberPadComponent':
-                    screens.push(this.renderNumberPad(value.options, index));
-                    break;
-                case 'VideoCallComponent':
-                    screens.push(this.renderVideoCall(value.options, index));
-                    break;
-                case 'CallLogsComponent':
-                    screens.push(this.renderCallLogs(value.options, index));
-                    break;
-                case 'GroupComponent':
-                    screens.push(this.renderGroup(value.options, index));
-                    break;
-                default:
-                    break;
-            }
+            screens.push(this.renderScreen(value.screen, value.options, index));
         });
 
-        if (screens.length === 0) {
-            return null;
-        }
-
         return screens;
+    }
+
+    renderScreen(screen, options, index) {
+        switch (screen) {
+            case 'ConversationsComponent':
+                return this.renderConversations(options, index);
+            case 'ChatComponent':
+                return this.renderChat(options, index);
+            case 'OnCallComponent':
+                return this.renderOnCall(options, index);
+            case 'ContactComponent':
+                return this.renderContact(options, index)
+            case 'NumberPadComponent':
+                return this.renderNumberPad(options, index);
+            case 'VideoCallComponent':
+                return this.renderVideoCall(options, index);
+            case 'CallLogsComponent':
+                return this.renderCallLogs(options, index);
+            case 'GroupComponent':
+                return this.renderGroup(options, index);
+            default:
+                break;
+        }
     }
 
     /* Navigation functions */

@@ -104,14 +104,16 @@ class CallLogsComponent extends React.Component {
             <ScreenBlockComponent
                 fullScreen={false}
                 CustomStyle={this.props.CustomStyle}
+                style={this.props.style}
             >
-                <ScreenHeaderBlockComponent
+                {this.props.header !== 'hidden' && <ScreenHeaderBlockComponent
                     CustomStyle={this.props.CustomStyle}
                     onBackButtonPressed={() => this.props.onBackButtonPressed()}
                     title={'Call Logs'}
-                />
+                />}
                 <ScreenBodyBlockComponent
                     CustomStyle={this.props.CustomStyle}
+                    style={this.props.contentContainerStyle}
                 >
                     {this.renderContent()}
                 </ScreenBodyBlockComponent>

@@ -91,37 +91,38 @@ class AZStackSdkExample extends React.Component {
     render() {
         const { width, height } = Dimensions.get('window');
         return (
-            <View
-                style={{
-                    flex: 1,
-                    ...Platform.select({
-                        ios: {
-                            paddingTop: 20
-                        }
-                    }),
+            <AZStackSdk
+                ref={"AZStackSdk"}
+                options={{
+                    azstackConfig: this.props.azstackConfig,
+                    languageCode: this.props.languageCode,
+                    themeName: this.props.themeName
                 }}
-            >
-                <ScrollView>
-                    <Text>{this.state.authenticatedUser ? 'Connected, ' + this.state.authenticatedUser.fullname : 'Connecting...'}</Text>
-                    <Text>{'\n'}{'\n'}</Text>
-                    <Button onPress={() => this.showConversations()} title='Show conversations'></Button>
-                    <Button onPress={() => this.showChat()} title='Chat with User 2'></Button>
-                    <Button onPress={() => this.audioCall()} title='Call User 2'></Button>
-                    <Button onPress={() => this.videoCall()} title='Video Call User 2'></Button>
-                    <Button onPress={() => this.showContact()} title='Contact List'></Button>
-                    <Button onPress={() => this.showNumberPad()} title='Callout'></Button>
-                    <Button onPress={() => this.showCallLogs()} title='Show call logs'></Button>
-                    <Button onPress={() => this.showGroup()} title='Create group'></Button>
-                </ScrollView>
-                <AZStackSdk
-                    ref={"AZStackSdk"}
-                    options={{
-                        azstackConfig: this.props.azstackConfig,
-                        languageCode: this.props.languageCode,
-                        themeName: this.props.themeName
+                >
+                <View
+                    style={{
+                        flex: 1,
+                        ...Platform.select({
+                            ios: {
+                                paddingTop: 20
+                            }
+                        }),
                     }}
-                />
-            </View>
+                    >
+                    <ScrollView>
+                        <Text>{this.state.authenticatedUser ? 'Connected, ' + this.state.authenticatedUser.fullname : 'Connecting...'}</Text>
+                        <Text>{'\n'}{'\n'}</Text>
+                        <Button onPress={() => this.showConversations()} title='Show conversations'></Button>
+                        <Button onPress={() => this.showChat()} title='Chat with User 2'></Button>
+                        <Button onPress={() => this.audioCall()} title='Call User 2'></Button>
+                        <Button onPress={() => this.videoCall()} title='Video Call User 2'></Button>
+                        <Button onPress={() => this.showContact()} title='Contact List'></Button>
+                        <Button onPress={() => this.showNumberPad()} title='Callout'></Button>
+                        <Button onPress={() => this.showCallLogs()} title='Show call logs'></Button>
+                        <Button onPress={() => this.showGroup()} title='Create group'></Button>
+                    </ScrollView>
+                </View>
+            </AZStackSdk>
         );
     };
 };

@@ -955,6 +955,7 @@ class ChatComponent extends React.Component {
             <ScreenBlockComponent
                 fullScreen={false}
                 CustomStyle={this.props.CustomStyle}
+                style={this.props.style}
             >
                 {
                     !this.state.chatTarget && <ScreenHeaderBlockComponent

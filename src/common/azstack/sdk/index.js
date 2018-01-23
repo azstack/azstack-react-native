@@ -4,7 +4,7 @@ import {
     View,
     Alert,
 } from 'react-native';
-import EventEmitter from 'EventEmitter';
+import EventEmitter from 'react-native/Libraries/vendor/emitter/EventEmitter';
 
 import * as eventConstants from './constant/eventConstants';
 import * as linkConstants from './constant/linkConstants';
@@ -47,6 +47,21 @@ export class AZStackSdk extends AZStackBaseComponent {
         });
         this.Event.delegatesToEvents();
     };
+
+    render() {
+        const { children } = this.props;
+
+        var childrenWithProps = React.Children.map(children, child => {
+            return React.cloneElement(child, { AZStackSdk: this })
+        });
+
+        return (
+            <View style={{flex: 1}}>
+                {childrenWithProps}
+                {this.renderScreens()}
+            </View>
+        );
+    }
 
     /* AZStack functions */
     connect() {
@@ -364,7 +379,7 @@ export class AZStackSdk extends AZStackBaseComponent {
                 },
                 onCallout: (options) => {
                     this.startCallout(options);
-                }
+                },
             }
         );
     }
@@ -382,7 +397,7 @@ export class AZStackSdk extends AZStackBaseComponent {
                 },
                 onCallout: (options) => {
                     this.startCallout(options);
-                }
+                },
             }
         );
     }
@@ -413,5 +428,88 @@ export class AZStackSdk extends AZStackBaseComponent {
         this.navigate(this.getNavigation().GroupComponent, {
             ...options,
         });
+    }
+
+    UIContacts(options) {
+        return this.renderScreen(
+            this.getNavigation().ConversationsComponent, 
+            {
+                ...options,
+                onVideoCall: (options) => {
+                    this.startVideoCall(options);
+                },
+                onAudioCall: (options) => {
+                    this.startAudioCall(options);
+                },
+                onCallout: (options) => {
+                    this.startCallout(options);
+                },
+            },
+            0
+        );
+    }
+
+    UIConversations(options) {
+        return this.renderScreen(
+            this.getNavigation().ConversationsComponent, 
+            {
+                ...options,
+                onPressConversation: (conversation) => {
+                    if(typeof options.onPressConversation === 'function') {
+                        options.onPressConversation();
+                    }
+    
+                    if(options.prevenDefault !== true) {
+                        this.navigate(this.getNavigation().ChatComponent, {
+                            chatType: conversation.chatType,
+                            chatId: conversation.chatId,
+                        });
+                    }
+                },
+            },
+            0
+        );
+    }
+
+    UICallLogs(options) {
+        return this.renderScreen(
+            this.getNavigation().CallLogsComponent, 
+            {
+                ...options,
+                onVideoCall: (options) => {
+                    this.startVideoCall(options);
+                },
+                onAudioCall: (options) => {
+                    this.startAudioCall(options);
+                },
+                onCallout: (options) => {
+                    this.startCallout(options);
+                }
+            },
+            0
+        );
+    }
+
+    UINumberPad(options) {
+        return this.renderScreen(
+            this.getNavigation().NumberPadComponent, 
+            {
+                ...options,
+                onCallout: (options) => {
+                    this.startCallout(options);
+                },
+            },
+            0
+        );
+    }
+
+    UIGroup(options) {
+        return this.renderScreen(
+            this.getNavigation().GroupComponent, 
+            {
+                ...options,
+            },
+            0
+        );
     }
 };

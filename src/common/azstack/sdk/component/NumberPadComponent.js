@@ -59,13 +59,14 @@ class NumberPadComponent extends React.Component {
 		return (
             <ScreenBlockComponent
 				fullScreen={false}
-                CustomStyle={this.props.CustomStyle}
+				CustomStyle={this.props.CustomStyle}
+				style={this.props.style}
             >
-				<ScreenHeaderBlockComponent
+				{this.props.header !== 'hidden' && <ScreenHeaderBlockComponent
 					CustomStyle={this.props.CustomStyle}
 					onBackButtonPressed={() => this.props.onBackButtonPressed()}
 					title={"Callout"}
-				/>
+				/>}
 				<View style={{backgroundColor: '#fff', justifyContent: 'flex-end', alignItems: 'center', flex: 1, paddingBottom: 40}}>
 					<View style={{width: 270, alignSelf: 'center', flexDirection: 'row', justifyContent: 'flex-end', backgroundColor: '#fff', alignItems: 'center', height: 50, marginBottom: 20}}>
 						<View style={{ alignItems: 'flex-end'}}>

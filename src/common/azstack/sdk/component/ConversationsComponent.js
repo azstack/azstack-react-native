@@ -766,14 +766,16 @@ class ConversationsComponent extends React.Component {
             <ScreenBlockComponent
                 fullScreen={false}
                 CustomStyle={this.props.CustomStyle}
+                style={this.props.style}
             >
-                <ScreenHeaderBlockComponent
+                {this.props.hidden !== 'hidden' && <ScreenHeaderBlockComponent
                     CustomStyle={this.props.CustomStyle}
                     onBackButtonPressed={this.props.onBackButtonPressed}
                     title={this.props.Language.getText('CONVERSATIONS_HEADER_TITLE_TEXT')}
-                />
+                />}
                 <ScreenBodyBlockComponent
                     CustomStyle={this.props.CustomStyle}
+                    style={this.props.contentContainerStyle}
                 >
                     <View
                         style={this.props.CustomStyle.getStyle('CONVERSATIONS_SEARCH_BLOCK_STYLE')}
