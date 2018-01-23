@@ -1,4 +1,5 @@
-export const DELEGATE_ON_AUTHENTICATION_RETURN = 'onAuthencationReturn';
+export const DELEGATE_ON_CONNECT_RETURN = 'onConnectReturn';
+export const DELEGATE_ON_RECONNECT_RETURN = 'onReconnectReturn';
 export const DELEGATE_ON_DISCONNECT_RETURN = 'onDisconnectReturn';
 export const DELEGATE_ON_DISCONNECTED = 'onDisconnected';
 

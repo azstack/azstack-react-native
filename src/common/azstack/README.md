@@ -3,12 +3,6 @@
 
 * [1. Requirements](#1-requirements)
 * [2. Sdk](#2-sdk)
-    * [2.1. Initial](#21-initial)
-    * [2.2. Connection ](#22-connection)
-        * [2.2.1. Connect ](#221-connect)
-        * [2.2.2. Disconnect ](#222-disconnect)
-    * [2.3. Render](#23-render)
-        * [2.3.1. Conversations List](#231-conversations-list)
 * [3. Core](#3-core)
     * [3.2. Initial](#32-initial)
     * [3.3. Constants](#33-constants)
@@ -37,8 +31,10 @@
             * [3.3.7.2. Group is in](#3372-group-is-in)
     * [3.4. Connection](#34-connection)
         * [3.4.1. Connect](#341-connect)
-        * [3.4.2. Disconnect](#342-disconnect)
-        * [3.4.3. Delegates](#343-delegates)
+        * [3.4.2. Reconnect](#342-reconnect)
+        * [3.4.3. Disconnect](#343-disconnect)
+        * [3.4.4. Delegates](#344-delegates)
+            * [3.4.4.2. Disconnected](#3442-disconnected)
     * [3.5. Calls](#35-calls)
         * [3.5.1. Free call](#351-free-call)
             * [3.5.1.1. Start function](#3511-start-function)
@@ -117,126 +113,6 @@
 
 # 2. Sdk
 
-## 2.1. Initial
-
-```javascript
-import { AZStackSdk } from '{path_to_libs}/azstack/';
-```
-
-```javascript
-    this.AZStackSdk = new AZStackSdk({
-        azstackConfig: {
-            requestTimeout: 60000,
-            intervalPingTime: 60000,
-            logLevel: 'DEBUG',
-            authenticatingData: {
-                appId: 'bd7095762179b886c094c31b8f5e4646',
-                publicKey: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs1XFclMmD+l83OY3oOqN2a4JH4PkFvi9O/SOAnASmgfjXliWm7XeVMHeTfNKWKcEZKzWp8rFdwVlO5dXqKquLmcmnr4gb+yvakXNnRm6z135BQDQKCAvrDyEuzr31mmtk935+Yxms8Lfiuxmi5hWZszfTyJDBp2xokeOXbDLjqhunMO3wfxs+lao0qxWxfk4Eb0847/3sY+Zt7hMIceZEYhg7rwdnkl+zNJusPnWYFsf5povE1/qke+KCAL5z2Xte7xcpSv3b29Tl5W4iMfGOqh4ikytfRL/OTRXH3U0wuLuxSDsD7Lms0foAEPCdRJzbGnoNmsV/ongwKRrONitFQIDAQAB',
-                azStackUserId: 'test_user_1',
-                userCredentials: '',
-                fullname: 'Test User 1',
-                namespace: ''
-            }
-        },
-        languageCode: 'en',
-        themeName: 'classic'
-    });
-    this.AZStackSdk.AZStackCore.connect();
-```
-
-#### Configs
-> - azstackConfig(required): config of azstack
->   - requestTimeout(optional): must be number, default 60000
->   - intervalPingTime(optional): must be number, default 60000
->   - logLevel(optional): can be one of
->       - NONE: no log (default)
->       - ERROR: just when error occur
->       - INFO: log the error and info of porocess running
->       - DEBUG: log the error, infor and data send/receiced
->   - authenticatingData(required):
->       - appId(required): the id of your azstack application
->       - publicKey(required): the public key of ypur azstack application
->       - azStackUserId(required): an unique string for authenticating user in your application
->       - userCredentials(optional): the creadentials of authenticating user
->       - fullname(required): the name of authenticating user
->       - namespace(optional): the namespace of authenticating user
-> - languageCode(optional): language code, default is 'en', can be 'en'
-> - themeName(optional): theme name, default is 'classic', can be 'classic'
-
-
-
-## 2.2. Connection 
-
-### 2.2.1. Connect
-
-```javascript 
-this.AZStackSdk.connect({}, (error, result) => {
-    console.log(error);
-    console.log(result);
-});
-```
-
-OR
-
-```javascript 
-this.AZStackSdk.connect({}).then((result) => {
-    console.log(result);
-}).catch((error) => {
-    console.log(error);
-});
-```
-
-#### error:
-> - code: error code
-> - message: error message
-
-#### result:
-> - azStackUserId: unique key string of users
-> - userId: userId of user in azstack
-> - fullname: fullname of user
-
-### 2.2.2. Disconnect
-
-```javascript 
-this.AZStackSdk.disconnect({}, (error, result) => {
-    console.log(error);
-    console.log(result);
-});
-```
-
-OR
-
-```javascript 
-this.AZStackSdk.disconnect({}).then((result) => {
-    console.log(result);
-}).catch((error) => {
-    console.log(error);
-});
-```
-
-#### error:
-> - code: error code
-> - message: error message
-
-
-
-
-## 2.3. Render
-
-### 2.3.1. Conversations List
-
-```javascript
-this.AZStackSdk.renderConversationsList({
-    onBackButtonPressed: () => {}
-});
-```
-
-#### params
-> - onBackButtonPressed: on back button clicked function
-
-#### result
-> - Conversations component
-
 
 
 
@@ -257,7 +133,7 @@ import { AZStackCore } from '{path_to_libs}/azstack/';
 this.AZStackCore = new AZStackCore({
     requestTimeout: 60000,
     intervalPingTime: 60000,
-    logLevel: azstack.logLevelConstants.LOG_LEVEL_NONE,
+    logLevel: 'NONE',
     authenticatingData: {
         appId: 'bd7095762179b886c094c31b8f5e4646',
         publicKey: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs1XFclMmD+l83OY3oOqN2a4JH4PkFvi9O/SOAnASmgfjXliWm7XeVMHeTfNKWKcEZKzWp8rFdwVlO5dXqKquLmcmnr4gb+yvakXNnRm6z135BQDQKCAvrDyEuzr31mmtk935+Yxms8Lfiuxmi5hWZszfTyJDBp2xokeOXbDLjqhunMO3wfxs+lao0qxWxfk4Eb0847/3sY+Zt7hMIceZEYhg7rwdnkl+zNJusPnWYFsf5povE1/qke+KCAL5z2Xte7xcpSv3b29Tl5W4iMfGOqh4ikytfRL/OTRXH3U0wuLuxSDsD7Lms0foAEPCdRJzbGnoNmsV/ongwKRrONitFQIDAQAB',
@@ -463,7 +339,7 @@ this.AZStackCore.connect({}).then((result) => {
 OR
 
 ```javascript 
-this.AZStackCore.Delegates.onAuthencationReturn = (error, result) => {
+this.AZStackCore.Delegates.onConnectReturn = (error, result) => {
     console.log(error, result);
 };
 this.AZStackCore.connect({});
@@ -478,7 +354,44 @@ this.AZStackCore.connect({});
 > - userId: userId of user in azstack
 > - fullname: fullname of user
 
-### 3.4.2. Disconnect
+### 3.4.2. Reconnect
+
+```javascript 
+this.AZStackCore.reconnect({}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.reconnect({}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.Delegates.onReconnectReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStackCore.reconnect({});
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - azStackUserId: unique key string of users
+> - userId: userId of user in azstack
+> - fullname: fullname of user
+
+### 3.4.3. Disconnect
 
 ```javascript 
 this.AZStackCore.disconnect({}, (error, result) => {
@@ -510,7 +423,9 @@ this.AZStackCore.disconnect({});
 > - code: error code
 > - message: error message
 
-### 3.4.3. Delegates
+### 3.4.4. Delegates
+
+#### 3.4.4.2. Disconnected
 
 ```javascript 
 this.AZStackCore.Delegates.onDisconnected = (error, result) => {

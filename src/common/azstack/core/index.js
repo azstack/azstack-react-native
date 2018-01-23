@@ -46,9 +46,12 @@ export class AZStackCore {
         this.Delegates = new Delegates({ logLevelConstants: this.logLevelConstants, delegateConstants: this.delegateConstants, Logger: this.Logger });
 
         this.unCalls = {};
+        this.coreInited = false;
         this.slaveAddress = null;
         this.slaveSocket = null;
         this.slaveSocketConnected = false;
+        this.slaveSocketConnecting = false;
+        this.slaveSocketReconnecting = false;
         this.slaveSocketDisconnecting = false;
         this.authenticatingData = {};
         this.authenticatedUser = null;
@@ -234,9 +237,21 @@ export class AZStackCore {
                         azStackUserId: result.username,
                         fullname: result.fullname
                     };
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_AUTHENTICATION, 'default', null, this.authenticatedUser);
+                    if (this.slaveSocketConnecting) {
+                        this.slaveSocketConnecting = false;
+                        this.callUncall(this.uncallConstants.UNCALL_KEY_CONNECT, 'default', null, this.authenticatedUser);
+                    } else if (this.slaveSocketReconnecting) {
+                        this.slaveSocketReconnecting = false;
+                        this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', null, this.authenticatedUser);
+                    }
                 }).catch((error) => {
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_AUTHENTICATION, 'default', error, null);
+                    if (this.slaveSocketConnecting) {
+                        this.slaveSocketConnecting = false;
+                        this.callUncall(this.uncallConstants.UNCALL_KEY_CONNECT, 'default', error, null);
+                    } else if (this.slaveSocketReconnecting) {
+                        this.slaveSocketReconnecting = false;
+                        this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', error, null);
+                    }
                 });
                 break;
 
@@ -746,6 +761,7 @@ export class AZStackCore {
             message: 'Slave socket uri',
             payload: this.slaveSocket.io.uri
         });
+        this.slaveSocketConnecting = true;
         this.slaveSocket.open();
 
         this.slaveSocket.on('connect', () => {
@@ -758,7 +774,13 @@ export class AZStackCore {
                 slaveAddress: this.slaveAddress,
                 authenticatingData: this.authenticatingData
             }).then(() => { }).catch((error) => {
-                this.callUncall(this.uncallConstants.UNCALL_KEY_AUTHENTICATION, 'default', error, null);
+                if (this.slaveSocketConnecting) {
+                    this.slaveSocketConnecting = false;
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_CONNECT, 'default', error, null);
+                } else if (this.slaveSocketReconnecting) {
+                    this.slaveSocketReconnecting = false;
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', error, null);
+                }
             });
             this.intervalSendPing = setInterval(() => {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
@@ -786,16 +808,25 @@ export class AZStackCore {
                 message: 'Slave socket connection error',
                 payload: error
             });
-            this.callUncall(this.uncallConstants.UNCALL_KEY_AUTHENTICATION, 'default', {
-                code: this.errorCodes.ERR_SOCKET_CONNECT,
-                message: 'Cannot connect to slave socket'
-            }, null);
+            if (this.slaveSocketConnecting) {
+                this.slaveSocketConnecting = false;
+                this.callUncall(this.uncallConstants.UNCALL_KEY_CONNECT, 'default', {
+                    code: this.errorCodes.ERR_SOCKET_CONNECT,
+                    message: 'Cannot connect to slave socket'
+                }, null);
+            } else if (this.slaveSocketReconnecting) {
+                this.slaveSocketReconnecting = false;
+                this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', {
+                    code: this.errorCodes.ERR_SOCKET_CONNECT,
+                    message: 'Cannot connect to slave socket'
+                }, null);
+            }
         });
         this.slaveSocket.on('disconnect', () => {
             this.slaveSocketConnected = false;
-            this.slaveAddress = null;
-            this.authenticatedUser = null;
-            this.slaveSocket = null;
+            // this.slaveAddress = null;
+            // this.authenticatedUser = null;
+            // this.slaveSocket = null;
             clearInterval(this.intervalSendPing);
             this.intervalSendPing = null;
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
@@ -891,7 +922,23 @@ export class AZStackCore {
 
     connect(options, callback) {
         return new Promise((resolve, reject) => {
-            this.addUncall(this.uncallConstants.UNCALL_KEY_AUTHENTICATION, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_AUTHENTICATION_RETURN);
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Start init core'
+            });
+
+            this.addUncall(this.uncallConstants.UNCALL_KEY_CONNECT, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_CONNECT_RETURN);
+
+            if (this.coreInited) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot init core, already inited'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot init core, already inited'
+                }, null);
+                return;
+            }
 
             if (!this.authenticatingData.appId || !this.authenticatingData.publicKey || !this.authenticatingData.azStackUserId || !this.authenticatingData.fullname) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -901,13 +948,14 @@ export class AZStackCore {
                     message: 'Authenticating data',
                     payload: this.authenticatingData
                 });
-                this.callUncall(this.uncallConstants.UNCALL_KEY_AUTHENTICATION, 'default', {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_CONNECT, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
                     message: 'appId, publicKey, azStackUserId, fullname are required for authenticating data, connect fail'
                 }, null);
                 return;
             }
 
+            this.coreInited = true;
             this.init();
 
             this.Authentication.getSlaveSocket({
@@ -917,8 +965,54 @@ export class AZStackCore {
                 this.slaveAddress = result.slaveAddress;
                 this.setupSocket(result.slaveSocket);
             }).catch((error) => {
-                this.callUncall(this.uncallConstants.UNCALL_KEY_AUTHENTICATION, 'default', error, null);
+                this.callUncall(this.uncallConstants.UNCALL_KEY_CONNECT, 'default', error, null);
             });
+        });
+    };
+    reconnect(options, callback) {
+        return new Promise((resolve, reject) => {
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Start reconnect to slave server'
+            });
+
+            this.addUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_RECONNECT_RETURN);
+
+            if (this.slaveSocketConnected) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot reconnect to slave server, slave socket already connected'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot reconnect to slave server, slave socket already connected'
+                }, null);
+                return;
+            }
+
+            if (this.slaveSocketReconnecting) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot reconnect to slave server, already try reconnecting'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot reconnect to slave server, already try reconnecting'
+                }, null);
+                return;
+            }
+
+            if (!this.slaveSocket) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot reconnect to slave server, slave socket is null'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot reconnect to slave server, slave socket is null'
+                }, null);
+                return;
+            }
+
+            this.slaveSocketReconnecting = true;
+            this.slaveSocket.open();
         });
     };
     disconnect(options, callback) {
@@ -937,6 +1031,28 @@ export class AZStackCore {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_DISCONNECT, 'default', {
                     code: this.errorCodes.ERR_SOCKET_NOT_CONNECTED,
                     message: 'Cannot disconnect to slave server, slave socket not connected'
+                }, null);
+                return;
+            }
+
+            if (this.slaveSocketDisconnecting) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot disconnect to slave server, already try disconnecting'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_DISCONNECT, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot disconnect to slave server, already try disconnecting'
+                }, null);
+                return;
+            }
+
+            if (!this.slaveSocket) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot disconnect to slave server, slave socket is null'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_DISCONNECT, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot disconnect to slave server, slave socket is null'
                 }, null);
                 return;
             }

@@ -26,6 +26,7 @@ class AZStackCoreExample extends React.Component {
             }
         };
 
+        this.reconnect = this.reconnect.bind(this);
         this.disconnect = this.disconnect.bind(this);
 
         this.toggleAudioState = this.toggleAudioState.bind(this);
@@ -110,8 +111,15 @@ class AZStackCoreExample extends React.Component {
         };
     };
 
+    reconnect() {
+        this.AZStackCore.reconnect({}).then((result) => {
+            this.setState({ authenticatedUser: result });
+        }).catch(() => { });
+    };
     disconnect() {
-        this.AZStackCore.disconnect({}).then(() => { }).catch(() => { });
+        this.AZStackCore.disconnect({}).then(() => {
+            this.setState({ authenticatedUser: null });
+        }).catch(() => { });
     };
 
     toggleAudioState() {
@@ -457,8 +465,8 @@ class AZStackCoreExample extends React.Component {
     };
 
     componentDidMount() {
-        this.AZStackCore.connect({}).then((authenticatedUser) => {
-            this.setState({ authenticatedUser: authenticatedUser })
+        this.AZStackCore.connect({}).then((result) => {
+            this.setState({ authenticatedUser: result });
         }).catch((error) => { });
     };
 
@@ -475,6 +483,7 @@ class AZStackCoreExample extends React.Component {
                     <Text>
                         {this.state.authenticatedUser ? `Connected, user ${this.state.authenticatedUser.fullname}` : 'Connecting'}
                     </Text>
+                    <Button onPress={this.reconnect} title='Reconnect' />
                     <Button onPress={this.disconnect} title='Disconnect' />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.toggleAudioState} title='Toggle Audio State' />

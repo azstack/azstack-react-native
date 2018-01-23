@@ -48,7 +48,7 @@ class ChatComponent extends React.Component {
     };
 
     addSubscriptions() {
-        this.subscriptions.onAuthenticated = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_AUTHENTICATED_RETURN, ({ error, result }) => {
+        this.subscriptions.onConnected = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_CONNECT_RETURN, ({ error, result }) => {
             if (error) {
                 return;
             }

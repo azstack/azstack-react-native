@@ -8,8 +8,8 @@ class Event {
     };
 
     delegatesToEvents() {
-        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_AUTHENTICATION_RETURN] = (error, result) => {
-            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_AUTHENTICATED_RETURN, { error, result });
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_CONNECT_RETURN] = (error, result) => {
+            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_CONNECT_RETURN, { error, result });
         };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_FREE_CALL_STAUTUS_CHANGED] = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_FREE_CALL_STATUS_CHANGED, { error, result });
