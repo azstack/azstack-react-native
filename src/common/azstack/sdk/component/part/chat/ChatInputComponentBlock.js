@@ -123,6 +123,14 @@ class ChatInputComponentBlock extends React.Component {
     sendTextMessage() {
 
         if (!this.props.AZStackCore.slaveSocketConnected) {
+            Alert.alert(
+                this.props.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.props.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
+                [
+                    { text: this.props.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
             return;
         }
 
@@ -150,6 +158,14 @@ class ChatInputComponentBlock extends React.Component {
     sendStickerMessage(itemName) {
 
         if (!this.props.AZStackCore.slaveSocketConnected) {
+            Alert.alert(
+                this.props.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.props.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
+                [
+                    { text: this.props.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
             return;
         }
 
