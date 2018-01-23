@@ -185,7 +185,10 @@ export const CONVERSATIONS_SEARCH_BLOCK_STYLE = {
 };
 export const CONVERSATIONS_LIST_STYLE = {
     paddingHorizontal: 15,
-    flex: 1,
+    flex: 1
+};
+export const CONVERSATIONS_LIST_CONTENT_CONTAINER_STYLE = {
+    paddingBottom: 15
 };
 export const CONVERSATION_BLOCK_STYLE = {
     flexDirection: 'row',
@@ -407,7 +410,7 @@ export const CHAT_INPUT_TEXT_INPUT_STYLE = {
     fontSize: 16,
     fontWeight: '300',
     color: '#95A5A6',
-    textAlignVertical: 'top', 
+    textAlignVertical: 'top',
     height: 40,
 };
 export const CHAT_INPUT_TEXT_INPUT_PROPS_STYLE = {
@@ -538,7 +541,8 @@ export const MESSAGE_TIME_MARK_TEXT_STYLE = {
     lineHeight: 15,
     fontWeight: '600',
     color: '#95A5A6',
-    marginBottom: 5
+    marginBottom: 5,
+    textAlign: 'center'
 };
 export const MESSAGE_TYPE_ACTION_TEXT_STYLE = {
     paddingVertical: 5,

@@ -13,8 +13,6 @@ class ChatInputComponentBlock extends React.Component {
 
         super(props);
 
-        this.subscriptions = {};
-
         this.state = {
             text: {
                 focused: false,
@@ -70,7 +68,6 @@ class ChatInputComponentBlock extends React.Component {
             this.setState({ file: Object.assign({}, this.state.file, { showed: false }) });
         }
         this.setState({ text: Object.assign({}, this.state.text, { focused: true }) });
-        this.props.onActive();
     };
     onTextInputBlured() {
         this.setState({ text: Object.assign({}, this.state.text, { focused: false }) });
@@ -90,7 +87,6 @@ class ChatInputComponentBlock extends React.Component {
         }
 
         this.setState({ sticker: Object.assign({}, this.state.sticker, { showed: true }) });
-        this.props.onActive();
     };
     closeStickerBox() {
         this.setState({ sticker: Object.assign({}, this.state.sticker, { showed: false }) });
@@ -118,13 +114,17 @@ class ChatInputComponentBlock extends React.Component {
         }
 
         this.setState({ file: Object.assign({}, this.state.file, { showed: true }) });
-        this.props.onActive();
     };
     closeFileBox() {
         this.setState({ file: Object.assign({}, this.state.file, { showed: false }) });
     };
 
     sendTextMessage() {
+
+        if (!this.props.AZStackCore.slaveSocketConnected) {
+            return;
+        }
+
         if (!this.state.text.val) {
             return;
         }
@@ -138,6 +138,11 @@ class ChatInputComponentBlock extends React.Component {
         }).catch((error) => { });
     };
     sendStickerMessage(itemName) {
+
+        if (!this.props.AZStackCore.slaveSocketConnected) {
+            return;
+        }
+
         this.props.AZStackCore.newMessage({
             chatType: this.props.chatType,
             chatId: this.props.chatId,
@@ -151,7 +156,7 @@ class ChatInputComponentBlock extends React.Component {
 
     onInputContentChangeSize(e) {
         console.log(e);
-    }
+    };
 
     render() {
         return (

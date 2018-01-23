@@ -3,6 +3,8 @@ class Event {
         this.eventConstants = options.eventConstants;
         this.AZStackCore = options.AZStackCore;
         this.EventEmitter = options.EventEmitter;
+
+        this.preparingMessages = {};
     };
 
     delegatesToEvents() {
@@ -56,6 +58,10 @@ class Event {
             }).catch(() => { });
         };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_MESSAGE_STATUS_CHANGED] = (error, result) => {
+            if (this.preparingMessages[result.msgId]) {
+                this.preparingMessages[result.msgId].status = result.messageStatus;
+                return;
+            }
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_MESSAGE_STATUS_CHANGED, { error, result });
         };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_HAS_NEW_MESSAGE] = (error, result) => {
@@ -64,6 +70,7 @@ class Event {
                 return;
             }
             let newMessage = result;
+            this.preparingMessages[newMessage.msgId] = newMessage;
             Promise.all([
                 new Promise((resolve, reject) => {
                     this.AZStackCore.changeMessageStatus({
@@ -117,6 +124,7 @@ class Event {
                     }
                 })
             ]).then(() => {
+                delete this.preparingMessages[newMessage.msgId];
                 this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_NEW_MESSAGE, { error: null, result: newMessage });
             }).catch((error) => { });
         };
@@ -126,6 +134,7 @@ class Event {
                 return;
             }
             let myMessage = result;
+            this.preparingMessages[myMessage.msgId] = myMessage;
             Promise.all([
                 new Promise((resolve, reject) => {
                     this.AZStackCore.getUsersInformation({
@@ -165,6 +174,7 @@ class Event {
                     }
                 })
             ]).then(() => {
+                delete this.preparingMessages[myMessage.msgId];
                 this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_MESSAGE_FROM_ME, { error: null, result: myMessage });
             }).catch((error) => { });
         };
@@ -173,7 +183,8 @@ class Event {
                 this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error, result: null });
                 return;
             }
-            let myMessage = result.newMessage;
+            let myMessage = result;
+            this.preparingMessages[myMessage.msgId] = myMessage;
             Promise.all([
                 new Promise((resolve, reject) => {
                     this.AZStackCore.getUsersInformation({
@@ -213,6 +224,7 @@ class Event {
                     }
                 })
             ]).then(() => {
+                delete this.preparingMessages[myMessage.msgId];
                 this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: myMessage });
             }).catch((error) => { });
         };
@@ -222,6 +234,7 @@ class Event {
                 return;
             }
             let newMessage = result;
+            this.preparingMessages[newMessage.msgId] = newMessage;
             Promise.all([
                 new Promise((resolve, reject) => {
                     this.AZStackCore.changeMessageStatus({
@@ -260,6 +273,7 @@ class Event {
                     });
                 })
             ]).then(() => {
+                delete this.preparingMessages[newMessage.msgId];
                 this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_GROUP_CREATED, { error: null, result: newMessage });
             }).catch((error) => { });
         };
@@ -269,6 +283,7 @@ class Event {
                 return;
             }
             let newMessage = result;
+            this.preparingMessages[newMessage.msgId] = newMessage;
             newMessage.invited.invites = [];
             Promise.all([
                 new Promise((resolve, reject) => {
@@ -323,6 +338,7 @@ class Event {
                     })
                 )
             ]).then(() => {
+                delete this.preparingMessages[newMessage.msgId];
                 this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_GROUP_INVITED, { error: null, result: newMessage });
             }).catch((error) => { });
         };
@@ -332,6 +348,7 @@ class Event {
                 return;
             }
             let newMessage = result;
+            this.preparingMessages[newMessage.msgId] = newMessage;
             Promise.all([
                 new Promise((resolve, reject) => {
                     this.AZStackCore.changeMessageStatus({
@@ -396,6 +413,7 @@ class Event {
                     });
                 })
             ]).then(() => {
+                delete this.preparingMessages[newMessage.msgId];
                 this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_GROUP_LEFT, { error: null, result: newMessage });
             }).catch((error) => { });
         };
@@ -405,6 +423,7 @@ class Event {
                 return;
             }
             let newMessage = result;
+            this.preparingMessages[newMessage.msgId] = newMessage;
             Promise.all([
                 new Promise((resolve, reject) => {
                     this.AZStackCore.changeMessageStatus({
@@ -443,6 +462,7 @@ class Event {
                     });
                 })
             ]).then(() => {
+                delete this.preparingMessages[newMessage.msgId];
                 this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_GROUP_RENAMED, { error: null, result: newMessage });
             }).catch((error) => { });
         };
@@ -452,6 +472,7 @@ class Event {
                 return;
             }
             let newMessage = result;
+            this.preparingMessages[newMessage.msgId] = newMessage;
             Promise.all([
                 new Promise((resolve, reject) => {
                     this.AZStackCore.changeMessageStatus({
@@ -501,6 +522,7 @@ class Event {
                     });
                 })
             ]).then(() => {
+                delete this.preparingMessages[newMessage.msgId];
                 this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_GROUP_ADMIN_CHANGED, { error: null, result: newMessage });
             }).catch((error) => { });
         };
@@ -510,6 +532,7 @@ class Event {
                 return;
             }
             let newMessage = result;
+            this.preparingMessages[newMessage.msgId] = newMessage;
             Promise.all([
                 new Promise((resolve, reject) => {
                     this.AZStackCore.changeMessageStatus({
@@ -559,6 +582,7 @@ class Event {
                     });
                 })
             ]).then(() => {
+                delete this.preparingMessages[newMessage.msgId];
                 this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_GROUP_PUBLIC_JOINED, { error: null, result: newMessage });
             }).catch((error) => { });
         };

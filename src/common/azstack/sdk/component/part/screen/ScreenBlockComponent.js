@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import CustomStatusBar from '../common/CustomStatusBar';
 
-const {height, width} = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 
 class ScreenBlockComponent extends React.Component {
     constructor(props) {
@@ -48,7 +48,7 @@ class ScreenBlockComponent extends React.Component {
                 this.state.heightAnimated,
                 {
                     toValue: height - event.endCoordinates.height,
-                    duration: 100,
+                    duration: 0,
                 }
             ).start();
         });
@@ -57,7 +57,7 @@ class ScreenBlockComponent extends React.Component {
                 this.state.heightAnimated,
                 {
                     toValue: height,
-                    duration: 100,
+                    duration: 0,
                 }
             ).start();
         });
