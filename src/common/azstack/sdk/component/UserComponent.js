@@ -12,8 +12,6 @@ import ConnectionBlockComponent from './part/common/ConnectionBlockComponent';
 class UserComponent extends React.Component {
     constructor(props) {
 
-        console.log(props);
-
         super(props);
 
         this.subscriptions = {};
@@ -66,7 +64,7 @@ class UserComponent extends React.Component {
                 {this.props.hidden !== 'hidden' && <ScreenHeaderBlockComponent
                     CustomStyle={this.props.CustomStyle}
                     onBackButtonPressed={this.props.onBackButtonPressed}
-                    title={this.props.Language.getText('USER_INFORMATION_HEADER_TITLE_TEXT')}
+                    title={this.props.Language.getText('USER_HEADER_TITLE_TEXT')}
                 />}
                 <ScreenBodyBlockComponent
                     CustomStyle={this.props.CustomStyle}
@@ -75,7 +73,7 @@ class UserComponent extends React.Component {
                     {
                         !this.state.user && <EmptyBlockComponent
                             CustomStyle={this.props.CustomStyle}
-                            emptyText={this.props.Language.getText('USER_INFORMATION_EMPTY_TEXT')}
+                            emptyText={this.props.Language.getText('USER_EMPTY_TEXT')}
                         />
                     }
                     <ConnectionBlockComponent

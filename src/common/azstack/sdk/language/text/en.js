@@ -66,5 +66,8 @@ export const CHAT_INPUT_FILE_OPTION_VOICE_TEXT = 'Voice';
 export const CHAT_INPUT_FILE_OPTION_DRAWING_TEXT = 'Drawing';
 export const MESSAGES_LIST_EMPTY_TEXT = 'No Message';
 
-export const USER_INFORMATION_HEADER_TITLE_TEXT = 'User Information';
-export const USER_INFORMATION_EMPTY_TEXT = 'No User Infomation';
+export const USER_HEADER_TITLE_TEXT = 'User Information';
+export const USER_EMPTY_TEXT = 'No User Infomation';
+
+export const GROUP_HEADER_TITLE_TEXT = 'Group Information';
+export const GROUP_EMPTY_TEXT = 'No Group Infomation';

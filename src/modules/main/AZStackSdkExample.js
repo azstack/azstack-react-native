@@ -82,15 +82,13 @@ class AZStackSdkExample extends React.Component {
     }
 
     showGroup() {
-        this.refs.AZStackSdk.showGroup();
+        this.refs.AZStackSdk.showGroup({ groupId: 7436 });
     }
 
     componentDidMount() {
         this.refs.AZStackSdk.connect().then((result) => {
             this.setState({ authenticatedUser: result });
-        }).catch((error) => {
-            console.log(error);
-        });
+        }).catch((error) => {});
     };
 
     componentWillUnmount() {
