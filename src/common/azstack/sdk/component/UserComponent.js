@@ -1,6 +1,9 @@
 import React from 'react';
 import {
-
+    View,
+    Text,
+    TouchableOpacity,
+    Image
 } from 'react-native';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
@@ -8,6 +11,8 @@ import ScreenHeaderBlockComponent from './part/screen/ScreenHeaderBlockComponent
 import ScreenBodyBlockComponent from './part/screen/ScreenBodyBlockComponent';
 import EmptyBlockComponent from './part/common/EmptyBlockComponent';
 import ConnectionBlockComponent from './part/common/ConnectionBlockComponent';
+import ChatAvatarBlockComponent from './part/common/ChatAvatarBlockComponent';
+import TimeFromNowBlockComponent from './part/common/TimeFromNowBlockComponent';
 
 class UserComponent extends React.Component {
     constructor(props) {
@@ -43,6 +48,15 @@ class UserComponent extends React.Component {
 
     initRun() {
         this.state.user = null;
+        this.getUser();
+    };
+
+    getUser() {
+        this.props.AZStackCore.getUsersInformation({
+            userIds: [this.props.userId]
+        }).then((result) => {
+            this.setState({ user: result.list[0] });
+        }).catch((error) => { });
     };
 
     componentDidMount() {
@@ -75,6 +89,87 @@ class UserComponent extends React.Component {
                             CustomStyle={this.props.CustomStyle}
                             emptyText={this.props.Language.getText('USER_EMPTY_TEXT')}
                         />
+                    }
+                    {
+                        !!this.state.user && (
+                            <View
+                                style={this.props.CustomStyle.getStyle('USER_BLOCK_STYLE')}
+                            >
+                                <View
+                                    style={this.props.CustomStyle.getStyle('USER_AVATAR_BLOCK_STYLE')}
+                                >
+                                    <ChatAvatarBlockComponent
+                                        CustomStyle={this.props.CustomStyle}
+                                        chatType={this.props.AZStackCore.chatConstants.CHAT_TYPE_USER}
+                                        chatTarget={this.state.user}
+                                        textStyle={this.props.CustomStyle.getStyle('USER_AVATAR_TEXT_STYLE')}
+                                    />
+                                </View>
+                                <Text
+                                    style={this.props.CustomStyle.getStyle('USER_NAME_TEXT_STYLE')}
+                                >
+                                    {this.state.user.fullname}
+                                </Text>
+                                {
+                                    this.state.user.status === this.props.AZStackCore.userConstants.USER_STATUS_ONLINE && (
+                                        <Text
+                                            style={this.props.CustomStyle.getStyle('USER_ONLINE_TEXT_STYLE')}
+                                        >
+                                            {this.props.Language.getText('USER_ONLINE_TEXT')}
+                                        </Text>
+                                    )
+                                }
+                                {
+                                    this.state.user.status === this.props.AZStackCore.userConstants.USER_STATUS_NOT_ONLINE && (
+                                        <Text
+                                            style={this.props.CustomStyle.getStyle('USER_OFFLINE_TEXT_STYLE')}
+                                        >
+                                            {`${this.props.Language.getText('USER_OFFLINE_TEXT')} `}
+                                            <TimeFromNowBlockComponent
+                                                Language={this.props.Language}
+                                                CustomStyle={this.props.CustomStyle}
+                                                textStyle={this.props.CustomStyle.getStyle('USER_OFFLINE_TEXT_STYLE')}
+                                                time={this.state.user.lastVisitDate * 1000}
+                                            />
+                                        </Text>
+                                    )
+                                }
+                                <View
+                                    style={this.props.CustomStyle.getStyle('USER_ACTION_BLOCK_STYLE')}
+                                >
+                                    <TouchableOpacity
+                                        style={this.props.CustomStyle.getStyle('USER_ACTION_BUTTON_STYLE')}
+                                        activeOpacity={0.5}
+                                        onPress={() => { }}
+                                    >
+                                        <Image
+                                            style={this.props.CustomStyle.getStyle('USER_ACTION_BUTTON_IMAGE_STYLE')}
+                                            source={this.props.CustomStyle.getImage('IMAGE_START_CHAT')}
+                                        />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={this.props.CustomStyle.getStyle('USER_ACTION_BUTTON_STYLE')}
+                                        activeOpacity={0.5}
+                                        onPress={() => { }}
+                                    >
+                                        <Image
+                                            style={this.props.CustomStyle.getStyle('USER_ACTION_BUTTON_IMAGE_STYLE')}
+                                            source={this.props.CustomStyle.getImage('IMAGE_VOICE_CALL')}
+                                        />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={this.props.CustomStyle.getStyle('USER_ACTION_BUTTON_STYLE')}
+                                        activeOpacity={0.5}
+                                        onPress={() => { }}
+                                    >
+                                        <Image
+                                            style={this.props.CustomStyle.getStyle('USER_ACTION_BUTTON_IMAGE_STYLE')}
+                                            source={this.props.CustomStyle.getImage('IMAGE_VIDEO_CALL')}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        )
                     }
                     <ConnectionBlockComponent
                         Language={this.props.Language}

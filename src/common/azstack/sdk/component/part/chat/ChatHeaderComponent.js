@@ -105,12 +105,12 @@ class ChatHeaderComponent extends React.Component {
                 {
                     this.props.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER && (
                         <TouchableOpacity
-                            style={this.props.CustomStyle.getStyle('CHAT_HEADER_VOICE_CALL_BUTTON_STYLE')}
+                            style={this.props.CustomStyle.getStyle('CHAT_HEADER_ACTION_BUTTON_STYLE')}
                             activeOpacity={0.5}
                             onPress={() => { }}
                         >
                             <Image
-                                style={this.props.CustomStyle.getStyle('CHAT_HEADER_VOICE_CALL_BUTTON_IMAGE_STYLE')}
+                                style={this.props.CustomStyle.getStyle('CHAT_HEADER_ACTION_BUTTON_IMAGE_STYLE')}
                                 source={this.props.CustomStyle.getImage('IMAGE_VOICE_CALL')}
                             />
                         </TouchableOpacity>
@@ -119,12 +119,12 @@ class ChatHeaderComponent extends React.Component {
                 {
                     this.props.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER && (
                         <TouchableOpacity
-                            style={this.props.CustomStyle.getStyle('CHAT_HEADER_VIDEO_CALL_BUTTON_STYLE')}
+                            style={this.props.CustomStyle.getStyle('CHAT_HEADER_ACTION_BUTTON_STYLE')}
                             activeOpacity={0.5}
                             onPress={() => { }}
                         >
                             <Image
-                                style={this.props.CustomStyle.getStyle('CHAT_HEADER_VIDEO_CALL_BUTTON_IMAGE_STYLE')}
+                                style={this.props.CustomStyle.getStyle('CHAT_HEADER_ACTION_BUTTON_IMAGE_STYLE')}
                                 source={this.props.CustomStyle.getImage('IMAGE_VIDEO_CALL')}
                             />
                         </TouchableOpacity>

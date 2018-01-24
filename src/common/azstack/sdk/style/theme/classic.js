@@ -11,6 +11,7 @@ export const IMAGE_VOICE = require('../../static/image/classic/voice.png');
 export const IMAGE_DRAWING = require('../../static/image/classic/drawing.png');
 export const IMAGE_VOICE_CALL = require('../../static/image/classic/voice-call.png');
 export const IMAGE_VIDEO_CALL = require('../../static/image/classic/video-call.png');
+export const IMAGE_START_CHAT = require('../../static/image/classic/start-chat.png');
 
 
 export const SCREEN_BLOCK_STYLE = {
@@ -361,23 +362,13 @@ export const CHAT_HEADER_MEMBERS_TEXT_STYLE = {
     lineHeight: 20,
     color: '#95A5A6'
 };
-export const CHAT_HEADER_VOICE_CALL_BUTTON_STYLE = {
+export const CHAT_HEADER_ACTION_BUTTON_STYLE = {
     width: 50,
     height: 50,
     justifyContent: 'center',
     alignItems: 'flex-end',
 };
-export const CHAT_HEADER_VOICE_CALL_BUTTON_IMAGE_STYLE = {
-    width: 35,
-    height: 35
-};
-export const CHAT_HEADER_VIDEO_CALL_BUTTON_STYLE = {
-    width: 50,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'flex-end'
-};
-export const CHAT_HEADER_VIDEO_CALL_BUTTON_IMAGE_STYLE = {
+export const CHAT_HEADER_ACTION_BUTTON_IMAGE_STYLE = {
     width: 35,
     height: 35
 };
@@ -745,3 +736,54 @@ export const MESSAGE_TYPE_MEDIA_STATUS_TEXT_STYLE = {
 };
 
 
+export const USER_BLOCK_STYLE = {
+    paddingHorizontal: 15,
+    paddingVertical: 20,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const USER_AVATAR_BLOCK_STYLE = {
+    width: 100,
+    height: 100
+};
+export const USER_AVATAR_TEXT_STYLE = {
+    fontSize: 40
+};
+export const USER_NAME_TEXT_STYLE = {
+    fontSize: 20,
+    fontWeight: '400',
+    lineHeight: 30,
+    color: '#2F353B',
+    marginTop: 10
+};
+export const USER_OFFLINE_TEXT_STYLE = {
+    fontSize: 18,
+    fontWeight: '300',
+    lineHeight: 30,
+    color: '#95A5A6',
+    textAlign: 'left',
+    marginTop: 10
+};
+export const USER_ONLINE_TEXT_STYLE = {
+    fontSize: 18,
+    fontWeight: '300',
+    lineHeight: 30,
+    color: '#578EBE',
+    marginTop: 10
+};
+export const USER_ACTION_BLOCK_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10
+};
+export const USER_ACTION_BUTTON_STYLE = {
+    width: 80,
+    height: 80,
+    justifyContent: 'center',
+    alignItems: 'center',
+};
+export const USER_ACTION_BUTTON_IMAGE_STYLE = {
+    width: 40,
+    height: 40
+};
