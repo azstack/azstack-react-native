@@ -9,7 +9,6 @@ class ScreenHeaderBlockComponent extends React.Component {
     }
 
     render() {
-        console.log(this.props.style);
         return (
             <View
                 style={{
