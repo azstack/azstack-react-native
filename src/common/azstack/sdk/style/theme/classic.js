@@ -9,6 +9,8 @@ export const IMAGE_CAMERA = require('../../static/image/classic/camera.png');
 export const IMAGE_LOCATION = require('../../static/image/classic/location.png');
 export const IMAGE_VOICE = require('../../static/image/classic/voice.png');
 export const IMAGE_DRAWING = require('../../static/image/classic/drawing.png');
+export const IMAGE_VOICE_CALL = require('../../static/image/classic/voice-call.png');
+export const IMAGE_VIDEO_CALL = require('../../static/image/classic/video-call.png');
 
 
 export const SCREEN_BLOCK_STYLE = {
@@ -21,34 +23,33 @@ export const SCREEN_BLOCK_STYLE = {
     flexDirection: 'column',
 };
 export const SCREEN_HEADER_BLOCK_STYLE = {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderStyle: 'solid',
     borderBottomWidth: 1,
     borderBottomColor: '#E1E5EC',
-    height: 54,
     justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: 'row'
 };
 export const SCREEN_HEADER_BACK_BUTTON_STYLE = {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-};
-export const SCREEN_HEADER_BACK_BUTTON_CONTAINER_STYLE = {
-    height: 54,
+    width: 50,
+    height: 50,
     justifyContent: 'center',
-    alignItems: 'flex-end',
-    paddingRight: 20,
-    paddingLeft: 10,
-}
+    alignItems: 'flex-start'
+};
 export const SCREEN_HEADER_BACK_BUTTON_IMAGE_STYLE = {
     width: 25,
     height: 25
 };
 export const SCREEN_HEADER_TITLE_TEXT_STYLE = {
+    flex: 1,
+    paddingRight: 50,
     fontSize: 20,
     fontWeight: '400',
     lineHeight: 25,
     color: '#2F353B',
+    textAlign: 'center'
 };
 export const SCREEN_BODY_BLOCK_STYLE = {
     flex: 1,
@@ -297,6 +298,7 @@ export const CONVERSATION_MESSAGE_STATUS_TEXT_STYLE = {
     fontSize: 8
 };
 
+
 export const CHAT_HEADER_BLOCK_STYLE = {
     paddingVertical: 10,
     paddingHorizontal: 15,
@@ -311,7 +313,7 @@ export const CHAT_HEADER_BACK_BUTTON_STYLE = {
     width: 50,
     height: 50,
     justifyContent: 'center',
-    alignItems: 'flex-start',
+    alignItems: 'flex-start'
 };
 export const CHAT_HEADER_BACK_BUTTON_IMAGE_STYLE = {
     width: 25,
@@ -359,6 +361,27 @@ export const CHAT_HEADER_MEMBERS_TEXT_STYLE = {
     lineHeight: 20,
     color: '#95A5A6'
 };
+export const CHAT_HEADER_VOICE_CALL_BUTTON_STYLE = {
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+};
+export const CHAT_HEADER_VOICE_CALL_BUTTON_IMAGE_STYLE = {
+    width: 35,
+    height: 35
+};
+export const CHAT_HEADER_VIDEO_CALL_BUTTON_STYLE = {
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'flex-end'
+};
+export const CHAT_HEADER_VIDEO_CALL_BUTTON_IMAGE_STYLE = {
+    width: 35,
+    height: 35
+};
+
 export const CHAT_TYPING_BLOCK_STYLE = {
     justifyContent: 'center',
     alignItems: 'flex-start',
@@ -370,6 +393,7 @@ export const CHAT_TYPING_TEXT_STYLE = {
     lineHeight: 15,
     color: '#95A5A6'
 };
+
 export const CHAT_INPUT_DISABLED_BLOCK_STYLE = {
     paddingVertical: 15,
     paddingHorizontal: 15,
@@ -385,6 +409,7 @@ export const CHAT_INPUT_DISABLED_TEXT_STYLE = {
     fontWeight: '500',
     color: '#fff',
 };
+
 export const CHAT_INPUT_BLOCK_STYLE = {
     borderTopWidth: 1,
     borderTopColor: '#E1E5EC',
@@ -556,6 +581,7 @@ export const CHAT_INPUT_FILE_BOX_CLOSE_BUTTON_TEXT_STYLE = {
     color: '#95A5A6',
     textAlign: 'center'
 };
+
 export const MESSAGES_LIST_STYLE = {
     paddingHorizontal: 15,
     flex: 1
