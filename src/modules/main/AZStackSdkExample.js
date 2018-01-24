@@ -25,10 +25,17 @@ class AZStackSdkExample extends React.Component {
         this.refs.AZStackSdk.showConversations({});
     };
 
-    showChat(options) {
+    startChatUser(options) {
         this.refs.AZStackSdk.startChat({
-            chatType: options.chatType,
-            chatId: options.chatId
+            chatType: this.refs.AZStackSdk.AZStackCore.chatConstants.CHAT_TYPE_USER,
+            chatId: 387212
+        });
+    };
+
+    startChatGroup(options) {
+        this.refs.AZStackSdk.startChat({
+            chatType: this.refs.AZStackSdk.AZStackCore.chatConstants.CHAT_TYPE_GROUP,
+            chatId: 7436
         });
     };
 
@@ -68,6 +75,10 @@ class AZStackSdkExample extends React.Component {
 
     showCallLogs() {
         this.refs.AZStackSdk.showCallLogs({});
+    }
+
+    showUser() {
+        this.refs.AZStackSdk.showUser({ userId: 387212 });
     }
 
     showGroup() {
@@ -113,14 +124,15 @@ class AZStackSdkExample extends React.Component {
                         <Text>{this.state.authenticatedUser ? 'Connected, ' + this.state.authenticatedUser.fullname : 'Connecting...'}</Text>
                         <Text>{'\n'}{'\n'}</Text>
                         <Button onPress={() => this.showConversations()} title='Show conversations'></Button>
-                        <Button onPress={() => this.showChat({ chatType: this.refs.AZStackSdk.AZStackCore.chatConstants.CHAT_TYPE_GROUP, chatId: 7436 })} title='Chat with group'></Button>
-                        <Button onPress={() => this.showChat({ chatType: this.refs.AZStackSdk.AZStackCore.chatConstants.CHAT_TYPE_USER, chatId: 387212 })} title='Chat with user'></Button>
+                        <Button onPress={() => this.startChatGroup()} title='Chat with group'></Button>
+                        <Button onPress={() => this.startChatUser()} title='Chat with user'></Button>
                         <Button onPress={() => this.audioCall()} title='Call User 2'></Button>
                         <Button onPress={() => this.videoCall()} title='Video Call User 2'></Button>
                         <Button onPress={() => this.showContact()} title='Contact List'></Button>
                         <Button onPress={() => this.showNumberPad()} title='Callout'></Button>
                         <Button onPress={() => this.showCallLogs()} title='Show call logs'></Button>
-                        <Button onPress={() => this.showGroup()} title='Create group'></Button>
+                        <Button onPress={() => this.showUser()} title='Show user'></Button>
+                        <Button onPress={() => this.showGroup()} title='Show group'></Button>
                     </ScrollView>
                 </View>
             </AZStackSdk>

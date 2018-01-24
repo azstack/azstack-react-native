@@ -424,6 +424,12 @@ export class AZStackSdk extends AZStackBaseComponent {
         });
     }
 
+    showUser(options) {
+        this.navigate(this.getNavigation().UserComponent, {
+            ...options,
+        });
+    }
+
     showGroup(options) {
         this.navigate(this.getNavigation().GroupComponent, {
             ...options,
@@ -498,6 +504,16 @@ export class AZStackSdk extends AZStackBaseComponent {
                 onCallout: (options) => {
                     this.startCallout(options);
                 },
+            },
+            0
+        );
+    }
+
+    UIUser(options) {
+        return this.renderScreen(
+            this.getNavigation().UserComponent, 
+            {
+                ...options,
             },
             0
         );

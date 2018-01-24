@@ -65,3 +65,6 @@ export const CHAT_INPUT_FILE_OPTION_LOCATION_TEXT = 'Location';
 export const CHAT_INPUT_FILE_OPTION_VOICE_TEXT = 'Voice';
 export const CHAT_INPUT_FILE_OPTION_DRAWING_TEXT = 'Drawing';
 export const MESSAGES_LIST_EMPTY_TEXT = 'No Message';
+
+export const USER_INFORMATION_HEADER_TITLE_TEXT = 'User Information';
+export const USER_INFORMATION_EMPTY_TEXT = 'No User Infomation';
