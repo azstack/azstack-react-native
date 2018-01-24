@@ -25,10 +25,10 @@ class AZStackSdkExample extends React.Component {
         this.refs.AZStackSdk.showConversations({});
     };
 
-    showChat() {
+    showChat(options) {
         this.refs.AZStackSdk.startChat({
-            chatType: this.refs.AZStackSdk.AZStackCore.chatConstants.CHAT_TYPE_GROUP,
-            chatId: 7436
+            chatType: options.chatType,
+            chatId: options.chatId
         });
     };
 
@@ -98,7 +98,7 @@ class AZStackSdkExample extends React.Component {
                     languageCode: this.props.languageCode,
                     themeName: this.props.themeName
                 }}
-                >
+            >
                 <View
                     style={{
                         flex: 1,
@@ -108,12 +108,13 @@ class AZStackSdkExample extends React.Component {
                             }
                         }),
                     }}
-                    >
+                >
                     <ScrollView>
                         <Text>{this.state.authenticatedUser ? 'Connected, ' + this.state.authenticatedUser.fullname : 'Connecting...'}</Text>
                         <Text>{'\n'}{'\n'}</Text>
                         <Button onPress={() => this.showConversations()} title='Show conversations'></Button>
-                        <Button onPress={() => this.showChat()} title='Chat with User 2'></Button>
+                        <Button onPress={() => this.showChat({ chatType: this.refs.AZStackSdk.AZStackCore.chatConstants.CHAT_TYPE_GROUP, chatId: 7436 })} title='Chat with group'></Button>
+                        <Button onPress={() => this.showChat({ chatType: this.refs.AZStackSdk.AZStackCore.chatConstants.CHAT_TYPE_USER, chatId: 387212 })} title='Chat with user'></Button>
                         <Button onPress={() => this.audioCall()} title='Call User 2'></Button>
                         <Button onPress={() => this.videoCall()} title='Video Call User 2'></Button>
                         <Button onPress={() => this.showContact()} title='Contact List'></Button>
