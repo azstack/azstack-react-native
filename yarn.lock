@@ -3506,6 +3506,10 @@ react-devtools-core@^2.5.0:
     shell-quote "^1.6.1"
     ws "^2.0.3"
 
+react-native-image-crop-picker@^0.19.1:
+  version "0.19.1"
+  resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.19.1.tgz#29ac98104b89e623501d5bcf476ada875679cce8"
+
 react-native-webrtc@^1.58.3:
   version "1.58.3"
   resolved "https://registry.yarnpkg.com/react-native-webrtc/-/react-native-webrtc-1.58.3.tgz#4d4f4f057ccf1ec25f985c63ada6c4a1b44e5c49"

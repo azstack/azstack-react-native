@@ -108,6 +108,7 @@
 ## 1.2. Install socket.io-client https://github.com/socketio/socket.io-client
 ## 1.3. Install jsencrypt https://github.com/travist/jsencrypt
 ## 1.4. Install react-native-webrtc https://github.com/oney/react-native-webrtc
+## 1.5. Install react-native-image-crop-picker https://github.com/ivpusic/react-native-image-crop-picker
 
 
 
