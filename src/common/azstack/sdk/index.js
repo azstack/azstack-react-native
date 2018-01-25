@@ -15,12 +15,15 @@ import CustomStyle from './style/';
 import { AZStackCore } from '../core/';
 
 import Event from './handler/event';
+import Member from './handler/member';
 
 import AZStackBaseComponent from './component/AZStackBaseComponent';
 
 export class AZStackSdk extends AZStackBaseComponent {
     constructor(props) {
         super(props);
+        this.subscriptions = {};
+        this.members = [];
         this.state = {
             navigation: []
         };
@@ -46,6 +49,57 @@ export class AZStackSdk extends AZStackBaseComponent {
             EventEmitter: this.EventEmitter
         });
         this.Event.delegatesToEvents();
+
+        this.Member = new Member({
+            AZStackCore: this.AZStackCore
+        });
+    };
+
+    addSubscriptions() {
+        this.subscriptions.onConnected = this.EventEmitter.addListener(this.eventConstants.EVENT_NAME_CONNECT_RETURN, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.initRun();
+        });
+        this.subscriptions.onAutoReconnected = this.EventEmitter.addListener(this.eventConstants.EVENT_NAME_ON_AUTO_RECONNECTED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.initRun();
+        });
+        this.subscriptions.onReconnected = this.EventEmitter.addListener(this.eventConstants.EVENT_NAME_RECONNECT_RETURN, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.initRun();
+        });
+    };
+    clearSubscriptions() {
+        for (let subscriptionName in this.subscriptions) {
+            this.subscriptions[subscriptionName].remove();
+        }
+    };
+
+    getMembers() {
+        if (!this.AZStackCore.slaveSocketConnected) {
+            return;
+        }
+        this.Member.prepareMembers({ rawMembers: this.props.options.members }).then((result) => {
+            this.members = result;
+            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_MEMBERS_CHANGED, { error: null, result });
+        }).catch(() => { });
+    };
+    initRun() {
+        this.getMembers();
+    };
+
+    componentDidMount() {
+        this.addSubscriptions();
+        this.initRun();
+    };
+    componentWillUnmount() {
+        this.clearSubscriptions();
     };
 
     render() {
@@ -61,7 +115,7 @@ export class AZStackSdk extends AZStackBaseComponent {
                 {this.renderScreens()}
             </View>
         );
-    }
+    };
 
     /* AZStack functions */
     connect() {
@@ -76,7 +130,7 @@ export class AZStackSdk extends AZStackBaseComponent {
 
     getConstants(constantGroup) {
         return this.AZStackCore[constantGroup];
-    }
+    };
 
     onCallinStart(error, result) {
         this.navigate(this.getNavigation().OnCallComponent, {
@@ -125,7 +179,7 @@ export class AZStackSdk extends AZStackBaseComponent {
                 });
             }
         });
-    }
+    };
 
     onFreeCallStart(error, result) {
         this.AZStackCore.getUsersInformation({
@@ -227,7 +281,7 @@ export class AZStackSdk extends AZStackBaseComponent {
         }).catch((error) => {
             console.log(error);
         });
-    }
+    };
 
     startCallout(options) {
         this.AZStackCore.startCallout({
@@ -264,7 +318,7 @@ export class AZStackSdk extends AZStackBaseComponent {
         }).catch((error) => {
             Alert.alert("Error", error.message, [{ text: 'OK', onPress: () => { } }]);
         });
-    }
+    };
 
     startAudioCall(options) {
         this.AZStackCore.startFreeCall({
@@ -303,7 +357,7 @@ export class AZStackSdk extends AZStackBaseComponent {
         }).catch((error) => {
             Alert.alert("Error", error.message, [{ text: 'OK', onPress: () => { } }]);
         });
-    }
+    };
 
     startVideoCall(options) {
         this.AZStackCore.startFreeCall({
@@ -352,7 +406,7 @@ export class AZStackSdk extends AZStackBaseComponent {
         }).catch((error) => {
             Alert.alert("Error", error.message, [{ text: 'OK', onPress: () => { } }]);
         });
-    }
+    };
 
     showNumberPad(options, ) {
         this.navigate(
@@ -367,7 +421,7 @@ export class AZStackSdk extends AZStackBaseComponent {
                 },
             }
         );
-    }
+    };
 
     showContacts(options) {
         this.navigate(
@@ -385,7 +439,7 @@ export class AZStackSdk extends AZStackBaseComponent {
                 },
             }
         );
-    }
+    };
 
     showCallLogs(options) {
         this.navigate(
@@ -403,11 +457,11 @@ export class AZStackSdk extends AZStackBaseComponent {
                 },
             }
         );
-    }
+    };
 
     startChat({ chatType, chatId, ...rest }) {
         this.navigate(this.getNavigation().ChatComponent, { chatType, chatId, ...rest });
-    }
+    };
 
     showConversations(options) {
         this.navigate(this.getNavigation().ConversationsComponent, {
@@ -425,19 +479,19 @@ export class AZStackSdk extends AZStackBaseComponent {
                 }
             },
         });
-    }
+    };
 
     showUser(options) {
         this.navigate(this.getNavigation().UserComponent, {
             ...options,
         });
-    }
+    };
 
     showGroup(options) {
         this.navigate(this.getNavigation().GroupComponent, {
             ...options,
         });
-    }
+    };
 
     UIContacts(options) {
         return this.renderScreen(
@@ -456,7 +510,7 @@ export class AZStackSdk extends AZStackBaseComponent {
             },
             0
         );
-    }
+    };
 
     UIConversations(options) {
         return this.renderScreen(
@@ -478,7 +532,7 @@ export class AZStackSdk extends AZStackBaseComponent {
             },
             0
         );
-    }
+    };
 
     UICallLogs(options) {
         return this.renderScreen(
@@ -497,7 +551,7 @@ export class AZStackSdk extends AZStackBaseComponent {
             },
             0
         );
-    }
+    };
 
     UINumberPad(options) {
         return this.renderScreen(
@@ -510,7 +564,7 @@ export class AZStackSdk extends AZStackBaseComponent {
             },
             0
         );
-    }
+    };
 
     UIUser(options) {
         return this.renderScreen(
@@ -520,7 +574,7 @@ export class AZStackSdk extends AZStackBaseComponent {
             },
             0
         );
-    }
+    };
 
     UIGroup(options) {
         return this.renderScreen(
@@ -530,5 +584,5 @@ export class AZStackSdk extends AZStackBaseComponent {
             },
             0
         );
-    }
+    };
 };

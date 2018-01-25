@@ -55,7 +55,6 @@ class GroupComponent extends React.Component {
         this.addSubscriptions();
         this.initRun();
     };
-
     componentWillUnmount() {
         this.clearSubscriptions();
     };

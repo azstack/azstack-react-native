@@ -76,7 +76,6 @@ class ConnectionBlockComponent extends React.Component {
             });
         }
     };
-
     componentWillUnmount() {
         this.clearSubscriptions();
     };

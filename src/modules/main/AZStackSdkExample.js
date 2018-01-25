@@ -105,7 +105,8 @@ class AZStackSdkExample extends React.Component {
                 options={{
                     azstackConfig: this.props.azstackConfig,
                     languageCode: this.props.languageCode,
-                    themeName: this.props.themeName
+                    themeName: this.props.themeName,
+                    members: this.props.members
                 }}
             >
                 <View

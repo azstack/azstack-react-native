@@ -1018,7 +1018,6 @@ class ChatComponent extends React.Component {
         this.addSubscriptions();
         this.initRun();
     };
-
     componentWillUnmount() {
         this.clearSubscriptions();
     };
