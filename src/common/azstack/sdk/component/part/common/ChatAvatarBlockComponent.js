@@ -35,7 +35,7 @@ class ChatAvatarBlockComponent extends React.Component {
             return '--'.toUpperCase();
         }
         if (textParts.length === 1) {
-            return (textParts[0][1] + (textParts[0].length === 1 ? '-' : textParts[0][1])).toUpperCase();
+            return (textParts[0][0] + (textParts[0].length === 1 ? '-' : textParts[0][1])).toUpperCase();
         }
         return (textParts[0][0] + textParts[1][0]).toUpperCase();
     };
