@@ -22,7 +22,7 @@ export class AZStackSdk extends AZStackBaseComponent {
     constructor(props) {
         super(props);
         this.state = {
-            navigation: [],
+            navigation: []
         };
 
         this.eventConstants = eventConstants;
@@ -66,6 +66,9 @@ export class AZStackSdk extends AZStackBaseComponent {
     /* AZStack functions */
     connect() {
         return this.AZStackCore.connect();
+    };
+    reconnect() {
+        return this.AZStackCore.reconnect();
     };
     disconnect() {
         return this.AZStackCore.disconnect();
