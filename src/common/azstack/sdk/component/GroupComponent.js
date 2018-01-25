@@ -17,7 +17,8 @@ class GroupComponent extends React.Component {
         this.subscriptions = {};
 
         this.state = {
-            group: null
+            group: null,
+            members: this.props.members
         };
     };
 
@@ -40,6 +41,12 @@ class GroupComponent extends React.Component {
             }
             this.initRun();
         });
+        this.subscriptions.onMembersChanged = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_MEMBERS_CHANGED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.setState({ members: result });
+        });
     };
     clearSubscriptions() {
         for (let subscriptionName in this.subscriptions) {
@@ -47,8 +54,19 @@ class GroupComponent extends React.Component {
         }
     };
 
+    getGroup() {
+        if (!this.props.AZStackCore.slaveSocketConnected) {
+            return;
+        }
+        this.props.AZStackCore.getDetailsGroup({
+            groupId: this.props.groupId
+        }).then((result) => {
+            this.setState({ group: result });
+        }).catch((error) => { });
+    };
     initRun() {
         this.state.group = null;
+        this.getGroup();
     };
 
     componentDidMount() {
