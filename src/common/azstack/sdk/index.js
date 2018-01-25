@@ -180,7 +180,6 @@ export class AZStackSdk extends AZStackBaseComponent {
             }
         });
     };
-
     onFreeCallStart(error, result) {
         this.AZStackCore.getUsersInformation({
             userIds: [result.fromUserId]
@@ -319,7 +318,6 @@ export class AZStackSdk extends AZStackBaseComponent {
             Alert.alert("Error", error.message, [{ text: 'OK', onPress: () => { } }]);
         });
     };
-
     startAudioCall(options) {
         this.AZStackCore.startFreeCall({
             mediaType: this.AZStackCore.callConstants.CALL_MEDIA_TYPE_AUDIO,
@@ -358,7 +356,6 @@ export class AZStackSdk extends AZStackBaseComponent {
             Alert.alert("Error", error.message, [{ text: 'OK', onPress: () => { } }]);
         });
     };
-
     startVideoCall(options) {
         this.AZStackCore.startFreeCall({
             mediaType: this.AZStackCore.callConstants.CALL_MEDIA_TYPE_VIDEO,
@@ -407,27 +404,52 @@ export class AZStackSdk extends AZStackBaseComponent {
             Alert.alert("Error", error.message, [{ text: 'OK', onPress: () => { } }]);
         });
     };
+    startChat(options) {
+        this.navigate(this.getNavigation().ChatComponent, {
+            ...options,
+            onBackButtonPressed: () => {
+                if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                    options.onBackButtonPressed();
+                    return;
+                }
 
-    showNumberPad(options, ) {
+                this.pop();
+            }
+        });
+    };
+
+    showNumberPad(options) {
         this.navigate(
             this.getNavigation().NumberPadComponent,
             {
                 ...options,
-                onCallout: (options) => {
-                    this.startCallout(options);
-                },
                 onBackButtonPressed: () => {
+                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                        options.onBackButtonPressed();
+                        return;
+                    }
+
                     this.pop();
                 },
+                onCallout: (options) => {
+                    this.startCallout(options);
+                }
             }
         );
     };
-
     showContacts(options) {
         this.navigate(
             this.getNavigation().ContactComponent,
             {
                 ...options,
+                onBackButtonPressed: () => {
+                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                        options.onBackButtonPressed();
+                        return;
+                    }
+
+                    this.pop();
+                },
                 onVideoCall: (options) => {
                     this.startVideoCall(options);
                 },
@@ -440,12 +462,19 @@ export class AZStackSdk extends AZStackBaseComponent {
             }
         );
     };
-
     showCallLogs(options) {
         this.navigate(
             this.getNavigation().CallLogsComponent,
             {
                 ...options,
+                onBackButtonPressed: () => {
+                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                        options.onBackButtonPressed();
+                        return;
+                    }
+
+                    this.pop();
+                },
                 onVideoCall: (options) => {
                     this.startVideoCall(options);
                 },
@@ -458,38 +487,54 @@ export class AZStackSdk extends AZStackBaseComponent {
             }
         );
     };
-
-    startChat({ chatType, chatId, ...rest }) {
-        this.navigate(this.getNavigation().ChatComponent, { chatType, chatId, ...rest });
-    };
-
     showConversations(options) {
         this.navigate(this.getNavigation().ConversationsComponent, {
             ...options,
+            onBackButtonPressed: () => {
+                if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                    options.onBackButtonPressed();
+                    return;
+                }
+
+                this.pop();
+            },
             onPressConversation: (conversation) => {
                 if (typeof options.onPressConversation === 'function') {
                     options.onPressConversation();
+                    return;
                 }
 
-                if (options.prevenDefault !== true) {
-                    this.navigate(this.getNavigation().ChatComponent, {
-                        chatType: conversation.chatType,
-                        chatId: conversation.chatId,
-                    });
-                }
+                this.navigate(this.getNavigation().ChatComponent, {
+                    chatType: conversation.chatType,
+                    chatId: conversation.chatId,
+                });
             },
         });
     };
-
     showUser(options) {
         this.navigate(this.getNavigation().UserComponent, {
             ...options,
+            onBackButtonPressed: () => {
+                if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                    options.onBackButtonPressed();
+                    return;
+                }
+
+                this.pop();
+            }
         });
     };
-
     showGroup(options) {
         this.navigate(this.getNavigation().GroupComponent, {
             ...options,
+            onBackButtonPressed: () => {
+                if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                    options.onBackButtonPressed();
+                    return;
+                }
+
+                this.pop();
+            }
         });
     };
 
@@ -498,6 +543,14 @@ export class AZStackSdk extends AZStackBaseComponent {
             this.getNavigation().ConversationsComponent,
             {
                 ...options,
+                onBackButtonPressed: () => {
+                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                        options.onBackButtonPressed();
+                        return;
+                    }
+
+                    this.pop();
+                },
                 onVideoCall: (options) => {
                     this.startVideoCall(options);
                 },
@@ -511,34 +564,46 @@ export class AZStackSdk extends AZStackBaseComponent {
             0
         );
     };
-
     UIConversations(options) {
         return this.renderScreen(
             this.getNavigation().ConversationsComponent,
             {
                 ...options,
+                onBackButtonPressed: () => {
+                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                        options.onBackButtonPressed();
+                        return;
+                    }
+
+                    this.pop();
+                },
                 onPressConversation: (conversation) => {
                     if (typeof options.onPressConversation === 'function') {
                         options.onPressConversation();
                     }
 
-                    if (options.prevenDefault !== true) {
-                        this.navigate(this.getNavigation().ChatComponent, {
-                            chatType: conversation.chatType,
-                            chatId: conversation.chatId,
-                        });
-                    }
+                    this.navigate(this.getNavigation().ChatComponent, {
+                        chatType: conversation.chatType,
+                        chatId: conversation.chatId,
+                    });
                 },
             },
             0
         );
     };
-
     UICallLogs(options) {
         return this.renderScreen(
             this.getNavigation().CallLogsComponent,
             {
                 ...options,
+                onBackButtonPressed: () => {
+                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                        options.onBackButtonPressed();
+                        return;
+                    }
+
+                    this.pop();
+                },
                 onVideoCall: (options) => {
                     this.startVideoCall(options);
                 },
@@ -552,12 +617,19 @@ export class AZStackSdk extends AZStackBaseComponent {
             0
         );
     };
-
     UINumberPad(options) {
         return this.renderScreen(
             this.getNavigation().NumberPadComponent,
             {
                 ...options,
+                onBackButtonPressed: () => {
+                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                        options.onBackButtonPressed();
+                        return;
+                    }
+
+                    this.pop();
+                },
                 onCallout: (options) => {
                     this.startCallout(options);
                 },
@@ -565,22 +637,36 @@ export class AZStackSdk extends AZStackBaseComponent {
             0
         );
     };
-
     UIUser(options) {
         return this.renderScreen(
             this.getNavigation().UserComponent,
             {
                 ...options,
+                onBackButtonPressed: () => {
+                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                        options.onBackButtonPressed();
+                        return;
+                    }
+
+                    this.pop();
+                }
             },
             0
         );
     };
-
     UIGroup(options) {
         return this.renderScreen(
             this.getNavigation().GroupComponent,
             {
                 ...options,
+                onBackButtonPressed: () => {
+                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                        options.onBackButtonPressed();
+                        return;
+                    }
+
+                    this.pop();
+                }
             },
             0
         );
