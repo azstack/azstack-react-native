@@ -23,6 +23,8 @@ class MessageBlockComponent extends React.Component {
                 height: 200
             }
         };
+
+        this.onSenderPressed = this.onSenderPressed.bind(this);
     };
 
     toTimeString(date) {
@@ -104,6 +106,12 @@ class MessageBlockComponent extends React.Component {
             }
         }
         return returnSizes;
+    };
+
+    onSenderPressed() {
+        this.props.onSenderPressed({
+            userId: this.props.message.sender.userId
+        });
     };
 
     render() {
@@ -292,8 +300,10 @@ class MessageBlockComponent extends React.Component {
                             {
                                 this.props.message.sender.userId !== this.props.AZStackCore.authenticatedUser.userId &&
                                 this.props.shouldRenderSender && (
-                                    <View
+                                    <TouchableOpacity
                                         style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_SENDER_BLOCK_STYLE')}
+                                        activeOpacity={0.5}
+                                        onPress={this.onSenderPressed}
                                     >
                                         <View
                                             style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_SENDER_AVATAR_BLOCK_STYLE')}
@@ -310,7 +320,7 @@ class MessageBlockComponent extends React.Component {
                                         >
                                             {this.getNameSender(this.props.message.sender)}
                                         </Text>
-                                    </View>
+                                    </TouchableOpacity>
                                 )
                             }
                             <View

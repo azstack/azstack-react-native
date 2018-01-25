@@ -1042,6 +1042,9 @@ class ChatComponent extends React.Component {
                         Language={this.props.Language}
                         AZStackCore={this.props.AZStackCore}
                         onBackButtonPressed={this.props.onBackButtonPressed}
+                        onChatTargetPressed={this.props.onChatTargetPressed}
+                        onVoiceCallButtonPressed={this.props.onVoiceCallButtonPressed}
+                        onVideoCallButtonPressed={this.props.onVideoCallButtonPressed}
                         chatType={this.props.chatType}
                         chatTarget={this.state.chatTarget}
                     />
@@ -1071,6 +1074,7 @@ class ChatComponent extends React.Component {
                                         message={item}
                                         shouldRenderTimeMark={this.shouldRenderTimeMark(index)}
                                         shouldRenderSender={this.shouldRenderSender(index)}
+                                        onSenderPressed={this.props.onSenderPressed}
                                     />
                                 );
                             }}
