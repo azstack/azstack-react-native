@@ -25,7 +25,7 @@ const NavigationEnum = {
     CallLogsComponent: 'CallLogsComponent',
     UserComponent: 'UserComponent',
     GroupComponent: 'GroupComponent'
-}
+};
 
 export default class AZStackBaseComponent extends React.Component {
     constructor(props) {
@@ -48,7 +48,7 @@ export default class AZStackBaseComponent extends React.Component {
         });
 
         return screens;
-    }
+    };
 
     renderScreen(screen, options, index) {
         switch (screen) {
@@ -73,36 +73,36 @@ export default class AZStackBaseComponent extends React.Component {
             default:
                 break;
         }
-    }
+    };
 
     /* Navigation functions */
     navigate(screen, options) {
         let newNavigation = [...this.state.navigation];
         newNavigation.push({ screen, options });
         this.setState({ navigation: newNavigation });
-    }
+    };
 
     dismiss() {
         this.setState({
             navigation: []
         })
-    }
+    };
 
     getNavigation() {
         return NavigationEnum;
-    }
+    };
 
     pop() {
         let newNavigation = [...this.state.navigation];
         newNavigation.splice(-1, 1);
         this.setState({ navigation: newNavigation });
-    }
+    };
 
     push(screen, options) {
         let newNavigation = [...this.state.navigation];
         newNavigation.push({ screen, options });
         this.setState({ navigation: newNavigation });
-    }
+    };
 
     /* Render component */
     renderConversations(options, key) {
@@ -115,9 +115,6 @@ export default class AZStackBaseComponent extends React.Component {
             AZStackCore={this.AZStackCore}
             EventEmitter={this.EventEmitter}
             {...options}
-            onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => {
-                this.pop();
-            }}
         />;
     };
 
@@ -131,11 +128,7 @@ export default class AZStackBaseComponent extends React.Component {
             linkConstants={this.linkConstants}
             AZStackCore={this.AZStackCore}
             EventEmitter={this.EventEmitter}
-            chatType={options.chatType}
-            chatId={options.chatId}
-            onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => {
-                this.pop();
-            }}
+            {...options}
         />;
     };
 
@@ -150,7 +143,7 @@ export default class AZStackBaseComponent extends React.Component {
             EventEmitter={this.EventEmitter}
             {...options}
         />;
-    }
+    };
 
     renderContact(options, key) {
         return <ContactComponent
@@ -162,11 +155,8 @@ export default class AZStackBaseComponent extends React.Component {
             AZStackCore={this.AZStackCore}
             EventEmitter={this.EventEmitter}
             {...options}
-            onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => {
-                this.pop();
-            }}
         />;
-    }
+    };
 
     renderNumberPad(options, key) {
         return <NumberPadComponent
@@ -178,11 +168,8 @@ export default class AZStackBaseComponent extends React.Component {
             AZStackCore={this.AZStackCore}
             EventEmitter={this.EventEmitter}
             {...options}
-            onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => {
-                this.pop();
-            }}
         />;
-    }
+    };
 
     renderVideoCall(options, key) {
         return <VideoCallComponent
@@ -194,11 +181,8 @@ export default class AZStackBaseComponent extends React.Component {
             AZStackCore={this.AZStackCore}
             EventEmitter={this.EventEmitter}
             {...options}
-            onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => {
-                this.pop();
-            }}
         />;
-    }
+    };
 
     renderCallLogs(options, key) {
         return <CallLogsComponent
@@ -210,11 +194,8 @@ export default class AZStackBaseComponent extends React.Component {
             AZStackCore={this.AZStackCore}
             EventEmitter={this.EventEmitter}
             {...options}
-            onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => {
-                this.pop();
-            }}
         />;
-    }
+    };
 
     renderUser(options, key) {
         return <UserComponent
@@ -226,11 +207,8 @@ export default class AZStackBaseComponent extends React.Component {
             AZStackCore={this.AZStackCore}
             EventEmitter={this.EventEmitter}
             {...options}
-            onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => {
-                this.pop();
-            }}
         />;
-    }
+    };
 
     renderGroup(options, key) {
         return <GroupComponent
@@ -241,10 +219,8 @@ export default class AZStackBaseComponent extends React.Component {
             eventConstants={this.eventConstants}
             AZStackCore={this.AZStackCore}
             EventEmitter={this.EventEmitter}
+            members={this.members}
             {...options}
-            onBackButtonPressed={options.onBackButtonPressed ? options.onBackButtonPressed : () => {
-                this.pop();
-            }}
         />;
-    }
+    };
 };

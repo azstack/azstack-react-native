@@ -12,6 +12,10 @@ export const IMAGE_DRAWING = require('../../static/image/classic/drawing.png');
 export const IMAGE_VOICE_CALL = require('../../static/image/classic/voice-call.png');
 export const IMAGE_VIDEO_CALL = require('../../static/image/classic/video-call.png');
 export const IMAGE_START_CHAT = require('../../static/image/classic/start-chat.png');
+export const IMAGE_PENCIL = require('../../static/image/classic/pencil.png');
+export const IMAGE_ADD_MEMBER = require('../../static/image/classic/add-member.png');
+export const IMAGE_LEAVE = require('../../static/image/classic/leave.png');
+export const IMAGE_KICK_MEMBER = require('../../static/image/classic/kick-member.png');
 
 
 export const SCREEN_BLOCK_STYLE = {
@@ -754,7 +758,7 @@ export const USER_NAME_TEXT_STYLE = {
     fontWeight: '400',
     lineHeight: 30,
     color: '#2F353B',
-    marginTop: 10
+    marginTop: 5
 };
 export const USER_OFFLINE_TEXT_STYLE = {
     fontSize: 18,
@@ -762,20 +766,19 @@ export const USER_OFFLINE_TEXT_STYLE = {
     lineHeight: 30,
     color: '#95A5A6',
     textAlign: 'left',
-    marginTop: 10
+    marginTop: 5
 };
 export const USER_ONLINE_TEXT_STYLE = {
     fontSize: 18,
     fontWeight: '300',
     lineHeight: 30,
     color: '#578EBE',
-    marginTop: 10
+    marginTop: 5
 };
 export const USER_ACTION_BLOCK_STYLE = {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10
+    alignItems: 'center'
 };
 export const USER_ACTION_BUTTON_STYLE = {
     width: 80,
@@ -786,4 +789,114 @@ export const USER_ACTION_BUTTON_STYLE = {
 export const USER_ACTION_BUTTON_IMAGE_STYLE = {
     width: 40,
     height: 40
+};
+
+
+export const GROUP_BLOCK_STYLE = {
+    flex: 1,
+    paddingHorizontal: 15,
+    paddingVertical: 20,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const GROUP_AVATAR_BLOCK_STYLE = {
+    width: 100,
+    height: 100
+};
+export const GROUP_AVATAR_TEXT_STYLE = {
+    fontSize: 40
+};
+export const GROUP_NAME_TEXT_STYLE = {
+    fontSize: 20,
+    fontWeight: '400',
+    lineHeight: 30,
+    color: '#2F353B',
+    marginTop: 5
+};
+export const GROUP_MEMBERS_TEXT_STYLE = {
+    fontSize: 18,
+    fontWeight: '300',
+    lineHeight: 30,
+    color: '#95A5A6',
+    textAlign: 'left',
+    marginTop: 5
+};
+export const GROUP_ACTION_BLOCK_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const GROUP_ACTION_BUTTON_STYLE = {
+    width: 80,
+    height: 80,
+    justifyContent: 'center',
+    alignItems: 'center',
+};
+export const GROUP_ACTION_BUTTON_IMAGE_STYLE = {
+    width: 40,
+    height: 40
+};
+export const GROUP_MEMBERS_BLOCK_STYLE = {
+    flex: 1,
+    width: '100%',
+    borderTopWidth: 1,
+    borderTopColor: '#E1E5EC'
+};
+export const GROUP_MEMBERS_LIST_BLOCK_STYLE = {
+    flex: 1,
+    width: '100%'
+};
+export const GROUP_MEMBERS_LIST_MEMBER_BLOCK_STYLE = {
+    width: '100%',
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E1E5EC',
+    paddingVertical: 10
+};
+export const GROUP_MEMBERS_LIST_MEMBER_INFO_BLOCK_STYLE = {
+    flex: 1,
+    flexDirection: 'row'
+};
+export const GROUP_MEMBERS_LIST_MEMBER_AVATAR_BLOCK_STYLE = {
+    width: 50,
+    height: 50
+};
+export const GROUP_MEMBERS_LIST_MEMBER_AVATAR_TEXT_STYLE = {
+    fontSize: 18
+};
+export const GROUP_MEMBERS_LIST_MEMBER_TEXTS_BLOCK_STYLE = {
+    flex: 1,
+    marginLeft: 10
+};
+export const GROUP_MEMBERS_LIST_MEMBER_NAME_TEXT_STYLE = {
+    fontSize: 16,
+    fontWeight: '400',
+    lineHeight: 25,
+    color: '#2F353B'
+};
+export const GROUP_MEMBERS_LIST_MEMBER_ADMIN_TEXT_STYLE = {
+    color: '#F2784B'
+};
+export const GROUP_MEMBERS_LIST_MEMBER_OFFLINE_TEXT_STYLE = {
+    fontSize: 15,
+    fontWeight: '300',
+    lineHeight: 25,
+    color: '#95A5A6',
+    textAlign: 'left'
+};
+export const GROUP_MEMBERS_LIST_MEMBER_ONLINE_TEXT_STYLE = {
+    fontSize: 15,
+    fontWeight: '300',
+    lineHeight: 25,
+    color: '#578EBE'
+};
+export const GROUP_MEMBERS_LIST_MEMBER_KICK_BUTTON_BLOCK_STYLE = {
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const GROUP_MEMBERS_LIST_MEMBER_KICK_BUTTON_IMAGE_STYLE = {
+    width: 25,
+    height: 25
 };

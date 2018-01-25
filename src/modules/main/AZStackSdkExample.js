@@ -41,11 +41,11 @@ class AZStackSdkExample extends React.Component {
 
     showContact() {
         this.refs.AZStackSdk.showContacts({});
-    }
+    };
 
     showNumberPad() {
-        this.refs.AZStackSdk.showNumberPad();
-    }
+        this.refs.AZStackSdk.showNumberPad({});
+    };
 
     audioCall() {
         this.refs.AZStackSdk.startAudioCall({
@@ -71,19 +71,19 @@ class AZStackSdkExample extends React.Component {
                 // or whatever you want here
             },
         });
-    }
+    };
 
     showCallLogs() {
         this.refs.AZStackSdk.showCallLogs({});
-    }
+    };
 
     showUser() {
         this.refs.AZStackSdk.showUser({ userId: 387212 });
-    }
+    };
 
     showGroup() {
         this.refs.AZStackSdk.showGroup({ groupId: 7436 });
-    }
+    };
 
     componentDidMount() {
         this.refs.AZStackSdk.connect().then((result) => {
@@ -105,7 +105,8 @@ class AZStackSdkExample extends React.Component {
                 options={{
                     azstackConfig: this.props.azstackConfig,
                     languageCode: this.props.languageCode,
-                    themeName: this.props.themeName
+                    themeName: this.props.themeName,
+                    members: this.props.members
                 }}
             >
                 <View
@@ -124,7 +125,7 @@ class AZStackSdkExample extends React.Component {
                         <Button onPress={() => this.showConversations()} title='Show conversations'></Button>
                         <Button onPress={() => this.startChatGroup()} title='Chat with group'></Button>
                         <Button onPress={() => this.startChatUser()} title='Chat with user'></Button>
-                        <Button onPress={() => this.audioCall()} title='Call User 2'></Button>
+                        <Button onPress={() => this.audioCall()} title='Voice Call User 2'></Button>
                         <Button onPress={() => this.videoCall()} title='Video Call User 2'></Button>
                         <Button onPress={() => this.showContact()} title='Contact List'></Button>
                         <Button onPress={() => this.showNumberPad()} title='Callout'></Button>

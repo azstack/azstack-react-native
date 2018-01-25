@@ -35,8 +35,6 @@ class ConversationsComponent extends React.Component {
         this.onSearchTextChanged = this.onSearchTextChanged.bind(this);
         this.onSearchTextCleared = this.onSearchTextCleared.bind(this);
         this.getFilteredConversations = this.getFilteredConversations.bind(this);
-
-        this.onConversationClicked = this.onConversationClicked.bind(this);
     };
 
     addSubscriptions() {
@@ -764,15 +762,10 @@ class ConversationsComponent extends React.Component {
         });
     };
 
-    onConversationClicked(conversation) {
-        this.props.onPressConversation(conversation);
-    };
-
     componentDidMount() {
         this.addSubscriptions();
         this.initRun();
     };
-
     componentWillUnmount() {
         this.clearSubscriptions();
     };
@@ -821,7 +814,7 @@ class ConversationsComponent extends React.Component {
                                         CustomStyle={this.props.CustomStyle}
                                         AZStackCore={this.props.AZStackCore}
                                         conversation={item}
-                                        onConversationClicked={this.onConversationClicked}
+                                        onConversationPressed={this.props.onConversationPressed}
                                     />
                                 );
                             }}

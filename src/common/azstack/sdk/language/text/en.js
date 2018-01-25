@@ -46,6 +46,7 @@ export const GROUP_TYPE_PRIVATE = 'private';
 export const GROUP_TYPE_PUBLIC = 'public';
 export const GROUP_MEMBER_TEXT = 'member';
 export const GROUP_MEMBER_MANY_TEXT = 'members';
+export const GROUP_ADMIN_TEXT = 'Admin';
 
 export const USER_ONLINE_TEXT = 'Online';
 export const USER_OFFLINE_TEXT = 'Last seen';
@@ -71,3 +72,4 @@ export const USER_EMPTY_TEXT = 'No User Infomation';
 
 export const GROUP_HEADER_TITLE_TEXT = 'Group Information';
 export const GROUP_EMPTY_TEXT = 'No Group Infomation';
+export const GROUP_MEMBER_EMPTY_TEXT = 'No Member';

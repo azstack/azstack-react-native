@@ -12,6 +12,11 @@ import TimeFromNowBlockComponent from '../common/TimeFromNowBlockComponent';
 class ChatHeaderComponent extends React.Component {
     constructor(props) {
         super(props);
+
+        this.onBackButtonPressed = this.onBackButtonPressed.bind(this);
+        this.onChatTargetPressed = this.onChatTargetPressed.bind(this);
+        this.onVoiceCallButtonPressed = this.onVoiceCallButtonPressed.bind(this);
+        this.onVideoCallButtonPressed = this.onVideoCallButtonPressed.bind(this);
     };
 
     isTargetOnline() {
@@ -28,6 +33,26 @@ class ChatHeaderComponent extends React.Component {
         return aUserOnline;
     };
 
+    onBackButtonPressed() {
+        this.props.onBackButtonPressed();
+    };
+    onChatTargetPressed() {
+        this.props.onChatTargetPressed({
+            chatType: this.props.chatType,
+            chatTarget: this.props.chatTarget
+        });
+    };
+    onVoiceCallButtonPressed() {
+        this.props.onVoiceCallButtonPressed({
+            userId: this.props.chatTarget.userId
+        });
+    };
+    onVideoCallButtonPressed() {
+        this.props.onVideoCallButtonPressed({
+            userId: this.props.chatTarget.userId
+        });
+    };
+
     render() {
         return (
             <View
@@ -36,15 +61,17 @@ class ChatHeaderComponent extends React.Component {
                 <TouchableOpacity
                     style={this.props.CustomStyle.getStyle('CHAT_HEADER_BACK_BUTTON_STYLE')}
                     activeOpacity={0.5}
-                    onPress={this.props.onBackButtonPressed}
+                    onPress={this.onBackButtonPressed}
                 >
                     <Image
                         style={this.props.CustomStyle.getStyle('CHAT_HEADER_BACK_BUTTON_IMAGE_STYLE')}
                         source={this.props.CustomStyle.getImage('IMAGE_BACK')}
                     />
                 </TouchableOpacity>
-                <View
+                <TouchableOpacity
                     style={this.props.CustomStyle.getStyle('CHAT_HEADER_INFO_BLOCK_STYLE')}
+                    activeOpacity={0.5}
+                    onPress={this.onChatTargetPressed}
                 >
                     <View
                         style={this.props.CustomStyle.getStyle('CHAT_HEADER_AVATAR_BLOCK_STYLE')}
@@ -101,13 +128,13 @@ class ChatHeaderComponent extends React.Component {
                             )
                         }
                     </View>
-                </View>
+                </TouchableOpacity>
                 {
                     this.props.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER && (
                         <TouchableOpacity
                             style={this.props.CustomStyle.getStyle('CHAT_HEADER_ACTION_BUTTON_STYLE')}
                             activeOpacity={0.5}
-                            onPress={() => { }}
+                            onPress={this.onVoiceCallButtonPressed}
                         >
                             <Image
                                 style={this.props.CustomStyle.getStyle('CHAT_HEADER_ACTION_BUTTON_IMAGE_STYLE')}
@@ -121,7 +148,7 @@ class ChatHeaderComponent extends React.Component {
                         <TouchableOpacity
                             style={this.props.CustomStyle.getStyle('CHAT_HEADER_ACTION_BUTTON_STYLE')}
                             activeOpacity={0.5}
-                            onPress={() => { }}
+                            onPress={this.onVideoCallButtonPressed}
                         >
                             <Image
                                 style={this.props.CustomStyle.getStyle('CHAT_HEADER_ACTION_BUTTON_IMAGE_STYLE')}

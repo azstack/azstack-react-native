@@ -884,7 +884,8 @@ class Group {
                         userId: member.userId,
                         azStackUserId: member.username,
                         fullname: member.fullname,
-                        status: member.online
+                        status: member.online,
+                        lastVisitDate: member.lastVisitDate
                     };
                 })
             });

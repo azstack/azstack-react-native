@@ -15,12 +15,15 @@ import CustomStyle from './style/';
 import { AZStackCore } from '../core/';
 
 import Event from './handler/event';
+import Member from './handler/member';
 
 import AZStackBaseComponent from './component/AZStackBaseComponent';
 
 export class AZStackSdk extends AZStackBaseComponent {
     constructor(props) {
         super(props);
+        this.subscriptions = {};
+        this.members = [];
         this.state = {
             navigation: []
         };
@@ -46,6 +49,57 @@ export class AZStackSdk extends AZStackBaseComponent {
             EventEmitter: this.EventEmitter
         });
         this.Event.delegatesToEvents();
+
+        this.Member = new Member({
+            AZStackCore: this.AZStackCore
+        });
+    };
+
+    addSubscriptions() {
+        this.subscriptions.onConnected = this.EventEmitter.addListener(this.eventConstants.EVENT_NAME_CONNECT_RETURN, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.initRun();
+        });
+        this.subscriptions.onAutoReconnected = this.EventEmitter.addListener(this.eventConstants.EVENT_NAME_ON_AUTO_RECONNECTED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.initRun();
+        });
+        this.subscriptions.onReconnected = this.EventEmitter.addListener(this.eventConstants.EVENT_NAME_RECONNECT_RETURN, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.initRun();
+        });
+    };
+    clearSubscriptions() {
+        for (let subscriptionName in this.subscriptions) {
+            this.subscriptions[subscriptionName].remove();
+        }
+    };
+
+    getMembers() {
+        if (!this.AZStackCore.slaveSocketConnected) {
+            return;
+        }
+        this.Member.prepareMembers({ rawMembers: this.props.options.members }).then((result) => {
+            this.members = result;
+            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_MEMBERS_CHANGED, { error: null, result });
+        }).catch(() => { });
+    };
+    initRun() {
+        this.getMembers();
+    };
+
+    componentDidMount() {
+        this.addSubscriptions();
+        this.initRun();
+    };
+    componentWillUnmount() {
+        this.clearSubscriptions();
     };
 
     render() {
@@ -61,7 +115,7 @@ export class AZStackSdk extends AZStackBaseComponent {
                 {this.renderScreens()}
             </View>
         );
-    }
+    };
 
     /* AZStack functions */
     connect() {
@@ -76,7 +130,7 @@ export class AZStackSdk extends AZStackBaseComponent {
 
     getConstants(constantGroup) {
         return this.AZStackCore[constantGroup];
-    }
+    };
 
     onCallinStart(error, result) {
         this.navigate(this.getNavigation().OnCallComponent, {
@@ -125,8 +179,7 @@ export class AZStackSdk extends AZStackBaseComponent {
                 });
             }
         });
-    }
-
+    };
     onFreeCallStart(error, result) {
         this.AZStackCore.getUsersInformation({
             userIds: [result.fromUserId]
@@ -227,7 +280,7 @@ export class AZStackSdk extends AZStackBaseComponent {
         }).catch((error) => {
             console.log(error);
         });
-    }
+    };
 
     startCallout(options) {
         this.AZStackCore.startCallout({
@@ -264,8 +317,7 @@ export class AZStackSdk extends AZStackBaseComponent {
         }).catch((error) => {
             Alert.alert("Error", error.message, [{ text: 'OK', onPress: () => { } }]);
         });
-    }
-
+    };
     startAudioCall(options) {
         this.AZStackCore.startFreeCall({
             mediaType: this.AZStackCore.callConstants.CALL_MEDIA_TYPE_AUDIO,
@@ -303,8 +355,7 @@ export class AZStackSdk extends AZStackBaseComponent {
         }).catch((error) => {
             Alert.alert("Error", error.message, [{ text: 'OK', onPress: () => { } }]);
         });
-    }
-
+    };
     startVideoCall(options) {
         this.AZStackCore.startFreeCall({
             mediaType: this.AZStackCore.callConstants.CALL_MEDIA_TYPE_VIDEO,
@@ -352,28 +403,103 @@ export class AZStackSdk extends AZStackBaseComponent {
         }).catch((error) => {
             Alert.alert("Error", error.message, [{ text: 'OK', onPress: () => { } }]);
         });
-    }
+    };
+    startChat(options) {
+        this.navigate(this.getNavigation().ChatComponent, {
+            ...options,
+            onBackButtonPressed: () => {
+                if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                    options.onBackButtonPressed();
+                    return;
+                }
 
-    showNumberPad(options, ) {
+                this.pop();
+            },
+            onChatTargetPressed: (event) => {
+                if (options && typeof options === 'object' && typeof options.onChatTargetPressed === 'function') {
+                    options.onChatTargetPressed(event);
+                    return;
+                }
+
+                if (event.chatType === this.AZStackCore.chatConstants.CHAT_TYPE_USER) {
+                    this.showUser({
+                        userId: event.chatTarget.userId
+                    });
+                } else if (event.chatType === this.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
+                    this.showGroup({
+                        groupId: event.chatTarget.groupId
+                    })
+                }
+            },
+            onSenderPressed: (event) => {
+                if (options && typeof options === 'object' && typeof options.onSenderPressed === 'function') {
+                    options.onSenderPressed(event);
+                    return;
+                }
+
+                this.showUser({
+                    userId: event.userId
+                });
+            },
+            onVoiceCallButtonPressed: (event) => {
+                if (options && typeof options === 'object' && typeof options.onVoiceCallButtonPressed === 'function') {
+                    options.onVoiceCallButtonPressed(event);
+                    return;
+                }
+
+                this.startAudioCall({
+                    info: {
+                        userId: event.userId
+                    }
+                });
+            },
+            onVideoCallButtonPressed: (event) => {
+                if (options && typeof options === 'object' && typeof options.onVideoCallButtonPressed === 'function') {
+                    options.onVideoCallButtonPressed();
+                    return;
+                }
+
+                this.startVideoCall({
+                    info: {
+                        userId: event.userId
+                    }
+                });
+            }
+        });
+    };
+
+    showNumberPad(options) {
         this.navigate(
             this.getNavigation().NumberPadComponent,
             {
                 ...options,
-                onCallout: (options) => {
-                    this.startCallout(options);
-                },
                 onBackButtonPressed: () => {
+                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                        options.onBackButtonPressed();
+                        return;
+                    }
+
                     this.pop();
                 },
+                onCallout: (options) => {
+                    this.startCallout(options);
+                }
             }
         );
-    }
-
+    };
     showContacts(options) {
         this.navigate(
             this.getNavigation().ContactComponent,
             {
                 ...options,
+                onBackButtonPressed: () => {
+                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                        options.onBackButtonPressed();
+                        return;
+                    }
+
+                    this.pop();
+                },
                 onVideoCall: (options) => {
                     this.startVideoCall(options);
                 },
@@ -385,13 +511,20 @@ export class AZStackSdk extends AZStackBaseComponent {
                 },
             }
         );
-    }
-
+    };
     showCallLogs(options) {
         this.navigate(
             this.getNavigation().CallLogsComponent,
             {
                 ...options,
+                onBackButtonPressed: () => {
+                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                        options.onBackButtonPressed();
+                        return;
+                    }
+
+                    this.pop();
+                },
                 onVideoCall: (options) => {
                     this.startVideoCall(options);
                 },
@@ -403,47 +536,132 @@ export class AZStackSdk extends AZStackBaseComponent {
                 },
             }
         );
-    }
-
-    startChat({ chatType, chatId, ...rest }) {
-        this.navigate(this.getNavigation().ChatComponent, { chatType, chatId, ...rest });
-    }
-
+    };
     showConversations(options) {
         this.navigate(this.getNavigation().ConversationsComponent, {
             ...options,
-            onPressConversation: (conversation) => {
-                if (typeof options.onPressConversation === 'function') {
-                    options.onPressConversation();
+            onBackButtonPressed: () => {
+                if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                    options.onBackButtonPressed();
+                    return;
                 }
 
-                if (options.prevenDefault !== true) {
-                    this.navigate(this.getNavigation().ChatComponent, {
-                        chatType: conversation.chatType,
-                        chatId: conversation.chatId,
-                    });
-                }
+                this.pop();
             },
-        });
-    }
+            onConversationPressed: (event) => {
+                if (options && typeof options === 'object' && typeof options.onConversationPressed === 'function') {
+                    options.onConversationPressed(event);
+                    return;
+                }
 
+                this.startChat({
+                    chatType: event.conversation.chatType,
+                    chatId: event.conversation.chatId,
+                });
+            }
+        });
+    };
     showUser(options) {
         this.navigate(this.getNavigation().UserComponent, {
             ...options,
-        });
-    }
+            onBackButtonPressed: () => {
+                if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                    options.onBackButtonPressed();
+                    return;
+                }
 
+                this.pop();
+            },
+            onStartChatButtonPressed: (event) => {
+                if (options && typeof options === 'object' && typeof options.onStartChatButtonPressed === 'function') {
+                    options.onStartChatButtonPressed(event);
+                    return;
+                }
+
+                this.startChat({
+                    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
+                    chatId: event.userId,
+                });
+            },
+            onVoiceCallButtonPressed: (event) => {
+                if (options && typeof options === 'object' && typeof options.onVoiceCallButtonPressed === 'function') {
+                    options.onVoiceCallButtonPressed(event);
+                    return;
+                }
+
+                this.startAudioCall({
+                    info: {
+                        userId: event.userId
+                    }
+                });
+            },
+            onVideoCallButtonPressed: (event) => {
+                if (options && typeof options === 'object' && typeof options.onVideoCallButtonPressed === 'function') {
+                    options.onVideoCallButtonPressed(event);
+                    return;
+                }
+
+                this.startVideoCall({
+                    info: {
+                        userId: event.userId
+                    }
+                });
+            }
+        });
+    };
     showGroup(options) {
         this.navigate(this.getNavigation().GroupComponent, {
             ...options,
+            onBackButtonPressed: () => {
+                if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                    options.onBackButtonPressed();
+                    return;
+                }
+
+                this.pop();
+            },
+            onStartChatButtonPressed: (event) => {
+                if (options && typeof options === 'object' && typeof options.onStartChatButtonPressed === 'function') {
+                    options.onStartChatButtonPressed(event);
+                    return;
+                }
+
+                this.startChat({
+                    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_GROUP,
+                    chatId: event.groupId,
+                });
+            },
+            onMemberPressed: (event) => {
+                if (options && typeof options === 'object' && typeof options.onMemberPressed === 'function') {
+                    options.onMemberPressed(event);
+                    return;
+                }
+
+                if (event.member.userId === this.AZStackCore.authenticatedUser.userId) {
+                    return;
+                }
+
+                this.startChat({
+                    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
+                    chatId: event.member.userId,
+                });
+            }
         });
-    }
+    };
 
     UIContacts(options) {
         return this.renderScreen(
             this.getNavigation().ConversationsComponent,
             {
                 ...options,
+                onBackButtonPressed: () => {
+                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                        options.onBackButtonPressed();
+                        return;
+                    }
+
+                    this.pop();
+                },
                 onVideoCall: (options) => {
                     this.startVideoCall(options);
                 },
@@ -456,35 +674,20 @@ export class AZStackSdk extends AZStackBaseComponent {
             },
             0
         );
-    }
-
-    UIConversations(options) {
-        return this.renderScreen(
-            this.getNavigation().ConversationsComponent,
-            {
-                ...options,
-                onPressConversation: (conversation) => {
-                    if (typeof options.onPressConversation === 'function') {
-                        options.onPressConversation();
-                    }
-
-                    if (options.prevenDefault !== true) {
-                        this.navigate(this.getNavigation().ChatComponent, {
-                            chatType: conversation.chatType,
-                            chatId: conversation.chatId,
-                        });
-                    }
-                },
-            },
-            0
-        );
-    }
-
+    };
     UICallLogs(options) {
         return this.renderScreen(
             this.getNavigation().CallLogsComponent,
             {
                 ...options,
+                onBackButtonPressed: () => {
+                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                        options.onBackButtonPressed();
+                        return;
+                    }
+
+                    this.pop();
+                },
                 onVideoCall: (options) => {
                     this.startVideoCall(options);
                 },
@@ -497,38 +700,211 @@ export class AZStackSdk extends AZStackBaseComponent {
             },
             0
         );
-    }
-
+    };
     UINumberPad(options) {
         return this.renderScreen(
             this.getNavigation().NumberPadComponent,
             {
                 ...options,
+                onBackButtonPressed: () => {
+                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                        options.onBackButtonPressed();
+                        return;
+                    }
+
+                    this.pop();
+                },
                 onCallout: (options) => {
                     this.startCallout(options);
                 },
             },
             0
         );
-    }
+    };
+    UIConversations(options) {
+        return this.renderScreen(
+            this.getNavigation().ConversationsComponent,
+            {
+                ...options,
+                onBackButtonPressed: () => {
+                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                        options.onBackButtonPressed();
+                        return;
+                    }
 
+                    this.pop();
+                },
+                onConversationPressed: (event) => {
+                    if (options && typeof options === 'object' && typeof options.onConversationPressed === 'function') {
+                        options.onConversationPressed(event);
+                        return;
+                    }
+
+                    this.startChat({
+                        chatType: event.conversation.chatType,
+                        chatId: event.conversation.chatId,
+                    });
+                }
+            },
+            0
+        );
+    };
+    UIChat(options) {
+        return this.renderScreen(
+            this.getNavigation().ChatComponent,
+            {
+                ...options,
+                onBackButtonPressed: () => {
+                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                        options.onBackButtonPressed();
+                        return;
+                    }
+
+                    this.pop();
+                },
+                onChatTargetPressed: (event) => {
+                    if (options && typeof options === 'object' && typeof options.onChatTargetPressed === 'function') {
+                        options.onChatTargetPressed(event);
+                        return;
+                    }
+
+                    if (event.chatType === this.AZStackCore.chatConstants.CHAT_TYPE_USER) {
+                        this.showUser({
+                            userId: event.chatTarget.userId
+                        });
+                    } else if (event.chatType === this.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
+                        this.showGroup({
+                            groupId: event.chatTarget.groupId
+                        })
+                    }
+                },
+                onSenderPressed: (event) => {
+                    if (options && typeof options === 'object' && typeof options.onSenderPressed === 'function') {
+                        options.onSenderPressed(event);
+                        return;
+                    }
+
+                    this.showUser({
+                        userId: event.userId
+                    });
+                },
+                onVoiceCallButtonPressed: (event) => {
+                    if (options && typeof options === 'object' && typeof options.onVoiceCallButtonPressed === 'function') {
+                        options.onVoiceCallButtonPressed(event);
+                        return;
+                    }
+
+                    this.startAudioCall({
+                        info: {
+                            userId: event.userId
+                        }
+                    });
+                },
+                onVideoCallButtonPressed: (event) => {
+                    if (options && typeof options === 'object' && typeof options.onVideoCallButtonPressed === 'function') {
+                        options.onVideoCallButtonPressed();
+                        return;
+                    }
+
+                    this.startVideoCall({
+                        info: {
+                            userId: event.userId
+                        }
+                    });
+                }
+            },
+            0
+        );
+    };
     UIUser(options) {
         return this.renderScreen(
             this.getNavigation().UserComponent,
             {
                 ...options,
+                onBackButtonPressed: () => {
+                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                        options.onBackButtonPressed();
+                        return;
+                    }
+
+                    this.pop();
+                },
+                onStartChatButtonPressed: (event) => {
+                    if (options && typeof options === 'object' && typeof options.onStartChatButtonPressed === 'function') {
+                        options.onStartChatButtonPressed(event);
+                        return;
+                    }
+
+                    this.startChat({
+                        chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
+                        chatId: event.userId,
+                    });
+                },
+                onVoiceCallButtonPressed: (event) => {
+                    if (options && typeof options === 'object' && typeof options.onVoiceCallButtonPressed === 'function') {
+                        options.onVoiceCallButtonPressed(event);
+                        return;
+                    }
+
+                    this.startAudioCall({
+                        info: {
+                            userId: event.userId
+                        }
+                    });
+                },
+                onVideoCallButtonPressed: (event) => {
+                    if (options && typeof options === 'object' && typeof options.onVideoCallButtonPressed === 'function') {
+                        options.onVideoCallButtonPressed(event);
+                        return;
+                    }
+
+                    this.startVideoCall({
+                        info: {
+                            userId: event.userId
+                        }
+                    });
+                }
             },
             0
         );
-    }
-
+    };
     UIGroup(options) {
         return this.renderScreen(
             this.getNavigation().GroupComponent,
             {
                 ...options,
+                onBackButtonPressed: () => {
+                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                        options.onBackButtonPressed();
+                        return;
+                    }
+
+                    this.pop();
+                },
+                onStartChatButtonPressed: (event) => {
+                    if (options && typeof options === 'object' && typeof options.onStartChatButtonPressed === 'function') {
+                        options.onStartChatButtonPressed(event);
+                        return;
+                    }
+
+                    this.startChat({
+                        chatType: this.AZStackCore.chatConstants.CHAT_TYPE_GROUP,
+                        chatId: event.groupId,
+                    });
+                },
+                onMemberPressed: (event) => {
+                    if (options && typeof options === 'object' && typeof options.onMemberPressed === 'function') {
+                        options.onMemberPressed(event);
+                        return;
+                    }
+
+                    this.startChat({
+                        chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
+                        chatId: event.member.userId,
+                    });
+                }
             },
             0
         );
-    }
+    };
 };

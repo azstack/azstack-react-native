@@ -15,12 +15,12 @@ class ConversationBlockComponent extends React.Component {
     constructor(props) {
         super(props);
 
-        this.onConversationClicked = this.onConversationClicked.bind(this);
+        this.onConversationPressed = this.onConversationPressed.bind(this);
         this.isConversationOnline = this.isConversationOnline.bind(this);
     };
 
-    onConversationClicked() {
-        this.props.onConversationClicked(this.props.conversation);
+    onConversationPressed() {
+        this.props.onConversationPressed({ conversation: this.props.conversation });
     };
 
     isConversationOnline() {
@@ -42,7 +42,7 @@ class ConversationBlockComponent extends React.Component {
             <TouchableOpacity
                 style={this.props.CustomStyle.getStyle('CONVERSATION_BLOCK_STYLE')}
                 activeOpacity={0.5}
-                onPress={this.onConversationClicked}
+                onPress={this.onConversationPressed}
             >
                 <View
                     style={this.props.CustomStyle.getStyle('CONVERSATION_AVATAR_BLOCK_STYLE')}
