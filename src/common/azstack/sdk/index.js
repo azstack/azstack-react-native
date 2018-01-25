@@ -504,7 +504,7 @@ export class AZStackSdk extends AZStackBaseComponent {
                     return;
                 }
 
-                this.navigate(this.getNavigation().ChatComponent, {
+                this.startChat({
                     chatType: conversation.chatType,
                     chatId: conversation.chatId,
                 });
@@ -628,7 +628,7 @@ export class AZStackSdk extends AZStackBaseComponent {
                         options.onPressConversation();
                     }
 
-                    this.navigate(this.getNavigation().ChatComponent, {
+                    this.startChat({
                         chatType: conversation.chatType,
                         chatId: conversation.chatId,
                     });
