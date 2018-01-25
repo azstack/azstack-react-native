@@ -499,7 +499,7 @@ export class AZStackSdk extends AZStackBaseComponent {
                 this.pop();
             },
             onPressConversation: (conversation) => {
-                if (typeof options.onPressConversation === 'function') {
+                if (options && typeof options === 'object' && typeof options.onPressConversation === 'function') {
                     options.onPressConversation();
                     return;
                 }
@@ -564,33 +564,6 @@ export class AZStackSdk extends AZStackBaseComponent {
             0
         );
     };
-    UIConversations(options) {
-        return this.renderScreen(
-            this.getNavigation().ConversationsComponent,
-            {
-                ...options,
-                onBackButtonPressed: () => {
-                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
-                        options.onBackButtonPressed();
-                        return;
-                    }
-
-                    this.pop();
-                },
-                onPressConversation: (conversation) => {
-                    if (typeof options.onPressConversation === 'function') {
-                        options.onPressConversation();
-                    }
-
-                    this.navigate(this.getNavigation().ChatComponent, {
-                        chatType: conversation.chatType,
-                        chatId: conversation.chatId,
-                    });
-                },
-            },
-            0
-        );
-    };
     UICallLogs(options) {
         return this.renderScreen(
             this.getNavigation().CallLogsComponent,
@@ -633,6 +606,50 @@ export class AZStackSdk extends AZStackBaseComponent {
                 onCallout: (options) => {
                     this.startCallout(options);
                 },
+            },
+            0
+        );
+    };
+    UIConversations(options) {
+        return this.renderScreen(
+            this.getNavigation().ConversationsComponent,
+            {
+                ...options,
+                onBackButtonPressed: () => {
+                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                        options.onBackButtonPressed();
+                        return;
+                    }
+
+                    this.pop();
+                },
+                onPressConversation: (conversation) => {
+                    if (options && typeof options === 'object' && typeof options.onPressConversation === 'function') {
+                        options.onPressConversation();
+                    }
+
+                    this.navigate(this.getNavigation().ChatComponent, {
+                        chatType: conversation.chatType,
+                        chatId: conversation.chatId,
+                    });
+                },
+            },
+            0
+        );
+    };
+    UIChat(options) {
+        return this.renderScreen(
+            this.getNavigation().ChatComponent,
+            {
+                ...options,
+                onBackButtonPressed: () => {
+                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                        options.onBackButtonPressed();
+                        return;
+                    }
+
+                    this.pop();
+                }
             },
             0
         );
