@@ -14,31 +14,34 @@ class Event {
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED] = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_AUTO_RECONNECTED, { error, result });
         };
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_RECONNECT_RETURN] = (error, result) => {
+            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_RECONNECT_RETURN, { error, result });
+        };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_DISCONNECTED] = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_DISCONNECTED, { error, result });
         };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_FREE_CALL_STAUTUS_CHANGED] = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_FREE_CALL_STATUS_CHANGED, { error, result });
         };
-        this.AZStackCore.Delegates.onFreeCallStatusChangedByMe = (error, result) => {
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_FREE_CALL_STAUTUS_CHANGED_BY_ME] = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_FREE_CALL_STATUS_CHANGED_BY_ME, { error, result });
         };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_CALLIN_STATUS_CHANGED] = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_CALLIN_STATUS_CHANGED, { error, result });
         };
-        this.AZStackCore.Delegates.onCallinStatusChangedByMe = (error, result) => {
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_CALLIN_STATUS_CHANGED_BY_ME] = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_CALLIN_STATUS_CHANGED_BY_ME, { error, result });
         };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_CALLOUT_STAUTUS_CHANGED] = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_CALLOUT_STATUS_CHANGED, { error, result });
         };
-        this.AZStackCore.Delegates.onLocalStreamArrived = (error, result) => {
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_LOCAL_STREAM_ARRIVED] = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_LOCAL_STREAM_ARRIVED, { error, result });
         };
-        this.AZStackCore.Delegates.onRemoteStreamArrived = (error, result) => {
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_REMOTE_STREAM_ARRIVED] = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_REMOTE_STREAM_ARRIVED, { error, result });
         };
-        this.AZStackCore.Delegates.onSwitchCameraTypeReturn = (error, result) => {
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_SWITCH_CAMERA_TYPE_RETURN] = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_SWITCH_CAMERA_TYPE_RETURN, { error, result });
         };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_TYPING] = (error, result) => {

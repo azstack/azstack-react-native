@@ -33,19 +33,16 @@ class ChatHeaderComponent extends React.Component {
             <View
                 style={this.props.CustomStyle.getStyle('CHAT_HEADER_BLOCK_STYLE')}
             >
-                <View
+                <TouchableOpacity
                     style={this.props.CustomStyle.getStyle('CHAT_HEADER_BACK_BUTTON_STYLE')}
+                    activeOpacity={0.5}
+                    onPress={this.props.onBackButtonPressed}
                 >
-                    <TouchableOpacity
-                        activeOpacity={0.5}
-                        onPress={this.props.onBackButtonPressed}
-                    >
-                        <Image
-                            style={this.props.CustomStyle.getStyle('CHAT_HEADER_BACK_BUTTON_IMAGE_STYLE')}
-                            source={this.props.CustomStyle.getImage('IMAGE_BACK')}
-                        />
-                    </TouchableOpacity>
-                </View>
+                    <Image
+                        style={this.props.CustomStyle.getStyle('CHAT_HEADER_BACK_BUTTON_IMAGE_STYLE')}
+                        source={this.props.CustomStyle.getImage('IMAGE_BACK')}
+                    />
+                </TouchableOpacity>
                 <View
                     style={this.props.CustomStyle.getStyle('CHAT_HEADER_INFO_BLOCK_STYLE')}
                 >
@@ -105,6 +102,34 @@ class ChatHeaderComponent extends React.Component {
                         }
                     </View>
                 </View>
+                {
+                    this.props.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER && (
+                        <TouchableOpacity
+                            style={this.props.CustomStyle.getStyle('CHAT_HEADER_ACTION_BUTTON_STYLE')}
+                            activeOpacity={0.5}
+                            onPress={() => { }}
+                        >
+                            <Image
+                                style={this.props.CustomStyle.getStyle('CHAT_HEADER_ACTION_BUTTON_IMAGE_STYLE')}
+                                source={this.props.CustomStyle.getImage('IMAGE_VOICE_CALL')}
+                            />
+                        </TouchableOpacity>
+                    )
+                }
+                {
+                    this.props.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER && (
+                        <TouchableOpacity
+                            style={this.props.CustomStyle.getStyle('CHAT_HEADER_ACTION_BUTTON_STYLE')}
+                            activeOpacity={0.5}
+                            onPress={() => { }}
+                        >
+                            <Image
+                                style={this.props.CustomStyle.getStyle('CHAT_HEADER_ACTION_BUTTON_IMAGE_STYLE')}
+                                source={this.props.CustomStyle.getImage('IMAGE_VIDEO_CALL')}
+                            />
+                        </TouchableOpacity>
+                    )
+                }
             </View>
         );
     };
