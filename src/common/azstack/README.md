@@ -2389,6 +2389,7 @@ this.AZStackCore.getDetailsGroup({
 >   - azStackUserId: unique string of user
 >   - fullname: fullname of user
 >   - status: status of user
+>   - lastVisitDate: last visit date of user
 
 #### 3.9.2.2. Get groups list
 

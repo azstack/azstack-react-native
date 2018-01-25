@@ -1,6 +1,10 @@
 import React from 'react';
 import {
-
+    View,
+    Text,
+    TouchableOpacity,
+    Image,
+    FlatList
 } from 'react-native';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
@@ -8,6 +12,8 @@ import ScreenHeaderBlockComponent from './part/screen/ScreenHeaderBlockComponent
 import ScreenBodyBlockComponent from './part/screen/ScreenBodyBlockComponent';
 import EmptyBlockComponent from './part/common/EmptyBlockComponent';
 import ConnectionBlockComponent from './part/common/ConnectionBlockComponent';
+import ChatAvatarBlockComponent from './part/common/ChatAvatarBlockComponent';
+import GroupMemberBlockComponent from './part/group/GroupMemberBlockComponent';
 
 class GroupComponent extends React.Component {
     constructor(props) {
@@ -20,6 +26,12 @@ class GroupComponent extends React.Component {
             group: null,
             members: this.props.members
         };
+
+        this.onStartChatButtonPressed = this.onStartChatButtonPressed.bind(this);
+        this.onEditNameButtonPressed = this.onEditNameButtonPressed.bind(this);
+        this.onAddMemberButtonPressed = this.onAddMemberButtonPressed.bind(this);
+        this.onLeaveGroupButtonPressed = this.onLeaveGroupButtonPressed.bind(this);
+        this.onKickButtonPressed = this.onKickButtonPressed.bind(this);
     };
 
     addSubscriptions() {
@@ -61,6 +73,13 @@ class GroupComponent extends React.Component {
         this.props.AZStackCore.getDetailsGroup({
             groupId: this.props.groupId
         }).then((result) => {
+            result.members.sort((a, b) => {
+                if (a.userId === this.props.AZStackCore.authenticatedUser.userId) {
+                    return -1;
+                } else {
+                    return a.fullname > b.fullname ? 1 : -1;
+                }
+            });
             this.setState({ group: result });
         }).catch((error) => { });
     };
@@ -68,6 +87,16 @@ class GroupComponent extends React.Component {
         this.state.group = null;
         this.getGroup();
     };
+
+    onStartChatButtonPressed() {
+        this.props.onStartChatButtonPressed({
+            groupId: this.props.groupId
+        });
+    };
+    onEditNameButtonPressed() { };
+    onAddMemberButtonPressed() { };
+    onLeaveGroupButtonPressed() { };
+    onKickButtonPressed(event) { };
 
     componentDidMount() {
         this.addSubscriptions();
@@ -94,10 +123,117 @@ class GroupComponent extends React.Component {
                     style={this.props.contentContainerStyle}
                 >
                     {
-                        !this.state.user && <EmptyBlockComponent
+                        !this.state.group && <EmptyBlockComponent
                             CustomStyle={this.props.CustomStyle}
                             emptyText={this.props.Language.getText('GROUP_EMPTY_TEXT')}
                         />
+                    }
+                    {
+                        !!this.state.group && (
+                            <View
+                                style={this.props.CustomStyle.getStyle('GROUP_BLOCK_STYLE')}
+                            >
+                                <View
+                                    style={this.props.CustomStyle.getStyle('GROUP_AVATAR_BLOCK_STYLE')}
+                                >
+                                    <ChatAvatarBlockComponent
+                                        CustomStyle={this.props.CustomStyle}
+                                        chatType={this.props.AZStackCore.chatConstants.CHAT_TYPE_GROUP}
+                                        chatTarget={this.state.group}
+                                        textStyle={this.props.CustomStyle.getStyle('GROUP_AVATAR_TEXT_STYLE')}
+                                    />
+                                </View>
+                                <Text
+                                    style={this.props.CustomStyle.getStyle('GROUP_NAME_TEXT_STYLE')}
+                                >
+                                    {this.state.group.name}
+                                </Text>
+                                <Text
+                                    style={this.props.CustomStyle.getStyle('GROUP_MEMBERS_TEXT_STYLE')}
+                                >
+                                    {`${this.state.group.members.length} `}
+                                    {this.props.Language.getText(this.state.group.members.length > 1 ? 'GROUP_MEMBER_MANY_TEXT' : 'GROUP_MEMBER_TEXT')}
+                                </Text>
+                                <View
+                                    style={this.props.CustomStyle.getStyle('GROUP_ACTION_BLOCK_STYLE')}
+                                >
+                                    <TouchableOpacity
+                                        style={this.props.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
+                                        activeOpacity={0.5}
+                                        onPress={this.onStartChatButtonPressed}
+                                    >
+                                        <Image
+                                            style={this.props.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
+                                            source={this.props.CustomStyle.getImage('IMAGE_START_CHAT')}
+                                        />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={this.props.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
+                                        activeOpacity={0.5}
+                                        onPress={this.onEditNameButtonPressed}
+                                    >
+                                        <Image
+                                            style={this.props.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
+                                            source={this.props.CustomStyle.getImage('IMAGE_PENCIL')}
+                                        />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={this.props.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
+                                        activeOpacity={0.5}
+                                        onPress={this.onAddMemberButtonPressed}
+                                    >
+                                        <Image
+                                            style={this.props.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
+                                            source={this.props.CustomStyle.getImage('IMAGE_ADD_MEMBER')}
+                                        />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={this.props.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
+                                        activeOpacity={0.5}
+                                        onPress={this.onLeaveGroupButtonPressed}
+                                    >
+                                        <Image
+                                            style={this.props.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
+                                            source={this.props.CustomStyle.getImage('IMAGE_LEAVE')}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                                <View
+                                    style={this.props.CustomStyle.getStyle('GROUP_MEMBERS_BLOCK_STYLE')}
+                                >
+                                    {
+                                        this.state.group.members.length === 0 && (
+                                            <EmptyBlockComponent
+                                                CustomStyle={this.props.CustomStyle}
+                                                emptyText={this.props.Language.getText('GROUP_MEMBER_EMPTY_TEXT')}
+                                            />
+                                        )
+                                    }
+                                    {
+                                        this.state.group.members.length > 0 && (
+                                            <FlatList
+                                                style={this.props.CustomStyle.getStyle('GROUP_MEMBERS_LIST_BLOCK_STYLE')}
+                                                data={this.state.group.members}
+                                                keyExtractor={(item, index) => ('group_member_' + item.userId)}
+                                                renderItem={({ item }) => {
+                                                    return (
+                                                        <GroupMemberBlockComponent
+                                                            Language={this.props.Language}
+                                                            CustomStyle={this.props.CustomStyle}
+                                                            AZStackCore={this.props.AZStackCore}
+                                                            member={item}
+                                                            adminId={this.state.group.adminId}
+                                                            onMemberPressed={this.props.onMemberPressed}
+                                                            onKickButtonPressed={this.onKickButtonPressed}
+                                                        />
+                                                    );
+                                                }}
+                                            />
+                                        )
+                                    }
+                                </View>
+                            </View>
+                        )
                     }
                     <ConnectionBlockComponent
                         Language={this.props.Language}

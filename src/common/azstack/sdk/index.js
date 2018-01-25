@@ -619,6 +619,32 @@ export class AZStackSdk extends AZStackBaseComponent {
                 }
 
                 this.pop();
+            },
+            onStartChatButtonPressed: (event) => {
+                if (options && typeof options === 'object' && typeof options.onStartChatButtonPressed === 'function') {
+                    options.onStartChatButtonPressed(event);
+                    return;
+                }
+
+                this.startChat({
+                    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_GROUP,
+                    chatId: event.groupId,
+                });
+            },
+            onMemberPressed: (event) => {
+                if (options && typeof options === 'object' && typeof options.onMemberPressed === 'function') {
+                    options.onMemberPressed(event);
+                    return;
+                }
+
+                if (event.member.userId === this.AZStackCore.authenticatedUser.userId) {
+                    return;
+                }
+
+                this.startChat({
+                    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
+                    chatId: event.member.userId,
+                });
             }
         });
     };
@@ -854,6 +880,28 @@ export class AZStackSdk extends AZStackBaseComponent {
                     }
 
                     this.pop();
+                },
+                onStartChatButtonPressed: (event) => {
+                    if (options && typeof options === 'object' && typeof options.onStartChatButtonPressed === 'function') {
+                        options.onStartChatButtonPressed(event);
+                        return;
+                    }
+
+                    this.startChat({
+                        chatType: this.AZStackCore.chatConstants.CHAT_TYPE_GROUP,
+                        chatId: event.groupId,
+                    });
+                },
+                onMemberPressed: (event) => {
+                    if (options && typeof options === 'object' && typeof options.onMemberPressed === 'function') {
+                        options.onMemberPressed(event);
+                        return;
+                    }
+
+                    this.startChat({
+                        chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
+                        chatId: event.member.userId,
+                    });
                 }
             },
             0
