@@ -700,6 +700,56 @@ export class AZStackSdk extends AZStackBaseComponent {
                     }
 
                     this.pop();
+                },
+                onChatTargetPressed: (event) => {
+                    if (options && typeof options === 'object' && typeof options.onChatTargetPressed === 'function') {
+                        options.onChatTargetPressed(event);
+                        return;
+                    }
+
+                    if (event.chatType === this.AZStackCore.chatConstants.CHAT_TYPE_USER) {
+                        this.showUser({
+                            userId: event.chatTarget.userId
+                        });
+                    } else if (event.chatType === this.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
+                        this.showGroup({
+                            groupId: event.chatTarget.groupId
+                        })
+                    }
+                },
+                onSenderPressed: (event) => {
+                    if (options && typeof options === 'object' && typeof options.onSenderPressed === 'function') {
+                        options.onSenderPressed(event);
+                        return;
+                    }
+
+                    this.showUser({
+                        userId: event.userId
+                    });
+                },
+                onVoiceCallButtonPressed: (event) => {
+                    if (options && typeof options === 'object' && typeof options.onVoiceCallButtonPressed === 'function') {
+                        options.onVoiceCallButtonPressed(event);
+                        return;
+                    }
+
+                    this.startAudioCall({
+                        info: {
+                            userId: event.userId
+                        }
+                    });
+                },
+                onVideoCallButtonPressed: (event) => {
+                    if (options && typeof options === 'object' && typeof options.onVideoCallButtonPressed === 'function') {
+                        options.onVideoCallButtonPressed();
+                        return;
+                    }
+
+                    this.startVideoCall({
+                        info: {
+                            userId: event.userId
+                        }
+                    });
                 }
             },
             0
