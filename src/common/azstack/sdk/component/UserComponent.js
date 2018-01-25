@@ -24,6 +24,10 @@ class UserComponent extends React.Component {
         this.state = {
             user: null
         };
+
+        this.onStartChatButtonPressed = this.onStartChatButtonPressed.bind(this);
+        this.onVoiceCallButtonPressed = this.onVoiceCallButtonPressed.bind(this);
+        this.onVideoCallButtonPressed = this.onVideoCallButtonPressed.bind(this);
     };
 
     addSubscriptions() {
@@ -65,6 +69,22 @@ class UserComponent extends React.Component {
         }).catch((error) => { });
     };
 
+    onStartChatButtonPressed() {
+        this.props.onStartChatButtonPressed({
+            userId: this.props.userId
+        });
+    };
+    onVoiceCallButtonPressed() {
+        this.props.onVoiceCallButtonPressed({
+            userId: this.props.userId
+        });
+    };
+    onVideoCallButtonPressed() {
+        this.props.onVideoCallButtonPressed({
+            userId: this.props.userId
+        });
+    };
+
     componentDidMount() {
         this.addSubscriptions();
         this.initRun();
@@ -72,7 +92,7 @@ class UserComponent extends React.Component {
     componentWillUnmount() {
         this.clearSubscriptions();
     };
-    
+
     render() {
         return (
             <ScreenBlockComponent
@@ -145,7 +165,7 @@ class UserComponent extends React.Component {
                                     <TouchableOpacity
                                         style={this.props.CustomStyle.getStyle('USER_ACTION_BUTTON_STYLE')}
                                         activeOpacity={0.5}
-                                        onPress={() => { }}
+                                        onPress={this.onStartChatButtonPressed}
                                     >
                                         <Image
                                             style={this.props.CustomStyle.getStyle('USER_ACTION_BUTTON_IMAGE_STYLE')}
@@ -155,7 +175,7 @@ class UserComponent extends React.Component {
                                     <TouchableOpacity
                                         style={this.props.CustomStyle.getStyle('USER_ACTION_BUTTON_STYLE')}
                                         activeOpacity={0.5}
-                                        onPress={() => { }}
+                                        onPress={this.onVoiceCallButtonPressed}
                                     >
                                         <Image
                                             style={this.props.CustomStyle.getStyle('USER_ACTION_BUTTON_IMAGE_STYLE')}
@@ -165,7 +185,7 @@ class UserComponent extends React.Component {
                                     <TouchableOpacity
                                         style={this.props.CustomStyle.getStyle('USER_ACTION_BUTTON_STYLE')}
                                         activeOpacity={0.5}
-                                        onPress={() => { }}
+                                        onPress={this.onVideoCallButtonPressed}
                                     >
                                         <Image
                                             style={this.props.CustomStyle.getStyle('USER_ACTION_BUTTON_IMAGE_STYLE')}

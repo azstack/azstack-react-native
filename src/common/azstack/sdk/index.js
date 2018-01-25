@@ -571,6 +571,41 @@ export class AZStackSdk extends AZStackBaseComponent {
                 }
 
                 this.pop();
+            },
+            onStartChatButtonPressed: (event) => {
+                if (options && typeof options === 'object' && typeof options.onStartChatButtonPressed === 'function') {
+                    options.onStartChatButtonPressed(event);
+                    return;
+                }
+
+                this.startChat({
+                    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
+                    chatId: event.userId,
+                });
+            },
+            onVoiceCallButtonPressed: (event) => {
+                if (options && typeof options === 'object' && typeof options.onVoiceCallButtonPressed === 'function') {
+                    options.onVoiceCallButtonPressed(event);
+                    return;
+                }
+
+                this.startAudioCall({
+                    info: {
+                        userId: event.userId
+                    }
+                });
+            },
+            onVideoCallButtonPressed: (event) => {
+                if (options && typeof options === 'object' && typeof options.onVideoCallButtonPressed === 'function') {
+                    options.onVideoCallButtonPressed(event);
+                    return;
+                }
+
+                this.startVideoCall({
+                    info: {
+                        userId: event.userId
+                    }
+                });
             }
         });
     };
@@ -767,6 +802,41 @@ export class AZStackSdk extends AZStackBaseComponent {
                     }
 
                     this.pop();
+                },
+                onStartChatButtonPressed: (event) => {
+                    if (options && typeof options === 'object' && typeof options.onStartChatButtonPressed === 'function') {
+                        options.onStartChatButtonPressed(event);
+                        return;
+                    }
+
+                    this.startChat({
+                        chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
+                        chatId: event.userId,
+                    });
+                },
+                onVoiceCallButtonPressed: (event) => {
+                    if (options && typeof options === 'object' && typeof options.onVoiceCallButtonPressed === 'function') {
+                        options.onVoiceCallButtonPressed(event);
+                        return;
+                    }
+
+                    this.startAudioCall({
+                        info: {
+                            userId: event.userId
+                        }
+                    });
+                },
+                onVideoCallButtonPressed: (event) => {
+                    if (options && typeof options === 'object' && typeof options.onVideoCallButtonPressed === 'function') {
+                        options.onVideoCallButtonPressed(event);
+                        return;
+                    }
+
+                    this.startVideoCall({
+                        info: {
+                            userId: event.userId
+                        }
+                    });
                 }
             },
             0
