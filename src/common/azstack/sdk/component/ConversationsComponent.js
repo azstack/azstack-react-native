@@ -777,7 +777,7 @@ class ConversationsComponent extends React.Component {
                 CustomStyle={this.props.CustomStyle}
                 style={this.props.style}
             >
-                {this.props.hidden !== 'hidden' && <ScreenHeaderBlockComponent
+                {this.props.header !== 'hidden' && <ScreenHeaderBlockComponent
                     CustomStyle={this.props.CustomStyle}
                     onBackButtonPressed={this.props.onBackButtonPressed}
                     title={this.props.Language.getText('CONVERSATIONS_HEADER_TITLE_TEXT')}

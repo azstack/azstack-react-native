@@ -72,11 +72,13 @@ class NumberPadComponent extends React.Component {
 						<View style={{ alignItems: 'flex-end'}}>
 							<Text style={{fontSize: this.state.phoneNumber.length <= 10 ? 40 : this.state.phoneNumber.length <= 13 ? 30 : 20 }}>{this.state.phoneNumber}</Text>
 						</View>
-						<TouchableOpacity onPress={() => this.onClear()}>
-							<View style={{justifyContent: 'center', alignItems: 'flex-end', width: 40, height: 50}}>
-								<Image source={ic_input_back} style={{width: 25, height: 19}} />
-							</View>
-						</TouchableOpacity>
+						{
+							this.state.phoneNumber != '' && <TouchableOpacity onPress={() => this.onClear()}>
+								<View style={{justifyContent: 'center', alignItems: 'flex-end', width: 40, height: 50}}>
+									<Image source={ic_input_back} style={{width: 25, height: 19}} />
+								</View>
+							</TouchableOpacity>
+						}
 					</View>
 					<View style={{width: width, justifyContent: 'center', alignItems: 'center'}}>
 						<View style={{width: 270, alignSelf: 'center'}}>
