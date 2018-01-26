@@ -186,14 +186,14 @@ export const MESSAGE_STATUS_BLOCK_SENDING_STYLE = {
     borderColor: '#BFBFBF'
 };
 export const MESSAGE_STATUS_BLOCK_SENT_STYLE = {
-    borderColor: '#BFBFBF'
-};
-export const MESSAGE_STATUS_BLOCK_DELIVERED_STYLE = {
     borderColor: '#F2784B'
 };
-export const MESSAGE_STATUS_BLOCK_SEEN_STYLE = {
+export const MESSAGE_STATUS_BLOCK_DELIVERED_STYLE = {
     borderColor: '#F2784B',
     backgroundColor: '#F2784B'
+};
+export const MESSAGE_STATUS_BLOCK_SEEN_STYLE = {
+    borderColor: '#fff'
 };
 export const MESSAGE_STATUS_TEXT_STYLE = {
     fontSize: 12,
@@ -203,10 +203,10 @@ export const MESSAGE_STATUS_TEXT_SENDING_STYLE = {
     color: '#fff'
 };
 export const MESSAGE_STATUS_TEXT_SENT_STYLE = {
-    color: '#BFBFBF'
+    color: '#F2784B'
 };
 export const MESSAGE_STATUS_TEXT_DELIVERED_STYLE = {
-    color: '#F2784B'
+    color: '#fff'
 };
 export const MESSAGE_STATUS_TEXT_SEEN_STYLE = {
     color: '#fff'
@@ -607,12 +607,6 @@ export const MESSAGE_TYPE_ACTION_TEXT_STYLE = {
 export const MESSAGE_TYPE_ACTION_BOLD_TEXT_STYLE = {
     fontWeight: '500'
 };
-export const MESSAGE_TYPE_ACTION_TIME_TEXT_STYLE = {
-    fontSize: 12,
-    lineHeight: 20,
-    fontWeight: '400',
-    color: '#95A5A6'
-};
 export const MESSAGE_TYPE_MEDIA_BLOCK_STYLE = {};
 export const MESSAGE_TYPE_MEDIA_SENDER_BLOCK_STYLE = {
     flexDirection: 'row',
@@ -724,7 +718,7 @@ export const MESSAGE_TYPE_MEDIA_FILE_IMAGE_STYLE = {
     width: 200,
     height: 200
 };
-export const MESSAGE_TYPE_MEDIA_TIME_TEXT_STYLE = {
+export const MESSAGE_TYPE_MEDIA_DETAILS_STATUS_TEXT_STYLE = {
     marginHorizontal: 5,
     fontSize: 12,
     lineHeight: 20,
@@ -732,6 +726,7 @@ export const MESSAGE_TYPE_MEDIA_TIME_TEXT_STYLE = {
     color: '#95A5A6'
 };
 export const MESSAGE_TYPE_MEDIA_STATUS_BLOCK_STYLE = {
+    marginHorizontal: 5,
     width: 15,
     height: 15
 };

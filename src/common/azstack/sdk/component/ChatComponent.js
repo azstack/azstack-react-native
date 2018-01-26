@@ -1070,7 +1070,9 @@ class ChatComponent extends React.Component {
                                     <MessageBlockComponent
                                         Language={this.props.Language}
                                         CustomStyle={this.props.CustomStyle}
+                                        eventConstants={this.props.eventConstants}
                                         AZStackCore={this.props.AZStackCore}
+                                        EventEmitter={this.props.EventEmitter}
                                         message={item}
                                         shouldRenderTimeMark={this.shouldRenderTimeMark(index)}
                                         shouldRenderSender={this.shouldRenderSender(index)}

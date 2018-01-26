@@ -49,7 +49,7 @@ class ConversationLastMessageBlockComponent extends React.Component {
                                 }
                             </Text>
                             <Text>
-                                {`[ ${this.props.Language.getText('MESSAGE_STATUS_CANCEL_TEXT')} ]`}
+                                {`[ ${this.props.Language.getText('MESSAGE_STATUS_CANCELED_TEXT')} ]`}
                             </Text>
                         </Text>
                     )

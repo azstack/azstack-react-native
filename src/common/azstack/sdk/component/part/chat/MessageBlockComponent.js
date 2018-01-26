@@ -24,7 +24,31 @@ class MessageBlockComponent extends React.Component {
             }
         };
 
+        this.subscriptions = {};
+
+        this.state = {
+            showDetails: false
+        };
+
+        this.toggleMessageDetails = this.toggleMessageDetails.bind(this);
         this.onSenderPressed = this.onSenderPressed.bind(this);
+    };
+
+    addSubscriptions() {
+        this.subscriptions.onMessageDetailsShowed = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_MESSAGE_DETAILS_SHOWED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+
+            if (result.msgId !== this.props.message.msgId) {
+                this.setState({ showDetails: false });
+            }
+        });
+    };
+    clearSubscriptions() {
+        for (let subscriptionName in this.subscriptions) {
+            this.subscriptions[subscriptionName].remove();
+        }
     };
 
     toTimeString(date) {
@@ -107,24 +131,55 @@ class MessageBlockComponent extends React.Component {
         }
         return returnSizes;
     };
+    getMessageStatusText(status) {
+        switch (status) {
+            case this.props.AZStackCore.chatConstants.MESSAGE_STATUS_SENDING:
+                return this.props.Language.getText('MESSAGE_STATUS_SENDING_TEXT');
+            case this.props.AZStackCore.chatConstants.MESSAGE_STATUS_SENT:
+                return this.props.Language.getText('MESSAGE_STATUS_SENT_TEXT');
+            case this.props.AZStackCore.chatConstants.MESSAGE_STATUS_DELIVERED:
+                return this.props.Language.getText('MESSAGE_STATUS_DELIVERED_TEXT');
+            case this.props.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN:
+                return this.props.Language.getText('MESSAGE_STATUS_SEEN_TEXT');
+            case this.props.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED:
+                return this.props.Language.getText('MESSAGE_STATUS_CANCELED_TEXT');
+            default:
+                return '';
+        }
+    };
 
+    toggleMessageDetails() {
+        if (!this.state.showDetails) {
+            this.props.EventEmitter.emit(this.props.eventConstants.EVENT_NAME_ON_MESSAGE_DETAILS_SHOWED, { error: null, result: { msgId: this.props.message.msgId } });
+        }
+        this.setState({ showDetails: !this.state.showDetails });
+    };
     onSenderPressed() {
         this.props.onSenderPressed({
             userId: this.props.message.sender.userId
         });
     };
 
+    componentDidMount() {
+        this.addSubscriptions();
+    };
+    componentWillUnmount() {
+        this.clearSubscriptions();
+    };
+
     render() {
         return (
-            <View
+            <TouchableOpacity
                 style={this.props.CustomStyle.getStyle('MESSAGE_BLOCK_STYLE')}
+                activeOpacity={0.5}
+                onPress={this.toggleMessageDetails}
             >
                 {
-                    this.props.shouldRenderTimeMark && (
+                    (this.props.shouldRenderTimeMark || this.state.showDetails) && (
                         <Text
                             style={this.props.CustomStyle.getStyle('MESSAGE_TIME_MARK_TEXT_STYLE')}
                         >
-                            {this.toDayString(this.props.message.created)}
+                            {`${this.toDayString(this.props.message.created)} ${this.toTimeString(this.props.message.created)}`}
                         </Text>
                     )
                 }
@@ -280,11 +335,6 @@ class MessageBlockComponent extends React.Component {
                                     </Text>
                                 )
                             }
-                            <Text
-                                style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_ACTION_TIME_TEXT_STYLE')}
-                            >
-                                {` ${this.toTimeString(this.props.message.created)}`}
-                            </Text>
                         </Text>
                     )
                 }
@@ -330,6 +380,17 @@ class MessageBlockComponent extends React.Component {
                                 ]}
                             >
                                 {
+                                    this.props.message.sender.userId === this.props.AZStackCore.authenticatedUser.userId &&
+                                    this.props.message.status !== this.props.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED &&
+                                    this.state.showDetails && (
+                                        <Text
+                                            style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_DETAILS_STATUS_TEXT_STYLE')}
+                                        >
+                                            {this.getMessageStatusText(this.props.message.status)}
+                                        </Text>
+                                    )
+                                }
+                                {
                                     this.props.message.status !== this.props.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED &&
                                     this.props.message.sender.userId === this.props.AZStackCore.authenticatedUser.userId && (
                                         <View
@@ -345,20 +406,11 @@ class MessageBlockComponent extends React.Component {
                                     )
                                 }
                                 {
-                                    this.props.message.sender.userId === this.props.AZStackCore.authenticatedUser.userId && (
-                                        <Text
-                                            style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_TIME_TEXT_STYLE')}
-                                        >
-                                            {this.toTimeString(this.props.message.created)}
-                                        </Text>
-                                    )
-                                }
-                                {
                                     this.props.message.status === this.props.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED && (
                                         <Text
                                             style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_CANCELED_STYLE')}
                                         >
-                                            {`[${this.props.Language.getText('MESSAGE_STATUS_CANCEL_TEXT')}]`}
+                                            {`[${this.props.Language.getText('MESSAGE_STATUS_CANCELED_TEXT')}]`}
                                         </Text>
                                     )
                                 }
@@ -463,11 +515,13 @@ class MessageBlockComponent extends React.Component {
                                     )
                                 }
                                 {
-                                    this.props.message.sender.userId !== this.props.AZStackCore.authenticatedUser.userId && (
+                                    this.props.message.sender.userId !== this.props.AZStackCore.authenticatedUser.userId &&
+                                    this.props.message.status !== this.props.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED &&
+                                    this.state.showDetails && (
                                         <Text
-                                            style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_TIME_TEXT_STYLE')}
+                                            style={this.props.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_DETAILS_STATUS_TEXT_STYLE')}
                                         >
-                                            {this.toTimeString(this.props.message.created)}
+                                            {this.getMessageStatusText(this.props.message.status)}
                                         </Text>
                                     )
                                 }
@@ -475,7 +529,7 @@ class MessageBlockComponent extends React.Component {
                         </View>
                     )
                 }
-            </View>
+            </TouchableOpacity>
         );
     };
 };
