@@ -31,7 +31,8 @@ class GroupComponent extends React.Component {
         this.onEditNameButtonPressed = this.onEditNameButtonPressed.bind(this);
         this.onAddMemberButtonPressed = this.onAddMemberButtonPressed.bind(this);
         this.onLeaveGroupButtonPressed = this.onLeaveGroupButtonPressed.bind(this);
-        this.onKickButtonPressed = this.onKickButtonPressed.bind(this);
+        this.onChangeAdminButtonPressed = this.onChangeAdminButtonPressed.bind(this);
+        this.onKickMemberButtonPressed = this.onKickMemberButtonPressed.bind(this);
     };
 
     addSubscriptions() {
@@ -134,7 +135,8 @@ class GroupComponent extends React.Component {
     onEditNameButtonPressed() { };
     onAddMemberButtonPressed() { };
     onLeaveGroupButtonPressed() { };
-    onKickButtonPressed(event) { };
+    onChangeAdminButtonPressed(event) { };
+    onKickMemberButtonPressed(event) { };
 
     onGroupInvited(newMessage) {
         if (newMessage.chatId !== this.props.groupId) {
@@ -288,69 +290,82 @@ class GroupComponent extends React.Component {
                                 style={this.props.CustomStyle.getStyle('GROUP_BLOCK_STYLE')}
                             >
                                 <View
-                                    style={this.props.CustomStyle.getStyle('GROUP_AVATAR_BLOCK_STYLE')}
+                                    style={this.props.CustomStyle.getStyle('GROUP_INFO_BLOCK_STYLE')}
                                 >
-                                    <ChatAvatarBlockComponent
-                                        CustomStyle={this.props.CustomStyle}
-                                        chatType={this.props.AZStackCore.chatConstants.CHAT_TYPE_GROUP}
-                                        chatTarget={this.state.group}
-                                        textStyle={this.props.CustomStyle.getStyle('GROUP_AVATAR_TEXT_STYLE')}
-                                    />
-                                </View>
-                                <Text
-                                    style={this.props.CustomStyle.getStyle('GROUP_NAME_TEXT_STYLE')}
-                                >
-                                    {this.state.group.name}
-                                </Text>
-                                <Text
-                                    style={this.props.CustomStyle.getStyle('GROUP_MEMBERS_TEXT_STYLE')}
-                                >
-                                    {`${this.state.group.members.length} `}
-                                    {this.props.Language.getText(this.state.group.members.length > 1 ? 'GROUP_MEMBER_MANY_TEXT' : 'GROUP_MEMBER_TEXT')}
-                                </Text>
-                                <View
-                                    style={this.props.CustomStyle.getStyle('GROUP_ACTION_BLOCK_STYLE')}
-                                >
-                                    <TouchableOpacity
-                                        style={this.props.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
-                                        activeOpacity={0.5}
-                                        onPress={this.onStartChatButtonPressed}
+                                    <View
+                                        style={this.props.CustomStyle.getStyle('GROUP_AVATAR_BLOCK_STYLE')}
                                     >
-                                        <Image
-                                            style={this.props.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
-                                            source={this.props.CustomStyle.getImage('IMAGE_START_CHAT')}
+                                        <ChatAvatarBlockComponent
+                                            CustomStyle={this.props.CustomStyle}
+                                            chatType={this.props.AZStackCore.chatConstants.CHAT_TYPE_GROUP}
+                                            chatTarget={this.state.group}
+                                            textStyle={this.props.CustomStyle.getStyle('GROUP_AVATAR_TEXT_STYLE')}
                                         />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        style={this.props.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
-                                        activeOpacity={0.5}
-                                        onPress={this.onEditNameButtonPressed}
+                                    </View>
+                                    <View
+                                        style={this.props.CustomStyle.getStyle('GROUP_DETAILS_BLOCK_STYLE')}
                                     >
-                                        <Image
-                                            style={this.props.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
-                                            source={this.props.CustomStyle.getImage('IMAGE_PENCIL')}
-                                        />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        style={this.props.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
-                                        activeOpacity={0.5}
-                                        onPress={this.onAddMemberButtonPressed}
-                                    >
-                                        <Image
-                                            style={this.props.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
-                                            source={this.props.CustomStyle.getImage('IMAGE_ADD_MEMBER')}
-                                        />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        style={this.props.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
-                                        activeOpacity={0.5}
-                                        onPress={this.onLeaveGroupButtonPressed}
-                                    >
-                                        <Image
-                                            style={this.props.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
-                                            source={this.props.CustomStyle.getImage('IMAGE_LEAVE')}
-                                        />
-                                    </TouchableOpacity>
+                                        <Text
+                                            style={this.props.CustomStyle.getStyle('GROUP_NAME_TEXT_STYLE')}
+                                        >
+                                            {this.state.group.name}
+                                        </Text>
+                                        <Text
+                                            style={this.props.CustomStyle.getStyle('GROUP_TYPE_TEXT_STYLE')}
+                                        >
+                                            {this.props.Language.getText(this.state.group.type === this.props.AZStackCore.groupConstants.GROUP_TYPE_PRIVATE ? 'GROUP_TYPE_PRIVATE' : 'GROUP_TYPE_PUBLIC')}
+                                        </Text>
+                                        <Text
+                                            style={this.props.CustomStyle.getStyle('GROUP_MEMBERS_TEXT_STYLE')}
+                                        >
+                                            {`${this.state.group.members.length} `}
+                                            {this.props.Language.getText(this.state.group.members.length > 1 ? 'GROUP_MEMBER_MANY_TEXT' : 'GROUP_MEMBER_TEXT')}
+                                        </Text>
+                                        <View
+                                            style={this.props.CustomStyle.getStyle('GROUP_ACTION_BLOCK_STYLE')}
+                                        >
+                                            <TouchableOpacity
+                                                style={this.props.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
+                                                activeOpacity={0.5}
+                                                onPress={this.onStartChatButtonPressed}
+                                            >
+                                                <Image
+                                                    style={this.props.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
+                                                    source={this.props.CustomStyle.getImage('IMAGE_START_CHAT')}
+                                                />
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                style={this.props.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
+                                                activeOpacity={0.5}
+                                                onPress={this.onEditNameButtonPressed}
+                                            >
+                                                <Image
+                                                    style={this.props.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
+                                                    source={this.props.CustomStyle.getImage('IMAGE_PENCIL')}
+                                                />
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                style={this.props.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
+                                                activeOpacity={0.5}
+                                                onPress={this.onAddMemberButtonPressed}
+                                            >
+                                                <Image
+                                                    style={this.props.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
+                                                    source={this.props.CustomStyle.getImage('IMAGE_ADD_MEMBER')}
+                                                />
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                style={this.props.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
+                                                activeOpacity={0.5}
+                                                onPress={this.onLeaveGroupButtonPressed}
+                                            >
+                                                <Image
+                                                    style={this.props.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
+                                                    source={this.props.CustomStyle.getImage('IMAGE_LEAVE')}
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
                                 </View>
                                 <View
                                     style={this.props.CustomStyle.getStyle('GROUP_MEMBERS_BLOCK_STYLE')}
@@ -378,7 +393,8 @@ class GroupComponent extends React.Component {
                                                             member={item}
                                                             adminId={this.state.group.adminId}
                                                             onMemberPressed={this.props.onMemberPressed}
-                                                            onKickButtonPressed={this.onKickButtonPressed}
+                                                            onChangeAdminButtonPressed={this.onChangeAdminButtonPressed}
+                                                            onKickMemberButtonPressed={this.onKickMemberButtonPressed}
                                                         />
                                                     );
                                                 }}

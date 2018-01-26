@@ -82,7 +82,7 @@ class AZStackSdkExample extends React.Component {
     };
 
     showGroup() {
-        this.refs.AZStackSdk.showGroup({ groupId: 7474 });
+        this.refs.AZStackSdk.showGroup({ groupId: 7472 });
     };
 
     componentDidMount() {

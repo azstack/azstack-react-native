@@ -641,9 +641,8 @@ export class AZStackSdk extends AZStackBaseComponent {
                     return;
                 }
 
-                this.startChat({
-                    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
-                    chatId: event.member.userId,
+                this.showUser({
+                    userId: event.member.userId
                 });
             }
         });
@@ -898,9 +897,8 @@ export class AZStackSdk extends AZStackBaseComponent {
                         return;
                     }
 
-                    this.startChat({
-                        chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
-                        chatId: event.member.userId,
+                    this.showUser({
+                        userId: event.member.userId
                     });
                 }
             },

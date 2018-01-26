@@ -14,7 +14,8 @@ class GroupMemberBlockComponent extends React.Component {
         super(props);
 
         this.onMemberPressed = this.onMemberPressed.bind(this);
-        this.onKickButtonPressed = this.onKickButtonPressed.bind(this);
+        this.onChangeAdminButtonPressed = this.onChangeAdminButtonPressed.bind(this);
+        this.onKickMemberButtonPressed = this.onKickMemberButtonPressed.bind(this);
     };
 
     getNameSender(sender) {
@@ -29,8 +30,13 @@ class GroupMemberBlockComponent extends React.Component {
             member: this.props.member
         });
     };
-    onKickButtonPressed() {
-        this.props.onKickButtonPressed({
+    onChangeAdminButtonPressed() {
+        this.props.onChangeAdminButtonPressed({
+            member: this.props.member
+        });
+    };
+    onKickMemberButtonPressed() {
+        this.props.onKickMemberButtonPressed({
             member: this.props.member
         });
     };
@@ -102,12 +108,27 @@ class GroupMemberBlockComponent extends React.Component {
                     this.props.adminId === this.props.AZStackCore.authenticatedUser.userId &&
                     this.props.member.userId !== this.props.AZStackCore.authenticatedUser.userId && (
                         <TouchableOpacity
-                            style={this.props.CustomStyle.getStyle('GROUP_MEMBERS_LIST_MEMBER_KICK_BUTTON_BLOCK_STYLE')}
+                            style={this.props.CustomStyle.getStyle('GROUP_MEMBERS_LIST_MEMBER_CHANGE_ADMIN_BUTTON_BLOCK_STYLE')}
                             activeOpacity={0.5}
-                            onPress={this.onKickButtonPressed}
+                            onPress={this.onChangeAdminButtonPressed}
                         >
                             <Image
-                                style={this.props.CustomStyle.getStyle('GROUP_MEMBERS_LIST_MEMBER_KICK_BUTTON_IMAGE_STYLE')}
+                                style={this.props.CustomStyle.getStyle('GROUP_MEMBERS_LIST_MEMBER_CHANGE_ADMIN_BUTTON_IMAGE_STYLE')}
+                                source={this.props.CustomStyle.getImage('IMAGE_CHANGE_ADMIN')}
+                            />
+                        </TouchableOpacity>
+                    )
+                }
+                {
+                    this.props.adminId === this.props.AZStackCore.authenticatedUser.userId &&
+                    this.props.member.userId !== this.props.AZStackCore.authenticatedUser.userId && (
+                        <TouchableOpacity
+                            style={this.props.CustomStyle.getStyle('GROUP_MEMBERS_LIST_MEMBER_KICK_MEMBER_BUTTON_BLOCK_STYLE')}
+                            activeOpacity={0.5}
+                            onPress={this.onKickMemberButtonPressed}
+                        >
+                            <Image
+                                style={this.props.CustomStyle.getStyle('GROUP_MEMBERS_LIST_MEMBER_KICK_MEMBER_BUTTON_IMAGE_STYLE')}
                                 source={this.props.CustomStyle.getImage('IMAGE_KICK_MEMBER')}
                             />
                         </TouchableOpacity>
