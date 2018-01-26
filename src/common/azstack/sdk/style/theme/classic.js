@@ -662,6 +662,7 @@ export const MESSAGE_TYPE_MEDIA_CANCELED_STYLE = {
     backgroundColor: '#E9EDEF'
 };
 export const MESSAGE_TYPE_MEDIA_TEXT_STYLE = {
+    maxWidth: '80%',
     fontSize: 16,
     lineHeight: 20,
     fontWeight: '400',
