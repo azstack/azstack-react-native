@@ -285,7 +285,7 @@ export const CONVERSATION_LAST_MESSAGE_BLOCK_STYLE = {
     alignItems: 'center'
 };
 export const CONVERSATION_LAST_MESSAGE_TEXT_STYLE = {
-    maxWidth: '80%',
+    maxWidth: '85%',
     fontSize: 15,
     fontWeight: '400',
     lineHeight: 20,
@@ -303,7 +303,7 @@ export const CONVERSATION_LAST_MESSAGE_STATUS_TEXT_STYLE = {
     fontSize: 8
 };
 export const CONVERSATION_TYPING_TEXT_STYLE = {
-    maxWidth: '80%',
+    maxWidth: '85%',
     fontSize: 15,
     lineHeight: 20,
     marginTop: 5
