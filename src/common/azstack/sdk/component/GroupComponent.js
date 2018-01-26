@@ -104,11 +104,19 @@ class GroupComponent extends React.Component {
             groupId: this.props.groupId
         }).then((result) => {
             result.members.sort((a, b) => {
+                if (a.userId === result.adminId) {
+                    return -1;
+                }
+                if (b.userId === result.adminId) {
+                    return 1;
+                }
                 if (a.userId === this.props.AZStackCore.authenticatedUser.userId) {
                     return -1;
-                } else {
-                    return a.fullname > b.fullname ? 1 : -1;
                 }
+                if (b.userId === this.props.AZStackCore.authenticatedUser.userId) {
+                    return 1;
+                }
+                return a.fullname > b.fullname ? 1 : -1;
             });
             this.setState({ group: result });
         }).catch((error) => { });
@@ -135,11 +143,19 @@ class GroupComponent extends React.Component {
 
         let group = { ...newMessage.receiver };
         group.members.sort((a, b) => {
+            if (a.userId === group.adminId) {
+                return -1;
+            }
+            if (b.userId === group.adminId) {
+                return 1;
+            }
             if (a.userId === this.props.AZStackCore.authenticatedUser.userId) {
                 return -1;
-            } else {
-                return a.fullname > b.fullname ? 1 : -1;
             }
+            if (b.userId === this.props.AZStackCore.authenticatedUser.userId) {
+                return 1;
+            }
+            return a.fullname > b.fullname ? 1 : -1;
         });
         this.setState({ group: group });
     };
@@ -150,11 +166,19 @@ class GroupComponent extends React.Component {
 
         let group = { ...newMessage.receiver };
         group.members.sort((a, b) => {
+            if (a.userId === group.adminId) {
+                return -1;
+            }
+            if (b.userId === group.adminId) {
+                return 1;
+            }
             if (a.userId === this.props.AZStackCore.authenticatedUser.userId) {
                 return -1;
-            } else {
-                return a.fullname > b.fullname ? 1 : -1;
             }
+            if (b.userId === this.props.AZStackCore.authenticatedUser.userId) {
+                return 1;
+            }
+            return a.fullname > b.fullname ? 1 : -1;
         });
         this.setState({ group: group });
     };
@@ -165,11 +189,19 @@ class GroupComponent extends React.Component {
 
         let group = { ...newMessage.receiver };
         group.members.sort((a, b) => {
+            if (a.userId === group.adminId) {
+                return -1;
+            }
+            if (b.userId === group.adminId) {
+                return 1;
+            }
             if (a.userId === this.props.AZStackCore.authenticatedUser.userId) {
                 return -1;
-            } else {
-                return a.fullname > b.fullname ? 1 : -1;
             }
+            if (b.userId === this.props.AZStackCore.authenticatedUser.userId) {
+                return 1;
+            }
+            return a.fullname > b.fullname ? 1 : -1;
         });
         this.setState({ group: group });
     };
@@ -180,11 +212,19 @@ class GroupComponent extends React.Component {
 
         let group = { ...newMessage.receiver };
         group.members.sort((a, b) => {
+            if (a.userId === group.adminId) {
+                return -1;
+            }
+            if (b.userId === group.adminId) {
+                return 1;
+            }
             if (a.userId === this.props.AZStackCore.authenticatedUser.userId) {
                 return -1;
-            } else {
-                return a.fullname > b.fullname ? 1 : -1;
             }
+            if (b.userId === this.props.AZStackCore.authenticatedUser.userId) {
+                return 1;
+            }
+            return a.fullname > b.fullname ? 1 : -1;
         });
         this.setState({ group: group });
     };
@@ -195,11 +235,19 @@ class GroupComponent extends React.Component {
 
         let group = { ...newMessage.receiver };
         group.members.sort((a, b) => {
+            if (a.userId === group.adminId) {
+                return -1;
+            }
+            if (b.userId === group.adminId) {
+                return 1;
+            }
             if (a.userId === this.props.AZStackCore.authenticatedUser.userId) {
                 return -1;
-            } else {
-                return a.fullname > b.fullname ? 1 : -1;
             }
+            if (b.userId === this.props.AZStackCore.authenticatedUser.userId) {
+                return 1;
+            }
+            return a.fullname > b.fullname ? 1 : -1;
         });
         this.setState({ group: group });
     };
