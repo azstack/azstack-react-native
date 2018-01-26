@@ -169,9 +169,8 @@ export const TYPING_BLOCK_BOLD_STYLE = {
 export const FROM_NOW_TIME_TEXT_STYLE = {
     fontSize: 15,
     fontWeight: '300',
-    lineHeight: 30,
-    color: '#2F353B',
-    textAlign: 'right'
+    lineHeight: 20,
+    color: '#2F353B'
 };
 
 export const MESSAGE_STATUS_BLOCK_STYLE = {
@@ -229,15 +228,15 @@ export const CONVERSATION_BLOCK_STYLE = {
     flexDirection: 'row',
     borderBottomWidth: 1,
     borderBottomColor: '#E1E5EC',
-    paddingVertical: 10
+    paddingVertical: 15
 };
 export const CONVERSATION_AVATAR_BLOCK_STYLE = {
-    width: 70,
-    height: 70,
+    width: 50,
+    height: 50,
     position: 'relative'
 };
 export const CONVERSATION_AVATAR_TEXT_STYLE = {
-    fontSize: 30
+    fontSize: 20
 };
 export const CONVERSATION_STATUS_BLOCK_STYLE = {
     width: 15,
@@ -245,15 +244,15 @@ export const CONVERSATION_STATUS_BLOCK_STYLE = {
     borderRadius: 50,
     backgroundColor: '#95A5A6',
     position: 'absolute',
-    top: 4,
-    right: 4
+    top: 0,
+    right: 0
 };
 export const CONVERSATION_STATUS_ONLINE_STYLE = {
     backgroundColor: '#578EBE'
 };
 export const CONVERSATION_INFORMATION_BLOCK_STYLE = {
     flex: 1,
-    marginLeft: 20,
+    marginLeft: 15,
     position: 'relative'
 };
 export const CONVERSATION_UNREAD_BLOCK_STYLE = {
@@ -264,8 +263,8 @@ export const CONVERSATION_UNREAD_BLOCK_STYLE = {
     alignItems: 'center',
     backgroundColor: '#F2784B',
     position: 'absolute',
-    top: 10,
-    right: 10
+    top: 25,
+    right: 0
 };
 export const CONVERSATION_UNREAD_TEXT_STYLE = {
     fontSize: 12,
@@ -273,35 +272,49 @@ export const CONVERSATION_UNREAD_TEXT_STYLE = {
     color: '#fff'
 };
 export const CONVERSATION_NAME_TEXT_STYLE = {
-    fontSize: 18,
+    maxWidth: '60%',
+    fontSize: 16,
     fontWeight: '500',
-    lineHeight: 30,
+    lineHeight: 20,
     color: '#2F353B'
 };
 export const CONVERSATION_LAST_MESSAGE_BLOCK_STYLE = {
-    fontSize: 16,
+    marginTop: 5,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center'
+};
+export const CONVERSATION_LAST_MESSAGE_TEXT_STYLE = {
+    maxWidth: '80%',
+    fontSize: 15,
     fontWeight: '400',
-    lineHeight: 30,
+    lineHeight: 20,
     color: '#2F353B'
-};
-export const CONVERSATION_TYPING_TEXT_STYLE = {
-    fontSize: 16
-};
-export const CONVERSATION_FROM_NOW_TEXT_STYLE = {
-    fontSize: 15
 };
 export const CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE = {
     fontWeight: '500'
 };
-export const CONVERSATION_MESSAGE_STATUS_BLOCK_STYLE = {
+export const CONVERSATION_LAST_MESSAGE_STATUS_BLOCK_STYLE = {
     width: 15,
     height: 15,
-    position: 'absolute',
-    top: 45,
-    right: 10
+    marginLeft: 5
 };
-export const CONVERSATION_MESSAGE_STATUS_TEXT_STYLE = {
+export const CONVERSATION_LAST_MESSAGE_STATUS_TEXT_STYLE = {
     fontSize: 8
+};
+export const CONVERSATION_TYPING_TEXT_STYLE = {
+    maxWidth: '80%',
+    fontSize: 15,
+    lineHeight: 20,
+    marginTop: 5
+};
+export const CONVERSATION_FROM_NOW_BLOCK_STYLE = {
+    position: 'absolute',
+    top: 0,
+    right: 0
+};
+export const CONVERSATION_FROM_NOW_TEXT_STYLE = {
+    fontSize: 14
 };
 
 
@@ -352,8 +365,7 @@ export const CHAT_HEADER_OFFLINE_TEXT_STYLE = {
     fontSize: 14,
     fontWeight: '300',
     lineHeight: 20,
-    color: '#95A5A6',
-    textAlign: 'left'
+    color: '#95A5A6'
 };
 export const CHAT_HEADER_ONLINE_TEXT_STYLE = {
     fontSize: 14,
@@ -761,7 +773,6 @@ export const USER_OFFLINE_TEXT_STYLE = {
     fontWeight: '300',
     lineHeight: 20,
     color: '#95A5A6',
-    textAlign: 'left',
     marginTop: 5
 };
 export const USER_ONLINE_TEXT_STYLE = {
@@ -890,7 +901,6 @@ export const GROUP_MEMBERS_LIST_MEMBER_OFFLINE_TEXT_STYLE = {
     fontWeight: '300',
     lineHeight: 20,
     color: '#95A5A6',
-    textAlign: 'left',
     marginTop: 5
 };
 export const GROUP_MEMBERS_LIST_MEMBER_ONLINE_TEXT_STYLE = {

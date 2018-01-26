@@ -8,7 +8,6 @@ import {
 import ChatAvatarBlockComponent from '../common/ChatAvatarBlockComponent';
 import TypingBlockComponent from '../common/TypingBlockComponent';
 import TimeFromNowBlockComponent from '../common/TimeFromNowBlockComponent';
-import MessageStatusBlockComponent from '../common/MessageStatusBlockComponent';
 import ConversationLastMessageBlockComponent from './ConversationLastMessageBlockComponent';
 
 class ConversationBlockComponent extends React.Component {
@@ -65,6 +64,7 @@ class ConversationBlockComponent extends React.Component {
                 >
                     <Text
                         style={this.props.CustomStyle.getStyle('CONVERSATION_NAME_TEXT_STYLE')}
+                        numberOfLines={1}
                     >
                         {this.props.conversation.chatTarget.fullname ? this.props.conversation.chatTarget.fullname : this.props.conversation.chatTarget.name}
                     </Text>
@@ -87,12 +87,16 @@ class ConversationBlockComponent extends React.Component {
                             typing={this.props.conversation.typing}
                         />
                     }
-                    <TimeFromNowBlockComponent
-                        Language={this.props.Language}
-                        CustomStyle={this.props.CustomStyle}
-                        textStyle={this.props.CustomStyle.getStyle('CONVERSATION_FROM_NOW_TEXT_STYLE')}
-                        time={this.props.conversation.lastMessage.created}
-                    />
+                    <View
+                        style={this.props.CustomStyle.getStyle('CONVERSATION_FROM_NOW_BLOCK_STYLE')}
+                    >
+                        <TimeFromNowBlockComponent
+                            Language={this.props.Language}
+                            CustomStyle={this.props.CustomStyle}
+                            textStyle={this.props.CustomStyle.getStyle('CONVERSATION_FROM_NOW_TEXT_STYLE')}
+                            time={this.props.conversation.lastMessage.created}
+                        />
+                    </View>
                     {
                         this.props.conversation.unread > 0 && (
                             <View
@@ -104,27 +108,6 @@ class ConversationBlockComponent extends React.Component {
                                 >
                                     {this.props.conversation.unread > 9 ? '9+' : this.props.conversation.unread}
                                 </Text>
-                            </View>
-                        )
-                    }
-                    {
-                        this.props.conversation.lastMessage.sender.userId === this.props.AZStackCore.authenticatedUser.userId &&
-                        [
-                            this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT,
-                            this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER,
-                            this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE
-                        ].indexOf(this.props.conversation.lastMessage.type) > -1 &&
-                        this.props.conversation.lastMessage.status !== this.props.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED &&
-                        (
-                            <View
-                                style={this.props.CustomStyle.getStyle('CONVERSATION_MESSAGE_STATUS_BLOCK_STYLE')}
-                            >
-                                <MessageStatusBlockComponent
-                                    CustomStyle={this.props.CustomStyle}
-                                    AZStackCore={this.props.AZStackCore}
-                                    textStyle={this.props.CustomStyle.getStyle('CONVERSATION_MESSAGE_STATUS_TEXT_STYLE')}
-                                    status={this.props.conversation.lastMessage.status}
-                                />
                             </View>
                         )
                     }

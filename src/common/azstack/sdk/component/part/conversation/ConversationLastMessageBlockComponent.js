@@ -1,7 +1,10 @@
 import React from 'react';
 import {
+    View,
     Text
 } from 'react-native';
+
+import MessageStatusBlockComponent from '../common/MessageStatusBlockComponent';
 
 class ConversationLastMessageBlockComponent extends React.Component {
     constructor(props) {
@@ -26,213 +29,240 @@ class ConversationLastMessageBlockComponent extends React.Component {
 
     render() {
         return (
-            <Text
+            <View
                 style={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_BLOCK_STYLE')}
             >
-                {
-                    this.props.lastMessage.status === this.props.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED && (
-                        <Text>
-                            <Text
-                                style={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE')}
-                            >
-                                {this.getNameSender(this.props.lastMessage.sender)}
-                            </Text>
-                            <Text
-                                style={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE')}
-                            >
-                                {
-                                    [
-                                        this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT,
-                                        this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER,
-                                        this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE
-                                    ].indexOf(this.props.lastMessage.type) > -1 ? ':' : ''
-                                }
-                            </Text>
+                <Text
+                    style={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_TEXT_STYLE')}
+                    numberOfLines={1}
+                >
+                    {
+                        this.props.lastMessage.status === this.props.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED && (
                             <Text>
-                                {`[ ${this.props.Language.getText('MESSAGE_STATUS_CANCELED_TEXT')} ]`}
+                                <Text
+                                    style={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE')}
+                                >
+                                    {this.getNameSender(this.props.lastMessage.sender)}
+                                </Text>
+                                <Text
+                                    style={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE')}
+                                >
+                                    {
+                                        [
+                                            this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT,
+                                            this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER,
+                                            this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE
+                                        ].indexOf(this.props.lastMessage.type) > -1 ? ':' : ''
+                                    }
+                                </Text>
+                                <Text>
+                                    {`[ ${this.props.Language.getText('MESSAGE_STATUS_CANCELED_TEXT')} ]`}
+                                </Text>
                             </Text>
-                        </Text>
-                    )
-                }
-                {
-                    this.props.lastMessage.status !== this.props.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED && (
-                        <Text>
-                            <Text
-                                style={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE')}
-                            >
-                                {this.getNameSender(this.props.lastMessage.sender)}
-                            </Text>
-                            <Text
-                                style={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE')}
-                            >
+                        )
+                    }
+                    {
+                        this.props.lastMessage.status !== this.props.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED && (
+                            <Text>
+                                <Text
+                                    style={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE')}
+                                >
+                                    {this.getNameSender(this.props.lastMessage.sender)}
+                                </Text>
+                                <Text
+                                    style={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE')}
+                                >
+                                    {
+                                        [
+                                            this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT,
+                                            this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER,
+                                            this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE
+                                        ].indexOf(this.props.lastMessage.type) > -1 ? ':' : ''
+                                    }
+                                </Text>
                                 {
-                                    [
-                                        this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT,
-                                        this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER,
-                                        this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE
-                                    ].indexOf(this.props.lastMessage.type) > -1 ? ':' : ''
+                                    this.props.lastMessage.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT && (
+                                        <Text>
+                                            {` ${this.props.lastMessage.text}`}
+                                        </Text>
+                                    )
                                 }
-                            </Text>
-                            {
-                                this.props.lastMessage.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT && (
-                                    <Text>
-                                        {` ${this.props.lastMessage.text}`}
-                                    </Text>
-                                )
-                            }
-                            {
-                                this.props.lastMessage.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER && (
-                                    <Text>
-                                        {` [${this.props.Language.getText('MESSAGE_TYPE_STICKER_TEXT')}]`}
-                                    </Text>
-                                )
-                            }
-                            {
-                                this.props.lastMessage.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE && (
-                                    <Text>
-                                        {` [${this.props.Language.getText('MESSAGE_TYPE_FILE_TEXT')}]`}
-                                    </Text>
-                                )
-                            }
-                            {
-                                this.props.lastMessage.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_CREATED && (
-                                    <Text>
+                                {
+                                    this.props.lastMessage.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER && (
                                         <Text>
-                                            {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_CREATED_ACTION_TEXT')}`}
+                                            {` [${this.props.Language.getText('MESSAGE_TYPE_STICKER_TEXT')}]`}
                                         </Text>
+                                    )
+                                }
+                                {
+                                    this.props.lastMessage.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE && (
                                         <Text>
-                                            {` ${this.props.lastMessage.receiver.type === this.props.AZStackCore.groupConstants.GROUP_TYPE_PRIVATE ? this.props.Language.getText('GROUP_TYPE_PRIVATE') : this.props.Language.getText('GROUP_TYPE_PUBLIC')}`}
+                                            {` [${this.props.Language.getText('MESSAGE_TYPE_FILE_TEXT')}]`}
                                         </Text>
+                                    )
+                                }
+                                {
+                                    this.props.lastMessage.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_CREATED && (
                                         <Text>
-                                            {` ${this.props.Language.getText('GROUP_TEXT')}`}
+                                            <Text>
+                                                {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_CREATED_ACTION_TEXT')}`}
+                                            </Text>
+                                            <Text>
+                                                {` ${this.props.lastMessage.receiver.type === this.props.AZStackCore.groupConstants.GROUP_TYPE_PRIVATE ? this.props.Language.getText('GROUP_TYPE_PRIVATE') : this.props.Language.getText('GROUP_TYPE_PUBLIC')}`}
+                                            </Text>
+                                            <Text>
+                                                {` ${this.props.Language.getText('GROUP_TEXT')}`}
+                                            </Text>
                                         </Text>
-                                    </Text>
-                                )
-                            }
-                            {
-                                this.props.lastMessage.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_INVITED && (
-                                    <Text>
+                                    )
+                                }
+                                {
+                                    this.props.lastMessage.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_INVITED && (
                                         <Text>
-                                            {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_INVITED_ACTION_TEXT')}`}
+                                            <Text>
+                                                {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_INVITED_ACTION_TEXT')}`}
+                                            </Text>
+                                            <Text
+                                                style={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE')}
+                                            >
+                                                {` ${
+                                                    this.props.lastMessage.invited.invites.map((invite) => {
+                                                        return this.getNameReceiver(invite);
+                                                    }).join(', ')
+                                                    }`}
+                                            </Text>
+                                            <Text>
+                                                {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_INVITED_PREPOSITION_TEXT')}`}
+                                            </Text>
+                                            <Text>
+                                                {` ${this.props.Language.getText('GROUP_TEXT')}`}
+                                            </Text>
                                         </Text>
-                                        <Text
-                                            style={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE')}
-                                        >
-                                            {` ${
-                                                this.props.lastMessage.invited.invites.map((invite) => {
-                                                    return this.getNameReceiver(invite);
-                                                }).join(', ')
-                                                }`}
-                                        </Text>
+                                    )
+                                }
+                                {
+                                    this.props.lastMessage.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_LEFT && (
                                         <Text>
-                                            {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_INVITED_PREPOSITION_TEXT')}`}
-                                        </Text>
-                                        <Text>
-                                            {` ${this.props.Language.getText('GROUP_TEXT')}`}
-                                        </Text>
-                                    </Text>
-                                )
-                            }
-                            {
-                                this.props.lastMessage.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_LEFT && (
-                                    <Text>
-                                        <Text>
-                                            {` ${this.props.Language.getText(this.props.lastMessage.sender.userId === this.props.lastMessage.left.leave.userId ? 'MESSAGE_TYPE_GROUP_SENDER_LEFT_ACTION_TEXT' : 'MESSAGE_TYPE_GROUP_RECEIVER_LEFT_ACTION_TEXT')}`}
-                                        </Text>
-                                        {
-                                            this.props.lastMessage.sender.userId !== this.props.lastMessage.left.leave.userId && (
-                                                <Text
-                                                    style={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE')}
-                                                >
-                                                    {` ${this.getNameReceiver(this.props.lastMessage.left.leave)}`}
-                                                </Text>
-                                            )
-                                        }
-                                        <Text>
-                                            {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_LEFT_PREPOSITION_TEXT')}`}
-                                        </Text>
-                                        <Text>
-                                            {` ${this.props.Language.getText('GROUP_TEXT')}`}
-                                        </Text>
-                                        {
-                                            !!this.props.lastMessage.left.newAdmin && (
-                                                <Text>
-                                                    <Text>
-                                                        {`, ${this.props.Language.getText('MESSAGE_TYPE_GROUP_LEFT_AND_TEXT')}`}
-                                                    </Text>
-                                                    <Text>
-                                                        {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_CHANGED_ADMIN_ACTION_TEXT')}`}
-                                                    </Text>
-                                                    <Text>
-                                                        {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_CHANGED_ADMIN_PREPOSITION_TEXT')}`}
-                                                    </Text>
+                                            <Text>
+                                                {` ${this.props.Language.getText(this.props.lastMessage.sender.userId === this.props.lastMessage.left.leave.userId ? 'MESSAGE_TYPE_GROUP_SENDER_LEFT_ACTION_TEXT' : 'MESSAGE_TYPE_GROUP_RECEIVER_LEFT_ACTION_TEXT')}`}
+                                            </Text>
+                                            {
+                                                this.props.lastMessage.sender.userId !== this.props.lastMessage.left.leave.userId && (
                                                     <Text
                                                         style={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE')}
                                                     >
-                                                        {` ${this.getNameReceiver(this.props.lastMessage.left.newAdmin)}`}
+                                                        {` ${this.getNameReceiver(this.props.lastMessage.left.leave)}`}
                                                     </Text>
-                                                </Text>
-                                            )
-                                        }
-                                    </Text>
-                                )
-                            }
-                            {
-                                this.props.lastMessage.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_RENAMED && (
-                                    <Text>
+                                                )
+                                            }
+                                            <Text>
+                                                {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_LEFT_PREPOSITION_TEXT')}`}
+                                            </Text>
+                                            <Text>
+                                                {` ${this.props.Language.getText('GROUP_TEXT')}`}
+                                            </Text>
+                                            {
+                                                !!this.props.lastMessage.left.newAdmin && (
+                                                    <Text>
+                                                        <Text>
+                                                            {`, ${this.props.Language.getText('MESSAGE_TYPE_GROUP_LEFT_AND_TEXT')}`}
+                                                        </Text>
+                                                        <Text>
+                                                            {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_CHANGED_ADMIN_ACTION_TEXT')}`}
+                                                        </Text>
+                                                        <Text>
+                                                            {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_CHANGED_ADMIN_PREPOSITION_TEXT')}`}
+                                                        </Text>
+                                                        <Text
+                                                            style={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE')}
+                                                        >
+                                                            {` ${this.getNameReceiver(this.props.lastMessage.left.newAdmin)}`}
+                                                        </Text>
+                                                    </Text>
+                                                )
+                                            }
+                                        </Text>
+                                    )
+                                }
+                                {
+                                    this.props.lastMessage.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_RENAMED && (
                                         <Text>
-                                            {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_RENAMED_ACTION_TEXT')}`}
+                                            <Text>
+                                                {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_RENAMED_ACTION_TEXT')}`}
+                                            </Text>
+                                            <Text>
+                                                {` ${this.props.Language.getText('GROUP_TEXT')}`}
+                                            </Text>
+                                            <Text>
+                                                {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_RENAMED_PREPOSITION_TEXT')}`}
+                                            </Text>
+                                            <Text
+                                                style={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE')}
+                                            >
+                                                {` ${this.props.lastMessage.renamed.newName}`}
+                                            </Text>
                                         </Text>
+                                    )
+                                }
+                                {
+                                    this.props.lastMessage.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_ADMIN_CHANGED && (
                                         <Text>
-                                            {` ${this.props.Language.getText('GROUP_TEXT')}`}
+                                            <Text>
+                                                {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_CHANGED_ADMIN_ACTION_TEXT')}`}
+                                            </Text>
+                                            <Text>
+                                                {` ${this.props.Language.getText('GROUP_TEXT')}`}
+                                            </Text>
+                                            <Text>
+                                                {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_CHANGED_ADMIN_PREPOSITION_TEXT')}`}
+                                            </Text>
+                                            <Text
+                                                style={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE')}
+                                            >
+                                                {` ${this.getNameReceiver(this.props.lastMessage.adminChanged.newAdmin)}`}
+                                            </Text>
                                         </Text>
+                                    )
+                                }
+                                {
+                                    this.props.lastMessage.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_PUBLIC_JOINED && (
                                         <Text>
-                                            {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_RENAMED_PREPOSITION_TEXT')}`}
+                                            <Text>
+                                                {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_JOINED_ACTION_TEXT')}`}
+                                            </Text>
+                                            <Text>
+                                                {` ${this.props.Language.getText('GROUP_TEXT')}`}
+                                            </Text>
                                         </Text>
-                                        <Text
-                                            style={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE')}
-                                        >
-                                            {` ${this.props.lastMessage.renamed.newName}`}
-                                        </Text>
-                                    </Text>
-                                )
-                            }
-                            {
-                                this.props.lastMessage.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_ADMIN_CHANGED && (
-                                    <Text>
-                                        <Text>
-                                            {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_CHANGED_ADMIN_ACTION_TEXT')}`}
-                                        </Text>
-                                        <Text>
-                                            {` ${this.props.Language.getText('GROUP_TEXT')}`}
-                                        </Text>
-                                        <Text>
-                                            {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_CHANGED_ADMIN_PREPOSITION_TEXT')}`}
-                                        </Text>
-                                        <Text
-                                            style={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE')}
-                                        >
-                                            {` ${this.getNameReceiver(this.props.lastMessage.adminChanged.newAdmin)}`}
-                                        </Text>
-                                    </Text>
-                                )
-                            }
-                            {
-                                this.props.lastMessage.type === this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_PUBLIC_JOINED && (
-                                    <Text>
-                                        <Text>
-                                            {` ${this.props.Language.getText('MESSAGE_TYPE_GROUP_JOINED_ACTION_TEXT')}`}
-                                        </Text>
-                                        <Text>
-                                            {` ${this.props.Language.getText('GROUP_TEXT')}`}
-                                        </Text>
-                                    </Text>
-                                )
-                            }
-                        </Text>
+                                    )
+                                }
+                            </Text>
+                        )
+                    }
+                </Text>
+                {
+                    this.props.lastMessage.status !== this.props.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED &&
+                    this.props.lastMessage.sender.userId === this.props.AZStackCore.authenticatedUser.userId &&
+                    [
+                        this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT,
+                        this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER,
+                        this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE
+                    ].indexOf(this.props.lastMessage.type) > -1 &&
+                    this.props.lastMessage.status !== this.props.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED &&
+                    (
+                        <View
+                            style={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_STATUS_BLOCK_STYLE')}
+                        >
+                            <MessageStatusBlockComponent
+                                CustomStyle={this.props.CustomStyle}
+                                AZStackCore={this.props.AZStackCore}
+                                textStyle={this.props.CustomStyle.getStyle('CONVERSATION_LAST_MESSAGE_STATUS_TEXT_STYLE')}
+                                status={this.props.lastMessage.status}
+                            />
+                        </View>
                     )
                 }
-            </Text>
+            </View>
         );
     };
 };
