@@ -59,6 +59,36 @@ class GroupComponent extends React.Component {
             }
             this.setState({ members: result });
         });
+        this.subscriptions.onGroupInvited = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_GROUP_INVITED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onGroupInvited(result);
+        });
+        this.subscriptions.onGroupLeft = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_GROUP_LEFT, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onGroupLeft(result);
+        });
+        this.subscriptions.onGroupRenamed = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_GROUP_RENAMED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onGroupRenamed(result);
+        });
+        this.subscriptions.onGroupAdminChanged = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_GROUP_ADMIN_CHANGED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onGroupAdminChanged(result);
+        });
+        this.subscriptions.onGroupPublicJoined = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_GROUP_PUBLIC_JOINED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onGroupPublicJoined(result);
+        });
     };
     clearSubscriptions() {
         for (let subscriptionName in this.subscriptions) {
@@ -97,6 +127,82 @@ class GroupComponent extends React.Component {
     onAddMemberButtonPressed() { };
     onLeaveGroupButtonPressed() { };
     onKickButtonPressed(event) { };
+
+    onGroupInvited(newMessage) {
+        if (newMessage.chatId !== this.props.groupId) {
+            return;
+        }
+
+        let group = { ...newMessage.receiver };
+        group.members.sort((a, b) => {
+            if (a.userId === this.props.AZStackCore.authenticatedUser.userId) {
+                return -1;
+            } else {
+                return a.fullname > b.fullname ? 1 : -1;
+            }
+        });
+        this.setState({ group: group });
+    };
+    onGroupLeft(newMessage) {
+        if (newMessage.chatId !== this.props.groupId) {
+            return;
+        }
+
+        let group = { ...newMessage.receiver };
+        group.members.sort((a, b) => {
+            if (a.userId === this.props.AZStackCore.authenticatedUser.userId) {
+                return -1;
+            } else {
+                return a.fullname > b.fullname ? 1 : -1;
+            }
+        });
+        this.setState({ group: group });
+    };
+    onGroupRenamed(newMessage) {
+        if (newMessage.chatId !== this.props.groupId) {
+            return;
+        }
+
+        let group = { ...newMessage.receiver };
+        group.members.sort((a, b) => {
+            if (a.userId === this.props.AZStackCore.authenticatedUser.userId) {
+                return -1;
+            } else {
+                return a.fullname > b.fullname ? 1 : -1;
+            }
+        });
+        this.setState({ group: group });
+    };
+    onGroupAdminChanged(newMessage) {
+        if (newMessage.chatId !== this.props.groupId) {
+            return;
+        }
+
+        let group = { ...newMessage.receiver };
+        group.members.sort((a, b) => {
+            if (a.userId === this.props.AZStackCore.authenticatedUser.userId) {
+                return -1;
+            } else {
+                return a.fullname > b.fullname ? 1 : -1;
+            }
+        });
+        this.setState({ group: group });
+    };
+    onGroupPublicJoined(newMessage) {
+        if (newMessage.chatId !== this.props.groupId) {
+            return;
+        }
+
+        let group = { ...newMessage.receiver };
+        group.members.sort((a, b) => {
+            if (a.userId === this.props.AZStackCore.authenticatedUser.userId) {
+                return -1;
+            } else {
+                return a.fullname > b.fullname ? 1 : -1;
+            }
+        });
+        this.setState({ group: group });
+    };
 
     componentDidMount() {
         this.addSubscriptions();
