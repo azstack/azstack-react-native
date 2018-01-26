@@ -737,13 +737,13 @@ export const MESSAGE_TYPE_MEDIA_STATUS_TEXT_STYLE = {
 
 export const USER_BLOCK_STYLE = {
     paddingHorizontal: 15,
-    paddingVertical: 20,
     justifyContent: 'center',
     alignItems: 'center'
 };
 export const USER_AVATAR_BLOCK_STYLE = {
     width: 100,
-    height: 100
+    height: 100,
+    marginTop: 30
 };
 export const USER_AVATAR_TEXT_STYLE = {
     fontSize: 40
@@ -753,12 +753,12 @@ export const USER_NAME_TEXT_STYLE = {
     fontWeight: '400',
     lineHeight: 30,
     color: '#2F353B',
-    marginTop: 5
+    marginTop: 10
 };
 export const USER_OFFLINE_TEXT_STYLE = {
     fontSize: 18,
     fontWeight: '300',
-    lineHeight: 30,
+    lineHeight: 20,
     color: '#95A5A6',
     textAlign: 'left',
     marginTop: 5
@@ -766,7 +766,7 @@ export const USER_OFFLINE_TEXT_STYLE = {
 export const USER_ONLINE_TEXT_STYLE = {
     fontSize: 18,
     fontWeight: '300',
-    lineHeight: 30,
+    lineHeight: 20,
     color: '#578EBE',
     marginTop: 5
 };
