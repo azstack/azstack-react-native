@@ -107,7 +107,7 @@ export const SEARCH_INPUT_STYLE = {
     borderWidth: 1,
     borderColor: '#E1E5EC',
     borderRadius: 5,
-    paddingVertical: 10,
+    paddingVertical: 5,
     paddingHorizontal: 40,
     lineHeight: 20,
     fontSize: 16,
@@ -123,14 +123,14 @@ export const SEARCH_INPUT_PROPS_STYLE = {
 };
 export const SEARCH_IMAGE_STYLE = {
     position: 'absolute',
-    top: 10,
+    top: 5,
     left: 5,
     width: 30,
     height: 30
 };
 export const SEARCH_CLEAR_BUTTON_BLOCK_STYLE = {
     position: 'absolute',
-    top: 7,
+    top: 2,
     right: 5,
     width: 30,
     height: 30
