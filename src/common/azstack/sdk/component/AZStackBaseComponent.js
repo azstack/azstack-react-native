@@ -201,12 +201,7 @@ export default class AZStackBaseComponent extends React.Component {
         return <GroupComponent
             key={key}
             Sizes={this.Sizes}
-            Language={this.Language}
-            CustomStyle={this.CustomStyle}
-            eventConstants={this.eventConstants}
-            AZStackCore={this.AZStackCore}
-            EventEmitter={this.EventEmitter}
-            members={this.members}
+            getCoreInstances={this.getCoreInstances}
             {...options}
         />;
     };

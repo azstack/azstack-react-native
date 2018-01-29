@@ -137,7 +137,8 @@ export class AZStackSdk extends AZStackBaseComponent {
             Language: this.Language,
             CustomStyle: this.CustomStyle,
             AZStackCore: this.AZStackCore,
-            EventEmitter: this.EventEmitter
+            EventEmitter: this.EventEmitter,
+            members: this.members
         };
     };
 
