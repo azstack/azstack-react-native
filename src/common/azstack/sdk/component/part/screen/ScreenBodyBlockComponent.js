@@ -6,13 +6,15 @@ import {
 class ScreenHeaderBlockComponent extends React.Component {
     constructor(props) {
         super(props);
-    }
+
+        this.coreInstances = props.getCoreInstances();
+    };
 
     render() {
         return (
             <View
                 style={{
-                    ...this.props.CustomStyle.getStyle('SCREEN_BODY_BLOCK_STYLE'),
+                    ...this.coreInstances.CustomStyle.getStyle('SCREEN_BODY_BLOCK_STYLE'),
                     ...this.props.style,
                 }}
             >

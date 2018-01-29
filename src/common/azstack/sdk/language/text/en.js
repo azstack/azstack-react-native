@@ -39,7 +39,12 @@ export const MESSAGE_TYPE_GROUP_RENAMED_PREPOSITION_TEXT = 'to';
 export const MESSAGE_TYPE_GROUP_CHANGED_ADMIN_ACTION_TEXT = 'changed admin';
 export const MESSAGE_TYPE_GROUP_CHANGED_ADMIN_PREPOSITION_TEXT = 'to';
 export const MESSAGE_TYPE_GROUP_JOINED_ACTION_TEXT = 'joined';
-export const MESSAGE_STATUS_CANCEL_TEXT = 'Cancel';
+
+export const MESSAGE_STATUS_SENDING_TEXT = 'Sending';
+export const MESSAGE_STATUS_SENT_TEXT = 'Sent';
+export const MESSAGE_STATUS_DELIVERED_TEXT = 'Delivered';
+export const MESSAGE_STATUS_SEEN_TEXT = 'Seen';
+export const MESSAGE_STATUS_CANCELED_TEXT = 'Cancel';
 
 export const GROUP_TEXT = 'group';
 export const GROUP_TYPE_PRIVATE = 'private';

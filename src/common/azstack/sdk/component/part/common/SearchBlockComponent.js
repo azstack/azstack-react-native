@@ -11,6 +11,8 @@ class SearchBlockComponent extends React.Component {
     constructor(props) {
         super(props);
 
+        this.coreInstances = props.getCoreInstances();
+
         this.state = {
             searchText: '',
             textInputFocused: false
@@ -41,13 +43,13 @@ class SearchBlockComponent extends React.Component {
     render() {
         return (
             <View
-                style={this.props.CustomStyle.getStyle('SEARCH_BLOCK_STYLE')}
+                style={this.coreInstances.CustomStyle.getStyle('SEARCH_BLOCK_STYLE')}
             >
                 <TextInput
                     ref={'TextInput'}
                     style={[
-                        this.props.CustomStyle.getStyle('SEARCH_INPUT_STYLE'),
-                        (this.state.textInputFocused ? this.props.CustomStyle.getStyle('SEARCH_INPUT_FOCUS_STYLE') : {})
+                        this.coreInstances.CustomStyle.getStyle('SEARCH_INPUT_STYLE'),
+                        (this.state.textInputFocused ? this.coreInstances.CustomStyle.getStyle('SEARCH_INPUT_FOCUS_STYLE') : {})
                     ]}
                     onChangeText={this.onSearchTextChanged}
                     onFocus={this.onTextInputFocused}
@@ -56,21 +58,21 @@ class SearchBlockComponent extends React.Component {
                     placeholder={this.props.placeholder}
                     returnKeyType='done'
                     {
-                    ...this.props.CustomStyle.getStyle('SEARCH_INPUT_PROPS_STYLE')
+                    ...this.coreInstances.CustomStyle.getStyle('SEARCH_INPUT_PROPS_STYLE')
                     }
                 />
                 <Image
-                    style={this.props.CustomStyle.getStyle('SEARCH_IMAGE_STYLE')}
-                    source={this.props.CustomStyle.getImage('IMAGE_SEARCH')}
+                    style={this.coreInstances.CustomStyle.getStyle('SEARCH_IMAGE_STYLE')}
+                    source={this.coreInstances.CustomStyle.getImage('IMAGE_SEARCH')}
                 />
                 {
                     !!this.state.searchText && <TouchableOpacity
-                        style={this.props.CustomStyle.getStyle('SEARCH_CLEAR_BUTTON_BLOCK_STYLE')}
+                        style={this.coreInstances.CustomStyle.getStyle('SEARCH_CLEAR_BUTTON_BLOCK_STYLE')}
                         activeOpacity={0.5}
                         onPress={this.clearSearchText}
                     >
                         <Text
-                            style={this.props.CustomStyle.getStyle('SEARCH_CLEAR_BUTTON_TEXT_STYLE')}
+                            style={this.coreInstances.CustomStyle.getStyle('SEARCH_CLEAR_BUTTON_TEXT_STYLE')}
                         >×</Text>
                     </TouchableOpacity>
                 }

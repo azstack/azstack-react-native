@@ -16,7 +16,7 @@ import ContactItem from './part/contact/ContactItem';
 class ContactComponent extends React.Component {
     constructor(props) {
         super(props);
-
+        this.coreInstances = this.props.getCoreInstances();
         this.state = {
             contact: [
                 {
@@ -42,14 +42,14 @@ class ContactComponent extends React.Component {
             ],
             showItemActions: null,
         };
-    }
+    };
 
     componentDidMount() {
         console.log(this.props);
-    }
+    };
 
     componentWillUnmount() {
-    }
+    };
 
     renderItem(item, index) {
         return (
@@ -68,13 +68,13 @@ class ContactComponent extends React.Component {
                 }}
             />
         );
-    }
+    };
 
     renderContent() {
-        if(this.state.contact.length === 0) {
+        if (this.state.contact.length === 0) {
             return (
                 <EmptyBlockComponent
-                    CustomStyle={this.props.CustomStyle}
+                    getCoreInstances={this.props.getCoreInstances}
                     emptyText={"No contact"}
                 />
             );
@@ -84,57 +84,57 @@ class ContactComponent extends React.Component {
             <FlatList
                 data={this.state.contact}
                 keyExtractor={(item, index) => index}
-                renderItem={({ item, index}) => this.renderItem(item, index)}
+                renderItem={({ item, index }) => this.renderItem(item, index)}
                 onEndReached={() => this.onEndReached()}
                 onEndReachedThreshold={0.2}
             />
         );
-    }
+    };
 
     render() {
         return (
             <ScreenBlockComponent
                 fullScreen={false}
-                CustomStyle={this.props.CustomStyle}
+                getCoreInstances={this.props.getCoreInstances}
                 style={this.props.style}
             >
                 {this.props.header !== 'hidden' && <ScreenHeaderBlockComponent
-                    CustomStyle={this.props.CustomStyle}
+                    getCoreInstances={this.props.getCoreInstances}
                     onBackButtonPressed={() => this.props.onBackButtonPressed()}
                     title={'Contact'}
                 />}
                 <ScreenBodyBlockComponent
-                    CustomStyle={this.props.CustomStyle}
+                    getCoreInstances={this.props.getCoreInstances}
                     style={this.props.contentContainerStyle}
                 >
                     <View
-                        style={this.props.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_BLOCK_STYLE')}
+                        style={this.coreInstances.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_BLOCK_STYLE')}
                     >
                         <SearchBlockComponent
-                            CustomStyle={this.props.CustomStyle}
+                            getCoreInstances={this.props.getCoreInstances}
                             onSearchTextChanged={this.onSearchTextChanged}
                             onSearchTextCleared={this.onSearchTextCleared}
-                            placeholder={this.props.Language.getText('CONVERSATIONS_LIST_SEARCH_PLACEHOLDER_TEXT')}
+                            placeholder={this.coreInstances.Language.getText('CONVERSATIONS_LIST_SEARCH_PLACEHOLDER_TEXT')}
                         />
                     </View>
                     {this.renderContent()}
                 </ScreenBodyBlockComponent>
             </ScreenBlockComponent>
         );
-    }
+    };
 
     onEndReached() {
 
-    }
+    };
 
     onItemPress(contact, index) {
-        if(this.state.showItemActions === index) {
-            this.setState({showItemActions: null});
+        if (this.state.showItemActions === index) {
+            this.setState({ showItemActions: null });
         } else {
-            this.setState({showItemActions: index});
+            this.setState({ showItemActions: index });
         }
-        
-    }
+
+    };
 };
 
 export default ContactComponent;

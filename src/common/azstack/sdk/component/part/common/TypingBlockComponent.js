@@ -6,18 +6,20 @@ import {
 class TypingBlockComponent extends React.Component {
     constructor(props) {
         super(props);
+
+        this.coreInstances = props.getCoreInstances();
     };
 
     render() {
         return (
             <Text
                 style={[
-                    this.props.CustomStyle.getStyle('TYPING_BLOCK_STYLE'),
+                    this.coreInstances.CustomStyle.getStyle('TYPING_BLOCK_STYLE'),
                     (this.props.textStyle ? this.props.textStyle : {})
                 ]}
             >
                 <Text
-                    style={this.props.CustomStyle.getStyle('TYPING_BLOCK_BOLD_STYLE')}
+                    style={this.coreInstances.CustomStyle.getStyle('TYPING_BLOCK_BOLD_STYLE')}
                 >
                     {
                         `${this.props.typing.senders.map((sender) => {
@@ -26,10 +28,10 @@ class TypingBlockComponent extends React.Component {
                     }
                 </Text>
                 {
-                    ` ${this.props.Language.getText(this.props.typing.senders.length > 1 ? 'TYPING_PREPOSITION_MANY_TEXT' : 'TYPING_PREPOSITION_TEXT')}`
+                    ` ${this.coreInstances.Language.getText(this.props.typing.senders.length > 1 ? 'TYPING_PREPOSITION_MANY_TEXT' : 'TYPING_PREPOSITION_TEXT')}`
                 }
                 {
-                    ` ${this.props.Language.getText('TYPING_TEXT')}`
+                    ` ${this.coreInstances.Language.getText('TYPING_TEXT')}`
                 }
             </Text>
         );

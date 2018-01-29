@@ -15,6 +15,7 @@ export const IMAGE_START_CHAT = require('../../static/image/classic/start-chat.p
 export const IMAGE_PENCIL = require('../../static/image/classic/pencil.png');
 export const IMAGE_ADD_MEMBER = require('../../static/image/classic/add-member.png');
 export const IMAGE_LEAVE = require('../../static/image/classic/leave.png');
+export const IMAGE_CHANGE_ADMIN = require('../../static/image/classic/change-admin.png');
 export const IMAGE_KICK_MEMBER = require('../../static/image/classic/kick-member.png');
 
 
@@ -106,7 +107,7 @@ export const SEARCH_INPUT_STYLE = {
     borderWidth: 1,
     borderColor: '#E1E5EC',
     borderRadius: 5,
-    paddingVertical: 10,
+    paddingVertical: 5,
     paddingHorizontal: 40,
     lineHeight: 20,
     fontSize: 16,
@@ -122,14 +123,14 @@ export const SEARCH_INPUT_PROPS_STYLE = {
 };
 export const SEARCH_IMAGE_STYLE = {
     position: 'absolute',
-    top: 10,
+    top: 5,
     left: 5,
     width: 30,
     height: 30
 };
 export const SEARCH_CLEAR_BUTTON_BLOCK_STYLE = {
     position: 'absolute',
-    top: 7,
+    top: 2,
     right: 5,
     width: 30,
     height: 30
@@ -168,9 +169,8 @@ export const TYPING_BLOCK_BOLD_STYLE = {
 export const FROM_NOW_TIME_TEXT_STYLE = {
     fontSize: 15,
     fontWeight: '300',
-    lineHeight: 30,
-    color: '#2F353B',
-    textAlign: 'right'
+    lineHeight: 20,
+    color: '#2F353B'
 };
 
 export const MESSAGE_STATUS_BLOCK_STYLE = {
@@ -186,14 +186,14 @@ export const MESSAGE_STATUS_BLOCK_SENDING_STYLE = {
     borderColor: '#BFBFBF'
 };
 export const MESSAGE_STATUS_BLOCK_SENT_STYLE = {
-    borderColor: '#BFBFBF'
-};
-export const MESSAGE_STATUS_BLOCK_DELIVERED_STYLE = {
     borderColor: '#F2784B'
 };
-export const MESSAGE_STATUS_BLOCK_SEEN_STYLE = {
+export const MESSAGE_STATUS_BLOCK_DELIVERED_STYLE = {
     borderColor: '#F2784B',
     backgroundColor: '#F2784B'
+};
+export const MESSAGE_STATUS_BLOCK_SEEN_STYLE = {
+    borderColor: '#fff'
 };
 export const MESSAGE_STATUS_TEXT_STYLE = {
     fontSize: 12,
@@ -203,10 +203,10 @@ export const MESSAGE_STATUS_TEXT_SENDING_STYLE = {
     color: '#fff'
 };
 export const MESSAGE_STATUS_TEXT_SENT_STYLE = {
-    color: '#BFBFBF'
+    color: '#F2784B'
 };
 export const MESSAGE_STATUS_TEXT_DELIVERED_STYLE = {
-    color: '#F2784B'
+    color: '#fff'
 };
 export const MESSAGE_STATUS_TEXT_SEEN_STYLE = {
     color: '#fff'
@@ -228,15 +228,15 @@ export const CONVERSATION_BLOCK_STYLE = {
     flexDirection: 'row',
     borderBottomWidth: 1,
     borderBottomColor: '#E1E5EC',
-    paddingVertical: 10
+    paddingVertical: 15
 };
 export const CONVERSATION_AVATAR_BLOCK_STYLE = {
-    width: 70,
-    height: 70,
+    width: 50,
+    height: 50,
     position: 'relative'
 };
 export const CONVERSATION_AVATAR_TEXT_STYLE = {
-    fontSize: 30
+    fontSize: 20
 };
 export const CONVERSATION_STATUS_BLOCK_STYLE = {
     width: 15,
@@ -244,15 +244,15 @@ export const CONVERSATION_STATUS_BLOCK_STYLE = {
     borderRadius: 50,
     backgroundColor: '#95A5A6',
     position: 'absolute',
-    top: 4,
-    right: 4
+    top: 0,
+    right: 0
 };
 export const CONVERSATION_STATUS_ONLINE_STYLE = {
     backgroundColor: '#578EBE'
 };
 export const CONVERSATION_INFORMATION_BLOCK_STYLE = {
     flex: 1,
-    marginLeft: 20,
+    marginLeft: 15,
     position: 'relative'
 };
 export const CONVERSATION_UNREAD_BLOCK_STYLE = {
@@ -263,8 +263,8 @@ export const CONVERSATION_UNREAD_BLOCK_STYLE = {
     alignItems: 'center',
     backgroundColor: '#F2784B',
     position: 'absolute',
-    top: 10,
-    right: 10
+    top: 25,
+    right: 0
 };
 export const CONVERSATION_UNREAD_TEXT_STYLE = {
     fontSize: 12,
@@ -272,35 +272,49 @@ export const CONVERSATION_UNREAD_TEXT_STYLE = {
     color: '#fff'
 };
 export const CONVERSATION_NAME_TEXT_STYLE = {
-    fontSize: 18,
+    maxWidth: '60%',
+    fontSize: 16,
     fontWeight: '500',
-    lineHeight: 30,
+    lineHeight: 20,
     color: '#2F353B'
 };
 export const CONVERSATION_LAST_MESSAGE_BLOCK_STYLE = {
-    fontSize: 16,
+    marginTop: 5,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center'
+};
+export const CONVERSATION_LAST_MESSAGE_TEXT_STYLE = {
+    maxWidth: '85%',
+    fontSize: 15,
     fontWeight: '400',
-    lineHeight: 30,
+    lineHeight: 20,
     color: '#2F353B'
-};
-export const CONVERSATION_TYPING_TEXT_STYLE = {
-    fontSize: 16
-};
-export const CONVERSATION_FROM_NOW_TEXT_STYLE = {
-    fontSize: 15
 };
 export const CONVERSATION_LAST_MESSAGE_TEXT_BOLD_STYLE = {
     fontWeight: '500'
 };
-export const CONVERSATION_MESSAGE_STATUS_BLOCK_STYLE = {
+export const CONVERSATION_LAST_MESSAGE_STATUS_BLOCK_STYLE = {
     width: 15,
     height: 15,
-    position: 'absolute',
-    top: 45,
-    right: 10
+    marginLeft: 5
 };
-export const CONVERSATION_MESSAGE_STATUS_TEXT_STYLE = {
+export const CONVERSATION_LAST_MESSAGE_STATUS_TEXT_STYLE = {
     fontSize: 8
+};
+export const CONVERSATION_TYPING_TEXT_STYLE = {
+    maxWidth: '85%',
+    fontSize: 15,
+    lineHeight: 20,
+    marginTop: 5
+};
+export const CONVERSATION_FROM_NOW_BLOCK_STYLE = {
+    position: 'absolute',
+    top: 0,
+    right: 0
+};
+export const CONVERSATION_FROM_NOW_TEXT_STYLE = {
+    fontSize: 14
 };
 
 
@@ -351,8 +365,7 @@ export const CHAT_HEADER_OFFLINE_TEXT_STYLE = {
     fontSize: 14,
     fontWeight: '300',
     lineHeight: 20,
-    color: '#95A5A6',
-    textAlign: 'left'
+    color: '#95A5A6'
 };
 export const CHAT_HEADER_ONLINE_TEXT_STYLE = {
     fontSize: 14,
@@ -607,12 +620,6 @@ export const MESSAGE_TYPE_ACTION_TEXT_STYLE = {
 export const MESSAGE_TYPE_ACTION_BOLD_TEXT_STYLE = {
     fontWeight: '500'
 };
-export const MESSAGE_TYPE_ACTION_TIME_TEXT_STYLE = {
-    fontSize: 12,
-    lineHeight: 20,
-    fontWeight: '400',
-    color: '#95A5A6'
-};
 export const MESSAGE_TYPE_MEDIA_BLOCK_STYLE = {};
 export const MESSAGE_TYPE_MEDIA_SENDER_BLOCK_STYLE = {
     flexDirection: 'row',
@@ -655,6 +662,7 @@ export const MESSAGE_TYPE_MEDIA_CANCELED_STYLE = {
     backgroundColor: '#E9EDEF'
 };
 export const MESSAGE_TYPE_MEDIA_TEXT_STYLE = {
+    maxWidth: '80%',
     fontSize: 16,
     lineHeight: 20,
     fontWeight: '400',
@@ -724,7 +732,7 @@ export const MESSAGE_TYPE_MEDIA_FILE_IMAGE_STYLE = {
     width: 200,
     height: 200
 };
-export const MESSAGE_TYPE_MEDIA_TIME_TEXT_STYLE = {
+export const MESSAGE_TYPE_MEDIA_DETAILS_STATUS_TEXT_STYLE = {
     marginHorizontal: 5,
     fontSize: 12,
     lineHeight: 20,
@@ -732,6 +740,7 @@ export const MESSAGE_TYPE_MEDIA_TIME_TEXT_STYLE = {
     color: '#95A5A6'
 };
 export const MESSAGE_TYPE_MEDIA_STATUS_BLOCK_STYLE = {
+    marginHorizontal: 5,
     width: 15,
     height: 15
 };
@@ -742,13 +751,13 @@ export const MESSAGE_TYPE_MEDIA_STATUS_TEXT_STYLE = {
 
 export const USER_BLOCK_STYLE = {
     paddingHorizontal: 15,
-    paddingVertical: 20,
     justifyContent: 'center',
     alignItems: 'center'
 };
 export const USER_AVATAR_BLOCK_STYLE = {
     width: 100,
-    height: 100
+    height: 100,
+    marginTop: 30
 };
 export const USER_AVATAR_TEXT_STYLE = {
     fontSize: 40
@@ -758,20 +767,19 @@ export const USER_NAME_TEXT_STYLE = {
     fontWeight: '400',
     lineHeight: 30,
     color: '#2F353B',
-    marginTop: 5
+    marginTop: 10
 };
 export const USER_OFFLINE_TEXT_STYLE = {
     fontSize: 18,
     fontWeight: '300',
-    lineHeight: 30,
+    lineHeight: 20,
     color: '#95A5A6',
-    textAlign: 'left',
     marginTop: 5
 };
 export const USER_ONLINE_TEXT_STYLE = {
     fontSize: 18,
     fontWeight: '300',
-    lineHeight: 30,
+    lineHeight: 20,
     color: '#578EBE',
     marginTop: 5
 };
@@ -794,10 +802,11 @@ export const USER_ACTION_BUTTON_IMAGE_STYLE = {
 
 export const GROUP_BLOCK_STYLE = {
     flex: 1,
-    paddingHorizontal: 15,
-    paddingVertical: 20,
-    justifyContent: 'center',
-    alignItems: 'center'
+    paddingHorizontal: 15
+};
+export const GROUP_INFO_BLOCK_STYLE = {
+    marginVertical: 15,
+    flexDirection: 'row'
 };
 export const GROUP_AVATAR_BLOCK_STYLE = {
     width: 100,
@@ -806,49 +815,60 @@ export const GROUP_AVATAR_BLOCK_STYLE = {
 export const GROUP_AVATAR_TEXT_STYLE = {
     fontSize: 40
 };
+export const GROUP_DETAILS_BLOCK_STYLE = {
+    marginLeft: 10
+};
 export const GROUP_NAME_TEXT_STYLE = {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: '400',
     lineHeight: 30,
     color: '#2F353B',
+    marginLeft: 5,
+    marginTop: 5
+};
+export const GROUP_TYPE_TEXT_STYLE = {
+    fontSize: 20,
+    fontWeight: '300',
+    lineHeight: 25,
+    color: '#95A5A6',
+    marginLeft: 5,
     marginTop: 5
 };
 export const GROUP_MEMBERS_TEXT_STYLE = {
     fontSize: 18,
-    fontWeight: '300',
-    lineHeight: 30,
+    fontWeight: '200',
+    lineHeight: 20,
     color: '#95A5A6',
-    textAlign: 'left',
+    marginLeft: 5,
     marginTop: 5
 };
 export const GROUP_ACTION_BLOCK_STYLE = {
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
+    marginTop: 5
 };
 export const GROUP_ACTION_BUTTON_STYLE = {
-    width: 80,
-    height: 80,
+    width: 40,
+    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
 };
 export const GROUP_ACTION_BUTTON_IMAGE_STYLE = {
-    width: 40,
-    height: 40
+    width: 25,
+    height: 25
 };
 export const GROUP_MEMBERS_BLOCK_STYLE = {
     flex: 1,
-    width: '100%',
     borderTopWidth: 1,
-    borderTopColor: '#E1E5EC'
+    borderTopColor: '#E1E5EC',
+    paddingBottom: 10
 };
 export const GROUP_MEMBERS_LIST_BLOCK_STYLE = {
-    flex: 1,
-    width: '100%'
+    flex: 1
 };
 export const GROUP_MEMBERS_LIST_MEMBER_BLOCK_STYLE = {
-    width: '100%',
     flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: '#E1E5EC',
     paddingVertical: 10
@@ -871,7 +891,7 @@ export const GROUP_MEMBERS_LIST_MEMBER_TEXTS_BLOCK_STYLE = {
 export const GROUP_MEMBERS_LIST_MEMBER_NAME_TEXT_STYLE = {
     fontSize: 16,
     fontWeight: '400',
-    lineHeight: 25,
+    lineHeight: 20,
     color: '#2F353B'
 };
 export const GROUP_MEMBERS_LIST_MEMBER_ADMIN_TEXT_STYLE = {
@@ -880,23 +900,34 @@ export const GROUP_MEMBERS_LIST_MEMBER_ADMIN_TEXT_STYLE = {
 export const GROUP_MEMBERS_LIST_MEMBER_OFFLINE_TEXT_STYLE = {
     fontSize: 15,
     fontWeight: '300',
-    lineHeight: 25,
+    lineHeight: 20,
     color: '#95A5A6',
-    textAlign: 'left'
+    marginTop: 5
 };
 export const GROUP_MEMBERS_LIST_MEMBER_ONLINE_TEXT_STYLE = {
     fontSize: 15,
     fontWeight: '300',
-    lineHeight: 25,
-    color: '#578EBE'
+    lineHeight: 20,
+    color: '#578EBE',
+    marginTop: 5
 };
-export const GROUP_MEMBERS_LIST_MEMBER_KICK_BUTTON_BLOCK_STYLE = {
-    width: 50,
-    height: 50,
+export const GROUP_MEMBERS_LIST_MEMBER_CHANGE_ADMIN_BUTTON_BLOCK_STYLE = {
+    width: 40,
+    height: 40,
     justifyContent: 'center',
     alignItems: 'center'
 };
-export const GROUP_MEMBERS_LIST_MEMBER_KICK_BUTTON_IMAGE_STYLE = {
+export const GROUP_MEMBERS_LIST_MEMBER_CHANGE_ADMIN_BUTTON_IMAGE_STYLE = {
+    width: 25,
+    height: 25
+};
+export const GROUP_MEMBERS_LIST_MEMBER_KICK_MEMBER_BUTTON_BLOCK_STYLE = {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const GROUP_MEMBERS_LIST_MEMBER_KICK_MEMBER_BUTTON_IMAGE_STYLE = {
     width: 25,
     height: 25
 };

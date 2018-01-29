@@ -7,17 +7,19 @@ import {
 class ChatInputDisabledComponent extends React.Component {
     constructor(props) {
         super(props);
+
+        this.coreInstances = props.getCoreInstances();
     };
 
     render() {
         return (
             <View
-                style={this.props.CustomStyle.getStyle('CHAT_INPUT_DISABLED_BLOCK_STYLE')}
+                style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_DISABLED_BLOCK_STYLE')}
             >
                 <Text
-                    style={this.props.CustomStyle.getStyle('CHAT_INPUT_DISABLED_TEXT_STYLE')}
+                    style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_DISABLED_TEXT_STYLE')}
                 >
-                    {this.props.Language.getText('CHAT_INPUT_DISABLED_TEXT')}
+                    {this.coreInstances.Language.getText('CHAT_INPUT_DISABLED_TEXT')}
                 </Text>
             </View>
         );

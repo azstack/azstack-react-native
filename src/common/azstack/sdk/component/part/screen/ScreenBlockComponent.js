@@ -13,6 +13,8 @@ class ScreenBlockComponent extends React.Component {
     constructor(props) {
         super(props);
 
+        this.coreInstances = props.getCoreInstances();
+
         this.state = {
             opacityAnimated: new Animated.Value(0),
             marginLeftAnimated: new Animated.Value(width),
@@ -91,7 +93,7 @@ class ScreenBlockComponent extends React.Component {
         return (
             <Animated.View
                 style={{
-                    ...this.props.CustomStyle.getStyle('SCREEN_BLOCK_STYLE'),
+                    ...this.coreInstances.CustomStyle.getStyle('SCREEN_BLOCK_STYLE'),
                     opacity: this.state.opacityAnimated,
                     marginLeft: this.state.marginLeftAnimated,
                     height: this.state.heightAnimated,

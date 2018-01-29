@@ -18,7 +18,7 @@ import CallLogItem from './part/call/CallLogItem';
 class CallLogsComponent extends React.Component {
     constructor(props) {
         super(props);
-
+        this.coreInstances = props.getCoreInstances();
         this.pagination = {
             done: 0,
             page: 1,
@@ -34,7 +34,7 @@ class CallLogsComponent extends React.Component {
     }
 
     componentWillMount() {
-        this.getCallLogs({reload: true});
+        this.getCallLogs({ reload: true });
     }
 
     componentDidMount() {
@@ -63,19 +63,19 @@ class CallLogsComponent extends React.Component {
     }
 
     renderContent() {
-        if(this.state.loading === true) {
+        if (this.state.loading === true) {
             return (
                 <EmptyBlockComponent
-                    CustomStyle={this.props.CustomStyle}
+                    getCoreInstances={this.props.getCoreInstances}
                     emptyText={"Loading"}
                 />
             );
         }
 
-        if(this.state.logs.length === 0) {
+        if (this.state.logs.length === 0) {
             return (
                 <EmptyBlockComponent
-                    CustomStyle={this.props.CustomStyle}
+                    getCoreInstances={this.props.getCoreInstances}
                     emptyText={"No recently call"}
                 />
             );
@@ -85,15 +85,15 @@ class CallLogsComponent extends React.Component {
             <FlatList
                 data={this.state.logs}
                 keyExtractor={(item, index) => index}
-                renderItem={({ item, index}) => this.renderItem(item, index)}
+                renderItem={({ item, index }) => this.renderItem(item, index)}
                 onEndReached={() => this.onEndReached()}
                 onEndReachedThreshold={0.2}
                 onRefresh={() => this.onRefresh()}
                 refreshing={this.state.loading}
                 onMomentumScrollBegin={() => { console.log('begin'); this.onEndReachedCalledDuringMomentum = false; }}
                 onMomentumScrollEnd={() => { console.log('end'); this.onEndReachedCalledDuringMomentum = true; }}
-                contentContainerStyle={{paddingBottom: 15}}
-                keyboardDismissMode={Platform.select({ios: 'interactive', android: 'on-drag'})}
+                contentContainerStyle={{ paddingBottom: 15 }}
+                keyboardDismissMode={Platform.select({ ios: 'interactive', android: 'on-drag' })}
                 centerContent={true}
             />
         );
@@ -103,16 +103,16 @@ class CallLogsComponent extends React.Component {
         return (
             <ScreenBlockComponent
                 fullScreen={false}
-                CustomStyle={this.props.CustomStyle}
+                getCoreInstances={this.props.getCoreInstances}
                 style={this.props.style}
             >
                 {this.props.header !== 'hidden' && <ScreenHeaderBlockComponent
-                    CustomStyle={this.props.CustomStyle}
+                    getCoreInstances={this.props.getCoreInstances}
                     onBackButtonPressed={() => this.props.onBackButtonPressed()}
                     title={'Call Logs'}
                 />}
                 <ScreenBodyBlockComponent
-                    CustomStyle={this.props.CustomStyle}
+                    getCoreInstances={this.props.getCoreInstances}
                     style={this.props.contentContainerStyle}
                 >
                     {this.renderContent()}
@@ -121,52 +121,52 @@ class CallLogsComponent extends React.Component {
         );
     }
 
-    getCallLogs({reload}) {
-        this.setState({loading: true});
-        this.props.AZStackCore.getPaidCallLogs({
+    getCallLogs({ reload }) {
+        this.setState({ loading: true });
+        this.coreInstances.AZStackCore.getPaidCallLogs({
             page: this.pagination.page,
             lastCreated: this.pagination.lastCreated
         }).then((result) => {
-            this.setState({loading: false});
+            this.setState({ loading: false });
             this.pagination.page += 1;
             this.pagination.done = result.done;
-            if(reload) {
-                this.setState({logs: result.list});
+            if (reload) {
+                this.setState({ logs: result.list });
             } else {
-                this.setState({logs: this.state.logs.concat(result.list)});
+                this.setState({ logs: this.state.logs.concat(result.list) });
             }
         }).catch((error) => {
-            this.setState({loading: false});
+            this.setState({ loading: false });
         });
     }
 
     onEndReached() {
-		if(this.pagination.done === this.props.AZStackCore.listConstants.GET_LIST_DONE) {
-			return;
-		}
-
-		if(this.state.loading === true) {
-			return;
-		}
-        if (this.onEndReachedCalledDuringMomentum) { // mean scrolling
-			return;
+        if (this.pagination.done === this.coreInstances.AZStackCore.listConstants.GET_LIST_DONE) {
+            return;
         }
-        
+
+        if (this.state.loading === true) {
+            return;
+        }
+        if (this.onEndReachedCalledDuringMomentum) { // mean scrolling
+            return;
+        }
+
         this.getCallLogs({});
-		this.onEndReachedCalledDuringMomentum = true;
+        this.onEndReachedCalledDuringMomentum = true;
     }
 
     onRefresh() {
-        this.getCallLogs({reload: true});
+        this.getCallLogs({ reload: true });
     }
 
     onItemPress(contact, index) {
-        if(this.state.showItemActions === index) {
-            this.setState({showItemActions: null});
+        if (this.state.showItemActions === index) {
+            this.setState({ showItemActions: null });
         } else {
-            this.setState({showItemActions: index});
+            this.setState({ showItemActions: index });
         }
-        
+
     }
 };
 

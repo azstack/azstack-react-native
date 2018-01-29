@@ -109,11 +109,7 @@ export default class AZStackBaseComponent extends React.Component {
         return <ConversationsComponent
             key={key}
             Sizes={this.Sizes}
-            Language={this.Language}
-            CustomStyle={this.CustomStyle}
-            eventConstants={this.eventConstants}
-            AZStackCore={this.AZStackCore}
-            EventEmitter={this.EventEmitter}
+            getCoreInstances={this.getCoreInstances}
             {...options}
         />;
     };
@@ -122,12 +118,7 @@ export default class AZStackBaseComponent extends React.Component {
         return <ChatComponent
             key={key}
             Sizes={this.Sizes}
-            Language={this.Language}
-            CustomStyle={this.CustomStyle}
-            eventConstants={this.eventConstants}
-            linkConstants={this.linkConstants}
-            AZStackCore={this.AZStackCore}
-            EventEmitter={this.EventEmitter}
+            getCoreInstances={this.getCoreInstances}
             {...options}
         />;
     };
@@ -136,11 +127,7 @@ export default class AZStackBaseComponent extends React.Component {
         return <OnCallComponent
             key={key}
             Sizes={this.Sizes}
-            Language={this.Language}
-            CustomStyle={this.CustomStyle}
-            eventConstants={this.eventConstants}
-            AZStackCore={this.AZStackCore}
-            EventEmitter={this.EventEmitter}
+            getCoreInstances={this.getCoreInstances}
             {...options}
         />;
     };
@@ -149,11 +136,7 @@ export default class AZStackBaseComponent extends React.Component {
         return <ContactComponent
             key={key}
             Sizes={this.Sizes}
-            Language={this.Language}
-            CustomStyle={this.CustomStyle}
-            eventConstants={this.eventConstants}
-            AZStackCore={this.AZStackCore}
-            EventEmitter={this.EventEmitter}
+            getCoreInstances={this.getCoreInstances}
             {...options}
         />;
     };
@@ -175,11 +158,7 @@ export default class AZStackBaseComponent extends React.Component {
         return <VideoCallComponent
             key={key}
             Sizes={this.Sizes}
-            Language={this.Language}
-            CustomStyle={this.CustomStyle}
-            eventConstants={this.eventConstants}
-            AZStackCore={this.AZStackCore}
-            EventEmitter={this.EventEmitter}
+            getCoreInstances={this.getCoreInstances}
             {...options}
         />;
     };
@@ -188,11 +167,7 @@ export default class AZStackBaseComponent extends React.Component {
         return <CallLogsComponent
             key={key}
             Sizes={this.Sizes}
-            Language={this.Language}
-            CustomStyle={this.CustomStyle}
-            eventConstants={this.eventConstants}
-            AZStackCore={this.AZStackCore}
-            EventEmitter={this.EventEmitter}
+            getCoreInstances={this.getCoreInstances}
             {...options}
         />;
     };
@@ -201,11 +176,7 @@ export default class AZStackBaseComponent extends React.Component {
         return <UserComponent
             key={key}
             Sizes={this.Sizes}
-            Language={this.Language}
-            CustomStyle={this.CustomStyle}
-            eventConstants={this.eventConstants}
-            AZStackCore={this.AZStackCore}
-            EventEmitter={this.EventEmitter}
+            getCoreInstances={this.getCoreInstances}
             {...options}
         />;
     };
@@ -214,12 +185,7 @@ export default class AZStackBaseComponent extends React.Component {
         return <GroupComponent
             key={key}
             Sizes={this.Sizes}
-            Language={this.Language}
-            CustomStyle={this.CustomStyle}
-            eventConstants={this.eventConstants}
-            AZStackCore={this.AZStackCore}
-            EventEmitter={this.EventEmitter}
-            members={this.members}
+            getCoreInstances={this.getCoreInstances}
             {...options}
         />;
     };

@@ -7,15 +7,17 @@ import {
 class EmptyBlockComponent extends React.Component {
     constructor(props) {
         super(props);
+
+        this.coreInstances = props.getCoreInstances();
     }
 
     render() {
         return (
             <View
-                style={this.props.CustomStyle.getStyle('EMPTY_BLOCK_STYLE')}
+                style={this.coreInstances.CustomStyle.getStyle('EMPTY_BLOCK_STYLE')}
             >
                 <Text
-                    style={this.props.CustomStyle.getStyle('EMPTY_TEXT_STYLE')}
+                    style={this.coreInstances.CustomStyle.getStyle('EMPTY_TEXT_STYLE')}
                 >
                     {this.props.emptyText}
                 </Text>

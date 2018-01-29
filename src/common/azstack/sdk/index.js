@@ -53,6 +53,8 @@ export class AZStackSdk extends AZStackBaseComponent {
         this.Member = new Member({
             AZStackCore: this.AZStackCore
         });
+
+        this.getCoreInstances = this.getCoreInstances.bind(this);
     };
 
     addSubscriptions() {
@@ -128,8 +130,16 @@ export class AZStackSdk extends AZStackBaseComponent {
         return this.AZStackCore.disconnect();
     };
 
-    getConstants(constantGroup) {
-        return this.AZStackCore[constantGroup];
+    getCoreInstances() {
+        return {
+            eventConstants: this.eventConstants,
+            linkConstants: this.linkConstants,
+            Language: this.Language,
+            CustomStyle: this.CustomStyle,
+            AZStackCore: this.AZStackCore,
+            EventEmitter: this.EventEmitter,
+            members: this.members
+        };
     };
 
     onCallinStart(error, result) {
@@ -641,9 +651,8 @@ export class AZStackSdk extends AZStackBaseComponent {
                     return;
                 }
 
-                this.startChat({
-                    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
-                    chatId: event.member.userId,
+                this.showUser({
+                    userId: event.member.userId
                 });
             }
         });
@@ -898,9 +907,8 @@ export class AZStackSdk extends AZStackBaseComponent {
                         return;
                     }
 
-                    this.startChat({
-                        chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
-                        chatId: event.member.userId,
+                    this.showUser({
+                        userId: event.member.userId
                     });
                 }
             },
