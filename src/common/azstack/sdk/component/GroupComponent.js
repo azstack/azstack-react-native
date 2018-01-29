@@ -25,8 +25,7 @@ class GroupComponent extends React.Component {
         this.subscriptions = {};
 
         this.state = {
-            group: null,
-            members: this.coreInstances.members
+            group: null
         };
 
         this.onStartChatButtonPressed = this.onStartChatButtonPressed.bind(this);
@@ -55,12 +54,6 @@ class GroupComponent extends React.Component {
                 return;
             }
             this.initRun();
-        });
-        this.subscriptions.onMembersChanged = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_MEMBERS_CHANGED, ({ error, result }) => {
-            if (error) {
-                return;
-            }
-            this.setState({ members: result });
         });
         this.subscriptions.onGroupInvited = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_GROUP_INVITED, ({ error, result }) => {
             if (error) {
@@ -135,8 +128,26 @@ class GroupComponent extends React.Component {
         });
     };
     onEditNameButtonPressed() { };
-    onAddMemberButtonPressed() { };
-    onLeaveGroupButtonPressed() { };
+    onAddMemberButtonPressed() {
+        this.props.showSelectMembers({
+            headerTitle: this.coreInstances.Language.getText('SELECT_NEW_MEMBERS_HEADER_TITLE_TEXT'),
+            ignoreMembers: [] || this.state.group.members.map((member) => {
+                return member.userId
+            }),
+            onSelectDone: (event) => {
+                console.log(event);
+            }
+        });
+    };
+    onLeaveGroupButtonPressed() {
+        this.props.showSelectMember({
+            headerTitle: this.coreInstances.Language.getText('SELECT_NEW_ADMIN_HEADER_TITLE_TEXT'),
+            ignoreMembers: [this.coreInstances.AZStackCore.authenticatedUser.userId],
+            onSelectDone: (event) => {
+                console.log(event);
+            }
+        });
+    };
     onChangeAdminButtonPressed(event) { };
     onKickMemberButtonPressed(event) { };
 

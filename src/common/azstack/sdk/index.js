@@ -630,6 +630,12 @@ export class AZStackSdk extends AZStackBaseComponent {
 
                 this.pop();
             },
+            showSelectMembers: (event) => {
+                this.showSelectMembers(event);
+            },
+            showSelectMember: (event) => {
+                this.showSelectMember(event);
+            },
             onStartChatButtonPressed: (event) => {
                 if (options && typeof options === 'object' && typeof options.onStartChatButtonPressed === 'function') {
                     options.onStartChatButtonPressed(event);
@@ -654,6 +660,60 @@ export class AZStackSdk extends AZStackBaseComponent {
                 this.showUser({
                     userId: event.member.userId
                 });
+            }
+        });
+    };
+    showSelectMembers(options) {
+        this.navigate(this.getNavigation().SelectMembersComponent, {
+            ...options,
+            onBackButtonPressed: () => {
+                if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                    options.onBackButtonPressed();
+                    return;
+                }
+
+                this.pop();
+            },
+            onSelectDone: (event) => {
+                if (options && typeof options === 'object' && typeof options.onSelectDone === 'function') {
+                    options.onSelectDone(event);
+                    return;
+                }
+            },
+            onDoneClose: () => {
+                if (options && typeof options === 'object' && typeof options.onDoneClose === 'function') {
+                    options.onDoneClose(event);
+                    return;
+                }
+
+                this.pop();
+            }
+        });
+    };
+    showSelectMember(options) {
+        this.navigate(this.getNavigation().SelectMemberComponent, {
+            ...options,
+            onBackButtonPressed: () => {
+                if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                    options.onBackButtonPressed();
+                    return;
+                }
+
+                this.pop();
+            },
+            onSelectDone: (event) => {
+                if (options && typeof options === 'object' && typeof options.onSelectDone === 'function') {
+                    options.onSelectDone(event);
+                    return;
+                }
+            },
+            onDoneClose: () => {
+                if (options && typeof options === 'object' && typeof options.onDoneClose === 'function') {
+                    options.onDoneClose(event);
+                    return;
+                }
+
+                this.pop();
             }
         });
     };

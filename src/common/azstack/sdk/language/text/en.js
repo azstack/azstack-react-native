@@ -1,4 +1,5 @@
 export const ALERT_TITLE_ERROR_TEXT = 'Error';
+export const ALERT_TITLE_WARNING_TEXT = 'Warning';
 export const ALERT_BUTTON_TITLE_OK_TEXT = 'OK';
 
 export const CONNECTTION_CONNECTING_TEXT = 'Connecting...';
@@ -78,3 +79,13 @@ export const USER_EMPTY_TEXT = 'No User Infomation';
 export const GROUP_HEADER_TITLE_TEXT = 'Group Information';
 export const GROUP_EMPTY_TEXT = 'No Group Infomation';
 export const GROUP_MEMBER_EMPTY_TEXT = 'No Member';
+
+export const SELECT_NEW_MEMBERS_HEADER_TITLE_TEXT = 'Select new members';
+export const SELECT_NEW_ADMIN_HEADER_TITLE_TEXT = 'Select new admin';
+
+export const SELECT_MEMBERS_SEARCH_PLACEHOLDER_TEXT = 'Search...';
+export const SELECT_MEMBERS_EMPTY_TEXT = 'No Member';
+export const SELECT_MEMBERS_UNSELECTED_WARNING_TEXT = 'Please select any member';
+
+export const SELECT_MEMBER_SEARCH_PLACEHOLDER_TEXT = 'Search...';
+export const SELECT_MEMBER_EMPTY_TEXT = 'No Member';

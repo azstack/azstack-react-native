@@ -129,6 +129,13 @@ class VideoCallComponent extends React.Component {
 
 	componentDidMount() {
 		this.addSubscriptions();
+		if (!this.props.isIncomingCall) {
+			if (this.coreInstances.AZStackCore.Call.callData.webRTC.localStream) {
+				this.setState({
+					localVideoUrl: this.coreInstances.AZStackCore.Call.callData.webRTC.localStream.toURL()
+				});
+			}
+		}
 	}
 
 	componentWillUnmount() {
@@ -292,8 +299,8 @@ class VideoCallComponent extends React.Component {
 		return (
 			<ScreenBlockComponent
 				fullScreen={true}
-                statusbar={this.props.statusbar}
-                style={this.props.style}
+				statusbar={this.props.statusbar}
+				style={this.props.style}
 				getCoreInstances={this.props.getCoreInstances}
 			>
 				{this.state.isIncomingCall === true && this.renderIncomingCall()}
