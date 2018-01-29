@@ -1,13 +1,17 @@
 import React from 'react';
 import {
-    View
+    Platform,
+    Alert,
+    View,
+    FlatList
 } from 'react-native';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
-import ScreenHeaderBlockComponent from './part/screen/ScreenHeaderBlockComponent';
+import SelectMembersHeaderBlockComponent from './part/select/SelectMembersHeaderBlockComponent';
 import ScreenBodyBlockComponent from './part/screen/ScreenBodyBlockComponent';
 import SearchBlockComponent from './part/common/SearchBlockComponent';
 import EmptyBlockComponent from './part/common/EmptyBlockComponent';
+import SelectMemberBlockComponent from './part/select/SelectMemberBlockComponent';
 import ConnectionBlockComponent from './part/common/ConnectionBlockComponent';
 
 class SelectMembersComponent extends React.Component {
@@ -18,11 +22,15 @@ class SelectMembersComponent extends React.Component {
         this.subscriptions = {};
         this.state = {
             members: this.coreInstances.members,
+            selectedMembers: [],
             searchText: ''
         };
 
         this.onSearchTextChanged = this.onSearchTextChanged.bind(this);
         this.onSearchTextCleared = this.onSearchTextCleared.bind(this);
+
+        this.onDoneButtonPressed = this.onDoneButtonPressed.bind(this);
+        this.onMemberPressed = this.onMemberPressed.bind(this);
     };
 
     addSubscriptions() {
@@ -48,7 +56,6 @@ class SelectMembersComponent extends React.Component {
         this.setState({ searchText: '' });
     };
     getAvailableMembers() {
-        return [];
         let availableMembers = this.state.members.filter((member) => {
             return this.props.ignoreMembers.indexOf(member.userId) === -1;
         });
@@ -68,6 +75,52 @@ class SelectMembersComponent extends React.Component {
         });
     };
 
+    onDoneButtonPressed() {
+        if (this.state.selectedMembers.length === 0) {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_WARNING_TEXT'),
+                this.coreInstances.Language.getText('SELECT_MEMBERS_UNSELECTED_WARNING_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+            return;
+        }
+
+        this.props.onSelectDone({
+            selected: this.state.selectedMembers
+        });
+        this.props.onBackButtonPressed();
+    };
+    onMemberPressed(event) {
+        let selectedMembers = [...this.state.selectedMembers];
+        let isSelected = false;
+        for (let i = 0; i < selectedMembers.length; i++) {
+            if (selectedMembers[i].userId === event.member.userId) {
+                selectedMembers.splice(i, 1);
+                isSelected = true;
+            }
+        }
+        if (!isSelected) {
+            selectedMembers.push(event.member);
+        }
+        this.setState({ selectedMembers: selectedMembers });
+    };
+
+    isMemberSelected(checkingMember) {
+        let isSelected = false;
+        for (let i = 0; i < this.state.selectedMembers.length; i++) {
+            if (this.state.selectedMembers[i].userId === checkingMember.userId) {
+                isSelected = true;
+            }
+        }
+        if (isSelected) {
+            return true;
+        }
+        return false;
+    };
+
     componentDidMount() {
         this.addSubscriptions();
     };
@@ -83,10 +136,11 @@ class SelectMembersComponent extends React.Component {
                 statusbar={this.props.statusbar}
                 style={this.props.style}
             >
-                <ScreenHeaderBlockComponent
+                <SelectMembersHeaderBlockComponent
                     getCoreInstances={this.props.getCoreInstances}
                     onBackButtonPressed={this.props.onBackButtonPressed}
-                    title={this.coreInstances.Language.getText('SELECT_MEMBERS_HEADER_TITLE_TEXT')}
+                    onDoneButtonPressed={this.onDoneButtonPressed}
+                    title={this.props.headerTitle}
                 />
                 <ScreenBodyBlockComponent
                     getCoreInstances={this.props.getCoreInstances}
@@ -106,6 +160,25 @@ class SelectMembersComponent extends React.Component {
                         this.getAvailableMembers().length === 0 && <EmptyBlockComponent
                             getCoreInstances={this.props.getCoreInstances}
                             emptyText={this.coreInstances.Language.getText('SELECT_MEMBERS_EMPTY_TEXT')}
+                        />
+                    }
+                    {
+                        this.getAvailableMembers().length > 0 && <FlatList
+                            style={this.coreInstances.CustomStyle.getStyle('SELECT_MEMBERS_LIST_STYLE')}
+                            data={this.getAvailableMembers()}
+                            keyExtractor={(item, index) => ('select_members_' + item.userId)}
+                            renderItem={({ item }) => {
+                                return (
+                                    <SelectMemberBlockComponent
+                                        getCoreInstances={this.props.getCoreInstances}
+                                        member={item}
+                                        isSelected={this.isMemberSelected(item)}
+                                        onMemberPressed={this.onMemberPressed}
+                                    />
+                                );
+                            }}
+                            contentContainerStyle={this.coreInstances.CustomStyle.getStyle('SELECT_MEMBERS_LIST_CONTENT_CONTAINER_STYLE')}
+                            keyboardDismissMode={Platform.select({ ios: 'interactive', android: 'on-drag' })}
                         />
                     }
                     <ConnectionBlockComponent

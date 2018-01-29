@@ -86,7 +86,7 @@ class SelectMemberComponent extends React.Component {
                 <ScreenHeaderBlockComponent
                     getCoreInstances={this.props.getCoreInstances}
                     onBackButtonPressed={this.props.onBackButtonPressed}
-                    title={this.coreInstances.Language.getText('SELECT_MEMBER_HEADER_TITLE_TEXT')}
+                    title={this.props.headerTitle}
                 />
                 <ScreenBodyBlockComponent
                     getCoreInstances={this.props.getCoreInstances}

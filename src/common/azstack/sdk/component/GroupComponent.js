@@ -130,7 +130,8 @@ class GroupComponent extends React.Component {
     onEditNameButtonPressed() { };
     onAddMemberButtonPressed() {
         this.props.showSelectMembers({
-            ignoreMembers: this.state.group.members.map((member) => {
+            headerTitle: this.coreInstances.Language.getText('SELECT_NEW_MEMBERS_HEADER_TITLE_TEXT'),
+            ignoreMembers: [] || this.state.group.members.map((member) => {
                 return member.userId
             }),
             onSelectDone: (event) => {
@@ -140,6 +141,7 @@ class GroupComponent extends React.Component {
     };
     onLeaveGroupButtonPressed() {
         this.props.showSelectMember({
+            headerTitle: this.coreInstances.Language.getText('SELECT_NEW_ADMIN_HEADER_TITLE_TEXT'),
             ignoreMembers: [this.coreInstances.AZStackCore.authenticatedUser.userId],
             onSelectDone: (event) => {
                 console.log(event);

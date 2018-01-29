@@ -17,6 +17,8 @@ export const IMAGE_ADD_MEMBER = require('../../static/image/classic/add-member.p
 export const IMAGE_LEAVE = require('../../static/image/classic/leave.png');
 export const IMAGE_CHANGE_ADMIN = require('../../static/image/classic/change-admin.png');
 export const IMAGE_KICK_MEMBER = require('../../static/image/classic/kick-member.png');
+export const IMAGE_DONE = require('../../static/image/classic/done.png');
+export const IMAGE_CHECK_MARK = require('../../static/image/classic/check-mark.png');
 
 
 export const SCREEN_BLOCK_STYLE = {
@@ -871,7 +873,7 @@ export const GROUP_MEMBERS_LIST_MEMBER_BLOCK_STYLE = {
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: '#E1E5EC',
-    paddingVertical: 10
+    paddingVertical: 15
 };
 export const GROUP_MEMBERS_LIST_MEMBER_INFO_BLOCK_STYLE = {
     flex: 1,
@@ -886,7 +888,7 @@ export const GROUP_MEMBERS_LIST_MEMBER_AVATAR_TEXT_STYLE = {
 };
 export const GROUP_MEMBERS_LIST_MEMBER_TEXTS_BLOCK_STYLE = {
     flex: 1,
-    marginLeft: 10
+    marginLeft: 15
 };
 export const GROUP_MEMBERS_LIST_MEMBER_NAME_TEXT_STYLE = {
     fontSize: 16,
@@ -933,13 +935,110 @@ export const GROUP_MEMBERS_LIST_MEMBER_KICK_MEMBER_BUTTON_IMAGE_STYLE = {
 };
 
 
+export const SELECT_MEMBERS_HEADER_BLOCK_STYLE = {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderStyle: 'solid',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E1E5EC',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row'
+};
+export const SELECT_MEMBERS_HEADER_BACK_BUTTON_STYLE = {
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'flex-start'
+};
+export const SELECT_MEMBERS_HEADER_BACK_BUTTON_IMAGE_STYLE = {
+    width: 25,
+    height: 25
+};
+export const SELECT_MEMBERS_HEADER_TITLE_TEXT_STYLE = {
+    flex: 1,
+    paddingHorizontal: 50,
+    fontSize: 20,
+    fontWeight: '400',
+    lineHeight: 25,
+    color: '#2F353B',
+    textAlign: 'center'
+};
+export const SELECT_MEMBERS_HEADER_DONE_BUTTON_STYLE = {
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'flex-end'
+};
+export const SELECT_MEMBERS_HEADER_DONE_BUTTON_IMAGE_STYLE = {
+    width: 25,
+    height: 25
+};
+
 export const SELECT_MEMBERS_SEARCH_BLOCK_STYLE = {
     marginVertical: 10,
     marginHorizontal: 15,
+};
+
+export const SELECT_MEMBERS_LIST_STYLE = {
+    paddingHorizontal: 15,
+    flex: 1
+};
+export const SELECT_MEMBERS_LIST_CONTENT_CONTAINER_STYLE = {
+    paddingBottom: 15
 };
 
 
 export const SELECT_MEMBER_SEARCH_BLOCK_STYLE = {
     marginVertical: 10,
     marginHorizontal: 15,
+};
+
+
+export const SELECT_MEMBER_BLOCK_STYLE = {
+    paddingVertical: 15,
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E1E5EC'
+};
+export const SELECT_MEMBER_AVATAR_BLOCK_STYLE = {
+    width: 50,
+    height: 50
+};
+export const SELECT_MEMBER_AVATAR_TEXT_STYLE = {
+    fontSize: 18
+};
+export const SELECT_MEMBER_TEXTS_BLOCK_STYLE = {
+    flex: 1,
+    marginLeft: 15
+};
+export const SELECT_MEMBER_NAME_TEXT_STYLE = {
+    fontSize: 16,
+    fontWeight: '400',
+    lineHeight: 20,
+    color: '#2F353B'
+};
+export const SELECT_MEMBER_OFFLINE_TEXT_STYLE = {
+    fontSize: 15,
+    fontWeight: '300',
+    lineHeight: 20,
+    color: '#95A5A6',
+    marginTop: 5
+};
+export const SELECT_MEMBER_ONLINE_TEXT_STYLE = {
+    fontSize: 15,
+    fontWeight: '300',
+    lineHeight: 20,
+    color: '#578EBE',
+    marginTop: 5
+};
+export const SELECT_MEMBER_SELECTED_BLOCK_STYLE = {
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'flex-end'
+};
+export const SELECT_MEMBER_SELECTED_IMAGE_STYLE = {
+    width: 35,
+    height: 35
 };
