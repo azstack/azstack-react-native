@@ -1,6 +1,8 @@
 import React from 'react';
 import {
-    View
+    Platform,
+    View,
+    FlatList
 } from 'react-native';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
@@ -8,6 +10,7 @@ import ScreenHeaderBlockComponent from './part/screen/ScreenHeaderBlockComponent
 import ScreenBodyBlockComponent from './part/screen/ScreenBodyBlockComponent';
 import SearchBlockComponent from './part/common/SearchBlockComponent';
 import EmptyBlockComponent from './part/common/EmptyBlockComponent';
+import SelectMemberBlockComponent from './part/select/SelectMemberBlockComponent';
 import ConnectionBlockComponent from './part/common/ConnectionBlockComponent';
 
 class SelectMemberComponent extends React.Component {
@@ -23,6 +26,8 @@ class SelectMemberComponent extends React.Component {
 
         this.onSearchTextChanged = this.onSearchTextChanged.bind(this);
         this.onSearchTextCleared = this.onSearchTextCleared.bind(this);
+
+        this.onMemberPressed = this.onMemberPressed.bind(this);
     };
 
     addSubscriptions() {
@@ -48,7 +53,6 @@ class SelectMemberComponent extends React.Component {
         this.setState({ searchText: '' });
     };
     getAvailableMembers() {
-        return [];
         let availableMembers = this.state.members.filter((member) => {
             return this.props.ignoreMembers.indexOf(member.userId) === -1;
         });
@@ -66,6 +70,11 @@ class SelectMemberComponent extends React.Component {
             }
             return matched;
         });
+    };
+
+    onMemberPressed(event) {
+        this.props.onSelectDone({ selected: event.member });
+        this.props.onDoneClose();
     };
 
     componentDidMount() {
@@ -106,6 +115,25 @@ class SelectMemberComponent extends React.Component {
                         this.getAvailableMembers().length === 0 && <EmptyBlockComponent
                             getCoreInstances={this.props.getCoreInstances}
                             emptyText={this.coreInstances.Language.getText('SELECT_MEMBER_EMPTY_TEXT')}
+                        />
+                    }
+                    {
+                        this.getAvailableMembers().length > 0 && <FlatList
+                            style={this.coreInstances.CustomStyle.getStyle('SELECT_MEMBER_LIST_STYLE')}
+                            data={this.getAvailableMembers()}
+                            keyExtractor={(item, index) => ('select_member_' + item.userId)}
+                            renderItem={({ item }) => {
+                                return (
+                                    <SelectMemberBlockComponent
+                                        getCoreInstances={this.props.getCoreInstances}
+                                        member={item}
+                                        isSelected={false}
+                                        onMemberPressed={this.onMemberPressed}
+                                    />
+                                );
+                            }}
+                            contentContainerStyle={this.coreInstances.CustomStyle.getStyle('SELECT_MEMBER_LIST_CONTENT_CONTAINER_STYLE')}
+                            keyboardDismissMode={Platform.select({ ios: 'interactive', android: 'on-drag' })}
                         />
                     }
                     <ConnectionBlockComponent

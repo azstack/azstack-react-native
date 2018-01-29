@@ -978,7 +978,6 @@ export const SELECT_MEMBERS_SEARCH_BLOCK_STYLE = {
     marginVertical: 10,
     marginHorizontal: 15,
 };
-
 export const SELECT_MEMBERS_LIST_STYLE = {
     paddingHorizontal: 15,
     flex: 1
@@ -991,6 +990,13 @@ export const SELECT_MEMBERS_LIST_CONTENT_CONTAINER_STYLE = {
 export const SELECT_MEMBER_SEARCH_BLOCK_STYLE = {
     marginVertical: 10,
     marginHorizontal: 15,
+};
+export const SELECT_MEMBER_LIST_STYLE = {
+    paddingHorizontal: 15,
+    flex: 1
+};
+export const SELECT_MEMBER_LIST_CONTENT_CONTAINER_STYLE = {
+    paddingBottom: 15
 };
 
 
