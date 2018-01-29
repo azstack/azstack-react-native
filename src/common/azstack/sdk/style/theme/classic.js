@@ -957,7 +957,6 @@ export const SELECT_MEMBERS_HEADER_BACK_BUTTON_IMAGE_STYLE = {
 };
 export const SELECT_MEMBERS_HEADER_TITLE_TEXT_STYLE = {
     flex: 1,
-    paddingHorizontal: 50,
     fontSize: 20,
     fontWeight: '400',
     lineHeight: 25,
