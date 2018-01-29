@@ -91,7 +91,7 @@ class SelectMembersComponent extends React.Component {
         this.props.onSelectDone({
             selected: this.state.selectedMembers
         });
-        this.props.onBackButtonPressed();
+        this.props.onDoneClose();
     };
     onMemberPressed(event) {
         let selectedMembers = [...this.state.selectedMembers];

@@ -679,6 +679,14 @@ export class AZStackSdk extends AZStackBaseComponent {
                     options.onSelectDone(event);
                     return;
                 }
+            },
+            onDoneClose: () => {
+                if (options && typeof options === 'object' && typeof options.onDoneClose === 'function') {
+                    options.onDoneClose(event);
+                    return;
+                }
+
+                this.pop();
             }
         });
     };
@@ -698,6 +706,14 @@ export class AZStackSdk extends AZStackBaseComponent {
                     options.onSelectDone(event);
                     return;
                 }
+            },
+            onDoneClose: () => {
+                if (options && typeof options === 'object' && typeof options.onDoneClose === 'function') {
+                    options.onDoneClose(event);
+                    return;
+                }
+
+                this.pop();
             }
         });
     };
