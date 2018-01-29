@@ -7,6 +7,8 @@ class TimeFromNowBlockComponent extends React.Component {
     constructor(props) {
         super(props);
 
+        this.coreInstances = props.getCoreInstances();
+
         this.state = {
             currentTime: new Date().getTime()
         };
@@ -27,58 +29,58 @@ class TimeFromNowBlockComponent extends React.Component {
             timeDiff = Math.round((this.state.currentTime - this.props.time) / 1000);
         }
         if (mode === 'future') {
-            fromNowText += ` ${this.props.Language.getText('FROM_NOW_FUTURE_TEXT')}`;
+            fromNowText += ` ${this.coreInstances.Language.getText('FROM_NOW_FUTURE_TEXT')}`;
         }
         if (timeDiff < 60) {
             fromNowText += ` ${timeDiff}`;
             if (timeDiff > 1) {
-                fromNowText += ` ${this.props.Language.getText('FROM_NOW_SECOND_MANY_TEXT')}`;
+                fromNowText += ` ${this.coreInstances.Language.getText('FROM_NOW_SECOND_MANY_TEXT')}`;
             } else {
-                fromNowText += ` ${this.props.Language.getText('FROM_NOW_SECOND_TEXT')}`;
+                fromNowText += ` ${this.coreInstances.Language.getText('FROM_NOW_SECOND_TEXT')}`;
             }
         } else if (timeDiff < 60 * 60) {
             let minute = Math.round(timeDiff / 60);
             fromNowText += ` ${minute}`;
             if (minute > 1) {
-                fromNowText += ` ${this.props.Language.getText('FROM_NOW_MINUTE_MANY_TEXT')}`;
+                fromNowText += ` ${this.coreInstances.Language.getText('FROM_NOW_MINUTE_MANY_TEXT')}`;
             } else {
-                fromNowText += ` ${this.props.Language.getText('FROM_NOW_MINUTE_TEXT')}`;
+                fromNowText += ` ${this.coreInstances.Language.getText('FROM_NOW_MINUTE_TEXT')}`;
             }
         } else if (timeDiff < 60 * 60 * 24) {
             let hour = Math.round(timeDiff / 60 / 60);
             fromNowText += ` ${hour}`;
             if (hour > 1) {
-                fromNowText += ` ${this.props.Language.getText('FROM_NOW_HOUR_MANY_TEXT')}`;
+                fromNowText += ` ${this.coreInstances.Language.getText('FROM_NOW_HOUR_MANY_TEXT')}`;
             } else {
-                fromNowText += ` ${this.props.Language.getText('FROM_NOW_HOUR_TEXT')}`;
+                fromNowText += ` ${this.coreInstances.Language.getText('FROM_NOW_HOUR_TEXT')}`;
             }
         } else if (timeDiff < 60 * 60 * 24 * 30) {
             let day = Math.round(timeDiff / 60 / 60 / 24);
             fromNowText += ` ${day}`;
             if (day > 1) {
-                fromNowText += ` ${this.props.Language.getText('FROM_NOW_DAY_MANY_TEXT')}`;
+                fromNowText += ` ${this.coreInstances.Language.getText('FROM_NOW_DAY_MANY_TEXT')}`;
             } else {
-                fromNowText += ` ${this.props.Language.getText('FROM_NOW_DAY_TEXT')}`;
+                fromNowText += ` ${this.coreInstances.Language.getText('FROM_NOW_DAY_TEXT')}`;
             }
         } else if (timeDiff < 60 * 60 * 24 * 30 * 12) {
             let month = Math.round(timeDiff / 60 / 60 / 24 / 30);
             fromNowText += ` ${month}`;
             if (month > 1) {
-                fromNowText += ` ${this.props.Language.getText('FROM_NOW_MONTH_MANY_TEXT')}`;
+                fromNowText += ` ${this.coreInstances.Language.getText('FROM_NOW_MONTH_MANY_TEXT')}`;
             } else {
-                fromNowText += ` ${this.props.Language.getText('FROM_NOW_MONTH_TEXT')}`;
+                fromNowText += ` ${this.coreInstances.Language.getText('FROM_NOW_MONTH_TEXT')}`;
             }
         } else {
             let year = Math.round(timeDiff / 60 / 60 / 24 / 30 / 12);
             fromNowText += ` ${year}`;
             if (year > 1) {
-                fromNowText += ` ${this.props.Language.getText('FROM_NOW_YEAR_MANY_TEXT')}`;
+                fromNowText += ` ${this.coreInstances.Language.getText('FROM_NOW_YEAR_MANY_TEXT')}`;
             } else {
-                fromNowText += ` ${this.props.Language.getText('FROM_NOW_YEAR_TEXT')}`;
+                fromNowText += ` ${this.coreInstances.Language.getText('FROM_NOW_YEAR_TEXT')}`;
             }
         }
         if (mode === 'past') {
-            fromNowText += ` ${this.props.Language.getText('FROM_NOW_PAST_TEXT')}`;
+            fromNowText += ` ${this.coreInstances.Language.getText('FROM_NOW_PAST_TEXT')}`;
         }
         return fromNowText;
     };
@@ -98,7 +100,7 @@ class TimeFromNowBlockComponent extends React.Component {
         return (
             <Text
                 style={[
-                    this.props.CustomStyle.getStyle('FROM_NOW_TIME_TEXT_STYLE'),
+                    this.coreInstances.CustomStyle.getStyle('FROM_NOW_TIME_TEXT_STYLE'),
                     (this.props.textStyle ? this.props.textStyle : {})
                 ]}
             >

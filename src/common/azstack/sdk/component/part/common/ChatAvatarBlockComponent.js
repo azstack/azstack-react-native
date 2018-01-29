@@ -9,6 +9,8 @@ class ChatAvatarBlockComponent extends React.Component {
     constructor(props) {
         super(props);
 
+        this.coreInstances = props.getCoreInstances();
+
         this.colors = ['#4C87B9', '#1BA39C', '#E35B5A', '#5E738B', '#C49F47', '#F3C200', '#95A5A6', '#C8D046', '#8775A7'];
     }
 
@@ -44,13 +46,13 @@ class ChatAvatarBlockComponent extends React.Component {
         return (
             <View
                 style={{
-                    ...this.props.CustomStyle.getStyle('AVATAR_BLOCK_STYLE'),
+                    ...this.coreInstances.CustomStyle.getStyle('AVATAR_BLOCK_STYLE'),
                     backgroundColor: this.getColor({ text: this.props.chatTarget.fullname ? this.props.chatTarget.fullname : this.props.chatTarget.name })
                 }}
             >
                 <Text
                     style={{
-                        ...this.props.CustomStyle.getStyle('AVATAR_TEXT_STYLE'),
+                        ...this.coreInstances.CustomStyle.getStyle('AVATAR_TEXT_STYLE'),
                         ...this.props.textStyle
                     }}
                 >

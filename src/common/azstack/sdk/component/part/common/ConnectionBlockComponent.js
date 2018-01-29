@@ -8,6 +8,8 @@ class ConnectionBlockComponent extends React.Component {
     constructor(props) {
         super(props);
 
+        this.coreInstances = props.getCoreInstances();
+
         this.subscriptions = {};
 
         this.state = {
@@ -19,7 +21,7 @@ class ConnectionBlockComponent extends React.Component {
     };
 
     addSubscriptions() {
-        this.subscriptions.onConnected = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_CONNECT_RETURN, ({ error, result }) => {
+        this.subscriptions.onConnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_CONNECT_RETURN, ({ error, result }) => {
             if (error) {
                 return;
             }
@@ -33,7 +35,7 @@ class ConnectionBlockComponent extends React.Component {
                 this.timeoutHide = null;
             }, 2000);
         });
-        this.subscriptions.onReconnected = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_AUTO_RECONNECTED, ({ error, result }) => {
+        this.subscriptions.onReconnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_AUTO_RECONNECTED, ({ error, result }) => {
             if (error) {
                 return;
             }
@@ -47,7 +49,7 @@ class ConnectionBlockComponent extends React.Component {
                 this.timeoutHide = null;
             }, 2000);
         });
-        this.subscriptions.onReconnected = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_DISCONNECTED, ({ error, result }) => {
+        this.subscriptions.onReconnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_DISCONNECTED, ({ error, result }) => {
             if (error) {
                 return;
             }
@@ -69,7 +71,7 @@ class ConnectionBlockComponent extends React.Component {
 
     componentDidMount() {
         this.addSubscriptions();
-        if (this.props.AZStackCore.slaveSocketConnected) {
+        if (this.coreInstances.AZStackCore.slaveSocketConnected) {
             this.setState({
                 connectionState: 'connected',
                 show: false
@@ -87,15 +89,15 @@ class ConnectionBlockComponent extends React.Component {
         return (
             <View
                 style={[
-                    this.props.CustomStyle.getStyle('CONNECTION_BLOCK_STYLE'),
-                    (this.state.connectionState === 'connecting' ? this.props.CustomStyle.getStyle('CONNECTION_BLOCK_CONNECTING_STYLE') : {}),
-                    (this.state.connectionState === 'connected' ? this.props.CustomStyle.getStyle('CONNECTION_BLOCK_CONNECTED_STYLE') : {})
+                    this.coreInstances.CustomStyle.getStyle('CONNECTION_BLOCK_STYLE'),
+                    (this.state.connectionState === 'connecting' ? this.coreInstances.CustomStyle.getStyle('CONNECTION_BLOCK_CONNECTING_STYLE') : {}),
+                    (this.state.connectionState === 'connected' ? this.coreInstances.CustomStyle.getStyle('CONNECTION_BLOCK_CONNECTED_STYLE') : {})
                 ]}
             >
                 <Text
-                    style={this.props.CustomStyle.getStyle('CONNECTION_TEXT_STYLE')}
+                    style={this.coreInstances.CustomStyle.getStyle('CONNECTION_TEXT_STYLE')}
                 >
-                    {this.props.Language.getText(this.state.connectionState === 'connecting' ? 'CONNECTTION_CONNECTING_TEXT' : 'CONNECTTION_CONNECTED_TEXT')}
+                    {this.coreInstances.Language.getText(this.state.connectionState === 'connecting' ? 'CONNECTTION_CONNECTING_TEXT' : 'CONNECTTION_CONNECTED_TEXT')}
                 </Text>
             </View>
         );

@@ -53,6 +53,8 @@ export class AZStackSdk extends AZStackBaseComponent {
         this.Member = new Member({
             AZStackCore: this.AZStackCore
         });
+
+        this.getCoreInstances = this.getCoreInstances.bind(this);
     };
 
     addSubscriptions() {
@@ -128,8 +130,15 @@ export class AZStackSdk extends AZStackBaseComponent {
         return this.AZStackCore.disconnect();
     };
 
-    getConstants(constantGroup) {
-        return this.AZStackCore[constantGroup];
+    getCoreInstances() {
+        return {
+            eventConstants: this.eventConstants,
+            linkConstants: this.linkConstants,
+            Language: this.Language,
+            CustomStyle: this.CustomStyle,
+            AZStackCore: this.AZStackCore,
+            EventEmitter: this.EventEmitter
+        };
     };
 
     onCallinStart(error, result) {
