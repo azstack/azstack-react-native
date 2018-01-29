@@ -78,3 +78,11 @@ export const USER_EMPTY_TEXT = 'No User Infomation';
 export const GROUP_HEADER_TITLE_TEXT = 'Group Information';
 export const GROUP_EMPTY_TEXT = 'No Group Infomation';
 export const GROUP_MEMBER_EMPTY_TEXT = 'No Member';
+
+export const SELECT_MEMBERS_HEADER_TITLE_TEXT = 'Select members';
+export const SELECT_MEMBERS_SEARCH_PLACEHOLDER_TEXT = 'Search...';
+export const SELECT_MEMBERS_EMPTY_TEXT = 'No Member';
+
+export const SELECT_MEMBER_HEADER_TITLE_TEXT = 'Select member';
+export const SELECT_MEMBER_SEARCH_PLACEHOLDER_TEXT = 'Search...';
+export const SELECT_MEMBER_EMPTY_TEXT = 'No Member';

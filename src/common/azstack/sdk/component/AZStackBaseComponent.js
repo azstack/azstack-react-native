@@ -14,6 +14,8 @@ import VideoCallComponent from './VideoCallComponent';
 import CallLogsComponent from './CallLogsComponent';
 import UserComponent from './UserComponent';
 import GroupComponent from './GroupComponent';
+import SelectMembersComponent from './SelectMembersComponent';
+import SelectMemberComponent from './SelectMemberComponent';
 
 const NavigationEnum = {
     ConversationsComponent: 'ConversationsComponent',
@@ -24,7 +26,9 @@ const NavigationEnum = {
     VideoCallComponent: 'VideoCallComponent',
     CallLogsComponent: 'CallLogsComponent',
     UserComponent: 'UserComponent',
-    GroupComponent: 'GroupComponent'
+    GroupComponent: 'GroupComponent',
+    SelectMembersComponent: 'SelectMembersComponent',
+    SelectMemberComponent: 'SelectMemberComponent'
 };
 
 export default class AZStackBaseComponent extends React.Component {
@@ -70,6 +74,10 @@ export default class AZStackBaseComponent extends React.Component {
                 return this.renderUser(options, index);
             case 'GroupComponent':
                 return this.renderGroup(options, index);
+            case 'SelectMembersComponent':
+                return this.renderSelectMembers(options, index);
+            case 'SelectMemberComponent':
+                return this.renderSelectMember(options, index);
             default:
                 break;
         }
@@ -179,6 +187,24 @@ export default class AZStackBaseComponent extends React.Component {
 
     renderGroup(options, key) {
         return <GroupComponent
+            key={key}
+            Sizes={this.Sizes}
+            getCoreInstances={this.getCoreInstances}
+            {...options}
+        />;
+    };
+
+    renderSelectMembers(options, key) {
+        return <SelectMembersComponent
+            key={key}
+            Sizes={this.Sizes}
+            getCoreInstances={this.getCoreInstances}
+            {...options}
+        />;
+    };
+
+    renderSelectMember(options, key) {
+        return <SelectMemberComponent
             key={key}
             Sizes={this.Sizes}
             getCoreInstances={this.getCoreInstances}

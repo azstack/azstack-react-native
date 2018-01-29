@@ -931,3 +931,15 @@ export const GROUP_MEMBERS_LIST_MEMBER_KICK_MEMBER_BUTTON_IMAGE_STYLE = {
     width: 25,
     height: 25
 };
+
+
+export const SELECT_MEMBERS_SEARCH_BLOCK_STYLE = {
+    marginVertical: 10,
+    marginHorizontal: 15,
+};
+
+
+export const SELECT_MEMBER_SEARCH_BLOCK_STYLE = {
+    marginVertical: 10,
+    marginHorizontal: 15,
+};

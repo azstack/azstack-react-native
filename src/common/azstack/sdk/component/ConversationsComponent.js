@@ -36,7 +36,6 @@ class ConversationsComponent extends React.Component {
 
         this.onSearchTextChanged = this.onSearchTextChanged.bind(this);
         this.onSearchTextCleared = this.onSearchTextCleared.bind(this);
-        this.getFilteredConversations = this.getFilteredConversations.bind(this);
     };
 
     addSubscriptions() {
