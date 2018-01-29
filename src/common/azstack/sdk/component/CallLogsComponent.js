@@ -105,6 +105,7 @@ class CallLogsComponent extends React.Component {
                 fullScreen={false}
                 getCoreInstances={this.props.getCoreInstances}
                 style={this.props.style}
+                statusbar={this.props.statusbar}
             >
                 {this.props.header !== 'hidden' && <ScreenHeaderBlockComponent
                     getCoreInstances={this.props.getCoreInstances}

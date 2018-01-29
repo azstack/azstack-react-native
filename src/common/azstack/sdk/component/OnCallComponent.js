@@ -240,6 +240,8 @@ class OnCallComponent extends React.Component {
 			<ScreenBlockComponent
 				fullScreen={true}
 				getCoreInstances={this.props.getCoreInstances}
+                statusbar={this.props.statusbar}
+                style={this.props.style}
 			>
 				<Image source={call_bg} style={{ width: width, height: height }} />
 				{this.state.isIncomingCall === true && this.renderIncomingCall()}

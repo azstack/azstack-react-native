@@ -96,6 +96,7 @@ class ContactComponent extends React.Component {
             <ScreenBlockComponent
                 fullScreen={false}
                 getCoreInstances={this.props.getCoreInstances}
+                statusbar={this.props.statusbar}
                 style={this.props.style}
             >
                 {this.props.header !== 'hidden' && <ScreenHeaderBlockComponent

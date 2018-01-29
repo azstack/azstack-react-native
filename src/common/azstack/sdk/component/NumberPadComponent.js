@@ -58,7 +58,8 @@ class NumberPadComponent extends React.Component {
 			<ScreenBlockComponent
 				fullScreen={false}
 				getCoreInstances={this.props.getCoreInstances}
-				style={this.props.style}
+                statusbar={this.props.statusbar}
+                style={this.props.style}
 			>
 				{this.props.header !== 'hidden' && <ScreenHeaderBlockComponent
 					getCoreInstances={this.props.getCoreInstances}

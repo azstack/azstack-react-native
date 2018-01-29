@@ -269,6 +269,7 @@ class GroupComponent extends React.Component {
             <ScreenBlockComponent
                 fullScreen={false}
                 getCoreInstances={this.props.getCoreInstances}
+                statusbar={this.props.statusbar}
                 style={this.props.style}
             >
                 {this.props.hidden !== 'hidden' && <ScreenHeaderBlockComponent
