@@ -56,7 +56,8 @@ class VideoCallComponent extends React.Component {
 
     addSubscriptions() {
         this.subscriptions.onLocalStreamArrived = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_LOCAL_STREAM_ARRIVED, ({ error, result }) => {
-            if (error) {
+			console.log('event local', error, result)
+			if (error) {
                 return;
             }
             this.setState({

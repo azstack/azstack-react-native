@@ -190,7 +190,6 @@ class ChatInputComponentBlock extends React.Component {
     };
 
     onInputContentChangeSize(e) {
-        console.log(e);
     };
 
     render() {

@@ -98,7 +98,7 @@ class ScreenBlockComponent extends React.Component {
                     ...this.props.style || {}
                 }}
             >
-                <CustomStatusBar backgroundColor="#fff" barStyle="dark-content" hidden={this.props.fullScreen === true} />
+                {this.props.statusbar === true && <CustomStatusBar backgroundColor="#fff" barStyle="dark-content" hidden={this.props.fullScreen === true} /> }
                 {this.props.children}
             </Animated.View >
         );
