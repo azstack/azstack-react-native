@@ -740,7 +740,7 @@ export const MESSAGE_TYPE_MEDIA_DETAILS_STATUS_TEXT_STYLE = {
     color: '#95A5A6'
 };
 export const MESSAGE_TYPE_MEDIA_STATUS_BLOCK_STYLE = {
-    marginHorizontal: 5,
+    marginLeft: 5,
     width: 15,
     height: 15
 };

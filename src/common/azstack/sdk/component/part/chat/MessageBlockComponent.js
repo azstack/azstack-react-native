@@ -393,20 +393,6 @@ class MessageBlockComponent extends React.Component {
                                     )
                                 }
                                 {
-                                    this.props.message.status !== this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED &&
-                                    this.props.message.sender.userId === this.coreInstances.AZStackCore.authenticatedUser.userId && (
-                                        <View
-                                            style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_STATUS_BLOCK_STYLE')}
-                                        >
-                                            <MessageStatusBlockComponent
-                                                getCoreInstances={this.props.getCoreInstances}
-                                                textStyle={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_STATUS_TEXT_STYLE')}
-                                                status={this.props.message.status}
-                                            />
-                                        </View>
-                                    )
-                                }
-                                {
                                     this.props.message.status === this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED && (
                                         <Text
                                             style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_CANCELED_STYLE')}
@@ -513,6 +499,20 @@ class MessageBlockComponent extends React.Component {
                                                 uri: this.props.message.file.url
                                             }}
                                         />
+                                    )
+                                }
+                                {
+                                    this.props.message.status !== this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED &&
+                                    this.props.message.sender.userId === this.coreInstances.AZStackCore.authenticatedUser.userId && (
+                                        <View
+                                            style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_STATUS_BLOCK_STYLE')}
+                                        >
+                                            <MessageStatusBlockComponent
+                                                getCoreInstances={this.props.getCoreInstances}
+                                                textStyle={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_STATUS_TEXT_STYLE')}
+                                                status={this.props.message.status}
+                                            />
+                                        </View>
                                     )
                                 }
                                 {
