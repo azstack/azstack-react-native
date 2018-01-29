@@ -36,12 +36,10 @@ class Event {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_CALLOUT_STATUS_CHANGED, { error, result });
         };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_LOCAL_STREAM_ARRIVED] = (error, result) => {
-            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_LOCAL_STREAM_ARRIVED, { error, result }, (sdasd) => {
-                console.log(sdasd);
-            });
+            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_LOCAL_STREAM_ARRIVED, { error, result });
         };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_REMOTE_STREAM_ARRIVED] = (error, result) => {
-            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_REMOTE_STREAM_ARRIVED, { error, result});
+            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_REMOTE_STREAM_ARRIVED, { error, result });
         };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_SWITCH_CAMERA_TYPE_RETURN] = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_SWITCH_CAMERA_TYPE_RETURN, { error, result });
