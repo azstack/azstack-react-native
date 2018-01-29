@@ -28,22 +28,24 @@ class ScreenBlockComponent extends React.Component {
     };
 
     componentDidMount() {
-        Animated.parallel([
-            Animated.timing(
-                this.state.opacityAnimated,
-                {
-                    toValue: 1,
-                    duration: 200,
-                }
-            ),
-            Animated.timing(
-                this.state.marginLeftAnimated,
-                {
-                    toValue: 0,
-                    duration: 200,
-                }
-            )
-        ]).start();
+        if(this.props.willAnimate === true || this.props.willAnimate === undefined) {
+            Animated.parallel([
+                Animated.timing(
+                    this.state.opacityAnimated,
+                    {
+                        toValue: 1,
+                        duration: 200,
+                    }
+                ),
+                Animated.timing(
+                    this.state.marginLeftAnimated,
+                    {
+                        toValue: 0,
+                        duration: 200,
+                    }
+                )
+            ]).start();
+        }
 
         this.keyboardListeners.onShowed = Keyboard.addListener('keyboardDidShow', (event) => {
             Animated.timing(
@@ -94,8 +96,8 @@ class ScreenBlockComponent extends React.Component {
             <Animated.View
                 style={{
                     ...this.coreInstances.CustomStyle.getStyle('SCREEN_BLOCK_STYLE'),
-                    opacity: this.state.opacityAnimated,
-                    marginLeft: this.state.marginLeftAnimated,
+                    opacity: (this.props.willAnimate === true || this.props.willAnimate === undefined) ? this.state.opacityAnimated : 1,
+                    marginLeft: (this.props.willAnimate === true || this.props.willAnimate === undefined) ? this.state.marginLeftAnimated : 0,
                     height: this.state.heightAnimated,
                     ...this.props.style || {}
                 }}
