@@ -19,6 +19,8 @@ class UserComponent extends React.Component {
 
         super(props);
 
+        this.coreInstances = props.getCoreInstances();
+
         this.subscriptions = {};
 
         this.state = {
@@ -31,19 +33,19 @@ class UserComponent extends React.Component {
     };
 
     addSubscriptions() {
-        this.subscriptions.onConnected = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_CONNECT_RETURN, ({ error, result }) => {
+        this.subscriptions.onConnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_CONNECT_RETURN, ({ error, result }) => {
             if (error) {
                 return;
             }
             this.initRun();
         });
-        this.subscriptions.onAutoReconnected = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_AUTO_RECONNECTED, ({ error, result }) => {
+        this.subscriptions.onAutoReconnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_AUTO_RECONNECTED, ({ error, result }) => {
             if (error) {
                 return;
             }
             this.initRun();
         });
-        this.subscriptions.onReconnected = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_RECONNECT_RETURN, ({ error, result }) => {
+        this.subscriptions.onReconnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_RECONNECT_RETURN, ({ error, result }) => {
             if (error) {
                 return;
             }
@@ -62,7 +64,7 @@ class UserComponent extends React.Component {
     };
 
     getUser() {
-        this.props.AZStackCore.getUsersInformation({
+        this.coreInstances.AZStackCore.getUsersInformation({
             userIds: [this.props.userId]
         }).then((result) => {
             this.setState({ user: result.list[0] });
@@ -97,99 +99,98 @@ class UserComponent extends React.Component {
         return (
             <ScreenBlockComponent
                 fullScreen={false}
-                CustomStyle={this.props.CustomStyle}
+                getCoreInstances={this.props.getCoreInstances}
                 style={this.props.style}
             >
                 {this.props.hidden !== 'hidden' && <ScreenHeaderBlockComponent
-                    CustomStyle={this.props.CustomStyle}
+                    getCoreInstances={this.props.getCoreInstances}
                     onBackButtonPressed={this.props.onBackButtonPressed}
-                    title={this.props.Language.getText('USER_HEADER_TITLE_TEXT')}
+                    title={this.coreInstances.Language.getText('USER_HEADER_TITLE_TEXT')}
                 />}
                 <ScreenBodyBlockComponent
-                    CustomStyle={this.props.CustomStyle}
+                    getCoreInstances={this.props.getCoreInstances}
                     style={this.props.contentContainerStyle}
                 >
                     {
                         !this.state.user && <EmptyBlockComponent
-                            CustomStyle={this.props.CustomStyle}
-                            emptyText={this.props.Language.getText('USER_EMPTY_TEXT')}
+                            getCoreInstances={this.props.getCoreInstances}
+                            emptyText={this.coreInstances.Language.getText('USER_EMPTY_TEXT')}
                         />
                     }
                     {
                         !!this.state.user && (
                             <View
-                                style={this.props.CustomStyle.getStyle('USER_BLOCK_STYLE')}
+                                style={this.coreInstances.CustomStyle.getStyle('USER_BLOCK_STYLE')}
                             >
                                 <View
-                                    style={this.props.CustomStyle.getStyle('USER_AVATAR_BLOCK_STYLE')}
+                                    style={this.coreInstances.CustomStyle.getStyle('USER_AVATAR_BLOCK_STYLE')}
                                 >
                                     <ChatAvatarBlockComponent
-                                        CustomStyle={this.props.CustomStyle}
-                                        chatType={this.props.AZStackCore.chatConstants.CHAT_TYPE_USER}
+                                        getCoreInstances={this.props.getCoreInstances}
+                                        chatType={this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_USER}
                                         chatTarget={this.state.user}
-                                        textStyle={this.props.CustomStyle.getStyle('USER_AVATAR_TEXT_STYLE')}
+                                        textStyle={this.coreInstances.CustomStyle.getStyle('USER_AVATAR_TEXT_STYLE')}
                                     />
                                 </View>
                                 <Text
-                                    style={this.props.CustomStyle.getStyle('USER_NAME_TEXT_STYLE')}
+                                    style={this.coreInstances.CustomStyle.getStyle('USER_NAME_TEXT_STYLE')}
                                 >
                                     {this.state.user.fullname}
                                 </Text>
                                 {
-                                    this.state.user.status === this.props.AZStackCore.userConstants.USER_STATUS_ONLINE && (
+                                    this.state.user.status === this.coreInstances.AZStackCore.userConstants.USER_STATUS_ONLINE && (
                                         <Text
-                                            style={this.props.CustomStyle.getStyle('USER_ONLINE_TEXT_STYLE')}
+                                            style={this.coreInstances.CustomStyle.getStyle('USER_ONLINE_TEXT_STYLE')}
                                         >
-                                            {this.props.Language.getText('USER_ONLINE_TEXT')}
+                                            {this.coreInstances.Language.getText('USER_ONLINE_TEXT')}
                                         </Text>
                                     )
                                 }
                                 {
-                                    this.state.user.status === this.props.AZStackCore.userConstants.USER_STATUS_NOT_ONLINE && (
+                                    this.state.user.status === this.coreInstances.AZStackCore.userConstants.USER_STATUS_NOT_ONLINE && (
                                         <Text
-                                            style={this.props.CustomStyle.getStyle('USER_OFFLINE_TEXT_STYLE')}
+                                            style={this.coreInstances.CustomStyle.getStyle('USER_OFFLINE_TEXT_STYLE')}
                                         >
-                                            {`${this.props.Language.getText('USER_OFFLINE_TEXT')} `}
+                                            {`${this.coreInstances.Language.getText('USER_OFFLINE_TEXT')} `}
                                             <TimeFromNowBlockComponent
-                                                Language={this.props.Language}
-                                                CustomStyle={this.props.CustomStyle}
-                                                textStyle={this.props.CustomStyle.getStyle('USER_OFFLINE_TEXT_STYLE')}
+                                                getCoreInstances={this.props.getCoreInstances}
+                                                textStyle={this.coreInstances.CustomStyle.getStyle('USER_OFFLINE_TEXT_STYLE')}
                                                 time={this.state.user.lastVisitDate * 1000}
                                             />
                                         </Text>
                                     )
                                 }
                                 <View
-                                    style={this.props.CustomStyle.getStyle('USER_ACTION_BLOCK_STYLE')}
+                                    style={this.coreInstances.CustomStyle.getStyle('USER_ACTION_BLOCK_STYLE')}
                                 >
                                     <TouchableOpacity
-                                        style={this.props.CustomStyle.getStyle('USER_ACTION_BUTTON_STYLE')}
+                                        style={this.coreInstances.CustomStyle.getStyle('USER_ACTION_BUTTON_STYLE')}
                                         activeOpacity={0.5}
                                         onPress={this.onStartChatButtonPressed}
                                     >
                                         <Image
-                                            style={this.props.CustomStyle.getStyle('USER_ACTION_BUTTON_IMAGE_STYLE')}
-                                            source={this.props.CustomStyle.getImage('IMAGE_START_CHAT')}
+                                            style={this.coreInstances.CustomStyle.getStyle('USER_ACTION_BUTTON_IMAGE_STYLE')}
+                                            source={this.coreInstances.CustomStyle.getImage('IMAGE_START_CHAT')}
                                         />
                                     </TouchableOpacity>
                                     <TouchableOpacity
-                                        style={this.props.CustomStyle.getStyle('USER_ACTION_BUTTON_STYLE')}
+                                        style={this.coreInstances.CustomStyle.getStyle('USER_ACTION_BUTTON_STYLE')}
                                         activeOpacity={0.5}
                                         onPress={this.onVoiceCallButtonPressed}
                                     >
                                         <Image
-                                            style={this.props.CustomStyle.getStyle('USER_ACTION_BUTTON_IMAGE_STYLE')}
-                                            source={this.props.CustomStyle.getImage('IMAGE_VOICE_CALL')}
+                                            style={this.coreInstances.CustomStyle.getStyle('USER_ACTION_BUTTON_IMAGE_STYLE')}
+                                            source={this.coreInstances.CustomStyle.getImage('IMAGE_VOICE_CALL')}
                                         />
                                     </TouchableOpacity>
                                     <TouchableOpacity
-                                        style={this.props.CustomStyle.getStyle('USER_ACTION_BUTTON_STYLE')}
+                                        style={this.coreInstances.CustomStyle.getStyle('USER_ACTION_BUTTON_STYLE')}
                                         activeOpacity={0.5}
                                         onPress={this.onVideoCallButtonPressed}
                                     >
                                         <Image
-                                            style={this.props.CustomStyle.getStyle('USER_ACTION_BUTTON_IMAGE_STYLE')}
-                                            source={this.props.CustomStyle.getImage('IMAGE_VIDEO_CALL')}
+                                            style={this.coreInstances.CustomStyle.getStyle('USER_ACTION_BUTTON_IMAGE_STYLE')}
+                                            source={this.coreInstances.CustomStyle.getImage('IMAGE_VIDEO_CALL')}
                                         />
                                     </TouchableOpacity>
                                 </View>
@@ -197,11 +198,7 @@ class UserComponent extends React.Component {
                         )
                     }
                     <ConnectionBlockComponent
-                        Language={this.props.Language}
-                        CustomStyle={this.props.CustomStyle}
-                        eventConstants={this.props.eventConstants}
-                        AZStackCore={this.props.AZStackCore}
-                        EventEmitter={this.props.EventEmitter}
+                        getCoreInstances={this.props.getCoreInstances}
                     />
                 </ScreenBodyBlockComponent>
             </ScreenBlockComponent>
