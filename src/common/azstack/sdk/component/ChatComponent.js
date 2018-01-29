@@ -22,6 +22,8 @@ class ChatComponent extends React.Component {
     constructor(props) {
         super(props);
 
+        this.coreInstances = props.getCoreInstances();
+
         this.subscriptions = {};
         this.pagination = {
             unread: {
@@ -49,79 +51,79 @@ class ChatComponent extends React.Component {
     };
 
     addSubscriptions() {
-        this.subscriptions.onConnected = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_CONNECT_RETURN, ({ error, result }) => {
+        this.subscriptions.onConnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_CONNECT_RETURN, ({ error, result }) => {
             if (error) {
                 return;
             }
             this.initRun()
         });
-        this.subscriptions.onAutoReconnected = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_AUTO_RECONNECTED, ({ error, result }) => {
+        this.subscriptions.onAutoReconnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_AUTO_RECONNECTED, ({ error, result }) => {
             if (error) {
                 return;
             }
             this.initRun()
         });
-        this.subscriptions.onReconnected = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_RECONNECT_RETURN, ({ error, result }) => {
+        this.subscriptions.onReconnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_RECONNECT_RETURN, ({ error, result }) => {
             if (error) {
                 return;
             }
             this.initRun()
         });
-        this.subscriptions.onTyping = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_TYPING, ({ error, result }) => {
+        this.subscriptions.onTyping = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_TYPING, ({ error, result }) => {
             if (error) {
                 return;
             }
             this.onTyping(result);
         });
-        this.subscriptions.onMessageStatusChanged = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_MESSAGE_STATUS_CHANGED, ({ error, result }) => {
+        this.subscriptions.onMessageStatusChanged = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_MESSAGE_STATUS_CHANGED, ({ error, result }) => {
             if (error) {
                 return;
             }
             this.onMessageStatusChanged(result);
         });
-        this.subscriptions.onHasNewMessage = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_NEW_MESSAGE, ({ error, result }) => {
+        this.subscriptions.onHasNewMessage = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE, ({ error, result }) => {
             if (error) {
                 return;
             }
             this.onHasNewMessage(result);
         });
-        this.subscriptions.onMessageFromMe = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_MESSAGE_FROM_ME, ({ error, result }) => {
+        this.subscriptions.onMessageFromMe = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_MESSAGE_FROM_ME, ({ error, result }) => {
             if (error) {
                 return;
             }
             this.onMessageFromMe(result);
         });
-        this.subscriptions.onNewMessageReturn = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, ({ error, result }) => {
+        this.subscriptions.onNewMessageReturn = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, ({ error, result }) => {
             if (error) {
                 return;
             }
             this.onNewMessageReturn(result);
         });
-        this.subscriptions.onGroupInvited = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_GROUP_INVITED, ({ error, result }) => {
+        this.subscriptions.onGroupInvited = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_GROUP_INVITED, ({ error, result }) => {
             if (error) {
                 return;
             }
             this.onGroupInvited(result);
         });
-        this.subscriptions.onGroupLeft = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_GROUP_LEFT, ({ error, result }) => {
+        this.subscriptions.onGroupLeft = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_GROUP_LEFT, ({ error, result }) => {
             if (error) {
                 return;
             }
             this.onGroupLeft(result);
         });
-        this.subscriptions.onGroupRenamed = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_GROUP_RENAMED, ({ error, result }) => {
+        this.subscriptions.onGroupRenamed = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_GROUP_RENAMED, ({ error, result }) => {
             if (error) {
                 return;
             }
             this.onGroupRenamed(result);
         });
-        this.subscriptions.onGroupAdminChanged = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_GROUP_ADMIN_CHANGED, ({ error, result }) => {
+        this.subscriptions.onGroupAdminChanged = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_GROUP_ADMIN_CHANGED, ({ error, result }) => {
             if (error) {
                 return;
             }
             this.onGroupAdminChanged(result);
         });
-        this.subscriptions.onGroupPublicJoined = this.props.EventEmitter.addListener(this.props.eventConstants.EVENT_NAME_ON_GROUP_PUBLIC_JOINED, ({ error, result }) => {
+        this.subscriptions.onGroupPublicJoined = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_GROUP_PUBLIC_JOINED, ({ error, result }) => {
             if (error) {
                 return;
             }
@@ -185,12 +187,12 @@ class ChatComponent extends React.Component {
         let currentMessage = this.state.messages[index];
 
         let groupActionMessageTypes = [
-            this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_CREATED,
-            this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_INVITED,
-            this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_LEFT,
-            this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_RENAMED,
-            this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_ADMIN_CHANGED,
-            this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_PUBLIC_JOINED
+            this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_CREATED,
+            this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_INVITED,
+            this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_LEFT,
+            this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_RENAMED,
+            this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_ADMIN_CHANGED,
+            this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_PUBLIC_JOINED
         ];
 
         if (groupActionMessageTypes.indexOf(currentMessage.type) > -1) {
@@ -207,7 +209,7 @@ class ChatComponent extends React.Component {
             return true;
         }
 
-        if (currentMessage.senderId !== this.props.AZStackCore.authenticatedUser.userId && currentMessage.senderId !== nextMessage.senderId) {
+        if (currentMessage.senderId !== this.coreInstances.AZStackCore.authenticatedUser.userId && currentMessage.senderId !== nextMessage.senderId) {
             return true;
         }
 
@@ -215,19 +217,19 @@ class ChatComponent extends React.Component {
     };
 
     getChatTarget() {
-        if (!this.props.AZStackCore.slaveSocketConnected) {
+        if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
             return;
         }
 
-        if (this.props.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER) {
-            this.props.AZStackCore.getUsersInformation({
+        if (this.props.chatType === this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_USER) {
+            this.coreInstances.AZStackCore.getUsersInformation({
                 userIds: [this.props.chatId]
             }).then((result) => {
                 this.setState({ chatTarget: result.list[0] });
                 this.getUnreadMessages();
             }).catch((error) => { })
-        } else if (this.props.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
-            this.props.AZStackCore.getDetailsGroup({
+        } else if (this.props.chatType === this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
+            this.coreInstances.AZStackCore.getDetailsGroup({
                 groupId: this.props.chatId
             }).then((result) => {
                 this.setState({ chatTarget: result });
@@ -236,7 +238,7 @@ class ChatComponent extends React.Component {
         }
     };
     getUnreadMessages() {
-        if (!this.props.AZStackCore.slaveSocketConnected) {
+        if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
             return;
         }
 
@@ -244,13 +246,13 @@ class ChatComponent extends React.Component {
             return;
         }
 
-        this.props.AZStackCore.getUnreadMessages({
+        this.coreInstances.AZStackCore.getUnreadMessages({
             page: this.pagination.unread.page,
             chatType: this.props.chatType,
             chatId: this.props.chatId
         }).then((result) => {
             this.setState({ unreads: this.state.unreads.concat(result.list) }, () => {
-                if (result.done === this.props.AZStackCore.listConstants.GET_LIST_DONE) {
+                if (result.done === this.coreInstances.AZStackCore.listConstants.GET_LIST_DONE) {
                     this.getModifiedMessages();
                 } else {
                     this.pagination.unread.page += 1;
@@ -261,7 +263,7 @@ class ChatComponent extends React.Component {
 
     };
     getModifiedMessages() {
-        if (!this.props.AZStackCore.slaveSocketConnected) {
+        if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
             return;
         }
 
@@ -285,7 +287,7 @@ class ChatComponent extends React.Component {
             this.setState({ unreads: [] });
         }
 
-        this.props.AZStackCore.getModifiedMessages({
+        this.coreInstances.AZStackCore.getModifiedMessages({
             page: this.pagination.modified.page,
             lastCreated: this.pagination.modified.lastCreated,
             chatType: this.props.chatType,
@@ -302,7 +304,7 @@ class ChatComponent extends React.Component {
                     })
                 });
 
-                if (result.done === this.props.AZStackCore.listConstants.GET_LIST_DONE) {
+                if (result.done === this.coreInstances.AZStackCore.listConstants.GET_LIST_DONE) {
                     this.pagination.modified.done = true;
                 } else {
                     this.pagination.modified.page += 1;
@@ -323,15 +325,15 @@ class ChatComponent extends React.Component {
                         return resolve(message);
                     }
 
-                    if (message.senderId !== this.props.AZStackCore.authenticatedUser.userId && message.status !== this.props.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN && message.status !== this.props.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED) {
-                        this.props.AZStackCore.changeMessageStatus({
+                    if (message.senderId !== this.coreInstances.AZStackCore.authenticatedUser.userId && message.status !== this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN && message.status !== this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED) {
+                        this.coreInstances.AZStackCore.changeMessageStatus({
                             chatType: message.chatType,
                             chatId: message.chatId,
                             messageSenderId: message.senderId,
-                            messageStatus: this.props.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN,
+                            messageStatus: this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN,
                             msgId: message.msgId
                         }).then((result) => {
-                            message.status = this.props.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN;
+                            message.status = this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN;
                             resolve(message);
                         }).catch((error) => {
                             resolve(message);
@@ -351,21 +353,21 @@ class ChatComponent extends React.Component {
                             return resolve(message);
                         }
 
-                        if (message.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_USER) {
+                        if (message.chatType === this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_USER) {
                             if (message.senderId === message.chatId) {
                                 message.sender = this.state.chatTarget;
-                                message.receiver = this.props.AZStackCore.authenticatedUser;
+                                message.receiver = this.coreInstances.AZStackCore.authenticatedUser;
                             } else if (message.receiverId === message.chatId) {
-                                message.sender = this.props.AZStackCore.authenticatedUser;
+                                message.sender = this.coreInstances.AZStackCore.authenticatedUser;
                                 message.receiver = this.state.chatTarget;
                             }
                             resolve(message);
-                        } else if (message.chatType === this.props.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
+                        } else if (message.chatType === this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
                             message.receiver = this.state.chatTarget;
                             let foundSender = false;
-                            if (message.senderId === this.props.AZStackCore.authenticatedUser.userId) {
+                            if (message.senderId === this.coreInstances.AZStackCore.authenticatedUser.userId) {
                                 foundSender = true;
-                                message.sender = this.props.AZStackCore.authenticatedUser
+                                message.sender = this.coreInstances.AZStackCore.authenticatedUser
                             } else {
                                 for (let i = 0; i < this.state.chatTarget.members.length; i++) {
                                     let member = this.state.chatTarget.members[i];
@@ -380,7 +382,7 @@ class ChatComponent extends React.Component {
                                 return resolve(message);
                             }
 
-                            this.props.AZStackCore.getUsersInformation({
+                            this.coreInstances.AZStackCore.getUsersInformation({
                                 userIds: [message.senderId]
                             }).then((result) => {
                                 message.sender = result.list[0];
@@ -405,12 +407,12 @@ class ChatComponent extends React.Component {
                         message.prepared = true;
 
                         switch (message.type) {
-                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_CREATED:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_RENAMED:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_CREATED:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_RENAMED:
                                 resolve(message);
                                 break;
-                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
                                 Image.getSize(message.sticker.url, (width, height) => {
                                     message.sticker.width = width;
                                     message.sticker.height = height;
@@ -419,9 +421,9 @@ class ChatComponent extends React.Component {
                                     resolve(message);
                                 });
                                 break;
-                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE:
                                 switch (message.file.type) {
-                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE:
+                                    case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE:
                                         Image.getSize(message.file.url, (width, height) => {
                                             message.file.width = width;
                                             message.file.height = height;
@@ -430,27 +432,27 @@ class ChatComponent extends React.Component {
                                             resolve(message);
                                         });
                                         break;
-                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_AUDIO:
-                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_VIDEO:
-                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_EXCEL:
-                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_WORD:
-                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_POWERPOINT:
-                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_PDF:
-                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_TEXT:
-                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_CODE:
-                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_ARCHIVE:
-                                    case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_UNKNOWN:
+                                    case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_AUDIO:
+                                    case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_VIDEO:
+                                    case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_EXCEL:
+                                    case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_WORD:
+                                    case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_POWERPOINT:
+                                    case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_PDF:
+                                    case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_TEXT:
+                                    case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_CODE:
+                                    case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_ARCHIVE:
+                                    case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_UNKNOWN:
                                     default:
                                         resolve(message);
                                         break;
                                 }
                                 break;
-                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_INVITED:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_INVITED:
                                 message.invited.invites = [];
                                 Promise.all(
                                     message.invited.inviteIds.map((inviteId) => {
                                         return new Promise((resolve, reject) => {
-                                            this.props.AZStackCore.getUsersInformation({
+                                            this.coreInstances.AZStackCore.getUsersInformation({
                                                 userIds: [inviteId]
                                             }).then((result) => {
                                                 message.invited.invites.push(result.list[0]);
@@ -467,11 +469,11 @@ class ChatComponent extends React.Component {
                                     resolve(message);
                                 });
                                 break;
-                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_LEFT:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_LEFT:
                                 let PromiseTasks = [];
                                 PromiseTasks.push(
                                     new Promise((resolve, reject) => {
-                                        this.props.AZStackCore.getUsersInformation({
+                                        this.coreInstances.AZStackCore.getUsersInformation({
                                             userIds: [message.left.leaveId]
                                         }).then((result) => {
                                             message.left.leave = result.list[0];
@@ -485,7 +487,7 @@ class ChatComponent extends React.Component {
                                 if (message.left.newAdminId) {
                                     PromiseTasks.push(
                                         new Promise((resolve, reject) => {
-                                            this.props.AZStackCore.getUsersInformation({
+                                            this.coreInstances.AZStackCore.getUsersInformation({
                                                 userIds: [message.left.newAdminId]
                                             }).then((result) => {
                                                 message.left.newAdmin = result.list[0];
@@ -505,8 +507,8 @@ class ChatComponent extends React.Component {
                                     resolve(message);
                                 });
                                 break;
-                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_ADMIN_CHANGED:
-                                this.props.AZStackCore.getUsersInformation({
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_ADMIN_CHANGED:
+                                this.coreInstances.AZStackCore.getUsersInformation({
                                     userIds: [message.adminChanged.newAdminId]
                                 }).then((result) => {
                                     message.adminChanged.newAdmin = result.list[0];
@@ -516,8 +518,8 @@ class ChatComponent extends React.Component {
                                     resolve(message);
                                 });
                                 break;
-                            case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_PUBLIC_JOINED:
-                                this.props.AZStackCore.getUsersInformation({
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_PUBLIC_JOINED:
+                                this.coreInstances.AZStackCore.getUsersInformation({
                                     userIds: [message.joined.joinId]
                                 }).then((result) => {
                                     message.joined.join = result.list[0];
@@ -595,11 +597,11 @@ class ChatComponent extends React.Component {
 
         Promise.all([
             new Promise((resolve, reject) => {
-                this.props.AZStackCore.changeMessageStatus({
+                this.coreInstances.AZStackCore.changeMessageStatus({
                     chatType: newMessage.chatType,
                     chatId: newMessage.chatId,
                     messageSenderId: newMessage.senderId,
-                    messageStatus: this.props.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN,
+                    messageStatus: this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN,
                     msgId: newMessage.msgId
                 }).then((result) => {
                     newMessage.status = this.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN;
@@ -610,10 +612,10 @@ class ChatComponent extends React.Component {
             }),
             new Promise((resolve, reject) => {
                 switch (newMessage.type) {
-                    case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT:
+                    case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT:
                         resolve(null);
                         break;
-                    case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
+                    case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
                         Image.getSize(newMessage.sticker.url, (width, height) => {
                             newMessage.sticker.width = width;
                             newMessage.sticker.height = height;
@@ -622,9 +624,9 @@ class ChatComponent extends React.Component {
                             resolve(null);
                         });
                         break;
-                    case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE:
+                    case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE:
                         switch (newMessage.file.type) {
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE:
                                 Image.getSize(newMessage.file.url, (width, height) => {
                                     newMessage.file.width = width;
                                     newMessage.file.height = height;
@@ -633,16 +635,16 @@ class ChatComponent extends React.Component {
                                     resolve(null);
                                 });
                                 break;
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_AUDIO:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_VIDEO:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_EXCEL:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_WORD:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_POWERPOINT:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_PDF:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_TEXT:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_CODE:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_ARCHIVE:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_UNKNOWN:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_AUDIO:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_VIDEO:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_EXCEL:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_WORD:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_POWERPOINT:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_PDF:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_TEXT:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_CODE:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_ARCHIVE:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_UNKNOWN:
                             default:
                                 resolve(null);
                                 break;
@@ -677,10 +679,10 @@ class ChatComponent extends React.Component {
         Promise.all([
             new Promise((resolve, reject) => {
                 switch (myMessage.type) {
-                    case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT:
+                    case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT:
                         resolve(null);
                         break;
-                    case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
+                    case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
                         Image.getSize(myMessage.sticker.url, (width, height) => {
                             myMessage.sticker.width = width;
                             myMessage.sticker.height = height;
@@ -689,9 +691,9 @@ class ChatComponent extends React.Component {
                             resolve(null);
                         });
                         break;
-                    case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE:
+                    case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE:
                         switch (myMessage.file.type) {
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE:
                                 Image.getSize(myMessage.file.url, (width, height) => {
                                     myMessage.file.width = width;
                                     myMessage.file.height = height;
@@ -700,16 +702,16 @@ class ChatComponent extends React.Component {
                                     resolve(null);
                                 });
                                 break;
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_AUDIO:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_VIDEO:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_EXCEL:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_WORD:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_POWERPOINT:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_PDF:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_TEXT:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_CODE:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_ARCHIVE:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_UNKNOWN:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_AUDIO:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_VIDEO:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_EXCEL:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_WORD:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_POWERPOINT:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_PDF:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_TEXT:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_CODE:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_ARCHIVE:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_UNKNOWN:
                             default:
                                 resolve(null);
                                 break;
@@ -744,10 +746,10 @@ class ChatComponent extends React.Component {
         Promise.all([
             new Promise((resolve, reject) => {
                 switch (myMessage.type) {
-                    case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT:
+                    case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT:
                         resolve(null);
                         break;
-                    case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
+                    case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
                         Image.getSize(myMessage.sticker.url, (width, height) => {
                             myMessage.sticker.width = width;
                             myMessage.sticker.height = height;
@@ -756,9 +758,9 @@ class ChatComponent extends React.Component {
                             resolve(null);
                         });
                         break;
-                    case this.props.AZStackCore.chatConstants.MESSAGE_TYPE_FILE:
+                    case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE:
                         switch (myMessage.file.type) {
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE:
                                 Image.getSize(myMessage.file.url, (width, height) => {
                                     myMessage.file.width = width;
                                     myMessage.file.height = height;
@@ -767,16 +769,16 @@ class ChatComponent extends React.Component {
                                     resolve(null);
                                 });
                                 break;
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_AUDIO:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_VIDEO:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_EXCEL:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_WORD:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_POWERPOINT:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_PDF:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_TEXT:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_CODE:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_ARCHIVE:
-                            case this.props.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_UNKNOWN:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_AUDIO:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_VIDEO:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_EXCEL:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_WORD:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_POWERPOINT:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_PDF:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_TEXT:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_CODE:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_ARCHIVE:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_UNKNOWN:
                             default:
                                 resolve(null);
                                 break;
@@ -811,15 +813,15 @@ class ChatComponent extends React.Component {
         Promise.all([
             new Promise((resolve, reject) => {
 
-                if (newMessage.senderId === this.props.AZStackCore.authenticatedUser.userId) {
+                if (newMessage.senderId === this.coreInstances.AZStackCore.authenticatedUser.userId) {
                     return resolve(null);
                 }
 
-                this.props.AZStackCore.changeMessageStatus({
+                this.coreInstances.AZStackCore.changeMessageStatus({
                     chatType: newMessage.chatType,
                     chatId: newMessage.chatId,
                     messageSenderId: newMessage.senderId,
-                    messageStatus: this.props.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN,
+                    messageStatus: this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN,
                     msgId: newMessage.msgId
                 }).then((result) => {
                     newMessage.status = this.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN;
@@ -853,15 +855,15 @@ class ChatComponent extends React.Component {
         Promise.all([
             new Promise((resolve, reject) => {
 
-                if (newMessage.senderId === this.props.AZStackCore.authenticatedUser.userId) {
+                if (newMessage.senderId === this.coreInstances.AZStackCore.authenticatedUser.userId) {
                     return resolve(null);
                 }
 
-                this.props.AZStackCore.changeMessageStatus({
+                this.coreInstances.AZStackCore.changeMessageStatus({
                     chatType: newMessage.chatType,
                     chatId: newMessage.chatId,
                     messageSenderId: newMessage.senderId,
-                    messageStatus: this.props.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN,
+                    messageStatus: this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN,
                     msgId: newMessage.msgId
                 }).then((result) => {
                     newMessage.status = this.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN;
@@ -895,15 +897,15 @@ class ChatComponent extends React.Component {
         Promise.all([
             new Promise((resolve, reject) => {
 
-                if (newMessage.senderId === this.props.AZStackCore.authenticatedUser.userId) {
+                if (newMessage.senderId === this.coreInstances.AZStackCore.authenticatedUser.userId) {
                     return resolve(null);
                 }
 
-                this.props.AZStackCore.changeMessageStatus({
+                this.coreInstances.AZStackCore.changeMessageStatus({
                     chatType: newMessage.chatType,
                     chatId: newMessage.chatId,
                     messageSenderId: newMessage.senderId,
-                    messageStatus: this.props.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN,
+                    messageStatus: this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN,
                     msgId: newMessage.msgId
                 }).then((result) => {
                     newMessage.status = this.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN;
@@ -937,15 +939,15 @@ class ChatComponent extends React.Component {
         Promise.all([
             new Promise((resolve, reject) => {
 
-                if (newMessage.senderId === this.props.AZStackCore.authenticatedUser.userId) {
+                if (newMessage.senderId === this.coreInstances.AZStackCore.authenticatedUser.userId) {
                     return resolve(null);
                 }
 
-                this.props.AZStackCore.changeMessageStatus({
+                this.coreInstances.AZStackCore.changeMessageStatus({
                     chatType: newMessage.chatType,
                     chatId: newMessage.chatId,
                     messageSenderId: newMessage.senderId,
-                    messageStatus: this.props.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN,
+                    messageStatus: this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN,
                     msgId: newMessage.msgId
                 }).then((result) => {
                     newMessage.status = this.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN;
@@ -979,15 +981,15 @@ class ChatComponent extends React.Component {
         Promise.all([
             new Promise((resolve, reject) => {
 
-                if (newMessage.senderId === this.props.AZStackCore.authenticatedUser.userId) {
+                if (newMessage.senderId === this.coreInstances.AZStackCore.authenticatedUser.userId) {
                     return resolve(null);
                 }
 
-                this.props.AZStackCore.changeMessageStatus({
+                this.coreInstances.AZStackCore.changeMessageStatus({
                     chatType: newMessage.chatType,
                     chatId: newMessage.chatId,
                     messageSenderId: newMessage.senderId,
-                    messageStatus: this.props.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN,
+                    messageStatus: this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN,
                     msgId: newMessage.msgId
                 }).then((result) => {
                     newMessage.status = this.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN;
@@ -1026,21 +1028,19 @@ class ChatComponent extends React.Component {
         return (
             <ScreenBlockComponent
                 fullScreen={false}
-                CustomStyle={this.props.CustomStyle}
+                getCoreInstances={this.props.getCoreInstances}
                 style={this.props.style}
             >
                 {
                     !this.state.chatTarget && <ScreenHeaderBlockComponent
-                        CustomStyle={this.props.CustomStyle}
+                        getCoreInstances={this.props.getCoreInstances}
                         onBackButtonPressed={this.props.onBackButtonPressed}
-                        title={this.props.Language.getText('CHAT_HEADER_TITLE_TEXT')}
+                        title={this.coreInstances.Language.getText('CHAT_HEADER_TITLE_TEXT')}
                     />
                 }
                 {
                     !!this.state.chatTarget && <ChatHeaderComponent
-                        CustomStyle={this.props.CustomStyle}
-                        Language={this.props.Language}
-                        AZStackCore={this.props.AZStackCore}
+                        getCoreInstances={this.props.getCoreInstances}
                         onBackButtonPressed={this.props.onBackButtonPressed}
                         onChatTargetPressed={this.props.onChatTargetPressed}
                         onVoiceCallButtonPressed={this.props.onVoiceCallButtonPressed}
@@ -1050,29 +1050,26 @@ class ChatComponent extends React.Component {
                     />
                 }
                 <ScreenBodyBlockComponent
-                    CustomStyle={this.props.CustomStyle}
+                    getCoreInstances={this.props.getCoreInstances}
+                    style={this.props.contentContainerStyle}
                 >
                     {
                         this.state.messages.length === 0 && <EmptyBlockComponent
-                            CustomStyle={this.props.CustomStyle}
-                            emptyText={this.props.Language.getText('MESSAGES_LIST_EMPTY_TEXT')}
+                            getCoreInstances={this.props.getCoreInstances}
+                            emptyText={this.coreInstances.Language.getText('MESSAGES_LIST_EMPTY_TEXT')}
                         />
                     }
                     {
                         this.state.messages.length > 0 && <FlatList
                             ref={'MessagesList'}
                             inverted={true}
-                            style={this.props.CustomStyle.getStyle('MESSAGES_LIST_STYLE')}
+                            style={this.coreInstances.CustomStyle.getStyle('MESSAGES_LIST_STYLE')}
                             data={this.state.messages}
                             keyExtractor={(item, index) => (item.msgId)}
                             renderItem={({ item, index }) => {
                                 return (
                                     <MessageBlockComponent
-                                        Language={this.props.Language}
-                                        CustomStyle={this.props.CustomStyle}
-                                        eventConstants={this.props.eventConstants}
-                                        AZStackCore={this.props.AZStackCore}
-                                        EventEmitter={this.props.EventEmitter}
+                                        getCoreInstances={this.props.getCoreInstances}
                                         message={item}
                                         shouldRenderTimeMark={this.shouldRenderTimeMark(index)}
                                         shouldRenderSender={this.shouldRenderSender(index)}
@@ -1086,22 +1083,17 @@ class ChatComponent extends React.Component {
                         />
                     }
                     <ConnectionBlockComponent
-                        Language={this.props.Language}
-                        CustomStyle={this.props.CustomStyle}
-                        eventConstants={this.props.eventConstants}
-                        AZStackCore={this.props.AZStackCore}
-                        EventEmitter={this.props.EventEmitter}
+                        getCoreInstances={this.props.getCoreInstances}
                     />
                 </ScreenBodyBlockComponent>
                 <View
-                    style={this.props.CustomStyle.getStyle('CHAT_TYPING_BLOCK_STYLE')}
+                    style={this.coreInstances.CustomStyle.getStyle('CHAT_TYPING_BLOCK_STYLE')}
                 >
                     {
                         this.state.typing.senders.length > 0 && (
                             <TypingBlockComponent
-                                Language={this.props.Language}
-                                CustomStyle={this.props.CustomStyle}
-                                textStyle={this.props.CustomStyle.getStyle('CHAT_TYPING_TEXT_STYLE')}
+                                getCoreInstances={this.props.getCoreInstances}
+                                textStyle={this.coreInstances.CustomStyle.getStyle('CHAT_TYPING_TEXT_STYLE')}
                                 typing={this.state.typing}
                             />
                         )
@@ -1110,18 +1102,14 @@ class ChatComponent extends React.Component {
                 {
                     !this.state.chatTarget && (
                         <ChatInputDisabledComponent
-                            CustomStyle={this.props.CustomStyle}
-                            Language={this.props.Language}
+                            getCoreInstances={this.props.getCoreInstances}
                         />
                     )
                 }
                 {
                     !!this.state.chatTarget && (
                         <ChatInputComponentBlock
-                            CustomStyle={this.props.CustomStyle}
-                            Language={this.props.Language}
-                            linkConstants={this.props.linkConstants}
-                            AZStackCore={this.props.AZStackCore}
+                            getCoreInstances={this.props.getCoreInstances}
                             chatType={this.props.chatType}
                             chatId={this.props.chatId}
                         />

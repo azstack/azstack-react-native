@@ -14,6 +14,8 @@ class ChatInputComponentBlock extends React.Component {
 
         super(props);
 
+        this.coreInstances = props.getCoreInstances();
+
         this.state = {
             text: {
                 focused: false,
@@ -122,12 +124,12 @@ class ChatInputComponentBlock extends React.Component {
 
     sendTextMessage() {
 
-        if (!this.props.AZStackCore.slaveSocketConnected) {
+        if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
             Alert.alert(
-                this.props.Language.getText('ALERT_TITLE_ERROR_TEXT'),
-                this.props.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
                 [
-                    { text: this.props.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
                 ],
                 { cancelable: true }
             );
@@ -138,7 +140,7 @@ class ChatInputComponentBlock extends React.Component {
             return;
         }
 
-        this.props.AZStackCore.newMessage({
+        this.coreInstances.AZStackCore.newMessage({
             chatType: this.props.chatType,
             chatId: this.props.chatId,
             text: this.state.text.val
@@ -146,10 +148,10 @@ class ChatInputComponentBlock extends React.Component {
             this.setState({ text: Object.assign({}, this.state.text, { val: '' }) });
         }).catch((error) => {
             Alert.alert(
-                this.props.Language.getText('ALERT_TITLE_ERROR_TEXT'),
-                this.props.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
                 [
-                    { text: this.props.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
                 ],
                 { cancelable: true }
             );
@@ -157,32 +159,32 @@ class ChatInputComponentBlock extends React.Component {
     };
     sendStickerMessage(itemName) {
 
-        if (!this.props.AZStackCore.slaveSocketConnected) {
+        if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
             Alert.alert(
-                this.props.Language.getText('ALERT_TITLE_ERROR_TEXT'),
-                this.props.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
                 [
-                    { text: this.props.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
                 ],
                 { cancelable: true }
             );
             return;
         }
 
-        this.props.AZStackCore.newMessage({
+        this.coreInstances.AZStackCore.newMessage({
             chatType: this.props.chatType,
             chatId: this.props.chatId,
             sticker: {
                 name: itemName,
                 catId: this.state.sticker.items[this.state.sticker.selected].catId,
-                url: `${this.props.linkConstants.LINK_API_URL_STICKER}${this.state.sticker.items[this.state.sticker.selected].catId}/${itemName}`
+                url: `${this.coreInstances.linkConstants.LINK_API_URL_STICKER}${this.state.sticker.items[this.state.sticker.selected].catId}/${itemName}`
             }
         }).then((result) => { }).catch((error) => {
             Alert.alert(
-                this.props.Language.getText('ALERT_TITLE_ERROR_TEXT'),
-                this.props.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
                 [
-                    { text: this.props.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
                 ],
                 { cancelable: true }
             );
@@ -196,90 +198,90 @@ class ChatInputComponentBlock extends React.Component {
     render() {
         return (
             <View
-                style={this.props.CustomStyle.getStyle('CHAT_INPUT_BLOCK_STYLE')}
+                style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_BLOCK_STYLE')}
             >
                 <View
-                    style={[this.props.CustomStyle.getStyle('CHAT_INPUT_INPUT_BLOCK_STYLE'), { borderWidth: 0 }]}
+                    style={[this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_INPUT_BLOCK_STYLE'), { borderWidth: 0 }]}
                 >
                     <TouchableOpacity
-                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BUTTON_BLOCK_STYLE')}
+                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BUTTON_BLOCK_STYLE')}
                         activeOpacity={0.5}
                         onPress={this.showStickerBox}
                     >
                         <Image
-                            style={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BUTTON_IMAGE_STYLE')}
-                            source={this.props.CustomStyle.getImage('IMAGE_STICKER')}
+                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BUTTON_IMAGE_STYLE')}
+                            source={this.coreInstances.CustomStyle.getImage('IMAGE_STICKER')}
                         />
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_ATTACH_BUTTON_BLOCK_STYLE')}
+                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_ATTACH_BUTTON_BLOCK_STYLE')}
                         activeOpacity={0.5}
                         onPress={this.showFileBox}
                     >
                         <Image
-                            style={this.props.CustomStyle.getStyle('CHAT_INPUT_ATTACH_BUTTON_IMAGE_STYLE')}
-                            source={this.props.CustomStyle.getImage('IMAGE_ATTACH')}
+                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_ATTACH_BUTTON_IMAGE_STYLE')}
+                            source={this.coreInstances.CustomStyle.getImage('IMAGE_ATTACH')}
                         />
                     </TouchableOpacity>
                     <View
-                        style={[this.props.CustomStyle.getStyle('CHAT_INPUT_TEXT_INPUT_BLOCK_STYLE')]}
+                        style={[this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_TEXT_INPUT_BLOCK_STYLE')]}
                     >
                         <TextInput
                             ref={'TextInput'}
-                            style={[this.props.CustomStyle.getStyle('CHAT_INPUT_TEXT_INPUT_STYLE')]}
+                            style={[this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_TEXT_INPUT_STYLE')]}
                             onChangeText={this.onTextInputChanged}
                             onFocus={this.onTextInputFocused}
                             onBlur={this.onTextInputBlured}
                             value={this.state.text.val}
-                            placeholder={this.props.Language.getText('CHAT_INPUT_TEXT_INPUT_PLACEHOLDER_TEXT')}
+                            placeholder={this.coreInstances.Language.getText('CHAT_INPUT_TEXT_INPUT_PLACEHOLDER_TEXT')}
                             returnKeyType={'done'}
                             autoCapitalize={'none'}
                             autoGrow
                             multiline
                             {
-                            ...this.props.CustomStyle.getStyle('CHAT_INPUT_TEXT_INPUT_PROPS_STYLE')
+                            ...this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_TEXT_INPUT_PROPS_STYLE')
                             }
                             onContentSizeChange={(e) => this.onInputContentChangeSize(e)}
                         />
                     </View>
                     <TouchableOpacity
-                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_SEND_BUTTON_BLOCK_STYLE')}
+                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_SEND_BUTTON_BLOCK_STYLE')}
                         activeOpacity={0.5}
                         onPress={this.sendTextMessage}
                     >
                         <Image
-                            style={this.props.CustomStyle.getStyle('CHAT_INPUT_SEND_BUTTON_IMAGE_STYLE')}
-                            source={this.props.CustomStyle.getImage('IMAGE_SEND')}
+                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_SEND_BUTTON_IMAGE_STYLE')}
+                            source={this.coreInstances.CustomStyle.getImage('IMAGE_SEND')}
                         />
                     </TouchableOpacity>
                 </View>
                 {
                     !!this.state.sticker.showed && (
                         <View
-                            style={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_BLOCK_STYLE')}
+                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_BLOCK_STYLE')}
                         >
                             <View
-                                style={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_HEADER_BLOCK_STYLE')}
+                                style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_HEADER_BLOCK_STYLE')}
                             >
                                 <View
-                                    style={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_TABS_BLOCK_STYLE')}
+                                    style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_TABS_BLOCK_STYLE')}
                                 >
                                     {
                                         this.state.sticker.items.map((item, index) => {
                                             return (
                                                 <TouchableOpacity
                                                     style={[
-                                                        this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_TABS_TAB_BUTTON_STYLE'),
-                                                        (this.state.sticker.selected === index ? this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_TABS_TAB_BUTTON_ACTIVE_STYLE') : {})
+                                                        this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_TABS_TAB_BUTTON_STYLE'),
+                                                        (this.state.sticker.selected === index ? this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_TABS_TAB_BUTTON_ACTIVE_STYLE') : {})
                                                     ]}
                                                     activeOpacity={0.5}
                                                     onPress={() => { this.changeStickerTab(index) }}
                                                     key={`sticker_tab_${item.catId}`}
                                                 >
                                                     <Image
-                                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_TABS_TAB_IMAGE_STYLE')}
+                                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_TABS_TAB_IMAGE_STYLE')}
                                                         source={{
-                                                            uri: `${this.props.linkConstants.LINK_API_URL_STICKER}${item.catId}/${item.iconName}`
+                                                            uri: `${this.coreInstances.linkConstants.LINK_API_URL_STICKER}${item.catId}/${item.iconName}`
                                                         }}
                                                     />
                                                 </TouchableOpacity>
@@ -288,34 +290,34 @@ class ChatInputComponentBlock extends React.Component {
                                     }
                                 </View>
                                 <TouchableOpacity
-                                    style={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_CLOSE_BUTTON_BLOCK_STYLE')}
+                                    style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_CLOSE_BUTTON_BLOCK_STYLE')}
                                     activeOpacity={0.5}
                                     onPress={this.closeStickerBox}
                                 >
                                     <Text
-                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_CLOSE_BUTTON_TEXT_STYLE')}
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_CLOSE_BUTTON_TEXT_STYLE')}
                                     >×</Text>
                                 </TouchableOpacity>
                             </View>
                             <View
-                                style={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_BODY_BLOCK_STYLE')}
+                                style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_BODY_BLOCK_STYLE')}
                             >
                                 <ScrollView
-                                    contentContainerStyle={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_STICKERS_BLOCK_STYLE')}
+                                    contentContainerStyle={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_STICKERS_BLOCK_STYLE')}
                                 >
                                     {
                                         this.state.sticker.items[this.state.sticker.selected].content.map((item) => {
                                             return (
                                                 <TouchableOpacity
-                                                    style={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_STICKERS_STICKER_BUTTON_STYLE')}
+                                                    style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_STICKERS_STICKER_BUTTON_STYLE')}
                                                     activeOpacity={0.5}
                                                     onPress={() => { this.sendStickerMessage(item) }}
                                                     key={`sticker_${this.state.sticker.items[this.state.sticker.selected].catId}_${item}`}
                                                 >
                                                     <Image
-                                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_STICKERS_STICKER_IMAGE_STYLE')}
+                                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_STICKERS_STICKER_IMAGE_STYLE')}
                                                         source={{
-                                                            uri: `${this.props.linkConstants.LINK_API_URL_STICKER}${this.state.sticker.items[this.state.sticker.selected].catId}/${item}`
+                                                            uri: `${this.coreInstances.linkConstants.LINK_API_URL_STICKER}${this.state.sticker.items[this.state.sticker.selected].catId}/${item}`
                                                         }}
                                                     />
                                                 </TouchableOpacity>
@@ -330,109 +332,109 @@ class ChatInputComponentBlock extends React.Component {
                 {
                     !!this.state.file.showed && (
                         <View
-                            style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_BLOCK_STYLE')}
+                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_BLOCK_STYLE')}
                         >
                             <View
-                                style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_CONTENT_BLOCK_STYLE')}
+                                style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_CONTENT_BLOCK_STYLE')}
                             >
                                 <TouchableOpacity
-                                    style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
+                                    style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
                                     activeOpacity={0.5}
                                     onPress={() => { }}
                                 >
                                     <Image
-                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
-                                        source={this.props.CustomStyle.getImage('IMAGE_GALLERY')}
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
+                                        source={this.coreInstances.CustomStyle.getImage('IMAGE_GALLERY')}
                                     />
                                     <Text
-                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
                                     >
-                                        {this.props.Language.getText('CHAT_INPUT_FILE_OPTION_GALLERY_TEXT')}
+                                        {this.coreInstances.Language.getText('CHAT_INPUT_FILE_OPTION_GALLERY_TEXT')}
                                     </Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
-                                    style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
+                                    style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
                                     activeOpacity={0.5}
                                     onPress={() => { }}
                                 >
                                     <Image
-                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
-                                        source={this.props.CustomStyle.getImage('IMAGE_CAMERA')}
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
+                                        source={this.coreInstances.CustomStyle.getImage('IMAGE_CAMERA')}
                                     />
                                     <Text
-                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
                                     >
-                                        {this.props.Language.getText('CHAT_INPUT_FILE_OPTION_CAMERA_TEXT')}
+                                        {this.coreInstances.Language.getText('CHAT_INPUT_FILE_OPTION_CAMERA_TEXT')}
                                     </Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
-                                    style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
+                                    style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
                                     activeOpacity={0.5}
                                     onPress={() => { }}
                                 >
                                     <Image
-                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
-                                        source={this.props.CustomStyle.getImage('IMAGE_FILE')}
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
+                                        source={this.coreInstances.CustomStyle.getImage('IMAGE_FILE')}
                                     />
                                     <Text
-                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
                                     >
-                                        {this.props.Language.getText('CHAT_INPUT_FILE_OPTION_FILE_TEXT')}
+                                        {this.coreInstances.Language.getText('CHAT_INPUT_FILE_OPTION_FILE_TEXT')}
                                     </Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
-                                    style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
+                                    style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
                                     activeOpacity={0.5}
                                     onPress={() => { }}
                                 >
                                     <Image
-                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
-                                        source={this.props.CustomStyle.getImage('IMAGE_LOCATION')}
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
+                                        source={this.coreInstances.CustomStyle.getImage('IMAGE_LOCATION')}
                                     />
                                     <Text
-                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
                                     >
-                                        {this.props.Language.getText('CHAT_INPUT_FILE_OPTION_LOCATION_TEXT')}
+                                        {this.coreInstances.Language.getText('CHAT_INPUT_FILE_OPTION_LOCATION_TEXT')}
                                     </Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
-                                    style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
+                                    style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
                                     activeOpacity={0.5}
                                     onPress={() => { }}
                                 >
                                     <Image
-                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
-                                        source={this.props.CustomStyle.getImage('IMAGE_VOICE')}
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
+                                        source={this.coreInstances.CustomStyle.getImage('IMAGE_VOICE')}
                                     />
                                     <Text
-                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
                                     >
-                                        {this.props.Language.getText('CHAT_INPUT_FILE_OPTION_VOICE_TEXT')}
+                                        {this.coreInstances.Language.getText('CHAT_INPUT_FILE_OPTION_VOICE_TEXT')}
                                     </Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
-                                    style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
+                                    style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
                                     activeOpacity={0.5}
                                     onPress={() => { }}
                                 >
                                     <Image
-                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
-                                        source={this.props.CustomStyle.getImage('IMAGE_DRAWING')}
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
+                                        source={this.coreInstances.CustomStyle.getImage('IMAGE_DRAWING')}
                                     />
                                     <Text
-                                        style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
                                     >
-                                        {this.props.Language.getText('CHAT_INPUT_FILE_OPTION_DRAWING_TEXT')}
+                                        {this.coreInstances.Language.getText('CHAT_INPUT_FILE_OPTION_DRAWING_TEXT')}
                                     </Text>
                                 </TouchableOpacity>
                             </View>
                             <TouchableOpacity
-                                style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_CLOSE_BUTTON_BLOCK_STYLE')}
+                                style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_CLOSE_BUTTON_BLOCK_STYLE')}
                                 activeOpacity={0.5}
                                 onPress={this.closeFileBox}
                             >
                                 <Text
-                                    style={this.props.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_CLOSE_BUTTON_TEXT_STYLE')}
+                                    style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_CLOSE_BUTTON_TEXT_STYLE')}
                                 >×</Text>
                             </TouchableOpacity>
                         </View>
