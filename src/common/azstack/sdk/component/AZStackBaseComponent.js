@@ -162,11 +162,7 @@ export default class AZStackBaseComponent extends React.Component {
         return <VideoCallComponent
             key={key}
             Sizes={this.Sizes}
-            Language={this.Language}
-            CustomStyle={this.CustomStyle}
-            eventConstants={this.eventConstants}
-            AZStackCore={this.AZStackCore}
-            EventEmitter={this.EventEmitter}
+            getCoreInstances={this.getCoreInstances}
             {...options}
         />;
     };
