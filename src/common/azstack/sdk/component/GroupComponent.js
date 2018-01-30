@@ -189,7 +189,21 @@ class GroupComponent extends React.Component {
             { cancelable: true }
         );
     };
-    onChangeAdminButtonPressed(event) { };
+    onChangeAdminButtonPressed(event) {
+        Alert.alert(
+            this.coreInstances.Language.getText('ALERT_TITLE_CONFIRM_TEXT'),
+            `${this.coreInstances.Language.getText('GROUP_ACTION_CHANGE_ADMIN_PART_1_TEXT')} ${event.member.fullname}${this.coreInstances.Language.getText('GROUP_ACTION_CHANGE_ADMIN_PART_2_TEXT')}`,
+            [
+                { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_CANCEL_TEXT'), onPress: () => { } },
+                {
+                    text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => {
+                        this.changeAdmin(event.member);
+                    }
+                }
+            ],
+            { cancelable: true }
+        );
+    };
     onKickMemberButtonPressed(event) {
         Alert.alert(
             this.coreInstances.Language.getText('ALERT_TITLE_CONFIRM_TEXT'),
@@ -316,6 +330,35 @@ class GroupComponent extends React.Component {
             Alert.alert(
                 this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
                 this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_AND_CHANGE_ADMIN_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+        });
+    };
+    changeAdmin(member) {
+        if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_ACTION_CHANGE_ADMIN_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+            return;
+        }
+
+        this.coreInstances.AZStackCore.changeAdminGroup({
+            groupId: this.props.groupId,
+            newAdminId: member.userId
+        }).then((result) => {
+
+        }).catch((error) => {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_ACTION_CHANGE_ADMIN_ERROR_TEXT'),
                 [
                     { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
                 ],
