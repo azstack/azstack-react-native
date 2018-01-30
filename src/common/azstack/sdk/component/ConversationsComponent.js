@@ -789,16 +789,13 @@ class ConversationsComponent extends React.Component {
                     getCoreInstances={this.props.getCoreInstances}
                     style={this.props.contentContainerStyle}
                 >
-                    <View
-                        style={this.coreInstances.CustomStyle.getStyle('CONVERSATIONS_SEARCH_BLOCK_STYLE')}
-                    >
-                        <SearchBlockComponent
-                            getCoreInstances={this.props.getCoreInstances}
-                            onSearchTextChanged={this.onSearchTextChanged}
-                            onSearchTextCleared={this.onSearchTextCleared}
-                            placeholder={this.coreInstances.Language.getText('CONVERSATIONS_SEARCH_PLACEHOLDER_TEXT')}
-                        />
-                    </View>
+                    <SearchBlockComponent
+                        getCoreInstances={this.props.getCoreInstances}
+                        containerStyle={this.coreInstances.CustomStyle.getStyle('CONVERSATIONS_SEARCH_BLOCK_STYLE')}
+                        onSearchTextChanged={this.onSearchTextChanged}
+                        onSearchTextCleared={this.onSearchTextCleared}
+                        placeholder={this.coreInstances.Language.getText('CONVERSATIONS_SEARCH_PLACEHOLDER_TEXT')}
+                    />
                     {
                         filteredConversations.length === 0 && <EmptyBlockComponent
                             getCoreInstances={this.props.getCoreInstances}

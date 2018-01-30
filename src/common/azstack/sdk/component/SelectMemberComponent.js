@@ -135,16 +135,13 @@ class SelectMemberComponent extends React.Component {
                     getCoreInstances={this.props.getCoreInstances}
                     style={this.props.contentContainerStyle}
                 >
-                    <View
-                        style={this.coreInstances.CustomStyle.getStyle('SELECT_MEMBER_SEARCH_BLOCK_STYLE')}
-                    >
-                        <SearchBlockComponent
-                            getCoreInstances={this.props.getCoreInstances}
-                            onSearchTextChanged={this.onSearchTextChanged}
-                            onSearchTextCleared={this.onSearchTextCleared}
-                            placeholder={this.coreInstances.Language.getText('SELECT_MEMBER_SEARCH_PLACEHOLDER_TEXT')}
-                        />
-                    </View>
+                    <SearchBlockComponent
+                        getCoreInstances={this.props.getCoreInstances}
+                        containerStyle={this.coreInstances.CustomStyle.getStyle('SELECT_MEMBER_SEARCH_BLOCK_STYLE')}
+                        onSearchTextChanged={this.onSearchTextChanged}
+                        onSearchTextCleared={this.onSearchTextCleared}
+                        placeholder={this.coreInstances.Language.getText('SELECT_MEMBER_SEARCH_PLACEHOLDER_TEXT')}
+                    />
                     {
                         groupedMembers.length === 0 && <EmptyBlockComponent
                             getCoreInstances={this.props.getCoreInstances}
