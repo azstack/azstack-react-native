@@ -53,31 +53,6 @@ class MessageBlockComponent extends React.Component {
         }
     };
 
-    toTimeString(date) {
-        if (!date) {
-            return '';
-        }
-        if (new Date(date) === 'Invalid Date' || isNaN(new Date(date))) {
-            return '';
-        }
-        let handleDate = new Date(date);
-        let hour = handleDate.getHours();
-        let minute = handleDate.getMinutes();
-        return `${hour > 9 ? hour : '0' + hour}:${minute > 9 ? minute : '0' + minute}`;
-    };
-    toDayString(date) {
-        if (!date) {
-            return '';
-        }
-        if (new Date(date) === 'Invalid Date' || isNaN(new Date(date))) {
-            return '';
-        }
-        let handleDate = new Date(date);
-        let year = handleDate.getFullYear();
-        let month = handleDate.getMonth() + 1;
-        let day = handleDate.getDate();
-        return `${year}/${month > 9 ? month : '0' + month}/${day > 9 ? day : '0' + day}`;
-    };
     toFileSizeString(bytes, si) {
         var thresh = si ? 1000 : 1024;
         if (Math.abs(bytes) < thresh) {
@@ -181,7 +156,7 @@ class MessageBlockComponent extends React.Component {
                         <Text
                             style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TIME_MARK_TEXT_STYLE')}
                         >
-                            {`${this.toDayString(this.props.message.created)} ${this.toTimeString(this.props.message.created)}`}
+                            {`${this.coreInstances.DateTimeFormatter.toDayString(this.props.message.created)} ${this.coreInstances.DateTimeFormatter.toTimeString(this.props.message.created)}`}
                         </Text>
                     )
                 }

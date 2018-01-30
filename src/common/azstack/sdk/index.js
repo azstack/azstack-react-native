@@ -14,6 +14,8 @@ import CustomStyle from './style/';
 
 import { AZStackCore } from '../core/';
 
+import DateTimeFormatter from './helper/dateTimeFormatter';
+
 import Event from './handler/event';
 import Member from './handler/member';
 
@@ -41,6 +43,8 @@ export class AZStackSdk extends AZStackBaseComponent {
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_FREE_CALL_START] = (error, result) => {
             this.onFreeCallStart(error, result);
         };
+
+        this.DateTimeFormatter = new DateTimeFormatter();
 
         this.EventEmitter = new EventEmitter();
         this.Event = new Event({
@@ -96,6 +100,24 @@ export class AZStackSdk extends AZStackBaseComponent {
         this.getMembers();
     };
 
+    getCoreInstances() {
+        return {
+            eventConstants: this.eventConstants,
+            linkConstants: this.linkConstants,
+
+            Language: this.Language,
+            CustomStyle: this.CustomStyle,
+
+            AZStackCore: this.AZStackCore,
+
+            DateTimeFormatter: this.DateTimeFormatter,
+
+            EventEmitter: this.EventEmitter,
+
+            members: this.members
+        };
+    };
+
     componentDidMount() {
         this.addSubscriptions();
         this.initRun();
@@ -128,18 +150,6 @@ export class AZStackSdk extends AZStackBaseComponent {
     };
     disconnect() {
         return this.AZStackCore.disconnect();
-    };
-
-    getCoreInstances() {
-        return {
-            eventConstants: this.eventConstants,
-            linkConstants: this.linkConstants,
-            Language: this.Language,
-            CustomStyle: this.CustomStyle,
-            AZStackCore: this.AZStackCore,
-            EventEmitter: this.EventEmitter,
-            members: this.members
-        };
     };
 
     onCallinStart(error, result) {
