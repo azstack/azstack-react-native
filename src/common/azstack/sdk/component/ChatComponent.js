@@ -63,7 +63,7 @@ class ChatComponent extends React.Component {
             }
             this.initRun()
         });
-        this.subscriptions.onReconnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_RECONNECT_RETURN, ({ error, result }) => {
+        this.subscriptions.onReconnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_RECONNECT_RETURN, ({ error, result }) => {
             if (error) {
                 return;
             }

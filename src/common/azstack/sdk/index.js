@@ -78,7 +78,7 @@ export class AZStackSdk extends AZStackBaseComponent {
             }
             this.initRun();
         });
-        this.subscriptions.onReconnected = this.EventEmitter.addListener(this.eventConstants.EVENT_NAME_RECONNECT_RETURN, ({ error, result }) => {
+        this.subscriptions.onReconnected = this.EventEmitter.addListener(this.eventConstants.EVENT_NAME_ON_RECONNECT_RETURN, ({ error, result }) => {
             if (error) {
                 return;
             }
