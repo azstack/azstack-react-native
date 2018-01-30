@@ -772,6 +772,7 @@ class ConversationsComponent extends React.Component {
     };
 
     render() {
+        let filteredConversations = this.getFilteredConversations();
         return (
             <ScreenBlockComponent
                 fullScreen={false}
@@ -799,15 +800,15 @@ class ConversationsComponent extends React.Component {
                         />
                     </View>
                     {
-                        this.getFilteredConversations().length === 0 && <EmptyBlockComponent
+                        filteredConversations.length === 0 && <EmptyBlockComponent
                             getCoreInstances={this.props.getCoreInstances}
                             emptyText={this.coreInstances.Language.getText('CONVERSATIONS_LIST_EMPTY_TEXT')}
                         />
                     }
                     {
-                        this.getFilteredConversations().length > 0 && <FlatList
+                        filteredConversations.length > 0 && <FlatList
                             style={this.coreInstances.CustomStyle.getStyle('CONVERSATIONS_LIST_STYLE')}
-                            data={this.getFilteredConversations()}
+                            data={filteredConversations}
                             keyExtractor={(item, index) => (item.chatType + '_' + item.chatId)}
                             renderItem={({ item }) => {
                                 return (
