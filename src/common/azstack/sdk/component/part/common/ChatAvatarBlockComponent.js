@@ -47,7 +47,7 @@ class ChatAvatarBlockComponent extends React.Component {
             <View
                 style={[
                     this.coreInstances.CustomStyle.getStyle('AVATAR_BLOCK_STYLE'),
-                    (this.props.containerStyle ? this.props.containerStyle : {})
+                    (this.props.containerStyle ? this.props.containerStyle : {}),
                     {backgroundColor: this.getColor({ text: this.props.chatTarget.fullname ? this.props.chatTarget.fullname : this.props.chatTarget.name })}
                 ]}
             >

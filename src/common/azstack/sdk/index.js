@@ -16,6 +16,7 @@ import { AZStackCore } from '../core/';
 
 import DateTimeFormatter from './helper/dateTimeFormatter';
 import FileConverter from './helper/fileConverter';
+import Diacritic from './helper/diacritic';
 
 import Event from './handler/event';
 import Member from './handler/member';
@@ -47,6 +48,7 @@ export class AZStackSdk extends AZStackBaseComponent {
 
         this.DateTimeFormatter = new DateTimeFormatter();
         this.FileConverter = new FileConverter();
+        this.Diacritic = new Diacritic();
 
         this.EventEmitter = new EventEmitter();
         this.Event = new Event({
@@ -114,6 +116,7 @@ export class AZStackSdk extends AZStackBaseComponent {
 
             DateTimeFormatter: this.DateTimeFormatter,
             FileConverter: this.FileConverter,
+            Diacritic: this.Diacritic,
 
             EventEmitter: this.EventEmitter,
 

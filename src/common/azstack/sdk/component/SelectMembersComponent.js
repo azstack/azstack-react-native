@@ -14,6 +14,7 @@ import SearchBlockComponent from './part/common/SearchBlockComponent';
 import EmptyBlockComponent from './part/common/EmptyBlockComponent';
 import SelectMemberBlockComponent from './part/select/SelectMemberBlockComponent';
 import ConnectionBlockComponent from './part/common/ConnectionBlockComponent';
+import member from '../handler/member';
 
 class SelectMembersComponent extends React.Component {
     constructor(props) {
@@ -21,8 +22,13 @@ class SelectMembersComponent extends React.Component {
 
         this.coreInstances = props.getCoreInstances();
         this.subscriptions = {};
+
+        let members = [...this.coreInstances.members];
+        members.map((member) => {
+            member.searchString = this.coreInstances.Diacritic.clear(member.fullname).toLowerCase();
+        });
         this.state = {
-            members: this.coreInstances.members,
+            members: members,
             selectedMembers: [],
             searchText: ''
         };
@@ -39,8 +45,13 @@ class SelectMembersComponent extends React.Component {
             if (error) {
                 return;
             }
+            
+            let members = [...result];
+            members.map((member) => {
+                member.searchString = this.coreInstances.Diacritic.clear(member.fullname).toLowerCase();
+            });
             this.setState({
-                members: result
+                members: members
             });
         });
     };
@@ -63,11 +74,11 @@ class SelectMembersComponent extends React.Component {
 
         let filteredMembers = availableMembers;
         if (this.state.searchText) {
-            let searchParts = this.state.searchText.toLowerCase().split(' ');
+            let searchParts = this.coreInstances.Diacritic.clear(this.state.searchText).toLowerCase().split(' ');
             filteredMembers = availableMembers.filter((member) => {
                 let matched = false;
                 for (let i = 0; i < searchParts.length; i++) {
-                    if (member.fullname.toLowerCase().indexOf(searchParts[i]) > -1) {
+                    if (member.searchString.indexOf(searchParts[i]) > -1) {
                         matched = true;
                         break;
                     }

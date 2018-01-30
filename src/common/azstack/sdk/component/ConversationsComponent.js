@@ -187,7 +187,7 @@ class ConversationsComponent extends React.Component {
                             userIds: [conversation.chatId]
                         }).then((result) => {
                             conversation.chatTarget = result.list[0];
-                            conversation.searchString = result.list[0].fullname.toLowerCase();
+                            conversation.searchString = this.coreInstances.Diacritic.clear(result.list[0].fullname).toLowerCase();
                             resolve(conversation);
                         }).catch((error) => {
                             conversation.chatTarget = { userId: conversation.chatId };
@@ -198,9 +198,9 @@ class ConversationsComponent extends React.Component {
                             groupId: conversation.chatId
                         }).then((result) => {
                             conversation.chatTarget = result;
-                            conversation.searchString = result.name.toLowerCase();
+                            conversation.searchString = this.coreInstances.Diacritic.clear(result.name).toLowerCase();
                             result.members.map((member) => {
-                                conversation.searchString += ` ${member.fullname.toLowerCase()}`;
+                                conversation.searchString += ` ${this.coreInstances.Diacritic.clear(member.fullname).toLowerCase()}`;
                             });
                             resolve(conversation);
                         }).catch((error) => {
@@ -355,7 +355,7 @@ class ConversationsComponent extends React.Component {
         if (!this.state.searchText) {
             return this.state.conversations;
         }
-        let searchParts = this.state.searchText.toLowerCase().split(' ');
+        let searchParts = this.coreInstances.Diacritic.clear(this.state.searchText).toLowerCase().split(' ');
         return this.state.conversations.filter((conversation) => {
             let matched = false;
             for (let i = 0; i < searchParts.length; i++) {
@@ -446,11 +446,11 @@ class ConversationsComponent extends React.Component {
                 prepared: true
             };
             if (newConversation.chatType === this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_USER) {
-                newConversation.searchString = newConversation.chatTarget.fullname.toLowerCase();
+                newConversation.searchString = this.coreInstances.Diacritic.clear(newConversation.chatTarget.fullname).toLowerCase();
             } else if (newConversation.chatType === this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
-                newConversation.searchString = newConversation.chatTarget.name.toLowerCase();
+                newConversation.searchString = this.coreInstances.Diacritic.clear(newConversation.chatTarget.name).toLowerCase();
                 newConversation.chatTarget.members.map((member) => {
-                    newConversation.searchString += ` ${member.fullname.toLowerCase()}`;
+                    newConversation.searchString += ` ${this.coreInstances.Diacritic.clear(member.fullname).toLowerCase()}`;
                 });
             }
             unorderConversations.push(newConversation);
@@ -485,11 +485,11 @@ class ConversationsComponent extends React.Component {
                 prepared: true
             };
             if (newConversation.chatType === this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_USER) {
-                newConversation.searchString = newConversation.chatTarget.fullname.toLowerCase();
+                newConversation.searchString = this.coreInstances.Diacritic.clear(newConversation.chatTarget.fullname).toLowerCase();
             } else if (newConversation.chatType === this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
-                newConversation.searchString = newConversation.chatTarget.name.toLowerCase();
+                newConversation.searchString = this.coreInstances.Diacritic.clear(newConversation.chatTarget.name).toLowerCase();
                 newConversation.chatTarget.members.map((member) => {
-                    newConversation.searchString += ` ${member.fullname.toLowerCase()}`;
+                    newConversation.searchString += ` ${this.coreInstances.Diacritic.clear(member.fullname).toLowerCase()}`;
                 });
             }
             unorderConversations.push(newConversation);
@@ -524,11 +524,11 @@ class ConversationsComponent extends React.Component {
                 prepared: true
             };
             if (newConversation.chatType === this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_USER) {
-                newConversation.searchString = newConversation.chatTarget.fullname.toLowerCase();
+                newConversation.searchString = this.coreInstances.Diacritic.clear(newConversation.chatTarget.fullname).toLowerCase();
             } else if (newConversation.chatType === this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
-                newConversation.searchString = newConversation.chatTarget.name.toLowerCase();
+                newConversation.searchString = this.coreInstances.Diacritic.clear(newConversation.chatTarget.name).toLowerCase();
                 newConversation.chatTarget.members.map((member) => {
-                    newConversation.searchString += ` ${member.fullname.toLowerCase()}`;
+                    newConversation.searchString += ` ${this.coreInstances.Diacritic.clear(member.fullname).toLowerCase()}`;
                 });
             }
             unorderConversations.push(newConversation);
@@ -551,9 +551,9 @@ class ConversationsComponent extends React.Component {
             modified: newMessage.modified,
             prepared: true
         };
-        newConversation.searchString = newConversation.chatTarget.name.toLowerCase();
+        newConversation.searchString = this.coreInstances.Diacritic.clear(newConversation.chatTarget.name).toLowerCase();
         newConversation.chatTarget.members.map((member) => {
-            newConversation.searchString += ` ${member.fullname.toLowerCase()}`;
+            newConversation.searchString += ` ${this.coreInstances.Diacritic.clear(member.fullname).toLowerCase()}`;
         });
         unorderConversations.push(newConversation);
         this.setState({
@@ -569,9 +569,9 @@ class ConversationsComponent extends React.Component {
             if (conversation.chatType === newMessage.chatType && conversation.chatId === newMessage.chatId) {
                 foundConversation = true;
                 conversation.chatTarget = newMessage.receiver;
-                conversation.searchString = conversation.chatTarget.name.toLowerCase();
+                conversation.searchString = this.coreInstances.Diacritic.clear(conversation.chatTarget.name).toLowerCase();
                 conversation.chatTarget.members.map((member) => {
-                    conversation.searchString += ` ${member.fullname.toLowerCase()}`;
+                    conversation.searchString += ` ${this.coreInstances.Diacritic.clear(member.fullname).toLowerCase()}`;
                 });
                 conversation.lastMessage = newMessage;
                 conversation.unread += 1;
@@ -590,9 +590,9 @@ class ConversationsComponent extends React.Component {
                 modified: newMessage.modified,
                 prepared: true
             };
-            newConversation.searchString = newConversation.chatTarget.name.toLowerCase();
+            newConversation.searchString = this.coreInstances.Diacritic.clear(newConversation.chatTarget.name).toLowerCase();
             newConversation.chatTarget.members.map((member) => {
-                newConversation.searchString += ` ${member.fullname.toLowerCase()}`;
+                newConversation.searchString += ` ${this.coreInstances.Diacritic.clear(member.fullname).toLowerCase()}`;
             });
             unorderConversations.push(newConversation);
         }
@@ -609,9 +609,9 @@ class ConversationsComponent extends React.Component {
             if (conversation.chatType === newMessage.chatType && conversation.chatId === newMessage.chatId) {
                 foundConversation = true;
                 conversation.chatTarget = newMessage.receiver;
-                conversation.searchString = conversation.chatTarget.name.toLowerCase();
+                conversation.searchString = this.coreInstances.Diacritic.clear(conversation.chatTarget.name).toLowerCase();
                 conversation.chatTarget.members.map((member) => {
-                    conversation.searchString += ` ${member.fullname.toLowerCase()}`;
+                    conversation.searchString += ` ${this.coreInstances.Diacritic.clear(member.fullname).toLowerCase()}`;
                 });
                 conversation.lastMessage = newMessage;
                 conversation.unread += 1;
@@ -630,9 +630,9 @@ class ConversationsComponent extends React.Component {
                 modified: newMessage.modified,
                 prepared: true
             };
-            newConversation.searchString = newConversation.chatTarget.name.toLowerCase();
+            newConversation.searchString = this.coreInstances.Diacritic.clear(newConversation.chatTarget.name).toLowerCase();
             newConversation.chatTarget.members.map((member) => {
-                newConversation.searchString += ` ${member.fullname.toLowerCase()}`;
+                newConversation.searchString += ` ${this.coreInstances.Diacritic.clear(member.fullname).toLowerCase()}`;
             });
             unorderConversations.push(newConversation);
         }
@@ -649,9 +649,9 @@ class ConversationsComponent extends React.Component {
             if (conversation.chatType === newMessage.chatType && conversation.chatId === newMessage.chatId) {
                 foundConversation = true;
                 conversation.chatTarget = newMessage.receiver;
-                conversation.searchString = conversation.chatTarget.name.toLowerCase();
+                conversation.searchString = this.coreInstances.Diacritic.clear(conversation.chatTarget.name).toLowerCase();
                 conversation.chatTarget.members.map((member) => {
-                    conversation.searchString += ` ${member.fullname.toLowerCase()}`;
+                    conversation.searchString += ` ${this.coreInstances.Diacritic.clear(member.fullname).toLowerCase()}`;
                 });
                 conversation.lastMessage = newMessage;
                 conversation.unread += 1;
@@ -670,9 +670,9 @@ class ConversationsComponent extends React.Component {
                 modified: newMessage.modified,
                 prepared: true
             };
-            newConversation.searchString = newConversation.chatTarget.name.toLowerCase();
+            newConversation.searchString = this.coreInstances.Diacritic.clear(newConversation.chatTarget.name).toLowerCase();
             newConversation.chatTarget.members.map((member) => {
-                newConversation.searchString += ` ${member.fullname.toLowerCase()}`;
+                newConversation.searchString += ` ${this.coreInstances.Diacritic.clear(member.fullname).toLowerCase()}`;
             });
             unorderConversations.push(newConversation);
         }
@@ -689,9 +689,9 @@ class ConversationsComponent extends React.Component {
             if (conversation.chatType === newMessage.chatType && conversation.chatId === newMessage.chatId) {
                 foundConversation = true;
                 conversation.chatTarget = newMessage.receiver;
-                conversation.searchString = conversation.chatTarget.name.toLowerCase();
+                conversation.searchString = this.coreInstances.Diacritic.clear(conversation.chatTarget.name).toLowerCase();
                 conversation.chatTarget.members.map((member) => {
-                    conversation.searchString += ` ${member.fullname.toLowerCase()}`;
+                    conversation.searchString += ` ${this.coreInstances.Diacritic.clear(member.fullname).toLowerCase()}`;
                 });
                 conversation.lastMessage = newMessage;
                 conversation.unread += 1;
@@ -710,9 +710,9 @@ class ConversationsComponent extends React.Component {
                 modified: newMessage.modified,
                 prepared: true
             };
-            newConversation.searchString = newConversation.chatTarget.name.toLowerCase();
+            newConversation.searchString = this.coreInstances.Diacritic.clear(newConversation.chatTarget.name).toLowerCase();
             newConversation.chatTarget.members.map((member) => {
-                newConversation.searchString += ` ${member.fullname.toLowerCase()}`;
+                newConversation.searchString += ` ${this.coreInstances.Diacritic.clear(member.fullname).toLowerCase()}`;
             });
             unorderConversations.push(newConversation);
         }
@@ -729,9 +729,9 @@ class ConversationsComponent extends React.Component {
             if (conversation.chatType === newMessage.chatType && conversation.chatId === newMessage.chatId) {
                 foundConversation = true;
                 conversation.chatTarget = newMessage.receiver;
-                conversation.searchString = conversation.chatTarget.name.toLowerCase();
+                conversation.searchString = this.coreInstances.Diacritic.clear(conversation.chatTarget.name).toLowerCase();
                 conversation.chatTarget.members.map((member) => {
-                    conversation.searchString += ` ${member.fullname.toLowerCase()}`;
+                    conversation.searchString += ` ${this.coreInstances.Diacritic.clear(member.fullname).toLowerCase()}`;
                 });
                 conversation.lastMessage = newMessage;
                 conversation.unread += 1;
@@ -750,9 +750,9 @@ class ConversationsComponent extends React.Component {
                 modified: newMessage.modified,
                 prepared: true
             };
-            newConversation.searchString = newConversation.chatTarget.name.toLowerCase();
+            newConversation.searchString = this.coreInstances.Diacritic.clear(newConversation.chatTarget.name).toLowerCase();
             newConversation.chatTarget.members.map((member) => {
-                newConversation.searchString += ` ${member.fullname.toLowerCase()}`;
+                newConversation.searchString += ` ${this.coreInstances.Diacritic.clear(member.fullname).toLowerCase()}`;
             });
             unorderConversations.push(newConversation);
         }
