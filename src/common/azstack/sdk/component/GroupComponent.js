@@ -171,7 +171,9 @@ class GroupComponent extends React.Component {
         }
         this.props.showSelectMember({
             headerTitle: this.coreInstances.Language.getText('SELECT_NEW_ADMIN_HEADER_TITLE_TEXT'),
-            ignoreMembers: [this.coreInstances.AZStackCore.authenticatedUser.userId],
+            members: this.state.group.members.filter((member) => {
+                return member.userId !== this.coreInstances.AZStackCore.authenticatedUser.userId
+            }),
             onSelectDone: (event) => {
                 Alert.alert(
                     this.coreInstances.Language.getText('ALERT_TITLE_CONFIRM_TEXT'),

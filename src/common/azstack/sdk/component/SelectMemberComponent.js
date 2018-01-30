@@ -21,7 +21,7 @@ class SelectMemberComponent extends React.Component {
         this.coreInstances = props.getCoreInstances();
         this.subscriptions = {};
 
-        let members = [...this.coreInstances.members];
+        let members = props.members ? [...props.members] : [...this.coreInstances.members];
         members.map((member) => {
             member.searchString = this.coreInstances.Diacritic.clear(member.fullname).toLowerCase();
         });
@@ -39,6 +39,10 @@ class SelectMemberComponent extends React.Component {
     addSubscriptions() {
         this.subscriptions.onMembersChanged = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_MEMBERS_CHANGED, ({ error, result }) => {
             if (error) {
+                return;
+            }
+
+            if (this.props.members) {
                 return;
             }
 
@@ -64,9 +68,13 @@ class SelectMemberComponent extends React.Component {
         this.setState({ searchText: '' });
     };
     getGroupedMembers() {
-        let availableMembers = this.state.members.filter((member) => {
-            return this.props.ignoreMembers.indexOf(member.userId) === -1;
-        });
+        let availableMembers = this.state.members;
+
+        if (this.props.ignoreMembers) {
+            availableMembers = this.state.members.filter((member) => {
+                return this.props.ignoreMembers.indexOf(member.userId) === -1;
+            });
+        }
 
         let filteredMembers = availableMembers;
         if (this.state.searchText) {
