@@ -1,6 +1,8 @@
 export const ALERT_TITLE_ERROR_TEXT = 'Error';
 export const ALERT_TITLE_WARNING_TEXT = 'Warning';
+export const ALERT_TITLE_CONFIRM_TEXT = 'Confirm';
 export const ALERT_BUTTON_TITLE_OK_TEXT = 'OK';
+export const ALERT_BUTTON_TITLE_CANCEL_TEXT = 'Cancel';
 
 export const CONNECTTION_CONNECTING_TEXT = 'Connecting...';
 export const CONNECTTION_CONNECTED_TEXT = 'Connected';
@@ -53,6 +55,10 @@ export const GROUP_TYPE_PUBLIC = 'public';
 export const GROUP_MEMBER_TEXT = 'member';
 export const GROUP_MEMBER_MANY_TEXT = 'members';
 export const GROUP_ADMIN_TEXT = 'Admin';
+
+export const GROUP_ACTION_KICK_PART_1_TEXT = 'Are you sure to kick member';
+export const GROUP_ACTION_KICK_PART_2_TEXT = '?';
+export const GROUP_ACTION_KICK_ERROR_TEXT = 'Can\'t kick member out of group, please try again later';
 
 export const USER_ONLINE_TEXT = 'Online';
 export const USER_OFFLINE_TEXT = 'Last seen';

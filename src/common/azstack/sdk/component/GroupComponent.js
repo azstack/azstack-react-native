@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Alert,
     View,
     Text,
     TouchableOpacity,
@@ -149,7 +150,51 @@ class GroupComponent extends React.Component {
         });
     };
     onChangeAdminButtonPressed(event) { };
-    onKickMemberButtonPressed(event) { };
+    onKickMemberButtonPressed(event) {
+        Alert.alert(
+            this.coreInstances.Language.getText('ALERT_TITLE_CONFIRM_TEXT'),
+            `${this.coreInstances.Language.getText('GROUP_ACTION_KICK_PART_1_TEXT')} ${event.member.fullname}${this.coreInstances.Language.getText('GROUP_ACTION_KICK_PART_2_TEXT')}`,
+            [
+                { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_CANCEL_TEXT'), onPress: () => { } },
+                {
+                    text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => {
+                        this.kickMember(event.member);
+                    }
+                }
+            ],
+            { cancelable: true }
+        );
+    };
+
+    kickMember(member) {
+        if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_ACTION_KICK_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+            return;
+        }
+
+        this.coreInstances.AZStackCore.leaveGroup({
+            groupId: this.props.groupId,
+            leaveId: member.userId
+        }).then((result) => {
+
+        }).catch((error) => {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_ACTION_KICK_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+        });
+    };
 
     onGroupInvited(newMessage) {
         if (newMessage.chatId !== this.props.groupId) {
