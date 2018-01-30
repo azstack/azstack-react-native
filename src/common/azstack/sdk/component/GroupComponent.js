@@ -132,11 +132,23 @@ class GroupComponent extends React.Component {
     onAddMemberButtonPressed() {
         this.props.showSelectMembers({
             headerTitle: this.coreInstances.Language.getText('SELECT_NEW_MEMBERS_HEADER_TITLE_TEXT'),
-            ignoreMembers: [] || this.state.group.members.map((member) => {
+            ignoreMembers: this.state.group.members.map((member) => {
                 return member.userId
             }),
             onSelectDone: (event) => {
-                console.log(event);
+                Alert.alert(
+                    this.coreInstances.Language.getText('ALERT_TITLE_CONFIRM_TEXT'),
+                    `${this.coreInstances.Language.getText('GROUP_ACTION_INVITE_PART_1_TEXT')} ${event.selected.map((member) => { return member.fullname }).join(', ')}${this.coreInstances.Language.getText('GROUP_ACTION_INVITE_PART_2_TEXT')}`,
+                    [
+                        { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_CANCEL_TEXT'), onPress: () => { } },
+                        {
+                            text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => {
+                                this.addMember(event.selected);
+                            }
+                        }
+                    ],
+                    { cancelable: true }
+                );
             }
         });
     };
@@ -166,6 +178,35 @@ class GroupComponent extends React.Component {
         );
     };
 
+    addMember(members) {
+        if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_ACTION_INVITE_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+            return;
+        }
+
+        this.coreInstances.AZStackCore.inviteGroup({
+            groupId: this.props.groupId,
+            inviteIds: members.map((member) => { return member.userId })
+        }).then((result) => {
+
+        }).catch((error) => {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_ACTION_INVITE_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+        });
+    };
     kickMember(member) {
         if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
             Alert.alert(

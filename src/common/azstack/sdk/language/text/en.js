@@ -56,7 +56,10 @@ export const GROUP_MEMBER_TEXT = 'member';
 export const GROUP_MEMBER_MANY_TEXT = 'members';
 export const GROUP_ADMIN_TEXT = 'Admin';
 
-export const GROUP_ACTION_KICK_PART_1_TEXT = 'Are you sure to kick member';
+export const GROUP_ACTION_INVITE_PART_1_TEXT = 'Are you sure to add';
+export const GROUP_ACTION_INVITE_PART_2_TEXT = '?';
+export const GROUP_ACTION_INVITE_ERROR_TEXT = 'Can\'t add member to group, please try again later';
+export const GROUP_ACTION_KICK_PART_1_TEXT = 'Are you sure to kick';
 export const GROUP_ACTION_KICK_PART_2_TEXT = '?';
 export const GROUP_ACTION_KICK_ERROR_TEXT = 'Can\'t kick member out of group, please try again later';
 
