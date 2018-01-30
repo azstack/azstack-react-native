@@ -50,10 +50,7 @@ class SearchBlockComponent extends React.Component {
             >
                 <TextInput
                     ref={'TextInput'}
-                    style={[
-                        this.coreInstances.CustomStyle.getStyle('SEARCH_INPUT_STYLE'),
-                        (this.state.textInputFocused ? this.coreInstances.CustomStyle.getStyle('SEARCH_INPUT_FOCUS_STYLE') : {})
-                    ]}
+                    style={this.coreInstances.CustomStyle.getStyle('SEARCH_INPUT_STYLE')}
                     onChangeText={this.onSearchTextChanged}
                     onFocus={this.onTextInputFocused}
                     onBlur={this.onTextInputBlured}

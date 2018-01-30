@@ -117,9 +117,6 @@ export const SEARCH_INPUT_STYLE = {
     fontWeight: '300',
     color: '#95A5A6'
 };
-export const SEARCH_INPUT_FOCUS_STYLE = {
-    borderColor: '#F2784B'
-};
 export const SEARCH_INPUT_PROPS_STYLE = {
     underlineColorAndroid: 'transparent',
     placeholderTextColor: '#E1E5EC'
