@@ -71,6 +71,9 @@ export const GROUP_ACTION_LEAVE_AND_CHANGE_ADMIN_ERROR_TEXT = 'Can\'t leave and 
 export const GROUP_ACTION_CHANGE_ADMIN_PART_1_TEXT = 'Are you sure to change admin to';
 export const GROUP_ACTION_CHANGE_ADMIN_PART_2_TEXT = '?';
 export const GROUP_ACTION_CHANGE_ADMIN_ERROR_TEXT = 'Can\'t change admin, please try again later';
+export const GROUP_ACTION_JOIN_PART_1_TEXT = 'Are you sure to join';
+export const GROUP_ACTION_JOIN_PART_2_TEXT = '?';
+export const GROUP_ACTION_JOIN_ERROR_TEXT = 'Can\'t join, please try again later';
 
 export const USER_ONLINE_TEXT = 'Online';
 export const USER_OFFLINE_TEXT = 'Last seen';

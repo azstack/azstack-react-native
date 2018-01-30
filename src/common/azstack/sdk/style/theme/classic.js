@@ -17,6 +17,7 @@ export const IMAGE_ADD_MEMBER = require('../../static/image/classic/add-member.p
 export const IMAGE_LEAVE = require('../../static/image/classic/leave.png');
 export const IMAGE_CHANGE_ADMIN = require('../../static/image/classic/change-admin.png');
 export const IMAGE_KICK_MEMBER = require('../../static/image/classic/kick-member.png');
+export const IMAGE_JOIN = require('../../static/image/classic/join.png');
 export const IMAGE_DONE = require('../../static/image/classic/done.png');
 export const IMAGE_CHECK_MARK = require('../../static/image/classic/check-mark.png');
 
