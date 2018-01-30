@@ -985,6 +985,14 @@ export const SELECT_MEMBERS_LIST_STYLE = {
 export const SELECT_MEMBERS_LIST_CONTENT_CONTAINER_STYLE = {
     paddingBottom: 15
 };
+export const SELECT_MEMBERS_SECTION_TITLE_TEXT_STYLE = {
+    fontSize: 18,
+    lineHeight: 25,
+    fontWeight: '300',
+    color: '#2F353B',
+    backgroundColor: '#E1E5EC',
+    paddingLeft: 5
+};
 
 
 export const SELECT_MEMBER_SEARCH_BLOCK_STYLE = {
@@ -997,6 +1005,14 @@ export const SELECT_MEMBER_LIST_STYLE = {
 };
 export const SELECT_MEMBER_LIST_CONTENT_CONTAINER_STYLE = {
     paddingBottom: 15
+};
+export const SELECT_MEMBER_SECTION_TITLE_TEXT_STYLE = {
+    fontSize: 18,
+    lineHeight: 25,
+    fontWeight: '300',
+    color: '#2F353B',
+    backgroundColor: '#E1E5EC',
+    paddingLeft: 5
 };
 
 

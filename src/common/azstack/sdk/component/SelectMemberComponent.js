@@ -2,7 +2,8 @@ import React from 'react';
 import {
     Platform,
     View,
-    FlatList
+    SectionList,
+    Text
 } from 'react-native';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
@@ -52,24 +53,56 @@ class SelectMemberComponent extends React.Component {
     onSearchTextCleared() {
         this.setState({ searchText: '' });
     };
-    getAvailableMembers() {
+    getGroupedMembers() {
         let availableMembers = this.state.members.filter((member) => {
             return this.props.ignoreMembers.indexOf(member.userId) === -1;
         });
-        if (!this.state.searchText) {
-            return availableMembers;
+
+        let filteredMembers = availableMembers;
+        if (this.state.searchText) {
+            let searchParts = this.state.searchText.toLowerCase().split(' ');
+            filteredMembers = availableMembers.filter((member) => {
+                let matched = false;
+                for (let i = 0; i < searchParts.length; i++) {
+                    if (member.fullname.toLowerCase().indexOf(searchParts[i]) > -1) {
+                        matched = true;
+                        break;
+                    }
+                }
+                return matched;
+            });
         }
-        let searchParts = this.state.searchText.toLowerCase().split(' ');
-        return availableMembers.filter((member) => {
-            let matched = false;
-            for (let i = 0; i < searchParts.length; i++) {
-                if (member.fullname.toLowerCase().indexOf(searchParts[i]) > -1) {
-                    matched = true;
+
+        let groupedMembers = [];
+        filteredMembers.map((member) => {
+            let firstLetter = member.fullname[0].toUpperCase();
+            let foundGroupedMember = false;
+            for (let i = 0; i < groupedMembers.length; i++) {
+                let groupedMember = groupedMembers[i];
+                if (groupedMember.title === firstLetter) {
+                    groupedMember.data.push(member);
+                    foundGroupedMember = true;
                     break;
                 }
             }
-            return matched;
+            if (!foundGroupedMember) {
+                groupedMembers.push({
+                    title: firstLetter,
+                    data: [member]
+                })
+            }
         });
+
+        groupedMembers.sort((a, b) => {
+            return a.title > b.title ? 1 : -1;
+        });
+        groupedMembers.map((groupedMember) => {
+            groupedMember.data.sort((a, b) => {
+                return a.fullname > b.fullname ? 1 : -1;
+            });
+        });
+
+        return groupedMembers;
     };
 
     onMemberPressed(event) {
@@ -85,6 +118,7 @@ class SelectMemberComponent extends React.Component {
     };
 
     render() {
+        let groupedMembers = this.getGroupedMembers();
         return (
             <ScreenBlockComponent
                 fullScreen={false}
@@ -112,16 +146,25 @@ class SelectMemberComponent extends React.Component {
                         />
                     </View>
                     {
-                        this.getAvailableMembers().length === 0 && <EmptyBlockComponent
+                        groupedMembers.length === 0 && <EmptyBlockComponent
                             getCoreInstances={this.props.getCoreInstances}
                             emptyText={this.coreInstances.Language.getText('SELECT_MEMBER_EMPTY_TEXT')}
                         />
                     }
                     {
-                        this.getAvailableMembers().length > 0 && <FlatList
+                        groupedMembers.length > 0 && <SectionList
                             style={this.coreInstances.CustomStyle.getStyle('SELECT_MEMBER_LIST_STYLE')}
-                            data={this.getAvailableMembers()}
+                            sections={groupedMembers}
                             keyExtractor={(item, index) => ('select_member_' + item.userId)}
+                            renderSectionHeader={({ section }) => {
+                                return (
+                                    <Text
+                                        style={this.coreInstances.CustomStyle.getStyle('SELECT_MEMBER_SECTION_TITLE_TEXT_STYLE')}
+                                    >
+                                        {section.title}
+                                    </Text>
+                                );
+                            }}
                             renderItem={({ item }) => {
                                 return (
                                     <SelectMemberBlockComponent
