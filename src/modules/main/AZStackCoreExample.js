@@ -87,6 +87,7 @@ class AZStackCoreExample extends React.Component {
 
         this.createGroup = this.createGroup.bind(this);
         this.inviteGroup = this.inviteGroup.bind(this);
+        this.kickGroup = this.kickGroup.bind(this);
         this.leaveGroup = this.leaveGroup.bind(this);
         this.renameGroup = this.renameGroup.bind(this);
         this.changeAdminGroup = this.changeAdminGroup.bind(this);
@@ -430,6 +431,12 @@ class AZStackCoreExample extends React.Component {
             inviteIds: [387212]
         }).then(() => { }).catch(() => { });
     };
+    kickGroup() {
+        this.AZStackCore.leaveGroup({
+            groupId: 7436,
+            leaveId: 387212
+        }).then(() => { }).catch(() => { });
+    };
     leaveGroup() {
         this.AZStackCore.leaveGroup({
             groupId: 7436,
@@ -563,6 +570,7 @@ class AZStackCoreExample extends React.Component {
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.createGroup} title='Create group' />
                     <Button onPress={this.inviteGroup} title='Invite group' />
+                    <Button onPress={this.kickGroup} title='Kick group' />
                     <Button onPress={this.leaveGroup} title='Leave group' />
                     <Button onPress={this.renameGroup} title='Rename group' />
                     <Button onPress={this.changeAdminGroup} title='Change admin group' />
