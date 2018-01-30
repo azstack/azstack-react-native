@@ -62,6 +62,12 @@ export const GROUP_ACTION_INVITE_ERROR_TEXT = 'Can\'t add member to group, pleas
 export const GROUP_ACTION_KICK_PART_1_TEXT = 'Are you sure to kick';
 export const GROUP_ACTION_KICK_PART_2_TEXT = '?';
 export const GROUP_ACTION_KICK_ERROR_TEXT = 'Can\'t kick member out of group, please try again later';
+export const GROUP_ACTION_LEAVE_PART_1_TEXT = 'Are you sure to leave';
+export const GROUP_ACTION_LEAVE_PART_2_TEXT = '?';
+export const GROUP_ACTION_LEAVE_ERROR_TEXT = 'Can\'t leave group, please try again later';
+export const GROUP_ACTION_LEAVE_AND_CHANGE_ADMIN_PART_1_TEXT = 'Are you sure to leave and change new admin to';
+export const GROUP_ACTION_LEAVE_AND_CHANGE_ADMIN_PART_2_TEXT = '?';
+export const GROUP_ACTION_LEAVE_AND_CHANGE_ADMIN_ERROR_TEXT = 'Can\'t leave group and change new admin, please try again later';
 
 export const USER_ONLINE_TEXT = 'Online';
 export const USER_OFFLINE_TEXT = 'Last seen';

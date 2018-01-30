@@ -153,13 +153,41 @@ class GroupComponent extends React.Component {
         });
     };
     onLeaveGroupButtonPressed() {
-        this.props.showSelectMember({
-            headerTitle: this.coreInstances.Language.getText('SELECT_NEW_ADMIN_HEADER_TITLE_TEXT'),
-            ignoreMembers: [this.coreInstances.AZStackCore.authenticatedUser.userId],
-            onSelectDone: (event) => {
-                console.log(event);
-            }
-        });
+        Alert.alert(
+            this.coreInstances.Language.getText('ALERT_TITLE_CONFIRM_TEXT'),
+            `${this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_PART_1_TEXT')}${this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_PART_2_TEXT')}`,
+            [
+                { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_CANCEL_TEXT'), onPress: () => { } },
+                {
+                    text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => {
+                        if (this.state.group.adminId !== this.coreInstances.AZStackCore.authenticatedUser.userId) {
+                            this.leaveGroup();
+                            return;
+                        }
+                        this.props.showSelectMember({
+                            headerTitle: this.coreInstances.Language.getText('SELECT_NEW_ADMIN_HEADER_TITLE_TEXT'),
+                            ignoreMembers: [this.coreInstances.AZStackCore.authenticatedUser.userId],
+                            onSelectDone: (event) => {
+                                Alert.alert(
+                                    this.coreInstances.Language.getText('ALERT_TITLE_CONFIRM_TEXT'),
+                                    `${this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_AND_CHANGE_ADMIN_PART_1_TEXT')} ${event.selected.fullname}${this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_AND_CHANGE_ADMIN_PART_2_TEXT')}`,
+                                    [
+                                        { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_CANCEL_TEXT'), onPress: () => { } },
+                                        {
+                                            text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => {
+                                                this.leaveAndChangeAdmin(event.selected);
+                                            }
+                                        }
+                                    ],
+                                    { cancelable: true }
+                                );
+                            }
+                        });
+                    }
+                }
+            ],
+            { cancelable: true }
+        );
     };
     onChangeAdminButtonPressed(event) { };
     onKickMemberButtonPressed(event) {
@@ -229,6 +257,65 @@ class GroupComponent extends React.Component {
             Alert.alert(
                 this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
                 this.coreInstances.Language.getText('GROUP_ACTION_KICK_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+        });
+    };
+    leaveGroup() {
+        if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+            return;
+        }
+
+        this.coreInstances.AZStackCore.leaveGroup({
+            groupId: this.props.groupId,
+            leaveId: this.coreInstances.AZStackCore.authenticatedUser.userId
+        }).then((result) => {
+
+        }).catch((error) => {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+        });
+    };
+    leaveAndChangeAdmin(member) {
+        if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_AND_CHANGE_ADMIN_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+            return;
+        }
+
+        this.coreInstances.AZStackCore.leaveGroup({
+            groupId: this.props.groupId,
+            leaveId: this.coreInstances.AZStackCore.authenticatedUser.userId,
+            newAdminId: member.userId
+        }).then((result) => {
+
+        }).catch((error) => {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_AND_CHANGE_ADMIN_ERROR_TEXT'),
                 [
                     { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
                 ],
