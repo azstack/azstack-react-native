@@ -53,22 +53,6 @@ class MessageBlockComponent extends React.Component {
         }
     };
 
-    toFileSizeString(bytes, si) {
-        var thresh = si ? 1000 : 1024;
-        if (Math.abs(bytes) < thresh) {
-            return bytes + ' B';
-        }
-        var units = si
-            ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-            : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
-        var u = -1;
-        do {
-            bytes /= thresh;
-            ++u;
-        } while (Math.abs(bytes) >= thresh && u < units.length - 1);
-        return bytes.toFixed(1) + ' ' + units[u];
-    };
-
     getNameSender(sender) {
         if (sender.userId === this.coreInstances.AZStackCore.authenticatedUser.userId) {
             return this.coreInstances.Language.getText('MESSAGE_SENDER_ME_TEXT');
@@ -80,33 +64,6 @@ class MessageBlockComponent extends React.Component {
             return this.coreInstances.Language.getText('MESSAGE_RECEIVER_ME_TEXT');
         }
         return receiver.fullname;
-    };
-    getImageSizes(file, maxSize) {
-        if (!file.width || !file.height) {
-            return {};
-        }
-        let returnSizes = {
-            width: 0,
-            height: 0
-        };
-        if (file.width > file.height) {
-            if (file.width > maxSize.width) {
-                returnSizes.width = maxSize.width;
-                returnSizes.height = maxSize.width / file.width * file.height;
-            } else {
-                returnSizes.width = file.width;
-                returnSizes.height = file.height;
-            }
-        } else {
-            if (file.height > maxSize.height) {
-                returnSizes.width = maxSize.height / file.height * file.width;
-                returnSizes.height = maxSize.height;
-            } else {
-                returnSizes.width = file.width;
-                returnSizes.height = file.height;
-            }
-        }
-        return returnSizes;
     };
     getMessageStatusText(status) {
         switch (status) {
@@ -395,7 +352,7 @@ class MessageBlockComponent extends React.Component {
                                         <Image
                                             style={[
                                                 this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_STICKER_STYLE'),
-                                                this.getImageSizes(this.props.message.sticker, this.maxSizes.stickerImage)
+                                                this.coreInstances.FileConverter.ajustImageSizes(this.props.message.sticker, this.maxSizes.stickerImage)
                                             ]}
                                             source={{
                                                 uri: this.props.message.sticker.url
@@ -446,7 +403,7 @@ class MessageBlockComponent extends React.Component {
                                                     <Text
                                                         style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_DOWNLOAD_INFO_SIZE_TEXT_STYLE')}
                                                     >
-                                                        {this.toFileSizeString(this.props.message.file.length)}
+                                                        {this.coreInstances.FileConverter.sizeAsString(this.props.message.file.length)}
                                                     </Text>
                                                 </View>
                                                 <View
@@ -468,7 +425,7 @@ class MessageBlockComponent extends React.Component {
                                         <Image
                                             style={[
                                                 this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_IMAGE_STYLE'),
-                                                this.getImageSizes(this.props.message.file, this.maxSizes.fileImage)
+                                                this.coreInstances.FileConverter.ajustImageSizes(this.props.message.file, this.maxSizes.fileImage)
                                             ]}
                                             source={{
                                                 uri: this.props.message.file.url
