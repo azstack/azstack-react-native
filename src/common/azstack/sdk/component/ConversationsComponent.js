@@ -546,7 +546,7 @@ class ConversationsComponent extends React.Component {
             chatId: newMessage.chatId,
             chatTarget: newMessage.receiver,
             lastMessage: newMessage,
-            unread: 1,
+            unread: newMessage.sender.userId === this.coreInstances.AZStackCore.authenticatedUser.userId ? 0 : 1,
             deleted: this.coreInstances.AZStackCore.chatConstants.CONVERSATION_DELETED_FALSE,
             modified: newMessage.modified,
             prepared: true
@@ -574,7 +574,9 @@ class ConversationsComponent extends React.Component {
                     conversation.searchString += ` ${this.coreInstances.Diacritic.clear(member.fullname).toLowerCase()}`;
                 });
                 conversation.lastMessage = newMessage;
-                conversation.unread += 1;
+                if (newMessage.sender.userId !== this.coreInstances.AZStackCore.authenticatedUser.userId) {
+                    conversation.unread += 1;
+                }
                 break;
             }
         }
@@ -585,7 +587,7 @@ class ConversationsComponent extends React.Component {
                 chatId: newMessage.chatId,
                 chatTarget: newMessage.receiver,
                 lastMessage: newMessage,
-                unread: 1,
+                unread: newMessage.sender.userId === this.coreInstances.AZStackCore.authenticatedUser.userId ? 0 : 1,
                 deleted: this.coreInstances.AZStackCore.chatConstants.CONVERSATION_DELETED_FALSE,
                 modified: newMessage.modified,
                 prepared: true
@@ -614,7 +616,9 @@ class ConversationsComponent extends React.Component {
                     conversation.searchString += ` ${this.coreInstances.Diacritic.clear(member.fullname).toLowerCase()}`;
                 });
                 conversation.lastMessage = newMessage;
-                conversation.unread += 1;
+                if (newMessage.sender.userId !== this.coreInstances.AZStackCore.authenticatedUser.userId) {
+                    conversation.unread += 1;
+                }
                 break;
             }
         }
@@ -625,7 +629,7 @@ class ConversationsComponent extends React.Component {
                 chatId: newMessage.chatId,
                 chatTarget: newMessage.receiver,
                 lastMessage: newMessage,
-                unread: 1,
+                unread: newMessage.sender.userId === this.coreInstances.AZStackCore.authenticatedUser.userId ? 0 : 1,
                 deleted: this.coreInstances.AZStackCore.chatConstants.CONVERSATION_DELETED_FALSE,
                 modified: newMessage.modified,
                 prepared: true
@@ -654,7 +658,9 @@ class ConversationsComponent extends React.Component {
                     conversation.searchString += ` ${this.coreInstances.Diacritic.clear(member.fullname).toLowerCase()}`;
                 });
                 conversation.lastMessage = newMessage;
-                conversation.unread += 1;
+                if (newMessage.sender.userId !== this.coreInstances.AZStackCore.authenticatedUser.userId) {
+                    conversation.unread += 1;
+                }
                 break;
             }
         }
@@ -665,7 +671,7 @@ class ConversationsComponent extends React.Component {
                 chatId: newMessage.chatId,
                 chatTarget: newMessage.receiver,
                 lastMessage: newMessage,
-                unread: 1,
+                unread: newMessage.sender.userId === this.coreInstances.AZStackCore.authenticatedUser.userId ? 0 : 1,
                 deleted: this.coreInstances.AZStackCore.chatConstants.CONVERSATION_DELETED_FALSE,
                 modified: newMessage.modified,
                 prepared: true
@@ -694,7 +700,9 @@ class ConversationsComponent extends React.Component {
                     conversation.searchString += ` ${this.coreInstances.Diacritic.clear(member.fullname).toLowerCase()}`;
                 });
                 conversation.lastMessage = newMessage;
-                conversation.unread += 1;
+                if (newMessage.sender.userId !== this.coreInstances.AZStackCore.authenticatedUser.userId) {
+                    conversation.unread += 1;
+                }
                 break;
             }
         }
@@ -705,7 +713,7 @@ class ConversationsComponent extends React.Component {
                 chatId: newMessage.chatId,
                 chatTarget: newMessage.receiver,
                 lastMessage: newMessage,
-                unread: 1,
+                unread: newMessage.sender.userId === this.coreInstances.AZStackCore.authenticatedUser.userId ? 0 : 1,
                 deleted: this.coreInstances.AZStackCore.chatConstants.CONVERSATION_DELETED_FALSE,
                 modified: newMessage.modified,
                 prepared: true
@@ -734,7 +742,9 @@ class ConversationsComponent extends React.Component {
                     conversation.searchString += ` ${this.coreInstances.Diacritic.clear(member.fullname).toLowerCase()}`;
                 });
                 conversation.lastMessage = newMessage;
-                conversation.unread += 1;
+                if (newMessage.sender.userId !== this.coreInstances.AZStackCore.authenticatedUser.userId) {
+                    conversation.unread += 1;
+                }
                 break;
             }
         }
@@ -745,7 +755,7 @@ class ConversationsComponent extends React.Component {
                 chatId: newMessage.chatId,
                 chatTarget: newMessage.receiver,
                 lastMessage: newMessage,
-                unread: 1,
+                unread: newMessage.sender.userId === this.coreInstances.AZStackCore.authenticatedUser.userId ? 0 : 1,
                 deleted: this.coreInstances.AZStackCore.chatConstants.CONVERSATION_DELETED_FALSE,
                 modified: newMessage.modified,
                 prepared: true
