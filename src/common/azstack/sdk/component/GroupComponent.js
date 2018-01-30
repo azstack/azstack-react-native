@@ -153,41 +153,41 @@ class GroupComponent extends React.Component {
         });
     };
     onLeaveGroupButtonPressed() {
-        Alert.alert(
-            this.coreInstances.Language.getText('ALERT_TITLE_CONFIRM_TEXT'),
-            `${this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_PART_1_TEXT')}${this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_PART_2_TEXT')}`,
-            [
-                { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_CANCEL_TEXT'), onPress: () => { } },
-                {
-                    text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => {
-                        if (this.state.group.adminId !== this.coreInstances.AZStackCore.authenticatedUser.userId) {
+        if (this.state.group.adminId !== this.coreInstances.AZStackCore.authenticatedUser.userId) {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_CONFIRM_TEXT'),
+                `${this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_PART_1_TEXT')}${this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_PART_2_TEXT')}`,
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_CANCEL_TEXT'), onPress: () => { } },
+                    {
+                        text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => {
                             this.leaveGroup();
-                            return;
                         }
-                        this.props.showSelectMember({
-                            headerTitle: this.coreInstances.Language.getText('SELECT_NEW_ADMIN_HEADER_TITLE_TEXT'),
-                            ignoreMembers: [this.coreInstances.AZStackCore.authenticatedUser.userId],
-                            onSelectDone: (event) => {
-                                Alert.alert(
-                                    this.coreInstances.Language.getText('ALERT_TITLE_CONFIRM_TEXT'),
-                                    `${this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_AND_CHANGE_ADMIN_PART_1_TEXT')} ${event.selected.fullname}${this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_AND_CHANGE_ADMIN_PART_2_TEXT')}`,
-                                    [
-                                        { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_CANCEL_TEXT'), onPress: () => { } },
-                                        {
-                                            text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => {
-                                                this.leaveAndChangeAdmin(event.selected);
-                                            }
-                                        }
-                                    ],
-                                    { cancelable: true }
-                                );
-                            }
-                        });
                     }
-                }
-            ],
-            { cancelable: true }
-        );
+                ],
+                { cancelable: true }
+            );
+            return;
+        }
+        this.props.showSelectMember({
+            headerTitle: this.coreInstances.Language.getText('SELECT_NEW_ADMIN_HEADER_TITLE_TEXT'),
+            ignoreMembers: [this.coreInstances.AZStackCore.authenticatedUser.userId],
+            onSelectDone: (event) => {
+                Alert.alert(
+                    this.coreInstances.Language.getText('ALERT_TITLE_CONFIRM_TEXT'),
+                    `${this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_AND_CHANGE_ADMIN_PART_1_TEXT')} ${event.selected.fullname}${this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_AND_CHANGE_ADMIN_PART_2_TEXT')}`,
+                    [
+                        { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_CANCEL_TEXT'), onPress: () => { } },
+                        {
+                            text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => {
+                                this.leaveAndChangeAdmin(event.selected);
+                            }
+                        }
+                    ],
+                    { cancelable: true }
+                );
+            }
+        });
     };
     onChangeAdminButtonPressed(event) {
         Alert.alert(
