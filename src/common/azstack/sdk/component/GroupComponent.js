@@ -26,7 +26,8 @@ class GroupComponent extends React.Component {
         this.subscriptions = {};
 
         this.state = {
-            group: null
+            group: null,
+            inGroup: false
         };
 
         this.onStartChatButtonPressed = this.onStartChatButtonPressed.bind(this);
@@ -93,6 +94,15 @@ class GroupComponent extends React.Component {
         }
     };
 
+    isInGroup(me, members) {
+        for (let i = 0; i < members.length; i++) {
+            if (me.userId === members[i].userId) {
+                return true;
+            }
+        }
+        return false;
+    };
+
     getGroup() {
         if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
             return;
@@ -115,7 +125,10 @@ class GroupComponent extends React.Component {
                 }
                 return a.fullname > b.fullname ? 1 : -1;
             });
-            this.setState({ group: result });
+            this.setState({
+                group: result,
+                inGroup: this.isInGroup(this.coreInstances.AZStackCore.authenticatedUser, result.members)
+            });
         }).catch((error) => { });
     };
     initRun() {
@@ -390,7 +403,10 @@ class GroupComponent extends React.Component {
             }
             return a.fullname > b.fullname ? 1 : -1;
         });
-        this.setState({ group: group });
+        this.setState({
+            group: group,
+            inGroup: this.isInGroup(this.coreInstances.AZStackCore.authenticatedUser, group.members)
+        });
     };
     onGroupLeft(newMessage) {
         if (newMessage.chatId !== this.props.groupId) {
@@ -413,7 +429,10 @@ class GroupComponent extends React.Component {
             }
             return a.fullname > b.fullname ? 1 : -1;
         });
-        this.setState({ group: group });
+        this.setState({
+            group: group,
+            inGroup: this.isInGroup(this.coreInstances.AZStackCore.authenticatedUser, group.members)
+        });
     };
     onGroupRenamed(newMessage) {
         if (newMessage.chatId !== this.props.groupId) {
@@ -550,50 +569,53 @@ class GroupComponent extends React.Component {
                                             {`${this.state.group.members.length} `}
                                             {this.coreInstances.Language.getText(this.state.group.members.length > 1 ? 'GROUP_MEMBER_MANY_TEXT' : 'GROUP_MEMBER_TEXT')}
                                         </Text>
-                                        <View
-                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BLOCK_STYLE')}
-                                        >
-                                            <TouchableOpacity
-                                                style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
-                                                activeOpacity={0.5}
-                                                onPress={this.onStartChatButtonPressed}
+                                        {
+                                            this.state.inGroup &&
+                                            (<View
+                                                style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BLOCK_STYLE')}
                                             >
-                                                <Image
-                                                    style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
-                                                    source={this.coreInstances.CustomStyle.getImage('IMAGE_START_CHAT')}
-                                                />
-                                            </TouchableOpacity>
-                                            <TouchableOpacity
-                                                style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
-                                                activeOpacity={0.5}
-                                                onPress={this.onEditNameButtonPressed}
-                                            >
-                                                <Image
-                                                    style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
-                                                    source={this.coreInstances.CustomStyle.getImage('IMAGE_PENCIL')}
-                                                />
-                                            </TouchableOpacity>
-                                            <TouchableOpacity
-                                                style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
-                                                activeOpacity={0.5}
-                                                onPress={this.onAddMemberButtonPressed}
-                                            >
-                                                <Image
-                                                    style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
-                                                    source={this.coreInstances.CustomStyle.getImage('IMAGE_ADD_MEMBER')}
-                                                />
-                                            </TouchableOpacity>
-                                            <TouchableOpacity
-                                                style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
-                                                activeOpacity={0.5}
-                                                onPress={this.onLeaveGroupButtonPressed}
-                                            >
-                                                <Image
-                                                    style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
-                                                    source={this.coreInstances.CustomStyle.getImage('IMAGE_LEAVE')}
-                                                />
-                                            </TouchableOpacity>
-                                        </View>
+                                                <TouchableOpacity
+                                                    style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
+                                                    activeOpacity={0.5}
+                                                    onPress={this.onStartChatButtonPressed}
+                                                >
+                                                    <Image
+                                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
+                                                        source={this.coreInstances.CustomStyle.getImage('IMAGE_START_CHAT')}
+                                                    />
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
+                                                    activeOpacity={0.5}
+                                                    onPress={this.onEditNameButtonPressed}
+                                                >
+                                                    <Image
+                                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
+                                                        source={this.coreInstances.CustomStyle.getImage('IMAGE_PENCIL')}
+                                                    />
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
+                                                    activeOpacity={0.5}
+                                                    onPress={this.onAddMemberButtonPressed}
+                                                >
+                                                    <Image
+                                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
+                                                        source={this.coreInstances.CustomStyle.getImage('IMAGE_ADD_MEMBER')}
+                                                    />
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
+                                                    activeOpacity={0.5}
+                                                    onPress={this.onLeaveGroupButtonPressed}
+                                                >
+                                                    <Image
+                                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
+                                                        source={this.coreInstances.CustomStyle.getImage('IMAGE_LEAVE')}
+                                                    />
+                                                </TouchableOpacity>
+                                            </View>)
+                                        }
                                     </View>
                                 </View>
                                 <View
