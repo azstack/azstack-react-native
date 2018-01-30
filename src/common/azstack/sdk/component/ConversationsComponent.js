@@ -32,6 +32,7 @@ class ConversationsComponent extends React.Component {
             searchText: ''
         };
 
+        this.onConversationPressed = this.onConversationPressed.bind(this);
         this.onConversationsListEndReach = this.onConversationsListEndReach.bind(this);
 
         this.onSearchTextChanged = this.onSearchTextChanged.bind(this);
@@ -341,6 +342,18 @@ class ConversationsComponent extends React.Component {
         });
     };
 
+    onConversationPressed(event) {
+        let conversations = [...this.state.conversations];
+        for (let i = 0; i < conversations.length; i++) {
+            let conversation = conversations[i];
+            if (conversation.chatType === event.conversation.chatType && conversation.chatId === event.conversation.chatId) {
+                conversation.unread = 0;
+                break;
+            }
+        }
+        this.setState({ conversations: conversations });
+        this.props.onConversationPressed(event);
+    };
     onConversationsListEndReach() {
         this.getConversations();
     };
@@ -822,7 +835,7 @@ class ConversationsComponent extends React.Component {
                                     <ConversationBlockComponent
                                         getCoreInstances={this.props.getCoreInstances}
                                         conversation={item}
-                                        onConversationPressed={this.props.onConversationPressed}
+                                        onConversationPressed={this.onConversationPressed}
                                     />
                                 );
                             }}
