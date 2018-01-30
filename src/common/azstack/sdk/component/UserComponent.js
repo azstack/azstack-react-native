@@ -123,16 +123,13 @@ class UserComponent extends React.Component {
                             <View
                                 style={this.coreInstances.CustomStyle.getStyle('USER_BLOCK_STYLE')}
                             >
-                                <View
-                                    style={this.coreInstances.CustomStyle.getStyle('USER_AVATAR_BLOCK_STYLE')}
-                                >
-                                    <ChatAvatarBlockComponent
-                                        getCoreInstances={this.props.getCoreInstances}
-                                        chatType={this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_USER}
-                                        chatTarget={this.state.user}
-                                        textStyle={this.coreInstances.CustomStyle.getStyle('USER_AVATAR_TEXT_STYLE')}
-                                    />
-                                </View>
+                                <ChatAvatarBlockComponent
+                                    getCoreInstances={this.props.getCoreInstances}
+                                    containerStyle={this.coreInstances.CustomStyle.getStyle('USER_AVATAR_BLOCK_STYLE')}
+                                    chatType={this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_USER}
+                                    chatTarget={this.state.user}
+                                    textStyle={this.coreInstances.CustomStyle.getStyle('USER_AVATAR_TEXT_STYLE')}
+                                />
                                 <Text
                                     style={this.coreInstances.CustomStyle.getStyle('USER_NAME_TEXT_STYLE')}
                                 >

@@ -146,14 +146,14 @@ export const SEARCH_CLEAR_BUTTON_TEXT_STYLE = {
 };
 
 export const AVATAR_BLOCK_STYLE = {
-    width: '100%',
-    height: '100%',
+    width: '50',
+    height: '50',
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center'
 };
 export const AVATAR_TEXT_STYLE = {
-    fontSize: 50,
+    fontSize: 20,
     fontWeight: '500',
     color: '#fff'
 };
@@ -232,10 +232,12 @@ export const CONVERSATION_BLOCK_STYLE = {
     borderBottomColor: '#E1E5EC',
     paddingVertical: 15
 };
+export const CONVERSATION_AVATAR_CONTAINER_BLOCK_STYLE = {
+    position: 'relative'
+};
 export const CONVERSATION_AVATAR_BLOCK_STYLE = {
     width: 50,
-    height: 50,
-    position: 'relative'
+    height: 50
 };
 export const CONVERSATION_AVATAR_TEXT_STYLE = {
     fontSize: 20

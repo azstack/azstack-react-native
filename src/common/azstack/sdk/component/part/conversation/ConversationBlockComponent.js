@@ -46,10 +46,11 @@ class ConversationBlockComponent extends React.Component {
                 onPress={this.onConversationPressed}
             >
                 <View
-                    style={this.coreInstances.CustomStyle.getStyle('CONVERSATION_AVATAR_BLOCK_STYLE')}
+                    style={this.coreInstances.CustomStyle.getStyle('CONVERSATION_AVATAR_CONTAINER_BLOCK_STYLE')}
                 >
                     <ChatAvatarBlockComponent
                         getCoreInstances={this.props.getCoreInstances}
+                        containerStyle={this.coreInstances.CustomStyle.getStyle('CONVERSATION_AVATAR_BLOCK_STYLE')}
                         chatType={this.props.conversation.chatType}
                         chatTarget={this.props.conversation.chatTarget}
                         textStyle={this.coreInstances.CustomStyle.getStyle('CONVERSATION_AVATAR_TEXT_STYLE')}

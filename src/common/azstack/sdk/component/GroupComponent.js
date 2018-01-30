@@ -306,16 +306,13 @@ class GroupComponent extends React.Component {
                                 <View
                                     style={this.coreInstances.CustomStyle.getStyle('GROUP_INFO_BLOCK_STYLE')}
                                 >
-                                    <View
-                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_AVATAR_BLOCK_STYLE')}
-                                    >
-                                        <ChatAvatarBlockComponent
-                                            getCoreInstances={this.props.getCoreInstances}
-                                            chatType={this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_GROUP}
-                                            chatTarget={this.state.group}
-                                            textStyle={this.coreInstances.CustomStyle.getStyle('GROUP_AVATAR_TEXT_STYLE')}
-                                        />
-                                    </View>
+                                    <ChatAvatarBlockComponent
+                                        getCoreInstances={this.props.getCoreInstances}
+                                        containerStyle={this.coreInstances.CustomStyle.getStyle('GROUP_AVATAR_BLOCK_STYLE')}
+                                        chatType={this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_GROUP}
+                                        chatTarget={this.state.group}
+                                        textStyle={this.coreInstances.CustomStyle.getStyle('GROUP_AVATAR_TEXT_STYLE')}
+                                    />
                                     <View
                                         style={this.coreInstances.CustomStyle.getStyle('GROUP_DETAILS_BLOCK_STYLE')}
                                     >

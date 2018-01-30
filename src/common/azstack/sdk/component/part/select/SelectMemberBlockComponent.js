@@ -38,16 +38,13 @@ class SelectMemberBlockComponent extends React.Component {
                 activeOpacity={0.5}
                 onPress={this.onMemberPressed}
             >
-                <View
-                    style={this.coreInstances.CustomStyle.getStyle('SELECT_MEMBER_AVATAR_BLOCK_STYLE')}
-                >
-                    <ChatAvatarBlockComponent
-                        getCoreInstances={this.props.getCoreInstances}
-                        chatType={this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_USER}
-                        chatTarget={this.props.member}
-                        textStyle={this.coreInstances.CustomStyle.getStyle('SELECT_MEMBER_AVATAR_TEXT_STYLE')}
-                    />
-                </View>
+                <ChatAvatarBlockComponent
+                    getCoreInstances={this.props.getCoreInstances}
+                    containerStyle={this.coreInstances.CustomStyle.getStyle('SELECT_MEMBER_AVATAR_BLOCK_STYLE')}
+                    chatType={this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_USER}
+                    chatTarget={this.props.member}
+                    textStyle={this.coreInstances.CustomStyle.getStyle('SELECT_MEMBER_AVATAR_TEXT_STYLE')}
+                />
                 <View
                     style={this.coreInstances.CustomStyle.getStyle('SELECT_MEMBER_TEXTS_BLOCK_STYLE')}
                 >

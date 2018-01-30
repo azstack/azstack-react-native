@@ -289,16 +289,13 @@ class MessageBlockComponent extends React.Component {
                                         activeOpacity={0.5}
                                         onPress={this.onSenderPressed}
                                     >
-                                        <View
-                                            style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_SENDER_AVATAR_BLOCK_STYLE')}
-                                        >
-                                            <ChatAvatarBlockComponent
-                                                getCoreInstances={this.props.getCoreInstances}
-                                                chatType={this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_USER}
-                                                chatTarget={this.props.message.sender}
-                                                textStyle={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_SENDER_AVATAR_TEXT_STYLE')}
-                                            />
-                                        </View>
+                                        <ChatAvatarBlockComponent
+                                            getCoreInstances={this.props.getCoreInstances}
+                                            containerStyle={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_SENDER_AVATAR_BLOCK_STYLE')}
+                                            chatType={this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_USER}
+                                            chatTarget={this.props.message.sender}
+                                            textStyle={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_SENDER_AVATAR_TEXT_STYLE')}
+                                        />
                                         <Text
                                             style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_SENDER_TEXT_STYLE')}
                                         >
