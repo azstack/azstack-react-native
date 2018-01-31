@@ -84,6 +84,8 @@ export const USER_OFFLINE_TEXT = 'Last seen';
 export const CONVERSATIONS_HEADER_TITLE_TEXT = 'Conversations';
 export const CONVERSATIONS_SEARCH_PLACEHOLDER_TEXT = 'Search...';
 export const CONVERSATIONS_LIST_EMPTY_TEXT = 'No Conversation';
+export const CONVERSATIONS_LIST_SELECT_MEMBERS_TO_CHAT_TEXT = 'Select members to chat';
+
 
 export const CHAT_HEADER_TITLE_TEXT = 'Chat';
 export const CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT = 'Can\'t not send message, please try again later.';
@@ -105,9 +107,8 @@ export const GROUP_EMPTY_TEXT = 'No Group Infomation';
 export const GROUP_MEMBER_EMPTY_TEXT = 'No Member';
 export const GROUP_NEW_NAME_TEXT = 'New group name';
 export const GROUP_NEW_NAME_PLACEHOLDER_TEXT = 'Enter new group name';
-
-export const SELECT_NEW_MEMBERS_HEADER_TITLE_TEXT = 'Select new members';
-export const SELECT_NEW_ADMIN_HEADER_TITLE_TEXT = 'Select new admin';
+export const GROUP_SELECT_NEW_MEMBERS_TEXT = 'Select new members';
+export const GROUP_SELECT_NEW_ADMIN_TEXT = 'Select new admin';
 
 export const SELECT_MEMBERS_SEARCH_PLACEHOLDER_TEXT = 'Search...';
 export const SELECT_MEMBERS_EMPTY_TEXT = 'No Member';

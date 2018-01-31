@@ -378,7 +378,22 @@ class ConversationsComponent extends React.Component {
             });
         }
     };
-    onNewConversationButtonPress() { };
+    onNewConversationButtonPress() {
+        this.props.showSelectMembers({
+            headerTitle: this.coreInstances.Language.getText('CONVERSATIONS_LIST_SELECT_MEMBERS_TO_CHAT_TEXT'),
+            ignoreMembers: [this.coreInstances.AZStackCore.authenticatedUser.userId],
+            onSelectDone: (event) => {
+                let selectedMembers = event.selected;
+                if (selectedMembers.length === 1) {
+                    this.props.onNewChat({
+                        chatType: this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_USER,
+                        chatId: selectedMembers[0].userId
+                    })
+                    return;
+                }
+            }
+        });
+    };
 
     onSearchTextChanged(newText) {
         this.setState({ searchText: newText });
