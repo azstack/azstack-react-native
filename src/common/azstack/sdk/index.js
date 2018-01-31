@@ -574,6 +574,9 @@ export class AZStackSdk extends AZStackBaseComponent {
 
                 this.pop();
             },
+            showSelectMembers: (event) => {
+                this.showSelectMembers(event);
+            },
             onConversationPressed: (event) => {
                 if (options && typeof options === 'object' && typeof options.onConversationPressed === 'function') {
                     options.onConversationPressed(event);
@@ -584,6 +587,19 @@ export class AZStackSdk extends AZStackBaseComponent {
                     chatType: event.conversation.chatType,
                     chatId: event.conversation.chatId,
                 });
+            },
+            onNewChat: (event) => {
+                if (options && typeof options === 'object' && typeof options.onNewChat === 'function') {
+                    options.onNewChat(event);
+                    return;
+                }
+
+                setTimeout(() => {
+                    this.startChat({
+                        chatType: event.chatType,
+                        chatId: event.chatId,
+                    });
+                }, 0);
             }
         });
     };
@@ -819,6 +835,9 @@ export class AZStackSdk extends AZStackBaseComponent {
 
                     this.pop();
                 },
+                showSelectMembers: (event) => {
+                    this.showSelectMembers(event);
+                },
                 onConversationPressed: (event) => {
                     if (options && typeof options === 'object' && typeof options.onConversationPressed === 'function') {
                         options.onConversationPressed(event);
@@ -828,6 +847,17 @@ export class AZStackSdk extends AZStackBaseComponent {
                     this.startChat({
                         chatType: event.conversation.chatType,
                         chatId: event.conversation.chatId,
+                    });
+                },
+                onNewChat: (event) => {
+                    if (options && typeof options === 'object' && typeof options.onNewChat === 'function') {
+                        options.onNewChat(event);
+                        return;
+                    }
+
+                    this.startChat({
+                        chatType: event.chatType,
+                        chatId: event.chatId,
                     });
                 }
             },
