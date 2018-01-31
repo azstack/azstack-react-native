@@ -1,5 +1,6 @@
 export const IMAGE_BACK = require('../../static/image/classic/back.png');
 export const IMAGE_SEARCH = require('../../static/image/classic/search.png');
+export const IMAGE_NEW_CHAT= require('../../static/image/classic/new-chat.png');
 export const IMAGE_FILE = require('../../static/image/classic/file.png');
 export const IMAGE_STICKER = require('../../static/image/classic/sticker.png');
 export const IMAGE_ATTACH = require('../../static/image/classic/attach.png');
@@ -144,8 +145,8 @@ export const SEARCH_CLEAR_BUTTON_TEXT_STYLE = {
 };
 
 export const AVATAR_BLOCK_STYLE = {
-    width: '50',
-    height: '50',
+    width: 50,
+    height: 50,
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center'
@@ -221,6 +222,22 @@ export const CONVERSATIONS_LIST_STYLE = {
     paddingHorizontal: 15,
     flex: 1
 };
+export const CONVERSATION_NEW_BUTTON_BLOCK_STYLE = {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    width: 45,
+    height: 45,
+    borderRadius: 50,
+    backgroundColor: '#F2784B',
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const CONVERSATION_NEW_BUTTON_IMAGE_STYLE = {
+    width: 25,
+    height: 25
+};
+
 export const CONVERSATIONS_LIST_CONTENT_CONTAINER_STYLE = {
     paddingBottom: 15
 };

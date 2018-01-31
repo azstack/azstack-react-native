@@ -3,6 +3,8 @@ import {
     View,
     FlatList,
     Platform,
+    TouchableOpacity,
+    Image
 } from 'react-native';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
@@ -27,13 +29,18 @@ class ConversationsComponent extends React.Component {
             done: false
         };
 
+        this.conversationsListOffset = 0;
+
         this.state = {
             conversations: [],
-            searchText: ''
+            searchText: '',
+            shouldNewConversationButtonShow: true
         };
 
         this.onConversationPressed = this.onConversationPressed.bind(this);
         this.onConversationsListEndReach = this.onConversationsListEndReach.bind(this);
+        this.onConversationsListScroll = this.onConversationsListScroll.bind(this);
+        this.onNewConversationButtonPress = this.onNewConversationButtonPress.bind(this);
 
         this.onSearchTextChanged = this.onSearchTextChanged.bind(this);
         this.onSearchTextCleared = this.onSearchTextCleared.bind(this);
@@ -357,6 +364,21 @@ class ConversationsComponent extends React.Component {
     onConversationsListEndReach() {
         this.getConversations();
     };
+    onConversationsListScroll(event) {
+        var currentOffset = event.nativeEvent.contentOffset.y;
+        var direction = currentOffset > this.conversationsListOffset ? 'down' : 'up';
+        this.conversationsListOffset = currentOffset;
+        if (direction === 'down') {
+            this.setState({
+                shouldNewConversationButtonShow: false
+            });
+        } else {
+            this.setState({
+                shouldNewConversationButtonShow: true
+            });
+        }
+    };
+    onNewConversationButtonPress() { };
 
     onSearchTextChanged(newText) {
         this.setState({ searchText: newText });
@@ -841,9 +863,24 @@ class ConversationsComponent extends React.Component {
                             }}
                             onEndReached={this.onConversationsListEndReach}
                             onEndReachedThreshold={0.1}
+                            onScroll={this.onConversationsListScroll}
                             contentContainerStyle={this.coreInstances.CustomStyle.getStyle('CONVERSATIONS_LIST_CONTENT_CONTAINER_STYLE')}
                             keyboardDismissMode={Platform.select({ ios: 'interactive', android: 'on-drag' })}
                         />
+                    }
+                    {
+                        this.state.shouldNewConversationButtonShow && (
+                            <TouchableOpacity
+                                style={this.coreInstances.CustomStyle.getStyle('CONVERSATION_NEW_BUTTON_BLOCK_STYLE')}
+                                activeOpacity={0.5}
+                                onPress={this.onNewConversationButtonPress}
+                            >
+                                <Image
+                                    style={this.coreInstances.CustomStyle.getStyle('CONVERSATION_NEW_BUTTON_IMAGE_STYLE')}
+                                    source={this.coreInstances.CustomStyle.getImage('IMAGE_NEW_CHAT')}
+                                />
+                            </TouchableOpacity>
+                        )
                     }
                     <ConnectionBlockComponent
                         getCoreInstances={this.props.getCoreInstances}
