@@ -23,7 +23,7 @@ import Timer from './part/common/Timer';
 
 const { height, width } = Dimensions.get('window');
 
-const ic_action_hangup = require('../static/image/ic_action_hangup.png');
+const ic_end_call_white = require('../static/image/ic_end_call_white.png');
 const ic_video_overlay = require('../static/image/ic_video_overlay.png');
 const ic_video_call_bubble = require('../static/image/ic_video_call_bubble.png');
 const ic_voice = require('../static/image/ic_voice.png');
@@ -32,6 +32,7 @@ const ic_switch_camera = require('../static/image/ic_switch_camera.png');
 const ic_cancel = require('../static/image/ic_cancel.png');
 const ic_video_camera_white = require('../static/image/ic_video_camera_white.png');
 const call_bg = require('../static/image/call_bg.jpg');
+const bg_call_avatar = require('../static/image/bg_call_avatar.png');
 
 class VideoCallComponent extends React.Component {
 	constructor(props) {
@@ -142,6 +143,27 @@ class VideoCallComponent extends React.Component {
 		this.clearSubscriptions();
 	}
 
+	renderUserInfoCenter() {
+		return (
+			<View style={styles.userInfoCenter}>
+				<View style={{alignItems: 'center' }}>
+					<View>
+						<View style={{justifyContent: 'center', alignItems: 'center'}}>
+							<Image source={bg_call_avatar} />
+						</View>
+						<View style={{position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
+							<Image source={ic_avatar} style={{ width: 110, height: 110, borderRadius: 55 }} />
+						</View>
+					</View>
+					<View style={{ alignItems: 'center' }}>
+						<Text style={{ color: '#fff', marginVertical: 10, fontSize: 20 }}>{this.props.info.name}</Text>
+						<Text style={{ color: '#2a2a2a' }}>{this.state.message}</Text>
+					</View>
+				</View>
+			</View>
+		);
+	}
+
 	renderBackgroundContent() {
 		if (this.state.status !== 200) {
 			return (
@@ -152,15 +174,7 @@ class VideoCallComponent extends React.Component {
 					{
 						(this.state.localVideoUrl === null || this.state.isVideoOn) === false && <Text style={{ color: '#8f8f8f' }}>Your camera off</Text>
 					}
-					<View style={styles.userInfoCenter}>
-						<View style={{ paddingBottom: 160, alignItems: 'center' }}>
-							<Image source={ic_avatar} style={{ width: 90, height: 90, borderRadius: 45 }} />
-							<View style={{ alignItems: 'center' }}>
-								<Text style={{ color: '#fff', marginVertical: 10, fontSize: 20 }}>{this.props.info.name}</Text>
-								<Text style={{ color: '#2a2a2a' }}>{this.state.message}</Text>
-							</View>
-						</View>
-					</View>
+					{this.renderUserInfoCenter()}
 				</View>
 			);
 		}
@@ -211,7 +225,7 @@ class VideoCallComponent extends React.Component {
 					</TouchableOpacity>
 					<TouchableOpacity onPress={() => this.onPressEndCall()}>
 						<View style={[styles.button, { backgroundColor: 'red' }]}>
-							<Image source={ic_action_hangup} style={styles.buttonIcon} resizeMode={'contain'} />
+							<Image source={ic_end_call_white} style={styles.buttonIcon} resizeMode={'contain'} />
 						</View>
 					</TouchableOpacity>
 					<TouchableOpacity onPress={() => this.onPressToggleAudio()}>
@@ -262,26 +276,69 @@ class VideoCallComponent extends React.Component {
 		);
 	}
 
+	// renderIncomingCall() {
+	// 	return (
+	// 		<View>
+	// 			<View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: '#353535'}}>
+	// 				<View style={styles.userInfoCenter}>
+	// 					<View style={{ paddingBottom: 160, alignItems: 'center' }}>
+	// 						<View>
+	// 							<View style={{justifyContent: 'center', alignItems: 'center'}}>
+	// 								<Image source={bg_call_avatar} />
+	// 							</View>
+	// 							<View style={{position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
+	// 								<Image source={ic_avatar} style={{ width: 90, height: 90, borderRadius: 45 }} />
+	// 							</View>
+	// 						</View>
+	// 						<View style={{ alignItems: 'center' }}>
+	// 							<Text style={{ color: '#fff', marginVertical: 10, fontSize: 20 }}>{this.props.info.name}</Text>
+	// 							<Text style={{ color: '#8f8f8f' }}>{this.state.message}</Text>
+	// 						</View>
+	// 					</View>
+	// 				</View>
+	// 			</View>
+	// 			<View style={[styles.bottomActionBlock, {}]}>
+	// 				<View style={styles.bottomActionBlockWrapper}>
+	// 					<TouchableOpacity onPress={() => this.onPressAnswer()}>
+	// 						<View style={[styles.button, { backgroundColor: 'green', marginHorizontal: 60 }]}>
+	// 							<Image source={ic_video_camera_white} style={{ width: 30, height: 30 }} resizeMode={'contain'} />
+	// 						</View>
+	// 					</TouchableOpacity>
+	// 					<TouchableOpacity onPress={() => this.props.onReject()}>
+	// 						<View style={[styles.button, { backgroundColor: 'red', marginHorizontal: 60 }]}>
+	// 							<Image source={ic_cancel} style={{ width: 30, height: 30 }} resizeMode={'contain'} />
+	// 						</View>
+	// 					</TouchableOpacity>
+	// 				</View>
+	// 			</View>
+	// 		</View>
+	// 	);
+	// }
+
+
 	renderIncomingCall() {
 		return (
-			<View>
-				<Image source={call_bg} style={{ width: '100%', height: '100%' }} />
-				<View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}>
-					<View style={styles.userInfoCenter}>
-						<View style={{ paddingBottom: 160, alignItems: 'center' }}>
-							<Image source={ic_avatar} style={{ width: 90, height: 90, borderRadius: 45 }} />
-							<View style={{ alignItems: 'center' }}>
-								<Text style={{ color: '#fff', marginVertical: 10, fontSize: 20 }}>{this.props.info.name}</Text>
-								<Text style={{ color: '#8f8f8f' }}>{this.state.message}</Text>
-							</View>
-						</View>
+			<View style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: '#353535', justifyContent: 'space-between'}}>
+				<View style={{ flex: 0.3}}>
+					<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+						<Text style={{ color: '#fff', fontSize: 30 }}>{this.props.info.name || this.props.info.phoneNumber}</Text>
+						<Text style={{ color: '#fff', fontSize: 20}}>{this.props.info.name ? this.props.info.phoneNumber : ''}</Text>
+						<Text style={{ color: '#57FFC1', fontSize: 18, }}>{this.state.message}</Text>
 					</View>
 				</View>
-				<View style={[styles.bottomActionBlock, {}]}>
-					<View style={styles.bottomActionBlockWrapper}>
+				<View>
+					<View style={{justifyContent: 'center', alignItems: 'center'}}>
+						<Image source={bg_call_avatar} />
+					</View>
+					<View style={{position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
+						<Image source={ic_avatar} />
+					</View>
+				</View>
+				<View style={{ flex: 0.3, justifyContent: 'flex-end', paddingBottom: 60}}>
+					<View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
 						<TouchableOpacity onPress={() => this.onPressAnswer()}>
 							<View style={[styles.button, { backgroundColor: 'green', marginHorizontal: 60 }]}>
-								<Image source={ic_video_camera_white} style={{ width: 30, height: 30 }} resizeMode={'contain'} />
+								<Image source={ic_answer_phone} style={{ width: 30, height: 30 }} resizeMode={'contain'} />
 							</View>
 						</TouchableOpacity>
 						<TouchableOpacity onPress={() => this.props.onReject()}>

@@ -20,13 +20,13 @@ import Timer from './part/common/Timer';
 
 const { height, width } = Dimensions.get('window');
 
-const ic_action_hangup = require('../static/image/ic_action_hangup.png');
-const ic_action_answer = require('../static/image/ic_action_answer.png');
-const call_bg = require('../static/image/call_bg.jpg');
+const ic_end_call_white = require('../static/image/ic_end_call_white.png');
 const ic_avatar = require('../static/image/ic_avatar.png');
 const ic_answer_phone = require('../static/image/ic_answer_phone.png');
 const ic_cancel = require('../static/image/ic_cancel.png');
-const ic_voice = require('../static/image/ic_voice.png');
+const ic_muted_white = require('../static/image/ic_muted_white.png');
+const ic_speaker_white = require('../static/image/ic_speaker_white.png');
+const bg_call_avatar = require('../static/image/bg_call_avatar.png');
 
 class OnCallComponent extends React.Component {
 	constructor(props) {
@@ -38,6 +38,7 @@ class OnCallComponent extends React.Component {
 			status: null,
 			message: '',
 			isAudioOn: true,
+			isSpeaker: false,
 		};
 	}
 
@@ -156,30 +157,56 @@ class OnCallComponent extends React.Component {
 		}
 	}
 
-	renderButton() {
+	renderButtons() {
 		return (
-			<TouchableOpacity onPress={() => this.onPressEndCall()}>
-				<View style={[styles.button, { backgroundColor: 'red' }]}>
-					<Image source={ic_action_hangup} style={styles.buttonIcon} resizeMode={'contain'} />
-				</View>
-			</TouchableOpacity>
+			<View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+				<TouchableOpacity onPress={() => this.toggleAudio()}>
+					{this.state.isAudioOn &&  <View style={{ width: 70, height: 70, borderRadius: 35, 
+					justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#fff' }}>
+					<Image source={ic_muted_white} /></View>}
+					{!this.state.isAudioOn && 
+					<View style={{ width: 70, height: 70, borderRadius: 35, 
+					justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.5)' }}>
+					<Image source={ic_muted_white} /></View>}
+				</TouchableOpacity>
+				<TouchableOpacity onPress={() => this.onPressEndCall()}>
+					<View style={[styles.button, { backgroundColor: 'red' }]}>
+						<Image source={ic_end_call_white} style={styles.buttonIcon} resizeMode={'contain'} />
+					</View>
+				</TouchableOpacity>
+				<TouchableOpacity onPress={() => this.toggleSpeaker()}>
+					{this.state.isSpeaker && <View style={{ width: 70, height: 70, borderRadius: 35, 
+					justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.5)'}}><Image source={ic_speaker_white} /></View>}
+					{!this.state.isSpeaker && <View style={{ width: 70, height: 70, borderRadius: 35, 
+					justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#fff' }}><Image source={ic_speaker_white} /></View>}
+				</TouchableOpacity>
+			</View>
 		);
 	}
 
 	renderIncomingCall() {
 		return (
-			<View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}>
-				<View style={styles.userInfoCenter}>
-					<View style={{ paddingBottom: 160, alignItems: 'center' }}>
-						<Image source={ic_avatar} style={{ width: 90, height: 90, borderRadius: 45 }} />
-						<View style={{ alignItems: 'center', backgroundColor: 'rgba(0,0,0,0)' }}>
-							<Text style={{ color: '#fff', marginVertical: 10, fontSize: 20 }}>{this.props.info.name || this.props.info.phoneNumber}</Text>
-							<Text style={{ color: '#8f8f8f' }}>{this.state.message}</Text>
-						</View>
+			<View style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: '#353535', justifyContent: 'space-between'}}>
+				<View style={{ flex: 0.3}}>
+					<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+						<Text style={{ color: '#fff', fontSize: 30 }}>{this.props.info.name || this.props.info.phoneNumber}</Text>
+						<Text style={{ color: '#fff', fontSize: 20}}>{this.props.info.name ? this.props.info.phoneNumber : ''}</Text>
+						<Text style={{ color: '#57FFC1', fontSize: 18, }}>{this.state.message}</Text>
+						{
+							this.state.status === 200 && <Timer />
+						}
 					</View>
 				</View>
-				<View style={[styles.bottomActionBlock, {}]}>
-					<View style={styles.bottomActionBlockWrapper}>
+				<View>
+					<View style={{justifyContent: 'center', alignItems: 'center'}}>
+						<Image source={bg_call_avatar} />
+					</View>
+					<View style={{position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
+						<Image source={ic_avatar} />
+					</View>
+				</View>
+				<View style={{ flex: 0.3, justifyContent: 'flex-end', paddingBottom: 60}}>
+					<View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
 						<TouchableOpacity onPress={() => this.onPressAnswer()}>
 							<View style={[styles.button, { backgroundColor: 'green', marginHorizontal: 60 }]}>
 								<Image source={ic_answer_phone} style={{ width: 30, height: 30 }} resizeMode={'contain'} />
@@ -198,38 +225,24 @@ class OnCallComponent extends React.Component {
 
 	renderOncall() {
 		return (
-			<View style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: 'rgba(0,0,0,0)' }}>
-				<View style={{ height: (height - 20) * 2 / 5 }}>
+			<View style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: '#353535', justifyContent: 'space-between'}}>
+				<View style={{ flex: 0.3}}>
 					<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-						<Image source={ic_avatar} style={{ width: 90, height: 90, borderRadius: 45 }} />
 						<Text style={{ color: '#fff', fontSize: 30 }}>{this.props.info.name || this.props.info.phoneNumber}</Text>
-						<Text style={{ color: '#e3e2e1', fontSize: 18, }}>{this.state.message}</Text>
-						{
-							this.state.status === 200 && <Timer />
-						}
+						<Text style={{ color: '#fff', fontSize: 20}}>{this.props.info.name ? this.props.info.phoneNumber : ''}</Text>
+						<Text style={{ color: '#57FFC1', fontSize: 18, }}>{this.state.message}</Text>
 					</View>
 				</View>
-				<View style={{ height: (height - 20) * 3 / 5, justifyContent: 'flex-end', paddingBottom: 60 }}>
-					<View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-						<TouchableOpacity onPress={() => this.toggleAudio()}>
-							<View style={{ padding: 20 }}>
-								{this.state.isAudioOn && <View style={{ width: 70, height: 70, borderRadius: 35, backgroundColor: 'green', justifyContent: 'center', alignItems: 'center' }}>
-									<Text style={{ color: "#fff" }}>Tắt âm</Text>
-								</View>}
-								{!this.state.isAudioOn && <View style={{ width: 70, height: 70, borderRadius: 35, backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center' }}>
-									<Text style={{ color: "#2a2a2a" }}>Bật âm</Text>
-								</View>}
-							</View>
-						</TouchableOpacity>
-						<TouchableOpacity>
-							<View style={{ padding: 20 }}>
-								<Text style={{ color: "#fff" }}>Loa ngoài</Text>
-							</View>
-						</TouchableOpacity>
+				<View>
+					<View style={{justifyContent: 'center', alignItems: 'center'}}>
+						<Image source={bg_call_avatar} />
 					</View>
-					<View style={{ justifyContent: 'center', marginTop: 20, width: width, alignItems: 'center' }}>
-						{this.renderButton()}
+					<View style={{position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
+						<Image source={ic_avatar} style={{width: 110, height: 110, borderRadius: 55,}} />
 					</View>
+				</View>
+				<View style={{ flex: 0.3, justifyContent: 'flex-end', paddingBottom: 60}}>
+					{this.renderButtons()}
 				</View>
 			</View>
 		);
@@ -243,7 +256,6 @@ class OnCallComponent extends React.Component {
                 statusbar={this.props.statusbar}
                 style={this.props.style}
 			>
-				<Image source={call_bg} style={{ width: width, height: height }} />
 				{this.state.isIncomingCall === true && this.renderIncomingCall()}
 				{this.state.isIncomingCall === false && this.renderOncall()}
 			</ScreenBlockComponent>
@@ -267,6 +279,10 @@ class OnCallComponent extends React.Component {
 	toggleAudio() {
 		this.props.onToggleAudio(!this.state.isAudioOn);
 		this.setState({ isAudioOn: !this.state.isAudioOn });
+	}
+
+	toggleSpeaker() {
+		this.setState({isSpeaker: !this.state.isSpeaker});
 	}
 
 }
