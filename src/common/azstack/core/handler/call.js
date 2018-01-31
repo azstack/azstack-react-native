@@ -1427,6 +1427,7 @@ class Call {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Cannot send start callout data, start callout fail'
                 });
+                this.clearCallData();
                 reject({
                     code: error.code,
                     message: 'Cannot send start callout data, start callout fail'
