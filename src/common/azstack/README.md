@@ -1140,6 +1140,7 @@ this.AZStackCore.getPaidCallLogs({});
 > - userId: id of user
 > - fromPhoneNumber: from phone number
 > - toPhoneNumber: to phone number
+> - duration: duration of call
 > - recordTime: recording time
 > - recordUrl: recording url
 
@@ -1162,6 +1163,7 @@ this.AZStackCore.Delegates.onPaidCallLogReturn = (error, result) => {
 > - userId: id of user
 > - fromPhoneNumber: from phone number
 > - toPhoneNumber: to phone number
+> - duration: duration of call
 > - recordTime: recording time
 > - recordUrl: recording url
 
