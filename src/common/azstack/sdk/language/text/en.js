@@ -58,22 +58,25 @@ export const GROUP_ADMIN_TEXT = 'Admin';
 
 export const GROUP_ACTION_INVITE_PART_1_TEXT = 'Are you sure to add';
 export const GROUP_ACTION_INVITE_PART_2_TEXT = '?';
-export const GROUP_ACTION_INVITE_ERROR_TEXT = 'Can\'t add member, please try again later';
+export const GROUP_ACTION_INVITE_ERROR_TEXT = 'Can\'t add member to group, please try again later';
 export const GROUP_ACTION_KICK_PART_1_TEXT = 'Are you sure to kick';
 export const GROUP_ACTION_KICK_PART_2_TEXT = '?';
-export const GROUP_ACTION_KICK_ERROR_TEXT = 'Can\'t kick member out, please try again later';
+export const GROUP_ACTION_KICK_ERROR_TEXT = 'Can\'t kick member out of group, please try again later';
 export const GROUP_ACTION_LEAVE_PART_1_TEXT = 'Are you sure to leave';
 export const GROUP_ACTION_LEAVE_PART_2_TEXT = '?';
-export const GROUP_ACTION_LEAVE_ERROR_TEXT = 'Can\'t leave, please try again later';
+export const GROUP_ACTION_LEAVE_ERROR_TEXT = 'Can\'t leave group, please try again later';
+export const GROUP_ACTION_RENAME_PART_1_TEXT = 'Are you sure to rename group to';
+export const GROUP_ACTION_RENAME_PART_2_TEXT = '?';
+export const GROUP_ACTION_RENAME_ERROR_TEXT = 'Can\'t rename group, please try again later';
 export const GROUP_ACTION_LEAVE_AND_CHANGE_ADMIN_PART_1_TEXT = 'Are you sure to leave and change new admin to';
 export const GROUP_ACTION_LEAVE_AND_CHANGE_ADMIN_PART_2_TEXT = '?';
-export const GROUP_ACTION_LEAVE_AND_CHANGE_ADMIN_ERROR_TEXT = 'Can\'t leave and change new admin, please try again later';
+export const GROUP_ACTION_LEAVE_AND_CHANGE_ADMIN_ERROR_TEXT = 'Can\'t leave and change group new admin, please try again later';
 export const GROUP_ACTION_CHANGE_ADMIN_PART_1_TEXT = 'Are you sure to change admin to';
 export const GROUP_ACTION_CHANGE_ADMIN_PART_2_TEXT = '?';
-export const GROUP_ACTION_CHANGE_ADMIN_ERROR_TEXT = 'Can\'t change admin, please try again later';
+export const GROUP_ACTION_CHANGE_ADMIN_ERROR_TEXT = 'Can\'t change group admin, please try again later';
 export const GROUP_ACTION_JOIN_PART_1_TEXT = 'Are you sure to join';
 export const GROUP_ACTION_JOIN_PART_2_TEXT = '?';
-export const GROUP_ACTION_JOIN_ERROR_TEXT = 'Can\'t join, please try again later';
+export const GROUP_ACTION_JOIN_ERROR_TEXT = 'Can\'t join group, please try again later';
 
 export const USER_ONLINE_TEXT = 'Online';
 export const USER_OFFLINE_TEXT = 'Last seen';
@@ -100,6 +103,8 @@ export const USER_EMPTY_TEXT = 'No User Infomation';
 export const GROUP_HEADER_TITLE_TEXT = 'Group Information';
 export const GROUP_EMPTY_TEXT = 'No Group Infomation';
 export const GROUP_MEMBER_EMPTY_TEXT = 'No Member';
+export const GROUP_NEW_NAME_TEXT = 'New group name';
+export const GROUP_NEW_NAME_PLACEHOLDER_TEXT = 'Enter new group name';
 
 export const SELECT_NEW_MEMBERS_HEADER_TITLE_TEXT = 'Select new members';
 export const SELECT_NEW_ADMIN_HEADER_TITLE_TEXT = 'Select new admin';
@@ -110,3 +115,7 @@ export const SELECT_MEMBERS_UNSELECTED_WARNING_TEXT = 'Please select any member'
 
 export const SELECT_MEMBER_SEARCH_PLACEHOLDER_TEXT = 'Search...';
 export const SELECT_MEMBER_EMPTY_TEXT = 'No Member';
+
+export const GROUP_NAME_INPUT_BUTTON_CANCEL_TEXT = 'Cancel';
+export const GROUP_NAME_INPUT_BUTTON_DONE_TEXT = 'Done';
+export const GROUP_NAME_INPUT_ERROR_EMPTY_TEXT = 'Group name can\'t be left blank';

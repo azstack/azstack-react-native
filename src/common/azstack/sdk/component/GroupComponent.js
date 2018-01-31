@@ -15,6 +15,7 @@ import EmptyBlockComponent from './part/common/EmptyBlockComponent';
 import ConnectionBlockComponent from './part/common/ConnectionBlockComponent';
 import ChatAvatarBlockComponent from './part/common/ChatAvatarBlockComponent';
 import GroupMemberBlockComponent from './part/group/GroupMemberBlockComponent';
+import GroupNameInputModalComponent from './part/group/GroupNameInputModalComponent';
 
 class GroupComponent extends React.Component {
     constructor(props) {
@@ -27,16 +28,20 @@ class GroupComponent extends React.Component {
 
         this.state = {
             group: null,
-            inGroup: false
+            inGroup: false,
+            showGroupNameInputModel: false
         };
 
         this.onStartChatButtonPressed = this.onStartChatButtonPressed.bind(this);
         this.onEditNameButtonPressed = this.onEditNameButtonPressed.bind(this);
         this.onAddMemberButtonPressed = this.onAddMemberButtonPressed.bind(this);
         this.onLeaveGroupButtonPressed = this.onLeaveGroupButtonPressed.bind(this);
+        this.onJoinButtonPressed = this.onJoinButtonPressed.bind(this);
         this.onChangeAdminButtonPressed = this.onChangeAdminButtonPressed.bind(this);
         this.onKickMemberButtonPressed = this.onKickMemberButtonPressed.bind(this);
-        this.onJoinButtonPressed = this.onJoinButtonPressed.bind(this);
+
+        this.onGroupNameInputModalClose = this.onGroupNameInputModalClose.bind(this);
+        this.onGroupNameInputModalDone = this.onGroupNameInputModalDone.bind(this);
     };
 
     addSubscriptions() {
@@ -142,7 +147,9 @@ class GroupComponent extends React.Component {
             groupId: this.props.groupId
         });
     };
-    onEditNameButtonPressed() { };
+    onEditNameButtonPressed() {
+        this.setState({ showGroupNameInputModel: true });
+    };
     onAddMemberButtonPressed() {
         this.props.showSelectMembers({
             headerTitle: this.coreInstances.Language.getText('SELECT_NEW_MEMBERS_HEADER_TITLE_TEXT'),
@@ -251,6 +258,58 @@ class GroupComponent extends React.Component {
         );
     };
 
+    onGroupNameInputModalClose() {
+        this.setState({ showGroupNameInputModel: false });
+    };
+    onGroupNameInputModalDone(event) {
+        if (event.newGroupName === this.state.group.name) {
+            return;
+        }
+
+        Alert.alert(
+            this.coreInstances.Language.getText('ALERT_TITLE_CONFIRM_TEXT'),
+            `${this.coreInstances.Language.getText('GROUP_ACTION_RENAME_PART_1_TEXT')} ${event.newGroupName}${this.coreInstances.Language.getText('GROUP_ACTION_RENAME_PART_2_TEXT')}`,
+            [
+                { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_CANCEL_TEXT'), onPress: () => { } },
+                {
+                    text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => {
+                        this.renameGroup(event.newGroupName);
+                    }
+                }
+            ],
+            { cancelable: true }
+        );
+    };
+
+    renameGroup(newGroupName) {
+        if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_ACTION_RENAME_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+            return;
+        }
+
+        this.coreInstances.AZStackCore.renameGroup({
+            groupId: this.props.groupId,
+            newName: newGroupName
+        }).then((result) => {
+
+        }).catch((error) => {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_ACTION_RENAME_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+        });
+    };
     addMember(members) {
         if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
             Alert.alert(
@@ -725,6 +784,18 @@ class GroupComponent extends React.Component {
                         getCoreInstances={this.props.getCoreInstances}
                     />
                 </ScreenBodyBlockComponent>
+                {
+                    this.state.showGroupNameInputModel && (
+                        <GroupNameInputModalComponent
+                            getCoreInstances={this.props.getCoreInstances}
+                            onGroupNameInputModalClose={this.onGroupNameInputModalClose}
+                            onGroupNameInputModalDone={this.onGroupNameInputModalDone}
+                            title={this.coreInstances.Language.getText('GROUP_NEW_NAME_TEXT')}
+                            placeholder={this.coreInstances.Language.getText('GROUP_NEW_NAME_PLACEHOLDER_TEXT')}
+                            groupName={this.state.group.name}
+                        />
+                    )
+                }
             </ScreenBlockComponent>
         );
     };

@@ -1063,3 +1063,75 @@ export const SELECT_MEMBER_SELECTED_IMAGE_STYLE = {
     width: 35,
     height: 35
 };
+
+
+export const GROUP_NAME_INPUT_BACK_GROUD_BLOCK_STYLE = {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0)',
+    padding: 20
+};
+export const GROUP_NAME_INPUT_CONTENT_BLOCK_STYLE = {
+    width: '100%',
+    padding: 15,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#E1E5EC',
+    borderRadius: 5
+};
+export const GROUP_NAME_INPUT_TITLE_STYLE = {
+    fontSize: 16,
+    fontWeight: '400',
+    lineHeight: 20,
+    color: '#2F353B'
+};
+export const GROUP_NAME_INPUT_INPUT_BLOCKS_STYLE = {
+    position: 'relative',
+    marginTop: 15
+};
+export const GROUP_NAME_INPUT_INPUT_STYLE = {
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderColor: '#E1E5EC',
+    borderRadius: 5,
+    paddingVertical: 5,
+    paddingLeft: 10,
+    paddingRight: 40,
+    lineHeight: 20,
+    fontSize: 16,
+    fontWeight: '300',
+    color: '#95A5A6'
+};
+export const GROUP_NAME_INPUT_INPUT_PROPS_STYLE = {
+    underlineColorAndroid: 'transparent',
+    placeholderTextColor: '#E1E5EC'
+};
+export const GROUP_NAME_INPUT_CLEAR_BUTTON_BLOCK_STYLE = {
+    position: 'absolute',
+    top: 2,
+    right: 5,
+    width: 30,
+    height: 30
+};
+export const GROUP_NAME_INPUT_CLEAR_BUTTON_TEXT_STYLE = {
+    fontSize: 30,
+    fontWeight: '400',
+    lineHeight: 30,
+    color: '#E1E5EC',
+    textAlign: 'center'
+};
+export const GROUP_NAME_INPUT_BUTTON_BLOCKS_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginTop: 15
+};
+export const GROUP_NAME_INPUT_BUTTON_TEXT_STYLE = {
+    fontSize: 14,
+    fontWeight: '300',
+    lineHeight: 20,
+    color: '#F2784B',
+    textAlign: 'center',
+    paddingHorizontal: 10
+};
