@@ -14,6 +14,10 @@ import CustomStyle from './style/';
 
 import { AZStackCore } from '../core/';
 
+import DateTimeFormatter from './helper/dateTimeFormatter';
+import FileConverter from './helper/fileConverter';
+import Diacritic from './helper/diacritic';
+
 import Event from './handler/event';
 import Member from './handler/member';
 
@@ -41,6 +45,10 @@ export class AZStackSdk extends AZStackBaseComponent {
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_FREE_CALL_START] = (error, result) => {
             this.onFreeCallStart(error, result);
         };
+
+        this.DateTimeFormatter = new DateTimeFormatter();
+        this.FileConverter = new FileConverter();
+        this.Diacritic = new Diacritic();
 
         this.EventEmitter = new EventEmitter();
         this.Event = new Event({
@@ -70,7 +78,7 @@ export class AZStackSdk extends AZStackBaseComponent {
             }
             this.initRun();
         });
-        this.subscriptions.onReconnected = this.EventEmitter.addListener(this.eventConstants.EVENT_NAME_RECONNECT_RETURN, ({ error, result }) => {
+        this.subscriptions.onReconnected = this.EventEmitter.addListener(this.eventConstants.EVENT_NAME_ON_RECONNECT_RETURN, ({ error, result }) => {
             if (error) {
                 return;
             }
@@ -94,6 +102,26 @@ export class AZStackSdk extends AZStackBaseComponent {
     };
     initRun() {
         this.getMembers();
+    };
+
+    getCoreInstances() {
+        return {
+            eventConstants: this.eventConstants,
+            linkConstants: this.linkConstants,
+
+            Language: this.Language,
+            CustomStyle: this.CustomStyle,
+
+            AZStackCore: this.AZStackCore,
+
+            DateTimeFormatter: this.DateTimeFormatter,
+            FileConverter: this.FileConverter,
+            Diacritic: this.Diacritic,
+
+            EventEmitter: this.EventEmitter,
+
+            members: this.members
+        };
     };
 
     componentDidMount() {
@@ -128,18 +156,6 @@ export class AZStackSdk extends AZStackBaseComponent {
     };
     disconnect() {
         return this.AZStackCore.disconnect();
-    };
-
-    getCoreInstances() {
-        return {
-            eventConstants: this.eventConstants,
-            linkConstants: this.linkConstants,
-            Language: this.Language,
-            CustomStyle: this.CustomStyle,
-            AZStackCore: this.AZStackCore,
-            EventEmitter: this.EventEmitter,
-            members: this.members
-        };
     };
 
     onCallinStart(error, result) {

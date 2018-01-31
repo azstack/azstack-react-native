@@ -108,16 +108,13 @@ class ContactComponent extends React.Component {
                     getCoreInstances={this.props.getCoreInstances}
                     style={this.props.contentContainerStyle}
                 >
-                    <View
-                        style={this.coreInstances.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_BLOCK_STYLE')}
-                    >
-                        <SearchBlockComponent
-                            getCoreInstances={this.props.getCoreInstances}
-                            onSearchTextChanged={this.onSearchTextChanged}
-                            onSearchTextCleared={this.onSearchTextCleared}
-                            placeholder={this.coreInstances.Language.getText('CONVERSATIONS_LIST_SEARCH_PLACEHOLDER_TEXT')}
-                        />
-                    </View>
+                    <SearchBlockComponent
+                        getCoreInstances={this.props.getCoreInstances}
+                        containerStyle={this.coreInstances.CustomStyle.getStyle('CONVERSATIONS_LIST_SEARCH_BLOCK_STYLE')}
+                        onSearchTextChanged={this.onSearchTextChanged}
+                        onSearchTextCleared={this.onSearchTextCleared}
+                        placeholder={this.coreInstances.Language.getText('CONVERSATIONS_LIST_SEARCH_PLACEHOLDER_TEXT')}
+                    />
                     {this.renderContent()}
                 </ScreenBodyBlockComponent>
             </ScreenBlockComponent>

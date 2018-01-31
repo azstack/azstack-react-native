@@ -5,9 +5,6 @@ import {
     Text,
     Image
 } from 'react-native';
-import {
-    formatDate
-} from '../../../helper';
 
 import call_icon from '../../../static/image/call-icon.png';
 import ic_avatar from '../../../static/image/ic_avatar.png';
@@ -15,6 +12,7 @@ import ic_avatar from '../../../static/image/ic_avatar.png';
 class CallLogItem extends React.Component {
     constructor(props) {
         super(props);
+        this.coreInstances = props.getCoreInstances();
         this.state = {
             showActions: false,
         };
@@ -26,16 +24,16 @@ class CallLogItem extends React.Component {
                 <TouchableOpacity onPress={() => this.onPress()}>
                     <View style={styles.contactToggle}>
                         <View style={styles.avatar}>
-                            <Image source={ic_avatar} style={{height: 30, width: 30}} resizeMode={'contain'} />
+                            <Image source={ic_avatar} style={{ height: 30, width: 30 }} resizeMode={'contain'} />
                         </View>
-                        <View style={{flex: 1, paddingRight: 60}}>
+                        <View style={{ flex: 1, paddingRight: 60 }}>
                             <Text numberOfLines={1}>{this.props.callLog.callType === 1 ? this.props.callLog.toPhoneNumber : this.props.callLog.fromPhoneNumber}</Text>
-                            <Text numberOfLines={1}>{this.props.callLog.callType} <Text>{formatDate(this.props.callLog.recordTime, "YYYY/MM/DD HH:mm:ss")}</Text></Text>
+                            <Text numberOfLines={1}>{this.props.callLog.callType} <Text>{this.coreInstances.DateTimeFormatter.formatDate(this.props.callLog.recordTime, "YYYY/MM/DD HH:mm:ss")}</Text></Text>
                         </View>
                         <View style={styles.inlineActions}>
                             <TouchableOpacity onPress={() => this.callout()}>
-                                <View style={{ alignSelf: 'flex-end'}}>
-                                    <Image source={call_icon} style={{width: 25, height: 25}} resizeMode={'contain'} />
+                                <View style={{ alignSelf: 'flex-end' }}>
+                                    <Image source={call_icon} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                                 </View>
                             </TouchableOpacity>
                         </View>
@@ -43,29 +41,29 @@ class CallLogItem extends React.Component {
                 </TouchableOpacity>
                 {
                     this.props.showActions === true && false && (
-                    <View style={styles.actions}>
-                        <TouchableOpacity onPress={() => this.audioCall()}>
-                            <View style={styles.actionButton}>
-                                <Text>Gọi Audio</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.videoCall()}>
-                            <View style={styles.actionButton}>
-                                <Text>Gọi Video</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.textMessage()}>
-                            <View style={styles.actionButton}>
-                                <Text>Nhắn tin</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
+                        <View style={styles.actions}>
+                            <TouchableOpacity onPress={() => this.audioCall()}>
+                                <View style={styles.actionButton}>
+                                    <Text>Gọi Audio</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.videoCall()}>
+                                <View style={styles.actionButton}>
+                                    <Text>Gọi Video</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.textMessage()}>
+                                <View style={styles.actionButton}>
+                                    <Text>Nhắn tin</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
                     )
                 }
             </View>
         );
     }
-    
+
     onPress() {
         this.props.onPress();
     }
@@ -115,7 +113,7 @@ const styles = {
     },
     inlineActions: {
         position: 'absolute',
-        top: 0, 
+        top: 0,
         right: 20,
         paddingVertical: 10,
         alignItems: 'center',

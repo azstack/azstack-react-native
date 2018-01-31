@@ -17,6 +17,7 @@ export const IMAGE_ADD_MEMBER = require('../../static/image/classic/add-member.p
 export const IMAGE_LEAVE = require('../../static/image/classic/leave.png');
 export const IMAGE_CHANGE_ADMIN = require('../../static/image/classic/change-admin.png');
 export const IMAGE_KICK_MEMBER = require('../../static/image/classic/kick-member.png');
+export const IMAGE_JOIN = require('../../static/image/classic/join.png');
 export const IMAGE_DONE = require('../../static/image/classic/done.png');
 export const IMAGE_CHECK_MARK = require('../../static/image/classic/check-mark.png');
 
@@ -116,9 +117,6 @@ export const SEARCH_INPUT_STYLE = {
     fontWeight: '300',
     color: '#95A5A6'
 };
-export const SEARCH_INPUT_FOCUS_STYLE = {
-    borderColor: '#F2784B'
-};
 export const SEARCH_INPUT_PROPS_STYLE = {
     underlineColorAndroid: 'transparent',
     placeholderTextColor: '#E1E5EC'
@@ -146,14 +144,14 @@ export const SEARCH_CLEAR_BUTTON_TEXT_STYLE = {
 };
 
 export const AVATAR_BLOCK_STYLE = {
-    width: '100%',
-    height: '100%',
+    width: '50',
+    height: '50',
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center'
 };
 export const AVATAR_TEXT_STYLE = {
-    fontSize: 50,
+    fontSize: 20,
     fontWeight: '500',
     color: '#fff'
 };
@@ -232,10 +230,12 @@ export const CONVERSATION_BLOCK_STYLE = {
     borderBottomColor: '#E1E5EC',
     paddingVertical: 15
 };
+export const CONVERSATION_AVATAR_CONTAINER_BLOCK_STYLE = {
+    position: 'relative'
+};
 export const CONVERSATION_AVATAR_BLOCK_STYLE = {
     width: 50,
-    height: 50,
-    position: 'relative'
+    height: 50
 };
 export const CONVERSATION_AVATAR_TEXT_STYLE = {
     fontSize: 20
@@ -985,6 +985,14 @@ export const SELECT_MEMBERS_LIST_STYLE = {
 export const SELECT_MEMBERS_LIST_CONTENT_CONTAINER_STYLE = {
     paddingBottom: 15
 };
+export const SELECT_MEMBERS_SECTION_TITLE_TEXT_STYLE = {
+    fontSize: 18,
+    lineHeight: 25,
+    fontWeight: '300',
+    color: '#2F353B',
+    backgroundColor: '#E1E5EC',
+    paddingLeft: 5
+};
 
 
 export const SELECT_MEMBER_SEARCH_BLOCK_STYLE = {
@@ -997,6 +1005,14 @@ export const SELECT_MEMBER_LIST_STYLE = {
 };
 export const SELECT_MEMBER_LIST_CONTENT_CONTAINER_STYLE = {
     paddingBottom: 15
+};
+export const SELECT_MEMBER_SECTION_TITLE_TEXT_STYLE = {
+    fontSize: 18,
+    lineHeight: 25,
+    fontWeight: '300',
+    color: '#2F353B',
+    backgroundColor: '#E1E5EC',
+    paddingLeft: 5
 };
 
 

@@ -35,7 +35,7 @@ class ConnectionBlockComponent extends React.Component {
                 this.timeoutHide = null;
             }, 2000);
         });
-        this.subscriptions.onReconnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_AUTO_RECONNECTED, ({ error, result }) => {
+        this.subscriptions.onAutoReconnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_AUTO_RECONNECTED, ({ error, result }) => {
             if (error) {
                 return;
             }
@@ -49,7 +49,21 @@ class ConnectionBlockComponent extends React.Component {
                 this.timeoutHide = null;
             }, 2000);
         });
-        this.subscriptions.onReconnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_DISCONNECTED, ({ error, result }) => {
+        this.subscriptions.onReconnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_RECONNECT_RETURN, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.setState({
+                connectionState: 'connected'
+            });
+            this.timeoutHide = setTimeout(() => {
+                this.setState({
+                    show: false
+                });
+                this.timeoutHide = null;
+            }, 2000);
+        });
+        this.subscriptions.onDisconnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_DISCONNECTED, ({ error, result }) => {
             if (error) {
                 return;
             }

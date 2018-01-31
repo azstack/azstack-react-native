@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Alert,
     View,
     Text,
     TouchableOpacity,
@@ -25,7 +26,8 @@ class GroupComponent extends React.Component {
         this.subscriptions = {};
 
         this.state = {
-            group: null
+            group: null,
+            inGroup: false
         };
 
         this.onStartChatButtonPressed = this.onStartChatButtonPressed.bind(this);
@@ -34,6 +36,7 @@ class GroupComponent extends React.Component {
         this.onLeaveGroupButtonPressed = this.onLeaveGroupButtonPressed.bind(this);
         this.onChangeAdminButtonPressed = this.onChangeAdminButtonPressed.bind(this);
         this.onKickMemberButtonPressed = this.onKickMemberButtonPressed.bind(this);
+        this.onJoinButtonPressed = this.onJoinButtonPressed.bind(this);
     };
 
     addSubscriptions() {
@@ -49,7 +52,7 @@ class GroupComponent extends React.Component {
             }
             this.initRun();
         });
-        this.subscriptions.onReconnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_RECONNECT_RETURN, ({ error, result }) => {
+        this.subscriptions.onReconnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_RECONNECT_RETURN, ({ error, result }) => {
             if (error) {
                 return;
             }
@@ -92,6 +95,15 @@ class GroupComponent extends React.Component {
         }
     };
 
+    isInGroup(me, members) {
+        for (let i = 0; i < members.length; i++) {
+            if (me.userId === members[i].userId) {
+                return true;
+            }
+        }
+        return false;
+    };
+
     getGroup() {
         if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
             return;
@@ -114,7 +126,10 @@ class GroupComponent extends React.Component {
                 }
                 return a.fullname > b.fullname ? 1 : -1;
             });
-            this.setState({ group: result });
+            this.setState({
+                group: result,
+                inGroup: this.isInGroup(this.coreInstances.AZStackCore.authenticatedUser, result.members)
+            });
         }).catch((error) => { });
     };
     initRun() {
@@ -131,25 +146,285 @@ class GroupComponent extends React.Component {
     onAddMemberButtonPressed() {
         this.props.showSelectMembers({
             headerTitle: this.coreInstances.Language.getText('SELECT_NEW_MEMBERS_HEADER_TITLE_TEXT'),
-            ignoreMembers: [] || this.state.group.members.map((member) => {
+            ignoreMembers: this.state.group.members.map((member) => {
                 return member.userId
             }),
             onSelectDone: (event) => {
-                console.log(event);
+                Alert.alert(
+                    this.coreInstances.Language.getText('ALERT_TITLE_CONFIRM_TEXT'),
+                    `${this.coreInstances.Language.getText('GROUP_ACTION_INVITE_PART_1_TEXT')} ${event.selected.map((member) => { return member.fullname }).join(', ')}${this.coreInstances.Language.getText('GROUP_ACTION_INVITE_PART_2_TEXT')}`,
+                    [
+                        { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_CANCEL_TEXT'), onPress: () => { } },
+                        {
+                            text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => {
+                                this.addMember(event.selected);
+                            }
+                        }
+                    ],
+                    { cancelable: true }
+                );
             }
         });
     };
     onLeaveGroupButtonPressed() {
+        if (this.state.group.adminId !== this.coreInstances.AZStackCore.authenticatedUser.userId) {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_CONFIRM_TEXT'),
+                `${this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_PART_1_TEXT')}${this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_PART_2_TEXT')}`,
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_CANCEL_TEXT'), onPress: () => { } },
+                    {
+                        text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => {
+                            this.leaveGroup();
+                        }
+                    }
+                ],
+                { cancelable: true }
+            );
+            return;
+        }
         this.props.showSelectMember({
             headerTitle: this.coreInstances.Language.getText('SELECT_NEW_ADMIN_HEADER_TITLE_TEXT'),
-            ignoreMembers: [this.coreInstances.AZStackCore.authenticatedUser.userId],
+            members: this.state.group.members.filter((member) => {
+                return member.userId !== this.coreInstances.AZStackCore.authenticatedUser.userId
+            }),
             onSelectDone: (event) => {
-                console.log(event);
+                Alert.alert(
+                    this.coreInstances.Language.getText('ALERT_TITLE_CONFIRM_TEXT'),
+                    `${this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_AND_CHANGE_ADMIN_PART_1_TEXT')} ${event.selected.fullname}${this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_AND_CHANGE_ADMIN_PART_2_TEXT')}`,
+                    [
+                        { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_CANCEL_TEXT'), onPress: () => { } },
+                        {
+                            text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => {
+                                this.leaveAndChangeAdmin(event.selected);
+                            }
+                        }
+                    ],
+                    { cancelable: true }
+                );
             }
         });
     };
-    onChangeAdminButtonPressed(event) { };
-    onKickMemberButtonPressed(event) { };
+    onJoinButtonPressed() {
+        Alert.alert(
+            this.coreInstances.Language.getText('ALERT_TITLE_CONFIRM_TEXT'),
+            `${this.coreInstances.Language.getText('GROUP_ACTION_JOIN_PART_1_TEXT')}${this.coreInstances.Language.getText('GROUP_ACTION_JOIN_PART_2_TEXT')}`,
+            [
+                { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_CANCEL_TEXT'), onPress: () => { } },
+                {
+                    text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => {
+                        this.joinGroup();
+                    }
+                }
+            ],
+            { cancelable: true }
+        );
+    };
+    onChangeAdminButtonPressed(event) {
+        Alert.alert(
+            this.coreInstances.Language.getText('ALERT_TITLE_CONFIRM_TEXT'),
+            `${this.coreInstances.Language.getText('GROUP_ACTION_CHANGE_ADMIN_PART_1_TEXT')} ${event.member.fullname}${this.coreInstances.Language.getText('GROUP_ACTION_CHANGE_ADMIN_PART_2_TEXT')}`,
+            [
+                { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_CANCEL_TEXT'), onPress: () => { } },
+                {
+                    text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => {
+                        this.changeAdmin(event.member);
+                    }
+                }
+            ],
+            { cancelable: true }
+        );
+    };
+    onKickMemberButtonPressed(event) {
+        Alert.alert(
+            this.coreInstances.Language.getText('ALERT_TITLE_CONFIRM_TEXT'),
+            `${this.coreInstances.Language.getText('GROUP_ACTION_KICK_PART_1_TEXT')} ${event.member.fullname}${this.coreInstances.Language.getText('GROUP_ACTION_KICK_PART_2_TEXT')}`,
+            [
+                { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_CANCEL_TEXT'), onPress: () => { } },
+                {
+                    text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => {
+                        this.kickMember(event.member);
+                    }
+                }
+            ],
+            { cancelable: true }
+        );
+    };
+
+    addMember(members) {
+        if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_ACTION_INVITE_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+            return;
+        }
+
+        this.coreInstances.AZStackCore.inviteGroup({
+            groupId: this.props.groupId,
+            inviteIds: members.map((member) => { return member.userId })
+        }).then((result) => {
+
+        }).catch((error) => {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_ACTION_INVITE_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+        });
+    };
+    leaveGroup() {
+        if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+            return;
+        }
+
+        this.coreInstances.AZStackCore.leaveGroup({
+            groupId: this.props.groupId,
+            leaveId: this.coreInstances.AZStackCore.authenticatedUser.userId
+        }).then((result) => {
+
+        }).catch((error) => {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+        });
+    };
+    leaveAndChangeAdmin(member) {
+        if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_AND_CHANGE_ADMIN_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+            return;
+        }
+
+        this.coreInstances.AZStackCore.leaveGroup({
+            groupId: this.props.groupId,
+            leaveId: this.coreInstances.AZStackCore.authenticatedUser.userId,
+            newAdminId: member.userId
+        }).then((result) => {
+
+        }).catch((error) => {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_ACTION_LEAVE_AND_CHANGE_ADMIN_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+        });
+    };
+    joinGroup() {
+        if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_ACTION_JOIN_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+            return;
+        }
+
+        this.coreInstances.AZStackCore.joinPublicGroup({
+            groupId: this.props.groupId
+        }).then((result) => {
+
+        }).catch((error) => {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_ACTION_JOIN_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+        });
+    };
+    changeAdmin(member) {
+        if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_ACTION_CHANGE_ADMIN_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+            return;
+        }
+
+        this.coreInstances.AZStackCore.changeAdminGroup({
+            groupId: this.props.groupId,
+            newAdminId: member.userId
+        }).then((result) => {
+
+        }).catch((error) => {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_ACTION_CHANGE_ADMIN_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+        });
+    };
+    kickMember(member) {
+        if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_ACTION_KICK_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+            return;
+        }
+
+        this.coreInstances.AZStackCore.leaveGroup({
+            groupId: this.props.groupId,
+            leaveId: member.userId
+        }).then((result) => {
+
+        }).catch((error) => {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_ACTION_KICK_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+        });
+    };
 
     onGroupInvited(newMessage) {
         if (newMessage.chatId !== this.props.groupId) {
@@ -172,7 +447,10 @@ class GroupComponent extends React.Component {
             }
             return a.fullname > b.fullname ? 1 : -1;
         });
-        this.setState({ group: group });
+        this.setState({
+            group: group,
+            inGroup: this.isInGroup(this.coreInstances.AZStackCore.authenticatedUser, group.members)
+        });
     };
     onGroupLeft(newMessage) {
         if (newMessage.chatId !== this.props.groupId) {
@@ -195,7 +473,10 @@ class GroupComponent extends React.Component {
             }
             return a.fullname > b.fullname ? 1 : -1;
         });
-        this.setState({ group: group });
+        this.setState({
+            group: group,
+            inGroup: this.isInGroup(this.coreInstances.AZStackCore.authenticatedUser, group.members)
+        });
     };
     onGroupRenamed(newMessage) {
         if (newMessage.chatId !== this.props.groupId) {
@@ -264,7 +545,10 @@ class GroupComponent extends React.Component {
             }
             return a.fullname > b.fullname ? 1 : -1;
         });
-        this.setState({ group: group });
+        this.setState({
+            group: group,
+            inGroup: this.isInGroup(this.coreInstances.AZStackCore.authenticatedUser, group.members)
+        });
     };
 
     componentDidMount() {
@@ -306,16 +590,13 @@ class GroupComponent extends React.Component {
                                 <View
                                     style={this.coreInstances.CustomStyle.getStyle('GROUP_INFO_BLOCK_STYLE')}
                                 >
-                                    <View
-                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_AVATAR_BLOCK_STYLE')}
-                                    >
-                                        <ChatAvatarBlockComponent
-                                            getCoreInstances={this.props.getCoreInstances}
-                                            chatType={this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_GROUP}
-                                            chatTarget={this.state.group}
-                                            textStyle={this.coreInstances.CustomStyle.getStyle('GROUP_AVATAR_TEXT_STYLE')}
-                                        />
-                                    </View>
+                                    <ChatAvatarBlockComponent
+                                        getCoreInstances={this.props.getCoreInstances}
+                                        containerStyle={this.coreInstances.CustomStyle.getStyle('GROUP_AVATAR_BLOCK_STYLE')}
+                                        chatType={this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_GROUP}
+                                        chatTarget={this.state.group}
+                                        textStyle={this.coreInstances.CustomStyle.getStyle('GROUP_AVATAR_TEXT_STYLE')}
+                                    />
                                     <View
                                         style={this.coreInstances.CustomStyle.getStyle('GROUP_DETAILS_BLOCK_STYLE')}
                                     >
@@ -335,50 +616,73 @@ class GroupComponent extends React.Component {
                                             {`${this.state.group.members.length} `}
                                             {this.coreInstances.Language.getText(this.state.group.members.length > 1 ? 'GROUP_MEMBER_MANY_TEXT' : 'GROUP_MEMBER_TEXT')}
                                         </Text>
-                                        <View
-                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BLOCK_STYLE')}
-                                        >
-                                            <TouchableOpacity
-                                                style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
-                                                activeOpacity={0.5}
-                                                onPress={this.onStartChatButtonPressed}
-                                            >
-                                                <Image
-                                                    style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
-                                                    source={this.coreInstances.CustomStyle.getImage('IMAGE_START_CHAT')}
-                                                />
-                                            </TouchableOpacity>
-                                            <TouchableOpacity
-                                                style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
-                                                activeOpacity={0.5}
-                                                onPress={this.onEditNameButtonPressed}
-                                            >
-                                                <Image
-                                                    style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
-                                                    source={this.coreInstances.CustomStyle.getImage('IMAGE_PENCIL')}
-                                                />
-                                            </TouchableOpacity>
-                                            <TouchableOpacity
-                                                style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
-                                                activeOpacity={0.5}
-                                                onPress={this.onAddMemberButtonPressed}
-                                            >
-                                                <Image
-                                                    style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
-                                                    source={this.coreInstances.CustomStyle.getImage('IMAGE_ADD_MEMBER')}
-                                                />
-                                            </TouchableOpacity>
-                                            <TouchableOpacity
-                                                style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
-                                                activeOpacity={0.5}
-                                                onPress={this.onLeaveGroupButtonPressed}
-                                            >
-                                                <Image
-                                                    style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
-                                                    source={this.coreInstances.CustomStyle.getImage('IMAGE_LEAVE')}
-                                                />
-                                            </TouchableOpacity>
-                                        </View>
+                                        {
+                                            this.state.inGroup && (
+                                                <View
+                                                    style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BLOCK_STYLE')}
+                                                >
+                                                    <TouchableOpacity
+                                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
+                                                        activeOpacity={0.5}
+                                                        onPress={this.onStartChatButtonPressed}
+                                                    >
+                                                        <Image
+                                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
+                                                            source={this.coreInstances.CustomStyle.getImage('IMAGE_START_CHAT')}
+                                                        />
+                                                    </TouchableOpacity>
+                                                    <TouchableOpacity
+                                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
+                                                        activeOpacity={0.5}
+                                                        onPress={this.onEditNameButtonPressed}
+                                                    >
+                                                        <Image
+                                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
+                                                            source={this.coreInstances.CustomStyle.getImage('IMAGE_PENCIL')}
+                                                        />
+                                                    </TouchableOpacity>
+                                                    <TouchableOpacity
+                                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
+                                                        activeOpacity={0.5}
+                                                        onPress={this.onAddMemberButtonPressed}
+                                                    >
+                                                        <Image
+                                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
+                                                            source={this.coreInstances.CustomStyle.getImage('IMAGE_ADD_MEMBER')}
+                                                        />
+                                                    </TouchableOpacity>
+                                                    <TouchableOpacity
+                                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
+                                                        activeOpacity={0.5}
+                                                        onPress={this.onLeaveGroupButtonPressed}
+                                                    >
+                                                        <Image
+                                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
+                                                            source={this.coreInstances.CustomStyle.getImage('IMAGE_LEAVE')}
+                                                        />
+                                                    </TouchableOpacity>
+                                                </View>
+                                            )
+                                        }
+                                        {
+                                            !this.state.inGroup &&
+                                            this.state.group.type === this.coreInstances.AZStackCore.groupConstants.GROUP_TYPE_PUBLIC && (
+                                                <View
+                                                    style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BLOCK_STYLE')}
+                                                >
+                                                    <TouchableOpacity
+                                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
+                                                        activeOpacity={0.5}
+                                                        onPress={this.onJoinButtonPressed}
+                                                    >
+                                                        <Image
+                                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
+                                                            source={this.coreInstances.CustomStyle.getImage('IMAGE_JOIN')}
+                                                        />
+                                                    </TouchableOpacity>
+                                                </View>
+                                            )
+                                        }
                                     </View>
                                 </View>
                                 <View

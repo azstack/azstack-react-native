@@ -46,6 +46,7 @@ class CallLogsComponent extends React.Component {
     renderItem(item, index) {
         return (
             <CallLogItem
+                getCoreInstances={this.props.getCoreInstances}
                 callLog={item}
                 onPress={() => this.onItemPress(item, index)}
                 showActions={this.state.showItemActions === index}

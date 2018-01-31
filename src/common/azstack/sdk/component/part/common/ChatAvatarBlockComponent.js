@@ -45,16 +45,17 @@ class ChatAvatarBlockComponent extends React.Component {
     render() {
         return (
             <View
-                style={{
-                    ...this.coreInstances.CustomStyle.getStyle('AVATAR_BLOCK_STYLE'),
-                    backgroundColor: this.getColor({ text: this.props.chatTarget.fullname ? this.props.chatTarget.fullname : this.props.chatTarget.name })
-                }}
+                style={[
+                    this.coreInstances.CustomStyle.getStyle('AVATAR_BLOCK_STYLE'),
+                    (this.props.containerStyle ? this.props.containerStyle : {}),
+                    {backgroundColor: this.getColor({ text: this.props.chatTarget.fullname ? this.props.chatTarget.fullname : this.props.chatTarget.name })}
+                ]}
             >
                 <Text
-                    style={{
-                        ...this.coreInstances.CustomStyle.getStyle('AVATAR_TEXT_STYLE'),
-                        ...this.props.textStyle
-                    }}
+                    style={[
+                        this.coreInstances.CustomStyle.getStyle('AVATAR_TEXT_STYLE'),
+                        (this.props.textStyle ? this.props.textStyle : {})
+                    ]}
                 >
                     {this.getFirstLetters({ text: this.props.chatTarget.fullname ? this.props.chatTarget.fullname : this.props.chatTarget.name, getNumber: this.props.chatType })}
                 </Text>

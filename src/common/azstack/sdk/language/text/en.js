@@ -1,6 +1,8 @@
 export const ALERT_TITLE_ERROR_TEXT = 'Error';
 export const ALERT_TITLE_WARNING_TEXT = 'Warning';
+export const ALERT_TITLE_CONFIRM_TEXT = 'Confirm';
 export const ALERT_BUTTON_TITLE_OK_TEXT = 'OK';
+export const ALERT_BUTTON_TITLE_CANCEL_TEXT = 'Cancel';
 
 export const CONNECTTION_CONNECTING_TEXT = 'Connecting...';
 export const CONNECTTION_CONNECTED_TEXT = 'Connected';
@@ -53,6 +55,25 @@ export const GROUP_TYPE_PUBLIC = 'public';
 export const GROUP_MEMBER_TEXT = 'member';
 export const GROUP_MEMBER_MANY_TEXT = 'members';
 export const GROUP_ADMIN_TEXT = 'Admin';
+
+export const GROUP_ACTION_INVITE_PART_1_TEXT = 'Are you sure to add';
+export const GROUP_ACTION_INVITE_PART_2_TEXT = '?';
+export const GROUP_ACTION_INVITE_ERROR_TEXT = 'Can\'t add member, please try again later';
+export const GROUP_ACTION_KICK_PART_1_TEXT = 'Are you sure to kick';
+export const GROUP_ACTION_KICK_PART_2_TEXT = '?';
+export const GROUP_ACTION_KICK_ERROR_TEXT = 'Can\'t kick member out, please try again later';
+export const GROUP_ACTION_LEAVE_PART_1_TEXT = 'Are you sure to leave';
+export const GROUP_ACTION_LEAVE_PART_2_TEXT = '?';
+export const GROUP_ACTION_LEAVE_ERROR_TEXT = 'Can\'t leave, please try again later';
+export const GROUP_ACTION_LEAVE_AND_CHANGE_ADMIN_PART_1_TEXT = 'Are you sure to leave and change new admin to';
+export const GROUP_ACTION_LEAVE_AND_CHANGE_ADMIN_PART_2_TEXT = '?';
+export const GROUP_ACTION_LEAVE_AND_CHANGE_ADMIN_ERROR_TEXT = 'Can\'t leave and change new admin, please try again later';
+export const GROUP_ACTION_CHANGE_ADMIN_PART_1_TEXT = 'Are you sure to change admin to';
+export const GROUP_ACTION_CHANGE_ADMIN_PART_2_TEXT = '?';
+export const GROUP_ACTION_CHANGE_ADMIN_ERROR_TEXT = 'Can\'t change admin, please try again later';
+export const GROUP_ACTION_JOIN_PART_1_TEXT = 'Are you sure to join';
+export const GROUP_ACTION_JOIN_PART_2_TEXT = '?';
+export const GROUP_ACTION_JOIN_ERROR_TEXT = 'Can\'t join, please try again later';
 
 export const USER_ONLINE_TEXT = 'Online';
 export const USER_OFFLINE_TEXT = 'Last seen';

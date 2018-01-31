@@ -75,16 +75,13 @@ class ChatHeaderComponent extends React.Component {
                     activeOpacity={0.5}
                     onPress={this.onChatTargetPressed}
                 >
-                    <View
-                        style={this.coreInstances.CustomStyle.getStyle('CHAT_HEADER_AVATAR_BLOCK_STYLE')}
-                    >
-                        <ChatAvatarBlockComponent
-                            getCoreInstances={this.props.getCoreInstances}
-                            chatType={this.props.chatType}
-                            chatTarget={this.props.chatTarget}
-                            textStyle={this.coreInstances.CustomStyle.getStyle('CHAT_HEADER_AVATAR_TEXT_STYLE')}
-                        />
-                    </View>
+                    <ChatAvatarBlockComponent
+                        getCoreInstances={this.props.getCoreInstances}
+                        containerStyle={this.coreInstances.CustomStyle.getStyle('CHAT_HEADER_AVATAR_BLOCK_STYLE')}
+                        chatType={this.props.chatType}
+                        chatTarget={this.props.chatTarget}
+                        textStyle={this.coreInstances.CustomStyle.getStyle('CHAT_HEADER_AVATAR_TEXT_STYLE')}
+                    />
                     <View
                         style={this.coreInstances.CustomStyle.getStyle('CHAT_HEADER_TEXT_BLOCK_STYLE')}
                     >

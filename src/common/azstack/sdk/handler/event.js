@@ -15,7 +15,7 @@ class Event {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_AUTO_RECONNECTED, { error, result });
         };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_RECONNECT_RETURN] = (error, result) => {
-            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_RECONNECT_RETURN, { error, result });
+            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_RECONNECT_RETURN, { error, result });
         };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_DISCONNECTED] = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_DISCONNECTED, { error, result });
