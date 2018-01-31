@@ -1,6 +1,6 @@
 {
   "name": "azstack-react-native",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "React native SDK for AZSTACK Communication Platform",
   "main": "index.js",
   "scripts": {
@@ -17,7 +17,7 @@
     "webrtc",
     "socketio"
   ],
-  "author": "AZSTACK Team (https://azstack.com) (https://github.com/azstack/azstack-react-native)",
+  "author": "AZSTACK Team (https://github.com/azstack/azstack-react-native)",
   "license": "ISC",
   "dependencies": {
     "jsencrypt": "^2.3.1",

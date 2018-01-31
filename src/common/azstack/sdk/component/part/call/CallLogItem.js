@@ -24,7 +24,7 @@ class CallLogItem extends React.Component {
                 <TouchableOpacity onPress={() => this.onPress()}>
                     <View style={styles.contactToggle}>
                         <View style={styles.avatar}>
-                            <Image source={ic_avatar} style={{ height: 30, width: 30 }} resizeMode={'contain'} />
+                            <Image source={ic_avatar} style={{ height: 50, width: 50 }} resizeMode={'contain'} />
                         </View>
                         <View style={{ flex: 1, paddingRight: 60 }}>
                             <Text numberOfLines={1}>{this.props.callLog.callType === 1 ? this.props.callLog.toPhoneNumber : this.props.callLog.fromPhoneNumber}</Text>
@@ -39,57 +39,12 @@ class CallLogItem extends React.Component {
                         </View>
                     </View>
                 </TouchableOpacity>
-                {
-                    this.props.showActions === true && false && (
-                        <View style={styles.actions}>
-                            <TouchableOpacity onPress={() => this.audioCall()}>
-                                <View style={styles.actionButton}>
-                                    <Text>Gọi Audio</Text>
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => this.videoCall()}>
-                                <View style={styles.actionButton}>
-                                    <Text>Gọi Video</Text>
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => this.textMessage()}>
-                                <View style={styles.actionButton}>
-                                    <Text>Nhắn tin</Text>
-                                </View>
-                            </TouchableOpacity>
-                        </View>
-                    )
-                }
             </View>
         );
     }
 
     onPress() {
         this.props.onPress();
-    }
-
-    callout() {
-        this.props.onCallout({
-            info: {
-                phoneNumber: this.props.callLog.callType === 1 ? this.props.callLog.toPhoneNumber : this.props.callLog.fromPhoneNumber
-            }
-        });
-    }
-
-    audioCall() {
-        this.props.onAudioCall({
-            info: this.props.callLog
-        });
-    }
-
-    videoCall() {
-        this.props.onVideoCall({
-            info: this.props.callLog
-        });
-    }
-
-    textMessage() {
-
     }
 }
 
@@ -106,18 +61,20 @@ const styles = {
         justifyContent: 'space-around'
     },
     avatar: {
-        width: 30,
-        height: 30,
-        borderRadius: 15,
+        width: 50,
+        height: 50,
+        borderRadius: 25,
         marginRight: 10,
     },
     inlineActions: {
         position: 'absolute',
         top: 0,
+        bottom: 0,
         right: 20,
         paddingVertical: 10,
         alignItems: 'center',
         justifyContent: 'space-around',
+        display: 'none'
     },
     actions: {
         flexDirection: 'row',

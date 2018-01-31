@@ -29,7 +29,6 @@ class CallLogsComponent extends React.Component {
 
             ],
             loading: false,
-            showItemActions: null,
         };
     }
 
@@ -49,7 +48,6 @@ class CallLogsComponent extends React.Component {
                 getCoreInstances={this.props.getCoreInstances}
                 callLog={item}
                 onPress={() => this.onItemPress(item, index)}
-                showActions={this.state.showItemActions === index}
                 onVideoCall={(options) => {
                     this.props.onVideoCall(options);
                 }}
@@ -130,6 +128,7 @@ class CallLogsComponent extends React.Component {
             page: this.pagination.page,
             lastCreated: this.pagination.lastCreated
         }).then((result) => {
+            console.log(result);
             this.setState({ loading: false });
             this.pagination.page += 1;
             this.pagination.done = result.done;
@@ -163,13 +162,12 @@ class CallLogsComponent extends React.Component {
         this.getCallLogs({ reload: true });
     }
 
-    onItemPress(contact, index) {
-        if (this.state.showItemActions === index) {
-            this.setState({ showItemActions: null });
-        } else {
-            this.setState({ showItemActions: index });
-        }
-
+    onItemPress(callLog, index) {
+        this.props.onCallout({
+            info: {
+                phoneNumber: callLog.callType === 1 ? callLog.toPhoneNumber : callLog.fromPhoneNumber
+            }
+        });
     }
 };
 
