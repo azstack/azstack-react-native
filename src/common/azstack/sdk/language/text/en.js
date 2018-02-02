@@ -109,6 +109,8 @@ export const GROUP_NEW_NAME_TEXT = 'New group name';
 export const GROUP_NEW_NAME_PLACEHOLDER_TEXT = 'Enter new group name';
 export const GROUP_SELECT_NEW_MEMBERS_TEXT = 'Select new members';
 export const GROUP_SELECT_NEW_ADMIN_TEXT = 'Select new admin';
+export const GROUP_NEW_NAME_INPUT_PLACE_HOLDER_TEXT = 'Group name';
+export const GROUP_NEW_NAME_EMPTY_ERROR_TEXT = 'Group name can\'t be left empty';
 
 export const SELECT_MEMBERS_SEARCH_PLACEHOLDER_TEXT = 'Search...';
 export const SELECT_MEMBERS_EMPTY_TEXT = 'No Member';
@@ -116,7 +118,3 @@ export const SELECT_MEMBERS_UNSELECTED_WARNING_TEXT = 'Please select any member'
 
 export const SELECT_MEMBER_SEARCH_PLACEHOLDER_TEXT = 'Search...';
 export const SELECT_MEMBER_EMPTY_TEXT = 'No Member';
-
-export const GROUP_NAME_INPUT_BUTTON_CANCEL_TEXT = 'Cancel';
-export const GROUP_NAME_INPUT_BUTTON_DONE_TEXT = 'Done';
-export const GROUP_NAME_INPUT_ERROR_EMPTY_TEXT = 'Group name can\'t be left blank';

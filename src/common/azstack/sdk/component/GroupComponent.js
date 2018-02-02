@@ -2,10 +2,11 @@ import React from 'react';
 import {
     Alert,
     View,
-    Text,
     TouchableOpacity,
+    Text,
     Image,
-    FlatList
+    FlatList,
+    TextInput
 } from 'react-native';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
@@ -15,7 +16,6 @@ import EmptyBlockComponent from './part/common/EmptyBlockComponent';
 import ConnectionBlockComponent from './part/common/ConnectionBlockComponent';
 import ChatAvatarBlockComponent from './part/common/ChatAvatarBlockComponent';
 import GroupMemberBlockComponent from './part/group/GroupMemberBlockComponent';
-import GroupNameInputModalComponent from './part/group/GroupNameInputModalComponent';
 
 class GroupComponent extends React.Component {
     constructor(props) {
@@ -29,17 +29,22 @@ class GroupComponent extends React.Component {
         this.state = {
             group: null,
             inGroup: false,
-            showGroupNameInputModel: false
+            editName: {
+                show: false,
+                newName: ''
+            }
         };
 
+        this.onGroupNamePressed = this.onGroupNamePressed.bind(this);
         this.onAddMemberButtonPressed = this.onAddMemberButtonPressed.bind(this);
         this.onLeaveGroupButtonPressed = this.onLeaveGroupButtonPressed.bind(this);
         this.onJoinButtonPressed = this.onJoinButtonPressed.bind(this);
         this.onChangeAdminButtonPressed = this.onChangeAdminButtonPressed.bind(this);
         this.onKickMemberButtonPressed = this.onKickMemberButtonPressed.bind(this);
 
-        this.onGroupNameInputModalClose = this.onGroupNameInputModalClose.bind(this);
-        this.onGroupNameInputModalDone = this.onGroupNameInputModalDone.bind(this);
+        this.onGroupNameInputTextChanged = this.onGroupNameInputTextChanged.bind(this);
+        this.onGroupNameInputCancelButtonPressed = this.onGroupNameInputCancelButtonPressed.bind(this);
+        this.onGroupNameInputDoneButtonPressed = this.onGroupNameInputDoneButtonPressed.bind(this);
     };
 
     addSubscriptions() {
@@ -140,6 +145,11 @@ class GroupComponent extends React.Component {
         this.getGroup();
     };
 
+    onGroupNamePressed() {
+        this.setState({ editName: Object.assign({}, this.state.editName, { show: true, newName: this.state.group.name }) }, () => {
+            this.refs.NameInput.focus();
+        });
+    };
     onAddMemberButtonPressed() {
         this.props.showSelectMembers({
             headerTitle: this.coreInstances.Language.getText('GROUP_SELECT_NEW_MEMBERS_TEXT'),
@@ -248,22 +258,41 @@ class GroupComponent extends React.Component {
         );
     };
 
-    onGroupNameInputModalClose() {
-        this.setState({ showGroupNameInputModel: false });
+    onGroupNameInputTextChanged(newText) {
+        this.setState({ editName: Object.assign({}, this.state.editName, { newName: newText }) });
     };
-    onGroupNameInputModalDone(event) {
-        if (event.newGroupName === this.state.group.name) {
+    onGroupNameInputCancelButtonPressed() {
+        this.setState({ editName: Object.assign({}, this.state.editName, { show: false }) });
+    };
+    onGroupNameInputDoneButtonPressed() {
+
+        if (!this.state.editName.newName) {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('GROUP_NEW_NAME_EMPTY_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_CANCEL_TEXT'), onPress: () => { } },
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+            return;
+        }
+
+        if (this.state.editName.newName === this.state.group.name) {
+            this.setState({ editName: Object.assign({}, this.state.editName, { show: false }) });
             return;
         }
 
         Alert.alert(
             this.coreInstances.Language.getText('ALERT_TITLE_CONFIRM_TEXT'),
-            `${this.coreInstances.Language.getText('GROUP_ACTION_RENAME_PART_1_TEXT')} ${event.newGroupName}${this.coreInstances.Language.getText('GROUP_ACTION_RENAME_PART_2_TEXT')}`,
+            `${this.coreInstances.Language.getText('GROUP_ACTION_RENAME_PART_1_TEXT')} ${this.state.editName.newName}${this.coreInstances.Language.getText('GROUP_ACTION_RENAME_PART_2_TEXT')}`,
             [
                 { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_CANCEL_TEXT'), onPress: () => { } },
                 {
                     text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => {
-                        this.renameGroup(event.newGroupName);
+                        this.setState({ editName: Object.assign({}, this.state.editName, { show: false }) });
+                        this.renameGroup(this.state.editName.newName);
                     }
                 }
             ],
@@ -701,16 +730,64 @@ class GroupComponent extends React.Component {
                                     <View
                                         style={this.coreInstances.CustomStyle.getStyle('GROUP_RIGHT_BLOCK_STYLE')}
                                     >
-                                        <Text
-                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_NAME_TEXT_STYLE')}
-                                        >
-                                            {this.state.group.name}
-                                        </Text>
+                                        {
+                                            !this.state.editName.show && (
+                                                <TouchableOpacity
+                                                    activeOpacity={0.5}
+                                                    onPress={this.onGroupNamePressed}
+                                                >
+                                                    <Text
+                                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_NAME_TEXT_STYLE')}
+                                                    >
+                                                        {this.state.group.name}
+                                                    </Text>
+                                                </TouchableOpacity>
+                                            )
+                                        }
+                                        {
+                                            this.state.editName.show && (
+                                                <View
+                                                    style={this.coreInstances.CustomStyle.getStyle('GROUP_NAME_INPUT_BLOCK')}
+                                                >
+                                                    <TextInput
+                                                        ref={'NameInput'}
+                                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_NAME_INPUT_STYLE')}
+                                                        onChangeText={this.onGroupNameInputTextChanged}
+                                                        value={this.state.editName.newName}
+                                                        placeholder={this.coreInstances.Language.getText('GROUP_NEW_NAME_INPUT_PLACE_HOLDER_TEXT')}
+                                                        returnKeyType='done'
+                                                        {
+                                                        ...this.coreInstances.CustomStyle.getStyle('GROUP_NAME_INPUT_PROPS_STYLE')
+                                                        }
+                                                    />
+                                                    <TouchableOpacity
+                                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_NAME_INPUT_ACTION_BUTTON_BLOCK_STYLE')}
+                                                        activeOpacity={0.5}
+                                                        onPress={this.onGroupNameInputDoneButtonPressed}
+                                                    >
+                                                        <Image
+                                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_NAME_INPUT_ACTION_BUTTON_IMAGE_STYLE')}
+                                                            source={this.coreInstances.CustomStyle.getImage('IMAGE_CHECK_MARK')}
+                                                        />
+                                                    </TouchableOpacity>
+                                                    <TouchableOpacity
+                                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_NAME_INPUT_ACTION_BUTTON_BLOCK_STYLE')}
+                                                        activeOpacity={0.5}
+                                                        onPress={this.onGroupNameInputCancelButtonPressed}
+                                                    >
+                                                        <Text
+                                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_NAME_INPUT_ACTION_BUTTON_TEXT_STYLE')}
+                                                        >×</Text>
+                                                    </TouchableOpacity>
+                                                </View>
+                                            )
+                                        }
                                         <Text
                                             style={this.coreInstances.CustomStyle.getStyle('GROUP_TYPE_TEXT_STYLE')}
                                         >
                                             {this.coreInstances.Language.getText(this.state.group.type === this.coreInstances.AZStackCore.groupConstants.GROUP_TYPE_PRIVATE ? 'GROUP_TYPE_PRIVATE' : 'GROUP_TYPE_PUBLIC')}
                                         </Text>
+
                                         <Text
                                             style={this.coreInstances.CustomStyle.getStyle('GROUP_MEMBERS_TEXT_STYLE')}
                                         >
@@ -759,18 +836,6 @@ class GroupComponent extends React.Component {
                         getCoreInstances={this.props.getCoreInstances}
                     />
                 </ScreenBodyBlockComponent>
-                {
-                    this.state.showGroupNameInputModel && (
-                        <GroupNameInputModalComponent
-                            getCoreInstances={this.props.getCoreInstances}
-                            onGroupNameInputModalClose={this.onGroupNameInputModalClose}
-                            onGroupNameInputModalDone={this.onGroupNameInputModalDone}
-                            title={this.coreInstances.Language.getText('GROUP_NEW_NAME_TEXT')}
-                            placeholder={this.coreInstances.Language.getText('GROUP_NEW_NAME_PLACEHOLDER_TEXT')}
-                            groupName={this.state.group.name}
-                        />
-                    )
-                }
             </ScreenBlockComponent>
         );
     };
