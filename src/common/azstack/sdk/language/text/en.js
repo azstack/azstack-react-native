@@ -85,6 +85,7 @@ export const CONVERSATIONS_HEADER_TITLE_TEXT = 'Conversations';
 export const CONVERSATIONS_SEARCH_PLACEHOLDER_TEXT = 'Search...';
 export const CONVERSATIONS_LIST_EMPTY_TEXT = 'No Conversation';
 export const CONVERSATIONS_LIST_SELECT_MEMBERS_TO_CHAT_TEXT = 'Select members to chat';
+export const CONVERSATIONS_LIST_NEW_GROUP_TO_CHAT_TEXT = 'Create group to chat';
 
 
 export const CHAT_HEADER_TITLE_TEXT = 'Chat';
