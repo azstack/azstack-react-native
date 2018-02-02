@@ -32,8 +32,6 @@ class GroupComponent extends React.Component {
             showGroupNameInputModel: false
         };
 
-        this.onStartChatButtonPressed = this.onStartChatButtonPressed.bind(this);
-        this.onEditNameButtonPressed = this.onEditNameButtonPressed.bind(this);
         this.onAddMemberButtonPressed = this.onAddMemberButtonPressed.bind(this);
         this.onLeaveGroupButtonPressed = this.onLeaveGroupButtonPressed.bind(this);
         this.onJoinButtonPressed = this.onJoinButtonPressed.bind(this);
@@ -142,14 +140,6 @@ class GroupComponent extends React.Component {
         this.getGroup();
     };
 
-    onStartChatButtonPressed() {
-        this.props.onStartChatButtonPressed({
-            groupId: this.props.groupId
-        });
-    };
-    onEditNameButtonPressed() {
-        this.setState({ showGroupNameInputModel: true });
-    };
     onAddMemberButtonPressed() {
         this.props.showSelectMembers({
             headerTitle: this.coreInstances.Language.getText('GROUP_SELECT_NEW_MEMBERS_TEXT'),
@@ -680,26 +670,6 @@ class GroupComponent extends React.Component {
                                                 <View
                                                     style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BLOCK_STYLE')}
                                                 >
-                                                    <TouchableOpacity
-                                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
-                                                        activeOpacity={0.5}
-                                                        onPress={this.onStartChatButtonPressed}
-                                                    >
-                                                        <Image
-                                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
-                                                            source={this.coreInstances.CustomStyle.getImage('IMAGE_START_CHAT')}
-                                                        />
-                                                    </TouchableOpacity>
-                                                    <TouchableOpacity
-                                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
-                                                        activeOpacity={0.5}
-                                                        onPress={this.onEditNameButtonPressed}
-                                                    >
-                                                        <Image
-                                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
-                                                            source={this.coreInstances.CustomStyle.getImage('IMAGE_PENCIL')}
-                                                        />
-                                                    </TouchableOpacity>
                                                     <TouchableOpacity
                                                         style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
                                                         activeOpacity={0.5}

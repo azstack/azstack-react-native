@@ -13,7 +13,6 @@ export const IMAGE_DRAWING = require('../../static/image/classic/drawing.png');
 export const IMAGE_VOICE_CALL = require('../../static/image/classic/voice-call.png');
 export const IMAGE_VIDEO_CALL = require('../../static/image/classic/video-call.png');
 export const IMAGE_START_CHAT = require('../../static/image/classic/start-chat.png');
-export const IMAGE_PENCIL = require('../../static/image/classic/pencil.png');
 export const IMAGE_ADD_MEMBER = require('../../static/image/classic/add-member.png');
 export const IMAGE_LEAVE = require('../../static/image/classic/leave.png');
 export const IMAGE_CHANGE_ADMIN = require('../../static/image/classic/change-admin.png');
