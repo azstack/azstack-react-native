@@ -668,17 +668,6 @@ export class AZStackSdk extends AZStackBaseComponent {
             showSelectMember: (event) => {
                 this.showSelectMember(event);
             },
-            onStartChatButtonPressed: (event) => {
-                if (options && typeof options === 'object' && typeof options.onStartChatButtonPressed === 'function') {
-                    options.onStartChatButtonPressed(event);
-                    return;
-                }
-
-                this.startChat({
-                    chatType: this.AZStackCore.chatConstants.CHAT_TYPE_GROUP,
-                    chatId: event.groupId,
-                });
-            },
             onMemberPressed: (event) => {
                 if (options && typeof options === 'object' && typeof options.onMemberPressed === 'function') {
                     options.onMemberPressed(event);
@@ -995,17 +984,6 @@ export class AZStackSdk extends AZStackBaseComponent {
                     }
 
                     this.pop();
-                },
-                onStartChatButtonPressed: (event) => {
-                    if (options && typeof options === 'object' && typeof options.onStartChatButtonPressed === 'function') {
-                        options.onStartChatButtonPressed(event);
-                        return;
-                    }
-
-                    this.startChat({
-                        chatType: this.AZStackCore.chatConstants.CHAT_TYPE_GROUP,
-                        chatId: event.groupId,
-                    });
                 },
                 onMemberPressed: (event) => {
                     if (options && typeof options === 'object' && typeof options.onMemberPressed === 'function') {

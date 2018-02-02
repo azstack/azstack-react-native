@@ -32,8 +32,6 @@ class GroupComponent extends React.Component {
             showGroupNameInputModel: false
         };
 
-        this.onStartChatButtonPressed = this.onStartChatButtonPressed.bind(this);
-        this.onEditNameButtonPressed = this.onEditNameButtonPressed.bind(this);
         this.onAddMemberButtonPressed = this.onAddMemberButtonPressed.bind(this);
         this.onLeaveGroupButtonPressed = this.onLeaveGroupButtonPressed.bind(this);
         this.onJoinButtonPressed = this.onJoinButtonPressed.bind(this);
@@ -142,14 +140,6 @@ class GroupComponent extends React.Component {
         this.getGroup();
     };
 
-    onStartChatButtonPressed() {
-        this.props.onStartChatButtonPressed({
-            groupId: this.props.groupId
-        });
-    };
-    onEditNameButtonPressed() {
-        this.setState({ showGroupNameInputModel: true });
-    };
     onAddMemberButtonPressed() {
         this.props.showSelectMembers({
             headerTitle: this.coreInstances.Language.getText('GROUP_SELECT_NEW_MEMBERS_TEXT'),
@@ -649,57 +639,22 @@ class GroupComponent extends React.Component {
                                 <View
                                     style={this.coreInstances.CustomStyle.getStyle('GROUP_INFO_BLOCK_STYLE')}
                                 >
-                                    <ChatAvatarBlockComponent
-                                        getCoreInstances={this.props.getCoreInstances}
-                                        containerStyle={this.coreInstances.CustomStyle.getStyle('GROUP_AVATAR_BLOCK_STYLE')}
-                                        chatType={this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_GROUP}
-                                        chatTarget={this.state.group}
-                                        textStyle={this.coreInstances.CustomStyle.getStyle('GROUP_AVATAR_TEXT_STYLE')}
-                                    />
                                     <View
-                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_DETAILS_BLOCK_STYLE')}
+                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_LEFT_BLOCK_STYLE')}
                                     >
-                                        <Text
-                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_NAME_TEXT_STYLE')}
-                                        >
-                                            {this.state.group.name}
-                                        </Text>
-                                        <Text
-                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_TYPE_TEXT_STYLE')}
-                                        >
-                                            {this.coreInstances.Language.getText(this.state.group.type === this.coreInstances.AZStackCore.groupConstants.GROUP_TYPE_PRIVATE ? 'GROUP_TYPE_PRIVATE' : 'GROUP_TYPE_PUBLIC')}
-                                        </Text>
-                                        <Text
-                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_MEMBERS_TEXT_STYLE')}
-                                        >
-                                            {`${this.state.group.members.length} `}
-                                            {this.coreInstances.Language.getText(this.state.group.members.length > 1 ? 'GROUP_MEMBER_MANY_TEXT' : 'GROUP_MEMBER_TEXT')}
-                                        </Text>
+
+                                        <ChatAvatarBlockComponent
+                                            getCoreInstances={this.props.getCoreInstances}
+                                            containerStyle={this.coreInstances.CustomStyle.getStyle('GROUP_AVATAR_BLOCK_STYLE')}
+                                            chatType={this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_GROUP}
+                                            chatTarget={this.state.group}
+                                            textStyle={this.coreInstances.CustomStyle.getStyle('GROUP_AVATAR_TEXT_STYLE')}
+                                        />
                                         {
                                             this.state.inGroup && (
                                                 <View
                                                     style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BLOCK_STYLE')}
                                                 >
-                                                    <TouchableOpacity
-                                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
-                                                        activeOpacity={0.5}
-                                                        onPress={this.onStartChatButtonPressed}
-                                                    >
-                                                        <Image
-                                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
-                                                            source={this.coreInstances.CustomStyle.getImage('IMAGE_START_CHAT')}
-                                                        />
-                                                    </TouchableOpacity>
-                                                    <TouchableOpacity
-                                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
-                                                        activeOpacity={0.5}
-                                                        onPress={this.onEditNameButtonPressed}
-                                                    >
-                                                        <Image
-                                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
-                                                            source={this.coreInstances.CustomStyle.getImage('IMAGE_PENCIL')}
-                                                        />
-                                                    </TouchableOpacity>
                                                     <TouchableOpacity
                                                         style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
                                                         activeOpacity={0.5}
@@ -742,6 +697,26 @@ class GroupComponent extends React.Component {
                                                 </View>
                                             )
                                         }
+                                    </View>
+                                    <View
+                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_RIGHT_BLOCK_STYLE')}
+                                    >
+                                        <Text
+                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_NAME_TEXT_STYLE')}
+                                        >
+                                            {this.state.group.name}
+                                        </Text>
+                                        <Text
+                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_TYPE_TEXT_STYLE')}
+                                        >
+                                            {this.coreInstances.Language.getText(this.state.group.type === this.coreInstances.AZStackCore.groupConstants.GROUP_TYPE_PRIVATE ? 'GROUP_TYPE_PRIVATE' : 'GROUP_TYPE_PUBLIC')}
+                                        </Text>
+                                        <Text
+                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_MEMBERS_TEXT_STYLE')}
+                                        >
+                                            {`${this.state.group.members.length} `}
+                                            {this.coreInstances.Language.getText(this.state.group.members.length > 1 ? 'GROUP_MEMBER_MANY_TEXT' : 'GROUP_MEMBER_TEXT')}
+                                        </Text>
                                     </View>
                                 </View>
                                 <View
