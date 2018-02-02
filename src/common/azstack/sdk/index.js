@@ -148,8 +148,8 @@ export class AZStackSdk extends AZStackBaseComponent {
     };
 
     /* AZStack functions */
-    connect() {
-        return this.AZStackCore.connect();
+    connect(options) {
+        return this.AZStackCore.connect(options);
     };
     reconnect() {
         return this.AZStackCore.reconnect();

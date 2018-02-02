@@ -97,6 +97,18 @@ export class AZStackCore {
         }
     };
 
+    // this will overwrite old, for connect with options
+    setAuthenticatingData(authenticatingData) {
+        if (authenticatingData && this.Validator.isObject(authenticatingData)) {
+            this.authenticatingData.appId = this.Validator.isString(authenticatingData.appId) ? authenticatingData.appId : '';
+            this.authenticatingData.publicKey = this.Validator.isString(authenticatingData.publicKey) ? authenticatingData.publicKey : '';
+            this.authenticatingData.azStackUserId = this.Validator.isString(authenticatingData.azStackUserId) ? authenticatingData.azStackUserId : '';
+            this.authenticatingData.userCredentials = this.Validator.isString(authenticatingData.userCredentials) ? authenticatingData.userCredentials : '';
+            this.authenticatingData.fullname = this.Validator.isString(authenticatingData.fullname) ? authenticatingData.fullname : '';
+            this.authenticatingData.namespace = this.Validator.isString(authenticatingData.namespace) ? authenticatingData.namespace : '';
+        }
+    }
+
     newUniqueId() {
         let currentTime = Math.round(new Date().getTime() / 1000);
         if (this.uniqueId >= currentTime) {
@@ -968,6 +980,10 @@ export class AZStackCore {
     };
 
     connect(options, callback) {
+        if(options && options.authenticatingData) {
+            // receive authenticatingData from options when connect
+            this.setAuthenticatingData(options.authenticatingData);
+        }
         return new Promise((resolve, reject) => {
 
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
