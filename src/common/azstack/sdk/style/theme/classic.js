@@ -876,8 +876,8 @@ export const GROUP_NAME_INPUT_STYLE = {
     borderRadius: 5,
     paddingBottom: 5,
     marginRight: 5,
-    lineHeight: 25,
-    fontSize: 20,
+    height: 30,
+    fontSize: 15,
     fontWeight: '400',
     color: '#2F353B'
 };
