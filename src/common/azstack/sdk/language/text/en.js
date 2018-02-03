@@ -86,6 +86,7 @@ export const CONVERSATIONS_SEARCH_PLACEHOLDER_TEXT = 'Search...';
 export const CONVERSATIONS_LIST_EMPTY_TEXT = 'No Conversation';
 export const CONVERSATIONS_LIST_SELECT_MEMBERS_TO_CHAT_TEXT = 'Select members to chat';
 export const CONVERSATIONS_LIST_NEW_GROUP_TO_CHAT_TEXT = 'Create group to chat';
+export const CONVERSATIONS_LIST_NEW_GROUP_TO_CHAT_ERROR_TEXT = 'Create group to chat fail, please try again later';
 
 
 export const CHAT_HEADER_TITLE_TEXT = 'Chat';
@@ -119,3 +120,10 @@ export const SELECT_MEMBERS_UNSELECTED_WARNING_TEXT = 'Please select any member'
 
 export const SELECT_MEMBER_SEARCH_PLACEHOLDER_TEXT = 'Search...';
 export const SELECT_MEMBER_EMPTY_TEXT = 'No Member';
+
+export const NEW_GROUP_NAME_LABEL_TEXT = 'Group name';
+export const NEW_GROUP_NAME_INPUT_PLACEHOLDER_TEXT = 'Group name';
+export const NEW_GROUP_TYPE_LABEL_TEXT = 'Group type';
+export const NEW_GROUP_TYPE_SELECT_DEFAULT_TEXT = 'Select group type';
+export const NEW_GROUP_NAME_EMPTY_ERROR = 'Group name can\'t be left blank';
+export const NEW_GROUP_TYPE_EMPTY_ERROR = 'Group type can\'t be left blank';

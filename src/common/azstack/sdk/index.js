@@ -750,11 +750,19 @@ export class AZStackSdk extends AZStackBaseComponent {
 
                 this.pop();
             },
-            onDone: (event) => {
-                if (options && typeof options === 'object' && typeof options.onDone === 'function') {
-                    options.onDone(event);
+            onInputDone: (event) => {
+                if (options && typeof options === 'object' && typeof options.onInputDone === 'function') {
+                    options.onInputDone(event);
                     return;
                 }
+            },
+            onDoneClose: () => {
+                if (options && typeof options === 'object' && typeof options.onDoneClose === 'function') {
+                    options.onDoneClose();
+                    return;
+                }
+
+                this.pop();
             }
         });
     };

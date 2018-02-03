@@ -130,7 +130,7 @@ class SelectMembersComponent extends React.Component {
     onDoneButtonPressed() {
         if (this.state.selectedMembers.length === 0) {
             Alert.alert(
-                this.coreInstances.Language.getText('ALERT_TITLE_WARNING_TEXT'),
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
                 this.coreInstances.Language.getText('SELECT_MEMBERS_UNSELECTED_WARNING_TEXT'),
                 [
                     { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }

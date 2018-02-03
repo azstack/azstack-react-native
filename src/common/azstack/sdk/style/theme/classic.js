@@ -873,9 +873,9 @@ export const GROUP_NAME_INPUT_STYLE = {
     borderStyle: 'solid',
     borderBottomWidth: 1,
     borderBottomColor: '#F2784B',
-    borderRadius: 5,
+    paddingHorizontal: 0,
     paddingBottom: 5,
-    marginRight: 5,
+    marginHorizontal: 5,
     height: 30,
     fontSize: 15,
     fontWeight: '400',
@@ -1120,4 +1120,80 @@ export const SELECT_MEMBER_SELECTED_BLOCK_STYLE = {
 export const SELECT_MEMBER_SELECTED_IMAGE_STYLE = {
     width: 35,
     height: 35
+};
+
+export const NEW_GROUP_HEADER_BLOCK_STYLE = {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderStyle: 'solid',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E1E5EC',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row'
+};
+export const NEW_GROUP_HEADER_BACK_BUTTON_STYLE = {
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'flex-start'
+};
+export const NEW_GROUP_HEADER_BACK_BUTTON_IMAGE_STYLE = {
+    width: 25,
+    height: 25
+};
+export const NEW_GROUP_HEADER_TITLE_TEXT_STYLE = {
+    flex: 1,
+    fontSize: 20,
+    fontWeight: '400',
+    lineHeight: 25,
+    color: '#2F353B',
+    textAlign: 'center'
+};
+export const NEW_GROUP_HEADER_DONE_BUTTON_STYLE = {
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'flex-end'
+};
+export const NEW_GROUP_HEADER_DONE_BUTTON_IMAGE_STYLE = {
+    width: 25,
+    height: 25
+};
+
+export const NEW_GROUP_BLOCK_STYLE = {
+    paddingVertical: 10,
+    paddingHorizontal: 15
+};
+export const NEW_GROUP_LABEL_TEXT_STYLE = {
+    fontSize: 16,
+    fontWeight: '400',
+    lineHeight: 20,
+    color: '#2F353B',
+    marginTop: 15
+};
+export const NEW_GROUP_GROUP_NAME_INPUT_STYLE = {
+    borderStyle: 'solid',
+    borderBottomWidth: 1,
+    borderBottomColor: '#F2784B',
+    paddingBottom: 5,
+    paddingHorizontal: 0,
+    marginHorizontal: 10,
+    fontSize: 15,
+    lineHeight: 20,
+    fontWeight: '400',
+    color: '#2F353B'
+};
+export const NEW_GROUP_GROUP_NAME_INPUT_PROPS_STYLE = {
+    underlineColorAndroid: 'transparent',
+    placeholderTextColor: '#E1E5EC'
+};
+export const NEW_GROUP_GROUP_TYPE_SELECT_STYLE = {
+
+};
+export const NEW_GROUP_GROUP_TYPE_ITEM_STYLE = {
+    fontSize: 15,
+    fontWeight: '400',
+    lineHeight: 15,
+    color: '#2F353B'
 };
