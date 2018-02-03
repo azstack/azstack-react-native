@@ -284,10 +284,7 @@ class VideoCallComponent extends React.Component {
 				</View>
 				<View>
 					<View style={{justifyContent: 'center', alignItems: 'center'}}>
-						<Image source={bg_call_avatar} />
-					</View>
-					<View style={{position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
-						<Image source={ic_avatar} />
+						<Pulse style={{justifyContent: 'center', alignItems: 'center',}} color={'#48D2A0'} numPulses={7} diameter={250} duration={850} speed={34} image={{source:ic_avatar, style:{width: 100, height: 100, borderRadius: 50,}}} />
 					</View>
 				</View>
 				<View style={{ flex: 0.3, justifyContent: 'flex-end', paddingBottom: 60}}>
