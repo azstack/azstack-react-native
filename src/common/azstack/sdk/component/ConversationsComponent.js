@@ -385,12 +385,23 @@ class ConversationsComponent extends React.Component {
             onSelectDone: (event) => {
                 let selectedMembers = event.selected;
                 if (selectedMembers.length === 1) {
-                    this.props.onNewChat({
-                        chatType: this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_USER,
-                        chatId: selectedMembers[0].userId
-                    })
+                    setTimeout(() => {
+                        this.props.onNewChat({
+                            chatType: this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_USER,
+                            chatId: selectedMembers[0].userId
+                        });
+                    }, 0);
                     return;
                 }
+
+                setTimeout(() => {
+                    this.props.showNewGroup({
+                        headerTitle: this.coreInstances.Language.getText('CONVERSATIONS_LIST_NEW_GROUP_TO_CHAT_TEXT'),
+                        onDone: (event) => {
+
+                        }
+                    });
+                }, 0);
             }
         });
     };

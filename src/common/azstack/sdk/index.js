@@ -577,6 +577,9 @@ export class AZStackSdk extends AZStackBaseComponent {
             showSelectMembers: (event) => {
                 this.showSelectMembers(event);
             },
+            showNewGroup: (event) => {
+                this.showNewGroup(event);
+            },
             onConversationPressed: (event) => {
                 if (options && typeof options === 'object' && typeof options.onConversationPressed === 'function') {
                     options.onConversationPressed(event);
@@ -594,12 +597,10 @@ export class AZStackSdk extends AZStackBaseComponent {
                     return;
                 }
 
-                setTimeout(() => {
-                    this.startChat({
-                        chatType: event.chatType,
-                        chatId: event.chatId,
-                    });
-                }, 0);
+                this.startChat({
+                    chatType: event.chatType,
+                    chatId: event.chatId,
+                });
             }
         });
     };
@@ -738,6 +739,25 @@ export class AZStackSdk extends AZStackBaseComponent {
             }
         });
     };
+    showNewGroup(options) {
+        this.navigate(this.getNavigation().NewGroupComponent, {
+            ...options,
+            onBackButtonPressed: () => {
+                if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                    options.onBackButtonPressed();
+                    return;
+                }
+
+                this.pop();
+            },
+            onDone: (event) => {
+                if (options && typeof options === 'object' && typeof options.onDone === 'function') {
+                    options.onDone(event);
+                    return;
+                }
+            }
+        });
+    };
 
     UIContacts(options) {
         return this.renderScreen(
@@ -826,6 +846,9 @@ export class AZStackSdk extends AZStackBaseComponent {
                 },
                 showSelectMembers: (event) => {
                     this.showSelectMembers(event);
+                },
+                showNewGroup: (event) => {
+                    this.showNewGroup(event);
                 },
                 onConversationPressed: (event) => {
                     if (options && typeof options === 'object' && typeof options.onConversationPressed === 'function') {
