@@ -246,6 +246,11 @@ class Event {
             this.preparingMessages[newMessage.msgId] = newMessage;
             Promise.all([
                 new Promise((resolve, reject) => {
+
+                    if(newMessage.senderId === this.AZStackCore.authenticatedUser.userId) {
+                        return resolve(null);
+                    }
+
                     this.AZStackCore.changeMessageStatus({
                         chatType: newMessage.chatType,
                         chatId: newMessage.chatId,
@@ -296,6 +301,11 @@ class Event {
             newMessage.invited.invites = [];
             Promise.all([
                 new Promise((resolve, reject) => {
+
+                    if(newMessage.senderId === this.AZStackCore.authenticatedUser.userId) {
+                        return resolve(null);
+                    }
+
                     this.AZStackCore.changeMessageStatus({
                         chatType: newMessage.chatType,
                         chatId: newMessage.chatId,
@@ -360,6 +370,11 @@ class Event {
             this.preparingMessages[newMessage.msgId] = newMessage;
             Promise.all([
                 new Promise((resolve, reject) => {
+
+                    if(newMessage.senderId === this.AZStackCore.authenticatedUser.userId) {
+                        return resolve(null);
+                    }
+
                     this.AZStackCore.changeMessageStatus({
                         chatType: newMessage.chatType,
                         chatId: newMessage.chatId,
@@ -435,6 +450,11 @@ class Event {
             this.preparingMessages[newMessage.msgId] = newMessage;
             Promise.all([
                 new Promise((resolve, reject) => {
+
+                    if(newMessage.senderId === this.AZStackCore.authenticatedUser.userId) {
+                        return resolve(null);
+                    }
+
                     this.AZStackCore.changeMessageStatus({
                         chatType: newMessage.chatType,
                         chatId: newMessage.chatId,
@@ -484,6 +504,11 @@ class Event {
             this.preparingMessages[newMessage.msgId] = newMessage;
             Promise.all([
                 new Promise((resolve, reject) => {
+
+                    if(newMessage.senderId === this.AZStackCore.authenticatedUser.userId) {
+                        return resolve(null);
+                    }
+
                     this.AZStackCore.changeMessageStatus({
                         chatType: newMessage.chatType,
                         chatId: newMessage.chatId,
@@ -544,6 +569,11 @@ class Event {
             this.preparingMessages[newMessage.msgId] = newMessage;
             Promise.all([
                 new Promise((resolve, reject) => {
+
+                    if(newMessage.senderId === this.AZStackCore.authenticatedUser.userId) {
+                        return resolve(null);
+                    }
+
                     this.AZStackCore.changeMessageStatus({
                         chatType: newMessage.chatType,
                         chatId: newMessage.chatId,
