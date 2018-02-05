@@ -275,7 +275,9 @@ class AZStackCoreExample extends React.Component {
             sticker: {
                 name: '002.png',
                 catId: 1,
-                url: 'http://azstack.com/api/public_html/sticker/1/002.png'
+                url: 'https://az1.azstack.com/sticker/1/002.png',
+                width: 256,
+                height: 256
             }
         }).then(() => { }).catch(() => { });
     };
@@ -287,7 +289,9 @@ class AZStackCoreExample extends React.Component {
                 name: 'logo.png',
                 length: 5183,
                 type: this.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE,
-                url: 'https://azstack.com/static/images/logo.png'
+                url: 'https://azstack.com/static/images/logo.png',
+                width: 171,
+                height: 49
             }
         }).then(() => { }).catch(() => { });
     };
@@ -305,7 +309,9 @@ class AZStackCoreExample extends React.Component {
             sticker: {
                 name: '002.png',
                 catId: 1,
-                url: 'http://azstack.com/api/public_html/sticker/1/002.png'
+                url: 'https://az1.azstack.com/sticker/1/002.png',
+                width: 256,
+                height: 256
             }
         }).then(() => { }).catch(() => { });
     };
@@ -317,7 +323,9 @@ class AZStackCoreExample extends React.Component {
                 name: 'logo.png',
                 length: 5183,
                 type: this.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE,
-                url: 'https://azstack.com/static/images/logo.png'
+                url: 'https://azstack.com/static/images/logo.png',
+                width: 171,
+                height: 49
             }
         }).then(() => { }).catch(() => { });
     };

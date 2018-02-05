@@ -2023,6 +2023,24 @@ export class AZStackCore {
                     required: true,
                     dataType: this.dataTypes.DATA_TYPE_URL,
                     data: options.file.url
+                }, {
+                    name: 'width',
+                    required: false,
+                    dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                    data: options.chatId,
+                    notEqual: 0
+                }, {
+                    name: 'height',
+                    required: false,
+                    dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                    data: options.chatId,
+                    notEqual: 0
+                }, {
+                    name: 'duration',
+                    required: false,
+                    dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                    data: options.chatId,
+                    notEqual: 0
                 }]);
                 if (dataErrorMessage) {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {

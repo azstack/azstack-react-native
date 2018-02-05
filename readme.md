@@ -1385,11 +1385,16 @@ this.AZStackCore.onGetUnreadMessagesReturn({
 >       - name: name
 >       - catId: catId
 >       - url: url
+>       - width: width
+>       - height: height
 >   - file: file of message
 >       - name: name
 >       - length: length
 >       - type: type
 >       - url: url
+>       - width: width
+>       - height: height
+>       - duration: duration
 >   - createdGroup: created group
 >       - type: group type
 >       - groupId: id of group
@@ -1487,11 +1492,16 @@ this.AZStackCore.getModifiedMessages({
 >       - name: name
 >       - catId: catId
 >       - url: url
+>       - width: width
+>       - height: height
 >   - file: file of message
 >       - name: name
 >       - length: length
 >       - type: type
 >       - url: url
+>       - width: width
+>       - height: height
+>       - duration: duration
 >   - createdGroup: created group
 >       - type: group type
 >       - groupId: id of group
@@ -1582,6 +1592,9 @@ this.AZStackCore.getModifiedFiles({
 >       - length: length
 >       - type: type
 >       - url: url
+>       - width: width
+>       - height: height
+>       - duration: duration
 
 ### 3.7.2. Sending
 
@@ -1595,13 +1608,17 @@ this.AZStackCore.newMessage({
     sticker: {
         name: 'name',
         catId: 1,
-        url: 'http://azstack.com/api/public_html/sticker/1/002.png'
+        url: 'http://azstack.com/api/public_html/sticker/1/002.png',
+        width: 256,
+        height: 256
     },
     file: {
         name: 'logo.png',
         length: 5183,
         type: this.chatConstants.MESSAGE_FILE_TYPE_IMAGE,
-        url: 'https://azstack.com/static/images/logo.png'
+        url: 'https://azstack.com/static/images/logo.png',
+        width: 171,
+        height: 49
     }
 }, (error, result) => {
     console.log(error);
@@ -1619,13 +1636,17 @@ this.AZStackCore.newMessage({
     sticker: {
         name: 'name',
         catId: 1,
-        url: 'http://azstack.com/api/public_html/sticker/1/002.png'
+        url: 'http://azstack.com/api/public_html/sticker/1/002.png',
+        width: 256,
+        height: 256
     },
     file: {
         name: 'logo.png',
         length: 5183,
         type: this.chatConstants.MESSAGE_FILE_TYPE_IMAGE,
-        url: 'https://azstack.com/static/images/logo.png'
+        url: 'https://azstack.com/static/images/logo.png',
+        width: 171,
+        height: 49
     }
 }).then((result) => {
     console.log(result);
@@ -1647,13 +1668,17 @@ this.AZStackCore.newMessage({
     sticker: {
         name: 'name',
         catId: 1,
-        url: 'http://azstack.com/api/public_html/sticker/1/002.png'
+        url: 'http://azstack.com/api/public_html/sticker/1/002.png',
+        width: 256,
+        height: 256
     },
     file: {
         name: 'logo.png',
         length: 5183,
         type: this.chatConstants.MESSAGE_FILE_TYPE_IMAGE,
-        url: 'https://azstack.com/static/images/logo.png'
+        url: 'https://azstack.com/static/images/logo.png',
+        width: 171,
+        height: 49
     }
 });
 ```
@@ -1665,11 +1690,16 @@ this.AZStackCore.newMessage({
 >   - name(required): name
 >   - catId(required): catId
 >   - url(required): url
+>   - width(optional): width
+>   - height(optional): height
 > - file(optional): file of message
 >   - name(required): name
 >   - length(required): length
 >   - type(required): type
 >   - url(required): url
+>   - width(optional): width
+>   - height(optional): height
+>   - duration(optional): duration
 
 #### error:
 > - code: error code
@@ -1691,11 +1721,16 @@ this.AZStackCore.newMessage({
 >   - name: name
 >   - catId: catId
 >   - url: url
+>   - width: width
+>   - height: height
 > - file: file of message
 >   - name: name
 >   - length: length
 >   - type: type
 >   - url: url
+>   - width: width
+>   - height: height
+>   - duration: duration
 
 #### 3.7.2.2. Change message status
 
@@ -1882,11 +1917,16 @@ this.AZStackCore.Delegates.onHasNewMessage = (error, result) => {
 >   - name: name
 >   - catId: catId
 >   - url: url
+>   - width: width
+>   - height: height
 > - file: file of message
 >   - name: name
 >   - length: length
 >   - type: type
 >   - url: url
+>   - width: width
+>   - height: height
+>   - duration: duration
 
 #### 3.7.3.2. On message from me
 
@@ -1916,11 +1956,16 @@ this.AZStackCore.Delegates.onMessageFromMe = (error, result) => {
 >   - name: name
 >   - catId: catId
 >   - url: url
+>   - width: width
+>   - height: height
 > - file: file of message
 >   - name: name
 >   - length: length
 >   - type: type
 >   - url: url
+>   - width: width
+>   - height: height
+>   - duration: duration
 
 #### 3.7.3.3. On message status changed
 

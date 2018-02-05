@@ -96,7 +96,9 @@ class Message {
                         unreadMessage.sticker = {
                             name: message.imgName,
                             catId: message.catId,
-                            url: message.url
+                            url: message.url,
+                            width: message.width,
+                            height: message.height
                         };
                         break;
                     case this.serviceTypes.MESSAGE_WITH_USER_TYPE_FILE:
@@ -105,7 +107,10 @@ class Message {
                             name: message.fileName,
                             length: message.fileLength,
                             type: message.type,
-                            url: message.url
+                            url: message.url,
+                            width: message.width,
+                            height: message.height,
+                            duration: message.duration
                         };
                         break;
                     case this.serviceTypes.MESSAGE_HAS_NEW_WITH_GROUP:
@@ -117,7 +122,9 @@ class Message {
                             unreadMessage.sticker = {
                                 name: message.imgName,
                                 catId: message.catId,
-                                url: message.url
+                                url: message.url,
+                                width: message.width,
+                                height: message.height
                             };
                         } else if (message.fileName) {
                             unreadMessage.type = this.chatConstants.MESSAGE_TYPE_FILE;
@@ -125,7 +132,10 @@ class Message {
                                 name: message.fileName,
                                 length: message.fileLength,
                                 type: message.type,
-                                url: message.url
+                                url: message.url,
+                                width: message.width,
+                                height: message.height,
+                                duration: message.duration
                             };
                         }
                         break;
@@ -271,7 +281,9 @@ class Message {
                         modifiedMessage.sticker = {
                             name: message.imgName,
                             catId: message.catId,
-                            url: message.url
+                            url: message.url,
+                            width: message.width,
+                            height: message.height
                         };
                         break;
                     case this.serviceTypes.MESSAGE_WITH_USER_TYPE_FILE:
@@ -280,7 +292,10 @@ class Message {
                             name: message.fileName,
                             length: message.fileLength,
                             type: message.type,
-                            url: message.url
+                            url: message.url,
+                            width: message.width,
+                            height: message.height,
+                            duration: message.duration
                         };
                         break;
                     case this.serviceTypes.MESSAGE_HAS_NEW_WITH_GROUP:
@@ -292,7 +307,9 @@ class Message {
                             modifiedMessage.sticker = {
                                 name: message.imgName,
                                 catId: message.catId,
-                                url: message.url
+                                url: message.url,
+                                width: message.width,
+                                height: message.height
                             };
                         } else if (message.fileName) {
                             modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_FILE;
@@ -300,7 +317,10 @@ class Message {
                                 name: message.fileName,
                                 length: message.fileLength,
                                 type: message.type,
-                                url: message.url
+                                url: message.url,
+                                width: message.width,
+                                height: message.height,
+                                duration: message.duration
                             };
                         }
                         break;
@@ -435,7 +455,10 @@ class Message {
                         name: file.fileName,
                         length: file.fileLength,
                         type: file.type,
-                        url: file.url
+                        url: file.url,
+                        width: file.width,
+                        height: file.height,
+                        duration: file.duration
                     }
                 }
                 modifiedfiles.list.push(modifiedfile);
@@ -481,7 +504,9 @@ class Message {
                         to: options.chatId,
                         imgName: options.sticker.name,
                         catId: options.sticker.catId,
-                        url: options.sticker.url
+                        url: options.sticker.url,
+                        width: options.sticker.width,
+                        height: options.sticker.height
                     };
                     let currentTimeStamp = new Date().getTime();
                     newMessageObj = {
@@ -498,7 +523,9 @@ class Message {
                         sticker: {
                             name: options.sticker.name,
                             catId: options.sticker.catId,
-                            url: options.sticker.url
+                            url: options.sticker.url,
+                            width: options.sticker.width,
+                            height: options.sticker.height
                         }
                     };
                 } else if (options.file) {
@@ -509,7 +536,10 @@ class Message {
                         fileName: options.file.name,
                         fileLength: options.file.length,
                         type: options.file.type,
-                        url: options.file.url
+                        url: options.file.url,
+                        width: options.file.width,
+                        height: options.file.height,
+                        duration: options.file.duration
                     };
                     let currentTimeStamp = new Date().getTime();
                     newMessageObj = {
@@ -527,7 +557,10 @@ class Message {
                             name: options.file.name,
                             length: options.file.length,
                             type: options.file.type,
-                            url: options.file.url
+                            url: options.file.url,
+                            width: options.file.width,
+                            height: options.file.height,
+                            duration: options.file.duration
                         }
                     };
                 }
@@ -561,7 +594,9 @@ class Message {
                         group: options.chatId,
                         imgName: options.sticker.name,
                         catId: options.sticker.catId,
-                        url: options.sticker.url
+                        url: options.sticker.url,
+                        width: options.sticker.width,
+                        height: options.sticker.height
                     };
                     let currentTimeStamp = new Date().getTime();
                     newMessageObj = {
@@ -578,7 +613,9 @@ class Message {
                         sticker: {
                             name: options.sticker.name,
                             catId: options.sticker.catId,
-                            url: options.sticker.url
+                            url: options.sticker.url,
+                            width: options.sticker.width,
+                            height: options.sticker.height
                         }
                     };
                 } else if (options.file) {
@@ -589,7 +626,10 @@ class Message {
                         fileName: options.file.name,
                         fileLength: options.file.length,
                         type: options.file.type,
-                        url: options.file.url
+                        url: options.file.url,
+                        width: options.file.width,
+                        height: options.file.height,
+                        duration: options.file.duration
                     };
                     let currentTimeStamp = new Date().getTime();
                     newMessageObj = {
@@ -607,7 +647,10 @@ class Message {
                             name: options.file.name,
                             length: options.file.length,
                             type: options.file.type,
-                            url: options.file.url
+                            url: options.file.url,
+                            width: options.file.width,
+                            height: options.file.height,
+                            duration: options.file.duration
                         }
                     };
                 }
@@ -693,7 +736,9 @@ class Message {
                         sticker: {
                             name: options.body.imgName,
                             catId: options.body.catId,
-                            url: options.body.url
+                            url: options.body.url,
+                            width: options.body.width,
+                            height: options.body.height
                         }
                     };
                 } else if (options.messageType === this.chatConstants.MESSAGE_TYPE_FILE) {
@@ -712,7 +757,10 @@ class Message {
                             name: options.body.fileName,
                             length: options.body.fileLength,
                             type: options.body.type,
-                            url: options.body.url
+                            url: options.body.url,
+                            width: options.body.width,
+                            height: options.body.height,
+                            duration: options.body.duration
                         }
                     };
                 }
@@ -747,7 +795,9 @@ class Message {
                         sticker: {
                             name: options.body.imgName,
                             catId: options.body.catId,
-                            url: options.body.url
+                            url: options.body.url,
+                            width: options.body.width,
+                            height: options.body.height
                         }
                     };
                 } else if (options.body.fileName) {
@@ -766,7 +816,10 @@ class Message {
                             name: options.body.fileName,
                             length: options.body.fileLength,
                             type: options.body.type,
-                            url: options.body.url
+                            url: options.body.url,
+                            width: options.body.width,
+                            height: options.body.height,
+                            duration: options.body.duration
                         }
                     };
                 }
@@ -829,7 +882,9 @@ class Message {
                         sticker: {
                             name: options.body.imgName,
                             catId: options.body.catId,
-                            url: options.body.url
+                            url: options.body.url,
+                            width: options.body.width,
+                            height: options.body.height
                         }
                     };
                 } else if (options.body.fileName) {
@@ -848,7 +903,10 @@ class Message {
                             name: options.body.fileName,
                             length: options.body.fileLength,
                             type: options.body.type,
-                            url: options.body.url
+                            url: options.body.url,
+                            width: options.body.width,
+                            height: options.body.height,
+                            duration: options.body.duration
                         }
                     };
                 }
@@ -882,7 +940,9 @@ class Message {
                         sticker: {
                             name: options.body.imgName,
                             catId: options.body.catId,
-                            url: options.body.url
+                            url: options.body.url,
+                            width: options.body.width,
+                            height: options.body.height
                         }
                     };
                 } else if (options.body.fileName) {
@@ -901,7 +961,10 @@ class Message {
                             name: options.body.fileName,
                             length: options.body.fileLength,
                             type: options.body.type,
-                            url: options.body.url
+                            url: options.body.url,
+                            width: options.body.width,
+                            height: options.body.height,
+                            duration: options.body.duration
                         }
                     };
                 }
