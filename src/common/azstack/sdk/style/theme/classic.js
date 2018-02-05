@@ -429,11 +429,10 @@ export const CHAT_INPUT_DISABLED_BLOCK_STYLE = {
     alignItems: 'center'
 };
 export const CHAT_INPUT_DISABLED_TEXT_STYLE = {
-    flex: 1,
     fontSize: 15,
     lineHeight: 20,
     fontWeight: '500',
-    color: '#fff',
+    color: '#fff'
 };
 
 export const CHAT_INPUT_BLOCK_STYLE = {

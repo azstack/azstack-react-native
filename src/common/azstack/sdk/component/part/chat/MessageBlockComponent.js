@@ -400,7 +400,7 @@ class MessageBlockComponent extends React.Component {
                                                     <Text
                                                         style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_DOWNLOAD_INFO_SIZE_TEXT_STYLE')}
                                                     >
-                                                        {this.coreInstances.FileConverter.sizeAsString(this.props.message.file.length)}
+                                                        {this.coreInstances.FileConverter.sizeAsString(this.props.message.file.length, true)}
                                                     </Text>
                                                 </View>
                                                 <View

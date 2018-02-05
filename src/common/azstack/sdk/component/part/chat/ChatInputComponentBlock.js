@@ -215,7 +215,7 @@ class ChatInputComponentBlock extends React.Component {
                 if (selectedImage.size > this.coreInstances.limitConstants.LIMIT_MAX_FILE_SIZE) {
                     Alert.alert(
                         this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
-                        `${this.coreInstances.Language.getText('CHAT_INPUT_FILE_SIZE_TOO_BIG_ERROR_TEXT')} ${this.coreInstances.FileConverter.sizeAsString(this.coreInstances.limitConstants.LIMIT_MAX_FILE_SIZE)}`,
+                        `${this.coreInstances.Language.getText('CHAT_INPUT_FILE_SIZE_TOO_BIG_ERROR_TEXT')} ${this.coreInstances.FileConverter.sizeAsString(this.coreInstances.limitConstants.LIMIT_MAX_FILE_SIZE, true)}`,
                         [
                             { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
                         ],
@@ -224,6 +224,8 @@ class ChatInputComponentBlock extends React.Component {
                     return;
                 }
             }
+
+            
         }).catch((error) => {
             Alert.alert(
                 this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
