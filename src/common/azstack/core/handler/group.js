@@ -812,7 +812,8 @@ class Group {
             const getDetailsGroupPacket = {
                 service: this.serviceTypes.GROUP_GET_DETAILS,
                 body: JSON.stringify({
-                    group: options.groupId
+                    group: options.groupId,
+                    requestId: options.requestId
                 })
             };
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
@@ -864,7 +865,7 @@ class Group {
                     message: 'Server response with error, get details group fail'
                 });
                 reject({
-                    groupId: body.group,
+                    requestId: body.requestId,
                     code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
                     message: 'Server response with error, get details group fail'
                 });
@@ -872,6 +873,7 @@ class Group {
             }
 
             resolve({
+                requestId: body.requestId,
                 type: body.type,
                 groupId: body.group,
                 name: body.name,

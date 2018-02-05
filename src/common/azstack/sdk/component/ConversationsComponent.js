@@ -31,7 +31,6 @@ class ConversationsComponent extends React.Component {
         };
 
         this.conversationsListOffset = 0;
-        this.onCreatingGroup = false;
 
         this.state = {
             conversations: [],
@@ -400,15 +399,16 @@ class ConversationsComponent extends React.Component {
                     this.props.showNewGroup({
                         headerTitle: this.coreInstances.Language.getText('CONVERSATIONS_LIST_NEW_GROUP_TO_CHAT_TEXT'),
                         onInputDone: (event) => {
-                            this.onCreatingGroup = true;
                             this.coreInstances.AZStackCore.createGroup({
                                 type: event.groupType,
                                 name: event.groupName,
                                 memberIds: selectedMembers.map((member) => { return member.userId })
                             }).then((result) => {
-                                
+                                this.props.onNewChat({
+                                    chatType: this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_GROUP,
+                                    chatId: result.groupId
+                                });
                             }).catch((error) => {
-                                this.onCreatingGroup = false;
                                 Alert.alert(
                                     this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
                                     this.coreInstances.Language.getText('CONVERSATIONS_LIST_NEW_GROUP_TO_CHAT_ERROR_TEXT'),
@@ -641,13 +641,6 @@ class ConversationsComponent extends React.Component {
                 return a.lastMessage.created > b.lastMessage.created ? -1 : 1
             })
         });
-        if(this.onCreatingGroup) {
-            this.onCreatingGroup = false;
-            this.props.onNewChat({
-                chatType: this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_GROUP,
-                chatId: newMessage.chatId
-            });
-        }
     };
     onGroupInvited(newMessage) {
         let foundConversation = false;

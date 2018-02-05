@@ -752,11 +752,13 @@ export class AZStackCore {
 
             case this.serviceTypes.GROUP_GET_DETAILS:
                 this.Group.receiveGroupDetailsGetResult(body).then((result) => {
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, result.groupId, null, result);
+                    let requestKey = result.requestId;
+                    delete result.requestId;
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, requestKey, null, result);
                 }).catch((error) => {
-                    let groupId = error.groupId;
-                    delete error.groupId;
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, groupId, error, null);
+                    let requestKey = error.requestId;
+                    delete error.requestId;
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, requestKey, error, null);
                 });
                 break;
             case this.serviceTypes.GROUP_GET_LIST_PRIVATE:
@@ -980,7 +982,7 @@ export class AZStackCore {
     };
 
     connect(options, callback) {
-        if(options && options.authenticatingData) {
+        if (options && options.authenticatingData) {
             // receive authenticatingData from options when connect
             this.setAuthenticatingData(options.authenticatingData);
         }
@@ -2798,6 +2800,9 @@ export class AZStackCore {
 
     getDetailsGroup(options, callback) {
         return new Promise((resolve, reject) => {
+
+            const requestKey = this.Tool.generateRequestPurpose();
+
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Get details group'
             });
@@ -2805,8 +2810,6 @@ export class AZStackCore {
                 message: 'Get details group params',
                 payload: options
             });
-
-            let requestKey = this.Validator.isObject(options) ? options.groupId : this.Tool.generateRequestPurpose();
 
             this.addUncall(this.uncallConstants.UNCALL_KEY_GROUP_GET_DETAILS, requestKey, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_GROUP_GET_DETAILS_RETURN);
 
@@ -2839,9 +2842,9 @@ export class AZStackCore {
                 return;
             }
 
-            this.newUniqueId();
             this.Group.sendGroupGetDetails({
-                groupId: options.groupId
+                groupId: options.groupId,
+                requestId: requestKey
             }).then((result) => {
 
             }).catch((error) => {
