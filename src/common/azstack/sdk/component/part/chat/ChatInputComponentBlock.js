@@ -209,7 +209,6 @@ class ChatInputComponentBlock extends React.Component {
             multiple: true,
             mediaType: 'photo'
         }).then((selectedImages) => {
-            console.log(selectedImages);
             let sendingImages = [];
             for (let i = 0; i < selectedImages.length; i++) {
                 let selectedImage = selectedImages[i];
@@ -246,17 +245,79 @@ class ChatInputComponentBlock extends React.Component {
                         type: this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE,
                         url: selectedImage.path,
                         width: selectedImage.width,
-                        height: selectedImage.height
+                        height: selectedImage.height,
+                        mimeType: selectedImage.mime
                     }
                 });
             }
 
             sendingImages.map((sendingImage) => {
-                this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: sendingImage });
+                this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...sendingImage } });
             });
+            Promise.all(
+                sendingImages.map((sendingImage) => {
+                    return new Promise((resolve, reject) => {
+                        const data = new FormData();
+                        data.append('uid', this.coreInstances.AZStackCore.authenticatedUser.azStackUserId);
+                        data.append('msgId', sendingImage.msgId);
+                        data.append('hash', this.coreInstances.FileConverter.MD5(`${sendingImage.msgId}abc_d123_##$$${this.coreInstances.AZStackCore.authenticatedUser.azStackUserId}`))
+                        data.append('fileToUpload', {
+                            uri: sendingImage.file.url,
+                            type: sendingImage.file.mimeType,
+                            name: sendingImage.file.name
+                        });
+                        fetch(this.coreInstances.linkConstants.LINK_API_URL_UPLOAD_FILE, {
+                            method: 'post',
+                            body: data
+                        }).then((response) => response.json()).then((responseJson) => {
+                            if (responseJson.status === 1000) {
+                                sendingImage.file.url = responseJson.data.replace('http://', 'https://');
+                            } else {
+                                sendingImage.status = -1;
+                            }
+                            resolve(null);
+                        }).catch((error) => {
+                            sendingImage.status = -1;
+                            resolve(null);
+                        });;
+                    });
+                })
+            ).then(() => {
+                sendingImages.map((sendingImage) => {
+                    if (sendingImage.status === -1) {
+                        this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...sendingImage } });
+                        return;
+                    }
+                    this.coreInstances.AZStackCore.newMessage({
+                        chatType: this.props.chatType,
+                        chatId: this.props.chatId,
+                        msgId: sendingImage.msgId,
+                        file: {
+                            name: sendingImage.file.name,
+                            length: sendingImage.file.length,
+                            type: sendingImage.file.type,
+                            url: sendingImage.file.url,
+                            width: sendingImage.file.width,
+                            height: sendingImage.file.height
+                        }
+                    }).then((result) => {
+
+                    }).catch((error) => {
+                        sendingImage.status = -1;
+                        this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...sendingImage } });
+                        Alert.alert(
+                            this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                            this.coreInstances.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
+                            [
+                                { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                            ],
+                            { cancelable: true }
+                        );
+                    });
+                });
+            }).catch((error) => { });
 
         }).catch((error) => {
-            console.log(error);
             Alert.alert(
                 this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
                 this.coreInstances.Language.getText('ALERT_GENERAL_ERROR_TEXT'),

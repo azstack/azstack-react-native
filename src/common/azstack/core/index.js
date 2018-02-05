@@ -1900,7 +1900,7 @@ export class AZStackCore {
             });
 
             this.newUniqueId();
-            let newMsgId = this.options && typeof options === 'object' && options.msgId && this.Validator.isNumber(options.msgId) ? options.msgId : this.uniqueId;
+            let newMsgId = options && typeof options === 'object' && options.msgId && this.Validator.isNumber(options.msgId) ? options.msgId : this.uniqueId;
 
             this.addUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, newMsgId, callback, resolve, reject, this.delegateConstants.DELEGATE_ON_NEW_MESSAGE_RETURN);
 

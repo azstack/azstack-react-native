@@ -824,7 +824,20 @@ class ChatComponent extends React.Component {
         ]).then(() => {
             myMessage.prepared = true;
             let messages = [].concat(this.state.messages);
-            messages.push(myMessage);
+            let messageExisted = false;
+            for (let i = 0; i < messages.length; i++) {
+                let message = messages[i];
+                if (message.msgId === myMessage.msgId) {
+                    messageExisted = true;
+                    message.status = myMessage.status;
+                    message.created = myMessage.created;
+                    message.modified = myMessage.modified;
+                    break;
+                }
+            }
+            if (!messageExisted) {
+                messages.push(myMessage);
+            }
             this.setState({
                 messages: messages.sort((a, b) => {
                     return a.created > b.created ? -1 : 1

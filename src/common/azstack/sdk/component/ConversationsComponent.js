@@ -586,8 +586,10 @@ class ConversationsComponent extends React.Component {
             let conversation = this.state.conversations[i];
             if (conversation.chatType === myMessage.chatType && conversation.chatId === myMessage.chatId) {
                 foundConversation = true;
-                conversation.lastMessage = myMessage;
-                conversation.unread = 0;
+                if (conversation.lastMessage.created <= myMessage.created) {
+                    conversation.lastMessage = myMessage;
+                    conversation.unread = 0;
+                }
                 break;
             }
         }
