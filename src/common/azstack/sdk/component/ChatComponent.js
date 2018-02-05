@@ -413,6 +413,10 @@ class ChatComponent extends React.Component {
                                 resolve(message);
                                 break;
                             case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
+                                if (message.sticker.width && message.sticker.height) {
+                                    return resolve(message);
+                                }
+
                                 Image.getSize(message.sticker.url, (width, height) => {
                                     message.sticker.width = width;
                                     message.sticker.height = height;
@@ -424,6 +428,10 @@ class ChatComponent extends React.Component {
                             case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE:
                                 switch (message.file.type) {
                                     case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE:
+                                        if (message.file.width && message.file.height) {
+                                            return resolve(message);
+                                        }
+
                                         Image.getSize(message.file.url, (width, height) => {
                                             message.file.width = width;
                                             message.file.height = height;
@@ -616,6 +624,10 @@ class ChatComponent extends React.Component {
                         resolve(null);
                         break;
                     case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
+                        if (newMessage.sticker.width && newMessage.sticker.height) {
+                            return resolve(null);
+                        }
+
                         Image.getSize(newMessage.sticker.url, (width, height) => {
                             newMessage.sticker.width = width;
                             newMessage.sticker.height = height;
@@ -627,6 +639,10 @@ class ChatComponent extends React.Component {
                     case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE:
                         switch (newMessage.file.type) {
                             case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE:
+                                if (newMessage.file.width && newMessage.file.height) {
+                                    return resolve(null);
+                                }
+
                                 Image.getSize(newMessage.file.url, (width, height) => {
                                     newMessage.file.width = width;
                                     newMessage.file.height = height;
@@ -683,6 +699,10 @@ class ChatComponent extends React.Component {
                         resolve(null);
                         break;
                     case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
+                        if (myMessage.sticker.width && myMessage.sticker.height) {
+                            return resolve(null);
+                        }
+
                         Image.getSize(myMessage.sticker.url, (width, height) => {
                             myMessage.sticker.width = width;
                             myMessage.sticker.height = height;
@@ -694,6 +714,10 @@ class ChatComponent extends React.Component {
                     case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE:
                         switch (myMessage.file.type) {
                             case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE:
+                                if (myMessage.file.width && myMessage.file.height) {
+                                    return resolve(null);
+                                }
+
                                 Image.getSize(myMessage.file.url, (width, height) => {
                                     myMessage.file.width = width;
                                     myMessage.file.height = height;
@@ -750,6 +774,10 @@ class ChatComponent extends React.Component {
                         resolve(null);
                         break;
                     case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
+                        if (myMessage.sticker.width && myMessage.sticker.height) {
+                            return resolve(null);
+                        }
+
                         Image.getSize(myMessage.sticker.url, (width, height) => {
                             myMessage.sticker.width = width;
                             myMessage.sticker.height = height;
@@ -761,6 +789,10 @@ class ChatComponent extends React.Component {
                     case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE:
                         switch (myMessage.file.type) {
                             case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE:
+                                if (myMessage.file.width && myMessage.file.height) {
+                                    return resolve(null);
+                                }
+
                                 Image.getSize(myMessage.file.url, (width, height) => {
                                     myMessage.file.width = width;
                                     myMessage.file.height = height;
