@@ -67,6 +67,8 @@ class MessageBlockComponent extends React.Component {
     };
     getMessageStatusText(status) {
         switch (status) {
+            case -1:
+                return this.coreInstances.Language.getText('MESSAGE_STATUS_ERROR_TEXT');
             case this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_SENDING:
                 return this.coreInstances.Language.getText('MESSAGE_STATUS_SENDING_TEXT');
             case this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_SENT:

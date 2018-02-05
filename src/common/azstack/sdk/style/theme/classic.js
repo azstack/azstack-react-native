@@ -185,6 +185,9 @@ export const MESSAGE_STATUS_BLOCK_STYLE = {
 export const MESSAGE_STATUS_BLOCK_SENDING_STYLE = {
     borderColor: '#BFBFBF'
 };
+export const MESSAGE_STATUS_BLOCK_ERROR_STYLE = {
+    borderColor: '#D05454'
+};
 export const MESSAGE_STATUS_BLOCK_SENT_STYLE = {
     borderColor: '#F2784B'
 };
@@ -201,6 +204,9 @@ export const MESSAGE_STATUS_TEXT_STYLE = {
 };
 export const MESSAGE_STATUS_TEXT_SENDING_STYLE = {
     color: '#fff'
+};
+export const MESSAGE_STATUS_TEXT_ERROR_STYLE = {
+    color: '#D05454'
 };
 export const MESSAGE_STATUS_TEXT_SENT_STYLE = {
     color: '#F2784B'

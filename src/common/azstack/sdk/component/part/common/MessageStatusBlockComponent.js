@@ -16,6 +16,7 @@ class MessageStatusBlockComponent extends React.Component {
             <View
                 style={[
                     this.coreInstances.CustomStyle.getStyle('MESSAGE_STATUS_BLOCK_STYLE'),
+                    (this.props.status === -1 ? this.coreInstances.CustomStyle.getStyle('MESSAGE_STATUS_BLOCK_ERROR_STYLE') : {}),
                     (this.props.status === this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_SENDING ? this.coreInstances.CustomStyle.getStyle('MESSAGE_STATUS_BLOCK_SENDING_STYLE') : {}),
                     (this.props.status === this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_SENT ? this.coreInstances.CustomStyle.getStyle('MESSAGE_STATUS_BLOCK_SENT_STYLE') : {}),
                     (this.props.status === this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_DELIVERED ? this.coreInstances.CustomStyle.getStyle('MESSAGE_STATUS_BLOCK_DELIVERED_STYLE') : {}),
@@ -25,13 +26,16 @@ class MessageStatusBlockComponent extends React.Component {
                 <Text
                     style={[
                         this.coreInstances.CustomStyle.getStyle('MESSAGE_STATUS_TEXT_STYLE'),
+                        (this.props.status === -1 ? this.coreInstances.CustomStyle.getStyle('MESSAGE_STATUS_TEXT_ERROR_STYLE') : {}),
                         (this.props.status === this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_SENDING ? this.coreInstances.CustomStyle.getStyle('MESSAGE_STATUS_TEXT_SENDING_STYLE') : {}),
                         (this.props.status === this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_SENT ? this.coreInstances.CustomStyle.getStyle('MESSAGE_STATUS_TEXT_SENT_STYLE') : {}),
                         (this.props.status === this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_DELIVERED ? this.coreInstances.CustomStyle.getStyle('MESSAGE_STATUS_TEXT_DELIVERED_STYLE') : {}),
                         (this.props.status === this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_SEEN ? this.coreInstances.CustomStyle.getStyle('MESSAGE_STATUS_TEXT_SEEN_STYLE') : {}),
                         (this.props.textStyle ? this.props.textStyle : {})
                     ]}
-                >✓</Text>
+                >
+                    {this.props.status === -1 ? '!' : '✓'}
+                </Text>
             </View>
         );
     };
