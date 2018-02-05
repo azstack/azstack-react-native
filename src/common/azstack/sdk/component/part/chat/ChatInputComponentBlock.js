@@ -8,6 +8,7 @@ import {
     ScrollView,
     Text
 } from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
 
 class ChatInputComponentBlock extends React.Component {
     constructor(props) {
@@ -51,11 +52,20 @@ class ChatInputComponentBlock extends React.Component {
         this.onTextInputChanged = this.onTextInputChanged.bind(this);
         this.onTextInputFocused = this.onTextInputFocused.bind(this);
         this.onTextInputBlured = this.onTextInputBlured.bind(this);
+
         this.showStickerBox = this.showStickerBox.bind(this);
         this.closeStickerBox = this.closeStickerBox.bind(this);
-        this.closeFileBox = this.closeFileBox.bind(this);
         this.changeStickerTab = this.changeStickerTab.bind(this);
+
+        this.closeFileBox = this.closeFileBox.bind(this);
         this.showFileBox = this.showFileBox.bind(this);
+        this.onFileBoxOptionGalleryButtonPressed = this.onFileBoxOptionGalleryButtonPressed.bind(this);
+        this.onFileBoxOptionCameraButtonPressed = this.onFileBoxOptionCameraButtonPressed.bind(this);
+        this.onFileBoxOptionFileButtonPressed = this.onFileBoxOptionFileButtonPressed.bind(this);
+        this.onFileBoxOptionLocationButtonPressed = this.onFileBoxOptionLocationButtonPressed.bind(this);
+        this.onFileBoxOptionVoiceButtonPressed = this.onFileBoxOptionVoiceButtonPressed.bind(this);
+        this.onFileBoxOptionDrawingButtonPressed = this.onFileBoxOptionDrawingButtonPressed.bind(this);
+
         this.sendTextMessage = this.sendTextMessage.bind(this);
         this.sendStickerMessage = this.sendStickerMessage.bind(this);
     };
@@ -193,6 +203,43 @@ class ChatInputComponentBlock extends React.Component {
 
     onInputContentChangeSize(e) {
     };
+
+    onFileBoxOptionGalleryButtonPressed() {
+        ImagePicker.openPicker({
+            multiple: true,
+            mediaType: 'photo'
+        }).then((selectedImages) => {
+            console.log(selectedImages);
+            for (let i = 0; i < selectedImages.length; i++) {
+                let selectedImage = selectedImages[i];
+                if (selectedImage.size > this.coreInstances.limitConstants.LIMIT_MAX_FILE_SIZE) {
+                    Alert.alert(
+                        this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                        `${this.coreInstances.Language.getText('CHAT_INPUT_FILE_SIZE_TOO_BIG_ERROR_TEXT')} ${this.coreInstances.FileConverter.sizeAsString(this.coreInstances.limitConstants.LIMIT_MAX_FILE_SIZE)}`,
+                        [
+                            { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                        ],
+                        { cancelable: true }
+                    );
+                    return;
+                }
+            }
+        }).catch((error) => {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('ALERT_GENERAL_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+        });
+    };
+    onFileBoxOptionCameraButtonPressed() { };
+    onFileBoxOptionFileButtonPressed() { };
+    onFileBoxOptionLocationButtonPressed() { };
+    onFileBoxOptionVoiceButtonPressed() { };
+    onFileBoxOptionDrawingButtonPressed() { };
 
     render() {
         return (
@@ -339,7 +386,7 @@ class ChatInputComponentBlock extends React.Component {
                                 <TouchableOpacity
                                     style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
                                     activeOpacity={0.5}
-                                    onPress={() => { }}
+                                    onPress={this.onFileBoxOptionGalleryButtonPressed}
                                 >
                                     <Image
                                         style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
@@ -354,7 +401,7 @@ class ChatInputComponentBlock extends React.Component {
                                 <TouchableOpacity
                                     style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
                                     activeOpacity={0.5}
-                                    onPress={() => { }}
+                                    onPress={this.onFileBoxOptionCameraButtonPressed}
                                 >
                                     <Image
                                         style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
@@ -369,7 +416,7 @@ class ChatInputComponentBlock extends React.Component {
                                 <TouchableOpacity
                                     style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
                                     activeOpacity={0.5}
-                                    onPress={() => { }}
+                                    onPress={this.onFileBoxOptionFileButtonPressed}
                                 >
                                     <Image
                                         style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
@@ -384,7 +431,7 @@ class ChatInputComponentBlock extends React.Component {
                                 <TouchableOpacity
                                     style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
                                     activeOpacity={0.5}
-                                    onPress={() => { }}
+                                    onPress={this.onFileBoxOptionLocationButtonPressed}
                                 >
                                     <Image
                                         style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
@@ -399,7 +446,7 @@ class ChatInputComponentBlock extends React.Component {
                                 <TouchableOpacity
                                     style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
                                     activeOpacity={0.5}
-                                    onPress={() => { }}
+                                    onPress={this.onFileBoxOptionVoiceButtonPressed}
                                 >
                                     <Image
                                         style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
@@ -414,7 +461,7 @@ class ChatInputComponentBlock extends React.Component {
                                 <TouchableOpacity
                                     style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
                                     activeOpacity={0.5}
-                                    onPress={() => { }}
+                                    onPress={this.onFileBoxOptionDrawingButtonPressed}
                                 >
                                     <Image
                                         style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}

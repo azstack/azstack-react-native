@@ -1,6 +1,7 @@
 export const ALERT_TITLE_ERROR_TEXT = 'Error';
 export const ALERT_TITLE_WARNING_TEXT = 'Warning';
 export const ALERT_TITLE_CONFIRM_TEXT = 'Confirm';
+export const ALERT_GENERAL_ERROR_TEXT = 'Something went wrong, please try again later';
 export const ALERT_BUTTON_TITLE_OK_TEXT = 'OK';
 export const ALERT_BUTTON_TITLE_CANCEL_TEXT = 'Cancel';
 
@@ -90,7 +91,7 @@ export const CONVERSATIONS_LIST_NEW_GROUP_TO_CHAT_ERROR_TEXT = 'Create group to 
 
 
 export const CHAT_HEADER_TITLE_TEXT = 'Chat';
-export const CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT = 'Can\'t not send message, please try again later.';
+export const MESSAGES_LIST_EMPTY_TEXT = 'No Message';
 export const CHAT_INPUT_DISABLED_TEXT = 'You can\'t not reply to this conversation';
 export const CHAT_INPUT_TEXT_INPUT_PLACEHOLDER_TEXT = 'Enter text...';
 export const CHAT_INPUT_FILE_OPTION_GALLERY_TEXT = 'Gallery';
@@ -99,7 +100,8 @@ export const CHAT_INPUT_FILE_OPTION_FILE_TEXT = 'File';
 export const CHAT_INPUT_FILE_OPTION_LOCATION_TEXT = 'Location';
 export const CHAT_INPUT_FILE_OPTION_VOICE_TEXT = 'Voice';
 export const CHAT_INPUT_FILE_OPTION_DRAWING_TEXT = 'Drawing';
-export const MESSAGES_LIST_EMPTY_TEXT = 'No Message';
+export const CHAT_INPUT_FILE_SIZE_TOO_BIG_ERROR_TEXT = 'File size can\' be bigger than';
+export const CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT = 'Can\'t not send message, please try again later.';
 
 export const USER_HEADER_TITLE_TEXT = 'User Information';
 export const USER_EMPTY_TEXT = 'No User Infomation';

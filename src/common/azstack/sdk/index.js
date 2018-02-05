@@ -8,6 +8,7 @@ import EventEmitter from 'react-native/Libraries/vendor/emitter/EventEmitter';
 
 import * as eventConstants from './constant/eventConstants';
 import * as linkConstants from './constant/linkConstants';
+import * as limitConstants from './constant/limitConstants';
 
 import Language from './language/';
 import CustomStyle from './style/';
@@ -34,6 +35,7 @@ export class AZStackSdk extends AZStackBaseComponent {
 
         this.eventConstants = eventConstants;
         this.linkConstants = linkConstants;
+        this.limitConstants = limitConstants;
 
         this.Language = new Language({ languageCode: props.options.languageCode });
         this.CustomStyle = new CustomStyle({ themeName: props.options.themeName });
@@ -108,6 +110,7 @@ export class AZStackSdk extends AZStackBaseComponent {
         return {
             eventConstants: this.eventConstants,
             linkConstants: this.linkConstants,
+            limitConstants: this.limitConstants,
 
             Language: this.Language,
             CustomStyle: this.CustomStyle,
