@@ -1685,6 +1685,7 @@ this.AZStackCore.newMessage({
 #### params
 > - chatType(required): chat type
 > - chatId(required): chatId
+> - msgId(optional): id of message
 > - text(optional): text message
 > - sticker(optional): sticker of message
 >   - name(required): name
