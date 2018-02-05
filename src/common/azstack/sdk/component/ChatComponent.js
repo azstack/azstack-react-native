@@ -1145,6 +1145,7 @@ class ChatComponent extends React.Component {
                             getCoreInstances={this.props.getCoreInstances}
                             chatType={this.props.chatType}
                             chatId={this.props.chatId}
+                            chatTarget={this.state.chatTarget}
                         />
                     )
                 }

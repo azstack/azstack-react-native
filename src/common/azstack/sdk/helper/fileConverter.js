@@ -17,6 +17,17 @@ class FileConverter {
         return bytes.toFixed(1) + ' ' + units[u];
     };
 
+    nameFromPath(path) {
+        if (!path) {
+            return '';
+        }
+        let pathParts = path.split('/');
+        if (!pathParts.length) {
+            return '';
+        }
+        return pathParts[pathParts.length - 1];
+    };
+
     ajustImageSizes(file, maxSize) {
         if (!file.width || !file.height) {
             return {};

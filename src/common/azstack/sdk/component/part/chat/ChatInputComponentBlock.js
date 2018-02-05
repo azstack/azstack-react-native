@@ -210,6 +210,7 @@ class ChatInputComponentBlock extends React.Component {
             mediaType: 'photo'
         }).then((selectedImages) => {
             console.log(selectedImages);
+            let sendingImages = [];
             for (let i = 0; i < selectedImages.length; i++) {
                 let selectedImage = selectedImages[i];
                 if (selectedImage.size > this.coreInstances.limitConstants.LIMIT_MAX_FILE_SIZE) {
@@ -223,10 +224,39 @@ class ChatInputComponentBlock extends React.Component {
                     );
                     return;
                 }
+
+                let currentTime = new Date().getTime();
+                this.coreInstances.AZStackCore.newUniqueId();
+                sendingImages.push({
+                    chatType: this.props.chatType,
+                    chatId: this.props.chatId,
+                    senderId: this.coreInstances.AZStackCore.authenticatedUser.userId,
+                    sender: this.coreInstances.AZStackCore.authenticatedUser,
+                    receiverId: this.props.chatId,
+                    receiver: this.props.chatTarget,
+                    msgId: this.coreInstances.AZStackCore.uniqueId,
+                    type: this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE,
+                    status: this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_SENDING,
+                    deleted: this.coreInstances.AZStackCore.chatConstants.MESSAGE_DELETED_FALSE,
+                    created: currentTime,
+                    modified: currentTime,
+                    file: {
+                        name: this.coreInstances.FileConverter.nameFromPath(selectedImage.path),
+                        length: selectedImage.size,
+                        type: this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE,
+                        url: selectedImage.path,
+                        width: selectedImage.width,
+                        height: selectedImage.height
+                    }
+                });
             }
 
-            
+            sendingImages.map((sendingImage) => {
+                this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: sendingImage });
+            });
+
         }).catch((error) => {
+            console.log(error);
             Alert.alert(
                 this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
                 this.coreInstances.Language.getText('ALERT_GENERAL_ERROR_TEXT'),
