@@ -17,6 +17,8 @@ class ChatInputComponentBlock extends React.Component {
 
         this.coreInstances = props.getCoreInstances();
 
+        this.subscriptions = {};
+
         this.state = {
             text: {
                 focused: false,
@@ -49,6 +51,8 @@ class ChatInputComponentBlock extends React.Component {
             }
         };
 
+        this.sendingMessageFailChecks = {};
+
         this.onTextInputChanged = this.onTextInputChanged.bind(this);
         this.onTextInputFocused = this.onTextInputFocused.bind(this);
         this.onTextInputBlured = this.onTextInputBlured.bind(this);
@@ -69,6 +73,47 @@ class ChatInputComponentBlock extends React.Component {
         this.sendTextMessage = this.sendTextMessage.bind(this);
         this.sendStickerMessage = this.sendStickerMessage.bind(this);
         this.sendFileMessage = this.sendFileMessage.bind(this);
+    };
+
+    addSubscriptions() {
+        this.subscriptions.onMessageStatusChanged = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_MESSAGE_STATUS_CHANGED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onMessageStatusChanged(result);
+        });
+        this.subscriptions.onNewMessageReturn = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onNewMessageReturn(result);
+        });
+    };
+    clearSubscriptions() {
+        for (let subscriptionName in this.subscriptions) {
+            this.subscriptions[subscriptionName].remove();
+        }
+    };
+
+    onMessageStatusChanged(myMessage) {
+        if (myMessage.chatType !== this.props.chatType || myMessage.chatId !== this.props.chatId) {
+            return;
+        }
+
+        if (this.sendingMessageFailChecks[myMessage.msgId]) {
+            clearTimeout(this.sendingMessageFailChecks[myMessage.msgId]);
+            delete this.sendingMessageFailChecks[myMessage.msgId];
+        }
+    };
+    onNewMessageReturn(newStatus) {
+        if (newStatus.chatType !== this.props.chatType || newStatus.chatId !== this.props.chatId) {
+            return;
+        }
+
+        if (this.sendingMessageFailChecks[newStatus.msgId]) {
+            clearTimeout(this.sendingMessageFailChecks[newStatus.msgId]);
+            delete this.sendingMessageFailChecks[newStatus.msgId];
+        }
     };
 
     onTextInputChanged(newText) {
@@ -171,25 +216,18 @@ class ChatInputComponentBlock extends React.Component {
         this.setState({ text: Object.assign({}, this.state.text, { val: '' }) });
         this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...textMessage } });
 
+        this.sendingMessageFailChecks[textMessage.msgId] = setTimeout(() => {
+            textMessage.status = -1;
+            this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...textMessage } });
+            delete this.sendingMessageFailChecks[textMessage.msgId];
+        }, 5000);
+
         this.coreInstances.AZStackCore.newMessage({
             chatType: this.props.chatType,
             chatId: this.props.chatId,
             msgId: textMessage.msgId,
             text: textMessage.text
-        }).then((result) => {
-
-        }).catch((error) => {
-            textMessage.status = -1;
-            this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...textMessage } });
-            Alert.alert(
-                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
-                this.coreInstances.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
-                [
-                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
-                ],
-                { cancelable: true }
-            );
-        });
+        }).then((result) => { }).catch((error) => { });
     };
     sendStickerMessage(itemName) {
 
@@ -230,7 +268,13 @@ class ChatInputComponentBlock extends React.Component {
                 }
             };
             this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...stickerMessage } });
-            
+
+            this.sendingMessageFailChecks[stickerMessage.msgId] = setTimeout(() => {
+                stickerMessage.status = -1;
+                this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...stickerMessage } });
+                delete this.sendingMessageFailChecks[stickerMessage.msgId];
+            }, 5000);
+
             this.coreInstances.AZStackCore.newMessage({
                 chatType: this.props.chatType,
                 chatId: this.props.chatId,
@@ -242,18 +286,7 @@ class ChatInputComponentBlock extends React.Component {
                     width: stickerMessage.sticker.width,
                     height: stickerMessage.sticker.height
                 }
-            }).then((result) => { }).catch((error) => {
-                stickerMessage.status = -1;
-                this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...stickerMessage } });
-                Alert.alert(
-                    this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
-                    this.coreInstances.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
-                    [
-                        { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
-                    ],
-                    { cancelable: true }
-                );
-            });
+            }).then((result) => { }).catch((error) => { });
         }, (error) => {
 
         });
@@ -264,6 +297,13 @@ class ChatInputComponentBlock extends React.Component {
                 this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...fileMessage } });
                 return;
             }
+
+            this.sendingMessageFailChecks[fileMessage.msgId] = setTimeout(() => {
+                fileMessage.status = -1;
+                this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...fileMessage } });
+                delete this.sendingMessageFailChecks[fileMessage.msgId];
+            }, 5000);
+
             this.coreInstances.AZStackCore.newMessage({
                 chatType: this.props.chatType,
                 chatId: this.props.chatId,
@@ -276,20 +316,7 @@ class ChatInputComponentBlock extends React.Component {
                     width: fileMessage.file.width,
                     height: fileMessage.file.height
                 }
-            }).then((result) => {
-
-            }).catch((error) => {
-                fileMessage.status = -1;
-                this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...fileMessage } });
-                Alert.alert(
-                    this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
-                    this.coreInstances.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
-                    [
-                        { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
-                    ],
-                    { cancelable: true }
-                );
-            });
+            }).then((result) => { }).catch((error) => { });
         });
     };
 
@@ -301,6 +328,18 @@ class ChatInputComponentBlock extends React.Component {
             multiple: true,
             mediaType: 'photo'
         }).then((selectedImages) => {
+
+            if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
+                Alert.alert(
+                    this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                    this.coreInstances.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
+                    [
+                        { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                    ],
+                    { cancelable: true }
+                );
+            }
+
             let sendingImages = [];
             for (let i = 0; i < selectedImages.length; i++) {
                 let selectedImage = selectedImages[i];
@@ -394,6 +433,13 @@ class ChatInputComponentBlock extends React.Component {
     onFileBoxOptionLocationButtonPressed() { };
     onFileBoxOptionVoiceButtonPressed() { };
     onFileBoxOptionDrawingButtonPressed() { };
+
+    componentDidMount() {
+        this.addSubscriptions();
+    };
+    componentWillUnmount() {
+        this.clearSubscriptions();
+    };
 
     render() {
         return (
