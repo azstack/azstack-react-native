@@ -68,6 +68,7 @@ class ChatInputComponentBlock extends React.Component {
 
         this.sendTextMessage = this.sendTextMessage.bind(this);
         this.sendStickerMessage = this.sendStickerMessage.bind(this);
+        this.sendFileMessage = this.sendFileMessage.bind(this);
     };
 
     onTextInputChanged(newText) {
@@ -223,6 +224,40 @@ class ChatInputComponentBlock extends React.Component {
             );
         });
     };
+    sendFileMessage(fileMessages) {
+        fileMessages.map((fileMessage) => {
+            if (fileMessage.status === -1) {
+                this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...fileMessage } });
+                return;
+            }
+            this.coreInstances.AZStackCore.newMessage({
+                chatType: this.props.chatType,
+                chatId: this.props.chatId,
+                msgId: fileMessage.msgId,
+                file: {
+                    name: fileMessage.file.name,
+                    length: fileMessage.file.length,
+                    type: fileMessage.file.type,
+                    url: fileMessage.file.url,
+                    width: fileMessage.file.width,
+                    height: fileMessage.file.height
+                }
+            }).then((result) => {
+
+            }).catch((error) => {
+                fileMessage.status = -1;
+                this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...fileMessage } });
+                Alert.alert(
+                    this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                    this.coreInstances.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
+                    [
+                        { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                    ],
+                    { cancelable: true }
+                );
+            });
+        });
+    };
 
     onInputContentChangeSize(e) {
     };
@@ -306,38 +341,7 @@ class ChatInputComponentBlock extends React.Component {
                     });
                 })
             ).then(() => {
-                sendingImages.map((sendingImage) => {
-                    if (sendingImage.status === -1) {
-                        this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...sendingImage } });
-                        return;
-                    }
-                    this.coreInstances.AZStackCore.newMessage({
-                        chatType: this.props.chatType,
-                        chatId: this.props.chatId,
-                        msgId: sendingImage.msgId,
-                        file: {
-                            name: sendingImage.file.name,
-                            length: sendingImage.file.length,
-                            type: sendingImage.file.type,
-                            url: sendingImage.file.url,
-                            width: sendingImage.file.width,
-                            height: sendingImage.file.height
-                        }
-                    }).then((result) => {
-
-                    }).catch((error) => {
-                        sendingImage.status = -1;
-                        this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...sendingImage } });
-                        Alert.alert(
-                            this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
-                            this.coreInstances.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
-                            [
-                                { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
-                            ],
-                            { cancelable: true }
-                        );
-                    });
-                });
+                this.sendFileMessage(sendingImages);
             }).catch((error) => { });
 
         }).catch((error) => {
