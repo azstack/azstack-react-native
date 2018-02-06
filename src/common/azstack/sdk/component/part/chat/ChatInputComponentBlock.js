@@ -150,13 +150,36 @@ class ChatInputComponentBlock extends React.Component {
             return;
         }
 
+        let currentTime = new Date().getTime();
+        this.coreInstances.AZStackCore.newUniqueId();
+        let textMessage = {
+            chatType: this.props.chatType,
+            chatId: this.props.chatId,
+            senderId: this.coreInstances.AZStackCore.authenticatedUser.userId,
+            sender: this.coreInstances.AZStackCore.authenticatedUser,
+            receiverId: this.props.chatId,
+            receiver: this.props.chatTarget,
+            msgId: this.coreInstances.AZStackCore.uniqueId,
+            type: this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT,
+            status: this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_SENDING,
+            deleted: this.coreInstances.AZStackCore.chatConstants.MESSAGE_DELETED_FALSE,
+            created: currentTime,
+            modified: currentTime,
+            text: this.state.text.val
+        };
+        this.setState({ text: Object.assign({}, this.state.text, { val: '' }) });
+        this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...textMessage } });
+
         this.coreInstances.AZStackCore.newMessage({
             chatType: this.props.chatType,
             chatId: this.props.chatId,
-            text: this.state.text.val
+            msgId: textMessage.msgId,
+            text: textMessage.text
         }).then((result) => {
-            this.setState({ text: Object.assign({}, this.state.text, { val: '' }) });
+
         }).catch((error) => {
+            textMessage.status = -1;
+            this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...textMessage } });
             Alert.alert(
                 this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
                 this.coreInstances.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
