@@ -205,23 +205,57 @@ class ChatInputComponentBlock extends React.Component {
             return;
         }
 
-        this.coreInstances.AZStackCore.newMessage({
-            chatType: this.props.chatType,
-            chatId: this.props.chatId,
-            sticker: {
-                name: itemName,
-                catId: this.state.sticker.items[this.state.sticker.selected].catId,
-                url: `${this.coreInstances.linkConstants.LINK_API_URL_STICKER}${this.state.sticker.items[this.state.sticker.selected].catId}/${itemName}`
-            }
-        }).then((result) => { }).catch((error) => {
-            Alert.alert(
-                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
-                this.coreInstances.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
-                [
-                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
-                ],
-                { cancelable: true }
-            );
+        Image.getSize(`${this.coreInstances.linkConstants.LINK_API_URL_STICKER}${this.state.sticker.items[this.state.sticker.selected].catId}/${itemName}`, (width, height) => {
+            let currentTime = new Date().getTime();
+            this.coreInstances.AZStackCore.newUniqueId();
+            let stickerMessage = {
+                chatType: this.props.chatType,
+                chatId: this.props.chatId,
+                senderId: this.coreInstances.AZStackCore.authenticatedUser.userId,
+                sender: this.coreInstances.AZStackCore.authenticatedUser,
+                receiverId: this.props.chatId,
+                receiver: this.props.chatTarget,
+                msgId: this.coreInstances.AZStackCore.uniqueId,
+                type: this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER,
+                status: this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_SENDING,
+                deleted: this.coreInstances.AZStackCore.chatConstants.MESSAGE_DELETED_FALSE,
+                created: currentTime,
+                modified: currentTime,
+                sticker: {
+                    name: itemName,
+                    catId: this.state.sticker.items[this.state.sticker.selected].catId,
+                    url: `${this.coreInstances.linkConstants.LINK_API_URL_STICKER}${this.state.sticker.items[this.state.sticker.selected].catId}/${itemName}`,
+                    width: width,
+                    height: height
+                }
+            };
+            this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...stickerMessage } });
+            
+            this.coreInstances.AZStackCore.newMessage({
+                chatType: this.props.chatType,
+                chatId: this.props.chatId,
+                msgId: stickerMessage.msgId,
+                sticker: {
+                    name: stickerMessage.sticker.name,
+                    catId: stickerMessage.sticker.catId,
+                    url: stickerMessage.sticker.url,
+                    width: stickerMessage.sticker.width,
+                    height: stickerMessage.sticker.height
+                }
+            }).then((result) => { }).catch((error) => {
+                stickerMessage.status = -1;
+                this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...stickerMessage } });
+                Alert.alert(
+                    this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                    this.coreInstances.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
+                    [
+                        { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                    ],
+                    { cancelable: true }
+                );
+            });
+        }, (error) => {
+
         });
     };
     sendFileMessage(fileMessages) {
