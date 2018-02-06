@@ -843,10 +843,12 @@ class ChatComponent extends React.Component {
                     return a.created > b.created ? -1 : 1
                 })
             }, () => {
-                this.refs.MessagesList.scrollToOffset({
-                    offset: 0,
-                    animated: true
-                });
+                if (!messageExisted) {
+                    this.refs.MessagesList.scrollToOffset({
+                        offset: 0,
+                        animated: true
+                    });
+                }
             });
         }).catch((error) => { });
     };
