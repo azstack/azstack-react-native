@@ -8,19 +8,6 @@ import {
   StyleSheet,
 } from 'react-native';
 
-const styles = StyleSheet.create({
-    container: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        alignItems: 'center'
-    },
-    pulse: {
-        position: 'absolute',
-        flex: 1
-    }
-});
-
 export default class Pulse extends Component {
     constructor(props){
         super(props);
@@ -148,3 +135,13 @@ export default class Pulse extends Component {
 
     }
 }
+
+const styles = StyleSheet.create({
+    container: {
+        alignItems: 'center'
+    },
+    pulse: {
+        position: 'absolute',
+        flex: 1
+    }
+});

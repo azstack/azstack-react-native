@@ -84,7 +84,6 @@ class OnCallComponent extends React.Component {
 				return;
 			}
 
-			console.log(result);
 			if (result.status !== this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING) {
 				this.props.onCallEnded();
 			}
@@ -232,7 +231,7 @@ class OnCallComponent extends React.Component {
 				</View>
 				<View>
 					<View style={{justifyContent: 'center', alignItems: 'center'}}>
-						<Pulse style={{justifyContent: 'center', alignItems: 'center',}} color={'#48D2A0'} numPulses={7} diameter={250} duration={850} speed={34} image={{source:ic_avatar, style:{width: 100, height: 100, borderRadius: 50,}}} />
+						<Pulse style={{justifyContent: 'center', alignItems: 'center',}} color={'#48D2A0'} numPulses={7} diameter={250} duration={560} speed={30} image={{source:ic_avatar, style:{width: 100, height: 100, borderRadius: 50,}}} />
 					</View>
 				</View>
 				<View style={{ flex: 0.3, justifyContent: 'flex-end', paddingBottom: 60}}>
