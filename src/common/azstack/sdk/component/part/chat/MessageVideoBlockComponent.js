@@ -66,29 +66,33 @@ class MessageVideoBlockComponent extends React.Component {
             <View
                 style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_VIDEO_BLOCK_STYLE')}
             >
-                <Video source={{ uri: this.props.videoFile.url }}
-                    style={[
-                        this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_VIDEO_FRAME_BLOCK_STYLE'),
-                        (this.state.sizes ? this.coreInstances.FileConverter.ajustImageSizes(this.state.sizes, { width: 250, height: 250 }) : {})
-                    ]}
-                    rate={1.0}
-                    volume={1.0}
-                    muted={false}
-                    paused={!this.state.playing}
-                    resizeMode='cover'
-                    repeat={false}
-                    playInBackground={false}
-                    playWhenInactive={false}
-                    ignoreSilentSwitch={'ignore'}
-                    progressUpdateInterval={250.0}
-                    onLoadStart={this.onVideoLoadStart}
-                    onLoad={this.onVideoLoad}
-                    onProgress={this.onVideoProcess}
-                    onEnd={this.onVideoEnd}
-                    onError={this.onVideoError}
-                    onBuffer={this.onVideoBuffer}
-                    onTimedMetadata={this.onVideoTimedMetadata}
-                />
+                <View
+                    style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_VIDEO_BLOCK_STYLE')}
+                >
+                    <Video source={{ uri: this.props.videoFile.url }}
+                        style={[
+                            this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_VIDEO_FRAME_DISPLAY_STYLE'),
+                            (this.state.sizes ? this.coreInstances.FileConverter.ajustImageSizes(this.state.sizes, { width: 250, height: 250 }) : {})
+                        ]}
+                        rate={1.0}
+                        volume={1.0}
+                        muted={false}
+                        paused={!this.state.playing}
+                        resizeMode='cover'
+                        repeat={false}
+                        playInBackground={false}
+                        playWhenInactive={false}
+                        ignoreSilentSwitch={'ignore'}
+                        progressUpdateInterval={250.0}
+                        onLoadStart={this.onVideoLoadStart}
+                        onLoad={this.onVideoLoad}
+                        onProgress={this.onVideoProcess}
+                        onEnd={this.onVideoEnd}
+                        onError={this.onVideoError}
+                        onBuffer={this.onVideoBuffer}
+                        onTimedMetadata={this.onVideoTimedMetadata}
+                    />
+                </View>
                 <View
                     style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_VIDEO_CONTROL_BLOCK_STYLE')}
                 >

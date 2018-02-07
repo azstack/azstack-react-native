@@ -834,10 +834,14 @@ export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_BLOCK_STYLE = {
     borderRadius: 5
 };
 export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_FRAME_BLOCK_STYLE = {
-    width: 250,
-    height: 250,
     borderTopLeftRadius: 5,
-    borderTopRightRadius: 5
+    borderTopRightRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_FRAME_DISPLAY_STYLE = {
+    width: 250,
+    height: 250
 };
 export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_CONTROL_BLOCK_STYLE = {
     flexDirection: 'row',
