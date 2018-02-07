@@ -412,6 +412,8 @@ class MessageBlockComponent extends React.Component {
                                         <MessageImageBlockComponent
                                             getCoreInstances={this.props.getCoreInstances}
                                             imageFile={this.props.message.file}
+                                            msgId={this.props.message.msgId}
+                                            onMessageImagePressed={this.props.onMessageImagePressed}
                                         />
                                     )
                                 }
