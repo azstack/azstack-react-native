@@ -755,7 +755,10 @@ export const MESSAGE_TYPE_MEDIA_FILE_DOWNLOAD_IMAGE_HOLDER_STYLE = {
 };
 export const MESSAGE_TYPE_MEDIA_FILE_IMAGE_STYLE = {
     width: 250,
-    height: 250
+    height: 250,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#E1E5EC'
 };
 export const MESSAGE_TYPE_MEDIA_FILE_AUDIO_CONTROL_BLOCK_STYLE = {
     width: 250,
