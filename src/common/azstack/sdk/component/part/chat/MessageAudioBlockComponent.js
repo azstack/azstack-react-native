@@ -1,6 +1,7 @@
 import React from 'react';
 import {
     View,
+    Text,
     TouchableOpacity,
     Image
 } from 'react-native';
@@ -13,7 +14,10 @@ class MessageAudioBlockComponent extends React.Component {
         this.coreInstances = props.getCoreInstances();
 
         this.state = {
-            playing: false
+            playing: false,
+            currentTime: 0,
+            duration: 0,
+            playableDuration: 0
         };
 
         this.onTogglePlayState = this.onTogglePlayState.bind(this);
@@ -31,49 +35,41 @@ class MessageAudioBlockComponent extends React.Component {
         this.setState({ playing: !this.state.playing });
     };
 
-    onAudioLoadStart(data) {
-        console.log('load start');
-        console.log(data);
-    };
+    onAudioLoadStart(data) { };
     onAudioLoad(data) {
-        console.log('load');
-        console.log(data);
+        this.setState({
+            duration: data.duration
+        });
     };
     onAudioProcess(data) {
-        console.log('process');
-        console.log(data);
+        this.setState({
+            currentTime: data.currentTime,
+            playableDuration: data.playableDuration
+        });
     };
     onAudioEnd(data) {
-        console.log('end');
-        console.log(data);
+        this.setState({ playing: true });
     };
     onAudioError(data) {
-        console.log('error');
-        console.log(data);
+        this.setState({ playing: false });
     };
-    onAudioBuffer(data) {
-        console.log('buffer');
-        console.log(data);
-    };
-    onAudioTimedMetadata(data) {
-        console.log('time metadata');
-        console.log(data);
-    };
+    onAudioBuffer(data) { };
+    onAudioTimedMetadata(data) { };
 
     render() {
         return (
             <View
-                style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_AUDIO_BLOCK_STYLE')}
+                style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_AUDIO_CONTROL_BLOCK_STYLE')}
             >
                 <TouchableOpacity
-                    style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_AUDIO_CONTROL_BUTTON_STYLE')}
+                    style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_AUDIO_STATE_BUTTON_STYLE')}
                     activeOpacity={0.5}
                     onPress={this.onTogglePlayState}
                 >
                     {
                         !this.state.playing && (
                             <Image
-                                style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_AUDIO_CONTROL_IMAGE_STYLE')}
+                                style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_AUDIO_STATE_IMAGE_STYLE')}
                                 source={this.coreInstances.CustomStyle.getImage('IMAGE_PLAY')}
                             />
                         )
@@ -81,7 +77,7 @@ class MessageAudioBlockComponent extends React.Component {
                     {
                         this.state.playing && (
                             <Image
-                                style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_AUDIO_CONTROL_IMAGE_STYLE')}
+                                style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_AUDIO_STATE_IMAGE_STYLE')}
                                 source={this.coreInstances.CustomStyle.getImage('IMAGE_PAUSE')}
                             />
                         )
@@ -90,6 +86,38 @@ class MessageAudioBlockComponent extends React.Component {
                 <View
                     style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_AUDIO_DURATION_BLOCK_STYLE')}
                 >
+                    <Text
+                        style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_AUDIO_NAME_TEXT_STYLE')}
+                        numberOfLines={1}
+                    >
+                        {this.props.audioFile.name}
+                    </Text>
+                    <View
+                        style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_AUDIO_DURATION_LINES_BLOCK_STYLE')}
+                    >
+                        <View
+                            style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_AUDIO_DURATION_LINE_STYLE')}
+                        />
+                        <View
+                            style={[
+                                this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_AUDIO_PLAYABLE_LINE_STYLE'),
+                                { width: `${Math.round(this.state.playableDuration / this.state.duration * 100)}%` }
+                            ]}
+                        />
+                        <View
+                            style={[
+                                this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_AUDIO_CURRENT_LINE_STYLE'),
+                                { width: `${Math.round(this.state.currentTime / this.state.duration * 100)}%` }
+                            ]}
+                        />
+                    </View>
+                    <Text
+                        style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_AUDIO_NAME_TEXT_STYLE')}
+                    >
+                        {this.coreInstances.FileConverter.timeAsString(this.state.currentTime)}
+                        /
+                        {this.coreInstances.FileConverter.timeAsString(this.state.duration)}
+                    </Text>
                 </View>
                 <Video source={{ uri: this.props.audioFile.url }}
                     ref={(ref) => {

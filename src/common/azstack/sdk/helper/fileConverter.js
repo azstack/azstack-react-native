@@ -19,6 +19,24 @@ class FileConverter {
         return bytes.toFixed(1) + ' ' + units[u];
     };
 
+    timeAsString(time) {
+        let timeString = '';
+        if (time < 60) {
+            let second = Math.floor(time);
+            timeString += `00:${second < 10 ? '0' + second : second}`;
+        } else if (time < 60 * 60) {
+            let minute = Math.floor(time / 60);
+            let second = Math.ceil(time - minute * 60);
+            timeString += `${minute < 10 ? '0' + minute : minute}:${second < 10 ? '0' + second : second}`;
+        } else if (time < 60 * 60 * 24) {
+            let hour = Math.floor(time / 60 / 60);
+            let minute = Math.floor((time - hour * 60 * 60) / 60);
+            let second = Math.ceil(time - hour * 60 * 60 - minute * 60);
+            timeString += `${hour < 10 ? '0' + hour : hour}:${minute < 10 ? '0' + minute : minute}:${second < 10 ? '0' + second : second}`;
+        }
+        return timeString
+    };
+
     nameFromPath(path) {
         if (!path) {
             return '';

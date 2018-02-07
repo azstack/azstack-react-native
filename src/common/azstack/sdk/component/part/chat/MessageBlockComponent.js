@@ -22,8 +22,8 @@ class MessageBlockComponent extends React.Component {
                 height: 60
             },
             fileImage: {
-                width: 200,
-                height: 200
+                width: 250,
+                height: 250
             }
         };
 
