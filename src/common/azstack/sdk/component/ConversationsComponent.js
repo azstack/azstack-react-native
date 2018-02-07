@@ -5,7 +5,8 @@ import {
     FlatList,
     Platform,
     TouchableOpacity,
-    Image
+    Image,
+    BackHandler
 } from 'react-native';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
@@ -37,6 +38,8 @@ class ConversationsComponent extends React.Component {
             searchText: '',
             shouldNewConversationButtonShow: true
         };
+
+        this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
 
         this.onConversationPressed = this.onConversationPressed.bind(this);
         this.onConversationsListEndReach = this.onConversationsListEndReach.bind(this);
@@ -146,6 +149,11 @@ class ConversationsComponent extends React.Component {
         this.pagination.loading = false;
         this.pagination.done = false;
         this.getConversations();
+    };
+
+    onHardBackButtonPressed() {
+        this.props.onBackButtonPressed();
+        return true;
     };
 
     getConversations() {
@@ -858,9 +866,12 @@ class ConversationsComponent extends React.Component {
     componentDidMount() {
         this.addSubscriptions();
         this.initRun();
+        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     };
     componentWillUnmount() {
         this.clearSubscriptions();
+        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+
     };
 
     render() {
