@@ -8,6 +8,7 @@ import {
 
 import ChatAvatarBlockComponent from '../common/ChatAvatarBlockComponent';
 import MessageStatusBlockComponent from '../common/MessageStatusBlockComponent';
+import MessageAudioBlockComponent from './MessageAudioBlockComponent';
 
 class MessageBlockComponent extends React.Component {
     constructor(props) {
@@ -365,7 +366,7 @@ class MessageBlockComponent extends React.Component {
                                     [
                                         this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_UNKNOWN,
                                         // this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE,
-                                        this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_AUDIO,
+                                        // this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_AUDIO,
                                         this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_VIDEO,
                                         this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_EXCEL,
                                         this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_WORD,
@@ -429,6 +430,16 @@ class MessageBlockComponent extends React.Component {
                                             source={{
                                                 uri: this.props.message.file.url
                                             }}
+                                        />
+                                    )
+                                }
+                                {
+                                    this.props.message.status !== this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED &&
+                                    this.props.message.type === this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE &&
+                                    this.props.message.file.type === this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_AUDIO && (
+                                        <MessageAudioBlockComponent
+                                            getCoreInstances={this.props.getCoreInstances}
+                                            audioFile={this.props.message.file}
                                         />
                                     )
                                 }

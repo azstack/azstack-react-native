@@ -20,6 +20,8 @@ export const IMAGE_KICK_MEMBER = require('../../static/image/classic/kick-member
 export const IMAGE_JOIN = require('../../static/image/classic/join.png');
 export const IMAGE_DONE = require('../../static/image/classic/done.png');
 export const IMAGE_CHECK_MARK = require('../../static/image/classic/check-mark.png');
+export const IMAGE_PLAY = require('../../static/image/classic/play.png');
+export const IMAGE_PAUSE = require('../../static/image/classic/pause.png');
 
 
 export const SCREEN_BLOCK_STYLE = {
@@ -754,6 +756,31 @@ export const MESSAGE_TYPE_MEDIA_FILE_DOWNLOAD_IMAGE_HOLDER_STYLE = {
 export const MESSAGE_TYPE_MEDIA_FILE_IMAGE_STYLE = {
     width: 200,
     height: 200
+};
+export const MESSAGE_TYPE_MEDIA_FILE_AUDIO_BLOCK_STYLE = {
+    width: 200,
+    height: 50,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E1E5EC',
+    borderRadius: 5,
+    padding: 5
+};
+export const MESSAGE_TYPE_MEDIA_FILE_AUDIO_CONTROL_BUTTON_STYLE = {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const MESSAGE_TYPE_MEDIA_FILE_AUDIO_CONTROL_IMAGE_STYLE = {
+    width: 30,
+    height: 30
+};
+export const MESSAGE_TYPE_MEDIA_FILE_AUDIO_DURATION_BLOCK_STYLE = {
+    marginLeft: 5,
+    flex: 1
 };
 export const MESSAGE_TYPE_MEDIA_DETAILS_STATUS_TEXT_STYLE = {
     marginHorizontal: 5,

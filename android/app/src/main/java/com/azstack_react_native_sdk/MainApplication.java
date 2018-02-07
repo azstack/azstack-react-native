@@ -3,6 +3,7 @@ package com.azstack_react_native_sdk;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.brentvatne.react.ReactVideoPackage;
 import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.facebook.react.ReactNativeHost;
@@ -26,6 +27,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactVideoPackage(),
             new ReactNativeDocumentPicker(),
             new PickerPackage(),
           new WebRTCModulePackage()

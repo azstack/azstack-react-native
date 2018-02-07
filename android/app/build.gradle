@@ -147,6 +147,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-video')
     compile project(':react-native-document-picker')
     compile project(':react-native-image-crop-picker')
     compile fileTree(dir: "libs", include: ["*.jar"])
