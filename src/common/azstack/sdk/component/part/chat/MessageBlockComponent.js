@@ -422,6 +422,7 @@ class MessageBlockComponent extends React.Component {
                                         <MessageAudioBlockComponent
                                             getCoreInstances={this.props.getCoreInstances}
                                             audioFile={this.props.message.file}
+                                            msgId={this.props.message.msgId}
                                         />
                                     )
                                 }
@@ -432,6 +433,7 @@ class MessageBlockComponent extends React.Component {
                                         <MessageVideoBlockComponent
                                             getCoreInstances={this.props.getCoreInstances}
                                             videoFile={this.props.message.file}
+                                            msgId={this.props.message.msgId}
                                         />
                                     )
                                 }

@@ -13,6 +13,8 @@ class MessageAudioBlockComponent extends React.Component {
 
         this.coreInstances = props.getCoreInstances();
 
+        this.subscriptions = {};
+
         this.state = {
             playing: false,
             currentTime: 0,
@@ -31,7 +33,27 @@ class MessageAudioBlockComponent extends React.Component {
         this.onAudioTimedMetadata = this.onAudioTimedMetadata.bind(this);
     };
 
+    addSubscriptions() {
+        this.subscriptions.onMessageMediaPlayed = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_MESSAGE_MEDIA_PLAYED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+
+            if (result.msgId !== this.props.msgId) {
+                this.setState({ playing: false });
+            }
+        });
+    };
+    clearSubscriptions() {
+        for (let subscriptionName in this.subscriptions) {
+            this.subscriptions[subscriptionName].remove();
+        }
+    };
+
     onTogglePlayState() {
+        if (!this.state.playing) {
+            this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_MESSAGE_MEDIA_PLAYED, { error: null, result: { msgId: this.props.msgId } });
+        }
         this.setState({ playing: !this.state.playing });
     };
 
@@ -55,6 +77,13 @@ class MessageAudioBlockComponent extends React.Component {
     };
     onAudioBuffer(data) { };
     onAudioTimedMetadata(data) { };
+
+    componentDidMount() {
+        this.addSubscriptions();
+    };
+    componentWillUnmount() {
+        this.clearSubscriptions();
+    };
 
     render() {
         return (
