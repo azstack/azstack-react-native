@@ -191,11 +191,11 @@ export const MESSAGE_STATUS_BLOCK_ERROR_STYLE = {
     borderColor: '#D05454'
 };
 export const MESSAGE_STATUS_BLOCK_SENT_STYLE = {
-    borderColor: '#F2784B'
+    borderColor: '#3598DC'
 };
 export const MESSAGE_STATUS_BLOCK_DELIVERED_STYLE = {
-    borderColor: '#F2784B',
-    backgroundColor: '#F2784B'
+    borderColor: '#3598DC',
+    backgroundColor: '#3598DC'
 };
 export const MESSAGE_STATUS_BLOCK_SEEN_STYLE = {
     borderColor: '#fff'
@@ -211,7 +211,7 @@ export const MESSAGE_STATUS_TEXT_ERROR_STYLE = {
     color: '#D05454'
 };
 export const MESSAGE_STATUS_TEXT_SENT_STYLE = {
-    color: '#F2784B'
+    color: '#3598DC'
 };
 export const MESSAGE_STATUS_TEXT_DELIVERED_STYLE = {
     color: '#fff'
