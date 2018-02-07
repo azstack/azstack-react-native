@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-    BackHandler,
     Platform,
     View,
     SectionList,
@@ -31,8 +30,6 @@ class SelectMemberComponent extends React.Component {
             searchText: ''
         };
 
-        this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
-
         this.onSearchTextChanged = this.onSearchTextChanged.bind(this);
         this.onSearchTextCleared = this.onSearchTextCleared.bind(this);
 
@@ -62,11 +59,6 @@ class SelectMemberComponent extends React.Component {
         for (let subscriptionName in this.subscriptions) {
             this.subscriptions[subscriptionName].remove();
         }
-    };
-
-    onHardBackButtonPressed() {
-        this.props.onBackButtonPressed();
-        return true;
     };
 
     onSearchTextChanged(newText) {
@@ -138,11 +130,9 @@ class SelectMemberComponent extends React.Component {
 
     componentDidMount() {
         this.addSubscriptions();
-        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     };
     componentWillUnmount() {
         this.clearSubscriptions();
-        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     };
 
     render() {

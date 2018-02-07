@@ -1,12 +1,12 @@
 import React from 'react';
 import {
-    BackHandler,
     Alert,
     View,
     FlatList,
     Platform,
     TouchableOpacity,
-    Image
+    Image,
+    BackHandler
 } from 'react-native';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
