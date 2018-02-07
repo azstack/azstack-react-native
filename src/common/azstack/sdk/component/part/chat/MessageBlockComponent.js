@@ -8,6 +8,7 @@ import {
 
 import ChatAvatarBlockComponent from '../common/ChatAvatarBlockComponent';
 import MessageStatusBlockComponent from '../common/MessageStatusBlockComponent';
+import MessageStickerBlockComponent from './MessageStickerBlockComponent';
 import MessageImageBlockComponent from './MessageImageBlockComponent';
 import MessageAudioBlockComponent from './MessageAudioBlockComponent';
 import MessageVideoBlockComponent from './MessageVideoBlockComponent';
@@ -17,13 +18,6 @@ class MessageBlockComponent extends React.Component {
         super(props);
 
         this.coreInstances = props.getCoreInstances();
-
-        this.maxSizes = {
-            stickerImage: {
-                width: 60,
-                height: 60
-            }
-        };
 
         this.subscriptions = {};
 
@@ -347,14 +341,9 @@ class MessageBlockComponent extends React.Component {
                                 {
                                     this.props.message.status !== this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED &&
                                     this.props.message.type === this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER && (
-                                        <Image
-                                            style={[
-                                                this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_STICKER_STYLE'),
-                                                this.coreInstances.FileConverter.ajustImageSizes(this.props.message.sticker, this.maxSizes.stickerImage)
-                                            ]}
-                                            source={{
-                                                uri: this.props.message.sticker.url
-                                            }}
+                                        <MessageStickerBlockComponent
+                                            getCoreInstances={this.props.getCoreInstances}
+                                            sticker={this.props.message.sticker}
                                         />
                                     )
                                 }
