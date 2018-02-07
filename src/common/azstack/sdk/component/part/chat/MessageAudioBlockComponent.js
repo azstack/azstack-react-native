@@ -141,7 +141,7 @@ class MessageAudioBlockComponent extends React.Component {
                         />
                     </View>
                     <Text
-                        style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_AUDIO_NAME_TEXT_STYLE')}
+                        style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_AUDIO_DURATION_TEXT_STYLE')}
                     >
                         {this.coreInstances.FileConverter.timeAsString(this.state.currentTime)}
                         /

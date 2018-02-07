@@ -176,7 +176,7 @@ class MessageVideoBlockComponent extends React.Component {
                             />
                         </View>
                         <Text
-                            style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_VIDEO_NAME_TEXT_STYLE')}
+                            style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_VIDEO_DURATION_TEXT_STYLE')}
                         >
                             {this.coreInstances.FileConverter.timeAsString(this.state.currentTime)}
                             /
