@@ -825,6 +825,81 @@ export const MESSAGE_TYPE_MEDIA_FILE_AUDIO_DURATION_TEXT_STYLE = {
     fontWeight: '300',
     color: '#95A5A6'
 };
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_BLOCK_STYLE = {
+    width: 250,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E1E5EC',
+    borderRadius: 5
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_FRAME_BLOCK_STYLE = {
+    width: 250,
+    height: 250,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_CONTROL_BLOCK_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_STATE_BUTTON_STYLE = {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_STATE_IMAGE_STYLE = {
+    width: 40,
+    height: 40
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_DURATION_BLOCK_STYLE = {
+    marginLeft: 10,
+    flex: 1
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_NAME_TEXT_STYLE = {
+    fontSize: 12,
+    lineHeight: 15,
+    fontWeight: '500',
+    color: '#95A5A6'
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_DURATION_LINES_BLOCK_STYLE = {
+    height: 4,
+    position: 'relative',
+    marginVertical: 10
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_DURATION_LINE_STYLE = {
+    height: 4,
+    width: '100%',
+    backgroundColor: '#BFBFBF',
+    position: 'absolute',
+    top: 0,
+    left: 0
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_PLAYABLE_LINE_STYLE = {
+    height: 4,
+    width: 0,
+    backgroundColor: '#C8D046',
+    position: 'absolute',
+    top: 0,
+    left: 0
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_CURRENT_LINE_STYLE = {
+    height: 4,
+    width: 0,
+    backgroundColor: '#F2784B',
+    position: 'absolute',
+    top: 0,
+    left: 0
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_DURATION_TEXT_STYLE = {
+    fontSize: 12,
+    lineHeight: 15,
+    fontWeight: '300',
+    color: '#95A5A6'
+};
 export const MESSAGE_TYPE_MEDIA_DETAILS_STATUS_TEXT_STYLE = {
     marginHorizontal: 5,
     fontSize: 12,

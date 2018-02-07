@@ -120,9 +120,6 @@ class MessageAudioBlockComponent extends React.Component {
                     </Text>
                 </View>
                 <Video source={{ uri: this.props.audioFile.url }}
-                    ref={(ref) => {
-                        this.player = ref
-                    }}
                     rate={1.0}
                     volume={1.0}
                     muted={false}
