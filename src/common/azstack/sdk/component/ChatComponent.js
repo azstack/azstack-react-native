@@ -48,6 +48,7 @@ class ChatComponent extends React.Component {
         };
 
         this.onMessagesListEndReach = this.onMessagesListEndReach.bind(this);
+        this.onMessageImagePressed = this.onMessageImagePressed.bind(this);
     };
 
     addSubscriptions() {
@@ -549,6 +550,9 @@ class ChatComponent extends React.Component {
 
     onMessagesListEndReach() {
         this.getModifiedMessages();
+    };
+    onMessageImagePressed(event) {
+        console.log(event);
     };
 
     onTyping(typingDetails) {
@@ -1122,6 +1126,7 @@ class ChatComponent extends React.Component {
                                         shouldRenderTimeMark={this.shouldRenderTimeMark(index)}
                                         shouldRenderSender={this.shouldRenderSender(index)}
                                         onSenderPressed={this.props.onSenderPressed}
+                                        onMessageImagePressed={this.onMessageImagePressed}
                                     />
                                 );
                             }}

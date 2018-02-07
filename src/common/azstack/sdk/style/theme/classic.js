@@ -191,11 +191,11 @@ export const MESSAGE_STATUS_BLOCK_ERROR_STYLE = {
     borderColor: '#D05454'
 };
 export const MESSAGE_STATUS_BLOCK_SENT_STYLE = {
-    borderColor: '#F2784B'
+    borderColor: '#3598DC'
 };
 export const MESSAGE_STATUS_BLOCK_DELIVERED_STYLE = {
-    borderColor: '#F2784B',
-    backgroundColor: '#F2784B'
+    borderColor: '#3598DC',
+    backgroundColor: '#3598DC'
 };
 export const MESSAGE_STATUS_BLOCK_SEEN_STYLE = {
     borderColor: '#fff'
@@ -211,7 +211,7 @@ export const MESSAGE_STATUS_TEXT_ERROR_STYLE = {
     color: '#D05454'
 };
 export const MESSAGE_STATUS_TEXT_SENT_STYLE = {
-    color: '#F2784B'
+    color: '#3598DC'
 };
 export const MESSAGE_STATUS_TEXT_DELIVERED_STYLE = {
     color: '#fff'
@@ -705,7 +705,7 @@ export const MESSAGE_TYPE_MEDIA_STICKER_STYLE = {
     height: 70
 };
 export const MESSAGE_TYPE_MEDIA_FILE_BLOCK_STYLE = {
-    width: 200
+    width: 250
 };
 export const MESSAGE_TYPE_MEDIA_FILE_IMAGE_BLOCK_STYLE = {
     padding: 30,
@@ -754,33 +754,155 @@ export const MESSAGE_TYPE_MEDIA_FILE_DOWNLOAD_IMAGE_HOLDER_STYLE = {
     height: 20
 };
 export const MESSAGE_TYPE_MEDIA_FILE_IMAGE_STYLE = {
-    width: 200,
-    height: 200
+    width: 250,
+    height: 250,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#E1E5EC'
 };
-export const MESSAGE_TYPE_MEDIA_FILE_AUDIO_BLOCK_STYLE = {
-    width: 200,
-    height: 50,
+export const MESSAGE_TYPE_MEDIA_FILE_AUDIO_CONTROL_BLOCK_STYLE = {
+    width: 250,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#E1E5EC',
     borderRadius: 5,
-    padding: 5
+    padding: 10
 };
-export const MESSAGE_TYPE_MEDIA_FILE_AUDIO_CONTROL_BUTTON_STYLE = {
+export const MESSAGE_TYPE_MEDIA_FILE_AUDIO_STATE_BUTTON_STYLE = {
     width: 40,
     height: 40,
     justifyContent: 'center',
     alignItems: 'center'
 };
-export const MESSAGE_TYPE_MEDIA_FILE_AUDIO_CONTROL_IMAGE_STYLE = {
-    width: 30,
-    height: 30
+export const MESSAGE_TYPE_MEDIA_FILE_AUDIO_STATE_IMAGE_STYLE = {
+    width: 40,
+    height: 40
 };
 export const MESSAGE_TYPE_MEDIA_FILE_AUDIO_DURATION_BLOCK_STYLE = {
-    marginLeft: 5,
+    marginLeft: 10,
     flex: 1
+};
+export const MESSAGE_TYPE_MEDIA_FILE_AUDIO_NAME_TEXT_STYLE = {
+    fontSize: 12,
+    lineHeight: 15,
+    fontWeight: '500',
+    color: '#95A5A6'
+};
+export const MESSAGE_TYPE_MEDIA_FILE_AUDIO_DURATION_LINES_BLOCK_STYLE = {
+    height: 4,
+    position: 'relative',
+    marginVertical: 10
+};
+export const MESSAGE_TYPE_MEDIA_FILE_AUDIO_DURATION_LINE_STYLE = {
+    height: 4,
+    width: '100%',
+    backgroundColor: '#BFBFBF',
+    position: 'absolute',
+    top: 0,
+    left: 0
+};
+export const MESSAGE_TYPE_MEDIA_FILE_AUDIO_PLAYABLE_LINE_STYLE = {
+    height: 4,
+    width: 0,
+    backgroundColor: '#C8D046',
+    position: 'absolute',
+    top: 0,
+    left: 0
+};
+export const MESSAGE_TYPE_MEDIA_FILE_AUDIO_CURRENT_LINE_STYLE = {
+    height: 4,
+    width: 0,
+    backgroundColor: '#F2784B',
+    position: 'absolute',
+    top: 0,
+    left: 0
+};
+export const MESSAGE_TYPE_MEDIA_FILE_AUDIO_DURATION_TEXT_STYLE = {
+    fontSize: 12,
+    lineHeight: 15,
+    fontWeight: '300',
+    color: '#95A5A6'
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_BLOCK_STYLE = {
+    width: 250,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E1E5EC',
+    borderRadius: 5
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_FRAME_BLOCK_STYLE = {
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_FRAME_DISPLAY_STYLE = {
+    width: 250,
+    height: 250
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_CONTROL_BLOCK_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_STATE_BUTTON_STYLE = {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_STATE_IMAGE_STYLE = {
+    width: 40,
+    height: 40
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_DURATION_BLOCK_STYLE = {
+    marginLeft: 10,
+    flex: 1
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_NAME_TEXT_STYLE = {
+    fontSize: 12,
+    lineHeight: 15,
+    fontWeight: '500',
+    color: '#95A5A6'
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_DURATION_LINES_BLOCK_STYLE = {
+    height: 4,
+    position: 'relative',
+    marginVertical: 10
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_DURATION_LINE_STYLE = {
+    height: 4,
+    width: '100%',
+    backgroundColor: '#BFBFBF',
+    position: 'absolute',
+    top: 0,
+    left: 0
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_PLAYABLE_LINE_STYLE = {
+    height: 4,
+    width: 0,
+    backgroundColor: '#C8D046',
+    position: 'absolute',
+    top: 0,
+    left: 0
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_CURRENT_LINE_STYLE = {
+    height: 4,
+    width: 0,
+    backgroundColor: '#F2784B',
+    position: 'absolute',
+    top: 0,
+    left: 0
+};
+export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_DURATION_TEXT_STYLE = {
+    fontSize: 12,
+    lineHeight: 15,
+    fontWeight: '300',
+    color: '#95A5A6'
 };
 export const MESSAGE_TYPE_MEDIA_DETAILS_STATUS_TEXT_STYLE = {
     marginHorizontal: 5,
