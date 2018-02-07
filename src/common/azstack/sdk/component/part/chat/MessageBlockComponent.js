@@ -8,6 +8,7 @@ import {
 
 import ChatAvatarBlockComponent from '../common/ChatAvatarBlockComponent';
 import MessageStatusBlockComponent from '../common/MessageStatusBlockComponent';
+import MessageImageBlockComponent from './MessageImageBlockComponent';
 import MessageAudioBlockComponent from './MessageAudioBlockComponent';
 import MessageVideoBlockComponent from './MessageVideoBlockComponent';
 
@@ -21,10 +22,6 @@ class MessageBlockComponent extends React.Component {
             stickerImage: {
                 width: 60,
                 height: 60
-            },
-            fileImage: {
-                width: 250,
-                height: 250
             }
         };
 
@@ -423,14 +420,9 @@ class MessageBlockComponent extends React.Component {
                                     this.props.message.status !== this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED &&
                                     this.props.message.type === this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE &&
                                     this.props.message.file.type === this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE && (
-                                        <Image
-                                            style={[
-                                                this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_FILE_IMAGE_STYLE'),
-                                                this.coreInstances.FileConverter.ajustImageSizes(this.props.message.file, this.maxSizes.fileImage)
-                                            ]}
-                                            source={{
-                                                uri: this.props.message.file.url
-                                            }}
+                                        <MessageImageBlockComponent
+                                            getCoreInstances={this.props.getCoreInstances}
+                                            imageFile={this.props.message.file}
                                         />
                                     )
                                 }
