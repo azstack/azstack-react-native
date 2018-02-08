@@ -444,6 +444,9 @@ export class AZStackSdk extends AZStackBaseComponent {
 
                 this.pop();
             },
+            showImageGallery: (event) => {
+                this.showImageGallery(event);
+            },
             onChatTargetPressed: (event) => {
                 if (options && typeof options === 'object' && typeof options.onChatTargetPressed === 'function') {
                     options.onChatTargetPressed(event);
@@ -769,6 +772,19 @@ export class AZStackSdk extends AZStackBaseComponent {
             }
         });
     };
+    showImageGallery(options) {
+        this.navigate(this.getNavigation().ImageGalleryComponent, {
+            ...options,
+            onBackButtonPressed: () => {
+                if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                    options.onBackButtonPressed();
+                    return;
+                }
+
+                this.pop();
+            }
+        });
+    };
 
     UIContacts(options) {
         return this.renderScreen(
@@ -899,6 +915,9 @@ export class AZStackSdk extends AZStackBaseComponent {
                     }
 
                     this.pop();
+                },
+                showImageGallery: (event) => {
+                    this.showImageGallery(event);
                 },
                 onChatTargetPressed: (event) => {
                     if (options && typeof options === 'object' && typeof options.onChatTargetPressed === 'function') {

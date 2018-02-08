@@ -17,6 +17,7 @@ import GroupComponent from './GroupComponent';
 import SelectMembersComponent from './SelectMembersComponent';
 import SelectMemberComponent from './SelectMemberComponent';
 import NewGroupComponent from './NewGroupComponent';
+import ImageGalleryComponent from './ImageGalleryComponent';
 
 const NavigationEnum = {
     ConversationsComponent: 'ConversationsComponent',
@@ -30,7 +31,8 @@ const NavigationEnum = {
     GroupComponent: 'GroupComponent',
     SelectMembersComponent: 'SelectMembersComponent',
     SelectMemberComponent: 'SelectMemberComponent',
-    NewGroupComponent: 'NewGroupComponent'
+    NewGroupComponent: 'NewGroupComponent',
+    ImageGalleryComponent: 'ImageGalleryComponent'
 };
 
 export default class AZStackBaseComponent extends React.Component {
@@ -82,6 +84,8 @@ export default class AZStackBaseComponent extends React.Component {
                 return this.renderSelectMember(options, index);
             case 'NewGroupComponent':
                 return this.renderNewGroup(options, index);
+            case 'ImageGalleryComponent':
+                return this.renderImageGallery(options, index);
             default:
                 break;
         }
@@ -218,6 +222,15 @@ export default class AZStackBaseComponent extends React.Component {
 
     renderNewGroup(options, key) {
         return <NewGroupComponent
+            key={key}
+            Sizes={this.Sizes}
+            getCoreInstances={this.getCoreInstances}
+            {...options}
+        />;
+    };
+
+    renderImageGallery(options, key) {
+        return <ImageGalleryComponent
             key={key}
             Sizes={this.Sizes}
             getCoreInstances={this.getCoreInstances}

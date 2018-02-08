@@ -133,3 +133,6 @@ export const NEW_GROUP_TYPE_LABEL_TEXT = 'Group type';
 export const NEW_GROUP_TYPE_SELECT_DEFAULT_TEXT = 'Select group type';
 export const NEW_GROUP_NAME_EMPTY_ERROR = 'Group name can\'t be left blank';
 export const NEW_GROUP_TYPE_EMPTY_ERROR = 'Group type can\'t be left blank';
+
+export const IMAGE_GALLERY_HEADER_TITLE_TEXT = 'Image gallery';
+export const IMAGE_GALLERY_EMPTY_TEXT = 'No image';

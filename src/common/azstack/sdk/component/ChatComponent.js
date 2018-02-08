@@ -671,7 +671,6 @@ class ChatComponent extends React.Component {
         if (!imageFiles.length) {
             return;
         }
-        console.log(imageFiles);
         let imageIndex = -1;
         for (let i = 0; i < imageFiles.length; i++) {
             if (imageFiles[i].msgId === event.msgId) {
@@ -682,7 +681,10 @@ class ChatComponent extends React.Component {
         if (imageIndex === -1) {
             return;
         }
-        console.log(imageIndex);
+        this.props.showImageGallery({
+            imageFiles: imageFiles,
+            initialIndex: imageIndex
+        });
     };
 
     onTyping(typingDetails) {
