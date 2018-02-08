@@ -1043,51 +1043,51 @@ export class AZStackCore {
         return new Promise((resolve, reject) => {
 
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                message: 'Start reconnect to slave server'
+                message: 'Start reconnect'
             });
 
             this.addUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_RECONNECT_RETURN);
 
             if (this.slaveSocketConnected) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'Cannot reconnect to slave server, slave socket already connected'
+                    message: 'Cannot reconnect, slave socket already connected'
                 });
                 this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_DATA,
-                    message: 'Cannot reconnect to slave server, slave socket already connected'
+                    message: 'Cannot reconnect, slave socket already connected'
                 }, null);
                 return;
             }
 
             if (!this.stateControls.coreInited) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'Cannot reconnect to slave server, core not inited'
+                    message: 'Cannot reconnect, core not inited'
                 });
                 this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_DATA,
-                    message: 'Cannot reconnect to slave server, core not inited'
+                    message: 'Cannot reconnect, core not inited'
                 }, null);
                 return;
             }
 
             if (this.stateControls.connecting) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'Cannot reconnect to slave server, already try connecting'
+                    message: 'Cannot reconnect, already try connecting'
                 });
                 this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_DATA,
-                    message: 'Cannot reconnect to slave server, already try connecting'
+                    message: 'Cannot reconnect, already try connecting'
                 }, null);
                 return;
             }
 
             if (this.stateControls.reconnecting || this.stateControls.autoReconnecting) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'Cannot reconnect to slave server, already try reconnecting'
+                    message: 'Cannot reconnect, already try reconnecting'
                 });
                 this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', {
                     code: this.errorCodes.ERR_UNEXPECTED_DATA,
-                    message: 'Cannot reconnect to slave server, already try reconnecting'
+                    message: 'Cannot reconnect, already try reconnecting'
                 }, null);
                 return;
             }
@@ -1113,7 +1113,7 @@ export class AZStackCore {
 
         if (this.autoReconnectLimitTries && this.autoReconnectTrieds >= this.autoReconnectLimitTries) {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                message: 'Stop auto reconnect to slave server, trieds exceed limit'
+                message: 'Stop auto reconnect, trieds exceed limit'
             });
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
                 message: 'Auto reconnect data',
@@ -1129,7 +1129,7 @@ export class AZStackCore {
             if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED] === 'function') {
                 this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED]({
                     code: this.errorCodes.ERR_UNEXPECTED_DATA,
-                    message: 'Stop auto reconnect to slave server, trieds exceed limit'
+                    message: 'Stop auto reconnect, trieds exceed limit'
                 }, null);
             }
 
@@ -1140,7 +1140,7 @@ export class AZStackCore {
 
         setTimeout(() => {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                message: 'Start auto reconnect to slave server'
+                message: 'Start auto reconnect'
             });
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
                 message: 'Auto reconnect data',
