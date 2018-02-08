@@ -35,8 +35,12 @@ class ChatComponent extends React.Component {
                 lastCreated: new Date().getTime(),
                 loading: false,
                 done: false
+            },
+            file: {
+                lastCreated: new Date().getTime()
             }
         };
+        this.files = [];
 
         this.state = {
             chatTarget: null,
@@ -151,10 +155,14 @@ class ChatComponent extends React.Component {
         this.pagination.modified.lastCreated = new Date().getTime();
         this.pagination.modified.loading = false;
         this.pagination.modified.done = false;
+        this.pagination.file.lastCreated = new Date().getTime();
         this.state.chatTarget = null;
         this.state.unreads = [];
         this.state.messages = [];
+        this.files = [];
+
         this.getChatTarget();
+        this.getModifiedFiles();
     };
 
     shouldRenderTimeMark(index) {
@@ -555,12 +563,126 @@ class ChatComponent extends React.Component {
             );
         });
     };
+    getModifiedFiles() {
+        this.coreInstances.AZStackCore.getModifiedFiles({
+            lastCreated: this.pagination.file.lastCreated,
+            chatType: this.props.chatType,
+            chatId: this.props.chatId
+        }).then((result) => {
+            this.prepareFiles(result.list).then((preparedFiles) => {
+                this.files = this.files.concat(preparedFiles).sort((a, b) => {
+                    return a.created < b.created ? -1 : 1
+                });
+            }).catch((error) => { });
+        }).catch((error) => { });
+    };
+    prepareFiles(files) {
+
+        return Promise.all(
+            files.map((file) => {
+                return new Promise((resolve, reject) => {
+
+                    if (file.chatType === this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_USER) {
+                        if (file.senderId === file.chatId) {
+                            file.sender = this.state.chatTarget;
+                            file.receiver = this.coreInstances.AZStackCore.authenticatedUser;
+                        } else if (file.receiverId === file.chatId) {
+                            file.sender = this.coreInstances.AZStackCore.authenticatedUser;
+                            file.receiver = this.state.chatTarget;
+                        }
+                        resolve(file);
+                    } else if (v.chatType === this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
+                        file.receiver = this.state.chatTarget;
+                        let foundSender = false;
+                        if (file.senderId === this.coreInstances.AZStackCore.authenticatedUser.userId) {
+                            foundSender = true;
+                            file.sender = this.coreInstances.AZStackCore.authenticatedUser
+                        } else {
+                            for (let i = 0; i < this.state.chatTarget.members.length; i++) {
+                                let member = this.state.chatTarget.members[i];
+                                if (file.senderId === member.userId) {
+                                    foundSender = true;
+                                    file.sender = member;
+                                    break;
+                                }
+                            }
+                        }
+                        if (foundSender) {
+                            return resolve(file);
+                        }
+
+                        this.coreInstances.AZStackCore.getUsersInformation({
+                            userIds: [file.senderId]
+                        }).then((result) => {
+                            file.sender = result.list[0];
+                            resolve(file);
+                        }).catch((error) => {
+                            file.sender = { userId: file.senderId };
+                            resolve(file);
+                        })
+                    }
+                });
+            })
+        ).then((files) => {
+            return Promise.all(
+                files.map((file) => {
+                    return new Promise((resolve, reject) => {
+                        switch (file.file.type) {
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE:
+                                if (file.file.width && file.file.height) {
+                                    return resolve(file);
+                                }
+
+                                Image.getSize(file.file.url, (width, height) => {
+                                    file.file.width = width;
+                                    file.file.height = height;
+                                    resolve(file);
+                                }, (error) => {
+                                    resolve(file);
+                                });
+                                break;
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_AUDIO:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_VIDEO:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_EXCEL:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_WORD:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_POWERPOINT:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_PDF:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_TEXT:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_CODE:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_ARCHIVE:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_UNKNOWN:
+                            default:
+                                resolve(file);
+                                break;
+                        }
+                    });
+                })
+            );
+        });
+    };
 
     onMessagesListEndReach() {
         this.getModifiedMessages();
     };
     onMessageImagePressed(event) {
-        console.log(event);
+        let imageFiles = this.files.filter((file) => {
+            return file.file.type === this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE;
+        });
+        if (!imageFiles.length) {
+            return;
+        }
+        console.log(imageFiles);
+        let imageIndex = -1;
+        for (let i = 0; i < imageFiles.length; i++) {
+            if (imageFiles[i].msgId === event.msgId) {
+                imageIndex = i;
+                break;
+            }
+        }
+        if (imageIndex === -1) {
+            return;
+        }
+        console.log(imageIndex);
     };
 
     onTyping(typingDetails) {
@@ -697,6 +819,12 @@ class ChatComponent extends React.Component {
                     animated: true
                 });
             });
+            if (newMessage.type === this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE) {
+                this.files.push(newMessage);
+                this.files = this.files.sort((a, b) => {
+                    return a.created < b.created ? -1 : 1
+                })
+            }
         }).catch((error) => { });
     };
     onMessageFromMe(myMessage) {
@@ -772,6 +900,12 @@ class ChatComponent extends React.Component {
                     animated: true
                 });
             });
+            if (myMessage.type === this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE) {
+                this.files.push(myMessage);
+                this.files = this.files.sort((a, b) => {
+                    return a.created < b.created ? -1 : 1
+                })
+            }
         }).catch((error) => { });
     };
     onNewMessageReturn(myMessage) {
@@ -849,6 +983,12 @@ class ChatComponent extends React.Component {
             }
             if (!messageExisted) {
                 messages.push(myMessage);
+                if (myMessage.type === this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE) {
+                    this.files.push(myMessage);
+                    this.files = this.files.sort((a, b) => {
+                        return a.created < b.created ? -1 : 1
+                    })
+                }
             }
             this.setState({
                 messages: messages.sort((a, b) => {
