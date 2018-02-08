@@ -109,13 +109,16 @@ export const USER_EMPTY_TEXT = 'No User Infomation';
 
 export const GROUP_HEADER_TITLE_TEXT = 'Group Information';
 export const GROUP_EMPTY_TEXT = 'No Group Infomation';
-export const GROUP_MEMBER_EMPTY_TEXT = 'No Member';
 export const GROUP_NEW_NAME_TEXT = 'New group name';
 export const GROUP_NEW_NAME_PLACEHOLDER_TEXT = 'Enter new group name';
+export const GROUP_ADD_MEMBERS_TEXT = 'Add members';
+export const GROUP_LEAVE_TEXT = 'Leave';
+export const GROUP_JOIN_TEXT = 'Join';
 export const GROUP_SELECT_NEW_MEMBERS_TEXT = 'Select new members';
 export const GROUP_SELECT_NEW_ADMIN_TEXT = 'Select new admin';
 export const GROUP_NEW_NAME_INPUT_PLACE_HOLDER_TEXT = 'Group name';
 export const GROUP_NEW_NAME_EMPTY_ERROR_TEXT = 'Group name can\'t be left empty';
+export const GROUP_MEMBER_EMPTY_TEXT = 'No Member';
 
 export const SELECT_MEMBERS_SEARCH_PLACEHOLDER_TEXT = 'Search...';
 export const SELECT_MEMBERS_EMPTY_TEXT = 'No Member';

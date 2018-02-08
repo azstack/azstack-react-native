@@ -689,53 +689,6 @@ class GroupComponent extends React.Component {
                                             chatTarget={this.state.group}
                                             textStyle={this.coreInstances.CustomStyle.getStyle('GROUP_AVATAR_TEXT_STYLE')}
                                         />
-                                        {
-                                            this.state.inGroup && (
-                                                <View
-                                                    style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BLOCK_STYLE')}
-                                                >
-                                                    <TouchableOpacity
-                                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
-                                                        activeOpacity={0.5}
-                                                        onPress={this.onAddMemberButtonPressed}
-                                                    >
-                                                        <Image
-                                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
-                                                            source={this.coreInstances.CustomStyle.getImage('IMAGE_ADD_MEMBER')}
-                                                        />
-                                                    </TouchableOpacity>
-                                                    <TouchableOpacity
-                                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
-                                                        activeOpacity={0.5}
-                                                        onPress={this.onLeaveGroupButtonPressed}
-                                                    >
-                                                        <Image
-                                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
-                                                            source={this.coreInstances.CustomStyle.getImage('IMAGE_LEAVE')}
-                                                        />
-                                                    </TouchableOpacity>
-                                                </View>
-                                            )
-                                        }
-                                        {
-                                            !this.state.inGroup &&
-                                            this.state.group.type === this.coreInstances.AZStackCore.groupConstants.GROUP_TYPE_PUBLIC && (
-                                                <View
-                                                    style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BLOCK_STYLE')}
-                                                >
-                                                    <TouchableOpacity
-                                                        style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
-                                                        activeOpacity={0.5}
-                                                        onPress={this.onJoinButtonPressed}
-                                                    >
-                                                        <Image
-                                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_IMAGE_STYLE')}
-                                                            source={this.coreInstances.CustomStyle.getImage('IMAGE_JOIN')}
-                                                        />
-                                                    </TouchableOpacity>
-                                                </View>
-                                            )
-                                        }
                                     </View>
                                     <View
                                         style={this.coreInstances.CustomStyle.getStyle('GROUP_RIGHT_BLOCK_STYLE')}
@@ -797,7 +750,6 @@ class GroupComponent extends React.Component {
                                         >
                                             {this.coreInstances.Language.getText(this.state.group.type === this.coreInstances.AZStackCore.groupConstants.GROUP_TYPE_PRIVATE ? 'GROUP_TYPE_PRIVATE' : 'GROUP_TYPE_PUBLIC')}
                                         </Text>
-
                                         <Text
                                             style={this.coreInstances.CustomStyle.getStyle('GROUP_MEMBERS_TEXT_STYLE')}
                                         >
@@ -806,6 +758,62 @@ class GroupComponent extends React.Component {
                                         </Text>
                                     </View>
                                 </View>
+                                {
+                                    this.state.inGroup && (
+                                        <View
+                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BLOCK_STYLE')}
+                                        >
+                                            <TouchableOpacity
+                                                style={[
+                                                    this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_HALF_STYLE'),
+                                                    this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_FIRST_HALF_STYLE')
+                                                ]}
+                                                activeOpacity={0.5}
+                                                onPress={this.onAddMemberButtonPressed}
+                                            >
+                                                <Text
+                                                    style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_TEXT_STYLE')}
+                                                >
+                                                    {this.coreInstances.Language.getText('GROUP_ADD_MEMBERS_TEXT')}
+                                                </Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                style={[
+                                                    this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_HALF_STYLE'),
+                                                    this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_SECOND_HALF_STYLE')
+                                                ]}
+                                                activeOpacity={0.5}
+                                                onPress={this.onLeaveGroupButtonPressed}
+                                            >
+                                                <Text
+                                                    style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_TEXT_STYLE')}
+                                                >
+                                                    {this.coreInstances.Language.getText('GROUP_LEAVE_TEXT')}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    )
+                                }
+                                {
+                                    !this.state.inGroup &&
+                                    this.state.group.type === this.coreInstances.AZStackCore.groupConstants.GROUP_TYPE_PUBLIC && (
+                                        <View
+                                            style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BLOCK_STYLE')}
+                                        >
+                                            <TouchableOpacity
+                                                style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_STYLE')}
+                                                activeOpacity={0.5}
+                                                onPress={this.onJoinButtonPressed}
+                                            >
+                                                <Text
+                                                    style={this.coreInstances.CustomStyle.getStyle('GROUP_ACTION_BUTTON_TEXT_STYLE')}
+                                                >
+                                                    {this.coreInstances.Language.getText('GROUP_JOIN_TEXT')}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    )
+                                }
                                 <View
                                     style={this.coreInstances.CustomStyle.getStyle('GROUP_MEMBERS_BLOCK_STYLE')}
                                 >

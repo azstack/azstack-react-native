@@ -13,11 +13,8 @@ export const IMAGE_DRAWING = require('../../static/image/classic/drawing.png');
 export const IMAGE_VOICE_CALL = require('../../static/image/classic/voice-call.png');
 export const IMAGE_VIDEO_CALL = require('../../static/image/classic/video-call.png');
 export const IMAGE_START_CHAT = require('../../static/image/classic/start-chat.png');
-export const IMAGE_ADD_MEMBER = require('../../static/image/classic/add-member.png');
-export const IMAGE_LEAVE = require('../../static/image/classic/leave.png');
 export const IMAGE_CHANGE_ADMIN = require('../../static/image/classic/change-admin.png');
 export const IMAGE_KICK_MEMBER = require('../../static/image/classic/kick-member.png');
-export const IMAGE_JOIN = require('../../static/image/classic/join.png');
 export const IMAGE_DONE = require('../../static/image/classic/done.png');
 export const IMAGE_CHECK_MARK = require('../../static/image/classic/check-mark.png');
 export const IMAGE_PLAY = require('../../static/image/classic/play.png');
@@ -990,21 +987,6 @@ export const GROUP_AVATAR_BLOCK_STYLE = {
 export const GROUP_AVATAR_TEXT_STYLE = {
     fontSize: 30
 };
-export const GROUP_ACTION_BLOCK_STYLE = {
-    flexDirection: 'row',
-    marginTop: 5,
-    justifyContent: 'center'
-};
-export const GROUP_ACTION_BUTTON_STYLE = {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-};
-export const GROUP_ACTION_BUTTON_IMAGE_STYLE = {
-    width: 25,
-    height: 25
-};
 export const GROUP_RIGHT_BLOCK_STYLE = {
     marginLeft: 10,
     flex: 1
@@ -1062,12 +1044,6 @@ export const GROUP_TYPE_TEXT_STYLE = {
     marginLeft: 5,
     marginTop: 5
 };
-export const GROUP_MEMBERS_BLOCK_STYLE = {
-    flex: 1,
-    borderTopWidth: 1,
-    borderTopColor: '#E1E5EC',
-    paddingBottom: 10
-};
 export const GROUP_MEMBERS_TEXT_STYLE = {
     fontSize: 18,
     fontWeight: '200',
@@ -1075,6 +1051,48 @@ export const GROUP_MEMBERS_TEXT_STYLE = {
     color: '#95A5A6',
     marginLeft: 5,
     marginTop: 5
+};
+export const GROUP_ACTION_BLOCK_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 5
+};
+export const GROUP_ACTION_BUTTON_HALF_STYLE = {
+    flex: 0.5,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    borderWidth: 1,
+    borderColor: '#3598DC',
+    borderRadius: 5
+};
+export const GROUP_ACTION_BUTTON_FIRST_HALF_STYLE = {
+    marginRight: 15
+};
+export const GROUP_ACTION_BUTTON_SECOND_HALF_STYLE = {
+    marginRight: 0
+};
+export const GROUP_ACTION_BUTTON_STYLE = {
+    flex: 1,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    borderWidth: 1,
+    borderColor: '#3598DC',
+    borderRadius: 5
+};
+export const GROUP_ACTION_BUTTON_TEXT_STYLE = {
+    fontSize: 18,
+    fontWeight: '400',
+    lineHeight: 20,
+    color: '#3598DC',
+    textAlign: 'center'
+};
+export const GROUP_MEMBERS_BLOCK_STYLE = {
+    flex: 1,
+    borderTopWidth: 1,
+    borderTopColor: '#E1E5EC',
+    paddingBottom: 10,
+    marginTop: 20
 };
 export const GROUP_MEMBERS_LIST_BLOCK_STYLE = {
     flex: 1
