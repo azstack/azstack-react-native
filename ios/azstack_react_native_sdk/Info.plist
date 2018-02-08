@@ -55,5 +55,7 @@
 	<string>Camera Permission</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Microphone Permission</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Send image</string>
 </dict>
 </plist>
