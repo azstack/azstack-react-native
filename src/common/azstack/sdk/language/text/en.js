@@ -93,7 +93,7 @@ export const CONVERSATIONS_LIST_NEW_GROUP_TO_CHAT_ERROR_TEXT = 'Create group to 
 
 export const CHAT_HEADER_TITLE_TEXT = 'Chat';
 export const MESSAGES_LIST_EMPTY_TEXT = 'No Message';
-export const CHAT_INPUT_DISABLED_TEXT = 'You can\'t not reply to this conversation';
+export const CHAT_INPUT_DISABLED_TEXT = 'You can\'t reply to this conversation';
 export const CHAT_INPUT_TEXT_INPUT_PLACEHOLDER_TEXT = 'Enter text...';
 export const CHAT_INPUT_FILE_OPTION_GALLERY_TEXT = 'Gallery';
 export const CHAT_INPUT_FILE_OPTION_CAMERA_TEXT = 'Camera';
@@ -102,7 +102,7 @@ export const CHAT_INPUT_FILE_OPTION_LOCATION_TEXT = 'Location';
 export const CHAT_INPUT_FILE_OPTION_VOICE_TEXT = 'Voice';
 export const CHAT_INPUT_FILE_OPTION_DRAWING_TEXT = 'Drawing';
 export const CHAT_INPUT_FILE_SIZE_TOO_BIG_ERROR_TEXT = 'File size can\' be bigger than';
-export const CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT = 'Can\'t not send message, please try again later.';
+export const CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT = 'Can\'t send message, please try again later.';
 
 export const USER_HEADER_TITLE_TEXT = 'User Information';
 export const USER_EMPTY_TEXT = 'No User Infomation';
