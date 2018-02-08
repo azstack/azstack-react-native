@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    BackHandler,
     Alert,
     View,
     Text,
@@ -23,10 +24,17 @@ class NewGroupComponent extends React.Component {
             groupType: ''
         };
 
+        this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
+
         this.onDoneButtonPressed = this.onDoneButtonPressed.bind(this);
 
         this.onGroupNameInputTextChanged = this.onGroupNameInputTextChanged.bind(this);
         this.onGroupTypeSelectChanged = this.onGroupTypeSelectChanged.bind(this);
+    };
+
+    onHardBackButtonPressed() {
+        this.props.onBackButtonPressed();
+        return true;
     };
 
     onDoneButtonPressed() {
@@ -70,6 +78,13 @@ class NewGroupComponent extends React.Component {
         this.setState({
             groupType: newValue
         });
+    };
+
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+    };
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     };
 
     render() {

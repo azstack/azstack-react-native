@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    BackHandler,
     View,
     FlatList,
 } from 'react-native';
@@ -42,13 +43,21 @@ class ContactComponent extends React.Component {
             ],
             showItemActions: null,
         };
+
+        this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
+    };
+
+    onHardBackButtonPressed() {
+        this.props.onBackButtonPressed();
+        return true;
     };
 
     componentDidMount() {
-        console.log(this.props);
+        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     };
 
     componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     };
 
     renderItem(item, index) {

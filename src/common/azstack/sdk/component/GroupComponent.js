@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    BackHandler,
     Alert,
     View,
     TouchableOpacity,
@@ -35,6 +36,8 @@ class GroupComponent extends React.Component {
             }
         };
 
+        this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
+
         this.onGroupNamePressed = this.onGroupNamePressed.bind(this);
         this.onAddMemberButtonPressed = this.onAddMemberButtonPressed.bind(this);
         this.onLeaveGroupButtonPressed = this.onLeaveGroupButtonPressed.bind(this);
@@ -45,6 +48,11 @@ class GroupComponent extends React.Component {
         this.onGroupNameInputTextChanged = this.onGroupNameInputTextChanged.bind(this);
         this.onGroupNameInputCancelButtonPressed = this.onGroupNameInputCancelButtonPressed.bind(this);
         this.onGroupNameInputDoneButtonPressed = this.onGroupNameInputDoneButtonPressed.bind(this);
+    };
+
+    onHardBackButtonPressed() {
+        this.props.onBackButtonPressed();
+        return true;
     };
 
     addSubscriptions() {
@@ -632,9 +640,11 @@ class GroupComponent extends React.Component {
     componentDidMount() {
         this.addSubscriptions();
         this.initRun();
+        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     };
     componentWillUnmount() {
         this.clearSubscriptions();
+        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     };
 
     render() {

@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    BackHandler,
     Platform,
     FlatList,
     Image,
@@ -47,8 +48,15 @@ class ChatComponent extends React.Component {
             messages: []
         };
 
+        this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
+
         this.onMessagesListEndReach = this.onMessagesListEndReach.bind(this);
         this.onMessageImagePressed = this.onMessageImagePressed.bind(this);
+    };
+
+    onHardBackButtonPressed() {
+        this.props.onBackButtonPressed();
+        return true;
     };
 
     addSubscriptions() {
@@ -1070,9 +1078,11 @@ class ChatComponent extends React.Component {
     componentDidMount() {
         this.addSubscriptions();
         this.initRun();
+        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     };
     componentWillUnmount() {
         this.clearSubscriptions();
+        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     };
 
     render() {

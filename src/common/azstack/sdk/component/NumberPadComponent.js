@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+	BackHandler,
 	View,
 	Text,
 	TouchableWithoutFeedback,
@@ -33,7 +34,22 @@ class NumberPadComponent extends React.Component {
 			onCall: null,
 
 		};
+
+		this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
 	}
+
+	onHardBackButtonPressed() {
+        this.props.onBackButtonPressed();
+        return true;
+	};
+	
+	componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+    };
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+    };
 
 	onClickNumber(number) {
 		this.setState({ phoneNumber: this.state.phoneNumber + number });

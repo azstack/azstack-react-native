@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+	BackHandler,
 	View,
 	Text,
 	TouchableWithoutFeedback,
@@ -40,7 +41,13 @@ class OnCallComponent extends React.Component {
 			isAudioOn: true,
 			isSpeaker: false,
 		};
+
+		this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
 	}
+
+	onHardBackButtonPressed() {
+        return true;
+	};
 
 	addSubscriptions() {
 		this.subscriptions.onCalloutStatusChanged = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_CALLOUT_STATUS_CHANGED, ({ error, result }) => {
@@ -135,9 +142,11 @@ class OnCallComponent extends React.Component {
 	}
 	componentDidMount() {
 		this.addSubscriptions();
+		BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
 	};
 	componentWillUnmount() {
 		this.clearSubscriptions();
+		BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
 	};
 
 	renderStatus() {

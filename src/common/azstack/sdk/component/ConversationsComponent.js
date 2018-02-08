@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    BackHandler,
     Alert,
     View,
     FlatList,
@@ -38,6 +39,8 @@ class ConversationsComponent extends React.Component {
             shouldNewConversationButtonShow: true
         };
 
+        this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
+
         this.onConversationPressed = this.onConversationPressed.bind(this);
         this.onConversationsListEndReach = this.onConversationsListEndReach.bind(this);
         this.onConversationsListScroll = this.onConversationsListScroll.bind(this);
@@ -45,6 +48,11 @@ class ConversationsComponent extends React.Component {
 
         this.onSearchTextChanged = this.onSearchTextChanged.bind(this);
         this.onSearchTextCleared = this.onSearchTextCleared.bind(this);
+    };
+
+    onHardBackButtonPressed() {
+        this.props.onBackButtonPressed();
+        return true;
     };
 
     addSubscriptions() {
@@ -858,9 +866,11 @@ class ConversationsComponent extends React.Component {
     componentDidMount() {
         this.addSubscriptions();
         this.initRun();
+        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     };
     componentWillUnmount() {
         this.clearSubscriptions();
+        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     };
 
     render() {

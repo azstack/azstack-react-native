@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    BackHandler,
     View,
     Text,
     TouchableOpacity,
@@ -27,9 +28,16 @@ class UserComponent extends React.Component {
             user: null
         };
 
+        this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
+
         this.onStartChatButtonPressed = this.onStartChatButtonPressed.bind(this);
         this.onVoiceCallButtonPressed = this.onVoiceCallButtonPressed.bind(this);
         this.onVideoCallButtonPressed = this.onVideoCallButtonPressed.bind(this);
+    };
+
+    onHardBackButtonPressed() {
+        this.props.onBackButtonPressed();
+        return true;
     };
 
     addSubscriptions() {
@@ -90,9 +98,11 @@ class UserComponent extends React.Component {
     componentDidMount() {
         this.addSubscriptions();
         this.initRun();
+        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     };
     componentWillUnmount() {
         this.clearSubscriptions();
+        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     };
 
     render() {

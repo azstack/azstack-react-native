@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    BackHandler,
     View,
     FlatList,
     Platform,
@@ -30,16 +31,25 @@ class CallLogsComponent extends React.Component {
             ],
             loading: false,
         };
+
+        this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
     }
+
+    onHardBackButtonPressed() {
+        this.props.onBackButtonPressed();
+        return true;
+    };
 
     componentWillMount() {
         this.getCallLogs({ reload: true });
     }
 
     componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     }
 
     componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     }
 
     renderItem(item, index) {

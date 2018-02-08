@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+	BackHandler,
 	View,
 	Text,
 	TouchableWithoutFeedback,
@@ -54,7 +55,13 @@ class VideoCallComponent extends React.Component {
 			status: -1,
 			message: '',
 		};
+
+		this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
 	}
+
+	onHardBackButtonPressed() {
+        return true;
+	};
 
 	addSubscriptions() {
 		this.subscriptions.onLocalStreamArrived = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_LOCAL_STREAM_ARRIVED, ({ error, result }) => {
@@ -138,10 +145,12 @@ class VideoCallComponent extends React.Component {
 				});
 			}
 		}
+		BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
 	}
 
 	componentWillUnmount() {
 		this.clearSubscriptions();
+		BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
 	}
 
 	renderUserInfoCenter() {
