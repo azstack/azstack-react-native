@@ -1369,3 +1369,48 @@ export const NEW_GROUP_GROUP_TYPE_ITEM_STYLE = {
     lineHeight: 15,
     color: '#2F353B'
 };
+
+export const IMAGE_GALLERY_CLOSE_BUTTON_BLOCK_STYLE = {
+    width: 40,
+    height: 40,
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const IMAGE_GALLERY__CLOSE_BUTTON_TEXT_STYLE = {
+    fontSize: 40,
+    fontWeight: '400',
+    lineHeight: 40,
+    color: '#fff'
+};
+export const IMAGE_GALLERY_BLOCK_STYLE = {
+    flex: 1
+};
+export const IMAGE_GALLERY_ITEM_BLOCK_STYLE = {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const IMAGE_GALLERY_ITEM_TITLE_BLOCK_STYLE = {
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: '100%',
+    padding: 10
+};
+export const IMAGE_GALLERY_ITEM_TITLE_INDEX_STYLE = {
+    fontSize: 15,
+    fontWeight: '400',
+    lineHeight: 20,
+    color: '#fff',
+    textAlign: 'center'
+};
+export const IMAGE_GALLERY_CONTROL_BUTTON_TEXT_STYLE = {
+    color: '#fff',
+    fontSize: 40,
+    fontWeight: '400'
+};
