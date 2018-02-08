@@ -978,11 +978,11 @@ export const GROUP_INFO_BLOCK_STYLE = {
     flexDirection: 'row'
 };
 export const GROUP_LEFT_BLOCK_STYLE = {
-    width: 80
+    width: 90
 };
 export const GROUP_AVATAR_BLOCK_STYLE = {
-    width: 80,
-    height: 80
+    width: 90,
+    height: 90
 };
 export const GROUP_AVATAR_TEXT_STYLE = {
     fontSize: 30
@@ -1061,7 +1061,7 @@ export const GROUP_ACTION_BLOCK_STYLE = {
 export const GROUP_ACTION_BUTTON_HALF_STYLE = {
     flex: 0.5,
     paddingHorizontal: 15,
-    paddingVertical: 5,
+    paddingVertical: 10,
     borderWidth: 1,
     borderColor: '#3598DC',
     borderRadius: 5
@@ -1075,7 +1075,7 @@ export const GROUP_ACTION_BUTTON_SECOND_HALF_STYLE = {
 export const GROUP_ACTION_BUTTON_STYLE = {
     flex: 1,
     paddingHorizontal: 15,
-    paddingVertical: 5,
+    paddingVertical: 10,
     borderWidth: 1,
     borderColor: '#3598DC',
     borderRadius: 5
