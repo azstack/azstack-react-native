@@ -53,7 +53,8 @@ class ConversationLastMessageBlockComponent extends React.Component {
                                         [
                                             this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT,
                                             this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER,
-                                            this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE
+                                            this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE,
+                                            this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_LOCATION
                                         ].indexOf(this.props.lastMessage.type) > -1 ? ':' : ''
                                     }
                                 </Text>
@@ -78,7 +79,8 @@ class ConversationLastMessageBlockComponent extends React.Component {
                                         [
                                             this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT,
                                             this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER,
-                                            this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE
+                                            this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE,
+                                            this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_LOCATION
                                         ].indexOf(this.props.lastMessage.type) > -1 ? ':' : ''
                                     }
                                 </Text>
@@ -100,6 +102,13 @@ class ConversationLastMessageBlockComponent extends React.Component {
                                     this.props.lastMessage.type === this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE && (
                                         <Text>
                                             {` [${this.coreInstances.Language.getText('MESSAGE_TYPE_FILE_TEXT')}]`}
+                                        </Text>
+                                    )
+                                }
+                                {
+                                    this.props.lastMessage.type === this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_LOCATION && (
+                                        <Text>
+                                            {` [${this.coreInstances.Language.getText('MESSAGE_TYPE_LOCATION_TEXT')}]`}
                                         </Text>
                                     )
                                 }
@@ -248,7 +257,8 @@ class ConversationLastMessageBlockComponent extends React.Component {
                     [
                         this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT,
                         this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER,
-                        this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE
+                        this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE,
+                        this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_LOCATION
                     ].indexOf(this.props.lastMessage.type) > -1 &&
                     this.props.lastMessage.status !== this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED &&
                     (

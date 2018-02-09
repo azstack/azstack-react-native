@@ -31,6 +31,7 @@ export const MESSAGE_SENDER_ME_TEXT = 'You';
 export const MESSAGE_RECEIVER_ME_TEXT = 'you';
 export const MESSAGE_TYPE_STICKER_TEXT = 'Sticker';
 export const MESSAGE_TYPE_FILE_TEXT = 'File';
+export const MESSAGE_TYPE_LOCATION_TEXT = 'Location';
 export const MESSAGE_TYPE_GROUP_CREATED_ACTION_TEXT = 'created';
 export const MESSAGE_TYPE_GROUP_INVITED_ACTION_TEXT = 'invited';
 export const MESSAGE_TYPE_GROUP_INVITED_PREPOSITION_TEXT = 'to';
