@@ -97,6 +97,10 @@ class Conversation {
                         modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_STICKER;
                         modifiedConversation.lastMessage.sticker = {};
                         break;
+                    case this.serviceTypes.MESSAGE_WITH_USER_TYPE_LOCATION:
+                        modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_LOCATION;
+                        modifiedConversation.lastMessage.location = {};
+                        break;
                     case this.serviceTypes.MESSAGE_WITH_USER_TYPE_FILE:
                         modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_FILE;
                         modifiedConversation.lastMessage.file = {
@@ -110,6 +114,9 @@ class Conversation {
                         } else if (conversation.lastMsg.msgType === 3) {
                             modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_STICKER;
                             modifiedConversation.lastMessage.sticker = {};
+                        } else if (conversation.lastMsg.msgType === 4) {
+                            modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_LOCATION;
+                            modifiedConversation.lastMessage.location = {};
                         } else {
                             modifiedConversation.lastMessage.type = this.chatConstants.MESSAGE_TYPE_FILE;
                             modifiedConversation.lastMessage.file = {

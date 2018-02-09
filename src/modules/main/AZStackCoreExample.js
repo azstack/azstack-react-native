@@ -65,9 +65,11 @@ class AZStackCoreExample extends React.Component {
         this.newMessageWithUserTypeText = this.newMessageWithUserTypeText.bind(this);
         this.newMessageWithUserTypeSticker = this.newMessageWithUserTypeSticker.bind(this);
         this.newMessageWithUserTypeFile = this.newMessageWithUserTypeFile.bind(this);
+        this.newMessageWithUserTypeLocation = this.newMessageWithUserTypeLocation.bind(this);
         this.newMessageWithGroupTypeText = this.newMessageWithGroupTypeText.bind(this);
         this.newMessageWithGroupTypeSticker = this.newMessageWithGroupTypeSticker.bind(this);
         this.newMessageWithGroupTypeFile = this.newMessageWithGroupTypeFile.bind(this);
+        this.newMessageWithGroupTypeLocation = this.newMessageWithGroupTypeLocation.bind(this);
 
         this.changeMessageStatusDeliveredWithUser = this.changeMessageStatusDeliveredWithUser.bind(this);
         this.changeMessageStatusSeenWithUser = this.changeMessageStatusSeenWithUser.bind(this);
@@ -230,7 +232,7 @@ class AZStackCoreExample extends React.Component {
         this.AZStackCore.getUnreadMessages({
             page: 1,
             chatType: this.AZStackCore.chatConstants.CHAT_TYPE_GROUP,
-            chatId: 7437
+            chatId: 7436
         }).then(() => { }).catch(() => { });
     };
     getModifiedMessagesTypeGroup() {
@@ -295,6 +297,17 @@ class AZStackCoreExample extends React.Component {
             }
         }).then(() => { }).catch(() => { });
     };
+    newMessageWithUserTypeLocation() {
+        this.AZStackCore.newMessage({
+            chatType: this.AZStackCore.chatConstants.CHAT_TYPE_USER,
+            chatId: 387212,
+            location: {
+                address: '2-1 Hoàng Đạo Thúy, Nhân Chính, Thanh Xuân, Hà Nội, Vietnam',
+                longitude: 105.804364,
+                latitude: 21.006021
+            }
+        }).then(() => { }).catch(() => { });
+    };
     newMessageWithGroupTypeText() {
         this.AZStackCore.newMessage({
             chatType: this.AZStackCore.chatConstants.CHAT_TYPE_GROUP,
@@ -326,6 +339,17 @@ class AZStackCoreExample extends React.Component {
                 url: 'https://azstack.com/static/images/logo.png',
                 width: 171,
                 height: 49
+            }
+        }).then(() => { }).catch(() => { });
+    };
+    newMessageWithGroupTypeLocation() {
+        this.AZStackCore.newMessage({
+            chatType: this.AZStackCore.chatConstants.CHAT_TYPE_GROUP,
+            chatId: 7436,
+            location: {
+                address: '2-1 Hoàng Đạo Thúy, Nhân Chính, Thanh Xuân, Hà Nội, Vietnam',
+                longitude: 105.804364,
+                latitude: 21.006021
             }
         }).then(() => { }).catch(() => { });
     };
@@ -556,9 +580,11 @@ class AZStackCoreExample extends React.Component {
                     <Button onPress={this.newMessageWithUserTypeText} title='New message with user type text' />
                     <Button onPress={this.newMessageWithUserTypeSticker} title='New message with user type sticker' />
                     <Button onPress={this.newMessageWithUserTypeFile} title='New message with user type file' />
+                    <Button onPress={this.newMessageWithUserTypeLocation} title='New message with user type location' />
                     <Button onPress={this.newMessageWithGroupTypeText} title='New message with group type text' />
                     <Button onPress={this.newMessageWithGroupTypeSticker} title='New message with group type sticker' />
                     <Button onPress={this.newMessageWithGroupTypeFile} title='New message with group type file' />
+                    <Button onPress={this.newMessageWithGroupTypeLocation} title='New message with group type location' />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.changeMessageStatusDeliveredWithUser} title='Change message status delivered with user' />
                     <Button onPress={this.changeMessageStatusSeenWithUser} title='Change message status seen with user' />

@@ -277,12 +277,13 @@ this.AZStackCore = new AZStackCore({
 > - MESSAGE_TYPE_TEXT(1): text message
 > - MESSAGE_TYPE_STICKER(2): sticker message
 > - MESSAGE_TYPE_FILE(3): file message
-> - MESSAGE_TYPE_GROUP_CREATED(4): create group message
-> - MESSAGE_TYPE_GROUP_INVITED(5): invite group message
-> - MESSAGE_TYPE_GROUP_LEFT(6): leave group message
-> - MESSAGE_TYPE_GROUP_RENAMED(7): rename group message
-> - MESSAGE_TYPE_GROUP_ADMIN_CHANGED(8): change admin group message
-> - MESSAGE_TYPE_GROUP_PUBLIC_JOINED(9): join public group message
+> - MESSAGE_TYPE_LOCATION(4): location message
+> - MESSAGE_TYPE_GROUP_CREATED(5): create group message
+> - MESSAGE_TYPE_GROUP_INVITED(6): invite group message
+> - MESSAGE_TYPE_GROUP_LEFT(7): leave group message
+> - MESSAGE_TYPE_GROUP_RENAMED(8): rename group message
+> - MESSAGE_TYPE_GROUP_ADMIN_CHANGED(9): change admin group message
+> - MESSAGE_TYPE_GROUP_PUBLIC_JOINED(10): join public group message
 
 #### 3.3.5.4. Message Statuses
 > - MESSAGE_STATUS_SENDING(0): status sending
@@ -1241,6 +1242,7 @@ this.AZStackCore.getModifiedConversations({
 >       - sticker: sticker of message
 >       - file: file of message
 >           - type: file type
+>       - location: location of message
 >       - createdGroup: created group
 >           - groupId: id of group
 >           - adminId: id of admin
@@ -1397,6 +1399,10 @@ this.AZStackCore.onGetUnreadMessagesReturn({
 >       - width: width
 >       - height: height
 >       - duration: duration
+>   - location: location of message
+>       - address: address
+>       - longitude: longitude
+>       - latitude: latitude
 >   - createdGroup: created group
 >       - type: group type
 >       - groupId: id of group
@@ -1504,6 +1510,10 @@ this.AZStackCore.getModifiedMessages({
 >       - width: width
 >       - height: height
 >       - duration: duration
+>   - location: location of message
+>       - address: address
+>       - longitude: longitude
+>       - latitude: latitude
 >   - createdGroup: created group
 >       - type: group type
 >       - groupId: id of group
@@ -1621,6 +1631,11 @@ this.AZStackCore.newMessage({
         url: 'https://azstack.com/static/images/logo.png',
         width: 171,
         height: 49
+    },
+    location: {
+        address: 'address string',
+        longitude: 100.000001,
+        latitude: 20.000002
     }
 }, (error, result) => {
     console.log(error);
@@ -1649,6 +1664,11 @@ this.AZStackCore.newMessage({
         url: 'https://azstack.com/static/images/logo.png',
         width: 171,
         height: 49
+    },
+    location: {
+        address: 'address string',
+        longitude: 100.000001,
+        latitude: 20.000002
     }
 }).then((result) => {
     console.log(result);
@@ -1681,6 +1701,11 @@ this.AZStackCore.newMessage({
         url: 'https://azstack.com/static/images/logo.png',
         width: 171,
         height: 49
+    },
+    location: {
+        address: 'address string',
+        longitude: 100.000001,
+        latitude: 20.000002
     }
 });
 ```
@@ -1703,6 +1728,10 @@ this.AZStackCore.newMessage({
 >   - width(optional): width
 >   - height(optional): height
 >   - duration(optional): duration
+> - location(optional): location of message
+>   - address(required): address
+>   - longitude(required): longitude
+>   - latitude(required): latitude
 
 #### error:
 > - code: error code
@@ -1734,6 +1763,10 @@ this.AZStackCore.newMessage({
 >   - width: width
 >   - height: height
 >   - duration: duration
+> - location: location of message
+>   - address: address
+>   - longitude: longitude
+>   - latitude: latitude
 
 #### 3.7.2.2. Change message status
 
@@ -1930,6 +1963,10 @@ this.AZStackCore.Delegates.onHasNewMessage = (error, result) => {
 >   - width: width
 >   - height: height
 >   - duration: duration
+> - location: location of message
+>   - address: address
+>   - longitude: longitude
+>   - latitude: latitude
 
 #### 3.7.3.2. On message from me
 
@@ -1969,6 +2006,10 @@ this.AZStackCore.Delegates.onMessageFromMe = (error, result) => {
 >   - width: width
 >   - height: height
 >   - duration: duration
+> - location: location of message
+>   - address: address
+>   - longitude: longitude
+>   - latitude: latitude
 
 #### 3.7.3.3. On message status changed
 

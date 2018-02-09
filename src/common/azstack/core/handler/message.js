@@ -113,6 +113,14 @@ class Message {
                             duration: message.duration
                         };
                         break;
+                    case this.serviceTypes.MESSAGE_WITH_USER_TYPE_LOCATION:
+                        unreadMessage.type = this.chatConstants.MESSAGE_TYPE_LOCATION
+                        unreadMessage.location = {
+                            address: message.addr,
+                            longitude: message.long,
+                            lat: message.lat
+                        };
+                        break;
                     case this.serviceTypes.MESSAGE_HAS_NEW_WITH_GROUP:
                         if (message.msg) {
                             unreadMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
@@ -136,6 +144,13 @@ class Message {
                                 width: message.width,
                                 height: message.height,
                                 duration: message.duration
+                            };
+                        } else if (message.addr) {
+                            unreadMessage.type = this.chatConstants.MESSAGE_TYPE_LOCATION
+                            unreadMessage.location = {
+                                address: message.addr,
+                                longitude: message.long,
+                                lat: message.lat
                             };
                         }
                         break;
@@ -298,6 +313,14 @@ class Message {
                             duration: message.duration
                         };
                         break;
+                    case this.serviceTypes.MESSAGE_WITH_USER_TYPE_LOCATION:
+                        modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_LOCATION
+                        modifiedMessage.location = {
+                            address: message.addr,
+                            longitude: message.long,
+                            lat: message.lat
+                        };
+                        break;
                     case this.serviceTypes.MESSAGE_HAS_NEW_WITH_GROUP:
                         if (message.msg) {
                             modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_TEXT;
@@ -321,6 +344,13 @@ class Message {
                                 width: message.width,
                                 height: message.height,
                                 duration: message.duration
+                            };
+                        } else if (message.addr) {
+                            modifiedMessage.type = this.chatConstants.MESSAGE_TYPE_LOCATION
+                            modifiedMessage.location = {
+                                address: message.addr,
+                                longitude: message.long,
+                                lat: message.lat
                             };
                         }
                         break;
@@ -563,6 +593,34 @@ class Message {
                             duration: options.file.duration
                         }
                     };
+                } else if (options.location) {
+                    newMessagePacketService = this.serviceTypes.MESSAGE_WITH_USER_TYPE_LOCATION;
+                    newMessagePacketBody = {
+                        type: 4,
+                        id: options.msgId,
+                        to: options.chatId,
+                        addr: options.location.address,
+                        long: options.location.longitude,
+                        lat: options.location.latitude
+                    };
+                    let currentTimeStamp = new Date().getTime();
+                    newMessageObj = {
+                        chatType: options.chatType,
+                        chatId: options.chatId,
+                        senderId: 0,
+                        receiverId: options.chatId,
+                        msgId: options.msgId,
+                        type: this.chatConstants.MESSAGE_TYPE_LOCATION,
+                        status: this.chatConstants.MESSAGE_STATUS_SENDING,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
+                        created: currentTimeStamp,
+                        modified: currentTimeStamp,
+                        location: {
+                            address: options.location.address,
+                            longitude: options.location.longitude,
+                            latitude: options.location.latitude
+                        }
+                    };
                 }
             } else if (options.chatType === this.chatConstants.CHAT_TYPE_GROUP) {
                 if (options.text) {
@@ -651,6 +709,34 @@ class Message {
                             width: options.file.width,
                             height: options.file.height,
                             duration: options.file.duration
+                        }
+                    };
+                } else if (options.location) {
+                    newMessagePacketService = this.serviceTypes.MESSAGE_NEW_WITH_GROUP;
+                    newMessagePacketBody = {
+                        type: 4,
+                        msgId: options.msgId,
+                        group: options.chatId,
+                        addr: options.location.address,
+                        long: options.location.longitude,
+                        lat: options.location.latitude
+                    };
+                    let currentTimeStamp = new Date().getTime();
+                    newMessageObj = {
+                        chatType: options.chatType,
+                        chatId: options.chatId,
+                        senderId: 0,
+                        receiverId: options.chatId,
+                        msgId: options.msgId,
+                        type: this.chatConstants.MESSAGE_TYPE_STICKER,
+                        status: this.chatConstants.MESSAGE_STATUS_SENDING,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
+                        created: currentTimeStamp,
+                        modified: currentTimeStamp,
+                        location: {
+                            address: options.location.address,
+                            longitude: options.location.longitude,
+                            latitude: options.location.latitude
                         }
                     };
                 }
@@ -763,6 +849,24 @@ class Message {
                             duration: options.body.duration
                         }
                     };
+                } else if (options.messageType === this.chatConstants.MESSAGE_TYPE_LOCATION) {
+                    newMessage = {
+                        chatType: this.chatConstants.CHAT_TYPE_USER,
+                        chatId: options.body.from,
+                        senderId: options.body.from,
+                        receiverId: options.body.to,
+                        msgId: options.body.id,
+                        type: this.chatConstants.MESSAGE_TYPE_LOCATION,
+                        status: this.chatConstants.MESSAGE_STATUS_SENT,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
+                        created: options.body.created,
+                        modified: options.body.created,
+                        location: {
+                            address: options.body.addr,
+                            longitude: options.body.long,
+                            latitude: options.body.lat
+                        }
+                    };
                 }
             }
             else if (options.chatType === this.chatConstants.CHAT_TYPE_GROUP) {
@@ -820,6 +924,24 @@ class Message {
                             width: options.body.width,
                             height: options.body.height,
                             duration: options.body.duration
+                        }
+                    };
+                } else if (options.body.addr) {
+                    newMessage = {
+                        chatType: this.chatConstants.CHAT_TYPE_GROUP,
+                        chatId: options.body.group,
+                        senderId: options.body.from,
+                        receiverId: options.body.group,
+                        msgId: options.body.msgId,
+                        type: this.chatConstants.MESSAGE_TYPE_LOCATION,
+                        status: this.chatConstants.MESSAGE_STATUS_SENT,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
+                        created: options.body.created,
+                        modified: options.body.created,
+                        location: {
+                            address: options.body.addr,
+                            longitude: options.body.long,
+                            latitude: options.body.lat
                         }
                     };
                 }
@@ -909,6 +1031,24 @@ class Message {
                             duration: options.body.duration
                         }
                     };
+                } else if (options.body.addr) {
+                    messageFromMe = {
+                        chatType: this.chatConstants.CHAT_TYPE_USER,
+                        chatId: options.body.to,
+                        senderId: options.body.from,
+                        receiverId: options.body.to,
+                        msgId: options.body.id,
+                        type: this.chatConstants.MESSAGE_TYPE_LOCATION,
+                        status: this.chatConstants.MESSAGE_STATUS_SENT,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
+                        created: options.body.created,
+                        modified: options.body.created,
+                        location: {
+                            address: options.body.addr,
+                            longitude: options.body.long,
+                            latitude: options.body.lat
+                        }
+                    };
                 }
             } else if (options.chatType === this.chatConstants.CHAT_TYPE_GROUP) {
                 if (options.body.msg) {
@@ -965,6 +1105,24 @@ class Message {
                             width: options.body.width,
                             height: options.body.height,
                             duration: options.body.duration
+                        }
+                    };
+                } else if (options.body.addr) {
+                    messageFromMe = {
+                        chatType: this.chatConstants.CHAT_TYPE_GROUP,
+                        chatId: options.body.group,
+                        senderId: options.body.from,
+                        receiverId: options.body.group,
+                        msgId: options.body.msgId,
+                        type: this.chatConstants.MESSAGE_TYPE_LOCATION,
+                        status: this.chatConstants.MESSAGE_STATUS_SENT,
+                        deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
+                        created: options.body.created,
+                        modified: options.body.created,
+                        location: {
+                            address: options.body.addr,
+                            longitude: options.body.long,
+                            latitude: options.body.lat
                         }
                     };
                 }

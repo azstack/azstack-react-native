@@ -455,6 +455,17 @@ export class AZStackCore {
                     }
                 }).catch();
                 break;
+            case this.serviceTypes.MESSAGE_WITH_USER_TYPE_LOCATION:
+                this.Message.receiveHasNewMessage({
+                    chatType: this.chatConstants.CHAT_TYPE_USER,
+                    messageType: this.chatConstants.MESSAGE_TYPE_LOCATION,
+                    body: body
+                }).then((result) => {
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_HAS_NEW_MESSAGE] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_HAS_NEW_MESSAGE](null, result);
+                    }
+                }).catch();
+                break;
             case this.serviceTypes.MESSAGE_HAS_NEW_WITH_GROUP:
                 this.Message.receiveHasNewMessage({
                     chatType: this.chatConstants.CHAT_TYPE_GROUP,
@@ -477,9 +488,9 @@ export class AZStackCore {
                     }
                 }).catch();
                 break;
-            case this.serviceTypes.MESSAGE_FROM_ME_WITH_GROUP:
+            case this.serviceTypes.MESSAGE_FROM_ME_WITH_USER_JSON:
                 this.Message.receiveMessageFromMe({
-                    chatType: this.chatConstants.CHAT_TYPE_GROUP,
+                    chatType: this.chatConstants.CHAT_TYPE_USER,
                     body: body
                 }).then((result) => {
                     if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_FROM_ME] === 'function') {
@@ -487,9 +498,9 @@ export class AZStackCore {
                     }
                 }).catch();
                 break;
-            case this.serviceTypes.MESSAGE_FROM_ME_WITH_USER_JSON:
+            case this.serviceTypes.MESSAGE_FROM_ME_WITH_GROUP:
                 this.Message.receiveMessageFromMe({
-                    chatType: this.chatConstants.CHAT_TYPE_USER,
+                    chatType: this.chatConstants.CHAT_TYPE_GROUP,
                     body: body
                 }).then((result) => {
                     if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_MESSAGE_FROM_ME] === 'function') {
@@ -1939,6 +1950,10 @@ export class AZStackCore {
                 name: 'file',
                 dataType: this.dataTypes.DATA_TYPE_OBJECT,
                 data: options.file
+            }, {
+                name: 'location',
+                dataType: this.dataTypes.DATA_TYPE_OBJECT,
+                data: options.location
             }]);
             if (dataErrorMessage) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -1951,13 +1966,13 @@ export class AZStackCore {
                 return;
             }
 
-            if (!options.text && !options.sticker && !options.file) {
+            if (!options.text && !options.sticker && !options.file && !options.location) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    message: 'text or sticker or file is required'
+                    message: 'text or sticker or file or location is required'
                 });
                 this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, newMsgId, {
                     code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
-                    message: 'text or sticker or file is required'
+                    message: 'text or sticker or file or location is required'
                 }, null);
                 return;
             }
@@ -2056,13 +2071,43 @@ export class AZStackCore {
                 }
             }
 
+            if (options.location) {
+                dataErrorMessage = this.Validator.check([{
+                    name: 'location address',
+                    required: true,
+                    dataType: this.dataTypes.DATA_TYPE_STRING,
+                    data: options.location.address
+                }, {
+                    name: 'location longitude',
+                    required: true,
+                    dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                    data: options.location.longitude
+                }, {
+                    name: 'location latitude',
+                    required: true,
+                    dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                    data: options.location.latitude
+                }]);
+                if (dataErrorMessage) {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                        message: dataErrorMessage
+                    });
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, newMsgId, {
+                        code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                        message: dataErrorMessage
+                    }, null);
+                    return;
+                }
+            }
+
             this.Message.sendNewMessage({
                 chatType: options.chatType,
                 chatId: options.chatId,
                 msgId: newMsgId,
                 text: options.text,
                 sticker: options.sticker,
-                file: options.file
+                file: options.file,
+                location: options.location
             }).then((result) => {
                 result.senderId = this.authenticatedUser.userId;
                 this.callUncall(this.uncallConstants.UNCALL_KEY_NEW_MESSAGE, newMsgId, null, result);
