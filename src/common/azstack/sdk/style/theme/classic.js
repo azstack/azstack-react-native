@@ -179,7 +179,7 @@ export const MESSAGE_STATUS_BLOCK_STYLE = {
     alignItems: 'center',
     borderRadius: 50,
     borderStyle: 'solid',
-    borderWidth: 2
+    borderWidth: 1
 };
 export const MESSAGE_STATUS_BLOCK_SENDING_STYLE = {
     borderColor: '#BFBFBF'

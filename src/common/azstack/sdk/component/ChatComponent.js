@@ -591,7 +591,7 @@ class ChatComponent extends React.Component {
                             file.receiver = this.state.chatTarget;
                         }
                         resolve(file);
-                    } else if (v.chatType === this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
+                    } else if (file.chatType === this.coreInstances.AZStackCore.chatConstants.CHAT_TYPE_GROUP) {
                         file.receiver = this.state.chatTarget;
                         let foundSender = false;
                         if (file.senderId === this.coreInstances.AZStackCore.authenticatedUser.userId) {
