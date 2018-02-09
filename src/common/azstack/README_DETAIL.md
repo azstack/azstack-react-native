@@ -109,8 +109,9 @@
 ## 1.3. Install jsencrypt https://github.com/travist/jsencrypt
 ## 1.4. Install react-native-webrtc https://github.com/oney/react-native-webrtc
 ## 1.5. Install react-native-image-crop-picker https://github.com/ivpusic/react-native-image-crop-picker
-## 1.6 Install react-native-document-picker https://github.com/Elyx0/react-native-document-picker
-
+## 1.6. Install react-native-document-picker https://github.com/Elyx0/react-native-document-picker
+## 1.7. Install react-native-video https://github.com/react-native-community/react-native-video
+## 1.8. Install react-native-swiper https://github.com/leecade/react-native-swiper
 
 
 
