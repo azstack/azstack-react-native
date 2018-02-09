@@ -901,6 +901,13 @@ export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_DURATION_TEXT_STYLE = {
     fontWeight: '300',
     color: '#95A5A6'
 };
+export const MESSAGE_TYPE_MEDIA_LOCATION_STYLE = {
+    width: 250,
+    fontSize: 16,
+    lineHeight: 20,
+    fontWeight: '400',
+    color: '#2F353B'
+};
 export const MESSAGE_TYPE_MEDIA_DETAILS_STATUS_TEXT_STYLE = {
     marginHorizontal: 5,
     fontSize: 12,

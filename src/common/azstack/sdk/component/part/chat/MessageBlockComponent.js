@@ -12,6 +12,7 @@ import MessageStickerBlockComponent from './MessageStickerBlockComponent';
 import MessageImageBlockComponent from './MessageImageBlockComponent';
 import MessageAudioBlockComponent from './MessageAudioBlockComponent';
 import MessageVideoBlockComponent from './MessageVideoBlockComponent';
+import MessageLocationBlockComponent from './MessageLocationBlockComponent';
 
 class MessageBlockComponent extends React.Component {
     constructor(props) {
@@ -271,7 +272,8 @@ class MessageBlockComponent extends React.Component {
                     [
                         this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT,
                         this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER,
-                        this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE
+                        this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE,
+                        this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_LOCATION
                     ].indexOf(this.props.message.type) > -1 && (
                         <View
                             style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_BLOCK_STYLE')}
@@ -436,6 +438,16 @@ class MessageBlockComponent extends React.Component {
                                             getCoreInstances={this.props.getCoreInstances}
                                             videoFile={this.props.message.file}
                                             msgId={this.props.message.msgId}
+                                        />
+                                    )
+                                }
+                                {
+                                    this.props.message.status !== this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED &&
+                                    this.props.message.type === this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_LOCATION && (
+                                        <MessageLocationBlockComponent
+                                            getCoreInstances={this.props.getCoreInstances}
+                                            location={this.props.message.location}
+                                            onMessageLocationPressed={this.props.onMessageLocationPressed}
                                         />
                                     )
                                 }

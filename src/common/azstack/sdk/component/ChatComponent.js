@@ -56,6 +56,7 @@ class ChatComponent extends React.Component {
 
         this.onMessagesListEndReach = this.onMessagesListEndReach.bind(this);
         this.onMessageImagePressed = this.onMessageImagePressed.bind(this);
+        this.onMessageLocationPressed = this.onMessageLocationPressed.bind(this);
     };
 
     onHardBackButtonPressed() {
@@ -425,6 +426,7 @@ class ChatComponent extends React.Component {
 
                         switch (message.type) {
                             case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_LOCATION:
                             case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_CREATED:
                             case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_RENAMED:
                                 resolve(message);
@@ -686,6 +688,9 @@ class ChatComponent extends React.Component {
             initialIndex: imageIndex
         });
     };
+    onMessageLocationPressed(event) {
+        console.log(event);
+    };
 
     onTyping(typingDetails) {
 
@@ -757,6 +762,7 @@ class ChatComponent extends React.Component {
             new Promise((resolve, reject) => {
                 switch (newMessage.type) {
                     case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT:
+                    case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_LOCATION:
                         resolve(null);
                         break;
                     case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
@@ -838,6 +844,7 @@ class ChatComponent extends React.Component {
             new Promise((resolve, reject) => {
                 switch (myMessage.type) {
                     case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT:
+                    case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_LOCATION:
                         resolve(null);
                         break;
                     case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
@@ -919,6 +926,7 @@ class ChatComponent extends React.Component {
             new Promise((resolve, reject) => {
                 switch (myMessage.type) {
                     case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT:
+                    case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_LOCATION:
                         resolve(null);
                         break;
                     case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
@@ -1279,6 +1287,7 @@ class ChatComponent extends React.Component {
                                         shouldRenderSender={this.shouldRenderSender(index)}
                                         onSenderPressed={this.props.onSenderPressed}
                                         onMessageImagePressed={this.onMessageImagePressed}
+                                        onMessageLocationPressed={this.onMessageLocationPressed}
                                     />
                                 );
                             }}
