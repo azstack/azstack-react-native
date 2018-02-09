@@ -262,6 +262,7 @@ class ConversationsComponent extends React.Component {
                             case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT:
                             case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
                             case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE:
+                            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_LOCATION:
                             case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_CREATED:
                             case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_RENAMED:
                                 resolve(conversation);
