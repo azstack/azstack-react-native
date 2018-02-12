@@ -1468,6 +1468,7 @@ class Call {
                 isCaller: true,
                 callType: this.callConstants.CALL_TYPE_CALLOUT,
                 callId: options.callId,
+                callStatus: this.callConstants.CALL_STATUS_CALLOUT_STATUS_CONNECTING,
                 toPhoneNumber: options.toPhoneNumber
             });
             this.setWebRTCCallData({
@@ -1643,6 +1644,7 @@ class Call {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callout status changed to connecting'
                     });
+                    this.callConstants.callStatus = this.callConstants.CALL_STATUS_CALLOUT_STATUS_CONNECTING;
                     resolve({
                         status: this.callConstants.CALL_STATUS_CALLOUT_STATUS_CONNECTING,
                         message: 'Callout status changed to connecting'
@@ -1652,6 +1654,7 @@ class Call {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callout status changed to ringing'
                     });
+                    this.callConstants.callStatus = this.callConstants.CALL_STATUS_CALLOUT_STATUS_RINGING;
                     resolve({
                         status: this.callConstants.CALL_STATUS_CALLOUT_STATUS_RINGING,
                         message: 'Callout status changed to ringing'
@@ -1688,6 +1691,7 @@ class Call {
                             payload: error
                         });
                     });
+                    this.callConstants.callStatus = this.callConstants.CALL_STATUS_CALLOUT_STATUS_ANSWERED;
                     resolve({
                         status: this.callConstants.CALL_STATUS_CALLOUT_STATUS_ANSWERED,
                         message: 'Callout status changed to answered'
@@ -1737,6 +1741,7 @@ class Call {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callout status changed to unknown'
                     });
+                    this.clearCallData();
                     resolve({
                         status: this.callConstants.CALL_STATUS_CALLOUT_STATUS_UNKNOWN,
                         message: 'Callout status changed to unknown'
@@ -1758,6 +1763,21 @@ class Call {
                 reject({
                     code: this.errorCodes.ERR_UNEXPECTED_DATA,
                     message: 'Cannot stop callout when not currently on callout'
+                });
+                return;
+            }
+
+            if (this.callData.callStatus !== this.callConstants.CALL_STATUS_CALLOUT_STATUS_CONNECTING && this.callData.callStatus !== this.callConstants.CALL_STATUS_CALLOUT_STATUS_RINGING && this.callData.callStatus !== this.callConstants.CALL_STATUS_CALLOUT_STATUS_ANSWERED) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot stop callout when current status is not connecting or ringing or answered'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot stop callout when current status is not connecting or ringing or answered'
                 });
                 return;
             }
