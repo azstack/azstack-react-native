@@ -112,6 +112,7 @@
 ## 1.6. Install react-native-document-picker https://github.com/Elyx0/react-native-document-picker
 ## 1.7. Install react-native-video https://github.com/react-native-community/react-native-video
 ## 1.8. Install react-native-swiper https://github.com/leecade/react-native-swiper
+## 1.9. Install react-native-audio https://github.com/jsierles/react-native-audio
 
 
 

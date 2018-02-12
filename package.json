@@ -10,6 +10,7 @@
 		"jsencrypt": "^2.3.1",
 		"react": "16.2.0",
 		"react-native": "0.52.2",
+		"react-native-audio": "^3.5.1",
 		"react-native-document-picker": "^2.1.0",
 		"react-native-image-crop-picker": "^0.19.1",
 		"react-native-swiper": "^1.5.13",
