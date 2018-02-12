@@ -299,67 +299,27 @@ class ChatInputComponentBlock extends React.Component {
             text: textMessage.text
         }).then((result) => { }).catch((error) => { });
     };
-    sendStickerMessage(event) {
+    sendStickerMessage(stickerMessage) {
+        this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...stickerMessage } });
 
-        if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
-            Alert.alert(
-                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
-                this.coreInstances.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
-                [
-                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
-                ],
-                { cancelable: true }
-            );
-            return;
-        }
-
-        Image.getSize(`${this.coreInstances.linkConstants.LINK_API_URL_STICKER}${event.catId}/${event.name}`, (width, height) => {
-            let currentTime = new Date().getTime();
-            this.coreInstances.AZStackCore.newUniqueId();
-            let stickerMessage = {
-                chatType: this.props.chatType,
-                chatId: this.props.chatId,
-                senderId: this.coreInstances.AZStackCore.authenticatedUser.userId,
-                sender: this.coreInstances.AZStackCore.authenticatedUser,
-                receiverId: this.props.chatId,
-                receiver: this.props.chatTarget,
-                msgId: this.coreInstances.AZStackCore.uniqueId,
-                type: this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER,
-                status: this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_SENDING,
-                deleted: this.coreInstances.AZStackCore.chatConstants.MESSAGE_DELETED_FALSE,
-                created: currentTime,
-                modified: currentTime,
-                sticker: {
-                    name: event.name,
-                    catId: event.catId,
-                    url: `${this.coreInstances.linkConstants.LINK_API_URL_STICKER}${event.catId}/${event.name}`,
-                    width: width,
-                    height: height
-                }
-            };
+        this.sendingMessageFailChecks[stickerMessage.msgId] = setTimeout(() => {
+            stickerMessage.status = -1;
             this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...stickerMessage } });
+            delete this.sendingMessageFailChecks[stickerMessage.msgId];
+        }, 5000);
 
-            this.sendingMessageFailChecks[stickerMessage.msgId] = setTimeout(() => {
-                stickerMessage.status = -1;
-                this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...stickerMessage } });
-                delete this.sendingMessageFailChecks[stickerMessage.msgId];
-            }, 5000);
-
-            this.coreInstances.AZStackCore.newMessage({
-                chatType: this.props.chatType,
-                chatId: this.props.chatId,
-                msgId: stickerMessage.msgId,
-                sticker: {
-                    name: stickerMessage.sticker.name,
-                    catId: stickerMessage.sticker.catId,
-                    url: stickerMessage.sticker.url,
-                    width: stickerMessage.sticker.width,
-                    height: stickerMessage.sticker.height
-                }
-            }).then((result) => { }).catch((error) => { });
-        }, (error) => {
-
-        });
+        this.coreInstances.AZStackCore.newMessage({
+            chatType: this.props.chatType,
+            chatId: this.props.chatId,
+            msgId: stickerMessage.msgId,
+            sticker: {
+                name: stickerMessage.sticker.name,
+                catId: stickerMessage.sticker.catId,
+                url: stickerMessage.sticker.url,
+                width: stickerMessage.sticker.width,
+                height: stickerMessage.sticker.height
+            }
+        }).then((result) => { }).catch((error) => { });
     };
     sendFileMessage(fileMessages) {
         fileMessages.map((fileMessage) => {
@@ -779,7 +739,7 @@ class ChatInputComponentBlock extends React.Component {
                         <ChatInputStickerBlockComponent
                             getCoreInstances={this.props.getCoreInstances}
                             onCloseButtonPressed={this.closeStickerBox}
-                            onStickerPressed={this.sendStickerMessage}
+                            onStickerMessageGenerated={this.sendStickerMessage}
                         />
                     )
                 }
