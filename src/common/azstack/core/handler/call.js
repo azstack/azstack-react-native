@@ -23,6 +23,7 @@ class Call {
             isCaller: null,
             callType: null,
             callId: null,
+            callStatus: null,
             fromUserId: null,
             toUserId: null,
             fromPhoneNumber: null,
@@ -68,6 +69,7 @@ class Call {
         this.callData.isCaller = null;
         this.callData.callType = null;
         this.callData.callId = null;
+        this.callData.callStatus = null;
         this.callData.fromUserId = null;
         this.callData.toUserId = null;
         this.callData.fromPhoneNumber = null;
@@ -721,6 +723,7 @@ class Call {
                 isCaller: true,
                 callType: this.callConstants.CALL_TYPE_FREE_CALL,
                 callId: options.callId,
+                callStatus: this.callConstants.CALL_STATUS_FREE_CALL_CONNECTING,
                 fromUserId: options.fromUserId,
                 toUserId: options.toUserId
             });
@@ -820,6 +823,7 @@ class Call {
                 isCaller: false,
                 callType: this.callConstants.CALL_TYPE_FREE_CALL,
                 callId: body.callId,
+                callStatus: this.callConstants.CALL_STATUS_FREE_CALL_RINGING,
                 fromUserId: body.from,
                 toUserId: body.to
             });
@@ -975,6 +979,7 @@ class Call {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Free call status changed to connecting'
                     });
+                    this.callData.callStatus = this.callConstants.CALL_STATUS_FREE_CALL_CONNECTING;
                     resolve({
                         status: this.callConstants.CALL_STATUS_FREE_CALL_CONNECTING,
                         message: 'Free call status changed to connecting'
@@ -984,6 +989,7 @@ class Call {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Free call status changed to ringing'
                     });
+                    this.callData.callStatus = this.callConstants.CALL_STATUS_FREE_CALL_RINGING;
                     resolve({
                         status: this.callConstants.CALL_STATUS_FREE_CALL_RINGING,
                         message: 'Free call status changed to ringing'
@@ -993,6 +999,7 @@ class Call {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Free call status changed to answered'
                     });
+                    this.callData.callStatus = this.callConstants.CALL_STATUS_FREE_CALL_ANSWERED;
                     resolve({
                         status: this.callConstants.CALL_STATUS_FREE_CALL_ANSWERED,
                         message: 'Free call status changed to answered'
@@ -1040,11 +1047,12 @@ class Call {
                     break;
                 default:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                        message: 'Free call status changed to unknown'
+                        message: 'Free call status changed to unknown, free call end'
                     });
+                    this.clearCallData();
                     resolve({
                         status: this.callConstants.CALL_STATUS_FREE_CALL_UNKNOWN,
-                        message: 'Free call status changed to unknown'
+                        message: 'Free call status changed to unknown, free call end'
                     });
                     break;
             }
@@ -1149,11 +1157,12 @@ class Call {
                     break;
                 default:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                        message: 'Free call status changed to unknown by me'
+                        message: 'Free call status changed to unknown by me, free call end'
                     });
+                    this.clearCallData();
                     resolve({
                         status: this.callConstants.CALL_STATUS_FREE_CALL_UNKNOWN,
-                        message: 'Free call status changed to unknown by me'
+                        message: 'Free call status changed to unknown by me, free call end'
                     });
                     break;
             }
@@ -1172,6 +1181,21 @@ class Call {
                 reject({
                     code: this.errorCodes.ERR_UNEXPECTED_DATA,
                     message: 'Cannot stop free call when not currently on free call'
+                });
+                return;
+            }
+
+            if (this.callData.callStatus !== this.callConstants.CALL_STATUS_FREE_CALL_CONNECTING && this.callData.callStatus !== this.callConstants.CALL_STATUS_FREE_CALL_RINGING && this.callData.callStatus !== this.callConstants.CALL_STATUS_FREE_CALL_ANSWERED) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot stop free call when current status is not connecting or ringing or answered'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot stop free call when current status is not connecting or ringing or answered'
                 });
                 return;
             }
@@ -1240,7 +1264,23 @@ class Call {
                 return;
             }
 
+            if (this.callData.callStatus !== this.callConstants.CALL_STATUS_FREE_CALL_CONNECTING && this.callData.callStatus !== this.callConstants.CALL_STATUS_FREE_CALL_RINGING) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot answer free call when current status is not connecting or ringing'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot answer free call when current status is not connecting or ringing'
+                });
+                return;
+            }
+
             return this.initWebRTC().then(() => {
+                this.callData.callStatus = this.callConstants.CALL_STATUS_FREE_CALL_ANSWERED;
                 resolve();
             }).catch((error) => {
                 reject(error);
@@ -1275,6 +1315,21 @@ class Call {
                 reject({
                     code: this.errorCodes.ERR_UNEXPECTED_DATA,
                     message: 'Cannot reject free call when is caller'
+                });
+                return;
+            }
+
+            if (this.callData.callStatus !== this.callConstants.CALL_STATUS_FREE_CALL_CONNECTING && this.callData.callStatus !== this.callConstants.CALL_STATUS_FREE_CALL_RINGING) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot reject free call when current status is not connecting or ringing'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot reject free call when current status is not connecting or ringing'
                 });
                 return;
             }
@@ -1339,6 +1394,21 @@ class Call {
                 reject({
                     code: this.errorCodes.ERR_UNEXPECTED_DATA,
                     message: 'Cannot not answer free call when is caller'
+                });
+                return;
+            }
+
+            if (this.callData.callStatus !== this.callConstants.CALL_STATUS_FREE_CALL_CONNECTING && this.callData.callStatus !== this.callConstants.CALL_STATUS_FREE_CALL_RINGING) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot not answer free call when current status is not connecting or ringing'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot not answer free call when current status is not connecting or ringing'
                 });
                 return;
             }
