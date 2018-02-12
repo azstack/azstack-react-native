@@ -1901,6 +1901,7 @@ class Call {
                 isCaller: false,
                 callType: this.callConstants.CALL_TYPE_CALLIN,
                 callId: body.callId,
+                callStatus: this.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING,
                 callinType: body.callType,
                 fromPhoneNumber: body.from,
                 toPhoneNumber: body.to
@@ -1978,11 +1979,12 @@ class Call {
                     break;
                 default:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                        message: 'Callin status changed to unknown'
+                        message: 'Callin status changed to unknown, callin end'
                     });
+                    this.clearCallData();
                     resolve({
                         status: this.callConstants.CALL_STATUS_CALLIN_STATUS_UNKNOWN,
-                        message: 'Callin status changed to unknown'
+                        message: 'Callin status changed to unknown, callin end'
                     });
                     break;
             }
@@ -2078,11 +2080,12 @@ class Call {
                     break;
                 default:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                        message: 'Callin status changed to unknown by me'
+                        message: 'Callin status changed to unknown by me, callin end'
                     });
+                    this.clearCallData();
                     resolve({
                         status: this.callConstants.CALL_STATUS_CALLIN_STATUS_UNKNOWN,
-                        message: 'Callin status changed to unknown by me'
+                        message: 'Callin status changed to unknown by me, callin end'
                     });
                     break;
             }
@@ -2105,7 +2108,23 @@ class Call {
                 return;
             }
 
+            if (this.callData.callStatus !== this.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot answer callin when current status is not ringing'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot answer callin when current status is not ringing'
+                });
+                return;
+            }
+
             return this.initWebRTC().then(() => {
+                this.callData.callStatus = this.callConstants.CALL_STATUS_CALLIN_STATUS_ANSWERED;
                 resolve();
             }).catch((error) => {
                 reject(error);
@@ -2125,6 +2144,21 @@ class Call {
                 reject({
                     code: this.errorCodes.ERR_UNEXPECTED_DATA,
                     message: 'Cannot reject callin when not currently on callin'
+                });
+                return;
+            }
+
+            if (this.callData.callStatus !== this.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot reject callin when current status is not ringing'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot reject callin when current status is not ringing'
                 });
                 return;
             }
@@ -2180,6 +2214,21 @@ class Call {
                 return;
             }
 
+            if (this.callData.callStatus !== this.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot not answer callin when current status is not ringing'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot not answer callin when current status is not ringing'
+                });
+                return;
+            }
+
             const notAnswerdCallinPacket = {
                 service: this.serviceTypes.CALLIN_STATUS_CHANGED,
                 body: JSON.stringify({
@@ -2227,6 +2276,21 @@ class Call {
                 reject({
                     code: this.errorCodes.ERR_UNEXPECTED_DATA,
                     message: 'Cannot stop callin when not currently on callin'
+                });
+                return;
+            }
+
+            if (this.callData.callStatus !== this.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING || this.callData.callStatus !== this.callConstants.CALL_STATUS_CALLIN_STATUS_ANSWERED) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot stop callin when current status is not ringing or answered'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Current call data',
+                    payload: this.callData
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Cannot stop callin when current status is not ringing or answered'
                 });
                 return;
             }
