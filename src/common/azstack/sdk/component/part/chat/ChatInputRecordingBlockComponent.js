@@ -14,11 +14,15 @@ class ChatInputRecordingBlockComponent extends React.Component {
         this.coreInstances = props.getCoreInstances();
 
         this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
+        this.clearAndClose = this.clearAndClose.bind(this);
     };
 
     onHardBackButtonPressed() {
-        this.props.onCloseButtonPressed();
+        this.clearAndClose();
         return true;
+    };
+    clearAndClose() {
+        this.props.onCloseButtonPressed();
     };
 
     componentDidMount() {
@@ -36,7 +40,7 @@ class ChatInputRecordingBlockComponent extends React.Component {
                 <TouchableOpacity
                     style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_CLOSE_BUTTON_BLOCK_STYLE')}
                     activeOpacity={0.5}
-                    onPress={this.props.onCloseButtonPressed}
+                    onPress={this.clearAndClose}
                 >
                     <Text
                         style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_CLOSE_BUTTON_TEXT_STYLE')}
