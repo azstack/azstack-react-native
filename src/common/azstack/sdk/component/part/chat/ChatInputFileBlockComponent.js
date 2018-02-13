@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    BackHandler,
     Alert,
     View,
     Image,
@@ -16,12 +17,19 @@ class ChatInputFileBlockComponent extends React.Component {
 
         this.coreInstances = props.getCoreInstances();
 
+        this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
+
         this.onFileBoxOptionGalleryButtonPressed = this.onFileBoxOptionGalleryButtonPressed.bind(this);
         this.onFileBoxOptionCameraButtonPressed = this.onFileBoxOptionCameraButtonPressed.bind(this);
         this.onFileBoxOptionFileButtonPressed = this.onFileBoxOptionFileButtonPressed.bind(this);
         this.onFileBoxOptionLocationButtonPressed = this.onFileBoxOptionLocationButtonPressed.bind(this);
         this.onFileBoxOptionVoiceButtonPressed = this.onFileBoxOptionVoiceButtonPressed.bind(this);
         this.onFileBoxOptionDrawingButtonPressed = this.onFileBoxOptionDrawingButtonPressed.bind(this);
+    };
+
+    onHardBackButtonPressed() {
+        this.props.onCloseButtonPressed();
+        return true;
     };
 
     detectFileType(mimeType) {
@@ -420,6 +428,13 @@ class ChatInputFileBlockComponent extends React.Component {
     onFileBoxOptionLocationButtonPressed() { };
     onFileBoxOptionVoiceButtonPressed() { };
     onFileBoxOptionDrawingButtonPressed() { };
+
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+    };
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+    };
 
     render() {
         return (

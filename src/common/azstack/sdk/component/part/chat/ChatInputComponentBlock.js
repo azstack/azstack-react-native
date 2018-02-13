@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-    BackHandler,
     Alert,
     View,
     TextInput,
@@ -35,8 +34,6 @@ class ChatInputComponentBlock extends React.Component {
 
         this.sendingMessageFailChecks = {};
 
-        this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
-
         this.onTextInputChanged = this.onTextInputChanged.bind(this);
         this.onTextInputFocused = this.onTextInputFocused.bind(this);
         this.onTextInputBlured = this.onTextInputBlured.bind(this);
@@ -50,18 +47,6 @@ class ChatInputComponentBlock extends React.Component {
         this.sendTextMessage = this.sendTextMessage.bind(this);
         this.sendStickerMessage = this.sendStickerMessage.bind(this);
         this.sendFileMessages = this.sendFileMessages.bind(this);
-    };
-
-    onHardBackButtonPressed() {
-        if (this.state.sticker.showed) {
-            this.closeStickerBox();
-            return true;
-        }
-        if (this.state.file.showed) {
-            this.closeFileBox();
-            return true;
-        }
-        return false;
     };
 
     addSubscriptions() {
@@ -266,11 +251,9 @@ class ChatInputComponentBlock extends React.Component {
 
     componentDidMount() {
         this.addSubscriptions();
-        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     };
     componentWillUnmount() {
         this.clearSubscriptions();
-        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     };
 
     render() {

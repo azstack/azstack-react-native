@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    BackHandler,
     Alert,
     View,
     Image,
@@ -36,8 +37,15 @@ class ChatInputStickerBlockComponent extends React.Component {
             ]
         };
 
+        this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
+
         this.changeStickerTab = this.changeStickerTab.bind(this);
         this.onStickerPressed = this.onStickerPressed.bind(this);
+    };
+
+    onHardBackButtonPressed() {
+        this.props.onCloseButtonPressed();
+        return true;
     };
 
     changeStickerTab() {
@@ -84,6 +92,13 @@ class ChatInputStickerBlockComponent extends React.Component {
         }, (error) => {
 
         });
+    };
+
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+    };
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     };
 
     render() {
