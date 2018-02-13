@@ -6,16 +6,32 @@ import {
     Image,
     TouchableOpacity,
     Text
- } from 'react-native';
+} from 'react-native';
 
 import ImagePicker from 'react-native-image-crop-picker';
 import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
+
+import ChatInputLocationBlockComponent from './ChatInputLocationBlockComponent';
+import ChatInputRecordingBlockComponent from './ChatInputRecordingBlockComponent';
+import ChatInputDrawingBlockComponent from './ChatInputDrawingBlockComponent';
 
 class ChatInputFileBlockComponent extends React.Component {
     constructor(props) {
         super(props);
 
         this.coreInstances = props.getCoreInstances();
+
+        this.state = {
+            location: {
+                showed: false,
+            },
+            recording: {
+                showed: false
+            },
+            drawing: {
+                showed: false
+            }
+        };
 
         this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
 
@@ -25,6 +41,10 @@ class ChatInputFileBlockComponent extends React.Component {
         this.onFileBoxOptionLocationButtonPressed = this.onFileBoxOptionLocationButtonPressed.bind(this);
         this.onFileBoxOptionVoiceButtonPressed = this.onFileBoxOptionVoiceButtonPressed.bind(this);
         this.onFileBoxOptionDrawingButtonPressed = this.onFileBoxOptionDrawingButtonPressed.bind(this);
+
+        this.closeLocation = this.closeLocation.bind(this);
+        this.closeRecording = this.closeRecording.bind(this);
+        this.closeDrawing = this.closeDrawing.bind(this);
     };
 
     onHardBackButtonPressed() {
@@ -416,18 +436,36 @@ class ChatInputFileBlockComponent extends React.Component {
                     })
                 ]).then(() => {
                     this.props.onFilesMessageGenerated([sendingFile]);
-                }).catch((error) => { 
+                }).catch((error) => {
                     console.log(error);
                 });
 
-            }).catch((error) => { 
+            }).catch((error) => {
                 console.log(error);
             });
         });
     };
-    onFileBoxOptionLocationButtonPressed() { };
-    onFileBoxOptionVoiceButtonPressed() { };
-    onFileBoxOptionDrawingButtonPressed() { };
+    onFileBoxOptionLocationButtonPressed() {
+        this.setState({ location: Object.assign({}, this.state.location, { showed: true }) });
+    };
+    onFileBoxOptionVoiceButtonPressed() {
+        this.setState({ recording: Object.assign({}, this.state.recording, { showed: true }) });
+    };
+    onFileBoxOptionDrawingButtonPressed() { 
+        this.setState({ drawing: Object.assign({}, this.state.drawing, { showed: true }) });
+    };
+
+    closeLocation() {
+        this.setState({ location: Object.assign({}, this.state.location, { showed: false }) });
+    };
+
+    closeRecording() {
+        this.setState({ recording: Object.assign({}, this.state.recording, { showed: false }) });
+    };
+
+    closeDrawing() {
+        this.setState({ drawing: Object.assign({}, this.state.drawing, { showed: false }) });
+    };
 
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
@@ -441,109 +479,143 @@ class ChatInputFileBlockComponent extends React.Component {
             <View
                 style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_BLOCK_STYLE')}
             >
-                <View
-                    style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_CONTENT_BLOCK_STYLE')}
-                >
-                    <TouchableOpacity
-                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
-                        activeOpacity={0.5}
-                        onPress={this.onFileBoxOptionGalleryButtonPressed}
-                    >
-                        <Image
-                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
-                            source={this.coreInstances.CustomStyle.getImage('IMAGE_GALLERY')}
-                        />
-                        <Text
-                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
+                {
+                    !this.state.location.showed &&
+                    !this.state.recording.showed &&
+                    !this.state.drawing.showed && (
+                        <View
+                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_CONTENT_BLOCK_STYLE')}
                         >
-                            {this.coreInstances.Language.getText('CHAT_INPUT_FILE_OPTION_GALLERY_TEXT')}
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
-                        activeOpacity={0.5}
-                        onPress={this.onFileBoxOptionCameraButtonPressed}
-                    >
-                        <Image
-                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
-                            source={this.coreInstances.CustomStyle.getImage('IMAGE_CAMERA')}
+                            <View
+                                style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTIONS_BLOCK_STYLE')}
+                            >
+                                <TouchableOpacity
+                                    style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
+                                    activeOpacity={0.5}
+                                    onPress={this.onFileBoxOptionGalleryButtonPressed}
+                                >
+                                    <Image
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
+                                        source={this.coreInstances.CustomStyle.getImage('IMAGE_GALLERY')}
+                                    />
+                                    <Text
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
+                                    >
+                                        {this.coreInstances.Language.getText('CHAT_INPUT_FILE_OPTION_GALLERY_TEXT')}
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
+                                    activeOpacity={0.5}
+                                    onPress={this.onFileBoxOptionCameraButtonPressed}
+                                >
+                                    <Image
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
+                                        source={this.coreInstances.CustomStyle.getImage('IMAGE_CAMERA')}
+                                    />
+                                    <Text
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
+                                    >
+                                        {this.coreInstances.Language.getText('CHAT_INPUT_FILE_OPTION_CAMERA_TEXT')}
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
+                                    activeOpacity={0.5}
+                                    onPress={this.onFileBoxOptionFileButtonPressed}
+                                >
+                                    <Image
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
+                                        source={this.coreInstances.CustomStyle.getImage('IMAGE_FILE')}
+                                    />
+                                    <Text
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
+                                    >
+                                        {this.coreInstances.Language.getText('CHAT_INPUT_FILE_OPTION_FILE_TEXT')}
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
+                                    activeOpacity={0.5}
+                                    onPress={this.onFileBoxOptionLocationButtonPressed}
+                                >
+                                    <Image
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
+                                        source={this.coreInstances.CustomStyle.getImage('IMAGE_LOCATION')}
+                                    />
+                                    <Text
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
+                                    >
+                                        {this.coreInstances.Language.getText('CHAT_INPUT_FILE_OPTION_LOCATION_TEXT')}
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
+                                    activeOpacity={0.5}
+                                    onPress={this.onFileBoxOptionVoiceButtonPressed}
+                                >
+                                    <Image
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
+                                        source={this.coreInstances.CustomStyle.getImage('IMAGE_VOICE')}
+                                    />
+                                    <Text
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
+                                    >
+                                        {this.coreInstances.Language.getText('CHAT_INPUT_FILE_OPTION_VOICE_TEXT')}
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
+                                    activeOpacity={0.5}
+                                    onPress={this.onFileBoxOptionDrawingButtonPressed}
+                                >
+                                    <Image
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
+                                        source={this.coreInstances.CustomStyle.getImage('IMAGE_DRAWING')}
+                                    />
+                                    <Text
+                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
+                                    >
+                                        {this.coreInstances.Language.getText('CHAT_INPUT_FILE_OPTION_DRAWING_TEXT')}
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                            <TouchableOpacity
+                                style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_CLOSE_BUTTON_BLOCK_STYLE')}
+                                activeOpacity={0.5}
+                                onPress={this.props.onCloseButtonPressed}
+                            >
+                                <Text
+                                    style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_CLOSE_BUTTON_TEXT_STYLE')}
+                                >×</Text>
+                            </TouchableOpacity>
+                        </View>
+                    )
+                }
+                {
+                    this.state.location.showed && (
+                        <ChatInputRecordingBlockComponent
+                            getCoreInstances={this.props.getCoreInstances}
+                            onCloseButtonPressed={this.closeLocation}
                         />
-                        <Text
-                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
-                        >
-                            {this.coreInstances.Language.getText('CHAT_INPUT_FILE_OPTION_CAMERA_TEXT')}
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
-                        activeOpacity={0.5}
-                        onPress={this.onFileBoxOptionFileButtonPressed}
-                    >
-                        <Image
-                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
-                            source={this.coreInstances.CustomStyle.getImage('IMAGE_FILE')}
+                    )
+                }
+                {
+                    this.state.recording.showed && (
+                        <ChatInputRecordingBlockComponent
+                            getCoreInstances={this.props.getCoreInstances}
+                            onCloseButtonPressed={this.closeRecording}
                         />
-                        <Text
-                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
-                        >
-                            {this.coreInstances.Language.getText('CHAT_INPUT_FILE_OPTION_FILE_TEXT')}
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
-                        activeOpacity={0.5}
-                        onPress={this.onFileBoxOptionLocationButtonPressed}
-                    >
-                        <Image
-                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
-                            source={this.coreInstances.CustomStyle.getImage('IMAGE_LOCATION')}
+                    )
+                }
+                {
+                    this.state.drawing.showed && (
+                        <ChatInputDrawingBlockComponent
+                            getCoreInstances={this.props.getCoreInstances}
+                            onCloseButtonPressed={this.closeDrawing}
                         />
-                        <Text
-                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
-                        >
-                            {this.coreInstances.Language.getText('CHAT_INPUT_FILE_OPTION_LOCATION_TEXT')}
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
-                        activeOpacity={0.5}
-                        onPress={this.onFileBoxOptionVoiceButtonPressed}
-                    >
-                        <Image
-                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
-                            source={this.coreInstances.CustomStyle.getImage('IMAGE_VOICE')}
-                        />
-                        <Text
-                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
-                        >
-                            {this.coreInstances.Language.getText('CHAT_INPUT_FILE_OPTION_VOICE_TEXT')}
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_BUTTON_BLOCK_STYLE')}
-                        activeOpacity={0.5}
-                        onPress={this.onFileBoxOptionDrawingButtonPressed}
-                    >
-                        <Image
-                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_IMAGE_BLOCK_STYLE')}
-                            source={this.coreInstances.CustomStyle.getImage('IMAGE_DRAWING')}
-                        />
-                        <Text
-                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE')}
-                        >
-                            {this.coreInstances.Language.getText('CHAT_INPUT_FILE_OPTION_DRAWING_TEXT')}
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-                <TouchableOpacity
-                    style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_CLOSE_BUTTON_BLOCK_STYLE')}
-                    activeOpacity={0.5}
-                    onPress={this.props.onCloseButtonPressed}
-                >
-                    <Text
-                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_CLOSE_BUTTON_TEXT_STYLE')}
-                    >×</Text>
-                </TouchableOpacity>
+                    )
+                }
             </View>
         );
     };
