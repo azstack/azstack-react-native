@@ -1,5 +1,7 @@
 import React from 'react';
 import {
+    Platform,
+    PermissionsAndroid,
     BackHandler,
     Alert,
     View
@@ -43,6 +45,24 @@ class ChatInputFileBlockComponent extends React.Component {
         this.closeLocation = this.closeLocation.bind(this);
         this.closeRecording = this.closeRecording.bind(this);
         this.closeDrawing = this.closeDrawing.bind(this);
+    };
+
+    checkMicrophonePermission() {
+        return new Promise((resolve, reject) => {
+            if (Platform.OS !== 'android') {
+                return resolve(true);
+            }
+
+            PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+                {
+                    title: this.coreInstances.Language.getText('PERMISSION_REQUEST_MICROPHONE_TITLE_TEXT'),
+                    message: this.coreInstances.Language.getText('PERMISSION_REQUEST_MICROPHONE_DESCRIPTION_TEXT')
+                }
+            ).then((result) => {
+                resolve(result === PermissionsAndroid.RESULTS.GRANTED);
+            });
+        });
     };
 
     onHardBackButtonPressed() {
@@ -446,7 +466,20 @@ class ChatInputFileBlockComponent extends React.Component {
     onFileBoxOptionLocationButtonPressed() {
         this.setState({ location: Object.assign({}, this.state.location, { showed: true }) });
     };
-    onFileBoxOptionVoiceButtonPressed() {
+    async onFileBoxOptionVoiceButtonPressed() {
+        const granted = await this.checkMicrophonePermission();
+        if (!granted) {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('CHAT_INPUT_NO_MICROPHONE_PERMISSION_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+            return;
+        }
+
         this.setState({ recording: Object.assign({}, this.state.recording, { showed: true }) });
     };
     onFileBoxOptionDrawingButtonPressed() {

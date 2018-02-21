@@ -1,8 +1,5 @@
 import React from 'react';
 import {
-    Alert,
-    Platform,
-    PermissionsAndroid,
     BackHandler,
     View,
     TouchableOpacity,
@@ -15,10 +12,6 @@ class ChatInputRecordingBlockComponent extends React.Component {
         super(props);
 
         this.coreInstances = props.getCoreInstances();
-
-        this.permissions = {
-            microphone: false
-        };
 
         this.state = {
             recording: {
@@ -52,35 +45,7 @@ class ChatInputRecordingBlockComponent extends React.Component {
         this.props.onCloseButtonPressed();
     };
 
-    checkPermission() {
-        if (Platform.OS !== 'android') {
-            this.permissions.microphone = true;
-            return;
-        }
-
-        PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO, {
-            title: this.coreInstances.Language.getText('PERMISSION_REQUEST_MICROPHONE_TITLE_TEXT'),
-            message: this.coreInstances.Language.getText('PERMISSION_REQUEST_MICROPHONE_DESCRIPTION_TEXT')
-        }).then((result) => {
-            if (result === PermissionsAndroid.RESULTS.GRANTED) {
-                this.permissions.microphone = true;
-            }
-        });
-    };
-
-    onStartRecordingButtonPressed() {
-        if (!this.permissions.microphone) {
-            Alert.alert(
-                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
-                this.coreInstances.Language.getText('CHAT_INPUT_NO_MICROPHONE_PERMISSION_ERROR_TEXT'),
-                [
-                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
-                ],
-                { cancelable: true }
-            );
-            return;
-        }
-    };
+    onStartRecordingButtonPressed() { };
     onStopRecordingButtonPressed() { };
     onPlayButtonPressed() { };
     onPauseButtonPressed() { };
@@ -89,7 +54,6 @@ class ChatInputRecordingBlockComponent extends React.Component {
 
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
-        this.checkPermission();
     };
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
