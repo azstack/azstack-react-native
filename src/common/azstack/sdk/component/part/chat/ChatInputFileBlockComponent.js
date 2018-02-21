@@ -495,7 +495,7 @@ class ChatInputFileBlockComponent extends React.Component {
                 }
                 {
                     this.state.location.showed && (
-                        <ChatInputRecordingBlockComponent
+                        <ChatInputLocationBlockComponent
                             getCoreInstances={this.props.getCoreInstances}
                             onCloseButtonPressed={this.closeLocation}
                         />
