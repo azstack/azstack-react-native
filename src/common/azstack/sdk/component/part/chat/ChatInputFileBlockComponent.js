@@ -47,6 +47,23 @@ class ChatInputFileBlockComponent extends React.Component {
         this.closeDrawing = this.closeDrawing.bind(this);
     };
 
+    checkCameraPermission() {
+        return new Promise((resolve, reject) => {
+            if (Platform.OS !== 'android') {
+                return resolve(true);
+            }
+
+            PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.CAMERA,
+                {
+                    title: this.coreInstances.Language.getText('PERMISSION_REQUEST_CAMERA_TITLE_TEXT'),
+                    message: this.coreInstances.Language.getText('PERMISSION_REQUEST_CAMERA_DESCRIPTION_TEXT')
+                }
+            ).then((result) => {
+                resolve(result === PermissionsAndroid.RESULTS.GRANTED);
+            });
+        });
+    };
     checkMicrophonePermission() {
         return new Promise((resolve, reject) => {
             if (Platform.OS !== 'android') {
@@ -256,7 +273,21 @@ class ChatInputFileBlockComponent extends React.Component {
             );
         });
     };
-    onFileBoxOptionCameraButtonPressed() {
+    async onFileBoxOptionCameraButtonPressed() {
+
+        const granted = await this.checkCameraPermission();
+        if (!granted) {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('CHAT_INPUT_NO_CAMERA_PERMISSION_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+            return;
+        }
+
         ImagePicker.openCamera({}).then((capturedImage) => {
             if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
                 Alert.alert(
