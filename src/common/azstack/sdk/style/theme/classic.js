@@ -1456,6 +1456,9 @@ export const NEW_GROUP_GROUP_TYPE_ITEM_STYLE = {
     color: '#2F353B'
 };
 
+export const IMAGE_GALLERY_SCREEN_BLOCK_STYLE = {
+    backgroundColor: 'rgba(0, 0, 0, 0.7)'
+};
 export const IMAGE_GALLERY_CLOSE_BUTTON_BLOCK_STYLE = {
     width: 40,
     height: 40,
@@ -1465,7 +1468,7 @@ export const IMAGE_GALLERY_CLOSE_BUTTON_BLOCK_STYLE = {
     justifyContent: 'center',
     alignItems: 'center'
 };
-export const IMAGE_GALLERY__CLOSE_BUTTON_TEXT_STYLE = {
+export const IMAGE_GALLERY_CLOSE_BUTTON_TEXT_STYLE = {
     fontSize: 40,
     fontWeight: '400',
     lineHeight: 40,
