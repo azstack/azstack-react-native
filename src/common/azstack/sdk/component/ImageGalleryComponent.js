@@ -40,7 +40,7 @@ class ImageGalleryComponent extends React.Component {
         return (
             <ScreenBlockComponent
                 fullScreen={true}
-                statusBar={false}
+                statusbar={this.props.statusbar}
                 getCoreInstances={this.props.getCoreInstances}
                 style={this.coreInstances.CustomStyle.getStyle('IMAGE_GALLERY_SCREEN_BLOCK_STYLE')}
             >
