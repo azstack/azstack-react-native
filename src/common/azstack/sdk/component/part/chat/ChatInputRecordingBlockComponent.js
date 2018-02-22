@@ -119,7 +119,7 @@ class ChatInputRecordingBlockComponent extends React.Component {
         clearInterval(this.intervalRecoringTime);
         this.setState({
             recording: Object.assign({}, this.state.recording, { isOn: false, time: 0 }),
-            playback: Object.assign({}, this.state.playback, { filePath: filePath })
+            playback: Object.assign({}, this.state.playback, { filePath: 'file://' + filePath })
         });
     };
     onPlayButtonPressed() {
@@ -128,7 +128,10 @@ class ChatInputRecordingBlockComponent extends React.Component {
     onPauseButtonPressed() {
         this.setState({ playback: Object.assign({}, this.state.playback, { isOn: false }) });
     };
-    onConfirmButtonPressed() { };
+    onConfirmButtonPressed() {
+        this.props.onAudioFileGenerated(this.state.playback.filePath);
+        this.props.onCloseButtonPressed();
+    };
     onCancelButtonPressed() {
         Alert.alert(
             this.coreInstances.Language.getText('ALERT_TITLE_CONFIRM_TEXT'),

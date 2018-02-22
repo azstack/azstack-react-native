@@ -322,6 +322,9 @@ class ChatInputComponentBlock extends React.Component {
                             getCoreInstances={this.props.getCoreInstances}
                             onCloseButtonPressed={this.closeStickerBox}
                             onStickerMessageGenerated={this.sendStickerMessage}
+                            chatType={this.props.chatType}
+                            chatId={this.props.chatId}
+                            chatTarget={this.props.chatTarget}
                         />
                     )
                 }
@@ -331,6 +334,9 @@ class ChatInputComponentBlock extends React.Component {
                             getCoreInstances={this.props.getCoreInstances}
                             onCloseButtonPressed={this.closeFileBox}
                             onFilesMessageGenerated={this.sendFileMessages}
+                            chatType={this.props.chatType}
+                            chatId={this.props.chatId}
+                            chatTarget={this.props.chatTarget}
                         />
                     )
                 }

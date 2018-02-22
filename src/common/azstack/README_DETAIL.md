@@ -113,6 +113,7 @@
 ## 1.7. Install react-native-video https://github.com/react-native-community/react-native-video
 ## 1.8. Install react-native-swiper https://github.com/leecade/react-native-swiper
 ## 1.9. Install react-native-audio https://github.com/jsierles/react-native-audio
+## 1.10. Install react-native-fs https://github.com/itinance/react-native-fs
 
 
 
