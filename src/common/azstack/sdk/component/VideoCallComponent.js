@@ -95,7 +95,7 @@ class VideoCallComponent extends React.Component {
 				return;
 			}
 
-			this.setState({ status: result.status, message: result.message });
+			this.setState({ status: result.status, message: this.renderMessage(result.status) });
 
 			if (result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_REJECTED ||
 				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_STOP ||
@@ -111,7 +111,7 @@ class VideoCallComponent extends React.Component {
 				return;
 			}
 
-			this.setState({ status: result.status, message: result.message });
+			this.setState({ status: result.status, message: this.renderMessage(result.status) });
 
 			if (result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_REJECTED ||
 				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_ANSWERED ||
@@ -164,7 +164,7 @@ class VideoCallComponent extends React.Component {
 					</View>
 					<View style={{ alignItems: 'center' }}>
 						<Text style={{ color: '#fff', marginVertical: 10, fontSize: 20 }}>{this.props.info.name}</Text>
-						<Text style={{ color: '#2a2a2a' }}>{this.state.message}</Text>
+						<Text style={{ color: '#57FFC1', fontSize: 18, backgroundColor: 'transparent'}}>{this.state.message}</Text>
 					</View>
 				</View>
 			</View>
@@ -276,7 +276,7 @@ class VideoCallComponent extends React.Component {
 					<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 						<Text style={{ color: '#fff', fontSize: 30 }}>{this.props.info.name || this.props.info.phoneNumber}</Text>
 						<Text style={{ color: '#fff', fontSize: 20}}>{this.props.info.name ? this.props.info.phoneNumber : ''}</Text>
-						<Text style={{ color: '#57FFC1', fontSize: 18, }}>{this.state.message}</Text>
+						<Text style={{ color: '#57FFC1', fontSize: 18, backgroundColor: 'transparent' }}>{this.state.message}</Text>
 					</View>
 				</View>
 				<View>
@@ -316,7 +316,7 @@ class VideoCallComponent extends React.Component {
 				<View style={[styles.topLayer, {justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0)',}]}>
 					<View style={{paddingTop: 40}}>
 						<Text style={{ color: '#fff', marginVertical: 10, fontSize: 20, backgroundColor: 'transparent'}}>{this.props.info.name}</Text>
-						<Text style={{ color: '#2a2a2a', backgroundColor: 'transparent'}}>{this.state.message}</Text>
+						<Text style={{  color: '#57FFC1', fontSize: 18, backgroundColor: 'transparent'}}>{this.state.message}</Text>
 					</View>
 					<View>
 						<Pulse style={{}} color={'#48D2A0'} numPulses={7} diameter={250} duration={850} speed={34} image={{source:ic_avatar, style:{width: 100, height: 100, borderRadius: 50,}}} />
@@ -371,12 +371,37 @@ class VideoCallComponent extends React.Component {
 		);
 	}
 
+	renderMessage(status) {
+		if(status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_CONNECTING) {
+			return this.coreInstances.Language.getText('CALL_CONNECTING'); 
+		}
+		if(status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_BUSY) {
+			return this.coreInstances.Language.getText('CALL_BUSY'); 
+		}
+		if(status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_NOT_ANSWERED) {
+			return this.coreInstances.Language.getText('CALL_NOT_ANSWERED'); 
+		}
+		if(status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_RINGING) {
+			return this.coreInstances.Language.getText('CALL_RINGING'); 
+		}
+		if(status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_REJECTED) {
+			return this.coreInstances.Language.getText('CALL_REJECTED'); 
+		}
+		if(status === 700) {
+			return this.coreInstances.Language.getText('CALL_END'); 
+		}
+		if(status === 200) {
+			return this.coreInstances.Language.getText('CALL_CALLING'); 
+		}
+		return this.coreInstances.Language.getText('CALL_UNKNOWN');
+	}
+
 	render() {
 		return (
 			<ScreenBlockComponent
 				fullScreen={true}
 				statusbar={this.props.statusbar}
-				style={[this.props.style, {width: width, height: height}]}
+				style={this.props.style}
 				getCoreInstances={this.props.getCoreInstances}
 			>
 				{ this.state.isIncomingCall === true && this.renderIncomingCall()}

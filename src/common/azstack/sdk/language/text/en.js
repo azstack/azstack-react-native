@@ -144,3 +144,12 @@ export const NEW_GROUP_NAME_EMPTY_ERROR = 'Group name can\'t be left blank';
 export const NEW_GROUP_TYPE_EMPTY_ERROR = 'Group type can\'t be left blank';
 
 export const IMAGE_GALLERY_EMPTY_TEXT = 'No image';
+
+export const CALL_RINGING = 'Ringing';
+export const CALL_CONNECTING = 'Connecting';
+export const CALL_BUSY = 'Busy'; // target is on an other call
+export const CALL_REJECTED = 'Rejected';
+export const CALL_NOT_ANSWERED = 'Not answered';
+export const CALL_END = 'Ending';
+export const CALL_UNKNOWN = 'Unknown';
+export const CALL_CALLING = 'Calling';

@@ -55,7 +55,7 @@ class OnCallComponent extends React.Component {
 				return;
 			}
 
-			this.setState({ status: result.status, message: result.message });
+			this.setState({ status: result.status, message: this.renderMessage(result.status) });
 
 			if (result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_INITIAL_BUSY ||
 				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_INITIAL_NOT_ENOUGH_BALANCE ||
@@ -63,6 +63,7 @@ class OnCallComponent extends React.Component {
 				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_STOP ||
 				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_BUSY ||
 				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_NOT_ANSWERED ||
+				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_UNKNOWN ||
 				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_NOT_ENOUGH_BALANCE) {
 
 				this.props.onCallEnded();
@@ -74,11 +75,12 @@ class OnCallComponent extends React.Component {
 				return;
 			}
 
-			this.setState({ status: result.status, message: result.message });
+			this.setState({ status: result.status, message: this.renderMessage(result.status) });
 
 			if (result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_STOP ||
 				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING_STOP ||
 				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_BUSY ||
+				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_UNKNOWN ||
 				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_NOT_ANSWERED) {
 
 				this.props.onCallEnded();
@@ -101,11 +103,12 @@ class OnCallComponent extends React.Component {
 				return;
 			}
 
-			this.setState({ status: result.status, message: result.message });
+			this.setState({ status: result.status, message: this.renderMessage(result.status) });
 
 			if (result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_REJECTED ||
 				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_STOP ||
 				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_BUSY ||
+				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_UNKNOWN ||
 				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_NOT_ANSWERED) {
 
 				this.props.onCallEnded();
@@ -117,14 +120,9 @@ class OnCallComponent extends React.Component {
 				return;
 			}
 
-			this.setState({ status: result.status, message: result.message });
+			this.setState({ status: result.status, message: this.renderMessage(result.status) });
 
-			if (result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_REJECTED ||
-				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_ANSWERED ||
-				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_STOP ||
-				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_BUSY ||
-				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_NOT_ANSWERED) {
-
+			if (result.status !== this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_RINGING) {
 				this.props.onCallEnded();
 			}
 		});
@@ -236,6 +234,9 @@ class OnCallComponent extends React.Component {
 						<Text style={{ color: '#fff', fontSize: 30 }}>{this.props.info.name || this.props.info.phoneNumber}</Text>
 						<Text style={{ color: '#fff', fontSize: 20}}>{this.props.info.name ? this.props.info.phoneNumber : ''}</Text>
 						<Text style={{ color: '#57FFC1', fontSize: 18, }}>{this.state.message}</Text>
+						{
+							this.state.status === 200 && <Timer />
+						}
 					</View>
 				</View>
 				<View>
@@ -264,9 +265,42 @@ class OnCallComponent extends React.Component {
 		);
 	}
 
+	renderMessage(status) {
+		if(status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_CONNECTING ||
+			status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_CONNECTING) {
+			return this.coreInstances.Language.getText('CALL_CONNECTING'); 
+		}
+		if(status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_BUSY ||
+			status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_BUSY ||
+			status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_BUSY) {
+			return this.coreInstances.Language.getText('CALL_BUSY'); 
+		}
+		if(status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_NOT_ANSWERED ||
+			status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_NOT_ANSWERED ||
+			status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_NOT_ANSWERED) {
+			return this.coreInstances.Language.getText('CALL_NOT_ANSWERED'); 
+		}
+		if(status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING ||
+			status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_RINGING ||
+			status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_RINGING) {
+			return this.coreInstances.Language.getText('CALL_RINGING'); 
+		}
+		if(status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_REJECTED ||
+			status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_REJECTED) {
+			return this.coreInstances.Language.getText('CALL_REJECTED'); 
+		}
+		if(status === 700) {
+			return this.coreInstances.Language.getText('CALL_END'); 
+		}
+		if(status === 200) {
+			return this.coreInstances.Language.getText('CALL_CALLING'); 
+		}
+		return this.coreInstances.Language.getText('CALL_UNKNOWN');
+	}
+
 	onPressEndCall() {
 		this.props.onEndCall();
-		this.setState({ message: 'Ending' });
+		this.setState({ message: 'Ending'});
 	}
 
 	onPressAnswer() {
