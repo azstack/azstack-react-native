@@ -5,6 +5,17 @@ class DateTimeFormatter {
         return (d < 10) ? '0' + d.toString() : d.toString();
     };
 
+    currentDatetimeString(spliter) {
+        let handleDate = new Date();
+        let year = handleDate.getFullYear();
+        let month = handleDate.getMonth() + 1;
+        let day = handleDate.getDate();
+        let hour = handleDate.getHours();
+        let minute = handleDate.getMinutes();
+        let second = handleDate.getSeconds();
+        return `${year}${spliter}${month > 9 ? month : '0' + month}${spliter}${day > 9 ? day : '0' + day}${spliter}${hour > 9 ? hour : '0' + hour}${spliter}${minute > 9 ? minute : '0' + minute}${spliter}${second > 9 ? second : '0' + second}`;
+    };
+
     toTimeString(date) {
         if (!date) {
             return '';

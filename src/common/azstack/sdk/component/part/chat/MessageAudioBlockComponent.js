@@ -70,7 +70,7 @@ class MessageAudioBlockComponent extends React.Component {
         });
     };
     onAudioEnd(data) {
-        this.setState({ playing: true });
+        this.setState({ playing: false, currentTime: 0 });
     };
     onAudioError(data) {
         this.setState({ playing: false });

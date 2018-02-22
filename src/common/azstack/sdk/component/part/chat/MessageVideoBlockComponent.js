@@ -75,7 +75,7 @@ class MessageVideoBlockComponent extends React.Component {
         });
     };
     onVideoEnd(data) {
-        this.setState({ playing: true });
+        this.setState({ playing: false, currentTime: 0 });
     };
     onVideoError(data) {
         this.setState({ playing: false });
