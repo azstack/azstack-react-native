@@ -19,6 +19,8 @@ export const IMAGE_DONE = require('../../static/image/classic/done.png');
 export const IMAGE_CHECK_MARK = require('../../static/image/classic/check-mark.png');
 export const IMAGE_PLAY = require('../../static/image/classic/play.png');
 export const IMAGE_PAUSE = require('../../static/image/classic/pause.png');
+export const IMAGE_PLAY_ICON_ONLY = require('../../static/image/classic/play-icon-only.png');
+export const IMAGE_PAUSE_ICON_ONLY = require('../../static/image/classic/pause-icon-only.png');
 
 
 export const SCREEN_BLOCK_STYLE = {
@@ -651,6 +653,10 @@ export const CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_MAIN_BUTTON_STYLE = {
 export const CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_MAIN_IMAGE_STYLE = {
     width: 30,
     height: 30
+};
+export const CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_MAIN_IMAGE_BIG_STYLE = {
+    width: 50,
+    height: 50
 };
 export const CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_CANCEL_BUTTON_STYLE = {
     width: 30,
@@ -1450,6 +1456,9 @@ export const NEW_GROUP_GROUP_TYPE_ITEM_STYLE = {
     color: '#2F353B'
 };
 
+export const IMAGE_GALLERY_SCREEN_BLOCK_STYLE = {
+    backgroundColor: 'rgba(0, 0, 0, 0.7)'
+};
 export const IMAGE_GALLERY_CLOSE_BUTTON_BLOCK_STYLE = {
     width: 40,
     height: 40,
@@ -1459,7 +1468,7 @@ export const IMAGE_GALLERY_CLOSE_BUTTON_BLOCK_STYLE = {
     justifyContent: 'center',
     alignItems: 'center'
 };
-export const IMAGE_GALLERY__CLOSE_BUTTON_TEXT_STYLE = {
+export const IMAGE_GALLERY_CLOSE_BUTTON_TEXT_STYLE = {
     fontSize: 40,
     fontWeight: '400',
     lineHeight: 40,

@@ -143,6 +143,13 @@ export class AZStackCore {
                     timeout: this.requestTimeout
                 }
             });
+            switch (uncallKey) {
+                case this.uncallConstants.UNCALL_KEY_START_CALLOUT:
+                    this.Call.clearCallData();
+                    break;
+                default:
+                    break;
+            }
             if (typeof callbackFunction === 'function') {
                 callbackFunction(error, null);
             }

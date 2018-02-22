@@ -1697,6 +1697,16 @@ class Call {
                         message: 'Callout status changed to answered'
                     });
                     break;
+                case this.callConstants.CALL_STATUS_CALLOUT_STATUS_REJECTED:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Callout status changed to rejected, callout end'
+                    });
+                    this.clearCallData();
+                    resolve({
+                        status: this.callConstants.CALL_STATUS_CALLOUT_STATUS_REJECTED,
+                        message: 'Callout status changed to rejected, callout end'
+                    });
+                    break;
                 case this.callConstants.CALL_STATUS_CALLOUT_STATUS_BUSY:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callout status changed to busy, callout end'
