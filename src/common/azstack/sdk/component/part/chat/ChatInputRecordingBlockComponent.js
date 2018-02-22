@@ -224,8 +224,8 @@ class ChatInputRecordingBlockComponent extends React.Component {
                                     {
                                         this.state.recording.isOn && (
                                             <Image
-                                                style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_MAIN_IMAGE_STYLE')}
-                                                source={this.coreInstances.CustomStyle.getImage('IMAGE_PAUSE')}
+                                                style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_MAIN_IMAGE_BIG_STYLE')}
+                                                source={this.coreInstances.CustomStyle.getImage('IMAGE_PAUSE_ICON_ONLY')}
                                             />
                                         )
                                     }
@@ -242,16 +242,16 @@ class ChatInputRecordingBlockComponent extends React.Component {
                                     {
                                         !this.state.playback.isOn && (
                                             <Image
-                                                style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_MAIN_IMAGE_STYLE')}
-                                                source={this.coreInstances.CustomStyle.getImage('IMAGE_PLAY')}
+                                                style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_MAIN_IMAGE_BIG_STYLE')}
+                                                source={this.coreInstances.CustomStyle.getImage('IMAGE_PLAY_ICON_ONLY')}
                                             />
                                         )
                                     }
                                     {
                                         this.state.playback.isOn && (
                                             <Image
-                                                style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_MAIN_IMAGE_STYLE')}
-                                                source={this.coreInstances.CustomStyle.getImage('IMAGE_PAUSE')}
+                                                style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_MAIN_IMAGE_BIG_STYLE')}
+                                                source={this.coreInstances.CustomStyle.getImage('IMAGE_PAUSE_ICON_ONLY')}
                                             />
                                         )
                                     }

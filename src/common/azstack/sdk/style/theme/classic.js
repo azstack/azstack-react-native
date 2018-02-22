@@ -19,6 +19,8 @@ export const IMAGE_DONE = require('../../static/image/classic/done.png');
 export const IMAGE_CHECK_MARK = require('../../static/image/classic/check-mark.png');
 export const IMAGE_PLAY = require('../../static/image/classic/play.png');
 export const IMAGE_PAUSE = require('../../static/image/classic/pause.png');
+export const IMAGE_PLAY_ICON_ONLY = require('../../static/image/classic/play-icon-only.png');
+export const IMAGE_PAUSE_ICON_ONLY = require('../../static/image/classic/pause-icon-only.png');
 
 
 export const SCREEN_BLOCK_STYLE = {
@@ -651,6 +653,10 @@ export const CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_MAIN_BUTTON_STYLE = {
 export const CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_MAIN_IMAGE_STYLE = {
     width: 30,
     height: 30
+};
+export const CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_MAIN_IMAGE_BIG_STYLE = {
+    width: 50,
+    height: 50
 };
 export const CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_CANCEL_BUTTON_STYLE = {
     width: 30,
