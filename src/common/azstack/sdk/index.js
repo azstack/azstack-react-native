@@ -447,6 +447,15 @@ export class AZStackSdk extends AZStackBaseComponent {
             showImageGallery: (event) => {
                 this.showImageGallery(event);
             },
+            showAudioRecording: (event) => {
+                this.showAudioRecording(event);
+            },
+            showLocationSelecting: (event) => {
+                this.showLocationSelecting(event);
+            },
+            showSketchDrawing: (event) => {
+                this.showSketchDrawing(event);
+            },
             onChatTargetPressed: (event) => {
                 if (options && typeof options === 'object' && typeof options.onChatTargetPressed === 'function') {
                     options.onChatTargetPressed(event);
@@ -785,6 +794,45 @@ export class AZStackSdk extends AZStackBaseComponent {
             }
         });
     };
+    showAudioRecording(options) {
+        this.navigate(this.getNavigation().AudioRecordingComponent, {
+            ...options,
+            onBackButtonPressed: () => {
+                if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                    options.onBackButtonPressed();
+                    return;
+                }
+
+                this.pop();
+            }
+        });
+    };
+    showLocationSelecting(options) {
+        this.navigate(this.getNavigation().LocationSelectingComponent, {
+            ...options,
+            onBackButtonPressed: () => {
+                if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                    options.onBackButtonPressed();
+                    return;
+                }
+
+                this.pop();
+            }
+        });
+    };
+    showSketchDrawing(options) {
+        this.navigate(this.getNavigation().SketchDrawingComponent, {
+            ...options,
+            onBackButtonPressed: () => {
+                if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                    options.onBackButtonPressed();
+                    return;
+                }
+
+                this.pop();
+            }
+        });
+    };
 
     UIContacts(options) {
         return this.renderScreen(
@@ -918,6 +966,15 @@ export class AZStackSdk extends AZStackBaseComponent {
                 },
                 showImageGallery: (event) => {
                     this.showImageGallery(event);
+                },
+                showAudioRecording: (event) => {
+                    this.showAudioRecording(event);
+                },
+                showLocationSelecting: (event) => {
+                    this.showLocationSelecting(event);
+                },
+                showSketchDrawing: (event) => {
+                    this.showSketchDrawing(event);
                 },
                 onChatTargetPressed: (event) => {
                     if (options && typeof options === 'object' && typeof options.onChatTargetPressed === 'function') {

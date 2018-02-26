@@ -1327,6 +1327,9 @@ class ChatComponent extends React.Component {
                             chatType={this.props.chatType}
                             chatId={this.props.chatId}
                             chatTarget={this.state.chatTarget}
+                            showAudioRecording={this.props.showAudioRecording}
+                            showLocationSelecting={this.props.showLocationSelecting}
+                            showSketchDrawing={this.props.showSketchDrawing}
                         />
                     )
                 }

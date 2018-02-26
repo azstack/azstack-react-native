@@ -616,80 +616,6 @@ export const CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE = {
     color: '#95A5A6',
     marginTop: 5
 };
-export const CHAT_INPUT_FILE_BOX_RECORDING_BLOCK_STYLE = {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-};
-export const CHAT_INPUT_FILE_BOX_RECORDING_TIME_BLOCK_STYLE = {
-    paddingHorizontal: 15,
-    paddingVertical: 5,
-    borderWidth: 1,
-    borderColor: '#E1E5EC',
-    borderRadius: 5
-};
-export const CHAT_INPUT_FILE_BOX_RECORDING_TIME_TEXT_STYLE = {
-    fontSize: 15,
-    fontWeight: '400',
-    lineHeight: 20,
-    color: '#2F353B'
-};
-export const CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_BLOCK_STYLE = {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 20
-};
-export const CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_MAIN_BUTTON_STYLE = {
-    width: 80,
-    height: 80,
-    borderWidth: 3,
-    borderColor: '#E1E5EC',
-    borderRadius: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 20
-};
-export const CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_MAIN_IMAGE_STYLE = {
-    width: 30,
-    height: 30
-};
-export const CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_MAIN_IMAGE_BIG_STYLE = {
-    width: 50,
-    height: 50
-};
-export const CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_CANCEL_BUTTON_STYLE = {
-    width: 30,
-    height: 30,
-    borderWidth: 1,
-    backgroundColor: '#95A5A6',
-    borderColor: '#95A5A6',
-    borderRadius: 15,
-    justifyContent: 'center',
-    alignItems: 'center'
-};
-export const CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_CANCEL_TEXT_STYLE = {
-    fontSize: 25,
-    lineHeight: 30,
-    fontWeight: '400',
-    color: '#fff'
-};
-export const CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_CONFIRM_BUTTON_STYLE = {
-    width: 30,
-    height: 30,
-    borderWidth: 1,
-    backgroundColor: '#3598DC',
-    borderColor: '#3598DC',
-    borderRadius: 15,
-    justifyContent: 'center',
-    alignItems: 'center'
-};
-export const CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_CONFIRM_TEXT_STYLE = {
-    fontSize: 15,
-    lineHeight: 20,
-    fontWeight: '400',
-    color: '#fff'
-};
 
 export const MESSAGES_LIST_STYLE = {
     paddingHorizontal: 15,
@@ -1502,4 +1428,80 @@ export const IMAGE_GALLERY_CONTROL_BUTTON_TEXT_STYLE = {
     color: '#fff',
     fontSize: 40,
     fontWeight: '400'
+};
+
+
+export const AUDIO_RECORDING_BLOCK_STYLE = {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const AUDIO_RECORDING_TIME_BLOCK_STYLE = {
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    borderWidth: 1,
+    borderColor: '#E1E5EC',
+    borderRadius: 5
+};
+export const AUDIO_RECORDING_TIME_TEXT_STYLE = {
+    fontSize: 15,
+    fontWeight: '400',
+    lineHeight: 20,
+    color: '#2F353B'
+};
+export const AUDIO_RECORDING_CONTROL_BLOCK_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20
+};
+export const AUDIO_RECORDING_CONTROL_MAIN_BUTTON_STYLE = {
+    width: 80,
+    height: 80,
+    borderWidth: 3,
+    borderColor: '#E1E5EC',
+    borderRadius: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 20
+};
+export const AUDIO_RECORDING_CONTROL_MAIN_IMAGE_STYLE = {
+    width: 30,
+    height: 30
+};
+export const AUDIO_RECORDING_CONTROL_MAIN_IMAGE_BIG_STYLE = {
+    width: 50,
+    height: 50
+};
+export const AUDIO_RECORDING_CONTROL_CANCEL_BUTTON_STYLE = {
+    width: 30,
+    height: 30,
+    borderWidth: 1,
+    backgroundColor: '#95A5A6',
+    borderColor: '#95A5A6',
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const AUDIO_RECORDING_CONTROL_CANCEL_TEXT_STYLE = {
+    fontSize: 25,
+    lineHeight: 30,
+    fontWeight: '400',
+    color: '#fff'
+};
+export const AUDIO_RECORDING_CONTROL_CONFIRM_BUTTON_STYLE = {
+    width: 30,
+    height: 30,
+    borderWidth: 1,
+    backgroundColor: '#3598DC',
+    borderColor: '#3598DC',
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const AUDIO_RECORDING_CONTROL_CONFIRM_TEXT_STYLE = {
+    fontSize: 15,
+    lineHeight: 20,
+    fontWeight: '400',
+    color: '#fff'
 };

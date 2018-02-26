@@ -18,6 +18,10 @@ import SelectMembersComponent from './SelectMembersComponent';
 import SelectMemberComponent from './SelectMemberComponent';
 import NewGroupComponent from './NewGroupComponent';
 import ImageGalleryComponent from './ImageGalleryComponent';
+import AudioRecordingComponent from './AudioRecordingComponent';
+import LocationSelectingComponent from './LocationSelectingComponent';
+import SketchDrawingComponent from './SketchDrawingComponent';
+
 
 const NavigationEnum = {
     ConversationsComponent: 'ConversationsComponent',
@@ -32,7 +36,9 @@ const NavigationEnum = {
     SelectMembersComponent: 'SelectMembersComponent',
     SelectMemberComponent: 'SelectMemberComponent',
     NewGroupComponent: 'NewGroupComponent',
-    ImageGalleryComponent: 'ImageGalleryComponent'
+    AudioRecordingComponent: 'AudioRecordingComponent',
+    LocationSelectingComponent: 'LocationSelectingComponent',
+    SketchDrawingComponent: 'SketchDrawingComponent'
 };
 
 export default class AZStackBaseComponent extends React.Component {
@@ -85,7 +91,13 @@ export default class AZStackBaseComponent extends React.Component {
             case 'NewGroupComponent':
                 return this.renderNewGroup(options, index);
             case 'ImageGalleryComponent':
-                return this.renderImageGallery(options, index);
+                return this.renderImageGallery(options, index); 
+            case 'AudioRecordingComponent':
+                return this.renderAudioRecording(options, index);
+            case 'LocationSelectingComponent':
+                return this.renderLocationSelecting(options, index);
+            case 'SketchDrawingComponent':
+                return this.renderSketchDrawing(options, index);
             default:
                 break;
         }
@@ -231,6 +243,33 @@ export default class AZStackBaseComponent extends React.Component {
 
     renderImageGallery(options, key) {
         return <ImageGalleryComponent
+            key={key}
+            Sizes={this.Sizes}
+            getCoreInstances={this.getCoreInstances}
+            {...options}
+        />;
+    };
+
+    renderAudioRecording(options, key) {
+        return <AudioRecordingComponent
+            key={key}
+            Sizes={this.Sizes}
+            getCoreInstances={this.getCoreInstances}
+            {...options}
+        />;
+    };
+
+    renderLocationSelecting(options, key) {
+        return <LocationSelectingComponent
+            key={key}
+            Sizes={this.Sizes}
+            getCoreInstances={this.getCoreInstances}
+            {...options}
+        />;
+    };
+
+    renderSketchDrawing(options, key) {
+        return <SketchDrawingComponent
             key={key}
             Sizes={this.Sizes}
             getCoreInstances={this.getCoreInstances}
