@@ -36,6 +36,7 @@ const NavigationEnum = {
     SelectMembersComponent: 'SelectMembersComponent',
     SelectMemberComponent: 'SelectMemberComponent',
     NewGroupComponent: 'NewGroupComponent',
+    ImageGalleryComponent: 'ImageGalleryComponent',
     AudioRecordingComponent: 'AudioRecordingComponent',
     LocationSelectingComponent: 'LocationSelectingComponent',
     SketchDrawingComponent: 'SketchDrawingComponent'
