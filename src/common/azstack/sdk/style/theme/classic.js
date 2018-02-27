@@ -21,6 +21,9 @@ export const IMAGE_PLAY = require('../../static/image/classic/play.png');
 export const IMAGE_PAUSE = require('../../static/image/classic/pause.png');
 export const IMAGE_PLAY_ICON_ONLY = require('../../static/image/classic/play-icon-only.png');
 export const IMAGE_PAUSE_ICON_ONLY = require('../../static/image/classic/pause-icon-only.png');
+export const IMAGE_SETTING = require('../../static/image/classic/setting.png');
+export const IMAGE_UNDO = require('../../static/image/classic/undo.png');
+export const IMAGE_ERASER = require('../../static/image/classic/eraser.png');
 
 
 export const SCREEN_BLOCK_STYLE = {
@@ -1547,6 +1550,57 @@ export const SKETCH_DRAWING_HEADER_DONE_BUTTON_IMAGE_STYLE = {
 };
 
 export const SKETCH_DRAWING_BLOCK_STYLE = {
-    flex: 1,
-    backgroundColor: '#fff'
+    flex: 1
+};
+
+export const SKETCH_DRAWING_SETTING_BLOCK_STYLE = {
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+    borderTopWidth: 1,
+    borderTopColor: '#E1E5EC',
+    position: 'absolute',
+    left: 0,
+    bottom: 0,
+    width: '100%'
+};
+export const SKETCH_DRAWING_SETTING_COLORS_BLOCK_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    alignItems: 'center'
+};
+export const SKETCH_DRAWING_SETTING_COLOR_BLOCK_STYLE = {
+    width: 25,
+    height: 25,
+    opacity: 0.4
+};
+export const SKETCH_DRAWING_SETTING_COLOR_SELECTED_STYLE = {
+    opacity: 1,
+    borderWidth: 1,
+    borderColor: '#000'
+};
+export const SKETCH_DRAWING_SETTING_SIZE_BLOCK_STYLE = {
+    marginTop: 10
+};
+
+
+export const SKETCH_DRAWING_FOOTER_BLOCK_STYLE = {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderTopWidth: 1,
+    borderTopColor: '#E1E5EC',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row'
+};
+export const SKETCH_DRAWING_FOOTER_BUTTON_BLOCK_STYLE = {
+    width: 40,
+    height: 40,
+    marginHorizontal: 15,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const SKETCH_DRAWING_FOOTER_BUTTON_IMAGE_STYLE = {
+    width: 30,
+    height: 30
 };

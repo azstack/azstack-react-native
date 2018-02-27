@@ -4,13 +4,15 @@ import {
     BackHandler,
     View,
     TouchableOpacity,
-    Text,
     Image
 } from 'react-native';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
 import SketchDrawingHeaderBlockComponent from './part/drawing/SketchDrawingHeaderBlockComponent';
 import ScreenBodyBlockComponent from './part/screen/ScreenBodyBlockComponent';
+import SketchDrawingSettingBlockComponent from './part/drawing/SketchDrawingSettingBlockComponent';
+import SketchDrawingFooterBlockComponent from './part/drawing/SketchDrawingFooterBlockComponent';
+
 
 class SketchDrawingComponent extends React.Component {
     constructor(props) {
@@ -18,28 +20,67 @@ class SketchDrawingComponent extends React.Component {
 
         this.coreInstances = props.getCoreInstances();
 
+        this.state = {
+            setting: {
+                show: false
+            },
+            draw: {
+                drawed: false,
+                color: '#000',
+                size: 1
+            }
+        };
+
         this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
         this.clearAndClose = this.clearAndClose.bind(this);
+
+        this.onSettingButtonPressed = this.onSettingButtonPressed.bind(this);
+        this.onUndoButtonPressed = this.onUndoButtonPressed.bind(this);
+        this.onClearButtonPressed = this.onClearButtonPressed.bind(this);
+
+        this.onColorSelected = this.onColorSelected.bind(this);
+        this.onSizeSelected = this.onSizeSelected.bind(this);
     };
 
     onHardBackButtonPressed() {
+        if (this.state.setting.show) {
+            this.setState({ setting: Object.assign({}, this.state.setting, { show: false }) });
+            return true;
+        }
         this.clearAndClose();
         return true;
     };
     clearAndClose() {
-        Alert.alert(
-            this.coreInstances.Language.getText('ALERT_TITLE_CONFIRM_TEXT'),
-            this.coreInstances.Language.getText('DISCARD_SKETCH_DRAWING_CONFIRMATION_TEXT'),
-            [
-                { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_CANCEL_TEXT'), onPress: () => { } },
-                {
-                    text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => {
-                        this.props.onBackButtonPressed();
+        if (this.state.draw.drawed) {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_CONFIRM_TEXT'),
+                this.coreInstances.Language.getText('DISCARD_SKETCH_DRAWING_CONFIRMATION_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_CANCEL_TEXT'), onPress: () => { } },
+                    {
+                        text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => {
+                            this.props.onBackButtonPressed();
+                        }
                     }
-                }
-            ],
-            { cancelable: true }
-        );
+                ],
+                { cancelable: true }
+            );
+            return;
+        }
+        this.props.onBackButtonPressed();
+    };
+
+    onSettingButtonPressed() {
+        this.setState({ setting: Object.assign({}, this.state.setting, { show: !this.state.setting.show }) });
+    };
+    onUndoButtonPressed() { };
+    onClearButtonPressed() { };
+
+    onColorSelected(color) {
+        this.setState({ draw: Object.assign({}, this.state.draw, { color: color }) });
+    };
+    onSizeSelected(size) {
+        this.setState({ draw: Object.assign({}, this.state.draw, { size: size }) });
     };
 
     componentDidMount() {
@@ -67,7 +108,24 @@ class SketchDrawingComponent extends React.Component {
                     getCoreInstances={this.props.getCoreInstances}
                     style={this.props.contentContainerStyle}
                 >
+                    {
+                        this.state.setting.show && (
+                            <SketchDrawingSettingBlockComponent
+                                initialColor={this.state.draw.color}
+                                initialSize={this.state.draw.size}
+                                getCoreInstances={this.props.getCoreInstances}
+                                onColorSelected={this.onColorSelected}
+                                onSizeSelected={this.onSizeSelected}
+                            />
+                        )
+                    }
                 </ScreenBodyBlockComponent>
+                <SketchDrawingFooterBlockComponent
+                    getCoreInstances={this.props.getCoreInstances}
+                    onSettingButtonPressed={this.onSettingButtonPressed}
+                    onUndoButtonPressed={this.onUndoButtonPressed}
+                    onClearButtonPressed={this.onClearButtonPressed}
+                />
             </ScreenBlockComponent>
         );
     };
