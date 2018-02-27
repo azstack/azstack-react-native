@@ -1505,3 +1505,48 @@ export const AUDIO_RECORDING_CONTROL_CONFIRM_TEXT_STYLE = {
     fontWeight: '400',
     color: '#fff'
 };
+
+
+export const SKETCH_DRAWING_HEADER_BLOCK_STYLE = {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderStyle: 'solid',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E1E5EC',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row'
+};
+export const SKETCH_DRAWING_HEADER_BACK_BUTTON_STYLE = {
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'flex-start'
+};
+export const SKETCH_DRAWING_HEADER_BACK_BUTTON_IMAGE_STYLE = {
+    width: 25,
+    height: 25
+};
+export const SKETCH_DRAWING_HEADER_TITLE_TEXT_STYLE = {
+    flex: 1,
+    fontSize: 20,
+    fontWeight: '400',
+    lineHeight: 25,
+    color: '#2F353B',
+    textAlign: 'center'
+};
+export const SKETCH_DRAWING_HEADER_DONE_BUTTON_STYLE = {
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'flex-end'
+};
+export const SKETCH_DRAWING_HEADER_DONE_BUTTON_IMAGE_STYLE = {
+    width: 25,
+    height: 25
+};
+
+export const SKETCH_DRAWING_BLOCK_STYLE = {
+    flex: 1,
+    backgroundColor: '#fff'
+};

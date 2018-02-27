@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Alert,
     BackHandler,
     View,
     TouchableOpacity,
@@ -8,7 +9,7 @@ import {
 } from 'react-native';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
-import ScreenHeaderBlockComponent from './part/screen/ScreenHeaderBlockComponent';
+import SketchDrawingHeaderBlockComponent from './part/drawing/SketchDrawingHeaderBlockComponent';
 import ScreenBodyBlockComponent from './part/screen/ScreenBodyBlockComponent';
 
 class SketchDrawingComponent extends React.Component {
@@ -26,7 +27,19 @@ class SketchDrawingComponent extends React.Component {
         return true;
     };
     clearAndClose() {
-        this.props.onBackButtonPressed();
+        Alert.alert(
+            this.coreInstances.Language.getText('ALERT_TITLE_CONFIRM_TEXT'),
+            this.coreInstances.Language.getText('DISCARD_SKETCH_DRAWING_CONFIRMATION_TEXT'),
+            [
+                { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_CANCEL_TEXT'), onPress: () => { } },
+                {
+                    text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => {
+                        this.props.onBackButtonPressed();
+                    }
+                }
+            ],
+            { cancelable: true }
+        );
     };
 
     componentDidMount() {
@@ -44,11 +57,12 @@ class SketchDrawingComponent extends React.Component {
                 statusbar={this.props.statusbar}
                 style={this.props.style}
             >
-                {this.props.header !== 'hidden' && <ScreenHeaderBlockComponent
+                <SketchDrawingHeaderBlockComponent
                     getCoreInstances={this.props.getCoreInstances}
-                    onBackButtonPressed={() => this.clearAndClose()}
+                    onBackButtonPressed={this.clearAndClose}
+                    onDoneButtonPressed={() => { }}
                     title={this.coreInstances.Language.getText('SKETCH_DRAWING_HEADER_TITLE_TEXT')}
-                />}
+                />
                 <ScreenBodyBlockComponent
                     getCoreInstances={this.props.getCoreInstances}
                     style={this.props.contentContainerStyle}

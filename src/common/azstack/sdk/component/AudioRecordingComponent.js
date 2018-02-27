@@ -123,7 +123,7 @@ class AudioRecordingComponent extends React.Component {
         clearInterval(this.intervalRecoringTime);
         this.setState({
             recording: Object.assign({}, this.state.recording, { isOn: false, time: 0 }),
-            playback: Object.assign({}, this.state.playback, { filePath: 'file://' + filePath })
+            playback: Object.assign({}, this.state.playback, { filePath: `file://${filePath}` })
         });
     };
     onPlayButtonPressed() {
