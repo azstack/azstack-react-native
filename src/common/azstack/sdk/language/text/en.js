@@ -151,6 +151,7 @@ export const LOCATION_SELECTING_HEADER_TITLE_TEXT = 'Location selecting';
 
 export const SKETCH_DRAWING_HEADER_TITLE_TEXT = 'Sketch drawing';
 export const DISCARD_SKETCH_DRAWING_CONFIRMATION_TEXT = 'Are you sure to discard drawed sketch?';
+export const SKETCH_DRAWING_EMPTY_ERROR_TEXT = 'You have not draw anything';
 
 
 export const CALL_RINGING = 'Ringing';

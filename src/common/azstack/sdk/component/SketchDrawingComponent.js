@@ -85,6 +85,19 @@ class SketchDrawingComponent extends React.Component {
         this.refs.SketchCanvas.clear();
     };
     onDoneButtonPressed() {
+
+        if (!this.state.draw.drawed) {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('SKETCH_DRAWING_EMPTY_ERROR_TEXT'),
+                [
+                    {text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => {}}
+                ],
+                { cancelable: true }
+            );
+            return;
+        }
+
         this.refs.SketchCanvas.getBase64('png', true, (error, result) => {
             if (error) {
                 Alert.alert(
@@ -98,7 +111,8 @@ class SketchDrawingComponent extends React.Component {
                 return;
             }
 
-            console.log(result);
+            this.props.onImageBase64StringGenerated(result);
+            this.props.onBackButtonPressed();
         });
     };
 
