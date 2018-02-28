@@ -111,7 +111,6 @@ export const CHAT_INPUT_FILE_SIZE_TOO_BIG_ERROR_TEXT = 'File size can\' be bigge
 export const CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT = 'Can\'t send message, please try again later.';
 export const CHAT_INPUT_NO_CAMERA_PERMISSION_ERROR_TEXT = 'Can\'t take picture, camera permission is not allowed';
 export const CHAT_INPUT_NO_MICROPHONE_PERMISSION_ERROR_TEXT = 'Can\'t record audio, microphone permission is not allowed';
-export const CHAT_INPUT_DISCARD_RECORDED_AUDIO_CONFIRMATION_TEXT = 'Are you sure to discard recorded audio?';
 
 export const USER_HEADER_TITLE_TEXT = 'User Information';
 export const USER_EMPTY_TEXT = 'No User Infomation';
@@ -144,6 +143,16 @@ export const NEW_GROUP_NAME_EMPTY_ERROR = 'Group name can\'t be left blank';
 export const NEW_GROUP_TYPE_EMPTY_ERROR = 'Group type can\'t be left blank';
 
 export const IMAGE_GALLERY_EMPTY_TEXT = 'No image';
+
+export const AUDIO_RECORDING_HEADER_TITLE_TEXT = 'Audio recording';
+export const DISCARD_RECORDED_AUDIO_CONFIRMATION_TEXT = 'Are you sure to discard recorded audio?';
+
+export const LOCATION_SELECTING_HEADER_TITLE_TEXT = 'Location selecting';
+
+export const SKETCH_DRAWING_HEADER_TITLE_TEXT = 'Sketch drawing';
+export const DISCARD_SKETCH_DRAWING_CONFIRMATION_TEXT = 'Are you sure to discard drawed sketch?';
+export const SKETCH_DRAWING_EMPTY_ERROR_TEXT = 'You have not draw anything';
+
 
 export const CALL_RINGING = 'Ringing';
 export const CALL_CONNECTING = 'Connecting';

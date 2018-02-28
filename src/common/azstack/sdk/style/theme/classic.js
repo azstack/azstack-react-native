@@ -21,6 +21,9 @@ export const IMAGE_PLAY = require('../../static/image/classic/play.png');
 export const IMAGE_PAUSE = require('../../static/image/classic/pause.png');
 export const IMAGE_PLAY_ICON_ONLY = require('../../static/image/classic/play-icon-only.png');
 export const IMAGE_PAUSE_ICON_ONLY = require('../../static/image/classic/pause-icon-only.png');
+export const IMAGE_SETTING = require('../../static/image/classic/setting.png');
+export const IMAGE_UNDO = require('../../static/image/classic/undo.png');
+export const IMAGE_ERASER = require('../../static/image/classic/eraser.png');
 
 
 export const SCREEN_BLOCK_STYLE = {
@@ -615,80 +618,6 @@ export const CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE = {
     fontWeight: '300',
     color: '#95A5A6',
     marginTop: 5
-};
-export const CHAT_INPUT_FILE_BOX_RECORDING_BLOCK_STYLE = {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-};
-export const CHAT_INPUT_FILE_BOX_RECORDING_TIME_BLOCK_STYLE = {
-    paddingHorizontal: 15,
-    paddingVertical: 5,
-    borderWidth: 1,
-    borderColor: '#E1E5EC',
-    borderRadius: 5
-};
-export const CHAT_INPUT_FILE_BOX_RECORDING_TIME_TEXT_STYLE = {
-    fontSize: 15,
-    fontWeight: '400',
-    lineHeight: 20,
-    color: '#2F353B'
-};
-export const CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_BLOCK_STYLE = {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 20
-};
-export const CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_MAIN_BUTTON_STYLE = {
-    width: 80,
-    height: 80,
-    borderWidth: 3,
-    borderColor: '#E1E5EC',
-    borderRadius: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 20
-};
-export const CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_MAIN_IMAGE_STYLE = {
-    width: 30,
-    height: 30
-};
-export const CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_MAIN_IMAGE_BIG_STYLE = {
-    width: 50,
-    height: 50
-};
-export const CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_CANCEL_BUTTON_STYLE = {
-    width: 30,
-    height: 30,
-    borderWidth: 1,
-    backgroundColor: '#95A5A6',
-    borderColor: '#95A5A6',
-    borderRadius: 15,
-    justifyContent: 'center',
-    alignItems: 'center'
-};
-export const CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_CANCEL_TEXT_STYLE = {
-    fontSize: 25,
-    lineHeight: 30,
-    fontWeight: '400',
-    color: '#fff'
-};
-export const CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_CONFIRM_BUTTON_STYLE = {
-    width: 30,
-    height: 30,
-    borderWidth: 1,
-    backgroundColor: '#3598DC',
-    borderColor: '#3598DC',
-    borderRadius: 15,
-    justifyContent: 'center',
-    alignItems: 'center'
-};
-export const CHAT_INPUT_FILE_BOX_RECORDING_CONTROL_CONFIRM_TEXT_STYLE = {
-    fontSize: 15,
-    lineHeight: 20,
-    fontWeight: '400',
-    color: '#fff'
 };
 
 export const MESSAGES_LIST_STYLE = {
@@ -1502,4 +1431,178 @@ export const IMAGE_GALLERY_CONTROL_BUTTON_TEXT_STYLE = {
     color: '#fff',
     fontSize: 40,
     fontWeight: '400'
+};
+
+
+export const AUDIO_RECORDING_BLOCK_STYLE = {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const AUDIO_RECORDING_TIME_BLOCK_STYLE = {
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    borderWidth: 1,
+    borderColor: '#E1E5EC',
+    borderRadius: 5
+};
+export const AUDIO_RECORDING_TIME_TEXT_STYLE = {
+    fontSize: 15,
+    fontWeight: '400',
+    lineHeight: 20,
+    color: '#2F353B'
+};
+export const AUDIO_RECORDING_CONTROL_BLOCK_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20
+};
+export const AUDIO_RECORDING_CONTROL_MAIN_BUTTON_STYLE = {
+    width: 80,
+    height: 80,
+    borderWidth: 3,
+    borderColor: '#E1E5EC',
+    borderRadius: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 20
+};
+export const AUDIO_RECORDING_CONTROL_MAIN_IMAGE_STYLE = {
+    width: 30,
+    height: 30
+};
+export const AUDIO_RECORDING_CONTROL_MAIN_IMAGE_BIG_STYLE = {
+    width: 50,
+    height: 50
+};
+export const AUDIO_RECORDING_CONTROL_CANCEL_BUTTON_STYLE = {
+    width: 30,
+    height: 30,
+    borderWidth: 1,
+    backgroundColor: '#95A5A6',
+    borderColor: '#95A5A6',
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const AUDIO_RECORDING_CONTROL_CANCEL_TEXT_STYLE = {
+    fontSize: 25,
+    lineHeight: 30,
+    fontWeight: '400',
+    color: '#fff'
+};
+export const AUDIO_RECORDING_CONTROL_CONFIRM_BUTTON_STYLE = {
+    width: 30,
+    height: 30,
+    borderWidth: 1,
+    backgroundColor: '#3598DC',
+    borderColor: '#3598DC',
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const AUDIO_RECORDING_CONTROL_CONFIRM_TEXT_STYLE = {
+    fontSize: 15,
+    lineHeight: 20,
+    fontWeight: '400',
+    color: '#fff'
+};
+
+
+export const SKETCH_DRAWING_HEADER_BLOCK_STYLE = {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderStyle: 'solid',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E1E5EC',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row'
+};
+export const SKETCH_DRAWING_HEADER_BACK_BUTTON_STYLE = {
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'flex-start'
+};
+export const SKETCH_DRAWING_HEADER_BACK_BUTTON_IMAGE_STYLE = {
+    width: 25,
+    height: 25
+};
+export const SKETCH_DRAWING_HEADER_TITLE_TEXT_STYLE = {
+    flex: 1,
+    fontSize: 20,
+    fontWeight: '400',
+    lineHeight: 25,
+    color: '#2F353B',
+    textAlign: 'center'
+};
+export const SKETCH_DRAWING_HEADER_DONE_BUTTON_STYLE = {
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'flex-end'
+};
+export const SKETCH_DRAWING_HEADER_DONE_BUTTON_IMAGE_STYLE = {
+    width: 25,
+    height: 25
+};
+
+export const SKETCH_DRAWING_BLOCK_STYLE = {
+    flex: 1
+};
+
+export const SKETCH_DRAWING_SETTING_BLOCK_STYLE = {
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+    borderTopWidth: 1,
+    borderTopColor: '#E1E5EC',
+    position: 'absolute',
+    left: 0,
+    bottom: 0,
+    width: '100%'
+};
+export const SKETCH_DRAWING_SETTING_COLORS_BLOCK_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    alignItems: 'center'
+};
+export const SKETCH_DRAWING_SETTING_COLOR_BLOCK_STYLE = {
+    width: 25,
+    height: 25,
+    opacity: 0.4
+};
+export const SKETCH_DRAWING_SETTING_COLOR_SELECTED_STYLE = {
+    opacity: 1,
+    borderWidth: 1,
+    borderColor: '#000'
+};
+export const SKETCH_DRAWING_SETTING_SIZE_BLOCK_STYLE = {
+    marginTop: 10
+};
+
+export const SKETCH_DRAWING_FOOTER_BLOCK_STYLE = {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderTopWidth: 1,
+    borderTopColor: '#E1E5EC',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row'
+};
+export const SKETCH_DRAWING_FOOTER_BUTTON_BLOCK_STYLE = {
+    width: 40,
+    height: 40,
+    marginHorizontal: 15,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const SKETCH_DRAWING_FOOTER_BUTTON_DISABLED_STYLE = {
+    opacity: 0.5
+};
+export const SKETCH_DRAWING_FOOTER_BUTTON_IMAGE_STYLE = {
+    width: 30,
+    height: 30
 };

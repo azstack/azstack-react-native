@@ -4,7 +4,8 @@ import {
     PermissionsAndroid,
     BackHandler,
     Alert,
-    View
+    View,
+    Image
 } from 'react-native';
 
 import ImagePicker from 'react-native-image-crop-picker';
@@ -12,27 +13,12 @@ import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker
 import RNFS from 'react-native-fs';
 
 import ChatInputFileOptionsBlockComponent from './ChatInputFileOptionsBlockComponent';
-import ChatInputLocationBlockComponent from './ChatInputLocationBlockComponent';
-import ChatInputRecordingBlockComponent from './ChatInputRecordingBlockComponent';
-import ChatInputDrawingBlockComponent from './ChatInputDrawingBlockComponent';
 
 class ChatInputFileBlockComponent extends React.Component {
     constructor(props) {
         super(props);
 
         this.coreInstances = props.getCoreInstances();
-
-        this.state = {
-            location: {
-                showed: false,
-            },
-            recording: {
-                showed: false
-            },
-            drawing: {
-                showed: false
-            }
-        };
 
         this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
 
@@ -42,8 +28,6 @@ class ChatInputFileBlockComponent extends React.Component {
         this.onFileBoxOptionLocationButtonPressed = this.onFileBoxOptionLocationButtonPressed.bind(this);
         this.onFileBoxOptionVoiceButtonPressed = this.onFileBoxOptionVoiceButtonPressed.bind(this);
         this.onFileBoxOptionDrawingButtonPressed = this.onFileBoxOptionDrawingButtonPressed.bind(this);
-
-        this.onAudioFileGenerated = this.onAudioFileGenerated.bind(this);
 
         this.closeLocation = this.closeLocation.bind(this);
         this.closeRecording = this.closeRecording.bind(this);
@@ -491,13 +475,13 @@ class ChatInputFileBlockComponent extends React.Component {
                     })
                 ]).then(() => {
                     this.props.onFilesMessageGenerated([sendingFile]);
-                }).catch((error) => {});
+                }).catch((error) => { });
 
-            }).catch((error) => {});
+            }).catch((error) => { });
         });
     };
     onFileBoxOptionLocationButtonPressed() {
-        this.setState({ location: Object.assign({}, this.state.location, { showed: true }) });
+        this.props.showLocationSelecting();
     };
     async onFileBoxOptionVoiceButtonPressed() {
         const granted = await this.checkMicrophonePermission();
@@ -513,101 +497,202 @@ class ChatInputFileBlockComponent extends React.Component {
             return;
         }
 
-        this.setState({ recording: Object.assign({}, this.state.recording, { showed: true }) });
+        this.props.showAudioRecording({
+            onAudioFileGenerated: (filePath) => {
+                RNFS.stat(filePath).then((fileStats) => {
+                    if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
+                        Alert.alert(
+                            this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                            this.coreInstances.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
+                            [
+                                { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                            ],
+                            { cancelable: true }
+                        );
+                        return;
+                    }
+
+                    if (fileStats.size > this.coreInstances.limitConstants.LIMIT_MAX_FILE_SIZE) {
+                        Alert.alert(
+                            this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                            `${this.coreInstances.Language.getText('CHAT_INPUT_FILE_SIZE_TOO_BIG_ERROR_TEXT')} ${this.coreInstances.FileConverter.sizeAsString(this.coreInstances.limitConstants.LIMIT_MAX_FILE_SIZE, true)}`,
+                            [
+                                { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                            ],
+                            { cancelable: true }
+                        );
+                        return;
+                    }
+
+                    let currentTime = new Date().getTime();
+                    this.coreInstances.AZStackCore.newUniqueId();
+                    sendingAudio = {
+                        chatType: this.props.chatType,
+                        chatId: this.props.chatId,
+                        senderId: this.coreInstances.AZStackCore.authenticatedUser.userId,
+                        sender: this.coreInstances.AZStackCore.authenticatedUser,
+                        receiverId: this.props.chatId,
+                        receiver: this.props.chatTarget,
+                        msgId: this.coreInstances.AZStackCore.uniqueId,
+                        type: this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE,
+                        status: this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_SENDING,
+                        deleted: this.coreInstances.AZStackCore.chatConstants.MESSAGE_DELETED_FALSE,
+                        created: currentTime,
+                        modified: currentTime,
+                        file: {
+                            name: this.coreInstances.FileConverter.nameFromPath(filePath),
+                            length: fileStats.size,
+                            type: this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_AUDIO,
+                            url: filePath
+                        }
+                    };
+
+                    this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...sendingAudio } });
+
+                    Promise.all([
+                        new Promise((resolve, reject) => {
+                            const data = new FormData();
+                            data.append('uid', this.coreInstances.AZStackCore.authenticatedUser.azStackUserId);
+                            data.append('msgId', sendingAudio.msgId);
+                            data.append('hash', this.coreInstances.FileConverter.MD5(`${sendingAudio.msgId}abc_d123_##$$${this.coreInstances.AZStackCore.authenticatedUser.azStackUserId}`))
+                            data.append('fileToUpload', {
+                                uri: sendingAudio.file.url,
+                                type: 'audio/acc',
+                                name: sendingAudio.file.name
+                            });
+                            fetch(this.coreInstances.linkConstants.LINK_API_URL_UPLOAD_FILE, {
+                                method: 'post',
+                                body: data
+                            }).then((response) => response.json()).then((responseJson) => {
+                                if (responseJson.status === 1000) {
+                                    sendingAudio.file.url = responseJson.data.replace('http://', 'https://');
+                                } else {
+                                    sendingAudio.status = -1;
+                                }
+                                resolve(null);
+                            }).catch((error) => {
+                                sendingAudio.status = -1;
+                                resolve(null);
+                            });;
+                        })
+                    ]).then(() => {
+                        this.props.onFilesMessageGenerated([sendingAudio]);
+                    }).catch((error) => { });
+                }).catch((error) => {
+                    Alert.alert(
+                        this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                        this.coreInstances.Language.getText('ALERT_GENERAL_ERROR_TEXT'),
+                        [
+                            { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                        ],
+                        { cancelable: true }
+                    );
+                });
+            }
+        })
     };
     onFileBoxOptionDrawingButtonPressed() {
-        this.setState({ drawing: Object.assign({}, this.state.drawing, { showed: true }) });
-    };
+        this.props.showSketchDrawing({
+            onImageBase64StringGenerated: (base64String) => {
+                let filePath = `${RNFS.DocumentDirectoryPath}/sketch-draw-${this.coreInstances.DateTimeFormatter.currentDatetimeString('-')}.png`;
+                RNFS.writeFile(filePath, base64String, 'base64').then((success) => {
+                    filePath = `file://${filePath}`;
+                    return RNFS.stat(filePath);
+                }).then((fileStats) => {
+                    Image.getSize(filePath, (width, height) => {
 
-    onAudioFileGenerated(filePath) {
-        RNFS.stat(filePath).then((fileStats) => {
-            if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
-                Alert.alert(
-                    this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
-                    this.coreInstances.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
-                    [
-                        { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
-                    ],
-                    { cancelable: true }
-                );
-                return;
-            }
-
-            if (fileStats.size > this.coreInstances.limitConstants.LIMIT_MAX_FILE_SIZE) {
-                Alert.alert(
-                    this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
-                    `${this.coreInstances.Language.getText('CHAT_INPUT_FILE_SIZE_TOO_BIG_ERROR_TEXT')} ${this.coreInstances.FileConverter.sizeAsString(this.coreInstances.limitConstants.LIMIT_MAX_FILE_SIZE, true)}`,
-                    [
-                        { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
-                    ],
-                    { cancelable: true }
-                );
-                return;
-            }
-
-            let currentTime = new Date().getTime();
-            this.coreInstances.AZStackCore.newUniqueId();
-            sendingAudio = {
-                chatType: this.props.chatType,
-                chatId: this.props.chatId,
-                senderId: this.coreInstances.AZStackCore.authenticatedUser.userId,
-                sender: this.coreInstances.AZStackCore.authenticatedUser,
-                receiverId: this.props.chatId,
-                receiver: this.props.chatTarget,
-                msgId: this.coreInstances.AZStackCore.uniqueId,
-                type: this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE,
-                status: this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_SENDING,
-                deleted: this.coreInstances.AZStackCore.chatConstants.MESSAGE_DELETED_FALSE,
-                created: currentTime,
-                modified: currentTime,
-                file: {
-                    name: this.coreInstances.FileConverter.nameFromPath(filePath),
-                    length: fileStats.size,
-                    type: this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_AUDIO,
-                    url: filePath
-                }
-            };
-
-            this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...sendingAudio } });
-
-            Promise.all([
-                new Promise((resolve, reject) => {
-                    const data = new FormData();
-                    data.append('uid', this.coreInstances.AZStackCore.authenticatedUser.azStackUserId);
-                    data.append('msgId', sendingAudio.msgId);
-                    data.append('hash', this.coreInstances.FileConverter.MD5(`${sendingAudio.msgId}abc_d123_##$$${this.coreInstances.AZStackCore.authenticatedUser.azStackUserId}`))
-                    data.append('fileToUpload', {
-                        uri: sendingAudio.file.url,
-                        type: 'audio/acc',
-                        name: sendingAudio.file.name
-                    });
-                    fetch(this.coreInstances.linkConstants.LINK_API_URL_UPLOAD_FILE, {
-                        method: 'post',
-                        body: data
-                    }).then((response) => response.json()).then((responseJson) => {
-                        if (responseJson.status === 1000) {
-                            sendingAudio.file.url = responseJson.data.replace('http://', 'https://');
-                        } else {
-                            sendingAudio.status = -1;
+                        if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
+                            Alert.alert(
+                                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                                this.coreInstances.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
+                                [
+                                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                                ],
+                                { cancelable: true }
+                            );
+                            return;
                         }
-                        resolve(null);
-                    }).catch((error) => {
-                        sendingAudio.status = -1;
-                        resolve(null);
-                    });;
-                })
-            ]).then(() => {
-                this.props.onFilesMessageGenerated([sendingAudio]);
-            }).catch((error) => { });
-        }).catch((error) => {
-            Alert.alert(
-                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
-                this.coreInstances.Language.getText('ALERT_GENERAL_ERROR_TEXT'),
-                [
-                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
-                ],
-                { cancelable: true }
-            );
+
+                        if (fileStats.size > this.coreInstances.limitConstants.LIMIT_MAX_FILE_SIZE) {
+                            Alert.alert(
+                                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                                `${this.coreInstances.Language.getText('CHAT_INPUT_FILE_SIZE_TOO_BIG_ERROR_TEXT')} ${this.coreInstances.FileConverter.sizeAsString(this.coreInstances.limitConstants.LIMIT_MAX_FILE_SIZE, true)}`,
+                                [
+                                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                                ],
+                                { cancelable: true }
+                            );
+                            return;
+                        }
+
+                        let currentTime = new Date().getTime();
+                        this.coreInstances.AZStackCore.newUniqueId();
+                        sendingImage = {
+                            chatType: this.props.chatType,
+                            chatId: this.props.chatId,
+                            senderId: this.coreInstances.AZStackCore.authenticatedUser.userId,
+                            sender: this.coreInstances.AZStackCore.authenticatedUser,
+                            receiverId: this.props.chatId,
+                            receiver: this.props.chatTarget,
+                            msgId: this.coreInstances.AZStackCore.uniqueId,
+                            type: this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE,
+                            status: this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_SENDING,
+                            deleted: this.coreInstances.AZStackCore.chatConstants.MESSAGE_DELETED_FALSE,
+                            created: currentTime,
+                            modified: currentTime,
+                            file: {
+                                name: this.coreInstances.FileConverter.nameFromPath(filePath),
+                                length: fileStats.size,
+                                type: this.coreInstances.AZStackCore.chatConstants.MESSAGE_FILE_TYPE_IMAGE,
+                                url: filePath,
+                                width: width,
+                                height: height
+                            }
+                        };
+
+                        this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...sendingImage } });
+
+                        Promise.all([
+                            new Promise((resolve, reject) => {
+                                const data = new FormData();
+                                data.append('uid', this.coreInstances.AZStackCore.authenticatedUser.azStackUserId);
+                                data.append('msgId', sendingImage.msgId);
+                                data.append('hash', this.coreInstances.FileConverter.MD5(`${sendingImage.msgId}abc_d123_##$$${this.coreInstances.AZStackCore.authenticatedUser.azStackUserId}`))
+                                data.append('fileToUpload', {
+                                    uri: sendingImage.file.url,
+                                    type: 'image/png',
+                                    name: sendingImage.file.name
+                                });
+                                fetch(this.coreInstances.linkConstants.LINK_API_URL_UPLOAD_FILE, {
+                                    method: 'post',
+                                    body: data
+                                }).then((response) => response.json()).then((responseJson) => {
+                                    if (responseJson.status === 1000) {
+                                        sendingImage.file.url = responseJson.data.replace('http://', 'https://');
+                                    } else {
+                                        sendingImage.status = -1;
+                                    }
+                                    resolve(null);
+                                }).catch((error) => {
+                                    sendingImage.status = -1;
+                                    resolve(null);
+                                });;
+                            })
+                        ]).then(() => {
+                            this.props.onFilesMessageGenerated([sendingImage]);
+                        }).catch((error) => { });
+                    });
+                }).catch((error) => {
+                    Alert.alert(
+                        this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                        this.coreInstances.Language.getText('ALERT_GENERAL_ERROR_TEXT'),
+                        [
+                            { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                        ],
+                        { cancelable: true }
+                    );
+                });
+            }
         });
     };
 
@@ -635,47 +720,16 @@ class ChatInputFileBlockComponent extends React.Component {
             <View
                 style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_FILE_BOX_BLOCK_STYLE')}
             >
-                {
-                    !this.state.location.showed &&
-                    !this.state.recording.showed &&
-                    !this.state.drawing.showed && (
-                        <ChatInputFileOptionsBlockComponent
-                            getCoreInstances={this.props.getCoreInstances}
-                            onCloseButtonPressed={this.props.onCloseButtonPressed}
-                            onFileBoxOptionGalleryButtonPressed={this.onFileBoxOptionGalleryButtonPressed}
-                            onFileBoxOptionCameraButtonPressed={this.onFileBoxOptionCameraButtonPressed}
-                            onFileBoxOptionFileButtonPressed={this.onFileBoxOptionFileButtonPressed}
-                            onFileBoxOptionLocationButtonPressed={this.onFileBoxOptionLocationButtonPressed}
-                            onFileBoxOptionVoiceButtonPressed={this.onFileBoxOptionVoiceButtonPressed}
-                            onFileBoxOptionDrawingButtonPressed={this.onFileBoxOptionDrawingButtonPressed}
-                        />
-                    )
-                }
-                {
-                    this.state.location.showed && (
-                        <ChatInputLocationBlockComponent
-                            getCoreInstances={this.props.getCoreInstances}
-                            onCloseButtonPressed={this.closeLocation}
-                        />
-                    )
-                }
-                {
-                    this.state.recording.showed && (
-                        <ChatInputRecordingBlockComponent
-                            getCoreInstances={this.props.getCoreInstances}
-                            onCloseButtonPressed={this.closeRecording}
-                            onAudioFileGenerated={this.onAudioFileGenerated}
-                        />
-                    )
-                }
-                {
-                    this.state.drawing.showed && (
-                        <ChatInputDrawingBlockComponent
-                            getCoreInstances={this.props.getCoreInstances}
-                            onCloseButtonPressed={this.closeDrawing}
-                        />
-                    )
-                }
+                <ChatInputFileOptionsBlockComponent
+                    getCoreInstances={this.props.getCoreInstances}
+                    onCloseButtonPressed={this.props.onCloseButtonPressed}
+                    onFileBoxOptionGalleryButtonPressed={this.onFileBoxOptionGalleryButtonPressed}
+                    onFileBoxOptionCameraButtonPressed={this.onFileBoxOptionCameraButtonPressed}
+                    onFileBoxOptionFileButtonPressed={this.onFileBoxOptionFileButtonPressed}
+                    onFileBoxOptionLocationButtonPressed={this.onFileBoxOptionLocationButtonPressed}
+                    onFileBoxOptionVoiceButtonPressed={this.onFileBoxOptionVoiceButtonPressed}
+                    onFileBoxOptionDrawingButtonPressed={this.onFileBoxOptionDrawingButtonPressed}
+                />
             </View>
         );
     };
