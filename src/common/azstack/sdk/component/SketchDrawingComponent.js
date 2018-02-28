@@ -6,6 +6,7 @@ import {
     TouchableOpacity,
     Image
 } from 'react-native';
+import { SketchCanvas } from '@terrylinla/react-native-sketch-canvas';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
 import SketchDrawingHeaderBlockComponent from './part/drawing/SketchDrawingHeaderBlockComponent';
@@ -27,7 +28,7 @@ class SketchDrawingComponent extends React.Component {
             draw: {
                 drawed: false,
                 color: '#000',
-                size: 1
+                size: 3
             }
         };
 
@@ -37,9 +38,13 @@ class SketchDrawingComponent extends React.Component {
         this.onSettingButtonPressed = this.onSettingButtonPressed.bind(this);
         this.onUndoButtonPressed = this.onUndoButtonPressed.bind(this);
         this.onClearButtonPressed = this.onClearButtonPressed.bind(this);
+        this.onDoneButtonPressed = this.onDoneButtonPressed.bind(this);
 
         this.onColorSelected = this.onColorSelected.bind(this);
         this.onSizeSelected = this.onSizeSelected.bind(this);
+
+        this.onSketchCanvasStrokeStart = this.onSketchCanvasStrokeStart.bind(this);
+        this.onSketchCanvasPathsChange = this.onSketchCanvasPathsChange.bind(this);
     };
 
     onHardBackButtonPressed() {
@@ -73,14 +78,48 @@ class SketchDrawingComponent extends React.Component {
     onSettingButtonPressed() {
         this.setState({ setting: Object.assign({}, this.state.setting, { show: !this.state.setting.show }) });
     };
-    onUndoButtonPressed() { };
-    onClearButtonPressed() { };
+    onUndoButtonPressed() {
+        this.refs.SketchCanvas.undo();
+    };
+    onClearButtonPressed() {
+        this.refs.SketchCanvas.clear();
+    };
+    onDoneButtonPressed() {
+        this.refs.SketchCanvas.getBase64('png', true, (error, result) => {
+            if (error) {
+                Alert.alert(
+                    this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                    this.coreInstances.Language.getText('ALERT_GENERAL_ERROR_TEXT'),
+                    [
+                        { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                    ],
+                    { cancelable: true }
+                );
+                return;
+            }
+
+            console.log(result);
+        });
+    };
 
     onColorSelected(color) {
         this.setState({ draw: Object.assign({}, this.state.draw, { color: color }) });
     };
     onSizeSelected(size) {
         this.setState({ draw: Object.assign({}, this.state.draw, { size: size }) });
+    };
+
+    onSketchCanvasStrokeStart() {
+        if (this.state.setting.show) {
+            this.setState({ setting: Object.assign({}, this.state.setting, { show: false }) });
+        }
+    };
+    onSketchCanvasPathsChange(pathsCount) {
+        if (pathsCount) {
+            this.setState({ draw: Object.assign({}, this.state.draw, { drawed: true }) });
+        } else {
+            this.setState({ draw: Object.assign({}, this.state.draw, { drawed: false }) });
+        }
     };
 
     componentDidMount() {
@@ -101,13 +140,21 @@ class SketchDrawingComponent extends React.Component {
                 <SketchDrawingHeaderBlockComponent
                     getCoreInstances={this.props.getCoreInstances}
                     onBackButtonPressed={this.clearAndClose}
-                    onDoneButtonPressed={() => { }}
+                    onDoneButtonPressed={this.onDoneButtonPressed}
                     title={this.coreInstances.Language.getText('SKETCH_DRAWING_HEADER_TITLE_TEXT')}
                 />
                 <ScreenBodyBlockComponent
                     getCoreInstances={this.props.getCoreInstances}
                     style={this.props.contentContainerStyle}
                 >
+                    <SketchCanvas
+                        ref={'SketchCanvas'}
+                        style={this.coreInstances.CustomStyle.getStyle('SKETCH_DRAWING_BLOCK_STYLE')}
+                        strokeColor={this.state.draw.color}
+                        strokeWidth={this.state.draw.size}
+                        onStrokeStart={this.onSketchCanvasStrokeStart}
+                        onPathsChange={this.onSketchCanvasPathsChange}
+                    />
                     {
                         this.state.setting.show && (
                             <SketchDrawingSettingBlockComponent

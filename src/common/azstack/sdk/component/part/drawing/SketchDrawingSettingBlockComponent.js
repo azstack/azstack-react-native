@@ -59,7 +59,7 @@ class SketchDrawingSettingBlockComponent extends React.Component {
                 <Slider
                     style={this.coreInstances.CustomStyle.getStyle('SKETCH_DRAWING_SETTING_SIZE_BLOCK_STYLE')}
                     minimumValue={1}
-                    maximumValue={5}
+                    maximumValue={15}
                     step={1}
                     value={this.state.size}
                     onSlidingComplete={this.props.onSizeSelected}

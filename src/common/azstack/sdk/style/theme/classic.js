@@ -1583,7 +1583,6 @@ export const SKETCH_DRAWING_SETTING_SIZE_BLOCK_STYLE = {
     marginTop: 10
 };
 
-
 export const SKETCH_DRAWING_FOOTER_BLOCK_STYLE = {
     paddingVertical: 10,
     paddingHorizontal: 15,
@@ -1599,6 +1598,9 @@ export const SKETCH_DRAWING_FOOTER_BUTTON_BLOCK_STYLE = {
     marginHorizontal: 15,
     justifyContent: 'center',
     alignItems: 'center'
+};
+export const SKETCH_DRAWING_FOOTER_BUTTON_DISABLED_STYLE = {
+    opacity: 0.5
 };
 export const SKETCH_DRAWING_FOOTER_BUTTON_IMAGE_STYLE = {
     width: 30,
