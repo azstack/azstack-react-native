@@ -18,7 +18,6 @@ import SelectMembersComponent from './SelectMembersComponent';
 import SelectMemberComponent from './SelectMemberComponent';
 import NewGroupComponent from './NewGroupComponent';
 import ImageGalleryComponent from './ImageGalleryComponent';
-import AudioRecordingComponent from './AudioRecordingComponent';
 import LocationSelectingComponent from './LocationSelectingComponent';
 import SketchDrawingComponent from './SketchDrawingComponent';
 
@@ -37,7 +36,6 @@ const NavigationEnum = {
     SelectMemberComponent: 'SelectMemberComponent',
     NewGroupComponent: 'NewGroupComponent',
     ImageGalleryComponent: 'ImageGalleryComponent',
-    AudioRecordingComponent: 'AudioRecordingComponent',
     LocationSelectingComponent: 'LocationSelectingComponent',
     SketchDrawingComponent: 'SketchDrawingComponent'
 };
@@ -93,8 +91,6 @@ export default class AZStackBaseComponent extends React.Component {
                 return this.renderNewGroup(options, index);
             case 'ImageGalleryComponent':
                 return this.renderImageGallery(options, index); 
-            case 'AudioRecordingComponent':
-                return this.renderAudioRecording(options, index);
             case 'LocationSelectingComponent':
                 return this.renderLocationSelecting(options, index);
             case 'SketchDrawingComponent':
@@ -244,15 +240,6 @@ export default class AZStackBaseComponent extends React.Component {
 
     renderImageGallery(options, key) {
         return <ImageGalleryComponent
-            key={key}
-            Sizes={this.Sizes}
-            getCoreInstances={this.getCoreInstances}
-            {...options}
-        />;
-    };
-
-    renderAudioRecording(options, key) {
-        return <AudioRecordingComponent
             key={key}
             Sizes={this.Sizes}
             getCoreInstances={this.getCoreInstances}
