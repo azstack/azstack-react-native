@@ -67,6 +67,7 @@ class ChatInputAudioRecordBlockComponent extends React.Component {
                                 clearInterval(this.intervalRecoringTime);
                             }
                             this.props.onCloseButtonPressed();
+                            this.props.onChatInputDraftDataStatusChanged(false);
                         }
                     }
                 ],
@@ -113,6 +114,7 @@ class ChatInputAudioRecordBlockComponent extends React.Component {
             this.setState({ recording: Object.assign({}, this.state.recording, { time: this.state.recording.time + 1 }) });
         }, 1000);
         const filePath = await AudioRecorder.startRecording();
+        this.props.onChatInputDraftDataStatusChanged(true);
     };
     async onStopRecordingButtonPressed() {
         const filePath = await AudioRecorder.stopRecording();
@@ -134,6 +136,7 @@ class ChatInputAudioRecordBlockComponent extends React.Component {
             recording: Object.assign({}, this.state.recording, { isOn: false, time: 0 }),
             playback: Object.assign({}, this.state.playback, { filePath: '', isOn: false, currentTime: 0, duration: 0 })
         });
+        this.props.onChatInputDraftDataStatusChanged(false);
     };
     onCancelButtonPressed() {
         Alert.alert(
@@ -147,6 +150,7 @@ class ChatInputAudioRecordBlockComponent extends React.Component {
                             recording: Object.assign({}, this.state.recording, { isOn: false, time: 0 }),
                             playback: Object.assign({}, this.state.playback, { filePath: '', isOn: false, currentTime: 0, duration: 0 })
                         });
+                        this.props.onChatInputDraftDataStatusChanged(false);
                     }
                 }
             ],

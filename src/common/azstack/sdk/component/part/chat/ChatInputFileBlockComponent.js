@@ -737,6 +737,7 @@ class ChatInputFileBlockComponent extends React.Component {
                             getCoreInstances={this.props.getCoreInstances}
                             onAudioFileGenerated={this.onAudioFileGenerated}
                             onCloseButtonPressed={this.closeRecording}
+                            onChatInputDraftDataStatusChanged={this.props.onChatInputDraftDataStatusChanged}
                         />
                     )
                 }

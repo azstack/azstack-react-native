@@ -430,6 +430,19 @@ export const CHAT_TYPING_TEXT_STYLE = {
     color: '#95A5A6'
 };
 
+export const CHAT_NOT_INPUT_BLOCK_STYLE = {
+    flex: 1,
+    position: 'relative'
+};
+export const CHAT_NOT_INPUT_DISABLE_TOUCH_BLOCK_STYLE = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)'
+};
+
 export const CHAT_INPUT_DISABLED_BLOCK_STYLE = {
     paddingVertical: 15,
     paddingHorizontal: 15,
@@ -446,15 +459,27 @@ export const CHAT_INPUT_DISABLED_TEXT_STYLE = {
 };
 
 export const CHAT_INPUT_BLOCK_STYLE = {
-    borderTopWidth: 1,
-    borderTopColor: '#E1E5EC',
+
 };
 export const CHAT_INPUT_INPUT_BLOCK_STYLE = {
+    position: 'relative'
+};
+export const CHAT_INPUT_INPUT_DISABLE_TOUCH_BLOCK_STYLE = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)'
+};
+export const CHAT_INPUT_INPUT_CONTENT_BLOCK_STYLE = {
+    borderTopWidth: 1,
+    borderTopColor: '#E1E5EC',
     paddingVertical: 5,
     paddingHorizontal: 15,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'flex-end',
+    alignItems: 'flex-end'
 };
 export const CHAT_INPUT_STICKER_BUTTON_BLOCK_STYLE = {
     width: 30,
