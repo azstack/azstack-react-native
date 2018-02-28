@@ -11,7 +11,6 @@ import Swiper from 'react-native-swiper';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
 import EmptyBlockComponent from './part/common/EmptyBlockComponent';
-import ConnectionBlockComponent from './part/common/ConnectionBlockComponent';
 
 const { height, width } = Dimensions.get('window');
 
@@ -102,9 +101,6 @@ class ImageGalleryComponent extends React.Component {
                         style={this.coreInstances.CustomStyle.getStyle('IMAGE_GALLERY_CLOSE_BUTTON_TEXT_STYLE')}
                     >×</Text>
                 </TouchableOpacity>
-                <ConnectionBlockComponent
-                    getCoreInstances={this.props.getCoreInstances}
-                />
             </ScreenBlockComponent>
         );
     };
