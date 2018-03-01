@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Alert,
     BackHandler,
     Platform,
     FlatList,
@@ -49,7 +50,8 @@ class ChatComponent extends React.Component {
                 clears: {}
             },
             unreads: [],
-            messages: []
+            messages: [],
+            hasDraftData: false
         };
 
         this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
@@ -57,6 +59,8 @@ class ChatComponent extends React.Component {
         this.onMessagesListEndReach = this.onMessagesListEndReach.bind(this);
         this.onMessageImagePressed = this.onMessageImagePressed.bind(this);
         this.onMessageLocationPressed = this.onMessageLocationPressed.bind(this);
+
+        this.onChatInputDraftDataStatusChanged = this.onChatInputDraftDataStatusChanged.bind(this);
     };
 
     onHardBackButtonPressed() {
@@ -69,19 +73,19 @@ class ChatComponent extends React.Component {
             if (error) {
                 return;
             }
-            this.initRun()
+            this.initRun();
         });
         this.subscriptions.onAutoReconnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_AUTO_RECONNECTED, ({ error, result }) => {
             if (error) {
                 return;
             }
-            this.initRun()
+            this.initRun();
         });
         this.subscriptions.onReconnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_RECONNECT_RETURN, ({ error, result }) => {
             if (error) {
                 return;
             }
-            this.initRun()
+            this.initRun();
         });
         this.subscriptions.onTyping = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_TYPING, ({ error, result }) => {
             if (error) {
@@ -689,7 +693,13 @@ class ChatComponent extends React.Component {
         });
     };
     onMessageLocationPressed(event) {
-        console.log(event);
+        this.props.showLocationMap({
+            location: event.location
+        });
+    };
+
+    onChatInputDraftDataStatusChanged(status) {
+        this.setState({ hasDraftData: status });
     };
 
     onTyping(typingDetails) {
@@ -1243,72 +1253,83 @@ class ChatComponent extends React.Component {
                 statusbar={this.props.statusbar}
                 style={this.props.style}
             >
-                {
-                    !this.state.chatTarget && <ScreenHeaderBlockComponent
-                        getCoreInstances={this.props.getCoreInstances}
-                        onBackButtonPressed={this.props.onBackButtonPressed}
-                        title={this.coreInstances.Language.getText('CHAT_HEADER_TITLE_TEXT')}
-                    />
-                }
-                {
-                    !!this.state.chatTarget && <ChatHeaderComponent
-                        getCoreInstances={this.props.getCoreInstances}
-                        onBackButtonPressed={this.props.onBackButtonPressed}
-                        onChatTargetPressed={this.props.onChatTargetPressed}
-                        onVoiceCallButtonPressed={this.props.onVoiceCallButtonPressed}
-                        onVideoCallButtonPressed={this.props.onVideoCallButtonPressed}
-                        chatType={this.props.chatType}
-                        chatTarget={this.state.chatTarget}
-                    />
-                }
-                <ScreenBodyBlockComponent
-                    getCoreInstances={this.props.getCoreInstances}
-                    style={this.props.contentContainerStyle}
-                >
-                    {
-                        this.state.messages.length === 0 && <EmptyBlockComponent
-                            getCoreInstances={this.props.getCoreInstances}
-                            emptyText={this.coreInstances.Language.getText('MESSAGES_LIST_EMPTY_TEXT')}
-                        />
-                    }
-                    {
-                        this.state.messages.length > 0 && <FlatList
-                            ref={'MessagesList'}
-                            inverted={true}
-                            style={this.coreInstances.CustomStyle.getStyle('MESSAGES_LIST_STYLE')}
-                            data={this.state.messages}
-                            keyExtractor={(item, index) => (item.msgId)}
-                            renderItem={({ item, index }) => {
-                                return (
-                                    <MessageBlockComponent
-                                        getCoreInstances={this.props.getCoreInstances}
-                                        message={item}
-                                        shouldRenderTimeMark={this.shouldRenderTimeMark(index)}
-                                        shouldRenderSender={this.shouldRenderSender(index)}
-                                        onSenderPressed={this.props.onSenderPressed}
-                                        onMessageImagePressed={this.onMessageImagePressed}
-                                        onMessageLocationPressed={this.onMessageLocationPressed}
-                                    />
-                                );
-                            }}
-                            onEndReached={this.onMessagesListEndReach}
-                            onEndReachedThreshold={0.1}
-                            keyboardDismissMode={Platform.select({ ios: 'interactive', android: 'on-drag' })}
-                        />
-                    }
-                    <ConnectionBlockComponent
-                        getCoreInstances={this.props.getCoreInstances}
-                    />
-                </ScreenBodyBlockComponent>
                 <View
-                    style={this.coreInstances.CustomStyle.getStyle('CHAT_TYPING_BLOCK_STYLE')}
+                    style={this.coreInstances.CustomStyle.getStyle('CHAT_NOT_INPUT_BLOCK_STYLE')}
                 >
                     {
-                        this.state.typing.senders.length > 0 && (
-                            <TypingBlockComponent
+                        !this.state.chatTarget && <ScreenHeaderBlockComponent
+                            getCoreInstances={this.props.getCoreInstances}
+                            onBackButtonPressed={this.props.onBackButtonPressed}
+                            title={this.coreInstances.Language.getText('CHAT_HEADER_TITLE_TEXT')}
+                        />
+                    }
+                    {
+                        !!this.state.chatTarget && <ChatHeaderComponent
+                            getCoreInstances={this.props.getCoreInstances}
+                            onBackButtonPressed={this.props.onBackButtonPressed}
+                            onChatTargetPressed={this.props.onChatTargetPressed}
+                            onVoiceCallButtonPressed={this.props.onVoiceCallButtonPressed}
+                            onVideoCallButtonPressed={this.props.onVideoCallButtonPressed}
+                            chatType={this.props.chatType}
+                            chatTarget={this.state.chatTarget}
+                        />
+                    }
+                    <ScreenBodyBlockComponent
+                        getCoreInstances={this.props.getCoreInstances}
+                        style={this.props.contentContainerStyle}
+                    >
+                        {
+                            this.state.messages.length === 0 && <EmptyBlockComponent
                                 getCoreInstances={this.props.getCoreInstances}
-                                textStyle={this.coreInstances.CustomStyle.getStyle('CHAT_TYPING_TEXT_STYLE')}
-                                typing={this.state.typing}
+                                emptyText={this.coreInstances.Language.getText('MESSAGES_LIST_EMPTY_TEXT')}
+                            />
+                        }
+                        {
+                            this.state.messages.length > 0 && <FlatList
+                                ref={'MessagesList'}
+                                inverted={true}
+                                style={this.coreInstances.CustomStyle.getStyle('MESSAGES_LIST_STYLE')}
+                                data={this.state.messages}
+                                keyExtractor={(item, index) => (item.msgId)}
+                                renderItem={({ item, index }) => {
+                                    return (
+                                        <MessageBlockComponent
+                                            getCoreInstances={this.props.getCoreInstances}
+                                            message={item}
+                                            shouldRenderTimeMark={this.shouldRenderTimeMark(index)}
+                                            shouldRenderSender={this.shouldRenderSender(index)}
+                                            onSenderPressed={this.props.onSenderPressed}
+                                            onMessageImagePressed={this.onMessageImagePressed}
+                                            onMessageLocationPressed={this.onMessageLocationPressed}
+                                        />
+                                    );
+                                }}
+                                onEndReached={this.onMessagesListEndReach}
+                                onEndReachedThreshold={0.1}
+                                keyboardDismissMode={Platform.select({ ios: 'interactive', android: 'on-drag' })}
+                            />
+                        }
+                        <ConnectionBlockComponent
+                            getCoreInstances={this.props.getCoreInstances}
+                        />
+                    </ScreenBodyBlockComponent>
+                    <View
+                        style={this.coreInstances.CustomStyle.getStyle('CHAT_TYPING_BLOCK_STYLE')}
+                    >
+                        {
+                            this.state.typing.senders.length > 0 && (
+                                <TypingBlockComponent
+                                    getCoreInstances={this.props.getCoreInstances}
+                                    textStyle={this.coreInstances.CustomStyle.getStyle('CHAT_TYPING_TEXT_STYLE')}
+                                    typing={this.state.typing}
+                                />
+                            )
+                        }
+                    </View>
+                    {
+                        this.state.hasDraftData && (
+                            <View
+                                style={this.coreInstances.CustomStyle.getStyle('CHAT_NOT_INPUT_DISABLE_TOUCH_BLOCK_STYLE')}
                             />
                         )
                     }
@@ -1327,7 +1348,7 @@ class ChatComponent extends React.Component {
                             chatType={this.props.chatType}
                             chatId={this.props.chatId}
                             chatTarget={this.state.chatTarget}
-                            showAudioRecording={this.props.showAudioRecording}
+                            onChatInputDraftDataStatusChanged={this.onChatInputDraftDataStatusChanged}
                             showLocationSelecting={this.props.showLocationSelecting}
                             showSketchDrawing={this.props.showSketchDrawing}
                         />

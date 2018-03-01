@@ -29,7 +29,8 @@ class ChatInputComponentBlock extends React.Component {
             },
             file: {
                 showed: false
-            }
+            },
+            hasDraftData: false
         };
 
         this.sendingMessageFailChecks = {};
@@ -43,6 +44,8 @@ class ChatInputComponentBlock extends React.Component {
 
         this.closeFileBox = this.closeFileBox.bind(this);
         this.showFileBox = this.showFileBox.bind(this);
+
+        this.onChatInputDraftDataStatusChanged = this.onChatInputDraftDataStatusChanged.bind(this);
 
         this.sendTextMessage = this.sendTextMessage.bind(this);
         this.sendStickerMessage = this.sendStickerMessage.bind(this);
@@ -142,6 +145,11 @@ class ChatInputComponentBlock extends React.Component {
     };
     closeFileBox() {
         this.setState({ file: Object.assign({}, this.state.file, { showed: false }) });
+    };
+
+    onChatInputDraftDataStatusChanged(status) {
+        this.setState({ hasDraftData: status });
+        this.props.onChatInputDraftDataStatusChanged(status);
     };
 
     sendTextMessage() {
@@ -264,57 +272,68 @@ class ChatInputComponentBlock extends React.Component {
                 <View
                     style={[this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_INPUT_BLOCK_STYLE'), { borderWidth: 0 }]}
                 >
-                    <TouchableOpacity
-                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BUTTON_BLOCK_STYLE')}
-                        activeOpacity={0.5}
-                        onPress={this.showStickerBox}
-                    >
-                        <Image
-                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BUTTON_IMAGE_STYLE')}
-                            source={this.coreInstances.CustomStyle.getImage('IMAGE_STICKER')}
-                        />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_ATTACH_BUTTON_BLOCK_STYLE')}
-                        activeOpacity={0.5}
-                        onPress={this.showFileBox}
-                    >
-                        <Image
-                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_ATTACH_BUTTON_IMAGE_STYLE')}
-                            source={this.coreInstances.CustomStyle.getImage('IMAGE_ATTACH')}
-                        />
-                    </TouchableOpacity>
                     <View
-                        style={[this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_TEXT_INPUT_BLOCK_STYLE')]}
+                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_INPUT_CONTENT_BLOCK_STYLE')}
                     >
-                        <TextInput
-                            ref={'TextInput'}
-                            style={[this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_TEXT_INPUT_STYLE')]}
-                            onChangeText={this.onTextInputChanged}
-                            onFocus={this.onTextInputFocused}
-                            onBlur={this.onTextInputBlured}
-                            value={this.state.text.val}
-                            placeholder={this.coreInstances.Language.getText('CHAT_INPUT_TEXT_INPUT_PLACEHOLDER_TEXT')}
-                            returnKeyType={'done'}
-                            autoCapitalize={'none'}
-                            autoGrow
-                            multiline
-                            {
-                            ...this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_TEXT_INPUT_PROPS_STYLE')
-                            }
-                            onContentSizeChange={(e) => this.onInputContentChangeSize(e)}
-                        />
+                        <TouchableOpacity
+                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BUTTON_BLOCK_STYLE')}
+                            activeOpacity={0.5}
+                            onPress={this.showStickerBox}
+                        >
+                            <Image
+                                style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BUTTON_IMAGE_STYLE')}
+                                source={this.coreInstances.CustomStyle.getImage('IMAGE_STICKER')}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_ATTACH_BUTTON_BLOCK_STYLE')}
+                            activeOpacity={0.5}
+                            onPress={this.showFileBox}
+                        >
+                            <Image
+                                style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_ATTACH_BUTTON_IMAGE_STYLE')}
+                                source={this.coreInstances.CustomStyle.getImage('IMAGE_ATTACH')}
+                            />
+                        </TouchableOpacity>
+                        <View
+                            style={[this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_TEXT_INPUT_BLOCK_STYLE')]}
+                        >
+                            <TextInput
+                                ref={'TextInput'}
+                                style={[this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_TEXT_INPUT_STYLE')]}
+                                onChangeText={this.onTextInputChanged}
+                                onFocus={this.onTextInputFocused}
+                                onBlur={this.onTextInputBlured}
+                                value={this.state.text.val}
+                                placeholder={this.coreInstances.Language.getText('CHAT_INPUT_TEXT_INPUT_PLACEHOLDER_TEXT')}
+                                returnKeyType={'done'}
+                                autoCapitalize={'none'}
+                                autoGrow
+                                multiline
+                                {
+                                ...this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_TEXT_INPUT_PROPS_STYLE')
+                                }
+                                onContentSizeChange={(e) => this.onInputContentChangeSize(e)}
+                            />
+                        </View>
+                        <TouchableOpacity
+                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_SEND_BUTTON_BLOCK_STYLE')}
+                            activeOpacity={0.5}
+                            onPress={this.sendTextMessage}
+                        >
+                            <Image
+                                style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_SEND_BUTTON_IMAGE_STYLE')}
+                                source={this.coreInstances.CustomStyle.getImage('IMAGE_SEND')}
+                            />
+                        </TouchableOpacity>
                     </View>
-                    <TouchableOpacity
-                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_SEND_BUTTON_BLOCK_STYLE')}
-                        activeOpacity={0.5}
-                        onPress={this.sendTextMessage}
-                    >
-                        <Image
-                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_SEND_BUTTON_IMAGE_STYLE')}
-                            source={this.coreInstances.CustomStyle.getImage('IMAGE_SEND')}
-                        />
-                    </TouchableOpacity>
+                    {
+                        this.state.hasDraftData && (
+                            <View
+                                style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_INPUT_DISABLE_TOUCH_BLOCK_STYLE')}
+                            />
+                        )
+                    }
                 </View>
                 {
                     !!this.state.sticker.showed && (
@@ -337,7 +356,7 @@ class ChatInputComponentBlock extends React.Component {
                             chatType={this.props.chatType}
                             chatId={this.props.chatId}
                             chatTarget={this.props.chatTarget}
-                            showAudioRecording={this.props.showAudioRecording}
+                            onChatInputDraftDataStatusChanged={this.onChatInputDraftDataStatusChanged}
                             showLocationSelecting={this.props.showLocationSelecting}
                             showSketchDrawing={this.props.showSketchDrawing}
                         />

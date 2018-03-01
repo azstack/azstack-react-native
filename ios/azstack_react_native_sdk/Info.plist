@@ -39,7 +39,7 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Location Permission</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>
@@ -56,6 +56,6 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Microphone Permission</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Send image</string>
+	<string>Photo Library Permission</string>
 </dict>
 </plist>

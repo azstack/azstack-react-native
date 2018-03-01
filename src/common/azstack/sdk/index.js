@@ -447,8 +447,8 @@ export class AZStackSdk extends AZStackBaseComponent {
             showImageGallery: (event) => {
                 this.showImageGallery(event);
             },
-            showAudioRecording: (event) => {
-                this.showAudioRecording(event);
+            showLocationMap: (event) => {
+                this.showLocationMap(event);
             },
             showLocationSelecting: (event) => {
                 this.showLocationSelecting(event);
@@ -794,8 +794,8 @@ export class AZStackSdk extends AZStackBaseComponent {
             }
         });
     };
-    showAudioRecording(options) {
-        this.navigate(this.getNavigation().AudioRecordingComponent, {
+    showLocationMap(options) {
+        this.navigate(this.getNavigation().LocationMapComponent, {
             ...options,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
@@ -817,6 +817,14 @@ export class AZStackSdk extends AZStackBaseComponent {
                 }
 
                 this.pop();
+            },
+            onDoneClose: () => {
+                if (options && typeof options === 'object' && typeof options.onDoneClose === 'function') {
+                    options.onDoneClose();
+                    return;
+                }
+
+                this.pop();
             }
         });
     };
@@ -826,6 +834,14 @@ export class AZStackSdk extends AZStackBaseComponent {
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
+                    return;
+                }
+
+                this.pop();
+            },
+            onDoneClose: () => {
+                if (options && typeof options === 'object' && typeof options.onDoneClose === 'function') {
+                    options.onDoneClose();
                     return;
                 }
 
@@ -967,8 +983,8 @@ export class AZStackSdk extends AZStackBaseComponent {
                 showImageGallery: (event) => {
                     this.showImageGallery(event);
                 },
-                showAudioRecording: (event) => {
-                    this.showAudioRecording(event);
+                showLocationMap: (event) => {
+                    this.showLocationMap(event);
                 },
                 showLocationSelecting: (event) => {
                     this.showLocationSelecting(event);

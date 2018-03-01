@@ -67,7 +67,8 @@ export const SCREEN_HEADER_TITLE_TEXT_STYLE = {
 export const SCREEN_BODY_BLOCK_STYLE = {
     flex: 1,
     flexDirection: 'column',
-    position: 'relative'
+    position: 'relative',
+    display: 'flex'
 };
 
 export const CONNECTION_BLOCK_STYLE = {
@@ -430,6 +431,19 @@ export const CHAT_TYPING_TEXT_STYLE = {
     color: '#95A5A6'
 };
 
+export const CHAT_NOT_INPUT_BLOCK_STYLE = {
+    flex: 1,
+    position: 'relative'
+};
+export const CHAT_NOT_INPUT_DISABLE_TOUCH_BLOCK_STYLE = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)'
+};
+
 export const CHAT_INPUT_DISABLED_BLOCK_STYLE = {
     paddingVertical: 15,
     paddingHorizontal: 15,
@@ -446,15 +460,27 @@ export const CHAT_INPUT_DISABLED_TEXT_STYLE = {
 };
 
 export const CHAT_INPUT_BLOCK_STYLE = {
-    borderTopWidth: 1,
-    borderTopColor: '#E1E5EC',
+
 };
 export const CHAT_INPUT_INPUT_BLOCK_STYLE = {
+    position: 'relative'
+};
+export const CHAT_INPUT_INPUT_DISABLE_TOUCH_BLOCK_STYLE = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)'
+};
+export const CHAT_INPUT_INPUT_CONTENT_BLOCK_STYLE = {
+    borderTopWidth: 1,
+    borderTopColor: '#E1E5EC',
     paddingVertical: 5,
     paddingHorizontal: 15,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'flex-end',
+    alignItems: 'flex-end'
 };
 export const CHAT_INPUT_STICKER_BUTTON_BLOCK_STYLE = {
     width: 30,
@@ -619,6 +645,81 @@ export const CHAT_INPUT_FILE_BOX_OPTION_TEXT_BLOCK_STYLE = {
     color: '#95A5A6',
     marginTop: 5
 };
+export const CHAT_INPUT_FILE_BOX_AUDIO_RECORDING_BLOCK_STYLE = {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const CHAT_INPUT_FILE_BOX_AUDIO_RECORDING_TIME_BLOCK_STYLE = {
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    borderWidth: 1,
+    borderColor: '#E1E5EC',
+    borderRadius: 5
+};
+export const CHAT_INPUT_FILE_BOX_AUDIO_RECORDING_TIME_TEXT_STYLE = {
+    fontSize: 15,
+    fontWeight: '400',
+    lineHeight: 20,
+    color: '#2F353B'
+};
+export const CHAT_INPUT_FILE_BOX_AUDIO_RECORDING_CONTROL_BLOCK_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20
+};
+export const CHAT_INPUT_FILE_BOX_AUDIO_RECORDING_CONTROL_MAIN_BUTTON_STYLE = {
+    width: 80,
+    height: 80,
+    borderWidth: 3,
+    borderColor: '#E1E5EC',
+    borderRadius: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 20
+};
+export const CHAT_INPUT_FILE_BOX_AUDIO_RECORDING_CONTROL_MAIN_IMAGE_STYLE = {
+    width: 30,
+    height: 30
+};
+export const CHAT_INPUT_FILE_BOX_AUDIO_RECORDING_CONTROL_MAIN_IMAGE_BIG_STYLE = {
+    width: 50,
+    height: 50
+};
+export const CHAT_INPUT_FILE_BOX_AUDIO_RECORDING_CONTROL_CANCEL_BUTTON_STYLE = {
+    width: 30,
+    height: 30,
+    borderWidth: 1,
+    backgroundColor: '#95A5A6',
+    borderColor: '#95A5A6',
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const CHAT_INPUT_FILE_BOX_AUDIO_RECORDING_CONTROL_CANCEL_TEXT_STYLE = {
+    fontSize: 25,
+    lineHeight: 30,
+    fontWeight: '400',
+    color: '#fff'
+};
+export const CHAT_INPUT_FILE_BOX_AUDIO_RECORDING_CONTROL_CONFIRM_BUTTON_STYLE = {
+    width: 30,
+    height: 30,
+    borderWidth: 1,
+    backgroundColor: '#3598DC',
+    borderColor: '#3598DC',
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const CHAT_INPUT_FILE_BOX_AUDIO_RECORDING_CONTROL_CONFIRM_TEXT_STYLE = {
+    fontSize: 15,
+    lineHeight: 20,
+    fontWeight: '400',
+    color: '#fff'
+};
+
 
 export const MESSAGES_LIST_STYLE = {
     paddingHorizontal: 15,
@@ -909,12 +1010,33 @@ export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_DURATION_TEXT_STYLE = {
     fontWeight: '300',
     color: '#95A5A6'
 };
-export const MESSAGE_TYPE_MEDIA_LOCATION_STYLE = {
+export const MESSAGE_TYPE_MEDIA_LOCATION_BLOCK_STYLE = {
     width: 250,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#E1E5EC',
+    position: 'relative'
+};
+export const MESSAGE_TYPE_MEDIA_LOCATION_MAP_BLOCK_STYLE = {
+    width: 250,
+    height: 200
+};
+export const MESSAGE_TYPE_MEDIA_LOCATION_MAP_COVER_BLOCK_STYLE = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: 250,
+    height: 200,
+    backgroundColor: 'rgba(0, 0, 0, 0)'
+};
+export const MESSAGE_TYPE_MEDIA_LOCATION_ADDRESS_TEXT_STYLE = {
     fontSize: 16,
     lineHeight: 20,
     fontWeight: '400',
-    color: '#2F353B'
+    color: '#2F353B',
+    backgroundColor: '#E5E5E5',
+    paddingHorizontal: 5,
+    paddingVertical: 5
 };
 export const MESSAGE_TYPE_MEDIA_DETAILS_STATUS_TEXT_STYLE = {
     marginHorizontal: 5,
@@ -1434,79 +1556,21 @@ export const IMAGE_GALLERY_CONTROL_BUTTON_TEXT_STYLE = {
 };
 
 
-export const AUDIO_RECORDING_BLOCK_STYLE = {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+export const LOCATION_MAP_FOOTER_BLOCK_STYLE = {
+    borderTopWidth: 1,
+    borderTopColor: '#E1E5EC',
 };
-export const AUDIO_RECORDING_TIME_BLOCK_STYLE = {
+export const LOCATION_MAP_FOOTER_OPEN_MAP_BUTTON_BLOCK_STYLE = {
     paddingHorizontal: 15,
-    paddingVertical: 5,
-    borderWidth: 1,
-    borderColor: '#E1E5EC',
-    borderRadius: 5
+    paddingVertical: 15,
+    justifyContent: 'center',
+    alignItems: 'center'
 };
-export const AUDIO_RECORDING_TIME_TEXT_STYLE = {
-    fontSize: 15,
+export const LOCATION_MAP_FOOTER_OPEN_MAP_BUTTON_TEXT_BLOCK_STYLE = {
+    fontSize: 20,
     fontWeight: '400',
-    lineHeight: 20,
+    lineHeight: 25,
     color: '#2F353B'
-};
-export const AUDIO_RECORDING_CONTROL_BLOCK_STYLE = {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 20
-};
-export const AUDIO_RECORDING_CONTROL_MAIN_BUTTON_STYLE = {
-    width: 80,
-    height: 80,
-    borderWidth: 3,
-    borderColor: '#E1E5EC',
-    borderRadius: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 20
-};
-export const AUDIO_RECORDING_CONTROL_MAIN_IMAGE_STYLE = {
-    width: 30,
-    height: 30
-};
-export const AUDIO_RECORDING_CONTROL_MAIN_IMAGE_BIG_STYLE = {
-    width: 50,
-    height: 50
-};
-export const AUDIO_RECORDING_CONTROL_CANCEL_BUTTON_STYLE = {
-    width: 30,
-    height: 30,
-    borderWidth: 1,
-    backgroundColor: '#95A5A6',
-    borderColor: '#95A5A6',
-    borderRadius: 15,
-    justifyContent: 'center',
-    alignItems: 'center'
-};
-export const AUDIO_RECORDING_CONTROL_CANCEL_TEXT_STYLE = {
-    fontSize: 25,
-    lineHeight: 30,
-    fontWeight: '400',
-    color: '#fff'
-};
-export const AUDIO_RECORDING_CONTROL_CONFIRM_BUTTON_STYLE = {
-    width: 30,
-    height: 30,
-    borderWidth: 1,
-    backgroundColor: '#3598DC',
-    borderColor: '#3598DC',
-    borderRadius: 15,
-    justifyContent: 'center',
-    alignItems: 'center'
-};
-export const AUDIO_RECORDING_CONTROL_CONFIRM_TEXT_STYLE = {
-    fontSize: 15,
-    lineHeight: 20,
-    fontWeight: '400',
-    color: '#fff'
 };
 
 
@@ -1605,4 +1669,44 @@ export const SKETCH_DRAWING_FOOTER_BUTTON_DISABLED_STYLE = {
 export const SKETCH_DRAWING_FOOTER_BUTTON_IMAGE_STYLE = {
     width: 30,
     height: 30
+};
+
+
+export const LOCATION_SELECTING_HEADER_BLOCK_STYLE = {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderStyle: 'solid',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E1E5EC',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row'
+};
+export const LOCATION_SELECTING_HEADER_BACK_BUTTON_STYLE = {
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'flex-start'
+};
+export const LOCATION_SELECTING_HEADER_BACK_BUTTON_IMAGE_STYLE = {
+    width: 25,
+    height: 25
+};
+export const LOCATION_SELECTING_HEADER_TITLE_TEXT_STYLE = {
+    flex: 1,
+    fontSize: 20,
+    fontWeight: '400',
+    lineHeight: 25,
+    color: '#2F353B',
+    textAlign: 'center'
+};
+export const LOCATION_SELECTING_HEADER_DONE_BUTTON_STYLE = {
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'flex-end'
+};
+export const LOCATION_SELECTING_HEADER_DONE_BUTTON_IMAGE_STYLE = {
+    width: 25,
+    height: 25
 };

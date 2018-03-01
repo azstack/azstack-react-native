@@ -17,6 +17,7 @@ class ScreenHeaderBlockComponent extends React.Component {
                     ...this.coreInstances.CustomStyle.getStyle('SCREEN_BODY_BLOCK_STYLE'),
                     ...this.props.style,
                 }}
+                onLayout={this.props.onLayout ? this.props.onLayout : null}
             >
                 {this.props.children}
             </View>
