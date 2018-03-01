@@ -99,6 +99,7 @@ export const CONVERSATIONS_LIST_NEW_GROUP_TO_CHAT_ERROR_TEXT = 'Create group to 
 
 export const CHAT_HEADER_TITLE_TEXT = 'Chat';
 export const MESSAGES_LIST_EMPTY_TEXT = 'No Message';
+export const CHAT_OPEN_LOCATION_MESSAGE_ERROR = 'Can\'t open locatioon, please try again later';
 export const CHAT_INPUT_DISABLED_TEXT = 'You can\'t reply to this conversation';
 export const CHAT_INPUT_TEXT_INPUT_PLACEHOLDER_TEXT = 'Enter text...';
 export const CHAT_INPUT_FILE_OPTION_GALLERY_TEXT = 'Gallery';

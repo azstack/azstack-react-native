@@ -1009,12 +1009,24 @@ export const MESSAGE_TYPE_MEDIA_FILE_VIDEO_DURATION_TEXT_STYLE = {
     fontWeight: '300',
     color: '#95A5A6'
 };
-export const MESSAGE_TYPE_MEDIA_LOCATION_STYLE = {
+export const MESSAGE_TYPE_MEDIA_LOCATION_BLOCK_STYLE = {
     width: 250,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#E1E5EC'
+};
+export const MESSAGE_TYPE_MEDIA_LOCATION_IMAGLE_STYLE = {
+    width: 250,
+    height: 200
+};
+export const MESSAGE_TYPE_MEDIA_LOCATION_ADDRESS_TEXT_STYLE = {
     fontSize: 16,
     lineHeight: 20,
     fontWeight: '400',
-    color: '#2F353B'
+    color: '#2F353B',
+    backgroundColor: '#E5E5E5',
+    paddingHorizontal: 5,
+    paddingVertical: 5
 };
 export const MESSAGE_TYPE_MEDIA_DETAILS_STATUS_TEXT_STYLE = {
     marginHorizontal: 5,

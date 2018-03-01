@@ -118,7 +118,7 @@ class Message {
                         unreadMessage.location = {
                             address: message.addr,
                             longitude: message.long,
-                            lat: message.lat
+                            latitude: message.lat
                         };
                         break;
                     case this.serviceTypes.MESSAGE_HAS_NEW_WITH_GROUP:
@@ -318,7 +318,7 @@ class Message {
                         modifiedMessage.location = {
                             address: message.addr,
                             longitude: message.long,
-                            lat: message.lat
+                            latitude: message.lat
                         };
                         break;
                     case this.serviceTypes.MESSAGE_HAS_NEW_WITH_GROUP:

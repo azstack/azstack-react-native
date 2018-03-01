@@ -37,6 +37,8 @@ export class AZStackSdk extends AZStackBaseComponent {
         this.linkConstants = linkConstants;
         this.limitConstants = limitConstants;
 
+        this.googleApiKey = props.options.googleApiKey;
+
         this.Language = new Language({ languageCode: props.options.languageCode });
         this.CustomStyle = new CustomStyle({ themeName: props.options.themeName });
 
@@ -111,6 +113,8 @@ export class AZStackSdk extends AZStackBaseComponent {
             eventConstants: this.eventConstants,
             linkConstants: this.linkConstants,
             limitConstants: this.limitConstants,
+
+            googleApiKey: this.googleApiKey,
 
             Language: this.Language,
             CustomStyle: this.CustomStyle,
