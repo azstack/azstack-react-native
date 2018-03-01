@@ -3,7 +3,6 @@ import {
     Alert,
     BackHandler,
     Platform,
-    Linking,
     FlatList,
     Image,
     View,
@@ -694,30 +693,7 @@ class ChatComponent extends React.Component {
         });
     };
     onMessageLocationPressed(event) {
-        const url = `${this.coreInstances.linkConstants.LINK_GOOGLE_PLACE_WEB}${event.location.latitude},${event.location.longitude}`;
-        Linking.canOpenURL(url).then((supported) => {
-            if (!supported) {
-                Alert.alert(
-                    this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
-                    this.coreInstances.Language.getText('CHAT_OPEN_LOCATION_MESSAGE_ERROR'),
-                    [
-                        { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
-                    ],
-                    { cancelable: true }
-                );
-                return;
-            }
-            Linking.openURL(url);
-        }).catch((error) => {
-            Alert.alert(
-                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
-                this.coreInstances.Language.getText('ALERT_GENERAL_ERROR_TEXT'),
-                [
-                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
-                ],
-                { cancelable: true }
-            );
-        });
+        console.log(event);
     };
 
     onChatInputDraftDataStatusChanged(status) {

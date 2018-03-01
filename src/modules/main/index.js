@@ -32,7 +32,7 @@ class AppMain extends React.Component {
         return (
             <View style={{ flex: 1 }}>
                 {exampleType === 'core' && <AZStackCoreExample azstackConfig={azstackConfig} />}
-                {exampleType === 'sdk' && <AZStackSdkExample azstackConfig={azstackConfig} languageCode='en' themeName='classic' googleApiKey='AIzaSyD_Pki-HgFU7WNpdpzEJBtpw1w6-YxOpUw' members={['test_user_1', 'test_user_2', 'test_user_3']} />}
+                {exampleType === 'sdk' && <AZStackSdkExample azstackConfig={azstackConfig} languageCode='en' themeName='classic' members={['test_user_1', 'test_user_2', 'test_user_3']} />}
             </View>
         );
     };

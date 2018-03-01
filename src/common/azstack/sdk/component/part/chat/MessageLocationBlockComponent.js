@@ -1,8 +1,7 @@
 import React from 'react';
 import {
     TouchableOpacity,
-    Text,
-    Image
+    Text
 } from 'react-native';
 
 class MessageLocationBlockComponent extends React.Component {
@@ -28,12 +27,6 @@ class MessageLocationBlockComponent extends React.Component {
                 onPress={this.onPressed}
                 style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_LOCATION_BLOCK_STYLE')}
             >
-                <Image
-                    style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_LOCATION_IMAGLE_STYLE')}
-                    source={{
-                        uri: `${this.coreInstances.linkConstants.LINK_GOOGLE_STATIC_MAP_API}?center=${this.props.location.latitude},${this.props.location.longitude}&maptype=roadmap&zoom=16&size=250x200&markers=color:blue%7Clabel:C%7C${this.props.location.latitude},${this.props.location.longitude}&key=${this.coreInstances.googleApiKey}`
-                    }}
-                />
                 <Text
                     style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_LOCATION_ADDRESS_TEXT_STYLE')}
                 >

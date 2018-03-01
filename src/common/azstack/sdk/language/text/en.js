@@ -101,7 +101,6 @@ export const CONVERSATIONS_LIST_NEW_GROUP_TO_CHAT_ERROR_TEXT = 'Create group to 
 
 export const CHAT_HEADER_TITLE_TEXT = 'Chat';
 export const MESSAGES_LIST_EMPTY_TEXT = 'No Message';
-export const CHAT_OPEN_LOCATION_MESSAGE_ERROR = 'Can\'t open locatioon, please try again later';
 export const CHAT_INPUT_DISABLED_TEXT = 'You can\'t reply to this conversation';
 export const CHAT_INPUT_TEXT_INPUT_PLACEHOLDER_TEXT = 'Enter text...';
 export const CHAT_INPUT_FILE_OPTION_GALLERY_TEXT = 'Gallery';
@@ -116,7 +115,6 @@ export const CHAT_INPUT_NO_CAMERA_PERMISSION_ERROR_TEXT = 'Can\'t take picture, 
 export const CHAT_INPUT_NO_MICROPHONE_PERMISSION_ERROR_TEXT = 'Can\'t record audio, microphone permission is not allowed';
 export const CHAT_INPUT_NO_LOCATION_PERMISSION_ERROR_TEXT = 'Can\'t detect current location, location permission is not allowed';
 export const CHAT_INPUT_DISCARD_RECORDED_AUDIO_CONFIRMATION_TEXT = 'Are you sure to discard recorded audio?';
-export const CHAT_INPUT_GET_CURRENT_LOCATION_ERROR_TEXT = 'Can\t get current location, please try again later';
 
 export const USER_HEADER_TITLE_TEXT = 'User Information';
 export const USER_EMPTY_TEXT = 'No User Infomation';
@@ -151,7 +149,8 @@ export const NEW_GROUP_TYPE_EMPTY_ERROR = 'Group type can\'t be left blank';
 export const IMAGE_GALLERY_EMPTY_TEXT = 'No image';
 
 export const LOCATION_SELECTING_HEADER_TITLE_TEXT = 'Location selecting';
-export const LOCATION_EMPTY_TEXT = 'No location';
+export const LOCATION_SELECTING_EMPTY_TEXT = 'No location';
+export const LOCATION_SELECTING_GET_CURRENT_LOCATION_ERROR_TEXT = 'Can\t get current location, please try again later';
 
 export const SKETCH_DRAWING_HEADER_TITLE_TEXT = 'Sketch drawing';
 export const DISCARD_SKETCH_DRAWING_CONFIRMATION_TEXT = 'Are you sure to discard drawed sketch?';

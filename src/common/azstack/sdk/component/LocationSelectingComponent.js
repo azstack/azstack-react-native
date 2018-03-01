@@ -37,7 +37,7 @@ class LocationSelectingComponent extends React.Component {
         if (!this.state.location) {
             Alert.alert(
                 this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
-                this.coreInstances.Language.getText('CHAT_INPUT_GET_CURRENT_LOCATION_ERROR_TEXT'),
+                this.coreInstances.Language.getText('LOCATION_SELECTING_GET_CURRENT_LOCATION_ERROR_TEXT'),
                 [
                     { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
                 ],
@@ -58,7 +58,7 @@ class LocationSelectingComponent extends React.Component {
             (error) => {
                 Alert.alert(
                     this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
-                    this.coreInstances.Language.getText('CHAT_INPUT_GET_CURRENT_LOCATION_ERROR_TEXT'),
+                    this.coreInstances.Language.getText('LOCATION_SELECTING_GET_CURRENT_LOCATION_ERROR_TEXT'),
                     [
                         { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
                     ],
@@ -99,7 +99,7 @@ class LocationSelectingComponent extends React.Component {
                         !this.state.location && (
                             <EmptyBlockComponent
                                 getCoreInstances={this.props.getCoreInstances}
-                                emptyText={this.coreInstances.Language.getText('LOCATION_EMPTY_TEXT')}
+                                emptyText={this.coreInstances.Language.getText('LOCATION_SELECTING_EMPTY_TEXT')}
                             />
                         )
                     }

@@ -1015,10 +1015,6 @@ export const MESSAGE_TYPE_MEDIA_LOCATION_BLOCK_STYLE = {
     borderWidth: 1,
     borderColor: '#E1E5EC'
 };
-export const MESSAGE_TYPE_MEDIA_LOCATION_IMAGLE_STYLE = {
-    width: 250,
-    height: 200
-};
 export const MESSAGE_TYPE_MEDIA_LOCATION_ADDRESS_TEXT_STYLE = {
     fontSize: 16,
     lineHeight: 20,
