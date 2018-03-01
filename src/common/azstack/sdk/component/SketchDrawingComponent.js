@@ -112,7 +112,7 @@ class SketchDrawingComponent extends React.Component {
             }
 
             this.props.onImageBase64StringGenerated(result);
-            this.props.onBackButtonPressed();
+            this.props.onDoneClose();
         });
     };
 

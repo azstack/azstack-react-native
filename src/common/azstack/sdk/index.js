@@ -805,6 +805,14 @@ export class AZStackSdk extends AZStackBaseComponent {
                 }
 
                 this.pop();
+            },
+            onDoneClose: () => {
+                if (options && typeof options === 'object' && typeof options.onDoneClose === 'function') {
+                    options.onDoneClose();
+                    return;
+                }
+
+                this.pop();
             }
         });
     };
@@ -814,6 +822,14 @@ export class AZStackSdk extends AZStackBaseComponent {
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
+                    return;
+                }
+
+                this.pop();
+            },
+            onDoneClose: () => {
+                if (options && typeof options === 'object' && typeof options.onDoneClose === 'function') {
+                    options.onDoneClose();
                     return;
                 }
 

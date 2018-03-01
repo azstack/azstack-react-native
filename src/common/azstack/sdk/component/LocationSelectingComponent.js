@@ -47,7 +47,7 @@ class LocationSelectingComponent extends React.Component {
         }
 
         this.props.onLocationDetected(this.state.location);
-        this.props.onBackButtonPressed();
+        this.props.onDoneClose();
     };
 
     getCurrentLocation() {
