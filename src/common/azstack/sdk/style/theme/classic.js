@@ -1013,7 +1013,20 @@ export const MESSAGE_TYPE_MEDIA_LOCATION_BLOCK_STYLE = {
     width: 250,
     borderRadius: 5,
     borderWidth: 1,
-    borderColor: '#E1E5EC'
+    borderColor: '#E1E5EC',
+    position: 'relative'
+};
+export const MESSAGE_TYPE_MEDIA_LOCATION_MAP_BLOCK_STYLE = {
+    width: 250,
+    height: 200
+};
+export const MESSAGE_TYPE_MEDIA_LOCATION_MAP_COVER_BLOCK_STYLE = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: 250,
+    height: 200,
+    backgroundColor: 'rgba(0, 0, 0, 0)'
 };
 export const MESSAGE_TYPE_MEDIA_LOCATION_ADDRESS_TEXT_STYLE = {
     fontSize: 16,

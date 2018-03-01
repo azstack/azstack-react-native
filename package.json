@@ -15,6 +15,7 @@
 		"react-native-document-picker": "^2.1.0",
 		"react-native-fs": "^2.9.11",
 		"react-native-image-crop-picker": "^0.19.1",
+		"react-native-maps": "^0.20.1",
 		"react-native-swiper": "^1.5.13",
 		"react-native-video": "^2.0.0",
 		"react-native-webrtc": "^1.58.3",
