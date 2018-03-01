@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    PermissionsAndroid,
     Alert,
     BackHandler,
     Platform,
@@ -236,6 +237,24 @@ class ChatComponent extends React.Component {
         }
 
         return false;
+    };
+
+    checkLocationPermission() {
+        return new Promise((resolve, reject) => {
+            if (Platform.OS !== 'android') {
+                return resolve(true);
+            }
+
+            PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                {
+                    title: this.coreInstances.Language.getText('PERMISSION_REQUEST_LOCATION_TITLE_TEXT'),
+                    message: this.coreInstances.Language.getText('PERMISSION_REQUEST_LOCATION_DESCRIPTION_TEXT')
+                }
+            ).then((result) => {
+                resolve(result === PermissionsAndroid.RESULTS.GRANTED);
+            });
+        });
     };
 
     getChatTarget() {
@@ -692,7 +711,21 @@ class ChatComponent extends React.Component {
             initialIndex: imageIndex
         });
     };
-    onMessageLocationPressed(event) {
+    async onMessageLocationPressed(event) {
+
+        const granted = await this.checkLocationPermission();
+        if (!granted) {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('CHAT_INPUT_NO_LOCATION_PERMISSION_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+            return;
+        }
+
         this.props.showLocationMap({
             location: event.location
         });

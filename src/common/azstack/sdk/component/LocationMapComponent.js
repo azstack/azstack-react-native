@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    BackHandler,
     View,
     TouchableOpacity,
     Text,
@@ -24,9 +25,33 @@ class LocationMapComponent extends React.Component {
             }
         };
 
+        this.currentLocation = {
+            latitude: null,
+            longitude: null
+        };
+
+        this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
+
         this.onMapBoundLayout = this.onMapBoundLayout.bind(this);
 
         this.openMapButtonPressed = this.openMapButtonPressed.bind(this);
+    };
+
+    onHardBackButtonPressed() {
+        this.props.onBackButtonPressed();
+        return true;
+    };
+
+    getCurrentLocation() {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                this.currentLocation.latitude = position.coords.latitude;
+                this.currentLocation.longitude = position.coords.longitude;
+            },
+            (error) => {
+            },
+            { enableHighAccuracy: false, timeout: 2000, maximumAge: 1000 }
+        );
     };
 
     onMapBoundLayout(event) {
@@ -34,7 +59,7 @@ class LocationMapComponent extends React.Component {
     };
 
     openMapButtonPressed() {
-        const url = `${this.coreInstances.linkConstants.LINK_GOOGLE_PLACE_WEB}${this.props.location.latitude},${this.props.location.longitude}`;
+        const url = `${this.coreInstances.linkConstants.LINK_GOOGLE_MAP_WEB}?daddr=${this.props.location.latitude},${this.props.location.longitude}${(this.currentLocation.latitude !== null && this.currentLocation.longitude !== null) ? `&saddr=${this.currentLocation.latitude},${this.currentLocation.longitude}` : ''}`;
         Linking.canOpenURL(url).then((supported) => {
             if (!supported) {
                 Alert.alert(
@@ -59,6 +84,14 @@ class LocationMapComponent extends React.Component {
             );
         });
 
+    };
+
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        this.getCurrentLocation();
+    };
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     };
 
     render() {
