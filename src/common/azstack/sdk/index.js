@@ -447,6 +447,9 @@ export class AZStackSdk extends AZStackBaseComponent {
             showImageGallery: (event) => {
                 this.showImageGallery(event);
             },
+            showLocationMap: (event) => {
+                this.showLocationMap(event);
+            },
             showLocationSelecting: (event) => {
                 this.showLocationSelecting(event);
             },
@@ -791,6 +794,19 @@ export class AZStackSdk extends AZStackBaseComponent {
             }
         });
     };
+    showLocationMap(options) {
+        this.navigate(this.getNavigation().LocationMapComponent, {
+            ...options,
+            onBackButtonPressed: () => {
+                if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                    options.onBackButtonPressed();
+                    return;
+                }
+
+                this.pop();
+            }
+        });
+    };
     showLocationSelecting(options) {
         this.navigate(this.getNavigation().LocationSelectingComponent, {
             ...options,
@@ -966,6 +982,9 @@ export class AZStackSdk extends AZStackBaseComponent {
                 },
                 showImageGallery: (event) => {
                     this.showImageGallery(event);
+                },
+                showLocationMap: (event) => {
+                    this.showLocationMap(event);
                 },
                 showLocationSelecting: (event) => {
                     this.showLocationSelecting(event);

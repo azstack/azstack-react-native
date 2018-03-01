@@ -12,6 +12,13 @@ class MessageLocationBlockComponent extends React.Component {
 
         this.coreInstances = props.getCoreInstances();
 
+        this.state = {
+            mapSize: {
+                width: null,
+                height: null
+            }
+        };
+
         this.onPressed = this.onPressed.bind(this);
     };
 

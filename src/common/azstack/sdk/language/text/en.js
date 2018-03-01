@@ -148,6 +148,10 @@ export const NEW_GROUP_TYPE_EMPTY_ERROR = 'Group type can\'t be left blank';
 
 export const IMAGE_GALLERY_EMPTY_TEXT = 'No image';
 
+export const LOCATION_MAP_HEADER_TITLE_TEXT = 'Location';
+export const LOCATION_MAP_OPEN_MAP_BUTTON_TITLE_TEXT = 'Open map';
+export const LOCATION_MAP_OPEN_MAP_ERROR_TEXT = 'Can\'t open map, please try again later';
+
 export const LOCATION_SELECTING_HEADER_TITLE_TEXT = 'Location selecting';
 export const LOCATION_SELECTING_EMPTY_TEXT = 'No location';
 export const LOCATION_SELECTING_GET_CURRENT_LOCATION_ERROR_TEXT = 'Can\t get current location, please try again later';

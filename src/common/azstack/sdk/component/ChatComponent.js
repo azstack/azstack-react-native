@@ -693,7 +693,9 @@ class ChatComponent extends React.Component {
         });
     };
     onMessageLocationPressed(event) {
-        console.log(event);
+        this.props.showLocationMap({
+            location: event.location
+        });
     };
 
     onChatInputDraftDataStatusChanged(status) {

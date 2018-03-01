@@ -67,7 +67,8 @@ export const SCREEN_HEADER_TITLE_TEXT_STYLE = {
 export const SCREEN_BODY_BLOCK_STYLE = {
     flex: 1,
     flexDirection: 'column',
-    position: 'relative'
+    position: 'relative',
+    display: 'flex'
 };
 
 export const CONNECTION_BLOCK_STYLE = {
@@ -1552,6 +1553,24 @@ export const IMAGE_GALLERY_CONTROL_BUTTON_TEXT_STYLE = {
     color: '#fff',
     fontSize: 40,
     fontWeight: '400'
+};
+
+
+export const LOCATION_MAP_FOOTER_BLOCK_STYLE = {
+    borderTopWidth: 1,
+    borderTopColor: '#E1E5EC',
+};
+export const LOCATION_MAP_FOOTER_OPEN_MAP_BUTTON_BLOCK_STYLE = {
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const LOCATION_MAP_FOOTER_OPEN_MAP_BUTTON_TEXT_BLOCK_STYLE = {
+    fontSize: 20,
+    fontWeight: '400',
+    lineHeight: 25,
+    color: '#2F353B'
 };
 
 
