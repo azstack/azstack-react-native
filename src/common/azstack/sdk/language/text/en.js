@@ -9,6 +9,8 @@ export const PERMISSION_REQUEST_CAMERA_TITLE_TEXT = 'Camera Permission';
 export const PERMISSION_REQUEST_CAMERA_DESCRIPTION_TEXT = 'We needs access to your camera so you can take picture.';
 export const PERMISSION_REQUEST_MICROPHONE_TITLE_TEXT = 'Microphone Permission';
 export const PERMISSION_REQUEST_MICROPHONE_DESCRIPTION_TEXT = 'We needs access to your microphone so you can record audio.';
+export const PERMISSION_REQUEST_LOCATION_TITLE_TEXT = 'Location Permission';
+export const PERMISSION_REQUEST_LOCATION_DESCRIPTION_TEXT = 'We needs access to your location so you can detect your current location.';
 
 export const CONNECTTION_CONNECTING_TEXT = 'Connecting...';
 export const CONNECTTION_CONNECTED_TEXT = 'Connected';
@@ -112,7 +114,9 @@ export const CHAT_INPUT_FILE_SIZE_TOO_BIG_ERROR_TEXT = 'File size can\' be bigge
 export const CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT = 'Can\'t send message, please try again later.';
 export const CHAT_INPUT_NO_CAMERA_PERMISSION_ERROR_TEXT = 'Can\'t take picture, camera permission is not allowed';
 export const CHAT_INPUT_NO_MICROPHONE_PERMISSION_ERROR_TEXT = 'Can\'t record audio, microphone permission is not allowed';
+export const CHAT_INPUT_NO_LOCATION_PERMISSION_ERROR_TEXT = 'Can\'t detect current location, location permission is not allowed';
 export const CHAT_INPUT_DISCARD_RECORDED_AUDIO_CONFIRMATION_TEXT = 'Are you sure to discard recorded audio?';
+export const CHAT_INPUT_GET_CURRENT_LOCATION_ERROR_TEXT = 'Can\t get current location, please try again later';
 
 export const USER_HEADER_TITLE_TEXT = 'User Information';
 export const USER_EMPTY_TEXT = 'No User Infomation';
@@ -147,6 +151,7 @@ export const NEW_GROUP_TYPE_EMPTY_ERROR = 'Group type can\'t be left blank';
 export const IMAGE_GALLERY_EMPTY_TEXT = 'No image';
 
 export const LOCATION_SELECTING_HEADER_TITLE_TEXT = 'Location selecting';
+export const LOCATION_EMPTY_TEXT = 'No location';
 
 export const SKETCH_DRAWING_HEADER_TITLE_TEXT = 'Sketch drawing';
 export const DISCARD_SKETCH_DRAWING_CONFIRMATION_TEXT = 'Are you sure to discard drawed sketch?';
