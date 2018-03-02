@@ -49,6 +49,14 @@ class LocationMapComponent extends React.Component {
                 this.currentLocation.longitude = position.coords.longitude;
             },
             (error) => {
+                Alert.alert(
+                    this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                    this.coreInstances.Language.getText('LOCATION_MAP_GET_CURRENT_LOCATION_ERROR_TEXT'),
+                    [
+                        { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                    ],
+                    { cancelable: true }
+                );
             },
             { enableHighAccuracy: false, timeout: 2000, maximumAge: 1000 }
         );
