@@ -1,9 +1,6 @@
 import React from 'react';
 import {
     BackHandler,
-    View,
-    TouchableOpacity,
-    Text,
     Linking
 } from 'react-native';
 import MapView from 'react-native-maps';
@@ -11,6 +8,7 @@ import MapView from 'react-native-maps';
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
 import ScreenHeaderBlockComponent from './part/screen/ScreenHeaderBlockComponent';
 import ScreenBodyBlockComponent from './part/screen/ScreenBodyBlockComponent';
+import LocationMapFooterBlockComponent from './part/location/LocationMapFooterBlockComponent';
 
 class LocationMapComponent extends React.Component {
     constructor(props) {
@@ -145,21 +143,10 @@ class LocationMapComponent extends React.Component {
                         )
                     }
                 </ScreenBodyBlockComponent>
-                <View
-                    style={this.coreInstances.CustomStyle.getStyle('LOCATION_MAP_FOOTER_BLOCK_STYLE')}
-                >
-                    <TouchableOpacity
-                        style={this.coreInstances.CustomStyle.getStyle('LOCATION_MAP_FOOTER_OPEN_MAP_BUTTON_BLOCK_STYLE')}
-                        activeOpacity={0.5}
-                        onPress={this.openMapButtonPressed}
-                    >
-                        <Text
-                            style={this.coreInstances.CustomStyle.getStyle('LOCATION_MAP_FOOTER_OPEN_MAP_BUTTON_TEXT_BLOCK_STYLE')}
-                        >
-                            {this.coreInstances.Language.getText('LOCATION_MAP_OPEN_MAP_BUTTON_TITLE_TEXT')}
-                        </Text>
-                    </TouchableOpacity>
-                </View>
+                <LocationMapFooterBlockComponent 
+                    getCoreInstances={this.props.getCoreInstances}
+                    openMapButtonPressed={this.openMapButtonPressed}
+                />
             </ScreenBlockComponent>
         );
     };
