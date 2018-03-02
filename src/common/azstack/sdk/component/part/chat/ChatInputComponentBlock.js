@@ -50,6 +50,7 @@ class ChatInputComponentBlock extends React.Component {
         this.sendTextMessage = this.sendTextMessage.bind(this);
         this.sendStickerMessage = this.sendStickerMessage.bind(this);
         this.sendFileMessages = this.sendFileMessages.bind(this);
+        this.sendLocationMessage = this.sendLocationMessage.bind(this);
     };
 
     addSubscriptions() {
@@ -253,6 +254,56 @@ class ChatInputComponentBlock extends React.Component {
             }).then((result) => { }).catch((error) => { });
         });
     };
+    sendLocationMessage(location) {
+
+        if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('CHAT_INPUT_SEND_MESSAGE_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+            return;
+        }
+
+        let currentTime = new Date().getTime();
+        this.coreInstances.AZStackCore.newUniqueId();
+        let locationMessage = {
+            chatType: this.props.chatType,
+            chatId: this.props.chatId,
+            senderId: this.coreInstances.AZStackCore.authenticatedUser.userId,
+            sender: this.coreInstances.AZStackCore.authenticatedUser,
+            receiverId: this.props.chatId,
+            receiver: this.props.chatTarget,
+            msgId: this.coreInstances.AZStackCore.uniqueId,
+            type: this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_LOCATION,
+            status: this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_SENDING,
+            deleted: this.coreInstances.AZStackCore.chatConstants.MESSAGE_DELETED_FALSE,
+            created: currentTime,
+            modified: currentTime,
+            location: {
+                address: location.address,
+                latitude: location.latitude,
+                longitude: location.longitude
+            }
+        };
+        this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...locationMessage } });
+
+        this.sendingMessageFailChecks[locationMessage.msgId] = setTimeout(() => {
+            locationMessage.status = -1;
+            this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...locationMessage } });
+            delete this.sendingMessageFailChecks[locationMessage.msgId];
+        }, 5000);
+
+        this.coreInstances.AZStackCore.newMessage({
+            chatType: this.props.chatType,
+            chatId: this.props.chatId,
+            msgId: locationMessage.msgId,
+            location: locationMessage.location
+        }).then((result) => { }).catch((error) => { });
+    };
 
     onInputContentChangeSize(e) {
     };
@@ -353,6 +404,7 @@ class ChatInputComponentBlock extends React.Component {
                             getCoreInstances={this.props.getCoreInstances}
                             onCloseButtonPressed={this.closeFileBox}
                             onFilesMessageGenerated={this.sendFileMessages}
+                            onLocationSelected={this.sendLocationMessage}
                             chatType={this.props.chatType}
                             chatId={this.props.chatId}
                             chatTarget={this.props.chatTarget}

@@ -521,7 +521,11 @@ class ChatInputFileBlockComponent extends React.Component {
 
         RNGooglePlaces.openPlacePickerModal()
             .then((place) => {
-                console.log(place);
+                this.props.onLocationSelected({
+                    address: place.address,
+                    latitude: place.latitude,
+                    longitude: place.longitude
+                })
             })
             .catch((error) => {
                 Alert.alert(
