@@ -1710,3 +1710,20 @@ export const LOCATION_SELECTING_HEADER_DONE_BUTTON_IMAGE_STYLE = {
     width: 25,
     height: 25
 };
+
+export const LOCATION_SELECTING_FOOTER_BLOCK_STYLE = {
+    borderTopWidth: 1,
+    borderTopColor: '#E1E5EC',
+};
+export const LOCATION_SELECTING_FOOTER_SELECT_BUTTON_BLOCK_STYLE = {
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const LOCATION_SELECTING_FOOTER_SELECT_BUTTON_TEXT_BLOCK_STYLE = {
+    fontSize: 20,
+    fontWeight: '400',
+    lineHeight: 25,
+    color: '#2F353B'
+};

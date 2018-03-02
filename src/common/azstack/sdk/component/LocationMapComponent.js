@@ -1,6 +1,7 @@
 import React from 'react';
 import {
     BackHandler,
+    Alert,
     Linking
 } from 'react-native';
 import MapView from 'react-native-maps';

@@ -519,7 +519,7 @@ class ChatInputFileBlockComponent extends React.Component {
         }
 
         this.props.showLocationSelecting({
-            onLocationDetected: (location) => {
+            onLocationSelected: (location) => {
 
             }
         });

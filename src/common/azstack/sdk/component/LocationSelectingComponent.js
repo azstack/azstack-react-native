@@ -1,16 +1,14 @@
 import React from 'react';
 import {
     BackHandler,
-    Alert,
-    View,
-    TouchableOpacity,
-    Text,
-    Image
+    Alert
 } from 'react-native';
+import MapView from 'react-native-maps';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
 import LocationSelectingHeaderBlockComponent from './part/location/LocationSelectingHeaderBlockComponent';
 import ScreenBodyBlockComponent from './part/screen/ScreenBodyBlockComponent';
+import LocationSelectingFooterBlockComponent from './part/location/LocationSelectingFooterBlockComponent';
 import EmptyBlockComponent from './part/common/EmptyBlockComponent';
 
 class LocationSelectingComponent extends React.Component {
@@ -20,12 +18,25 @@ class LocationSelectingComponent extends React.Component {
         this.coreInstances = props.getCoreInstances();
 
         this.state = {
-            location: null
+            selectedLocation: {
+                latitude: null,
+                longitude: null
+            },
+            map: {
+                sizes: {
+                    width: null,
+                    height: null
+                }
+            }
         };
 
         this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
 
         this.onDoneButtonPressed = this.onDoneButtonPressed.bind(this);
+
+        this.onMapBoundLayout = this.onMapBoundLayout.bind(this);
+
+        this.selectLocationButtonPressed = this.selectLocationButtonPressed.bind(this);
     };
 
     onHardBackButtonPressed() {
@@ -34,7 +45,7 @@ class LocationSelectingComponent extends React.Component {
     };
 
     onDoneButtonPressed() {
-        if (!this.state.location) {
+        if (this.state.selectedLocation.latitude === null || this.state.selectedLocation.longitude === null) {
             Alert.alert(
                 this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
                 this.coreInstances.Language.getText('LOCATION_SELECTING_GET_CURRENT_LOCATION_ERROR_TEXT'),
@@ -46,14 +57,16 @@ class LocationSelectingComponent extends React.Component {
             return;
         }
 
-        this.props.onLocationDetected(this.state.location);
+        this.props.onLocationSelected(this.state.selectedLocation);
         this.props.onDoneClose();
     };
 
     getCurrentLocation() {
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                console.log(position);
+                this.setState({
+                    selectedLocation: Object.assign({}, this.state.selectedLocation, { latitude: position.coords.latitude, longitude: position.coords.longitude })
+                });
             },
             (error) => {
                 Alert.alert(
@@ -68,6 +81,13 @@ class LocationSelectingComponent extends React.Component {
             { enableHighAccuracy: false, timeout: 2000, maximumAge: 1000 }
         );
     };
+
+    onMapBoundLayout(event) {
+        console.log(event);
+        this.setState({ map: Object.assign({}, this.state.map, { sizes: Object.assign({}, this.state.map.sizes, { width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height }) }) })
+    };
+
+    selectLocationButtonPressed() { };
 
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
@@ -94,16 +114,48 @@ class LocationSelectingComponent extends React.Component {
                 <ScreenBodyBlockComponent
                     getCoreInstances={this.props.getCoreInstances}
                     style={this.props.contentContainerStyle}
+                    onLayout={this.onMapBoundLayout}
                 >
                     {
-                        !this.state.location && (
+                        this.state.selectedLocation.latitude === null &&
+                        this.state.selectedLocation.longitude === null && (
                             <EmptyBlockComponent
                                 getCoreInstances={this.props.getCoreInstances}
                                 emptyText={this.coreInstances.Language.getText('LOCATION_SELECTING_EMPTY_TEXT')}
                             />
                         )
                     }
+                    {
+                        !!this.state.map.sizes.height &&
+                        !!this.state.map.sizes.width &&
+                        this.state.selectedLocation.latitude !== null &&
+                        this.state.selectedLocation.longitude !== null && (
+                            <MapView
+                                style={{
+                                    width: this.state.map.sizes.width,
+                                    height: this.state.map.sizes.height
+                                }}
+                                initialRegion={{
+                                    latitude: this.state.selectedLocation.latitude,
+                                    longitude: this.state.selectedLocation.longitude,
+                                    latitudeDelta: 0.01,
+                                    longitudeDelta: 0.01 * this.state.map.sizes.width / this.state.map.sizes.height,
+                                }}
+                            >
+                                <MapView.Marker
+                                    coordinate={{
+                                        latitude: this.state.selectedLocation.latitude,
+                                        longitude: this.state.selectedLocation.longitude
+                                    }}
+                                />
+                            </MapView>
+                        )
+                    }
                 </ScreenBodyBlockComponent>
+                <LocationSelectingFooterBlockComponent
+                    getCoreInstances={this.props.getCoreInstances}
+                    selectLocationButtonPressed={this.selectLocationButtonPressed}
+                />
             </ScreenBlockComponent>
         );
     };
