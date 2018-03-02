@@ -357,7 +357,6 @@ class ChatInputComponentBlock extends React.Component {
                             chatId={this.props.chatId}
                             chatTarget={this.props.chatTarget}
                             onChatInputDraftDataStatusChanged={this.onChatInputDraftDataStatusChanged}
-                            showLocationSelecting={this.props.showLocationSelecting}
                             showSketchDrawing={this.props.showSketchDrawing}
                         />
                     )

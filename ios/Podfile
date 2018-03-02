@@ -30,6 +30,9 @@ target 'azstack_react_native_sdk' do
   pod 'GoogleMaps'
   pod 'react-native-google-maps', path: rn_maps_path
 
+  pod 'GooglePlaces'
+  pod 'GooglePlacePicker'
+
 end
 
 post_install do |installer|

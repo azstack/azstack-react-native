@@ -156,6 +156,7 @@ export const LOCATION_MAP_GET_CURRENT_LOCATION_ERROR_TEXT = 'Can\t get current l
 export const LOCATION_SELECTING_HEADER_TITLE_TEXT = 'Location selecting';
 export const LOCATION_SELECTING_EMPTY_TEXT = 'No selected location';
 export const LOCATION_SELECTING_GET_CURRENT_LOCATION_ERROR_TEXT = 'Can\t get current location, please try again later';
+export const LOCATION_SELECTING_NO_SELECT_ERROR_TEXT = 'You have not select any location';
 export const LOCATION_SELECTING_SELECT_BUTTON_TITLE_TEXT = 'Select location';
 
 export const SKETCH_DRAWING_HEADER_TITLE_TEXT = 'Sketch drawing';

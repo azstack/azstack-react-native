@@ -1382,7 +1382,6 @@ class ChatComponent extends React.Component {
                             chatId={this.props.chatId}
                             chatTarget={this.state.chatTarget}
                             onChatInputDraftDataStatusChanged={this.onChatInputDraftDataStatusChanged}
-                            showLocationSelecting={this.props.showLocationSelecting}
                             showSketchDrawing={this.props.showSketchDrawing}
                         />
                     )

@@ -116,6 +116,7 @@
 ## 1.10. Install react-native-fs https://github.com/itinance/react-native-fs
 ## 1.11. Install react-native-sketch-canvas https://github.com/terrylinla/react-native-sketch-canvas
 ## 1.12. Install react-native-maps https://github.com/react-community/react-native-maps
+## 1.13. Install react-native-google-places https://github.com/tolu360/react-native-google-places
 
 
 

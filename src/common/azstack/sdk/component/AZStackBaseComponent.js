@@ -19,7 +19,6 @@ import SelectMemberComponent from './SelectMemberComponent';
 import NewGroupComponent from './NewGroupComponent';
 import ImageGalleryComponent from './ImageGalleryComponent';
 import LocationMapComponent from './LocationMapComponent';
-import LocationSelectingComponent from './LocationSelectingComponent';
 import SketchDrawingComponent from './SketchDrawingComponent';
 
 
@@ -38,7 +37,6 @@ const NavigationEnum = {
     NewGroupComponent: 'NewGroupComponent',
     ImageGalleryComponent: 'ImageGalleryComponent',
     LocationMapComponent: 'LocationMapComponent',
-    LocationSelectingComponent: 'LocationSelectingComponent',
     SketchDrawingComponent: 'SketchDrawingComponent'
 };
 
@@ -95,8 +93,6 @@ export default class AZStackBaseComponent extends React.Component {
                 return this.renderImageGallery(options, index);
             case 'LocationMapComponent':
                 return this.renderLocationMap(options, index);
-            case 'LocationSelectingComponent':
-                return this.renderLocationSelecting(options, index);
             case 'SketchDrawingComponent':
                 return this.renderSketchDrawing(options, index);
             default:
@@ -253,15 +249,6 @@ export default class AZStackBaseComponent extends React.Component {
 
     renderLocationMap(options, key) {
         return <LocationMapComponent
-            key={key}
-            Sizes={this.Sizes}
-            getCoreInstances={this.getCoreInstances}
-            {...options}
-        />;
-    };
-
-    renderLocationSelecting(options, key) {
-        return <LocationSelectingComponent
             key={key}
             Sizes={this.Sizes}
             getCoreInstances={this.getCoreInstances}

@@ -7,6 +7,7 @@ import {
     View,
     Image
 } from 'react-native';
+import RNGooglePlaces from 'react-native-google-places';
 
 import ImagePicker from 'react-native-image-crop-picker';
 import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
@@ -518,11 +519,20 @@ class ChatInputFileBlockComponent extends React.Component {
             return;
         }
 
-        this.props.showLocationSelecting({
-            onLocationSelected: (location) => {
-
-            }
-        });
+        RNGooglePlaces.openPlacePickerModal()
+            .then((place) => {
+                console.log(place);
+            })
+            .catch((error) => {
+                Alert.alert(
+                    this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                    this.coreInstances.Language.getText('ALERT_GENERAL_ERROR_TEXT'),
+                    [
+                        { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                    ],
+                    { cancelable: true }
+                );
+            });
     };
     async onFileBoxOptionVoiceButtonPressed() {
         const granted = await this.checkMicrophonePermission();
