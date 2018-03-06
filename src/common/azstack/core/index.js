@@ -1,3 +1,4 @@
+import * as platformConstants from './constant/platformConstants';
 import * as uncallConstants from './constant/uncallConstants';
 import * as delegateConstants from './constant/delegateConstants';
 import * as dataTypes from './constant/dataTypes';
@@ -25,6 +26,8 @@ export class AZStackCore {
     constructor(options) {
         this.sdkVersion = '0.0.1';
         this.masterSocketUri = 'https://www.azhub.xyz:9199';
+
+        this.platformConstants = platformConstants;
         this.uncallConstants = uncallConstants;
         this.delegateConstants = delegateConstants;
         this.dataTypes = dataTypes;
@@ -36,6 +39,7 @@ export class AZStackCore {
         this.chatConstants = chatConstants;
         this.userConstants = userConstants;
         this.groupConstants = groupConstants;
+
         this.logLevel = this.logLevelConstants.LOG_LEVEL_NONE;
         this.requestTimeout = 60000;
         this.intervalPingTime = 60000;
@@ -107,7 +111,7 @@ export class AZStackCore {
             this.authenticatingData.fullname = this.Validator.isString(authenticatingData.fullname) ? authenticatingData.fullname : '';
             this.authenticatingData.namespace = this.Validator.isString(authenticatingData.namespace) ? authenticatingData.namespace : '';
         }
-    }
+    };
 
     newUniqueId() {
         let currentTime = Math.round(new Date().getTime() / 1000);
@@ -935,6 +939,7 @@ export class AZStackCore {
     init() {
         this.Logger.setLogLevel(this.logLevel);
         this.Authentication = new Authentication({
+            platformConstants: this.platformConstants,
             logLevelConstants: this.logLevelConstants,
             serviceTypes: this.serviceTypes,
             errorCodes: this.errorCodes,
