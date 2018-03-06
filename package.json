@@ -13,6 +13,7 @@
 		"react-native": "0.52.2",
 		"react-native-audio": "^3.5.1",
 		"react-native-document-picker": "^2.1.0",
+		"react-native-fcm": "^14.0.1",
 		"react-native-fs": "^2.9.11",
 		"react-native-google-places": "^2.4.2",
 		"react-native-image-crop-picker": "^0.19.1",

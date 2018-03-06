@@ -1,3 +1,8 @@
+import {
+    Platform,
+    Dimensions
+} from 'react-native';
+
 import * as platformConstants from './constant/platformConstants';
 import * as uncallConstants from './constant/uncallConstants';
 import * as delegateConstants from './constant/delegateConstants';
@@ -21,6 +26,7 @@ import Conversation from './handler/conversation';
 import Message from './handler/message';
 import User from './handler/user';
 import Group from './handler/group';
+import Notification from './handler/notification';
 
 export class AZStackCore {
     constructor(options) {
@@ -65,6 +71,11 @@ export class AZStackCore {
         this.slaveSocketConnected = false;
         this.authenticatingData = {};
         this.authenticatedUser = null;
+
+        this.deviceToken = null;
+        this.devicePlatformOS = Platform.OS === 'android' ? this.platformConstants.PLATFORM_ANDROID : (Platform.OS === 'ios' ? this.platformConstants.PLATFORM_IOS : this.platformConstants.PLATFORM_WEB);
+        this.deviceScreenSizes = `${Dimensions.get('window').width}x${Dimensions.get('window').height}`;
+
         this.intervalSendPing = null;
         this.autoReconnectTrieds = 0;
 
@@ -224,6 +235,197 @@ export class AZStackCore {
         }
     };
 
+    init() {
+        this.Logger.setLogLevel(this.logLevel);
+        this.Authentication = new Authentication({
+            logLevelConstants: this.logLevelConstants,
+            serviceTypes: this.serviceTypes,
+            errorCodes: this.errorCodes,
+            Logger: this.Logger,
+            sendPacketFunction: this.sendSlavePacket.bind(this)
+        });
+        this.Call = new Call({
+            logLevelConstants: this.logLevelConstants,
+            serviceTypes: this.serviceTypes,
+            errorCodes: this.errorCodes,
+            callConstants: this.callConstants,
+            listConstants: this.listConstants,
+            Logger: this.Logger,
+            sendPacketFunction: this.sendSlavePacket.bind(this),
+            onLocalStreamArrived: ((result) => {
+                if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_LOCAL_STREAM_ARRIVED] === 'function') {
+                    this.Delegates[this.delegateConstants.DELEGATE_ON_LOCAL_STREAM_ARRIVED](null, result);
+                }
+            }).bind(this),
+            onRemoteStreamArrived: ((result) => {
+                if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_REMOTE_STREAM_ARRIVED] === 'function') {
+                    this.Delegates[this.delegateConstants.DELEGATE_ON_REMOTE_STREAM_ARRIVED](null, result);
+                }
+            }).bind(this)
+        });
+        this.Conversation = new Conversation({
+            logLevelConstants: this.logLevelConstants,
+            serviceTypes: this.serviceTypes,
+            errorCodes: this.errorCodes,
+            listConstants: this.listConstants,
+            chatConstants: this.chatConstants,
+            Logger: this.Logger,
+            sendPacketFunction: this.sendSlavePacket.bind(this)
+        });
+        this.Message = new Message({
+            logLevelConstants: this.logLevelConstants,
+            serviceTypes: this.serviceTypes,
+            errorCodes: this.errorCodes,
+            listConstants: this.listConstants,
+            chatConstants: this.chatConstants,
+            Logger: this.Logger,
+            sendPacketFunction: this.sendSlavePacket.bind(this)
+        });
+        this.User = new User({
+            logLevelConstants: this.logLevelConstants,
+            serviceTypes: this.serviceTypes,
+            errorCodes: this.errorCodes,
+            listConstants: this.listConstants,
+            userConstants: this.userConstants,
+            Logger: this.Logger,
+            sendPacketFunction: this.sendSlavePacket.bind(this)
+        });
+        this.Group = new Group({
+            logLevelConstants: this.logLevelConstants,
+            serviceTypes: this.serviceTypes,
+            errorCodes: this.errorCodes,
+            listConstants: this.listConstants,
+            chatConstants: this.chatConstants,
+            groupConstants: this.groupConstants,
+            Logger: this.Logger,
+            sendPacketFunction: this.sendSlavePacket.bind(this)
+        });
+        this.Notification = new Notification({
+            logLevelConstants: this.logLevelConstants,
+            Logger: this.Logger
+        });
+    };
+    setupSocket(slaveSocket) {
+        this.slaveSocket = slaveSocket;
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+            message: 'Start connect to slave server'
+        });
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+            message: 'Slave socket uri',
+            payload: this.slaveSocket.io.uri
+        });
+
+        this.slaveSocket.open();
+
+        this.slaveSocket.on('connect', () => {
+            this.slaveSocketConnected = true;
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Connected to slave server'
+            });
+            this.Authentication.sendAuthenticate({
+                sdkVersion: this.sdkVersion,
+                devicePlatformOS: this.devicePlatformOS,
+                deviceScreenSizes: this.deviceScreenSizes,
+                slaveAddress: this.slaveAddress,
+                authenticatingData: this.authenticatingData
+            }).then(() => { }).catch((error) => {
+                if (this.stateControls.connecting) {
+                    this.stateControls.connecting = false;
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_CONNECT, 'default', error, null);
+                } else if (this.stateControls.reconnecting) {
+                    this.stateControls.reconnecting = false;
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', error, null);
+                } else if (this.stateControls.autoReconnecting) {
+                    this.stateControls.autoReconnecting = false;
+                    this.autoReconnectTrieds = 0;
+                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED] === 'function') {
+                        this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED](error, null);
+                    }
+                }
+            });
+            this.intervalSendPing = setInterval(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send ping packet to slave server'
+                });
+                this.sendSlavePacket({
+                    service: this.serviceTypes.PING,
+                    body: JSON.stringify({})
+                }).then(() => {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Send ping packet to slave server successfully'
+                    });
+                }).catch(() => {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                        message: 'Send ping packet to slave server fail'
+                    });
+                });
+            }, this.intervalPingTime);
+        });
+        this.slaveSocket.on('connect_error', (error) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                message: 'Cannot connect to slave socket'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Slave socket connection error',
+                payload: error
+            });
+            if (this.stateControls.connecting) {
+                this.stateControls.connecting = false;
+                this.callUncall(this.uncallConstants.UNCALL_KEY_CONNECT, 'default', {
+                    code: this.errorCodes.ERR_SOCKET_CONNECT,
+                    message: 'Cannot connect to slave socket'
+                }, null);
+                if (this.autoReconnect) {
+                    this.tryAutoReconnect();
+                }
+            } else if (this.stateControls.reconnecting) {
+                this.stateControls.reconnecting = false;
+                this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', {
+                    code: this.errorCodes.ERR_SOCKET_CONNECT,
+                    message: 'Cannot reconnect to slave socket'
+                }, null);
+            } else if (this.stateControls.autoReconnecting) {
+                if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED] === 'function') {
+                    this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED]({
+                        code: this.errorCodes.ERR_SOCKET_CONNECT,
+                        message: 'Cannot auto reconnect to slave socket'
+                    }, null);
+                }
+                this.tryAutoReconnect();
+            }
+        });
+        this.slaveSocket.on('disconnect', () => {
+            this.slaveSocketConnected = false;
+            clearInterval(this.intervalSendPing);
+            this.intervalSendPing = null;
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Disconnected to slave socket'
+            });
+            if (this.stateControls.disconnecting) {
+                this.stateControls.disconnecting = false;
+                this.authenticatedUser = null;
+                this.deviceToken = null;
+                this.callUncall(this.uncallConstants.UNCALL_KEY_DISCONNECT, 'default', null, null);
+            } else {
+                if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_DISCONNECTED] === 'function') {
+                    this.Delegates[this.delegateConstants.DELEGATE_ON_DISCONNECTED](null, null);
+                }
+                if (this.autoReconnect) {
+                    this.tryAutoReconnect();
+                }
+            }
+        });
+        this.slaveSocket.on('WebPacket', (packet) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got web packet from slave socket'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Slave socket web packet',
+                payload: packet
+            });
+            this.receiveSlavePacket(packet);
+        });
+    };
     sendSlavePacket(packet) {
         return new Promise((resolve, reject) => {
             if (!this.slaveSocketConnected) {
@@ -289,6 +491,46 @@ export class AZStackCore {
                             this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED](null, this.authenticatedUser);
                         }
                     }
+
+                    if (this.deviceToken) {
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                            message: 'Setup push notification already done'
+                        });
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                            message: 'Device token',
+                            payload: {
+                                deviceToken: this.deviceToken
+                            }
+                        });
+                        return;
+                    }
+                    this.Notification.setup().then((deviceToken) => {
+                        this.deviceToken = deviceToken;
+
+                        const pushNotificationRegisterDevicePacket = {
+                            service: this.serviceTypes.PUSH_NOTIFICATION_REGISTER_DEVICE_SEND,
+                            body: JSON.stringify({
+                                id: deviceToken,
+                                type: this.devicePlatformOS
+                            })
+                        };
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                            message: 'Push notification register device'
+                        });
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                            message: 'Push notification register device packet',
+                            payload: pushNotificationRegisterDevicePacket
+                        });
+                        this.sendSlavePacket(pushNotificationRegisterDevicePacket).then(() => {
+                            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                                message: 'Send push notification register device data successfully'
+                            });
+                        }).catch((error) => {
+                            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                                message: 'Cannot send push notification register device data, register device fail'
+                            });
+                        });
+                    }).catch(() => { });
                 }).catch((error) => {
                     if (this.stateControls.connecting) {
                         this.stateControls.connecting = false;
@@ -303,6 +545,16 @@ export class AZStackCore {
                             this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED](error, null);
                         }
                     }
+                });
+                break;
+
+            case this.serviceTypes.PUSH_NOTIFICATION_REGISTER_DEVICE_RECEIVE:
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Push notification register device success'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Push notification register device response',
+                    payload: body
                 });
                 break;
 
@@ -814,194 +1066,6 @@ export class AZStackCore {
                 });
                 break;
         }
-    };
-
-    setupSocket(slaveSocket) {
-        this.slaveSocket = slaveSocket;
-        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-            message: 'Start connect to slave server'
-        });
-        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-            message: 'Slave socket uri',
-            payload: this.slaveSocket.io.uri
-        });
-
-        this.slaveSocket.open();
-
-        this.slaveSocket.on('connect', () => {
-            this.slaveSocketConnected = true;
-            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                message: 'Connected to slave server'
-            });
-            this.Authentication.sendAuthenticate({
-                sdkVersion: this.sdkVersion,
-                slaveAddress: this.slaveAddress,
-                authenticatingData: this.authenticatingData
-            }).then(() => { }).catch((error) => {
-                if (this.stateControls.connecting) {
-                    this.stateControls.connecting = false;
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_CONNECT, 'default', error, null);
-                } else if (this.stateControls.reconnecting) {
-                    this.stateControls.reconnecting = false;
-                    this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', error, null);
-                } else if (this.stateControls.autoReconnecting) {
-                    this.stateControls.autoReconnecting = false;
-                    this.autoReconnectTrieds = 0;
-                    if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED] === 'function') {
-                        this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED](error, null);
-                    }
-                }
-            });
-            this.intervalSendPing = setInterval(() => {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                    message: 'Send ping packet to slave server'
-                });
-                this.sendSlavePacket({
-                    service: this.serviceTypes.PING,
-                    body: JSON.stringify({})
-                }).then(() => {
-                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                        message: 'Send ping packet to slave server successfully'
-                    });
-                }).catch(() => {
-                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                        message: 'Send ping packet to slave server fail'
-                    });
-                });
-            }, this.intervalPingTime);
-        });
-        this.slaveSocket.on('connect_error', (error) => {
-            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                message: 'Cannot connect to slave socket'
-            });
-            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                message: 'Slave socket connection error',
-                payload: error
-            });
-            if (this.stateControls.connecting) {
-                this.stateControls.connecting = false;
-                this.callUncall(this.uncallConstants.UNCALL_KEY_CONNECT, 'default', {
-                    code: this.errorCodes.ERR_SOCKET_CONNECT,
-                    message: 'Cannot connect to slave socket'
-                }, null);
-                if (this.autoReconnect) {
-                    this.tryAutoReconnect();
-                }
-            } else if (this.stateControls.reconnecting) {
-                this.stateControls.reconnecting = false;
-                this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', {
-                    code: this.errorCodes.ERR_SOCKET_CONNECT,
-                    message: 'Cannot reconnect to slave socket'
-                }, null);
-            } else if (this.stateControls.autoReconnecting) {
-                if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED] === 'function') {
-                    this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED]({
-                        code: this.errorCodes.ERR_SOCKET_CONNECT,
-                        message: 'Cannot auto reconnect to slave socket'
-                    }, null);
-                }
-                this.tryAutoReconnect();
-            }
-        });
-        this.slaveSocket.on('disconnect', () => {
-            this.slaveSocketConnected = false;
-            // this.slaveAddress = null;
-            // this.authenticatedUser = null;
-            // this.slaveSocket = null;
-            clearInterval(this.intervalSendPing);
-            this.intervalSendPing = null;
-            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                message: 'Disconnected to slave socket'
-            });
-            if (this.stateControls.disconnecting) {
-                this.stateControls.disconnecting = false;
-                this.callUncall(this.uncallConstants.UNCALL_KEY_DISCONNECT, 'default', null, null);
-            } else {
-                if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_DISCONNECTED] === 'function') {
-                    this.Delegates[this.delegateConstants.DELEGATE_ON_DISCONNECTED](null, null);
-                }
-                if (this.autoReconnect) {
-                    this.tryAutoReconnect();
-                }
-            }
-        });
-        this.slaveSocket.on('WebPacket', (packet) => {
-            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                message: 'Got web packet from slave socket'
-            });
-            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                message: 'Slave socket web packet',
-                payload: packet
-            });
-            this.receiveSlavePacket(packet);
-        });
-    };
-    init() {
-        this.Logger.setLogLevel(this.logLevel);
-        this.Authentication = new Authentication({
-            platformConstants: this.platformConstants,
-            logLevelConstants: this.logLevelConstants,
-            serviceTypes: this.serviceTypes,
-            errorCodes: this.errorCodes,
-            Logger: this.Logger,
-            sendPacketFunction: this.sendSlavePacket.bind(this)
-        });
-        this.Call = new Call({
-            logLevelConstants: this.logLevelConstants,
-            serviceTypes: this.serviceTypes,
-            errorCodes: this.errorCodes,
-            callConstants: this.callConstants,
-            listConstants: this.listConstants,
-            Logger: this.Logger,
-            sendPacketFunction: this.sendSlavePacket.bind(this),
-            onLocalStreamArrived: ((result) => {
-                if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_LOCAL_STREAM_ARRIVED] === 'function') {
-                    this.Delegates[this.delegateConstants.DELEGATE_ON_LOCAL_STREAM_ARRIVED](null, result);
-                }
-            }).bind(this),
-            onRemoteStreamArrived: ((result) => {
-                if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_REMOTE_STREAM_ARRIVED] === 'function') {
-                    this.Delegates[this.delegateConstants.DELEGATE_ON_REMOTE_STREAM_ARRIVED](null, result);
-                }
-            }).bind(this)
-        });
-        this.Conversation = new Conversation({
-            logLevelConstants: this.logLevelConstants,
-            serviceTypes: this.serviceTypes,
-            errorCodes: this.errorCodes,
-            listConstants: this.listConstants,
-            chatConstants: this.chatConstants,
-            Logger: this.Logger,
-            sendPacketFunction: this.sendSlavePacket.bind(this)
-        });
-        this.Message = new Message({
-            logLevelConstants: this.logLevelConstants,
-            serviceTypes: this.serviceTypes,
-            errorCodes: this.errorCodes,
-            listConstants: this.listConstants,
-            chatConstants: this.chatConstants,
-            Logger: this.Logger,
-            sendPacketFunction: this.sendSlavePacket.bind(this)
-        });
-        this.User = new User({
-            logLevelConstants: this.logLevelConstants,
-            serviceTypes: this.serviceTypes,
-            errorCodes: this.errorCodes,
-            listConstants: this.listConstants,
-            userConstants: this.userConstants,
-            Logger: this.Logger,
-            sendPacketFunction: this.sendSlavePacket.bind(this)
-        });
-        this.Group = new Group({
-            logLevelConstants: this.logLevelConstants,
-            serviceTypes: this.serviceTypes,
-            errorCodes: this.errorCodes,
-            listConstants: this.listConstants,
-            chatConstants: this.chatConstants,
-            groupConstants: this.groupConstants,
-            Logger: this.Logger,
-            sendPacketFunction: this.sendSlavePacket.bind(this)
-        });
     };
 
     connect(options, callback) {

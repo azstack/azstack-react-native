@@ -117,6 +117,7 @@
 ## 1.11. Install react-native-sketch-canvas https://github.com/terrylinla/react-native-sketch-canvas
 ## 1.12. Install react-native-maps https://github.com/react-community/react-native-maps
 ## 1.13. Install react-native-google-places https://github.com/tolu360/react-native-google-places
+## 1.14. Install react-native-fcm https://github.com/evollu/react-native-fcm (Android only)
 
 
 

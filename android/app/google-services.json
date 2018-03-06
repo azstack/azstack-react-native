@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "483977366498",
+    "firebase_url": "https://azstack-sdk.firebaseio.com",
+    "project_id": "azstack-sdk",
+    "storage_bucket": "azstack-sdk.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:483977366498:android:7d2d4f77d11936bc",
+        "android_client_info": {
+          "package_name": "com.azstack_react_native_sdk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "483977366498-mflrp7d8084rgkp71cngjvuj1nuo4vh4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxjydp9v5g0_I9Qm6oc2WOWewXqmjeOfQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

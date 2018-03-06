@@ -1,14 +1,8 @@
-import {
-    Platform,
-    Dimensions
-} from 'react-native';
-
 import io from 'socket.io-client';
 import { JSEncrypt } from 'jsencrypt';
 
 class Authentication {
     constructor(options) {
-        this.platformConstants = options.platformConstants;
         this.logLevelConstants = options.logLevelConstants;
         this.serviceTypes = options.serviceTypes;
         this.errorCodes = options.errorCodes;
@@ -218,9 +212,9 @@ class Authentication {
                     fullname: options.authenticatingData.fullname,
                     namespace: options.authenticatingData.namespace,
                     appId: options.authenticatingData.appId,
-                    platform: Platform.OS === 'android' ? this.platformConstants.PLATFORM_ANDROID : (Platform.OS === 'ios' ? this.platformConstants.PLATFORM_IOS : this.platformConstants.PLATFORM_WEB),
+                    platform: this.devicePlatformOS,
                     sdkVersion: options.sdkVersion,
-                    screenSize: `${Dimensions.get('window').width}x${Dimensions.get('window').height}`
+                    screenSize: options.deviceScreenSizes
                 })
             };
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
