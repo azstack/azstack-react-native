@@ -1,9 +1,11 @@
 import {
     Platform,
-    Dimensions
+    Dimensions,
+    AppState
 } from 'react-native';
 
 import * as platformConstants from './constant/platformConstants';
+import * as applicationStateConstants from './constant/applicationStateConstants';
 import * as uncallConstants from './constant/uncallConstants';
 import * as delegateConstants from './constant/delegateConstants';
 import * as dataTypes from './constant/dataTypes';
@@ -34,6 +36,7 @@ export class AZStackCore {
         this.masterSocketUri = 'https://www.azhub.xyz:9199';
 
         this.platformConstants = platformConstants;
+        this.applicationStateConstants = applicationStateConstants;
         this.uncallConstants = uncallConstants;
         this.delegateConstants = delegateConstants;
         this.dataTypes = dataTypes;
@@ -235,6 +238,31 @@ export class AZStackCore {
         }
     };
 
+    handleAppStateChange = (nextAppState) => {
+        const changeApplicationStatePacket = {
+            service: this.serviceTypes.APPLICATION_CHANGE_STATE,
+            body: JSON.stringify({
+                state: nextAppState === 'active' ? this.applicationStateConstants.APPLICATION_STATE_FOREGROUND : this.applicationStateConstants.APPLICATION_STATE_BACKGROUND
+            })
+        };
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+            message: 'Change application state'
+        });
+        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+            message: 'Change application state packet',
+            payload: changeApplicationStatePacket
+        });
+        this.sendSlavePacket(changeApplicationStatePacket).then(() => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send change application state successfully'
+            });
+        }).catch((error) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                message: 'Cannot send change application state, change application state fail'
+            });
+        });
+    };
+
     init() {
         this.Logger.setLogLevel(this.logLevel);
         this.Authentication = new Authentication({
@@ -398,6 +426,7 @@ export class AZStackCore {
             this.slaveSocketConnected = false;
             clearInterval(this.intervalSendPing);
             this.intervalSendPing = null;
+            AppState.removeEventListener('change', this.handleAppStateChange);
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Disconnected to slave socket'
             });
@@ -445,20 +474,23 @@ export class AZStackCore {
     receiveSlavePacket(packet) {
         let body = null;
         let parseError = null;
-        try {
-            body = JSON.parse(packet.body);
-        } catch (e) {
-            parseError = e;
-        }
 
-        if (!body) {
-            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                message: 'Parse slave socket packet\'s body error'
-            });
-            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                message: 'Parse error',
-                payload: parseError
-            });
+        if (packet.body) {
+            try {
+                body = JSON.parse(packet.body);
+            } catch (e) {
+                parseError = e;
+            }
+
+            if (!body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Parse slave socket packet\'s body error'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Parse error',
+                    payload: parseError
+                });
+            }
         }
 
         switch (packet.service) {
@@ -502,35 +534,59 @@ export class AZStackCore {
                                 deviceToken: this.deviceToken
                             }
                         });
-                        return;
-                    }
-                    this.Notification.setup().then((deviceToken) => {
-                        this.deviceToken = deviceToken;
+                    } else {
+                        this.Notification.setup().then((deviceToken) => {
+                            this.deviceToken = deviceToken;
 
-                        const pushNotificationRegisterDevicePacket = {
-                            service: this.serviceTypes.PUSH_NOTIFICATION_REGISTER_DEVICE_SEND,
-                            body: JSON.stringify({
-                                id: deviceToken,
-                                type: this.devicePlatformOS
-                            })
-                        };
-                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                            message: 'Push notification register device'
-                        });
-                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                            message: 'Push notification register device packet',
-                            payload: pushNotificationRegisterDevicePacket
-                        });
-                        this.sendSlavePacket(pushNotificationRegisterDevicePacket).then(() => {
+                            const pushNotificationRegisterDevicePacket = {
+                                service: this.serviceTypes.PUSH_NOTIFICATION_REGISTER_DEVICE_SEND,
+                                body: JSON.stringify({
+                                    id: deviceToken,
+                                    type: this.devicePlatformOS
+                                })
+                            };
                             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                                message: 'Send push notification register device data successfully'
+                                message: 'Push notification register device'
                             });
-                        }).catch((error) => {
-                            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                                message: 'Cannot send push notification register device data, register device fail'
+                            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                                message: 'Push notification register device packet',
+                                payload: pushNotificationRegisterDevicePacket
                             });
+                            this.sendSlavePacket(pushNotificationRegisterDevicePacket).then(() => {
+                                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                                    message: 'Send push notification register device data successfully'
+                                });
+                            }).catch((error) => {
+                                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                                    message: 'Cannot send push notification register device data, register device fail'
+                                });
+                            });
+                        }).catch(() => { });
+                    }
+
+                    AppState.addEventListener('change', this.handleAppStateChange);
+                    const changeApplicationStatePacket = {
+                        service: this.serviceTypes.APPLICATION_CHANGE_STATE,
+                        body: JSON.stringify({
+                            state: AppState.currentState === 'active' ? this.applicationStateConstants.APPLICATION_STATE_FOREGROUND : this.applicationStateConstants.APPLICATION_STATE_BACKGROUND
+                        })
+                    };
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Change application state'
+                    });
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                        message: 'Change application state packet',
+                        payload: changeApplicationStatePacket
+                    });
+                    this.sendSlavePacket(changeApplicationStatePacket).then(() => {
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                            message: 'Send change application state successfully'
                         });
-                    }).catch(() => { });
+                    }).catch((error) => {
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                            message: 'Cannot send change application state, change application state fail'
+                        });
+                    });
                 }).catch((error) => {
                     if (this.stateControls.connecting) {
                         this.stateControls.connecting = false;
@@ -554,6 +610,16 @@ export class AZStackCore {
                 });
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
                     message: 'Push notification register device response',
+                    payload: body
+                });
+                break;
+
+            case this.serviceTypes.APPLICATION_CHANGE_STATE:
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Change application state success'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Change application state response',
                     payload: body
                 });
                 break;
