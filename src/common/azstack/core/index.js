@@ -3071,10 +3071,10 @@ export class AZStackCore {
                 dataType: this.dataTypes.DATA_TYPE_STRING,
                 data: options.deviceToken
             }, {
-                name: 'devicePlatform',
+                name: 'devicePlatformOS',
                 required: true,
                 dataType: this.dataTypes.DATA_TYPE_NUMBER,
-                data: options.devicePlatform,
+                data: options.devicePlatformOS,
                 in: [this.platformConstants.PLATFORM_ANDROID, this.platformConstants.PLATFORM_IOS]
             }, {
                 name: 'applicationBundleId',
@@ -3095,7 +3095,7 @@ export class AZStackCore {
 
             this.Notification.sendNotificationRegisterDevice({
                 deviceToken: options.deviceToken,
-                devicePlatform: options.devicePlatform,
+                devicePlatformOS: options.devicePlatformOS,
                 applicationBundleId: options.applicationBundleId
             }).then((result) => {
 

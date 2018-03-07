@@ -63,7 +63,7 @@ class Notification {
                 service: this.serviceTypes.PUSH_NOTIFICATION_REGISTER_DEVICE_SEND,
                 body: JSON.stringify({
                     id: options.deviceToken,
-                    type: options.devicePlatform,
+                    type: options.devicePlatformOS,
                     appBundleId: options.applicationBundleId
                 })
             };

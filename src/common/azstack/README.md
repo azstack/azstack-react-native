@@ -2786,7 +2786,7 @@ this.AZStackCore.changeApplicationState({
 ```javascript 
 this.AZStackCore.notificationRegisterDevice({
     deviceToken: 'this-is-device-token',
-    devicePlatform: this.AZStackCore.platformConstants.PLATFORM_ANDROID,
+    devicePlatformOS: this.AZStackCore.platformConstants.PLATFORM_ANDROID,
     applicationBundleId: 'com.azstack_react_native_sdk'
 }, (error, result) => {
     console.log(error);
@@ -2799,7 +2799,7 @@ OR
 ```javascript 
 this.AZStackCore.notificationRegisterDevice({
     deviceToken: 'this-is-device-token',
-    devicePlatform: this.AZStackCore.platformConstants.PLATFORM_ANDROID,
+    devicePlatformOS: this.AZStackCore.platformConstants.PLATFORM_ANDROID,
     applicationBundleId: 'com.azstack_react_native_sdk'
 }).then((result) => {
     console.log(result);
@@ -2816,14 +2816,14 @@ this.AZStackCore.Delegates.onNotificationRegisterDeviceReturn = (error, result) 
 };
 this.AZStackCore.notificationRegisterDevice({
     deviceToken: 'this-is-device-token',
-    devicePlatform: this.AZStackCore.platformConstants.PLATFORM_ANDROID,
+    devicePlatformOS: this.AZStackCore.platformConstants.PLATFORM_ANDROID,
     applicationBundleId: 'com.azstack_react_native_sdk'
 });
 ```
 
 #### params
 > - deviceToken(required): token of device
-> - devicePlatform(required): platform of device
+> - devicePlatformOS(required): platform os of device
 > - applicationBundleId(required): bundle id of application
 
 #### error:

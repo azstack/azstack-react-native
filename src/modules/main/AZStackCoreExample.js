@@ -529,7 +529,7 @@ class AZStackCoreExample extends React.Component {
     notificationRegisterDevice() {
         this.AZStackCore.notificationRegisterDevice({
             deviceToken: 'this-is-device-token',
-            devicePlatform: this.AZStackCore.platformConstants.PLATFORM_ANDROID,
+            devicePlatformOS: this.AZStackCore.platformConstants.PLATFORM_ANDROID,
             applicationBundleId: 'com.azstack_react_native_sdk'
         }).then(() => { }).catch(() => { });
     };
