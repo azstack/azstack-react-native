@@ -107,6 +107,7 @@
             * [3.9.3.6. On group public joined](#3936-on-group-public-joined)
     * [3.10. Notification](#310-notification)
         * [3.10.1. Change application state](#3101-change-application-state)
+        * [3.10.2. Notification register device](#3102-notification-register-device)
 
 
 
@@ -117,20 +118,20 @@
 ### 1.1.1. Install socket.io-client https://github.com/socketio/socket.io-client
 ### 1.1.2. Install jsencrypt https://github.com/travist/jsencrypt
 ### 1.1.3. Install react-native-webrtc https://github.com/oney/react-native-webrtc
-### 1.1.4. Install react-native-device-info https://github.com/rebeccahughes/react-native-device-info
-### 1.1.5. Install react-native-fcm https://github.com/evollu/react-native-fcm (Android only)
 
 ## 1.2. Sdk
 
-## 1.2.1. Install react-native-image-crop-picker https://github.com/ivpusic/react-native-image-crop-picker
-## 1.2.2. Install react-native-document-picker https://github.com/Elyx0/react-native-document-picker
-## 1.2.3. Install react-native-video https://github.com/react-native-community/react-native-video
-## 1.2.4. Install react-native-swiper https://github.com/leecade/react-native-swiper
-## 1.2.5. Install react-native-audio https://github.com/jsierles/react-native-audio
-## 1.2.6. Install react-native-fs https://github.com/itinance/react-native-fs
-## 1.2.7. Install react-native-sketch-canvas https://github.com/terrylinla/react-native-sketch-canvas
-## 1.2.8. Install react-native-maps https://github.com/react-community/react-native-maps
-## 1.2.9. Install react-native-google-places https://github.com/tolu360/react-native-google-places
+### 1.2.1. Install react-native-image-crop-picker https://github.com/ivpusic/react-native-image-crop-picker
+### 1.2.2. Install react-native-document-picker https://github.com/Elyx0/react-native-document-picker
+### 1.2.3. Install react-native-video https://github.com/react-native-community/react-native-video
+### 1.2.4. Install react-native-swiper https://github.com/leecade/react-native-swiper
+### 1.2.5. Install react-native-audio https://github.com/jsierles/react-native-audio
+### 1.2.6. Install react-native-fs https://github.com/itinance/react-native-fs
+### 1.2.7. Install react-native-sketch-canvas https://github.com/terrylinla/react-native-sketch-canvas
+### 1.2.8. Install react-native-maps https://github.com/react-community/react-native-maps
+### 1.2.9. Install react-native-google-places https://github.com/tolu360/react-native-google-places
+### 1.2.10. Install react-native-device-info https://github.com/rebeccahughes/react-native-device-info
+### 1.2.11. Install react-native-fcm https://github.com/evollu/react-native-fcm (Android only)
 
 
 
@@ -2773,6 +2774,57 @@ this.AZStackCore.changeApplicationState({
 
 #### params
 > - state(required): state of application
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+
+### 3.10.2. Notification register device
+
+```javascript 
+this.AZStackCore.notificationRegisterDevice({
+    deviceToken: 'this-is-device-token',
+    devicePlatform: this.AZStackCore.platformConstants.PLATFORM_ANDROID,
+    applicationBundleId: 'com.azstack_react_native_sdk'
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.notificationRegisterDevice({
+    deviceToken: 'this-is-device-token',
+    devicePlatform: this.AZStackCore.platformConstants.PLATFORM_ANDROID,
+    applicationBundleId: 'com.azstack_react_native_sdk'
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.Delegates.onNotificationRegisterDeviceReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStackCore.notificationRegisterDevice({
+    deviceToken: 'this-is-device-token',
+    devicePlatform: this.AZStackCore.platformConstants.PLATFORM_ANDROID,
+    applicationBundleId: 'com.azstack_react_native_sdk'
+});
+```
+
+#### params
+> - deviceToken(required): token of device
+> - devicePlatform(required): platform of device
+> - applicationBundleId(required): bundle id of application
 
 #### error:
 > - code: error code

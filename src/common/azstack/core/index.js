@@ -497,47 +497,6 @@ export class AZStackCore {
                             this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED](null, this.authenticatedUser);
                         }
                     }
-
-                    // if (this.deviceToken) {
-                    //     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                    //         message: 'Setup push notification already done'
-                    //     });
-                    //     this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                    //         message: 'Device token',
-                    //         payload: {
-                    //             deviceToken: this.deviceToken
-                    //         }
-                    //     });
-                    // } else {
-                    //     this.Notification.setup().then((deviceToken) => {
-                    //         this.deviceToken = deviceToken;
-
-                    //         const pushNotificationRegisterDevicePacket = {
-                    //             service: this.serviceTypes.PUSH_NOTIFICATION_REGISTER_DEVICE_SEND,
-                    //             body: JSON.stringify({
-                    //                 id: deviceToken,
-                    //                 type: this.devicePlatformOS,
-                    //                 appBundleId: this.applicationBundleId
-                    //             })
-                    //         };
-                    //         this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                    //             message: 'Push notification register device'
-                    //         });
-                    //         this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                    //             message: 'Push notification register device packet',
-                    //             payload: pushNotificationRegisterDevicePacket
-                    //         });
-                    //         this.sendSlavePacket(pushNotificationRegisterDevicePacket).then(() => {
-                    //             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                    //                 message: 'Send push notification register device data successfully'
-                    //             });
-                    //         }).catch((error) => {
-                    //             this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                    //                 message: 'Cannot send push notification register device data, register device fail'
-                    //             });
-                    //         });
-                    //     }).catch(() => { });
-                    // }
                 }).catch((error) => {
                     if (this.stateControls.connecting) {
                         this.stateControls.connecting = false;
@@ -552,16 +511,6 @@ export class AZStackCore {
                             this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED](error, null);
                         }
                     }
-                });
-                break;
-
-            case this.serviceTypes.PUSH_NOTIFICATION_REGISTER_DEVICE_RECEIVE:
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                    message: 'Push notification register device success'
-                });
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                    message: 'Push notification register device response',
-                    payload: body
                 });
                 break;
 
@@ -1071,6 +1020,14 @@ export class AZStackCore {
                 this.Notification.receiveChangeApplicationState(body).then((result) => {
                     this.callUncall(this.uncallConstants.UNCALL_KEY_APPLICATION_CHANGE_STATE, 'default', null, result);
                 }).catch((error) => { });
+                break;
+
+            case this.serviceTypes.PUSH_NOTIFICATION_REGISTER_DEVICE_RECEIVE:
+                this.Notification.receiveNotificationRegisterDevice(body).then((result) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_NOTIFICATION_REGISTER_DEVICE, 'default', null, result);
+                }).catch((error) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_NOTIFICATION_REGISTER_DEVICE, 'default', error, null);
+                });
                 break;
 
             default:
@@ -3081,6 +3038,69 @@ export class AZStackCore {
 
             }).catch((error) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_APPLICATION_CHANGE_STATE, 'default', error, null);
+            });
+        });
+    };
+
+    notificationRegisterDevice(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Notification register device'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Notification register device',
+                payload: options
+            });
+
+            this.addUncall(this.uncallConstants.UNCALL_KEY_NOTIFICATION_REGISTER_DEVICE, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_NOTIFICATION_REGISTER_DEVICE_RETURN);
+
+            if (!options || typeof options !== 'object') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Missing notification register device params'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NOTIFICATION_REGISTER_DEVICE, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'Missing notification register device params'
+                }, null);
+                return;
+            }
+
+            let dataErrorMessage = this.Validator.check([{
+                name: 'deviceToken',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_STRING,
+                data: options.deviceToken
+            }, {
+                name: 'devicePlatform',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_NUMBER,
+                data: options.devicePlatform,
+                in: [this.platformConstants.PLATFORM_ANDROID, this.platformConstants.PLATFORM_IOS]
+            }, {
+                name: 'applicationBundleId',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_STRING,
+                data: options.applicationBundleId
+            }]);
+            if (dataErrorMessage) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: dataErrorMessage
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NOTIFICATION_REGISTER_DEVICE, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: dataErrorMessage
+                }, null);
+                return;
+            }
+
+            this.Notification.sendNotificationRegisterDevice({
+                deviceToken: options.deviceToken,
+                devicePlatform: options.devicePlatform,
+                applicationBundleId: options.applicationBundleId
+            }).then((result) => {
+
+            }).catch((error) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NOTIFICATION_REGISTER_DEVICE, 'default', error, null);
             });
         });
     };

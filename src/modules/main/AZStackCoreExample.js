@@ -102,6 +102,8 @@ class AZStackCoreExample extends React.Component {
 
         this.changeApplicationState = this.changeApplicationState.bind(this);
 
+        this.notificationRegisterDevice = this.notificationRegisterDevice.bind(this);
+
         this.AZStackCore = new AZStackCore(this.props.azstackConfig);
 
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_DISCONNECTED] = (error, result) => {
@@ -524,6 +526,14 @@ class AZStackCoreExample extends React.Component {
         }).then(() => { }).catch(() => { });
     };
 
+    notificationRegisterDevice() {
+        this.AZStackCore.notificationRegisterDevice({
+            deviceToken: 'this-is-device-token',
+            devicePlatform: this.AZStackCore.platformConstants.PLATFORM_ANDROID,
+            applicationBundleId: 'com.azstack_react_native_sdk'
+        }).then(() => { }).catch(() => { });
+    };
+
     componentDidMount() {
         this.AZStackCore.connect({}).then((result) => {
             this.setState({ authenticatedUser: result });
@@ -623,7 +633,10 @@ class AZStackCoreExample extends React.Component {
                     <Button onPress={this.getListGroupsPrivate} title='Get list groups private' />
                     <Button onPress={this.getListGroupsPublic} title='Get list groups public' />
                     <Text>{'\n'}{'\n'}</Text>
-                    <Button onPress={this.changeApplicationState} title='Change application state' />                    
+                    <Button onPress={this.changeApplicationState} title='Change application state' /> 
+                    <Text>{'\n'}{'\n'}</Text>
+                    <Button onPress={this.notificationRegisterDevice} title='Notification register device' />   
+                    <Text>{'\n'}{'\n'}</Text>                  
                 </View>
             </ScrollView>
         );
