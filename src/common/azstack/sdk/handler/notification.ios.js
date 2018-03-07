@@ -1,5 +1,11 @@
 class Notication {
-    constructor(options) {};
+    constructor() { };
+
+    init() {
+        return new Promise((resolve, reject) => {
+            reject();
+        });
+    };
 };
 
 export default Notication;

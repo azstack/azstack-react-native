@@ -1,11 +1,13 @@
 import React from 'react';
 import {
+    Platform,
     AppState,
     Alert,
     Dimensions,
     View
 } from 'react-native';
 import EventEmitter from 'react-native/Libraries/vendor/emitter/EventEmitter';
+import DeviceInfo from 'react-native-device-info';
 
 import * as eventConstants from './constant/eventConstants';
 import * as linkConstants from './constant/linkConstants';
@@ -22,6 +24,7 @@ import Diacritic from './helper/diacritic';
 
 import Event from './handler/event';
 import Member from './handler/member';
+import Notification from './handler/notification';
 
 import AZStackBaseComponent from './component/AZStackBaseComponent';
 
@@ -65,6 +68,11 @@ export class AZStackSdk extends AZStackBaseComponent {
             AZStackCore: this.AZStackCore
         });
 
+        this.Notification = new Notification();
+        this.deviceToken = null;
+        this.devicePlatformOS = Platform.OS === 'android' ? this.AZStackCore.platformConstants.PLATFORM_ANDROID : (Platform.OS === 'ios' ? this.AZStackCore.platformConstants.PLATFORM_IOS : this.AZStackCore.platformConstants.PLATFORM_WEB);
+        this.applicationBundleId = DeviceInfo.getBundleId();
+
         this.getCoreInstances = this.getCoreInstances.bind(this);
 
         this.handleAppStateChange = this.handleAppStateChange.bind(this);
@@ -89,6 +97,12 @@ export class AZStackSdk extends AZStackBaseComponent {
             }
             this.initRun();
         });
+        this.subscriptions.onDisconnectReturn = this.EventEmitter.addListener(this.eventConstants.EVENT_NAME_ON_DISCONNECT_RETURN, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.deviceToken = null;
+        });
     };
     clearSubscriptions() {
         for (let subscriptionName in this.subscriptions) {
@@ -105,8 +119,25 @@ export class AZStackSdk extends AZStackBaseComponent {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_MEMBERS_CHANGED, { error: null, result });
         }).catch(() => { });
     };
+    registerDeviceToken() {
+        if (!this.AZStackCore.slaveSocketConnected) {
+            return;
+        }
+        if (this.deviceToken) {
+            return;
+        }
+        this.Notification.init().then((deviceToken) => {
+            this.deviceToken = deviceToken;
+            this.AZStackCore.notificationRegisterDevice({
+                deviceToken: this.deviceToken,
+                devicePlatformOS: this.devicePlatformOS,
+                applicationBundleId: this.applicationBundleId
+            }).then((result) => { }).catch((error) => { });
+        }).catch((error) => { });
+    };
     initRun() {
         this.getMembers();
+        this.registerDeviceToken();
     };
 
     getCoreInstances() {
