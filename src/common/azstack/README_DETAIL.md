@@ -1,7 +1,9 @@
 
 # Table of Contents
 
-* [1. Requirements](#1-requirements)
+* [1. Libraries](#1-libraries)
+    * [1.1. Core](#11-core)
+    * [1.2. Sdk](#12-sdk)
 * [2. Sdk](#2-sdk)
 * [3. Core](#3-core)
     * [3.2. Initial](#32-initial)
@@ -102,22 +104,27 @@
 
 
 
-# 1. Requirements
+# 1. Libraries
 
-## 1.1. Get our sdk
-## 1.2. Install socket.io-client https://github.com/socketio/socket.io-client
-## 1.3. Install jsencrypt https://github.com/travist/jsencrypt
-## 1.4. Install react-native-webrtc https://github.com/oney/react-native-webrtc
-## 1.5. Install react-native-image-crop-picker https://github.com/ivpusic/react-native-image-crop-picker
-## 1.6. Install react-native-document-picker https://github.com/Elyx0/react-native-document-picker
-## 1.7. Install react-native-video https://github.com/react-native-community/react-native-video
-## 1.8. Install react-native-swiper https://github.com/leecade/react-native-swiper
-## 1.9. Install react-native-audio https://github.com/jsierles/react-native-audio
-## 1.10. Install react-native-fs https://github.com/itinance/react-native-fs
-## 1.11. Install react-native-sketch-canvas https://github.com/terrylinla/react-native-sketch-canvas
-## 1.12. Install react-native-maps https://github.com/react-community/react-native-maps
-## 1.13. Install react-native-google-places https://github.com/tolu360/react-native-google-places
-## 1.14. Install react-native-fcm https://github.com/evollu/react-native-fcm (Android only)
+## 1.1. Core
+
+### 1.1.1. Install socket.io-client https://github.com/socketio/socket.io-client
+### 1.1.2. Install jsencrypt https://github.com/travist/jsencrypt
+### 1.1.3. Install react-native-webrtc https://github.com/oney/react-native-webrtc
+### 1.1.4. Install react-native-device-info https://github.com/rebeccahughes/react-native-device-info
+### 1.1.5. Install react-native-fcm https://github.com/evollu/react-native-fcm (Android only)
+
+## 1.2. Sdk
+
+## 1.2.1. Install react-native-image-crop-picker https://github.com/ivpusic/react-native-image-crop-picker
+## 1.2.2. Install react-native-document-picker https://github.com/Elyx0/react-native-document-picker
+## 1.2.3. Install react-native-video https://github.com/react-native-community/react-native-video
+## 1.2.4. Install react-native-swiper https://github.com/leecade/react-native-swiper
+## 1.2.5. Install react-native-audio https://github.com/jsierles/react-native-audio
+## 1.2.6. Install react-native-fs https://github.com/itinance/react-native-fs
+## 1.2.7. Install react-native-sketch-canvas https://github.com/terrylinla/react-native-sketch-canvas
+## 1.2.8. Install react-native-maps https://github.com/react-community/react-native-maps
+## 1.2.9. Install react-native-google-places https://github.com/tolu360/react-native-google-places
 
 
 

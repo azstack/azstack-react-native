@@ -3,6 +3,7 @@ import {
     Dimensions,
     AppState
 } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 
 import * as platformConstants from './constant/platformConstants';
 import * as applicationStateConstants from './constant/applicationStateConstants';
@@ -78,6 +79,7 @@ export class AZStackCore {
         this.deviceToken = null;
         this.devicePlatformOS = Platform.OS === 'android' ? this.platformConstants.PLATFORM_ANDROID : (Platform.OS === 'ios' ? this.platformConstants.PLATFORM_IOS : this.platformConstants.PLATFORM_WEB);
         this.deviceScreenSizes = `${Dimensions.get('window').width}x${Dimensions.get('window').height}`;
+        this.applicationBundleId = DeviceInfo.getBundleId();
 
         this.intervalSendPing = null;
         this.autoReconnectTrieds = 0;
@@ -542,7 +544,8 @@ export class AZStackCore {
                                 service: this.serviceTypes.PUSH_NOTIFICATION_REGISTER_DEVICE_SEND,
                                 body: JSON.stringify({
                                     id: deviceToken,
-                                    type: this.devicePlatformOS
+                                    type: this.devicePlatformOS,
+                                    appBundleId: this.applicationBundleId
                                 })
                             };
                             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {

@@ -3623,6 +3623,10 @@ react-native-audio@^3.5.1:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/react-native-audio/-/react-native-audio-3.5.1.tgz#4acf1d5731c51cfdf76b0b8c8e60e0af41783f6e"
 
+react-native-device-info@^0.17.3:
+  version "0.17.3"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-0.17.3.tgz#7aa58f5c6ce1381beddc86429b9fd4e06e3ce20d"
+
 react-native-document-picker@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/react-native-document-picker/-/react-native-document-picker-2.1.0.tgz#61bbe113435a9d7bf67ab77093a4092d76b52fe3"
