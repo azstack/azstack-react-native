@@ -7,14 +7,43 @@ class Notication {
 
         this.logLevelConstants = options.logLevelConstants;
         this.Logger = options.Logger;
+        this.applicationBundleId = options.applicationBundleId;
 
         FCM.on(FCMEvent.Notification, async (notification) => {
-            if (notification.local_notification) {
-            }
-            if (notification.opened_from_tray) {
-            }
+
             console.log('new notification');
             console.log(notification);
+
+            if (notification.local_notification) {
+                return;
+            }
+            if (notification.opened_from_tray) {
+                return;
+            }
+
+            FCM.presentLocalNotification({
+                id: new Date().valueOf().toString(),
+                title: 'Test Notification with action',
+                body: 'Force touch to reply',
+                sub_text: 'This is a subText',
+                sound: 'default',
+                priority: 'high',
+                click_action: this.applicationBundleId,
+                number: 10,
+                ticker: 'My Notification Ticker',
+                auto_cancel: false,
+                large_icon: 'https://image.freepik.com/free-icon/small-boy-cartoon_318-38077.jpg',
+                icon: 'ic_launcher',
+                big_text: 'Show when notification is expanded',
+                color: 'red',
+                vibrate: 300,
+                wake_screen: true,
+                group: this.applicationBundleId,
+                picture: '',
+                ongoing: true,
+                lights: true,
+                show_in_foreground: true
+            });
         });
     };
 

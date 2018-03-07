@@ -332,7 +332,8 @@ export class AZStackCore {
         });
         this.Notification = new Notification({
             logLevelConstants: this.logLevelConstants,
-            Logger: this.Logger
+            Logger: this.Logger,
+            applicationBundleId: this.applicationBundleId
         });
     };
     setupSocket(slaveSocket) {
