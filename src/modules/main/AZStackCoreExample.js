@@ -100,6 +100,8 @@ class AZStackCoreExample extends React.Component {
         this.getListGroupsPrivate = this.getListGroupsPrivate.bind(this);
         this.getListGroupsPublic = this.getListGroupsPublic.bind(this);
 
+        this.changeApplicationState = this.changeApplicationState.bind(this);
+
         this.AZStackCore = new AZStackCore(this.props.azstackConfig);
 
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_DISCONNECTED] = (error, result) => {
@@ -516,10 +518,16 @@ class AZStackCoreExample extends React.Component {
         }).then(() => { }).catch(() => { });
     };
 
+    changeApplicationState() {
+        this.AZStackCore.changeApplicationState({
+            state: this.AZStackCore.applicationStateConstants.APPLICATION_STATE_FOREGROUND
+        }).then(() => { }).catch(() => { });
+    };
+
     componentDidMount() {
         this.AZStackCore.connect({}).then((result) => {
             this.setState({ authenticatedUser: result });
-        }).catch((error) => {});
+        }).catch((error) => { });
     };
 
     componentWillUnmount() {
@@ -614,6 +622,8 @@ class AZStackCoreExample extends React.Component {
                     <Button onPress={this.getDetailsGroup} title='Get details group' />
                     <Button onPress={this.getListGroupsPrivate} title='Get list groups private' />
                     <Button onPress={this.getListGroupsPublic} title='Get list groups public' />
+                    <Text>{'\n'}{'\n'}</Text>
+                    <Button onPress={this.changeApplicationState} title='Change application state' />                    
                 </View>
             </ScrollView>
         );

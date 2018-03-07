@@ -31,6 +31,10 @@
         * [3.3.7. Group constants](#337-group-constants)
             * [3.3.7.1. Group types](#3371-group-types)
             * [3.3.7.2. Group is in](#3372-group-is-in)
+            * [3.3.7.3. Group is auto join](#3373-group-is-auto-join)
+        * [3.3.8. Notification constants](#338-notification-constants)
+            * [3.3.8.1. Application state](#3381-application-state)
+            * [3.3.8.2. Platform OS](#3382-platform-os)
     * [3.4. Connection](#34-connection)
         * [3.4.1. Connect](#341-connect)
         * [3.4.2. Reconnect](#342-reconnect)
@@ -101,6 +105,8 @@
             * [3.9.3.4. On group renamed](#3934-on-group-renamed)
             * [3.9.3.5. On group admin changed](#3935-on-group-admin-changed)
             * [3.9.3.6. On group public joined](#3936-on-group-public-joined)
+    * [3.10. Notification](#310-notification)
+        * [3.10.1. Change application state](#3101-change-application-state)
 
 
 
@@ -339,9 +345,19 @@ this.AZStackCore = new AZStackCore({
 > - GROUP_IS_NOT_IN(0): not in group
 > - GROUP_IS_IN(1): in group
 
-#### 3.3.7.2. Group is auto join
+#### 3.3.7.3. Group is auto join
 > - GROUP_IS_NOT_AUTO_JOIN(0): group is not auto join
 > - GROUP_IS_AUTO_JOIN(1): group is auto join
+
+### 3.3.8. Notification constants
+
+#### 3.3.8.1. Application state
+> - APPLICATION_STATE_BACKGROUND(1): background
+> - APPLICATION_STATE_FOREGROUND(2): foreground
+
+#### 3.3.8.2. Platform OS
+> - PLATFORM_ANDROID(1): android
+> - PLATFORM_IOS(2): ios
 
 
 
@@ -2716,3 +2732,50 @@ this.AZStackCore.Delegates.onGroupPublicJoined = (error, result) => {
 > - joined: joined data
 >   - groupId: id of group
 >   - joinId: join id
+
+
+
+## 3.10. Notification
+
+### 3.10.1. Change application state
+
+```javascript 
+this.AZStackCore.changeApplicationState({
+    state: this.AZStackCore.applicationStateConstants.APPLICATION_STATE_FOREGROUND
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.changeApplicationState({
+    state: this.AZStackCore.applicationStateConstants.APPLICATION_STATE_FOREGROUND
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.Delegates.onApplicationChangeStateReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStackCore.changeApplicationState({
+    state: this.AZStackCore.applicationStateConstants.APPLICATION_STATE_FOREGROUND
+});
+```
+
+#### params
+> - state(required): state of application
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:

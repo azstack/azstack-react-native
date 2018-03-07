@@ -73,3 +73,5 @@ export const DELEGATE_ON_GROUP_PUBLIC_JOINED = 'onGroupPublicJoined';
 
 export const DELEGATE_ON_GROUP_GET_DETAILS_RETURN = 'onGroupGetDetailsReturn';
 export const DELEGATE_ON_GROUP_GET_LIST_RETURN = 'onGroupGetListReturn';
+
+export const DELEGATE_ON_APPLICATION_CHANGE_STATE_RETURN = 'onApplicationChangeStateReturn';
