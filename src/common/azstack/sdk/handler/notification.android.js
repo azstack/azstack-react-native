@@ -35,7 +35,8 @@ class Notication {
                 group: this.applicationBundleId,
                 ongoing: false,
                 lights: true,
-                show_in_foreground: true
+                show_in_foreground: true,
+                data: { badge: 3 }
             });
         });
     };
