@@ -1,8 +1,9 @@
 import React from 'react';
 import {
-    Dimensions,
-    View,
+    AppState,
     Alert,
+    Dimensions,
+    View
 } from 'react-native';
 import EventEmitter from 'react-native/Libraries/vendor/emitter/EventEmitter';
 
@@ -65,6 +66,8 @@ export class AZStackSdk extends AZStackBaseComponent {
         });
 
         this.getCoreInstances = this.getCoreInstances.bind(this);
+
+        this.handleAppStateChange = this.handleAppStateChange.bind(this);
     };
 
     addSubscriptions() {
@@ -127,12 +130,22 @@ export class AZStackSdk extends AZStackBaseComponent {
         };
     };
 
+    handleAppStateChange(nextAppState) {
+        if (!!this.AZStackCore && this.AZStackCore.slaveSocketConnected) {
+            this.AZStackCore.changeApplicationState({
+                state: nextAppState === 'active' ? this.AZStackCore.applicationStateConstants.APPLICATION_STATE_FOREGROUND : this.AZStackCore.applicationStateConstants.APPLICATION_STATE_BACKGROUND
+            }).then(() => { }).catch(() => { });
+        };
+    };
+
     componentDidMount() {
         this.addSubscriptions();
         this.initRun();
+        AppState.addEventListener('change', this.handleAppStateChange);
     };
     componentWillUnmount() {
         this.clearSubscriptions();
+        AppState.removeEventListener('change', this.handleAppStateChange);
     };
 
     render() {
