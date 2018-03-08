@@ -1,6 +1,6 @@
 {
   "name": "azstack-react-native",
-  "version": "1.0.27",
+  "version": "1.0.31",
   "description": "React native SDK for AZSTACK Communication Platform",
   "main": "index.js",
   "scripts": {
@@ -19,14 +19,19 @@
   ],
   "author": "AZSTACK Team (https://github.com/azstack/azstack-react-native)",
   "license": "ISC",
-  "dependencies": {
-    "jsencrypt": "^2.3.1",
+  "peerDependencies": {
+		"@terrylinla/react-native-sketch-canvas": "^0.3.1",
     "react-native-webrtc": "^1.58.3",
-    "socket.io-client": "^2.0.4",
 		"react-native-document-picker": "^2.1.0",
 		"react-native-image-crop-picker": "^0.19.1",
 		"react-native-video": "^2.0.0",
     "react-native-audio": "^3.5.1",
-		"react-native-swiper": "^1.5.13"
+    "react-native-swiper": "^1.5.13",
+    "react-native-fs": "^2.9.11",
+		"react-native-maps": "^0.20.1"
+  },
+  "dependencies": {
+    "jsencrypt": "^2.3.1",
+    "socket.io-client": "^2.0.4"
   }
 }
