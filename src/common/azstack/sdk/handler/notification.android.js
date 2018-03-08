@@ -25,7 +25,6 @@ class Notication {
                 sound: 'default',
                 priority: 'high',
                 click_action: this.applicationBundleId,
-                number: 10,
                 auto_cancel: true,
                 // large_icon: '',
                 icon: 'ic_launcher',
