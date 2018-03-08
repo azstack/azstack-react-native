@@ -212,9 +212,9 @@ class Authentication {
                     fullname: options.authenticatingData.fullname,
                     namespace: options.authenticatingData.namespace,
                     appId: options.authenticatingData.appId,
-                    platform: 3,
+                    platform: this.devicePlatformOS,
                     sdkVersion: options.sdkVersion,
-                    screenSize: '0x0'
+                    screenSize: options.deviceScreenSizes
                 })
             };
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {

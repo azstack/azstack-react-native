@@ -14,7 +14,7 @@ class Logger {
             [logLevelConstants.LOG_LEVEL_INFO]: 'color: #4B77BE; font-size: 14px;',
             [logLevelConstants.LOG_LEVEL_DEBUG]: 'color: #F7CA18; font-size: 14px;'
         };
-        this.logLever = logLevelConstants.LOG_LEVEL_DEBUG;
+        this.logLever = logLevelConstants.LOG_LEVEL_NONE;
     };
     setLogLevel(logLevel) {
         if (this.logLevers.indexOf(logLevel) === -1) {

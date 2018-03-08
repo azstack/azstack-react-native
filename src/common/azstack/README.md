@@ -1,7 +1,9 @@
 
 # Table of Contents
 
-* [1. Requirements](#1-requirements)
+* [1. Libraries](#1-libraries)
+    * [1.1. Core](#11-core)
+    * [1.2. Sdk](#12-sdk)
 * [2. Sdk](#2-sdk)
 * [3. Core](#3-core)
     * [3.2. Initial](#32-initial)
@@ -29,6 +31,10 @@
         * [3.3.7. Group constants](#337-group-constants)
             * [3.3.7.1. Group types](#3371-group-types)
             * [3.3.7.2. Group is in](#3372-group-is-in)
+            * [3.3.7.3. Group is auto join](#3373-group-is-auto-join)
+        * [3.3.8. Notification constants](#338-notification-constants)
+            * [3.3.8.1. Application state](#3381-application-state)
+            * [3.3.8.2. Platform OS](#3382-platform-os)
     * [3.4. Connection](#34-connection)
         * [3.4.1. Connect](#341-connect)
         * [3.4.2. Reconnect](#342-reconnect)
@@ -99,19 +105,33 @@
             * [3.9.3.4. On group renamed](#3934-on-group-renamed)
             * [3.9.3.5. On group admin changed](#3935-on-group-admin-changed)
             * [3.9.3.6. On group public joined](#3936-on-group-public-joined)
+    * [3.10. Notification](#310-notification)
+        * [3.10.1. Change application state](#3101-change-application-state)
+        * [3.10.2. Notification register device](#3102-notification-register-device)
 
 
 
-# 1. Requirements
+# 1. Libraries
 
-## 1.1. Get our sdk
-## 1.2. Install socket.io-client https://github.com/socketio/socket.io-client
-## 1.3. Install jsencrypt https://github.com/travist/jsencrypt
-## 1.4. Install react-native-webrtc https://github.com/oney/react-native-webrtc
-## 1.5. Install react-native-image-crop-picker https://github.com/ivpusic/react-native-image-crop-picker
-## 1.6 Install react-native-document-picker https://github.com/Elyx0/react-native-document-picker
-## 1.7 Install react-native-video https://github.com/react-native-community/react-native-video
+## 1.1. Core
 
+### 1.1.1. Install socket.io-client https://github.com/socketio/socket.io-client
+### 1.1.2. Install jsencrypt https://github.com/travist/jsencrypt
+### 1.1.3. Install react-native-webrtc https://github.com/oney/react-native-webrtc
+
+## 1.2. Sdk
+
+### 1.2.1. Install react-native-image-crop-picker https://github.com/ivpusic/react-native-image-crop-picker
+### 1.2.2. Install react-native-document-picker https://github.com/Elyx0/react-native-document-picker
+### 1.2.3. Install react-native-video https://github.com/react-native-community/react-native-video
+### 1.2.4. Install react-native-swiper https://github.com/leecade/react-native-swiper
+### 1.2.5. Install react-native-audio https://github.com/jsierles/react-native-audio
+### 1.2.6. Install react-native-fs https://github.com/itinance/react-native-fs
+### 1.2.7. Install react-native-sketch-canvas https://github.com/terrylinla/react-native-sketch-canvas
+### 1.2.8. Install react-native-maps https://github.com/react-community/react-native-maps
+### 1.2.9. Install react-native-google-places https://github.com/tolu360/react-native-google-places
+### 1.2.10. Install react-native-device-info https://github.com/rebeccahughes/react-native-device-info
+### 1.2.11. Install react-native-fcm https://github.com/evollu/react-native-fcm (Android only)
 
 
 
@@ -235,6 +255,7 @@ this.AZStackCore = new AZStackCore({
 > - CALL_STATUS_CALLOUT_STATUS_CONNECTING(100): status connecting;
 > - CALL_STATUS_CALLOUT_STATUS_RINGING(183): status ringing;
 > - CALL_STATUS_CALLOUT_STATUS_ANSWERED(200): status answered;
+> - CALL_STATUS_CALLOUT_STATUS_REJECTED(403): status rejected;
 > - CALL_STATUS_CALLOUT_STATUS_BUSY(486): status busy;
 > - CALL_STATUS_CALLOUT_STATUS_NOT_ANSWERED(480): status answered;
 > - CALL_STATUS_CALLOUT_STATUS_STOP(700): status stop;
@@ -277,12 +298,13 @@ this.AZStackCore = new AZStackCore({
 > - MESSAGE_TYPE_TEXT(1): text message
 > - MESSAGE_TYPE_STICKER(2): sticker message
 > - MESSAGE_TYPE_FILE(3): file message
-> - MESSAGE_TYPE_GROUP_CREATED(4): create group message
-> - MESSAGE_TYPE_GROUP_INVITED(5): invite group message
-> - MESSAGE_TYPE_GROUP_LEFT(6): leave group message
-> - MESSAGE_TYPE_GROUP_RENAMED(7): rename group message
-> - MESSAGE_TYPE_GROUP_ADMIN_CHANGED(8): change admin group message
-> - MESSAGE_TYPE_GROUP_PUBLIC_JOINED(9): join public group message
+> - MESSAGE_TYPE_LOCATION(4): location message
+> - MESSAGE_TYPE_GROUP_CREATED(5): create group message
+> - MESSAGE_TYPE_GROUP_INVITED(6): invite group message
+> - MESSAGE_TYPE_GROUP_LEFT(7): leave group message
+> - MESSAGE_TYPE_GROUP_RENAMED(8): rename group message
+> - MESSAGE_TYPE_GROUP_ADMIN_CHANGED(9): change admin group message
+> - MESSAGE_TYPE_GROUP_PUBLIC_JOINED(10): join public group message
 
 #### 3.3.5.4. Message Statuses
 > - MESSAGE_STATUS_SENDING(0): status sending
@@ -324,9 +346,19 @@ this.AZStackCore = new AZStackCore({
 > - GROUP_IS_NOT_IN(0): not in group
 > - GROUP_IS_IN(1): in group
 
-#### 3.3.7.2. Group is auto join
+#### 3.3.7.3. Group is auto join
 > - GROUP_IS_NOT_AUTO_JOIN(0): group is not auto join
 > - GROUP_IS_AUTO_JOIN(1): group is auto join
+
+### 3.3.8. Notification constants
+
+#### 3.3.8.1. Application state
+> - APPLICATION_STATE_BACKGROUND(1): background
+> - APPLICATION_STATE_FOREGROUND(2): foreground
+
+#### 3.3.8.2. Platform OS
+> - PLATFORM_ANDROID(1): android
+> - PLATFORM_IOS(2): ios
 
 
 
@@ -1241,6 +1273,7 @@ this.AZStackCore.getModifiedConversations({
 >       - sticker: sticker of message
 >       - file: file of message
 >           - type: file type
+>       - location: location of message
 >       - createdGroup: created group
 >           - groupId: id of group
 >           - adminId: id of admin
@@ -1397,6 +1430,10 @@ this.AZStackCore.onGetUnreadMessagesReturn({
 >       - width: width
 >       - height: height
 >       - duration: duration
+>   - location: location of message
+>       - address: address
+>       - longitude: longitude
+>       - latitude: latitude
 >   - createdGroup: created group
 >       - type: group type
 >       - groupId: id of group
@@ -1504,6 +1541,10 @@ this.AZStackCore.getModifiedMessages({
 >       - width: width
 >       - height: height
 >       - duration: duration
+>   - location: location of message
+>       - address: address
+>       - longitude: longitude
+>       - latitude: latitude
 >   - createdGroup: created group
 >       - type: group type
 >       - groupId: id of group
@@ -1621,6 +1662,11 @@ this.AZStackCore.newMessage({
         url: 'https://azstack.com/static/images/logo.png',
         width: 171,
         height: 49
+    },
+    location: {
+        address: 'address string',
+        longitude: 100.000001,
+        latitude: 20.000002
     }
 }, (error, result) => {
     console.log(error);
@@ -1649,6 +1695,11 @@ this.AZStackCore.newMessage({
         url: 'https://azstack.com/static/images/logo.png',
         width: 171,
         height: 49
+    },
+    location: {
+        address: 'address string',
+        longitude: 100.000001,
+        latitude: 20.000002
     }
 }).then((result) => {
     console.log(result);
@@ -1681,6 +1732,11 @@ this.AZStackCore.newMessage({
         url: 'https://azstack.com/static/images/logo.png',
         width: 171,
         height: 49
+    },
+    location: {
+        address: 'address string',
+        longitude: 100.000001,
+        latitude: 20.000002
     }
 });
 ```
@@ -1703,6 +1759,10 @@ this.AZStackCore.newMessage({
 >   - width(optional): width
 >   - height(optional): height
 >   - duration(optional): duration
+> - location(optional): location of message
+>   - address(required): address
+>   - longitude(required): longitude
+>   - latitude(required): latitude
 
 #### error:
 > - code: error code
@@ -1734,6 +1794,10 @@ this.AZStackCore.newMessage({
 >   - width: width
 >   - height: height
 >   - duration: duration
+> - location: location of message
+>   - address: address
+>   - longitude: longitude
+>   - latitude: latitude
 
 #### 3.7.2.2. Change message status
 
@@ -1930,6 +1994,10 @@ this.AZStackCore.Delegates.onHasNewMessage = (error, result) => {
 >   - width: width
 >   - height: height
 >   - duration: duration
+> - location: location of message
+>   - address: address
+>   - longitude: longitude
+>   - latitude: latitude
 
 #### 3.7.3.2. On message from me
 
@@ -1969,6 +2037,10 @@ this.AZStackCore.Delegates.onMessageFromMe = (error, result) => {
 >   - width: width
 >   - height: height
 >   - duration: duration
+> - location: location of message
+>   - address: address
+>   - longitude: longitude
+>   - latitude: latitude
 
 #### 3.7.3.3. On message status changed
 
@@ -2661,3 +2733,101 @@ this.AZStackCore.Delegates.onGroupPublicJoined = (error, result) => {
 > - joined: joined data
 >   - groupId: id of group
 >   - joinId: join id
+
+
+
+## 3.10. Notification
+
+### 3.10.1. Change application state
+
+```javascript 
+this.AZStackCore.changeApplicationState({
+    state: this.AZStackCore.applicationStateConstants.APPLICATION_STATE_FOREGROUND
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.changeApplicationState({
+    state: this.AZStackCore.applicationStateConstants.APPLICATION_STATE_FOREGROUND
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.Delegates.onApplicationChangeStateReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStackCore.changeApplicationState({
+    state: this.AZStackCore.applicationStateConstants.APPLICATION_STATE_FOREGROUND
+});
+```
+
+#### params
+> - state(required): state of application
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+
+### 3.10.2. Notification register device
+
+```javascript 
+this.AZStackCore.notificationRegisterDevice({
+    deviceToken: 'this-is-device-token',
+    devicePlatformOS: this.AZStackCore.platformConstants.PLATFORM_ANDROID,
+    applicationBundleId: 'com.azstack_react_native_sdk'
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.notificationRegisterDevice({
+    deviceToken: 'this-is-device-token',
+    devicePlatformOS: this.AZStackCore.platformConstants.PLATFORM_ANDROID,
+    applicationBundleId: 'com.azstack_react_native_sdk'
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.Delegates.onNotificationRegisterDeviceReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStackCore.notificationRegisterDevice({
+    deviceToken: 'this-is-device-token',
+    devicePlatformOS: this.AZStackCore.platformConstants.PLATFORM_ANDROID,
+    applicationBundleId: 'com.azstack_react_native_sdk'
+});
+```
+
+#### params
+> - deviceToken(required): token of device
+> - devicePlatformOS(required): platform os of device
+> - applicationBundleId(required): bundle id of application
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:

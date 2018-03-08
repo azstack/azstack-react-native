@@ -3,6 +3,7 @@ package com.azstack_react_native_sdk;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.arttitude360.reactnative.rngoogleplaces.RNGooglePlacesPackage;
 import com.terrylinla.rnsketchcanvas.SketchCanvasPackage;
 import com.rnfs.RNFSPackage;
@@ -16,6 +17,7 @@ import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.oney.WebRTCModule.WebRTCModulePackage;
 import com.airbnb.android.react.maps.MapsPackage;
+import com.evollu.react.fcm.FIRMessagingPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,15 +34,17 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new RNGooglePlacesPackage(),
+          new RNDeviceInfo(),
+          new FIRMessagingPackage(),
+          new MapsPackage(),
+          new RNGooglePlacesPackage(),
           new SketchCanvasPackage(),
           new RNFSPackage(),
           new ReactNativeAudioPackage(),
           new PickerPackage(),
           new ReactVideoPackage(),
           new ReactNativeDocumentPicker(),
-          new WebRTCModulePackage(),
-          new MapsPackage()
+          new WebRTCModulePackage()
       );
     }
 
