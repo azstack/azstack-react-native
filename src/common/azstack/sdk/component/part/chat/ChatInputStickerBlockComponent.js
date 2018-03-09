@@ -48,7 +48,7 @@ class ChatInputStickerBlockComponent extends React.Component {
         return true;
     };
 
-    changeStickerTab() {
+    changeStickerTab(index) {
         this.setState({ selected: index });
     };
     onStickerPressed(event) {
