@@ -3048,7 +3048,7 @@ export class AZStackCore {
                 message: 'Notification register device'
             });
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                message: 'Notification register device',
+                message: 'Notification register device params',
                 payload: options
             });
 
@@ -3102,6 +3102,50 @@ export class AZStackCore {
             }).catch((error) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_NOTIFICATION_REGISTER_DEVICE, 'default', error, null);
             });
+        });
+    };
+    parseNotification(options, callback) {
+
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Parse notification'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Parse notification params',
+                payload: options
+            });
+
+            this.addUncall(this.uncallConstants.UNCALL_KEY_NOTIFICATION_PARSE, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_NOTIFICATION_PARSE_RETURN);
+
+            if (!options || typeof options !== 'object') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Missing notification register device params'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NOTIFICATION_PARSE, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: 'Missing notification register device params'
+                }, null);
+                return;
+            }
+
+            let dataErrorMessage = this.Validator.check([{
+                name: 'notification',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_OBJECT,
+                data: options.notification
+            }]);
+            if (dataErrorMessage) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: dataErrorMessage
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NOTIFICATION_PARSE, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: dataErrorMessage
+                }, null);
+                return;
+            }
+
+            this.callUncall(this.uncallConstants.UNCALL_KEY_NOTIFICATION_PARSE, 'default', null, this.Notification.parseNotification(options));
         });
     };
 };

@@ -108,6 +108,7 @@
     * [3.10. Notification](#310-notification)
         * [3.10.1. Change application state](#3101-change-application-state)
         * [3.10.2. Notification register device](#3102-notification-register-device)
+        * [3.10.3. Notification parse](#3103-notification-parse)
 
 
 
@@ -2826,6 +2827,49 @@ this.AZStackCore.notificationRegisterDevice({
 > - deviceToken(required): token of device
 > - devicePlatformOS(required): platform os of device
 > - applicationBundleId(required): bundle id of application
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+
+### 3.10.3. Notification parse
+
+```javascript 
+this.AZStackCore.parseNotification({
+    notification: {}
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.parseNotification({
+    notification: {}
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.Delegates.onNotificationParseReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStackCore.parseNotification({
+    notification: {}
+});
+```
+
+#### params
+> - notification(required): push notification data object
 
 #### error:
 > - code: error code

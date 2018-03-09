@@ -68,7 +68,9 @@ export class AZStackSdk extends AZStackBaseComponent {
             AZStackCore: this.AZStackCore
         });
 
-        this.Notification = new Notification();
+        this.Notification = new Notification({
+            AZStackCore: this.AZStackCore
+        });
         this.deviceToken = null;
         this.devicePlatformOS = Platform.OS === 'android' ? this.AZStackCore.platformConstants.PLATFORM_ANDROID : (Platform.OS === 'ios' ? this.AZStackCore.platformConstants.PLATFORM_IOS : this.AZStackCore.platformConstants.PLATFORM_WEB);
         this.applicationBundleId = DeviceInfo.getBundleId();

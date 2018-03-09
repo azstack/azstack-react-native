@@ -126,6 +126,12 @@ class Notification {
             resolve({});
         });
     };
+
+    parseNotification(options) {
+        let parsedNotification = {};
+        
+        return parsedNotification;
+    };
 };
 
 export default Notification;

@@ -3,7 +3,10 @@ import {
 } from 'react-native';
 
 class Notication {
-    constructor() {
+    constructor(options) {
+
+        this.AZStackCore = options.AZStackCore;
+
         this.resolveFunction = null;
         this.rejectFunction = null;
         PushNotificationIOS.addEventListener('register', (deviceToken) => {
@@ -32,7 +35,12 @@ class Notication {
                 if (!notification) {
                     return reject();
                 }
-                resolve({ ...notification._data });
+
+                this.AZStackCore.parseNotification({ notification: notification._data }).then((result) => {
+                    resolve(result);
+                }).catch((error) => {
+                    reject();
+                });
             }).then((error) => {
                 reject();
             });

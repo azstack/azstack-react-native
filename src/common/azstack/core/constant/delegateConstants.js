@@ -77,3 +77,4 @@ export const DELEGATE_ON_GROUP_GET_LIST_RETURN = 'onGroupGetListReturn';
 export const DELEGATE_ON_APPLICATION_CHANGE_STATE_RETURN = 'onApplicationChangeStateReturn';
 
 export const DELEGATE_ON_NOTIFICATION_REGISTER_DEVICE_RETURN = 'onNotificationRegisterDeviceReturn';
+export const DELEGATE_ON_NOTIFICATION_PARSE_RETURN = 'onNotificationParseReturn';
