@@ -135,6 +135,25 @@ export class AZStackSdk extends AZStackBaseComponent {
             }).then((result) => { }).catch((error) => { });
         }).catch((error) => { });
     };
+    getInitialNotification() {
+        this.Notification.getInitialNotification().then((notification) => {
+            console.log('initial notification');
+            console.log(notification);
+        }).catch((error) => { });
+    };
+    handleAppStateChange(nextAppState) {
+        if (!!this.AZStackCore && this.AZStackCore.slaveSocketConnected) {
+            this.AZStackCore.changeApplicationState({
+                state: nextAppState === 'active' ? this.AZStackCore.applicationStateConstants.APPLICATION_STATE_FOREGROUND : this.AZStackCore.applicationStateConstants.APPLICATION_STATE_BACKGROUND
+            }).then(() => { }).catch(() => { });
+        };
+
+        if (nextAppState === 'active') {
+            if (Platform.OS === 'android') {
+                this.getInitialNotification();
+            }
+        }
+    };
     initRun() {
         this.getMembers();
         this.registerDeviceToken();
@@ -161,18 +180,13 @@ export class AZStackSdk extends AZStackBaseComponent {
         };
     };
 
-    handleAppStateChange(nextAppState) {
-        if (!!this.AZStackCore && this.AZStackCore.slaveSocketConnected) {
-            this.AZStackCore.changeApplicationState({
-                state: nextAppState === 'active' ? this.AZStackCore.applicationStateConstants.APPLICATION_STATE_FOREGROUND : this.AZStackCore.applicationStateConstants.APPLICATION_STATE_BACKGROUND
-            }).then(() => { }).catch(() => { });
-        };
-    };
-
     componentDidMount() {
         this.addSubscriptions();
         this.initRun();
         AppState.addEventListener('change', this.handleAppStateChange);
+        if (Platform.OS === 'ios') {
+            this.getInitialNotification();
+        }
     };
     componentWillUnmount() {
         this.clearSubscriptions();

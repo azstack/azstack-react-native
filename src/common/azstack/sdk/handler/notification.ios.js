@@ -12,12 +12,8 @@ class Notication {
         PushNotificationIOS.addEventListener('registrationError', (error) => {
             this.rejectFunction();
         });
-        PushNotificationIOS.addEventListener('notification', (notification) => {
-            console.log('You have received a new notification!', notification);
-        });
-        PushNotificationIOS.addEventListener('localNotification', (notification) => {
-            console.log('Local notification', notification);
-        });
+        PushNotificationIOS.addEventListener('notification', (notification) => { });
+        PushNotificationIOS.addEventListener('localNotification', (notification) => { });
     };
 
     init() {
@@ -25,6 +21,19 @@ class Notication {
             this.resolveFunction = resolve;
             this.rejectFunction = reject;
             this.requestPermissions().then(() => { }).catch(() => {
+                reject();
+            });
+        });
+    };
+
+    getInitialNotification() {
+        return new Promise((resolve, reject) => {
+            PushNotificationIOS.getInitialNotification().then((notification) => {
+                if (!notification) {
+                    return reject();
+                }
+                resolve({ ...notification._data });
+            }).then((error) => {
                 reject();
             });
         });
