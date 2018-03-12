@@ -3,7 +3,6 @@ class Notification {
         this.logLevelConstants = options.logLevelConstants;
         this.serviceTypes = options.serviceTypes;
         this.errorCodes = options.errorCodes;
-        this.chatConstants = options.chatConstants;
         this.notificationConstants = options.notificationConstants;
         this.Logger = options.Logger;
         this.sendPacketFunction = options.sendPacketFunction;
@@ -132,12 +131,7 @@ class Notification {
     parseNotification(options) {
         let parsedNotification = {
             appId: options.appId,
-            type: this.notificationConstants.NOTIFICATION_TYPE_UNKNOWN,
-            chatType: 0,
-            senderId: 0,
-            receiverId: 0,
-            msgId: 0,
-            time: 0
+            type: this.notificationConstants.NOTIFICATION_TYPE_UNKNOWN
         };
 
         let packetType = 0;
@@ -161,121 +155,15 @@ class Notification {
             });
         }
 
-        if (isNaN(options.pushFromId)) {
-            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                message: 'Parse packet sender id error'
-            });
-            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                message: 'Packet sender id',
-                payload: {
-                    senderId: options.pushFromId
-                }
-            });
-            // return ({
-            //     error: {
-            //         code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
-            //         message: 'Cannot parse packet sender id, parse notification fail'
-            //     },
-            //     result: null
-            // });
-        }
-
-        if (isNaN(options.pushToId)) {
-            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                message: 'Parse packet receiver id error'
-            });
-            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                message: 'Packet receiver id',
-                payload: {
-                    receiverId: options.pushToId
-                }
-            });
-            // return ({
-            //     error: {
-            //         code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
-            //         message: 'Cannot parse packet receiver id, parse notification fail'
-            //     },
-            //     result: null
-            // });
-        }
-
-        if (isNaN(options.pushMsgId)) {
-            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                message: 'Parse packet msg id error'
-            });
-            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                message: 'Packet msg id',
-                payload: {
-                    msgId: options.pushMsgId
-                }
-            });
-            // return ({
-            //     error: {
-            //         code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
-            //         message: 'Cannot parse packet msg id, parse notification fail'
-            //     },
-            //     result: null
-            // });
-        }
-
-        if (isNaN(options.pushTime)) {
-            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                message: 'Parse packet time error'
-            });
-            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                message: 'Packet time',
-                payload: {
-                    time: options.pushTime
-                }
-            });
-            // return ({
-            //     error: {
-            //         code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
-            //         message: 'Cannot parse packet time, parse notification fail'
-            //     },
-            //     result: null
-            // });
-        }
-
         packetType = parseInt(options.pushPacketType);
-        parsedNotification.senderId = parseInt(options.pushFromId);
-        parsedNotification.receiverId = options.group ? parseInt(options.group) : parseInt(options.pushToId);
-        parsedNotification.msgId = parseInt(options.pushMsgId);
-        parsedNotification.time = parseInt(options.pushTime) * 1000;
 
         switch (packetType) {
             case this.serviceTypes.MESSAGE_SERVER_WITH_USER_TYPE_TEXT:
-                parsedNotification.type = this.notificationConstants.NOTIFICATION_TYPE_MESSAGE;
-                parsedNotification.chatType = this.chatConstants.CHAT_TYPE_USER;
-                parsedNotification.msgType = this.chatConstants.MESSAGE_TYPE_TEXT;
-                break;
             case this.serviceTypes.MESSAGE_WITH_USER_TYPE_STICKER:
-                parsedNotification.type = this.notificationConstants.NOTIFICATION_TYPE_MESSAGE;
-                parsedNotification.chatType = this.chatConstants.CHAT_TYPE_USER;
-                parsedNotification.msgType = this.chatConstants.MESSAGE_TYPE_STICKER;
-                break;
             case this.serviceTypes.MESSAGE_WITH_USER_TYPE_FILE:
-                parsedNotification.type = this.notificationConstants.NOTIFICATION_TYPE_MESSAGE;
-                parsedNotification.chatType = this.chatConstants.CHAT_TYPE_USER;
-                parsedNotification.msgType = this.chatConstants.MESSAGE_TYPE_FILE;
-                break;
             case this.serviceTypes.MESSAGE_WITH_USER_TYPE_LOCATION:
-                parsedNotification.type = this.notificationConstants.NOTIFICATION_TYPE_MESSAGE;
-                parsedNotification.chatType = this.chatConstants.CHAT_TYPE_USER;
-                parsedNotification.msgType = this.chatConstants.MESSAGE_TYPE_LOCATION;
-                break;
             case this.serviceTypes.MESSAGE_HAS_NEW_WITH_GROUP:
                 parsedNotification.type = this.notificationConstants.NOTIFICATION_TYPE_MESSAGE;
-                parsedNotification.chatType = this.chatConstants.CHAT_TYPE_GROUP;
-                if (options.pushMsgType === '3') {
-                    parsedNotification.msgType = this.chatConstants.MESSAGE_TYPE_STICKER;
-                } else if (options.pushMsgType === '4') {
-                    parsedNotification.msgType = this.chatConstants.MESSAGE_TYPE_LOCATION;
-                } else if (options.pushMsgType !== '0') {
-                    parsedNotification.msgType = this.chatConstants.MESSAGE_TYPE_FILE;
-                } else {
-                    parsedNotification.msgType = this.chatConstants.MESSAGE_TYPE_TEXT;
-                }
                 break;
             default:
                 break;

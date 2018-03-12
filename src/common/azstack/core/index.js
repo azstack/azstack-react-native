@@ -307,7 +307,6 @@ export class AZStackCore {
             logLevelConstants: this.logLevelConstants,
             serviceTypes: this.serviceTypes,
             errorCodes: this.errorCodes,
-            chatConstants: this.chatConstants,
             notificationConstants: this.notificationConstants,
             Logger: this.Logger,
             sendPacketFunction: this.sendSlavePacket.bind(this)
@@ -3156,35 +3155,10 @@ export class AZStackCore {
                 notEqual: '0',
                 data: options.notification.pushPacketType
             }, {
-                name: 'notification pushFromId',
-                required: false,
+                name: 'notification appId',
+                required: true,
                 dataType: this.dataTypes.DATA_TYPE_STRING,
-                data: options.notification.pushFromId
-            }, {
-                name: 'notification pushToId',
-                required: false,
-                dataType: this.dataTypes.DATA_TYPE_STRING,
-                data: options.notification.pushToId
-            }, {
-                name: 'notification group',
-                required: false,
-                dataType: this.dataTypes.DATA_TYPE_STRING,
-                data: options.notification.group
-            }, {
-                name: 'notification pushMsgId',
-                required: false,
-                dataType: this.dataTypes.DATA_TYPE_STRING,
-                data: options.notification.pushMsgId
-            }, {
-                name: 'notification pushTime',
-                required: false,
-                dataType: this.dataTypes.DATA_TYPE_STRING,
-                data: options.notification.pushTime
-            }, {
-                name: 'notification pushMsgType',
-                required: false,
-                dataType: this.dataTypes.DATA_TYPE_STRING,
-                data: options.notification.pushMsgType
+                data: options.notification.appId
             }]);
             if (dataErrorMessage) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {

@@ -42,13 +42,7 @@ FCM.on(FCMEvent.Notification, async (notification) => {
         data: { badge: 1 },
         initialNotification: {
             appId: notification.appId,
-            pushPacketType: notification.pushPacketType,
-            pushFromId: notification.pushFromId,
-            pushToId: notification.pushToId,
-            group: notification.group,
-            pushMsgId: notification.pushMsgId,
-            pushTime: notification.pushTime,
-            pushMsgType: notification.pushMsgType
+            pushPacketType: notification.pushPacketType
         }
     });
 });

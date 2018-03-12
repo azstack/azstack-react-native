@@ -39,13 +39,7 @@ class Notication {
                 this.AZStackCore.parseNotification({
                     notification: {
                         appId: notification._data.appId,
-                        pushPacketType: notification._data.pushPacketType,
-                        pushFromId: notification._data.pushFromId,
-                        pushToId: notification._data.pushToId,
-                        group: notification._data.group,
-                        pushMsgId: notification._data.pushMsgId,
-                        pushTime: notification._data.pushTime,
-                        pushMsgType: notification.pushMsgType
+                        pushPacketType: notification._data.pushPacketType
                     }
                 }).then((result) => {
                     resolve(result);
