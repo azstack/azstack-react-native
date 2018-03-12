@@ -366,8 +366,8 @@ this.AZStackCore = new AZStackCore({
 #### 3.3.8.3. Notification types
 > - NOTIFICATION_TYPE_UNKNOWN(0): unknown
 > - NOTIFICATION_TYPE_MESSAGE(1): message
-> - NOTIFICATION_TYPE_FREE_CALL_INVITE(3): free call
-> - NOTIFICATION_TYPE_CALLIN_INVITE(4): callin
+> - NOTIFICATION_TYPE_FREE_CALL(2): free call
+> - NOTIFICATION_TYPE_CALLIN(3): callin
 
 
 

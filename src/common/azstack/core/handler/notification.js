@@ -165,6 +165,10 @@ class Notification {
             case this.serviceTypes.MESSAGE_HAS_NEW_WITH_GROUP:
                 parsedNotification.type = this.notificationConstants.NOTIFICATION_TYPE_MESSAGE;
                 break;
+            case this.serviceTypes.FREE_CALL_START:
+            case this.serviceTypes.FREE_CALL_STATUS_CHANGED:
+                parsedNotification.type = this.notificationConstants.NOTIFICATION_TYPE_FREE_CALL;
+                break;
             default:
                 break;
         };
