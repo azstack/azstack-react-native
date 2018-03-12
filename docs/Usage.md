@@ -2885,40 +2885,8 @@ this.AZStackCore.parseNotification({
 #### result:
 > - appId: id of application
 > - type: type of notification
-> - message: message data
->       - chatType: chat type
->       - chatId: chat id
->       - senderId: id of sender
->       - receiverId: id of receiver
->       - msgId: id of message
->       - type: type of message
->       - status: status of message
->       - deleted: message deleted
->       - created: created time
->       - modified: modified time
->       - text: text of message
->       - sticker: sticker of message
->       - file: file of message
->           - type: file type
->       - location: location of message
->       - createdGroup: created group
->           - groupId: id of group
->           - adminId: id of admin
->           - name: name of group
->           - created: created time
->       - invited: invited data
->           - groupId: id of group
->           - inviteIds: id of inviteds
->       - left: left data
->           - groupId: id of group
->           - leaveId: id of leaver
->           - newAdminId: id of new admin
->       - renamed: renamed data
->           - groupId: id of group
->           - newName: new name
->       - adminChanged: admin changed data
->           - groupId: id of group
->           - newAdminId: new admin id
->       - joined: joined data
->           - groupId: id of group
->           - joinId: join id
+> - senderId: sender id of notification
+> - receiverId: receiver id of notification
+> - msgId: msg id of notification
+> - time: time of notification
+> - msgType: message type of notification

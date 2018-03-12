@@ -132,16 +132,14 @@ class Notification {
     parseNotification(options) {
         let parsedNotification = {
             appId: options.appId,
-            type: this.notificationConstants.NOTIFICATION_TYPE_UNKNOWN
-        };
-
-        let packet = {
-            type: 0,
+            type: this.notificationConstants.NOTIFICATION_TYPE_UNKNOWN,
             senderId: 0,
             receiverId: 0,
             msgId: 0,
             time: 0
         };
+
+        let packetType = 0;
 
         if (isNaN(options.pushPacketType)) {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -172,13 +170,13 @@ class Notification {
                     senderId: options.pushFromId
                 }
             });
-            return ({
-                error: {
-                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
-                    message: 'Cannot parse packet sender id, parse notification fail'
-                },
-                result: null
-            });
+            // return ({
+            //     error: {
+            //         code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+            //         message: 'Cannot parse packet sender id, parse notification fail'
+            //     },
+            //     result: null
+            // });
         }
 
         if (isNaN(options.pushToId)) {
@@ -191,13 +189,13 @@ class Notification {
                     receiverId: options.pushToId
                 }
             });
-            return ({
-                error: {
-                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
-                    message: 'Cannot parse packet receiver id, parse notification fail'
-                },
-                result: null
-            });
+            // return ({
+            //     error: {
+            //         code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+            //         message: 'Cannot parse packet receiver id, parse notification fail'
+            //     },
+            //     result: null
+            // });
         }
 
         if (isNaN(options.pushMsgId)) {
@@ -210,13 +208,13 @@ class Notification {
                     msgId: options.pushMsgId
                 }
             });
-            return ({
-                error: {
-                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
-                    message: 'Cannot parse packet msg id, parse notification fail'
-                },
-                result: null
-            });
+            // return ({
+            //     error: {
+            //         code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+            //         message: 'Cannot parse packet msg id, parse notification fail'
+            //     },
+            //     result: null
+            // });
         }
 
         if (isNaN(options.pushTime)) {
@@ -229,37 +227,25 @@ class Notification {
                     time: options.pushTime
                 }
             });
-            return ({
-                error: {
-                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
-                    message: 'Cannot parse packet time, parse notification fail'
-                },
-                result: null
-            });
+            // return ({
+            //     error: {
+            //         code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+            //         message: 'Cannot parse packet time, parse notification fail'
+            //     },
+            //     result: null
+            // });
         }
 
-        packet.type = parseInt(options.pushPacketType);
-        packet.senderId = parseInt(options.pushFromId);
-        packet.receiverId = parseInt(options.pushToId);
-        packet.msgId = parseInt(options.pushMsgId);
-        packet.time = parseInt(options.pushTime) * 1000;
+        packetType = parseInt(options.pushPacketType);
+        parsedNotification.senderId = parseInt(options.pushFromId);
+        parsedNotification.receiverId = parseInt(options.pushToId);
+        parsedNotification.msgId = parseInt(options.pushMsgId);
+        parsedNotification.time = parseInt(options.pushTime) * 1000;
 
-        switch (packet.type) {
+        switch (packetType) {
             case this.serviceTypes.MESSAGE_SERVER_WITH_USER_TYPE_TEXT:
                 parsedNotification.type = this.notificationConstants.NOTIFICATION_TYPE_MESSAGE;
-                parsedNotification.message = {
-                    chatType: this.chatConstants.CHAT_TYPE_USER,
-                    chatId: packet.senderId,
-                    senderId: packet.senderId,
-                    receiverId: packet.receiverId,
-                    msgId: packet.msgId,
-                    type: this.chatConstants.MESSAGE_TYPE_TEXT,
-                    status: this.chatConstants.MESSAGE_STATUS_SENT,
-                    deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
-                    created: packet.time,
-                    modified: packet.time,
-                    text: options.pushMessage
-                };
+                parsedNotification.msgType = this.chatConstants.MESSAGE_TYPE_TEXT;
             default:
                 break;
         };
