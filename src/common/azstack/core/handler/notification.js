@@ -242,10 +242,26 @@ class Notification {
         packet.senderId = parseInt(options.pushFromId);
         packet.receiverId = parseInt(options.pushToId);
         packet.msgId = parseInt(options.pushMsgId);
-        packet.time = parseInt(options.pushTime);
+        packet.time = parseInt(options.pushTime) * 1000;
 
         switch (packet.type) {
-
+            case this.serviceTypes.MESSAGE_SERVER_WITH_USER_TYPE_TEXT:
+                parsedNotification.type = this.notificationConstants.NOTIFICATION_TYPE_MESSAGE;
+                parsedNotification.message = {
+                    chatType: this.chatConstants.CHAT_TYPE_USER,
+                    chatId: packet.senderId,
+                    senderId: packet.senderId,
+                    receiverId: packet.receiverId,
+                    msgId: packet.msgId,
+                    type: this.chatConstants.MESSAGE_TYPE_TEXT,
+                    status: this.chatConstants.MESSAGE_STATUS_SENT,
+                    deleted: this.chatConstants.MESSAGE_DELETED_FALSE,
+                    created: packet.time,
+                    modified: packet.time,
+                    text: options.pushMessage
+                };
+            default:
+                break;
         };
 
         return {
