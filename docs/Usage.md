@@ -35,6 +35,7 @@
         * [3.3.8. Notification constants](#338-notification-constants)
             * [3.3.8.1. Application state](#3381-application-state)
             * [3.3.8.2. Platform OS](#3382-platform-os)
+            * [3.3.8.3. Notification types](#3383-notification-types)
     * [3.4. Connection](#34-connection)
         * [3.4.1. Connect](#341-connect)
         * [3.4.2. Reconnect](#342-reconnect)
@@ -361,6 +362,12 @@ this.AZStackCore = new AZStackCore({
 #### 3.3.8.2. Platform OS
 > - PLATFORM_ANDROID(1): android
 > - PLATFORM_IOS(2): ios
+
+#### 3.3.8.3. Notification types
+> - NOTIFICATION_TYPE_UNKNOWN(0): unknown
+> - NOTIFICATION_TYPE_MESSAGE(1): message
+> - NOTIFICATION_TYPE_FREE_CALL_INVITE(3): free call
+> - NOTIFICATION_TYPE_CALLIN_INVITE(4): callin
 
 
 
@@ -2876,3 +2883,42 @@ this.AZStackCore.parseNotification({
 > - message: error message
 
 #### result:
+> - appId: id of application
+> - type: type of notification
+> - message: message data
+>       - chatType: chat type
+>       - chatId: chat id
+>       - senderId: id of sender
+>       - receiverId: id of receiver
+>       - msgId: id of message
+>       - type: type of message
+>       - status: status of message
+>       - deleted: message deleted
+>       - created: created time
+>       - modified: modified time
+>       - text: text of message
+>       - sticker: sticker of message
+>       - file: file of message
+>           - type: file type
+>       - location: location of message
+>       - createdGroup: created group
+>           - groupId: id of group
+>           - adminId: id of admin
+>           - name: name of group
+>           - created: created time
+>       - invited: invited data
+>           - groupId: id of group
+>           - inviteIds: id of inviteds
+>       - left: left data
+>           - groupId: id of group
+>           - leaveId: id of leaver
+>           - newAdminId: id of new admin
+>       - renamed: renamed data
+>           - groupId: id of group
+>           - newName: new name
+>       - adminChanged: admin changed data
+>           - groupId: id of group
+>           - newAdminId: new admin id
+>       - joined: joined data
+>           - groupId: id of group
+>           - joinId: join id

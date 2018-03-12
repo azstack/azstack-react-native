@@ -3,6 +3,8 @@ class Notification {
         this.logLevelConstants = options.logLevelConstants;
         this.serviceTypes = options.serviceTypes;
         this.errorCodes = options.errorCodes;
+        this.chatConstants = options.chatConstants;
+        this.notificationConstants = options.notificationConstants;
         this.Logger = options.Logger;
         this.sendPacketFunction = options.sendPacketFunction;
     };
@@ -128,9 +130,128 @@ class Notification {
     };
 
     parseNotification(options) {
-        let parsedNotification = {};
-        
-        return parsedNotification;
+        let parsedNotification = {
+            appId: options.appId,
+            type: this.notificationConstants.NOTIFICATION_TYPE_UNKNOWN
+        };
+
+        let packet = {
+            type: 0,
+            senderId: 0,
+            receiverId: 0,
+            msgId: 0,
+            time: 0
+        };
+
+        if (isNaN(options.pushPacketType)) {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                message: 'Parse packet type error'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Packet type',
+                payload: {
+                    packetType: options.pushPacketType
+                }
+            });
+            return ({
+                error: {
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Cannot parse packet type, parse notification fail'
+                },
+                result: null
+            });
+        }
+
+        if (isNaN(options.pushFromId)) {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                message: 'Parse packet sender id error'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Packet sender id',
+                payload: {
+                    senderId: options.pushFromId
+                }
+            });
+            return ({
+                error: {
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Cannot parse packet sender id, parse notification fail'
+                },
+                result: null
+            });
+        }
+
+        if (isNaN(options.pushToId)) {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                message: 'Parse packet receiver id error'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Packet receiver id',
+                payload: {
+                    receiverId: options.pushToId
+                }
+            });
+            return ({
+                error: {
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Cannot parse packet receiver id, parse notification fail'
+                },
+                result: null
+            });
+        }
+
+        if (isNaN(options.pushMsgId)) {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                message: 'Parse packet msg id error'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Packet msg id',
+                payload: {
+                    msgId: options.pushMsgId
+                }
+            });
+            return ({
+                error: {
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Cannot parse packet msg id, parse notification fail'
+                },
+                result: null
+            });
+        }
+
+        if (isNaN(options.pushTime)) {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                message: 'Parse packet time error'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Packet time',
+                payload: {
+                    time: options.pushTime
+                }
+            });
+            return ({
+                error: {
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Cannot parse packet time, parse notification fail'
+                },
+                result: null
+            });
+        }
+
+        packet.type = parseInt(options.pushPacketType);
+        packet.senderId = parseInt(options.pushFromId);
+        packet.receiverId = parseInt(options.pushToId);
+        packet.msgId = parseInt(options.pushMsgId);
+        packet.time = parseInt(options.pushTime);
+
+        switch (packet.type) {
+
+        };
+
+        return {
+            error: null,
+            result: parsedNotification
+        };
     };
 };
 

@@ -33,16 +33,16 @@ class Notication {
         return new Promise((resolve, reject) => {
             PushNotificationIOS.getInitialNotification().then((notification) => {
                 if (!notification) {
-                    return reject();
+                    return reject({});
                 }
 
                 this.AZStackCore.parseNotification({ notification: notification._data }).then((result) => {
                     resolve(result);
                 }).catch((error) => {
-                    reject();
+                    reject(error);
                 });
             }).then((error) => {
-                reject();
+                reject({});
             });
         });
     };

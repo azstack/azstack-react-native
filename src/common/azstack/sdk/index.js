@@ -141,7 +141,10 @@ export class AZStackSdk extends AZStackBaseComponent {
         this.Notification.getInitialNotification().then((notification) => {
             console.log('initial notification');
             console.log(notification);
-        }).catch((error) => { });
+        }).catch((error) => { 
+            console.log('initial notification error');
+            console.log(error);
+        });
     };
     handleAppStateChange(nextAppState) {
         if (!!this.AZStackCore && this.AZStackCore.slaveSocketConnected) {

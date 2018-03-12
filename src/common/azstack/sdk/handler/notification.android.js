@@ -83,9 +83,8 @@ class Notication {
                 if (notification && notification.fcm.action === fcmActionBannerClicked && notification.initialNotification) {
                     this.AZStackCore.parseNotification({ notification: notification.initialNotification }).then((result) => {
                         resolve(result);
-                        initialNotification = null;
                     }).catch((error) => {
-                        reject();
+                        reject(error);
                     });
                     return;
                 }
@@ -96,15 +95,15 @@ class Notication {
                         initialNotification = null;
                     }).catch((error) => {
                         initialNotification = null;
-                        reject();
+                        reject(error);
                     });
                     return;
                 }
 
-                reject();
+                reject({});
 
             }).catch((error) => {
-                reject();
+                reject({});
             });
         });
     };

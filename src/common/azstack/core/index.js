@@ -16,6 +16,7 @@ import * as listConstants from './constant/listConstants';
 import * as chatConstants from './constant/chatConstants';
 import * as userConstants from './constant/userConstants';
 import * as groupConstants from './constant/groupConstants';
+import * as notificationConstants from './constant/notificationConstants';
 
 import Tool from './helper/tool';
 import Validator from './helper/validator';
@@ -47,6 +48,7 @@ export class AZStackCore {
         this.chatConstants = chatConstants;
         this.userConstants = userConstants;
         this.groupConstants = groupConstants;
+        this.notificationConstants = notificationConstants;
 
         this.logLevel = this.logLevelConstants.LOG_LEVEL_NONE;
         this.requestTimeout = 60000;
@@ -305,6 +307,8 @@ export class AZStackCore {
             logLevelConstants: this.logLevelConstants,
             serviceTypes: this.serviceTypes,
             errorCodes: this.errorCodes,
+            chatConstants: this.chatConstants,
+            notificationConstants: this.notificationConstants,
             Logger: this.Logger,
             sendPacketFunction: this.sendSlavePacket.bind(this)
         });
@@ -3145,7 +3149,9 @@ export class AZStackCore {
                 return;
             }
 
-            this.callUncall(this.uncallConstants.UNCALL_KEY_NOTIFICATION_PARSE, 'default', null, this.Notification.parseNotification(options));
+            let parsedNotification = this.Notification.parseNotification(options.notification);
+
+            this.callUncall(this.uncallConstants.UNCALL_KEY_NOTIFICATION_PARSE, 'default', parsedNotification.error, parsedNotification.result);
         });
     };
 };
