@@ -3149,6 +3149,44 @@ export class AZStackCore {
                 return;
             }
 
+            dataErrorMessage = this.Validator.check([{
+                name: 'notification pushPacketType',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_STRING,
+                notEqual: '0',
+                data: options.notification.pushPacketType
+            }, {
+                name: 'notification pushFromId',
+                required: false,
+                dataType: this.dataTypes.DATA_TYPE_STRING,
+                data: options.notification.pushFromId
+            }, {
+                name: 'notification pushToId',
+                required: false,
+                dataType: this.dataTypes.DATA_TYPE_STRING,
+                data: options.notification.pushToId
+            }, {
+                name: 'notification pushMsgId',
+                required: false,
+                dataType: this.dataTypes.DATA_TYPE_STRING,
+                data: options.notification.pushMsgId
+            }, {
+                name: 'notification pushTime',
+                required: false,
+                dataType: this.dataTypes.DATA_TYPE_STRING,
+                data: options.notification.pushTime
+            }]);
+            if (dataErrorMessage) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: dataErrorMessage
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NOTIFICATION_PARSE, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_DATA,
+                    message: dataErrorMessage
+                }, null);
+                return;
+            }
+
             let parsedNotification = this.Notification.parseNotification(options.notification);
 
             this.callUncall(this.uncallConstants.UNCALL_KEY_NOTIFICATION_PARSE, 'default', parsedNotification.error, parsedNotification.result);
