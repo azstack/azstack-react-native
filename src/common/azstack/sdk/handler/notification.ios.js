@@ -36,7 +36,18 @@ class Notication {
                     return reject({});
                 }
 
-                this.AZStackCore.parseNotification({ notification: notification._data }).then((result) => {
+                this.AZStackCore.parseNotification({
+                    notification: {
+                        appId: notification._data.appId,
+                        pushPacketType: notification._data.pushPacketType,
+                        pushFromId: notification._data.pushFromId,
+                        pushToId: notification._data.pushToId,
+                        group: notification._data.group,
+                        pushMsgId: notification._data.pushMsgId,
+                        pushTime: notification._data.pushTime,
+                        pushMsgType: notification.pushMsgType
+                    }
+                }).then((result) => {
                     resolve(result);
                 }).catch((error) => {
                     reject(error);

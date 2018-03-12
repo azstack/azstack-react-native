@@ -239,7 +239,7 @@ class Notification {
 
         packetType = parseInt(options.pushPacketType);
         parsedNotification.senderId = parseInt(options.pushFromId);
-        parsedNotification.receiverId = parseInt(options.pushToId);
+        parsedNotification.receiverId = options.group ? parseInt(options.group) : parseInt(options.pushToId);
         parsedNotification.msgId = parseInt(options.pushMsgId);
         parsedNotification.time = parseInt(options.pushTime) * 1000;
 
@@ -263,6 +263,19 @@ class Notification {
                 parsedNotification.type = this.notificationConstants.NOTIFICATION_TYPE_MESSAGE;
                 parsedNotification.chatType = this.chatConstants.CHAT_TYPE_USER;
                 parsedNotification.msgType = this.chatConstants.MESSAGE_TYPE_LOCATION;
+                break;
+            case this.serviceTypes.MESSAGE_HAS_NEW_WITH_GROUP:
+                parsedNotification.type = this.notificationConstants.NOTIFICATION_TYPE_MESSAGE;
+                parsedNotification.chatType = this.chatConstants.CHAT_TYPE_GROUP;
+                if (options.pushMsgType === '3') {
+                    parsedNotification.msgType = this.chatConstants.MESSAGE_TYPE_STICKER;
+                } else if (options.pushMsgType === '4') {
+                    parsedNotification.msgType = this.chatConstants.MESSAGE_TYPE_LOCATION;
+                } else if (options.pushMsgType !== '0') {
+                    parsedNotification.msgType = this.chatConstants.MESSAGE_TYPE_FILE;
+                } else {
+                    parsedNotification.msgType = this.chatConstants.MESSAGE_TYPE_TEXT;
+                }
                 break;
             default:
                 break;

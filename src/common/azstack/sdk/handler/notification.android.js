@@ -23,7 +23,7 @@ FCM.on(FCMEvent.Notification, async (notification) => {
 
     FCM.presentLocalNotification({
         id: new Date().valueOf().toString(),
-        title: notification.pushFrom,
+        title: notification.pushFrom + `${notification.group ? ` (${notification.groupName})` : ''}`,
         body: notification.pushMessage,
         // sub_text: '',
         sound: 'default',
@@ -45,8 +45,10 @@ FCM.on(FCMEvent.Notification, async (notification) => {
             pushPacketType: notification.pushPacketType,
             pushFromId: notification.pushFromId,
             pushToId: notification.pushToId,
+            group: notification.group,
             pushMsgId: notification.pushMsgId,
-            pushTime: notification.pushTime
+            pushTime: notification.pushTime,
+            pushMsgType: notification.pushMsgType
         }
     });
 });

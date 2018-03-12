@@ -3166,6 +3166,11 @@ export class AZStackCore {
                 dataType: this.dataTypes.DATA_TYPE_STRING,
                 data: options.notification.pushToId
             }, {
+                name: 'notification group',
+                required: false,
+                dataType: this.dataTypes.DATA_TYPE_STRING,
+                data: options.notification.group
+            }, {
                 name: 'notification pushMsgId',
                 required: false,
                 dataType: this.dataTypes.DATA_TYPE_STRING,
@@ -3175,6 +3180,11 @@ export class AZStackCore {
                 required: false,
                 dataType: this.dataTypes.DATA_TYPE_STRING,
                 data: options.notification.pushTime
+            }, {
+                name: 'notification pushMsgType',
+                required: false,
+                dataType: this.dataTypes.DATA_TYPE_STRING,
+                data: options.notification.pushMsgType
             }]);
             if (dataErrorMessage) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
