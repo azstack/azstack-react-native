@@ -133,6 +133,7 @@ class Notification {
         let parsedNotification = {
             appId: options.appId,
             type: this.notificationConstants.NOTIFICATION_TYPE_UNKNOWN,
+            chatType: 0,
             senderId: 0,
             receiverId: 0,
             msgId: 0,
@@ -245,7 +246,24 @@ class Notification {
         switch (packetType) {
             case this.serviceTypes.MESSAGE_SERVER_WITH_USER_TYPE_TEXT:
                 parsedNotification.type = this.notificationConstants.NOTIFICATION_TYPE_MESSAGE;
+                parsedNotification.chatType = this.chatConstants.CHAT_TYPE_USER;
                 parsedNotification.msgType = this.chatConstants.MESSAGE_TYPE_TEXT;
+                break;
+            case this.serviceTypes.MESSAGE_WITH_USER_TYPE_STICKER:
+                parsedNotification.type = this.notificationConstants.NOTIFICATION_TYPE_MESSAGE;
+                parsedNotification.chatType = this.chatConstants.CHAT_TYPE_USER;
+                parsedNotification.msgType = this.chatConstants.MESSAGE_TYPE_STICKER;
+                break;
+            case this.serviceTypes.MESSAGE_WITH_USER_TYPE_FILE:
+                parsedNotification.type = this.notificationConstants.NOTIFICATION_TYPE_MESSAGE;
+                parsedNotification.chatType = this.chatConstants.CHAT_TYPE_USER;
+                parsedNotification.msgType = this.chatConstants.MESSAGE_TYPE_FILE;
+                break;
+            case this.serviceTypes.MESSAGE_WITH_USER_TYPE_LOCATION:
+                parsedNotification.type = this.notificationConstants.NOTIFICATION_TYPE_MESSAGE;
+                parsedNotification.chatType = this.chatConstants.CHAT_TYPE_USER;
+                parsedNotification.msgType = this.chatConstants.MESSAGE_TYPE_LOCATION;
+                break;
             default:
                 break;
         };

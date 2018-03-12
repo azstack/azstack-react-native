@@ -2885,6 +2885,7 @@ this.AZStackCore.parseNotification({
 #### result:
 > - appId: id of application
 > - type: type of notification
+> - chatType: chat type of notification
 > - senderId: sender id of notification
 > - receiverId: receiver id of notification
 > - msgId: msg id of notification
