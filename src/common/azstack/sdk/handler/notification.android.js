@@ -23,9 +23,9 @@ FCM.on(FCMEvent.Notification, async (notification) => {
 
     FCM.presentLocalNotification({
         id: new Date().valueOf().toString(),
-        title: 'This is title',
-        body: 'This is body',
-        sub_text: 'This is a subText',
+        title: notification.pushFrom,
+        body: notification.pushMessage,
+        // sub_text: '',
         sound: 'default',
         priority: 'high',
         click_action: fcmActionBannerClicked,
@@ -35,23 +35,18 @@ FCM.on(FCMEvent.Notification, async (notification) => {
         color: 'red',
         vibrate: 300,
         wake_screen: true,
-        group: this.applicationBundleId,
+        // group: '',
         ongoing: false,
         lights: true,
         show_in_foreground: true,
         data: { badge: 1 },
         initialNotification: {
             appId: notification.appId,
-            pushFromId: notification.pushFromId,
-            pushFrom: notification.pushFrom,
-            pushToId: notification.pushToId,
-            pushTime: notification.pushTime,
-
             pushPacketType: notification.pushPacketType,
-
+            pushFromId: notification.pushFromId,
+            pushToId: notification.pushToId,
             pushMsgId: notification.pushMsgId,
-            pushMessage: notification.pushMessage,
-            pushMsgType: notification.pushMsgType
+            pushTime: notification.pushTime
         }
     });
 });
