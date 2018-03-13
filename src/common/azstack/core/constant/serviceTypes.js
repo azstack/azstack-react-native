@@ -24,6 +24,7 @@ export const CALLOUT_DATA_STATUS_CHANGED = 503;
 export const CALLIN_START = 505;
 export const CALLIN_STATUS_CHANGED = 506;
 export const CALLIN_STATUS_CHANGED_BY_ME = 508;
+export const CALLIN_START_PUSH = 602;
 
 export const PAID_CALL_LOG_RETURN = 601;
 export const PAID_CALL_LOGS_GET = 509;

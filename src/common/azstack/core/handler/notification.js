@@ -169,6 +169,9 @@ class Notification {
             case this.serviceTypes.FREE_CALL_STATUS_CHANGED:
                 parsedNotification.type = this.notificationConstants.NOTIFICATION_TYPE_FREE_CALL;
                 break;
+            case this.serviceTypes.CALLIN_START_PUSH:
+                parsedNotification.type = this.notificationConstants.NOTIFICATION_TYPE_CALLIN;
+                break;
             default:
                 break;
         };
