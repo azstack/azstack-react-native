@@ -150,7 +150,7 @@ class Message {
                             unreadMessage.location = {
                                 address: message.addr,
                                 longitude: message.long,
-                                lat: message.lat
+                                latitude: message.lat
                             };
                         }
                         break;
@@ -350,7 +350,7 @@ class Message {
                             modifiedMessage.location = {
                                 address: message.addr,
                                 longitude: message.long,
-                                lat: message.lat
+                                latitude: message.lat
                             };
                         }
                         break;
