@@ -3,6 +3,7 @@ package com.azstack_react_native_sdk;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.zxcpoiu.incallmanager.InCallManagerPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.arttitude360.reactnative.rngoogleplaces.RNGooglePlacesPackage;
 import com.terrylinla.rnsketchcanvas.SketchCanvasPackage;
@@ -34,6 +35,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new InCallManagerPackage(),
           new RNDeviceInfo(),
           new FIRMessagingPackage(),
           new MapsPackage(),

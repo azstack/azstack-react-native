@@ -22,6 +22,8 @@ target 'azstack_react_native_sdk' do
     'BatchedBridge'
   ]
 
+  pod 'react-native-webrtc', :path => '../node_modules/react-native-webrtc'
+
   pod 'RSKImageCropper'
   pod 'QBImagePickerController'
 
@@ -32,6 +34,8 @@ target 'azstack_react_native_sdk' do
 
   pod 'GooglePlaces'
   pod 'GooglePlacePicker'
+
+
 
 end
 

@@ -15,6 +15,7 @@ import {
 	TextInput,
 	ScrollView,
 } from 'react-native';
+import InCallManager from 'react-native-incall-manager';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
 import Timer from './part/common/Timer';
@@ -55,6 +56,19 @@ class OnCallComponent extends React.Component {
 				return;
 			}
 
+			if(result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING) {
+				console.log('Callout status ringing: ', result.status);
+				InCallManager.start({media: 'audio', ringback: '_BUNDLE_'});
+			}
+
+			if(result.status !== this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING) {
+				console.log('Callout status not ringing: ', result.status);
+				if(this.state.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING) {
+					console.log('stopRingback');
+					InCallManager.stopRingback();
+				}
+			}
+
 			this.setState({ status: result.status, message: this.renderMessage(result.status) });
 
 			if (result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_INITIAL_BUSY ||
@@ -77,6 +91,14 @@ class OnCallComponent extends React.Component {
 
 			this.setState({ status: result.status, message: this.renderMessage(result.status) });
 
+			if(result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING) {
+				InCallManager.startRingtone('_BUNDLE_');
+			}
+
+			if(result.status !== this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING) {
+				InCallManager.stopRingtone();
+			}
+
 			if (result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_STOP ||
 				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING_STOP ||
 				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_BUSY ||
@@ -94,6 +116,7 @@ class OnCallComponent extends React.Component {
 			}
 
 			if (result.status !== this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING) {
+				InCallManager.stop();
 				this.props.onCallEnded();
 			}
 		});
@@ -104,6 +127,14 @@ class OnCallComponent extends React.Component {
 			}
 
 			this.setState({ status: result.status, message: this.renderMessage(result.status) });
+
+			if(result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_RINGING) {
+				InCallManager.start({media: 'audio'});
+			}
+
+			if(result.status !== this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_RINGING) {
+				InCallManager.stop();
+			}
 
 			if (result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_REJECTED ||
 				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_STOP ||
@@ -123,6 +154,7 @@ class OnCallComponent extends React.Component {
 			this.setState({ status: result.status, message: this.renderMessage(result.status) });
 
 			if (result.status !== this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_RINGING) {
+				InCallManager.stop();
 				this.props.onCallEnded();
 			}
 		});
@@ -286,7 +318,8 @@ class OnCallComponent extends React.Component {
 			return this.coreInstances.Language.getText('CALL_RINGING'); 
 		}
 		if(status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_REJECTED ||
-			status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_REJECTED) {
+			status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_REJECTED ||
+			status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING_STOP) {
 			return this.coreInstances.Language.getText('CALL_REJECTED'); 
 		}
 		if(status === 700) {
@@ -299,6 +332,7 @@ class OnCallComponent extends React.Component {
 	}
 
 	onPressEndCall() {
+		InCallManager.stopRingback();
 		this.props.onEndCall();
 		this.setState({ message: 'Ending'});
 	}
