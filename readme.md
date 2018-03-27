@@ -203,3 +203,30 @@ end
 run ```pod install```
 
 # 2. Usage
+
+``` import { AZStackSdk, } from '../../common/azstack/'; ```
+
+```
+    componentDidMount() {
+        this.refs.AZStackSdk.connect().then((result) => {
+            this.setState({ authenticatedUser: result });
+        }).catch((error) => {});
+    };
+```
+
+```
+render() {
+    ...
+    <AZStackSdk
+        ref={"AZStackSdk"}
+        options={{
+            azstackConfig: this.props.azstackConfig,
+            googleApiKey: this.props.googleApiKey,
+            languageCode: this.props.languageCode,
+            themeName: this.props.themeName,
+            members: this.props.members
+        }}
+    >
+    ...
+}
+```
