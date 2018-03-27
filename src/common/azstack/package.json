@@ -1,6 +1,6 @@
 {
   "name": "azstack-react-native",
-  "version": "1.0.41",
+  "version": "1.0.42",
   "description": "React native SDK for AZSTACK Communication Platform",
   "main": "index.js",
   "scripts": {
@@ -18,22 +18,5 @@
     "socketio"
   ],
   "author": "AZSTACK Team (https://github.com/azstack/azstack-react-native)",
-  "license": "ISC",
-  "dependencies": {
-		"@terrylinla/react-native-sketch-canvas": "^0.3.1",
-		"react-native-fcm": "^14.0.1",
-		"react-native-device-info": "^0.17.3",
-    "react-native-webrtc": "^1.58.3",
-		"react-native-document-picker": "^2.1.0",
-		"react-native-image-crop-picker": "^0.19.1",
-		"react-native-video": "^2.0.0",
-    "react-native-audio": "^3.5.1",
-    "react-native-swiper": "^1.5.13",
-    "react-native-fs": "^2.9.11",
-		"react-native-google-places": "^2.4.2",
-		"react-native-maps": "^0.20.1",
-    "jsencrypt": "^2.3.1",
-    "socket.io-client": "^2.0.4",
-		"react-native-incall-manager": "^3.1.0"
-  }
+  "license": "ISC"
 }

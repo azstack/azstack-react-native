@@ -202,6 +202,11 @@ end
 
 run ```pod install```
 
+# Push notification ios
+Please following this instruction to install PushNotificationIOS manually 
+
+https://facebook.github.io/react-native/docs/pushnotificationios.html
+
 # 2. Usage
 
 ``` import { AZStackSdk, } from '../../common/azstack/'; ```
@@ -217,16 +222,36 @@ run ```pod install```
 ```
 render() {
     ...
-    <AZStackSdk
-        ref={"AZStackSdk"}
-        options={{
-            azstackConfig: this.props.azstackConfig,
-            googleApiKey: this.props.googleApiKey,
-            languageCode: this.props.languageCode,
-            themeName: this.props.themeName,
-            members: this.props.members
-        }}
-    >
+    let azstackConfig = {
+        requestTimeout: 60000,
+        intervalPingTime: 60000,
+        autoReconnect: true,
+        autoReconnectLimitTries: 0,
+        autoReconnectIntervalTime: 5000,
+        logLevel: 'ERROR',
+        authenticatingData: {
+            appId: '',
+            publicKey: '',
+            azStackUserId: '',
+            userCredentials: '',
+            fullname: '',
+            namespace: ''
+        }
+    };
+    ...
+    return (
+        <AZStackSdk
+            ref={"AZStackSdk"}
+            options={{
+                azstackConfig: azstackConfig,
+                googleApiKey: 'your google api key here',
+                languageCode: 'en',
+                themeName: 'classic',
+                members: ['test_user_1', 'test_user_2', 'test_user_3']
+            }}
+        >
+    )
     ...
 }
 ```
+
