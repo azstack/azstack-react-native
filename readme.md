@@ -255,3 +255,44 @@ render() {
 }
 ```
 
+# APIS
+
+``` this.refs.AZStackSdk.showConversations({}) ```
+``` 
+    this.refs.AZStackSdk.startChat({
+        chatType: this.refs.AZStackSdk.AZStackCore.chatConstants.CHAT_TYPE_USER,
+        chatId: 387212
+    }); ```
+``` 
+    this.refs.AZStackSdk.startChat({
+        chatType: this.refs.AZStackSdk.AZStackCore.chatConstants.CHAT_TYPE_GROUP,
+        chatId: 7436
+    }); ```
+``` this.refs.AZStackSdk.showNumberPad({}) ```
+``` 
+    this.refs.AZStackSdk.startVideoCall({
+        info: {
+            name: 'User 2',
+            phoneNumber: '',
+            userId: 387212, // must be number
+        },
+        onEndCall: () => {
+            // or whatever you want here
+        },
+    }); ```
+```
+    this.refs.AZStackSdk.startAudioCall({
+        info: {
+            name: 'User 2',
+            phoneNumber: '',
+            userId: 387212, // must be number
+        },
+        onEndCall: () => {
+            // or whatever you want here
+        },
+    }); 
+```
+``` this.refs.AZStackSdk.showCallLogs({}) ```
+``` this.refs.AZStackSdk.showUser({}) ```
+``` this.refs.AZStackSdk.showGroup({}) ```
+
