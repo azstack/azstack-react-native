@@ -323,3 +323,6 @@ Show group info
     statusbar: true, // true by default
 }
 ```
+
+# For more detail about how it work
+Visit https://github.com/azstack/azstack-react-native/blob/master/docs/Usage.md
