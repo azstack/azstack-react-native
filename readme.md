@@ -257,18 +257,15 @@ render() {
 
 # APIS
 
-``` this.refs.AZStackSdk.showConversations({}) ```
+``` 
+    this.refs.AZStackSdk.showConversations(screenOptions) ```
 ``` 
     this.refs.AZStackSdk.startChat({
-        chatType: this.refs.AZStackSdk.AZStackCore.chatConstants.CHAT_TYPE_USER,
-        chatId: 387212
+        chatType: '', // 1: CHAT_TYPE_USER, 2: CHAT_TYPE_GROUP
+        chatId: 0,
     }); ```
 ``` 
-    this.refs.AZStackSdk.startChat({
-        chatType: this.refs.AZStackSdk.AZStackCore.chatConstants.CHAT_TYPE_GROUP,
-        chatId: 7436
-    }); ```
-``` this.refs.AZStackSdk.showNumberPad({}) ```
+    this.refs.AZStackSdk.showNumberPad(screenOptions) ```
 ``` 
     this.refs.AZStackSdk.startVideoCall({
         info: {
@@ -279,6 +276,7 @@ render() {
         onEndCall: () => {
             // or whatever you want here
         },
+        // other screenOptions
     }); ```
 ```
     this.refs.AZStackSdk.startAudioCall({
@@ -290,9 +288,23 @@ render() {
         onEndCall: () => {
             // or whatever you want here
         },
-    }); 
-```
-``` this.refs.AZStackSdk.showCallLogs({}) ```
-``` this.refs.AZStackSdk.showUser({}) ```
-``` this.refs.AZStackSdk.showGroup({}) ```
+        // other screenOptions
+    }); ```
+``` 
+    this.refs.AZStackSdk.showCallLogs(screenOptions) ```
+``` 
+    this.refs.AZStackSdk.showUser(screenOptions) ```
+``` 
+    this.refs.AZStackSdk.showGroup(screenOptions) ```
 
+# screenOptions
+
+```
+{
+    onBackButtonPressed: () => {},
+    style: {},
+    containerStyle: {}
+    fullScreen: false, // false by default
+    statusbar: true, // true by default
+}
+```
