@@ -258,7 +258,8 @@ render() {
 # APIS
 List conversations
 ``` 
-    this.refs.AZStackSdk.showConversations(screenOptions) ```
+    this.refs.AZStackSdk.showConversations(screenOptions) 
+```
     
 How to start chat
 ``` 
@@ -266,11 +267,13 @@ How to start chat
         chatType: '', // 1: CHAT_TYPE_USER, 2: CHAT_TYPE_GROUP
         chatId: 0,
         // other screenOptions
-    }); ```
+    }); 
+```
 
 Show number pad for callout
 ``` 
-    this.refs.AZStackSdk.showNumberPad(screenOptions) ```
+    this.refs.AZStackSdk.showNumberPad(screenOptions) 
+```
 
 How to start video call
 ``` 
@@ -284,7 +287,8 @@ How to start video call
             // or whatever you want here
         },
         // other screenOptions
-    }); ```
+    }); 
+```
 
 How to start audio call
 ```
@@ -298,19 +302,23 @@ How to start audio call
             // or whatever you want here
         },
         // other screenOptions
-    }); ```
+    }); 
+```
 
 Show call logs
 ``` 
-    this.refs.AZStackSdk.showCallLogs(screenOptions) ```
+    this.refs.AZStackSdk.showCallLogs(screenOptions) 
+```
 
 Show user info
 ``` 
-    this.refs.AZStackSdk.showUser(screenOptions) ```
+    this.refs.AZStackSdk.showUser(screenOptions) 
+```
 
 Show group info
 ``` 
-    this.refs.AZStackSdk.showGroup(screenOptions) ```
+    this.refs.AZStackSdk.showGroup(screenOptions) 
+```
 
 # screenOptions
 
