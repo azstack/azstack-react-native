@@ -166,8 +166,9 @@ class OnCallComponent extends React.Component {
 	};
 
 	componentWillMount() {
+		this.setState({message: this.coreInstances.Language.getText('CALL_CONNECTING')});
 		if (this.props.isIncomingCall) {
-			this.setState({ isIncomingCall: this.props.isIncomingCall, message: 'Ringing' });
+			this.setState({ isIncomingCall: this.props.isIncomingCall, message: this.coreInstances.Language.getText('CALL_RINGING') });
 		}
 	}
 	componentDidMount() {

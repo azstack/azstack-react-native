@@ -121,6 +121,15 @@ export class AZStackSdk extends AZStackBaseComponent {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_MEMBERS_CHANGED, { error: null, result });
         }).catch(() => { });
     };
+    setMembers(members) {
+        if (!this.AZStackCore.slaveSocketConnected) {
+            return;
+        }
+        this.Member.prepareMembers({ rawMembers: members }).then((result) => {
+            this.members = result;
+            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_MEMBERS_CHANGED, { error: null, result });
+        }).catch(() => { });
+    }
     registerDeviceToken() {
         if (!this.AZStackCore.slaveSocketConnected) {
             return;
@@ -375,37 +384,37 @@ export class AZStackSdk extends AZStackBaseComponent {
     };
 
     startCallout(options) {
-        this.AZStackCore.startCallout({
-            toPhoneNumber: options.info.phoneNumber
-        }).then((result) => {
-            this.navigate(
-                this.getNavigation().OnCallComponent,
-                {
-                    ...options,
-                    onEndCall: () => {
-                        if (options.onEndCall) {
-                            options.onEndCall()
-                        }
-                        this.AZStackCore.stopCallout().then((result) => {
-                            setTimeout(() => {
-                                this.pop();
-                            }, 1500);
-                        });
-                    },
-                    onCallEnded: () => {
+        this.navigate (
+            this.getNavigation().OnCallComponent,
+            {
+                ...options,
+                onEndCall: () => {
+                    if (options.onEndCall) {
+                        options.onEndCall()
+                    }
+                    this.AZStackCore.stopCallout().then((result) => {
                         setTimeout(() => {
                             this.pop();
                         }, 1500);
-                    },
-                    onToggleAudio: (toOn) => {
-                        this.AZStackCore.toggleAudioState({
-                            state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
-                        }, (error, result) => {
+                    });
+                },
+                onCallEnded: () => {
+                    setTimeout(() => {
+                        this.pop();
+                    }, 1500);
+                },
+                onToggleAudio: (toOn) => {
+                    this.AZStackCore.toggleAudioState({
+                        state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
+                    }, (error, result) => {
 
-                        });
-                    },
-                }
-            );
+                    });
+                },
+            }
+        );
+        this.AZStackCore.startCallout({
+            toPhoneNumber: options.info.phoneNumber
+        }).then((result) => {
         }).catch((error) => {
             Alert.alert("Error", error.message, [{ text: 'OK', onPress: () => { } }]);
         });
