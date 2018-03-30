@@ -22,7 +22,7 @@ class SelectMemberComponent extends React.Component {
         this.coreInstances = props.getCoreInstances();
         this.subscriptions = {};
 
-        let members = props.members ? [...props.members] : [...this.coreInstances.members];
+        let members = props.members ? [...props.members] : [];
         members.map((member) => {
             member.searchString = this.coreInstances.Diacritic.clear(member.fullname).toLowerCase();
         });
@@ -45,23 +45,7 @@ class SelectMemberComponent extends React.Component {
     };
 
     addSubscriptions() {
-        this.subscriptions.onMembersChanged = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_MEMBERS_CHANGED, ({ error, result }) => {
-            if (error) {
-                return;
-            }
-
-            if (this.props.members) {
-                return;
-            }
-
-            let members = [...result];
-            members.map((member) => {
-                member.searchString = this.coreInstances.Diacritic.clear(member.fullname).toLowerCase();
-            });
-            this.setState({
-                members: members
-            });
-        });
+        
     };
     clearSubscriptions() {
         for (let subscriptionName in this.subscriptions) {
