@@ -135,6 +135,7 @@ export const GROUP_MEMBER_EMPTY_TEXT = 'No Member';
 export const SELECT_MEMBERS_SEARCH_PLACEHOLDER_TEXT = 'Search...';
 export const SELECT_MEMBERS_EMPTY_TEXT = 'No Member';
 export const SELECT_MEMBERS_UNSELECTED_WARNING_TEXT = 'Please select any member';
+export const SELECT_MEMBERS_SELECTED_TITLE_TEXT = 'Selected';
 
 export const SELECT_MEMBER_SEARCH_PLACEHOLDER_TEXT = 'Search...';
 export const SELECT_MEMBER_EMPTY_TEXT = 'No Member';

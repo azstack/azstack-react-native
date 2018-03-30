@@ -107,7 +107,9 @@ class AZStackSdkExample extends React.Component {
                     googleApiKey: this.props.googleApiKey,
                     languageCode: this.props.languageCode,
                     themeName: this.props.themeName,
-                    members: this.props.members
+                    members: this.props.members,
+                    getInitialMembers: this.props.getInitialMembers,
+                    getMoreMembers: this.props.getMoreMembers
                 }}
             >
                 <View

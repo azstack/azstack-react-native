@@ -24,15 +24,14 @@ class SelectMembersComponent extends React.Component {
         this.coreInstances = props.getCoreInstances();
         this.subscriptions = {};
 
-        let members = props.members ? [...props.members] : [...this.coreInstances.members];
-        members.map((member) => {
-            member.searchString = this.coreInstances.Diacritic.clear(member.fullname).toLowerCase();
-        });
         this.state = {
-            members: members,
+            members: [],
             selectedMembers: [],
             searchText: ''
         };
+        this.shouldCallGetInitialMembers = false;
+        this.callingGetInitialMembers = false;
+        this.callingGetMoreMembers = false;
 
         this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
 
@@ -48,23 +47,131 @@ class SelectMembersComponent extends React.Component {
         return true;
     };
 
+    initRun() {
+        this.getInitialMembers();
+    };
+    getInitialMembers() {
+
+        if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
+            return;
+        }
+
+        if (this.callingGetInitialMembers || this.callingGetMoreMembers) {
+            this.shouldCallGetInitialMembers = true;
+            return;
+        }
+
+        this.callingGetInitialMembers = true;
+
+        this.coreInstances.Member.getInitialMembers({ searchText: this.state.searchText }).then((initialMembers) => {
+            if (!initialMembers || !Array.isArray(initialMembers) || initialMembers.length === 0) {
+                return new Promise((resolve, reject) => {
+                    reject();
+                });
+            }
+
+            let validatedMembers = initialMembers.filter((member) => {
+                return typeof member === 'string';
+            });
+            if (validatedMembers.length === 0) {
+                return new Promise((resolve, reject) => {
+                    reject();
+                });
+            }
+
+            return this.coreInstances.AZStackCore.getUsersInformation({
+                azStackUserIds: validatedMembers
+            });
+
+        }).then((result) => {
+            this.setState({ members: result.list });
+
+            this.callingGetInitialMembers = false;
+            if (this.shouldCallGetInitialMembers) {
+                this.shouldCallGetInitialMembers = false;
+                this.getInitialMembers();
+            }
+        }).catch((error) => {
+            this.setState({ members: [] });
+
+            this.callingGetInitialMembers = false;
+            if (this.shouldCallGetInitialMembers) {
+                this.shouldCallGetInitialMembers = false;
+                this.getInitialMembers();
+            }
+        });
+
+    };
+    getMoreMembers() {
+        console.log('get more member');
+        return;
+
+        if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
+            return;
+        }
+
+        if (this.callingGetInitialMembers || this.callingGetMoreMembers) {
+            return;
+        }
+
+        this.callingGetMoreMembers = true;
+
+        this.coreInstances.Member.getMoreMembers({ searchText: this.state.searchText }).then((moreMembers) => {
+            if (!moreMembers || !Array.isArray(moreMembers) || moreMembers.length === 0) {
+                return new Promise((resolve, reject) => {
+                    reject();
+                });
+            }
+
+            let validatedMembers = moreMembers.filter((member) => {
+                return typeof member === 'string';
+            });
+            if (validatedMembers.length === 0) {
+                return new Promise((resolve, reject) => {
+                    reject();
+                });
+            }
+
+            return this.coreInstances.AZStackCore.getUsersInformation({
+                azStackUserIds: validatedMembers
+            });
+
+        }).then((result) => {
+            let members = [...this.state.members, ...result.list];
+            this.setState({ members: members });
+
+            this.callingGetMoreMembers = false;
+            if (this.shouldCallGetInitialMembers) {
+                this.shouldCallGetInitialMembers = false;
+                this.getInitialMembers();
+            }
+        }).catch((error) => {
+            this.callingGetMoreMembers = false;
+            if (this.shouldCallGetInitialMembers) {
+                this.shouldCallGetInitialMembers = false;
+                this.getInitialMembers();
+            }
+        });
+    };
+
     addSubscriptions() {
-        this.subscriptions.onMembersChanged = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_MEMBERS_CHANGED, ({ error, result }) => {
+        this.subscriptions.onConnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_CONNECT_RETURN, ({ error, result }) => {
             if (error) {
                 return;
             }
-
-            if (this.props.members) {
+            this.initRun();
+        });
+        this.subscriptions.onAutoReconnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_AUTO_RECONNECTED, ({ error, result }) => {
+            if (error) {
                 return;
             }
-
-            let members = [...result];
-            members.map((member) => {
-                member.searchString = this.coreInstances.Diacritic.clear(member.fullname).toLowerCase();
-            });
-            this.setState({
-                members: members
-            });
+            this.initRun();
+        });
+        this.subscriptions.onReconnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_RECONNECT_RETURN, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.initRun();
         });
     };
     clearSubscriptions() {
@@ -74,10 +181,22 @@ class SelectMembersComponent extends React.Component {
     };
 
     onSearchTextChanged(newText) {
-        this.setState({ searchText: newText });
+        this.setState({ searchText: newText }, () => {
+            if (this.callingGetInitialMembers || this.callingGetMoreMembers) {
+                this.shouldCallGetInitialMembers = true;
+                return;
+            }
+            this.getInitialMembers();
+        });
     };
     onSearchTextCleared() {
-        this.setState({ searchText: '' });
+        this.setState({ searchText: '' }, () => {
+            if (this.callingGetInitialMembers || this.callingGetMoreMembers) {
+                this.shouldCallGetInitialMembers = true;
+                return;
+            }
+            this.getInitialMembers();
+        });
     };
     getGroupedMembers() {
         let availableMembers = this.state.members;
@@ -88,23 +207,12 @@ class SelectMembersComponent extends React.Component {
             });
         }
 
-        let filteredMembers = availableMembers;
-        if (this.state.searchText) {
-            let searchParts = this.coreInstances.Diacritic.clear(this.state.searchText).toLowerCase().split(' ');
-            filteredMembers = availableMembers.filter((member) => {
-                let matched = false;
-                for (let i = 0; i < searchParts.length; i++) {
-                    if (member.searchString.indexOf(searchParts[i]) > -1) {
-                        matched = true;
-                        break;
-                    }
-                }
-                return matched;
-            });
-        }
-
         let groupedMembers = [];
-        filteredMembers.map((member) => {
+        availableMembers.map((member) => {
+            if (this.isMemberSelected(member)) {
+                return;
+            }
+
             let firstLetter = member.fullname[0].toUpperCase();
             let foundGroupedMember = false;
             for (let i = 0; i < groupedMembers.length; i++) {
@@ -119,11 +227,21 @@ class SelectMembersComponent extends React.Component {
                 groupedMembers.push({
                     title: firstLetter,
                     data: [member]
-                })
+                });
             }
         });
 
+        if (this.state.selectedMembers.length > 0) {
+            groupedMembers.push({
+                title: this.coreInstances.Language.getText('SELECT_MEMBERS_SELECTED_TITLE_TEXT'),
+                data: [...this.state.selectedMembers]
+            });
+        }
+
         groupedMembers.sort((a, b) => {
+            if(a.title === this.coreInstances.Language.getText('SELECT_MEMBERS_SELECTED_TITLE_TEXT')) {
+                return -1;
+            }
             return a.title > b.title ? 1 : -1;
         });
         groupedMembers.map((groupedMember) => {
@@ -184,6 +302,7 @@ class SelectMembersComponent extends React.Component {
     componentDidMount() {
         this.addSubscriptions();
         BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        this.initRun();
     };
     componentWillUnmount() {
         this.clearSubscriptions();
@@ -226,7 +345,7 @@ class SelectMembersComponent extends React.Component {
                         groupedMembers.length > 0 && <SectionList
                             style={this.coreInstances.CustomStyle.getStyle('SELECT_MEMBERS_LIST_STYLE')}
                             sections={groupedMembers}
-                            keyExtractor={(item, index) => ('select_members_' + item.userId)}
+                            keyExtractor={(item, index) => (`select_members_${item.userId}`)}
                             renderSectionHeader={({ section }) => {
                                 return (
                                     <Text
@@ -247,6 +366,8 @@ class SelectMembersComponent extends React.Component {
                                 );
                             }}
                             contentContainerStyle={this.coreInstances.CustomStyle.getStyle('SELECT_MEMBERS_LIST_CONTENT_CONTAINER_STYLE')}
+                            onEndReached={this.getMoreMembers()}
+                            onEndReachedThreshold={0.1}
                             keyboardDismissMode={Platform.select({ ios: 'interactive', android: 'on-drag' })}
                         />
                     }

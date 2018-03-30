@@ -7,9 +7,12 @@ import AZStackCoreExample from './AZStackCoreExample';
 import AZStackSdkExample from './AZStackSdkExample';
 
 class AppMain extends React.Component {
-    render() {
-        let exampleType = 'sdk';
-        let azstackConfig = {
+
+    constructor(props) {
+        super(props);
+
+        this.exampleType = 'sdk';
+        this.azstackConfig = {
             requestTimeout: 60000,
             intervalPingTime: 60000,
             autoReconnect: true,
@@ -28,11 +31,41 @@ class AppMain extends React.Component {
         //user 1: test_user_1 381032
         //user 2: test_user_2 387212
         //user 3: test_user_3 391658
+        this.languageCode = 'en';
+        this.themeName = 'classic';
+        this.getInitialMembers = this.getInitialMembers.bind(this);
+        this.getMoreMembers = this.getMoreMembers.bind(this);
+    };
 
+    getInitialMembers = (options) => {
+        return new Promise((resolve, reject) => {
+            resolve(['test_user_1', 'test_user_2', 'test_user_3'].filter((member) => {
+                return member.indexOf(options.searchText) > -1;
+            }));
+        });
+    };
+    getMoreMembers = (options) => {
+        return new Promise((resolve, reject) => {
+            resolve(false);
+        });
+    };
+
+    render() {
         return (
             <View style={{ flex: 1 }}>
-                {exampleType === 'core' && <AZStackCoreExample azstackConfig={azstackConfig} />}
-                {exampleType === 'sdk' && <AZStackSdkExample azstackConfig={azstackConfig} languageCode='en' themeName='classic' members={['test_user_1', 'test_user_2', 'test_user_3']} />}
+                {
+                    this.exampleType === 'core' && <AZStackCoreExample
+                        azstackConfig={this.azstackConfig}
+                    />
+                }
+                {
+                    this.exampleType === 'sdk' && <AZStackSdkExample
+                        azstackConfig={this.azstackConfig}
+                        languageCode={this.languageCode}
+                        themeName={this.themeName}
+                        getInitialMembers={this.getInitialMembers}
+                        getMoreMembers={this.getMoreMembers}
+                    />}
             </View>
         );
     };

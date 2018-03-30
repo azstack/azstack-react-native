@@ -32,7 +32,6 @@ export class AZStackSdk extends AZStackBaseComponent {
     constructor(props) {
         super(props);
         this.subscriptions = {};
-        this.members = [];
         this.state = {
             navigation: []
         };
@@ -64,9 +63,13 @@ export class AZStackSdk extends AZStackBaseComponent {
         });
         this.Event.delegatesToEvents();
 
-        this.Member = new Member({
-            AZStackCore: this.AZStackCore
-        });
+        this.Member = new Member();
+        if(this.props.options.getInitialMembers) {
+            this.Member.getInitialMembers = this.props.options.getInitialMembers;
+        }
+        if(this.props.options.getMoreMembers) {
+            this.Member.getMoreMembers = this.props.options.getMoreMembers;
+        }
 
         this.Notification = new Notification({
             AZStackCore: this.AZStackCore
@@ -112,24 +115,6 @@ export class AZStackSdk extends AZStackBaseComponent {
         }
     };
 
-    getMembers() {
-        if (!this.AZStackCore.slaveSocketConnected) {
-            return;
-        }
-        this.Member.prepareMembers({ rawMembers: this.props.options.members }).then((result) => {
-            this.members = result;
-            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_MEMBERS_CHANGED, { error: null, result });
-        }).catch(() => { });
-    };
-    setMembers(members) {
-        if (!this.AZStackCore.slaveSocketConnected) {
-            return;
-        }
-        this.Member.prepareMembers({ rawMembers: members }).then((result) => {
-            this.members = result;
-            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_MEMBERS_CHANGED, { error: null, result });
-        }).catch(() => { });
-    }
     registerDeviceToken() {
         if (!this.AZStackCore.slaveSocketConnected) {
             return;
@@ -169,7 +154,6 @@ export class AZStackSdk extends AZStackBaseComponent {
         }
     };
     initRun() {
-        this.getMembers();
         this.registerDeviceToken();
     };
 
@@ -190,7 +174,7 @@ export class AZStackSdk extends AZStackBaseComponent {
 
             EventEmitter: this.EventEmitter,
 
-            members: this.members
+            Member: this.Member
         };
     };
 
