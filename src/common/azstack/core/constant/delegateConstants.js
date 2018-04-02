@@ -78,3 +78,6 @@ export const DELEGATE_ON_APPLICATION_CHANGE_STATE_RETURN = 'onApplicationChangeS
 
 export const DELEGATE_ON_NOTIFICATION_REGISTER_DEVICE_RETURN = 'onNotificationRegisterDeviceReturn';
 export const DELEGATE_ON_NOTIFICATION_PARSE_RETURN = 'onNotificationParseReturn';
+
+export const DELEGATE_ON_GET_STICKERS_LIST_RETURN = 'onGetStickersListReturn';
+
