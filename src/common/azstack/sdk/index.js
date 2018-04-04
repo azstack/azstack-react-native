@@ -403,8 +403,10 @@ export class AZStackSdk extends AZStackBaseComponent {
                 },
             }
         );
+        
         this.AZStackCore.startCallout({
-            toPhoneNumber: options.info.phoneNumber
+            toPhoneNumber: options.info.phoneNumber,
+            fromPhoneNumber: options.info.fromPhoneNumber,
         }).then((result) => {
         }).catch((error) => {
             Alert.alert("Error", error.message, [{ text: 'OK', onPress: () => { } }]);
