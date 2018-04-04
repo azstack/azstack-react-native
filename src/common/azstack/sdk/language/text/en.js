@@ -164,6 +164,11 @@ export const SKETCH_DRAWING_HEADER_TITLE_TEXT = 'Sketch drawing';
 export const DISCARD_SKETCH_DRAWING_CONFIRMATION_TEXT = 'Are you sure to discard drawed sketch?';
 export const SKETCH_DRAWING_EMPTY_ERROR_TEXT = 'You have not draw anything';
 
+export const STICKERS_LIST_HEADER_TITLE_TEXT = 'Stickers list';
+export const STICKERS_LIST_EMPTY_TEXT = 'No sticker';
+export const STICKERS_LIST_EARCH_PLACEHOLDER_TEXT = 'Search...';
+
+export const STICKER_DETAILS_HEADER_TITLE_TEXT = 'Sticker details';
 
 export const CALL_RINGING = 'Ringing';
 export const CALL_CONNECTING = 'Connecting';

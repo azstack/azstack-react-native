@@ -395,6 +395,8 @@ class ChatInputComponentBlock extends React.Component {
                             chatType={this.props.chatType}
                             chatId={this.props.chatId}
                             chatTarget={this.props.chatTarget}
+                            showStickersList={this.props.showStickersList}
+                            showStickerDetails={this.props.showStickerDetails}
                         />
                     )
                 }

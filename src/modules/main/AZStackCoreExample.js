@@ -104,6 +104,9 @@ class AZStackCoreExample extends React.Component {
 
         this.notificationRegisterDevice = this.notificationRegisterDevice.bind(this);
 
+        this.getDefaultStickersList = this.getDefaultStickersList.bind(this);
+        this.getNotDefaultStickersList = this.getNotDefaultStickersList.bind(this);
+
         this.AZStackCore = new AZStackCore(this.props.azstackConfig);
 
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_DISCONNECTED] = (error, result) => {
@@ -534,6 +537,17 @@ class AZStackCoreExample extends React.Component {
         }).then(() => { }).catch(() => { });
     };
 
+    getDefaultStickersList() {
+        this.AZStackCore.getStickersList({
+            isDefault: true
+        }).then(() => { }).catch(() => { });
+    };
+    getNotDefaultStickersList() {
+        this.AZStackCore.getStickersList({
+            isDefault: false
+        }).then(() => { }).catch(() => { });
+    };
+
     componentDidMount() {
         this.AZStackCore.connect({}).then((result) => {
             this.setState({ authenticatedUser: result });
@@ -636,7 +650,10 @@ class AZStackCoreExample extends React.Component {
                     <Button onPress={this.changeApplicationState} title='Change application state' /> 
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.notificationRegisterDevice} title='Notification register device' />   
-                    <Text>{'\n'}{'\n'}</Text>                  
+                    <Text>{'\n'}{'\n'}</Text>
+                    <Button onPress={this.getDefaultStickersList} title='Get default stickers list' />   
+                    <Button onPress={this.getNotDefaultStickersList} title='Get not default stickers list' />   
+                    <Text>{'\n'}{'\n'}</Text>                     
                 </View>
             </ScrollView>
         );

@@ -78,3 +78,5 @@ export const GROUP_JOIN_PUBLIC = 197;
 export const GROUP_GET_DETAILS = 148;
 export const GROUP_GET_LIST_PRIVATE = 147;
 export const GROUP_GET_LIST_PUBLIC = 198;
+
+export const STICKER_GET_LIST = 112;

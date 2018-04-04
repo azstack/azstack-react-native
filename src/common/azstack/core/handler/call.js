@@ -1469,7 +1469,8 @@ class Call {
                 callType: this.callConstants.CALL_TYPE_CALLOUT,
                 callId: options.callId,
                 callStatus: this.callConstants.CALL_STATUS_CALLOUT_STATUS_CONNECTING,
-                toPhoneNumber: options.toPhoneNumber
+                toPhoneNumber: options.toPhoneNumber,
+                fromPhoneNumber: options.fromPhoneNumber
             });
             this.setWebRTCCallData({
                 audioState: this.callConstants.CALL_WEBRTC_AUDIO_STATE_ON
@@ -1479,7 +1480,8 @@ class Call {
                 service: this.serviceTypes.CALLOUT_START_SEND,
                 body: JSON.stringify({
                     callId: this.callData.callId,
-                    to: this.callData.toPhoneNumber
+                    to: this.callData.toPhoneNumber,
+                    from: this.callData.fromPhoneNumber
                 })
             };
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {

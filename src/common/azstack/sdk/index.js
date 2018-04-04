@@ -516,6 +516,12 @@ export class AZStackSdk extends AZStackBaseComponent {
             showSketchDrawing: (event) => {
                 this.showSketchDrawing(event);
             },
+            showStickersList: (event) => {
+                this.showStickersList(event);
+            },
+            showStickerDetails: (event) => {
+                this.showStickerDetails(event);
+            },
             onChatTargetPressed: (event) => {
                 if (options && typeof options === 'object' && typeof options.onChatTargetPressed === 'function') {
                     options.onChatTargetPressed(event);
@@ -888,6 +894,32 @@ export class AZStackSdk extends AZStackBaseComponent {
             }
         });
     };
+    showStickersList(options) {
+        this.navigate(this.getNavigation().StickerListComponent, {
+            ...options,
+            onBackButtonPressed: () => {
+                if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                    options.onBackButtonPressed();
+                    return;
+                }
+
+                this.pop();
+            }
+        });
+    };
+    showStickerDetails(options) {
+        this.navigate(this.getNavigation().StickerDetailsComponent, {
+            ...options,
+            onBackButtonPressed: () => {
+                if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                    options.onBackButtonPressed();
+                    return;
+                }
+
+                this.pop();
+            }
+        });
+    };
 
     UIContacts(options) {
         return this.renderScreen(
@@ -1027,6 +1059,12 @@ export class AZStackSdk extends AZStackBaseComponent {
                 },
                 showSketchDrawing: (event) => {
                     this.showSketchDrawing(event);
+                },
+                showStickersList: (event) => {
+                    this.showStickersList(event);
+                },
+                showStickerDetails: (event) => {
+                    this.showStickerDetails(event);
                 },
                 onChatTargetPressed: (event) => {
                     if (options && typeof options === 'object' && typeof options.onChatTargetPressed === 'function') {

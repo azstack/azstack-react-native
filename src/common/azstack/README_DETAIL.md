@@ -35,6 +35,7 @@
         * [3.3.8. Notification constants](#338-notification-constants)
             * [3.3.8.1. Application state](#3381-application-state)
             * [3.3.8.2. Platform OS](#3382-platform-os)
+        * [3.3.9. Sticker constants](#339-sticker-constants)
     * [3.4. Connection](#34-connection)
         * [3.4.1. Connect](#341-connect)
         * [3.4.2. Reconnect](#342-reconnect)
@@ -108,6 +109,8 @@
     * [3.10. Notification](#310-notification)
         * [3.10.1. Change application state](#3101-change-application-state)
         * [3.10.2. Notification register device](#3102-notification-register-device)
+    * [3.11. Sticker](#311-sticker)
+        * [3.11.1. Get stickers list](#3111-get-stickers-list)
 
 
 
@@ -360,6 +363,10 @@ this.AZStackCore = new AZStackCore({
 #### 3.3.8.2. Platform OS
 > - PLATFORM_ANDROID(1): android
 > - PLATFORM_IOS(2): ios
+
+### 3.3.9. Sticker constants
+> - STICKER_TYPE_DEFAULT(1): default
+> - STICKER_TYPE_NOT_DEFAULT(0): not default
 
 
 
@@ -783,6 +790,7 @@ this.AZStackCore.startCallout({
 
 #### params(required):
 > - toPhoneNumber(required): target phone number
+> - fromPhoneNumber(optional): from phone number
 
 #### error:
 > - code: error code
@@ -2832,3 +2840,58 @@ this.AZStackCore.notificationRegisterDevice({
 > - message: error message
 
 #### result:
+
+
+
+## 3.11. Sticker
+
+### 3.11.1. Get Stickers list
+
+```javascript 
+this.AZStackCore.getStickersList({
+    isDefault: true
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.getStickersList({
+    isDefault: true
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.Delegates.onGetStickersListReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStackCore.getStickersList({
+    isDefault: true
+});
+```
+
+#### params
+> - isDefault(required): is default or not
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+> - done: done or not
+> - list: stickers list
+>   - catId: category id
+>   - name: name of sticker's packet
+>   - urls: urls
+>       - download: download url
+>       - fullCover: full cover url
+>       - miniCover: mini cover url

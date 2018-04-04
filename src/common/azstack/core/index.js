@@ -17,6 +17,7 @@ import * as chatConstants from './constant/chatConstants';
 import * as userConstants from './constant/userConstants';
 import * as groupConstants from './constant/groupConstants';
 import * as notificationConstants from './constant/notificationConstants';
+import * as stickerConstants from './constant/stickerConstants';
 
 import Tool from './helper/tool';
 import Validator from './helper/validator';
@@ -29,6 +30,7 @@ import Message from './handler/message';
 import User from './handler/user';
 import Group from './handler/group';
 import Notification from './handler/notification';
+import Sticker from './handler/sticker';
 
 export class AZStackCore {
     constructor(options) {
@@ -49,6 +51,7 @@ export class AZStackCore {
         this.userConstants = userConstants;
         this.groupConstants = groupConstants;
         this.notificationConstants = notificationConstants;
+        this.stickerConstants = stickerConstants;
 
         this.logLevel = this.logLevelConstants.LOG_LEVEL_NONE;
         this.requestTimeout = 60000;
@@ -308,6 +311,15 @@ export class AZStackCore {
             serviceTypes: this.serviceTypes,
             errorCodes: this.errorCodes,
             notificationConstants: this.notificationConstants,
+            Logger: this.Logger,
+            sendPacketFunction: this.sendSlavePacket.bind(this)
+        });
+        this.Sticker = new Sticker({
+            logLevelConstants: this.logLevelConstants,
+            serviceTypes: this.serviceTypes,
+            errorCodes: this.errorCodes,
+            listConstants: this.listConstants,
+            stickerConstants: this.stickerConstants,
             Logger: this.Logger,
             sendPacketFunction: this.sendSlavePacket.bind(this)
         });
@@ -1033,6 +1045,14 @@ export class AZStackCore {
                 });
                 break;
 
+            case this.serviceTypes.STICKER_GET_LIST:
+                this.Sticker.receiveStickersList(body).then((result) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_STICKERS_LIST, 'default', null, result);
+                }).catch((error) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_GET_STICKERS_LIST, 'default', error, null);
+                });
+                break;
+
             default:
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Got unknown packet from slave socket'
@@ -1517,6 +1537,11 @@ export class AZStackCore {
                 required: true,
                 dataType: this.dataTypes.DATA_TYPE_PHONE_NUMBER,
                 data: options.toPhoneNumber
+            }, {
+                name: 'fromPhoneNumber',
+                required: false,
+                dataType: this.dataTypes.DATA_TYPE_PHONE_NUMBER,
+                data: options.fromPhoneNumber
             }]);
             if (dataErrorMessage) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -3174,6 +3199,55 @@ export class AZStackCore {
             let parsedNotification = this.Notification.parseNotification(options.notification);
 
             this.callUncall(this.uncallConstants.UNCALL_KEY_NOTIFICATION_PARSE, 'default', parsedNotification.error, parsedNotification.result);
+        });
+    };
+
+    getStickersList(options, callback) {
+        return new Promise((resolve, reject) => {
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Get stickers list'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Get stickers list params',
+                payload: options
+            });
+
+            this.addUncall(this.uncallConstants.UNCALL_KEY_GET_STICKERS_LIST, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_GET_STICKERS_LIST_RETURN);
+
+            if (!options || typeof options !== 'object') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Missing stickers list params'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_STICKERS_LIST, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'Missing stickers list params'
+                }, null);
+                return;
+            }
+
+            let dataErrorMessage = this.Validator.check([{
+                name: 'isDefault',
+                dataType: this.dataTypes.DATA_TYPE_BOOLEAN,
+                required: true,
+                data: options.isDefault
+            }]);
+            if (dataErrorMessage) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: dataErrorMessage
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_STICKERS_LIST, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: dataErrorMessage
+                }, null);
+                return;
+            }
+
+            this.Sticker.sendGetStickersList({
+                isDefault: options.isDefault
+            }).then().catch((error) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_GET_STICKERS_LIST, 'default', error, null);
+            });
         });
     };
 };
