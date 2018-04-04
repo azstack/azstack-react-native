@@ -1541,7 +1541,7 @@ class Call {
                 return;
             }
 
-            if (!body.chargingError) {
+            if (body.status === this.callConstants.CALL_STATUS_FROM_SERVER_CALLOUT_INITIAL_SUCCESS) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                     message: 'Ignore start callout initial because of no error'
                 });
@@ -1553,18 +1553,28 @@ class Call {
                 status: this.callConstants.CALL_STATUS_CALLOUT_INITIAL_UNKNOWN,
                 message: 'Unknown error'
             };
-            switch (body.chargingError) {
-                case this.callConstants.CALL_STATUS_CALLOUT_INITIAL_BUSY:
-                    error.status = this.callConstants.CALL_STATUS_CALLOUT_INITIAL_BUSY;
-                    error.message = 'The toPhoneNumber currently busy'
+            switch (body.status) {
+                case this.callConstants.CALL_STATUS_FROM_SERVER_CALLOUT_INITIAL_ERROR_CHARGING:
+                    switch (body.chargingError) {
+                        case this.callConstants.CALL_STATUS_CALLOUT_INITIAL_BUSY:
+                            error.status = this.callConstants.CALL_STATUS_CALLOUT_INITIAL_BUSY;
+                            error.message = 'The toPhoneNumber currently busy'
+                            break;
+                        case this.callConstants.CALL_STATUS_CALLOUT_INITIAL_NOT_ENOUGH_BALANCE:
+                            error.status = this.callConstants.CALL_STATUS_CALLOUT_INITIAL_NOT_ENOUGH_BALANCE;
+                            error.message = 'Your account has not enough balance'
+                            break;
+                        case this.callConstants.CALL_STATUS_CALLOUT_INITIAL_INVALID_TO_NUMBER:
+                            error.status = this.callConstants.CALL_STATUS_CALLOUT_INITIAL_INVALID_TO_NUMBER;
+                            error.message = 'The toPhoneNumber is not valid'
+                            break;
+                        default:
+                            break;
+                    }
                     break;
-                case this.callConstants.CALL_STATUS_CALLOUT_INITIAL_NOT_ENOUGH_BALANCE:
-                    error.status = this.callConstants.CALL_STATUS_CALLOUT_INITIAL_NOT_ENOUGH_BALANCE;
-                    error.message = 'Your account has not enough balance'
-                    break;
-                case this.callConstants.CALL_STATUS_CALLOUT_INITIAL_INVALID_NUMBER:
-                    error.status = this.callConstants.CALL_STATUS_CALLOUT_INITIAL_INVALID_NUMBER;
-                    error.message = 'The toPhoneNumber is not valid'
+                case this.callConstants.CALL_STATUS_FROM_SERVER_CALLOUT_INITIAL_ERROR_FROM_NUMBER:
+                    error.status = this.callConstants.CALL_STATUS_CALLOUT_INITIAL_INVALID_FROM_NUMBER;
+                    error.message = 'The fromPhoneNumber is not valid'
                     break;
                 default:
                     break;
