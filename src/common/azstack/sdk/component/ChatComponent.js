@@ -1383,6 +1383,8 @@ class ChatComponent extends React.Component {
                             chatTarget={this.state.chatTarget}
                             onChatInputDraftDataStatusChanged={this.onChatInputDraftDataStatusChanged}
                             showSketchDrawing={this.props.showSketchDrawing}
+                            showStickersList={this.props.showStickersList}
+                            showStickerDetails={this.props.showStickerDetails}
                         />
                     )
                 }

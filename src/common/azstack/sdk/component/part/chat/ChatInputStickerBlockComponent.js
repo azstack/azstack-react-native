@@ -41,6 +41,8 @@ class ChatInputStickerBlockComponent extends React.Component {
 
         this.changeStickerTab = this.changeStickerTab.bind(this);
         this.onStickerPressed = this.onStickerPressed.bind(this);
+
+        this.onAddStickerPressed = this.onAddStickerPressed.bind(this);
     };
 
     onHardBackButtonPressed() {
@@ -94,6 +96,12 @@ class ChatInputStickerBlockComponent extends React.Component {
         });
     };
 
+    onAddStickerPressed() {
+        this.props.showStickersList({
+            showStickerDetails: this.props.showStickerDetails
+        });
+    };
+
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     };
@@ -134,6 +142,16 @@ class ChatInputStickerBlockComponent extends React.Component {
                                 );
                             })
                         }
+                        <TouchableOpacity
+                            style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_TABS_TAB_BUTTON_STYLE')}
+                            activeOpacity={0.5}
+                            onPress={() => { this.onAddStickerPressed() }}
+                        >
+                            <Image
+                                style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_TABS_TAB_IMAGE_STYLE')}
+                                source={this.coreInstances.CustomStyle.getImage('IMAGE_CROSS')}
+                            />
+                        </TouchableOpacity>
                     </View>
                     <TouchableOpacity
                         style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_CLOSE_BUTTON_BLOCK_STYLE')}

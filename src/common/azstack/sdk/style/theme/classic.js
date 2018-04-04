@@ -24,6 +24,7 @@ export const IMAGE_PAUSE_ICON_ONLY = require('../../static/image/classic/pause-i
 export const IMAGE_SETTING = require('../../static/image/classic/setting.png');
 export const IMAGE_UNDO = require('../../static/image/classic/undo.png');
 export const IMAGE_ERASER = require('../../static/image/classic/eraser.png');
+export const IMAGE_CROSS = require('../../static/image/classic/cross.png');
 
 
 export const SCREEN_BLOCK_STYLE = {
@@ -135,7 +136,7 @@ export const SEARCH_IMAGE_STYLE = {
 };
 export const SEARCH_CLEAR_BUTTON_BLOCK_STYLE = {
     position: 'absolute',
-    top: 2,
+    top: 5,
     right: 5,
     width: 30,
     height: 30
@@ -1726,4 +1727,57 @@ export const LOCATION_SELECTING_FOOTER_SELECT_BUTTON_TEXT_BLOCK_STYLE = {
     fontWeight: '400',
     lineHeight: 25,
     color: '#2F353B'
+};
+
+export const STICKERS_LIST_SEARCH_BLOCK_STYLE = {
+    marginVertical: 10,
+    marginHorizontal: 15
+};
+export const STICKERS_LIST_BLOCK_STYLE = {
+    flex: 1
+};
+export const STICKERS_LIST_ITEM_BLOCK_STYLE = {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10,
+    marginHorizontal: 15
+};
+export const STICKERS_LIST_ITEM_MINI_COVER_IMAGE = {
+    width: 70,
+    height: 70
+};
+export const STICKERS_LIST_ITEM_NAME_TEXT_STYLE = {
+    flex: 1,
+    fontSize: 17,
+    fontWeight: '400',
+    lineHeight: 20,
+    color: '#2F353B',
+    marginLeft: 15
+};
+
+export const STICKER_DETAILS_MAIN_BLOCK_STYLE = {
+    marginVertical: 10,
+    marginHorizontal: 15,
+    flexDirection: 'row',
+    alignItems: 'center'
+};
+export const STICKER_DETAILS_MINI_COVER_IMAGE = {
+    width: 70,
+    height: 70
+};
+export const STICKER_DETAILS_NAME_TEXT_STYLE = {
+    flex: 1,
+    fontSize: 17,
+    fontWeight: '400',
+    lineHeight: 20,
+    color: '#2F353B',
+    marginLeft: 15
+};
+export const STICKER_DETAILS_FULL_COVER_BLOCK_STYLE = {
+    marginVertical: 10,
+    marginHorizontal: 15,
+    flex: 1
+};
+export const STICKER_DETAILS_FULL_COVER_CONTAINER_BLOCK_STYLE = {
+    alignItems: 'center'
 };

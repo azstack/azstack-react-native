@@ -20,6 +20,8 @@ import NewGroupComponent from './NewGroupComponent';
 import ImageGalleryComponent from './ImageGalleryComponent';
 import LocationMapComponent from './LocationMapComponent';
 import SketchDrawingComponent from './SketchDrawingComponent';
+import StickerListComponent from './StickerListComponent';
+import StickerDetailsComponent from './StickerDetailsComponent';
 
 
 const NavigationEnum = {
@@ -37,7 +39,9 @@ const NavigationEnum = {
     NewGroupComponent: 'NewGroupComponent',
     ImageGalleryComponent: 'ImageGalleryComponent',
     LocationMapComponent: 'LocationMapComponent',
-    SketchDrawingComponent: 'SketchDrawingComponent'
+    SketchDrawingComponent: 'SketchDrawingComponent',
+    StickerListComponent: 'StickerListComponent',
+    StickerDetailsComponent: 'StickerDetailsComponent'
 };
 
 export default class AZStackBaseComponent extends React.Component {
@@ -88,13 +92,17 @@ export default class AZStackBaseComponent extends React.Component {
             case 'SelectMemberComponent':
                 return this.renderSelectMember(options, index);
             case 'NewGroupComponent':
-                return this.renderNewGroup(options, index); 
+                return this.renderNewGroup(options, index);
             case 'ImageGalleryComponent':
                 return this.renderImageGallery(options, index);
             case 'LocationMapComponent':
                 return this.renderLocationMap(options, index);
             case 'SketchDrawingComponent':
                 return this.renderSketchDrawing(options, index);
+            case 'StickerListComponent':
+                return this.renderStickersList(options, index);
+            case 'StickerDetailsComponent':
+                return this.renderStickerDetails(options, index);
             default:
                 break;
         }
@@ -258,6 +266,24 @@ export default class AZStackBaseComponent extends React.Component {
 
     renderSketchDrawing(options, key) {
         return <SketchDrawingComponent
+            key={key}
+            Sizes={this.Sizes}
+            getCoreInstances={this.getCoreInstances}
+            {...options}
+        />;
+    };
+
+    renderStickersList(options, key) {
+        return <StickerListComponent
+            key={key}
+            Sizes={this.Sizes}
+            getCoreInstances={this.getCoreInstances}
+            {...options}
+        />;
+    };
+
+    renderStickerDetails(options, key) {
+        return <StickerDetailsComponent
             key={key}
             Sizes={this.Sizes}
             getCoreInstances={this.getCoreInstances}
