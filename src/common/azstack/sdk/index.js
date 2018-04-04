@@ -383,11 +383,10 @@ export class AZStackSdk extends AZStackBaseComponent {
                     if (options.onEndCall) {
                         options.onEndCall()
                     }
-                    this.AZStackCore.stopCallout().then((result) => {
-                        setTimeout(() => {
-                            this.pop();
-                        }, 1500);
-                    });
+                    this.AZStackCore.stopCallout().then((result) => {});
+                    setTimeout(() => {
+                        this.pop();
+                    }, 1500);
                 },
                 onCallEnded: () => {
                     setTimeout(() => {
