@@ -1537,6 +1537,11 @@ export class AZStackCore {
                 required: true,
                 dataType: this.dataTypes.DATA_TYPE_PHONE_NUMBER,
                 data: options.toPhoneNumber
+            }, {
+                name: 'fromPhoneNumber',
+                required: false,
+                dataType: this.dataTypes.DATA_TYPE_PHONE_NUMBER,
+                data: options.fromPhoneNumber
             }]);
             if (dataErrorMessage) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
