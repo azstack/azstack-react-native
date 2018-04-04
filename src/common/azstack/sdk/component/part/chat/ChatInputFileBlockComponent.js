@@ -557,10 +557,19 @@ class ChatInputFileBlockComponent extends React.Component {
     onFileBoxOptionDrawingButtonPressed() {
         this.props.showSketchDrawing({
             onImageBase64StringGenerated: (base64String) => {
-                let filePath = `${RNFS.DocumentDirectoryPath}/sketch-draw-${this.coreInstances.DateTimeFormatter.currentDatetimeString('-')}.png`;
-                RNFS.writeFile(filePath, base64String, 'base64').then((success) => {
-                    filePath = `file://${filePath}`;
-                    return RNFS.stat(filePath);
+                let filePath = `${RNFS.DocumentDirectoryPath}/drawings/sketch-draw-${this.coreInstances.DateTimeFormatter.currentDatetimeString('-')}.png`;
+                RNFS.exists(`${RNFS.DocumentDirectoryPath}/drawings`).then((isExist) => {
+                    if(isExist) {
+                        return new Promise((resolve, reject) => {
+                            resolve();
+                        });
+                    }
+                    return RNFS.mkdir(`${RNFS.DocumentDirectoryPath}/drawings`);
+                }).then(() => {
+                    return RNFS.writeFile(filePath, base64String, 'base64').then((success) => {
+                        filePath = `file://${filePath}`;
+                        return RNFS.stat(filePath);
+                    });
                 }).then((fileStats) => {
                     Image.getSize(filePath, (width, height) => {
 

@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { AudioRecorder, AudioUtils } from 'react-native-audio';
 import Video from 'react-native-video';
+import RNFS from 'react-native-fs';
 
 class ChatInputAudioRecordBlockComponent extends React.Component {
     constructor(props) {
@@ -78,9 +79,25 @@ class ChatInputAudioRecordBlockComponent extends React.Component {
         this.props.onCloseButtonPressed();
     };
 
+    makeSureAudioFolder() {
+        return new Promise((resolve, reject) => {
+            RNFS.exists(`${AudioUtils.DocumentDirectoryPath}/records`).then((isExist) => {
+                if (isExist) {
+                    return resolve();
+                }
+                RNFS.mkdir(`${AudioUtils.DocumentDirectoryPath}/records`).then(() => {
+                    resolve();
+                }).catch((error) => {
+                    reject(error);
+                })
+            }).catch((error) => {
+                reject(error);
+            })
+        });
+    };
     prepareRecordingPath() {
         AudioRecorder.prepareRecordingAtPath(
-            `${AudioUtils.DocumentDirectoryPath}/audio-record-${this.coreInstances.DateTimeFormatter.currentDatetimeString('-')}.aac`,
+            `${AudioUtils.DocumentDirectoryPath}/records/audio-record-${this.coreInstances.DateTimeFormatter.currentDatetimeString('-')}.aac`,
             {
                 SampleRate: 22050,
                 Channels: 1,
@@ -107,14 +124,25 @@ class ChatInputAudioRecordBlockComponent extends React.Component {
     onVideoBuffer(data) { };
     onVideoTimedMetadata(data) { };
 
-    async onStartRecordingButtonPressed() {
-        this.prepareRecordingPath();
-        this.setState({ recording: Object.assign({}, this.state.recording, { isOn: true, time: 0 }) });
-        this.intervalRecoringTime = setInterval(() => {
-            this.setState({ recording: Object.assign({}, this.state.recording, { time: this.state.recording.time + 1 }) });
-        }, 1000);
-        const filePath = await AudioRecorder.startRecording();
-        this.props.onChatInputDraftDataStatusChanged(true);
+    onStartRecordingButtonPressed() {
+        this.makeSureAudioFolder().then(async () => {
+            this.prepareRecordingPath();
+            this.setState({ recording: Object.assign({}, this.state.recording, { isOn: true, time: 0 }) });
+            this.intervalRecoringTime = setInterval(() => {
+                this.setState({ recording: Object.assign({}, this.state.recording, { time: this.state.recording.time + 1 }) });
+            }, 1000);
+            const filePath = await AudioRecorder.startRecording();
+            this.props.onChatInputDraftDataStatusChanged(true);
+        }).catch((error) => {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('ALERT_GENERAL_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+        });
     };
     async onStopRecordingButtonPressed() {
         const filePath = await AudioRecorder.stopRecording();
