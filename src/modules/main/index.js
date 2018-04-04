@@ -35,11 +35,12 @@ class AppMain extends React.Component {
         this.themeName = 'classic';
         this.getInitialMembers = this.getInitialMembers.bind(this);
         this.getMoreMembers = this.getMoreMembers.bind(this);
+        this.getNumbers = this.getNumbers.bind(this);
     };
 
     getInitialMembers = (options) => {
         return new Promise((resolve, reject) => {
-            resolve(['test_user_1', 'test_user_2', 'test_user_3'].filter((member) => {
+            resolve(['test_user_1', 'test_user_2', 'test_user_3', 'test_user_1', 'test_user_2', 'test_user_3', 'test_user_1', 'test_user_2', 'test_user_3', 'test_user_1', 'test_user_2', 'test_user_3'].filter((member) => {
                 return member.indexOf(options.searchText) > -1;
             }));
         });
@@ -49,6 +50,11 @@ class AppMain extends React.Component {
             resolve(false);
         });
     };
+    getNumbers = (options) => {
+        return new Promise((resolve, reject) => {
+            resolve(['01672848892', '0966275092']);
+        });
+    }
 
     render() {
         return (
@@ -65,6 +71,7 @@ class AppMain extends React.Component {
                         themeName={this.themeName}
                         getInitialMembers={this.getInitialMembers}
                         getMoreMembers={this.getMoreMembers}
+                        getNumbers={this.getNumbers}
                     />}
             </View>
         );

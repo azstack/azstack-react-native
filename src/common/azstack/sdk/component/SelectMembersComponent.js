@@ -20,6 +20,7 @@ import member from '../handler/member';
 class SelectMembersComponent extends React.Component {
     constructor(props) {
         super(props);
+        this.onEndReachedCalledDuringMomentum = true;
 
         this.coreInstances = props.getCoreInstances();
         this.subscriptions = {};
@@ -345,7 +346,7 @@ class SelectMembersComponent extends React.Component {
                         groupedMembers.length > 0 && <SectionList
                             style={this.coreInstances.CustomStyle.getStyle('SELECT_MEMBERS_LIST_STYLE')}
                             sections={groupedMembers}
-                            keyExtractor={(item, index) => (`select_members_${item.userId}`)}
+                            keyExtractor={(item, index) => (`select_members_${item.userId}_${index}`)}
                             renderSectionHeader={({ section }) => {
                                 return (
                                     <Text
@@ -366,9 +367,9 @@ class SelectMembersComponent extends React.Component {
                                 );
                             }}
                             contentContainerStyle={this.coreInstances.CustomStyle.getStyle('SELECT_MEMBERS_LIST_CONTENT_CONTAINER_STYLE')}
-                            onEndReached={this.getMoreMembers()}
-                            onEndReachedThreshold={0.1}
-                            keyboardDismissMode={Platform.select({ ios: 'interactive', android: 'on-drag' })}
+                            onEndReached={() => {console.log(this.onEndReachedCalledDuringMomentum); if(this.onEndReachedCalledDuringMomentum == false) {console.log('Load more'); this.onEndReachedCalledDuringMomentum = true;}}}
+                            onEndReachedThreshold={0.02}
+                            onMomentumScrollBegin={() => {console.log('hooho'); this.onEndReachedCalledDuringMomentum = false; }}
                         />
                     }
                     <ConnectionBlockComponent

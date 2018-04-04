@@ -29,13 +29,25 @@ class NumberPadComponent extends React.Component {
 	constructor(props) {
 		super(props);
 		this.coreInstances = props.getCoreInstances();
+		this.myNumbers = [];
+
 		this.state = {
+			fromPhoneNumber: [],
 			phoneNumber: '',
 			onCall: null,
-
 		};
 
 		this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
+	}
+
+	componentWillMount() {
+		console.log(this.coreInstances);
+		this.coreInstances.Number.getNumbers().then((numbers) => {
+			console.log(numbers);
+			this.myNumbers = numbers;
+
+			this.setState({fromPhoneNumber: numbers[0]});
+		}); 
 	}
 
 	onHardBackButtonPressed() {
@@ -69,6 +81,30 @@ class NumberPadComponent extends React.Component {
 		});
 	}
 
+	renderFromNumbers() {
+		return (
+			<ScrollView horizontal={true}>
+			{
+				this.myNumbers.map((value, index) => {
+					let backgroundColor = '#fff';
+					let color = '#d1d1d1';
+					if(value === this.state.fromPhoneNumber) {
+						backgroundColor = '#44f441';
+						color = '#fff';
+					}
+					return (
+						<TouchableOpacity onPress={() => this.setState({fromPhoneNumber: value})} style={{paddingHorizontal: 5, justifyContent: 'center', alignItems: 'center', backgroundColor, borderWidth: 1, borderColor: '#d1d1d1', borderRadius: 15, marginRight: 10}}>
+							<Text style={{color}}>
+								{value}
+							</Text>
+						</TouchableOpacity>
+					);
+				})
+			}
+			</ScrollView>
+		);
+	}
+
 	render() {
 		return (
 			<ScreenBlockComponent
@@ -83,9 +119,12 @@ class NumberPadComponent extends React.Component {
 					title={"Callout"}
 				/>}
 				<View style={{ backgroundColor: '#fff', justifyContent: 'flex-end', alignItems: 'center', flex: 1, paddingBottom: 40 }}>
-					<View style={{ width: 270, alignSelf: 'center', flexDirection: 'row', justifyContent: 'flex-end', backgroundColor: '#fff', alignItems: 'center', height: 50, marginBottom: 20 }}>
-						<View style={{ alignItems: 'flex-end' }}>
-							<Text style={{ fontSize: this.state.phoneNumber.length <= 10 ? 40 : this.state.phoneNumber.length <= 13 ? 30 : 20 }}>{this.state.phoneNumber}</Text>
+					<View style={{width: '69%', height: 30, marginBottom: 10}}>
+						{this.renderFromNumbers()}
+					</View>
+					<View style={{width: '69%', alignSelf: 'center', flexDirection: 'row', justifyContent: 'flex-end', backgroundColor: '#fff', alignItems: 'center', height: 50, marginBottom: 15}}>
+						<View style={{ alignItems: 'flex-end'}}>
+							<Text style={{ fontSize: this.state.phoneNumber.length <= 9 ? 40 : this.state.phoneNumber.length <= 12 ? 30 : 20}} numberOfLines={1}>{this.state.phoneNumber}</Text>
 						</View>
 						{
 							this.state.phoneNumber != '' && <TouchableOpacity onPress={() => this.onClear()}>
@@ -96,7 +135,7 @@ class NumberPadComponent extends React.Component {
 						}
 					</View>
 					<View style={{ width: width, justifyContent: 'center', alignItems: 'center' }}>
-						<View style={{ width: 270, alignSelf: 'center' }}>
+						<View style={{ width: '69%', alignSelf: 'center' }}>
 							<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 								<TouchableOpacity onPress={() => { this.onClickNumber('1') }}>
 									<View style={styles.number}>

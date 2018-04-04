@@ -109,7 +109,8 @@ class AZStackSdkExample extends React.Component {
                     themeName: this.props.themeName,
                     members: this.props.members,
                     getInitialMembers: this.props.getInitialMembers,
-                    getMoreMembers: this.props.getMoreMembers
+                    getMoreMembers: this.props.getMoreMembers,
+                    getNumbers: this.props.getNumbers
                 }}
             >
                 <View
