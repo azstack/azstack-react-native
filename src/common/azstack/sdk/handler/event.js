@@ -38,6 +38,9 @@ class Event {
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_CALLOUT_STAUTUS_CHANGED] = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_CALLOUT_STATUS_CHANGED, { error, result });
         };
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_START_CALLOUT_RETURN] = (error, result) => {
+            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_CALLOUT_START_RETURN, { error, result });
+        };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_LOCAL_STREAM_ARRIVED] = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_LOCAL_STREAM_ARRIVED, { error, result });
         };

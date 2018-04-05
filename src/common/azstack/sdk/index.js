@@ -24,6 +24,7 @@ import Diacritic from './helper/diacritic';
 
 import Event from './handler/event';
 import Member from './handler/member';
+import Number from './handler/number';
 import Notification from './handler/notification';
 
 import AZStackBaseComponent from './component/AZStackBaseComponent';
@@ -69,6 +70,11 @@ export class AZStackSdk extends AZStackBaseComponent {
         }
         if(this.props.options.getMoreMembers) {
             this.Member.getMoreMembers = this.props.options.getMoreMembers;
+        }
+
+        this.Number = new Number();
+        if(this.props.options.getNumbers) {
+            this.Number.getNumbers = this.props.options.getNumbers;
         }
 
         this.Notification = new Notification({
@@ -174,7 +180,8 @@ export class AZStackSdk extends AZStackBaseComponent {
 
             EventEmitter: this.EventEmitter,
 
-            Member: this.Member
+            Member: this.Member,
+            Number: this.Number
         };
     };
 
@@ -376,11 +383,10 @@ export class AZStackSdk extends AZStackBaseComponent {
                     if (options.onEndCall) {
                         options.onEndCall()
                     }
-                    this.AZStackCore.stopCallout().then((result) => {
-                        setTimeout(() => {
-                            this.pop();
-                        }, 1500);
-                    });
+                    this.AZStackCore.stopCallout().then((result) => {});
+                    setTimeout(() => {
+                        this.pop();
+                    }, 1500);
                 },
                 onCallEnded: () => {
                     setTimeout(() => {
@@ -396,8 +402,10 @@ export class AZStackSdk extends AZStackBaseComponent {
                 },
             }
         );
+        
         this.AZStackCore.startCallout({
-            toPhoneNumber: options.info.phoneNumber
+            toPhoneNumber: options.info.phoneNumber,
+            fromPhoneNumber: options.info.fromPhoneNumber,
         }).then((result) => {
         }).catch((error) => {
             Alert.alert("Error", error.message, [{ text: 'OK', onPress: () => { } }]);
