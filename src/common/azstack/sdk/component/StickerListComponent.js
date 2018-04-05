@@ -90,7 +90,6 @@ class StickerListComponent extends React.Component {
         }).then((result) => {
             let stickers = result.list;
             this.prepareSitckers(result.list).then((preparedStickers) => {
-                console.log(preparedStickers);
                 this.setState({ stickers: preparedStickers });
             }).catch(() => { });
         }).catch((error) => { });
@@ -155,9 +154,8 @@ class StickerListComponent extends React.Component {
                                 }
                             }
                             this.setState({ stickers: stickers });
+                            this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_STICKER_PACKET_DOWNLOAD_STATUS_CHANGED, { error: null, result: { catId: targetSticker.catId, downloaded: false } });
                         }).catch((error) => {
-                            console.log(error);
-                            console.log(`${RNFS.DocumentDirectoryPath}/stickers/${targetSticker.catId}`);
                             Alert.alert(
                                 this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
                                 this.coreInstances.Language.getText('STICKERS_LIST_REMOVE_ERROR_TEXT'),
