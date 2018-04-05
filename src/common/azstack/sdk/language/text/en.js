@@ -169,6 +169,13 @@ export const STICKERS_LIST_EMPTY_TEXT = 'No sticker';
 export const STICKERS_LIST_EARCH_PLACEHOLDER_TEXT = 'Search...';
 
 export const STICKER_DETAILS_HEADER_TITLE_TEXT = 'Sticker details';
+export const STICKER_DETAILS_DOWNLOAD_ERROR_TEXT = 'Can\t download sticker, please try again later';
+export const STICKER_DETAILS_EXTRACT_ERROR_TEXT = 'Can\t extract sticker, please try again later';
+export const STICKER_DETAILS_STOP_DOWNLOAD_CONFIRM_TEXT = 'Are you sure to stop download?';
+export const STICKER_DETAILS_REMOVE_CONFIRM_TEXT = 'Are you sure to remove this sticker?';
+export const STICKER_DETAILS_REMOVE_ERROR_TEXT = 'Can\t remove sticker, please try again later';
+export const STICKER_DETAILS_DOWNLOAING_TITLE_TEXT = 'downloading...';
+export const STICKER_DETAILS_EXTRACTING_TITLE_TEXT = 'extracting...';
 
 export const CALL_RINGING = 'Ringing';
 export const CALL_CONNECTING = 'Connecting';

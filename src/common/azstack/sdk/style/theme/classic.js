@@ -25,6 +25,8 @@ export const IMAGE_SETTING = require('../../static/image/classic/setting.png');
 export const IMAGE_UNDO = require('../../static/image/classic/undo.png');
 export const IMAGE_ERASER = require('../../static/image/classic/eraser.png');
 export const IMAGE_CROSS = require('../../static/image/classic/cross.png');
+export const IMAGE_DOWNLOAD = require('../../static/image/classic/download.png');
+export const IMAGE_TRASH = require('../../static/image/classic/trash.png');
 
 
 export const SCREEN_BLOCK_STYLE = {
@@ -1765,13 +1767,86 @@ export const STICKER_DETAILS_MINI_COVER_IMAGE = {
     width: 70,
     height: 70
 };
+export const STICKER_DETAILS_LEFT_CONTENT_STYLE = {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    marginLeft: 15
+};
+export const STICKER_DETAILS_CONTENT_STYLE = {
+    flexDirection: 'row',
+    alignItems: 'center'
+};
 export const STICKER_DETAILS_NAME_TEXT_STYLE = {
     flex: 1,
     fontSize: 17,
     fontWeight: '400',
     lineHeight: 20,
+    color: '#2F353B'
+};
+export const STICKER_DETAILS_ACTION_BUTTON_STYLE = {
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'flex-end'
+};
+export const STICKER_DETAILS_ACTION_BUTTON_IMAGE_STYLE = {
+    width: 25,
+    height: 25
+};
+export const STICKER_DETAILS_DOWNLOAD_BLOCK_STYLE = {
+    flexDirection: 'row',
+    alignItems: 'center'
+};
+export const STICKER_DETAILS_DOWNLOAD_LINES_BLOCK_STYLE = {
+    flex: 1,
+    height: 4,
+    position: 'relative',
+    marginVertical: 10
+};
+export const STICKER_DETAILS_DOWNLOAD_LENGTH_LINE_STYLE = {
+    height: 4,
+    width: '100%',
+    backgroundColor: '#BFBFBF',
+    position: 'absolute',
+    top: 0,
+    left: 0
+};
+export const STICKER_DETAILS_DOWNLOAD_DOWNLOADED_LINE_STYLE = {
+    height: 4,
+    width: 0,
+    backgroundColor: '#C8D046',
+    position: 'absolute',
+    top: 0,
+    left: 0
+};
+export const STICKER_DETAILS_DOWNLOAD_EXTRACTING_LINE_STYLE = {
+    height: 4,
+    width: 0,
+    backgroundColor: '#F2784B',
+    position: 'absolute',
+    top: 0,
+    left: 0
+};
+export const STICKER_DETAILS_DOWNLOAD_STOP_BUTTON_BLOCK_STYLE = {
+    width: 40,
+    height: 40,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'flex-end'
+};
+export const STICKER_DETAILS_DOWNLOAD_STOP_BUTTON_TEXT_STYLE = {
+    fontSize: 40,
+    fontWeight: '400',
+    lineHeight: 40,
+    color: '#95A5A6'
+};
+export const STICKER_DETAILS_DOWNLOAD_TITLE_TEXT_STYLE = {
+    fontSize: 14,
+    fontWeight: '300',
+    lineHeight: 15,
     color: '#2F353B',
-    marginLeft: 15
+    textAlign: 'center'
 };
 export const STICKER_DETAILS_FULL_COVER_BLOCK_STYLE = {
     marginVertical: 10,

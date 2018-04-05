@@ -136,6 +136,7 @@
 ### 1.2.10. Install react-native-device-info https://github.com/rebeccahughes/react-native-device-info
 ### 1.2.11. Install react-native-fcm https://github.com/evollu/react-native-fcm (Android only)
 ### 1.2.12. Install react-native-incall-manager https://github.com/zxcpoiu/react-native-incall-manager
+### 1.2.13. Install react-native-zip-archive https://github.com/mockingbot/react-native-zip-archive
 
 
 

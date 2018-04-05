@@ -147,6 +147,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-zip-archive')
     compile project(':react-native-incall-manager')
     compile project(':react-native-webrtc')
     compile project(':react-native-device-info')

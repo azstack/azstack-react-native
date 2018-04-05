@@ -3704,6 +3704,10 @@ react-native-webrtc@^1.58.3:
     event-target-shim "^1.0.5"
     prop-types "^15.5.10"
 
+react-native-zip-archive@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/react-native-zip-archive/-/react-native-zip-archive-2.2.2.tgz#e3ab0261980aaadca472d32c46ae83e42eb81efd"
+
 react-native@0.52.2:
   version "0.52.2"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.52.2.tgz#1ae9a4c4441bd6e54a8ffc8aae4ac2b5c7cccd68"

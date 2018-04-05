@@ -23,6 +23,7 @@
 		"react-native-swiper": "^1.5.13",
 		"react-native-video": "^2.0.0",
 		"react-native-webrtc": "^1.58.3",
+		"react-native-zip-archive": "^2.2.2",
 		"socket.io-client": "^2.0.4"
 	},
 	"devDependencies": {
