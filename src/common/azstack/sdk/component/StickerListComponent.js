@@ -1,12 +1,14 @@
 import React from 'react';
 import {
     BackHandler,
+    Alert,
     Image,
     TouchableOpacity,
     FlatList,
     Platform,
     Text
 } from 'react-native';
+import RNFS from 'react-native-fs';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
 import ScreenHeaderBlockComponent from './part/screen/ScreenHeaderBlockComponent';
@@ -34,6 +36,7 @@ class StickerListComponent extends React.Component {
         this.onSearchTextCleared = this.onSearchTextCleared.bind(this);
 
         this.onStickerPressed = this.onStickerPressed.bind(this);
+        this.onStickerRemoveButtonPressed = this.onStickerRemoveButtonPressed.bind(this);
     };
 
     onHardBackButtonPressed() {
@@ -60,6 +63,12 @@ class StickerListComponent extends React.Component {
             }
             this.initRun();
         });
+        this.subscriptions.onStickerPacketDownloadStatusChanged = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_STICKER_PACKET_DOWNLOAD_STATUS_CHANGED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.onStickerDownloadStatusChanged(result);
+        });
     };
     clearSubscriptions() {
         for (let subscriptionName in this.subscriptions) {
@@ -80,12 +89,25 @@ class StickerListComponent extends React.Component {
             isDefault: true
         }).then((result) => {
             let stickers = result.list;
-            stickers.map((sticker) => {
-                sticker.searchString = this.coreInstances.Diacritic.clear(sticker.name).toLowerCase();
-            });
-            console.log(stickers);
-            this.setState({ stickers: stickers });
+            this.prepareSitckers(result.list).then((preparedStickers) => {
+                console.log(preparedStickers);
+                this.setState({ stickers: preparedStickers });
+            }).catch(() => { });
         }).catch((error) => { });
+    };
+    prepareSitckers(stickers) {
+        return Promise.all(stickers.map((sticker) => {
+            return new Promise((resolve, reject) => {
+                sticker.searchString = this.coreInstances.Diacritic.clear(sticker.name).toLowerCase();
+                RNFS.exists(`${RNFS.DocumentDirectoryPath}/stickers/${sticker.catId}`).then((isExist) => {
+                    sticker.downloaded = isExist;
+                    resolve(sticker);
+                }).catch((error) => {
+                    sticker.downloaded = false;
+                    resolve(sticker);
+                });
+            });
+        }));
     };
 
     onSearchTextChanged(newText) {
@@ -112,10 +134,54 @@ class StickerListComponent extends React.Component {
     };
 
     onStickerPressed(sticker) {
-        console.log(sticker);
         this.props.showStickerDetails({
-            sticker: sticker
+            sticker: { ...sticker }
         });
+    };
+    onStickerRemoveButtonPressed(targetSticker) {
+        Alert.alert(
+            this.coreInstances.Language.getText('ALERT_TITLE_CONFIRM_TEXT'),
+            this.coreInstances.Language.getText('STICKERS_LIST_REMOVE_CONFIRM_TEXT'),
+            [
+                { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_CANCEL_TEXT'), onPress: () => { } },
+                {
+                    text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => {
+                        RNFS.unlink(`${RNFS.DocumentDirectoryPath}/stickers/${targetSticker.catId}`).then(() => {
+                            let stickers = [...this.state.stickers];
+                            for (let i = 0; i < stickers.length; i++) {
+                                if (stickers[i].catId === targetSticker.catId) {
+                                    stickers[i].downloaded = false;
+                                    break;
+                                }
+                            }
+                            this.setState({ stickers: stickers });
+                        }).catch((error) => {
+                            console.log(error);
+                            console.log(`${RNFS.DocumentDirectoryPath}/stickers/${targetSticker.catId}`);
+                            Alert.alert(
+                                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                                this.coreInstances.Language.getText('STICKERS_LIST_REMOVE_ERROR_TEXT'),
+                                [
+                                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                                ],
+                                { cancelable: true }
+                            );
+                        });
+                    }
+                }
+            ],
+            { cancelable: true }
+        );
+    };
+    onStickerDownloadStatusChanged(changedSticker) {
+        let stickers = [...this.state.stickers];
+        for (let i = 0; i < stickers.length; i++) {
+            if (stickers[i].catId === changedSticker.catId) {
+                stickers[i].downloaded = changedSticker.downloaded;
+                break;
+            }
+        }
+        this.setState({ stickers: stickers });
     };
 
     componentDidMount() {
@@ -180,6 +246,20 @@ class StickerListComponent extends React.Component {
                                         >
                                             {item.name}
                                         </Text>
+                                        {
+                                            item.downloaded && (
+                                                <TouchableOpacity
+                                                    style={this.coreInstances.CustomStyle.getStyle('STICKERS_LIST_ITEM_ACTION_BUTTON_STYLE')}
+                                                    activeOpacity={0.5}
+                                                    onPress={() => this.onStickerRemoveButtonPressed(item)}
+                                                >
+                                                    <Image
+                                                        style={this.coreInstances.CustomStyle.getStyle('STICKERS_LIST_ITEM_ACTION_BUTTON_IMAGE_STYLE')}
+                                                        source={this.coreInstances.CustomStyle.getImage('IMAGE_TRASH')}
+                                                    />
+                                                </TouchableOpacity>
+                                            )
+                                        }
                                     </TouchableOpacity>
                                 );
                             }}

@@ -143,6 +143,7 @@ class StickerDetailsComponent extends React.Component {
                     process: Object.assign({}, this.state.process, { running: false, jobId: null, downloaded: '0%', extracted: '0%' }),
                     downloaded: true
                 });
+                this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_STICKER_PACKET_DOWNLOAD_STATUS_CHANGED, { error: null, result: { catId: this.props.sticker.catId, downloaded: true } });
             }).catch((error) => {
                 this.setState({ process: Object.assign({}, this.state.process, { running: false, jobId: null, downloaded: '0%', extracted: '0%' }) });
                 Alert.alert(
@@ -194,6 +195,7 @@ class StickerDetailsComponent extends React.Component {
                     text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => {
                         RNFS.unlink(`${RNFS.DocumentDirectoryPath}/stickers/${this.props.sticker.catId}`).then(() => {
                             this.setState({ downloaded: false });
+                            this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_STICKER_PACKET_DOWNLOAD_STATUS_CHANGED, { error: null, result: { catId: this.props.sticker.catId, downloaded: false } });
                         }).catch((error) => {
                             Alert.alert(
                                 this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),

@@ -167,6 +167,9 @@ export const SKETCH_DRAWING_EMPTY_ERROR_TEXT = 'You have not draw anything';
 export const STICKERS_LIST_HEADER_TITLE_TEXT = 'Stickers list';
 export const STICKERS_LIST_EMPTY_TEXT = 'No sticker';
 export const STICKERS_LIST_EARCH_PLACEHOLDER_TEXT = 'Search...';
+export const STICKERS_LIST_REMOVE_CONFIRM_TEXT = 'Are you sure to remove this sticker?';
+export const STICKERS_LIST_REMOVE_ERROR_TEXT = 'Can\t remove sticker, please try again later';
+
 
 export const STICKER_DETAILS_HEADER_TITLE_TEXT = 'Sticker details';
 export const STICKER_DETAILS_DOWNLOAD_ERROR_TEXT = 'Can\t download sticker, please try again later';

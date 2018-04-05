@@ -1756,6 +1756,16 @@ export const STICKERS_LIST_ITEM_NAME_TEXT_STYLE = {
     color: '#2F353B',
     marginLeft: 15
 };
+export const STICKERS_LIST_ITEM_ACTION_BUTTON_STYLE = {
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'flex-end'
+};
+export const STICKERS_LIST_ITEM_ACTION_BUTTON_IMAGE_STYLE = {
+    width: 25,
+    height: 25
+};
 
 export const STICKER_DETAILS_MAIN_BLOCK_STYLE = {
     marginVertical: 10,
