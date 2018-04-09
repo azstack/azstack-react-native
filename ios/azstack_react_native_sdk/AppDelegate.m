@@ -15,6 +15,7 @@
 
 @import GooglePlaces;
 @import GoogleMaps;
+#import <AVFoundation/AVFoundation.h>  // import
 
 @implementation AppDelegate
 
@@ -22,6 +23,7 @@
 {
   [GMSPlacesClient provideAPIKey:@"AIzaSyDU-YbMlOCtS66V80vfOclTDezSJg3VlXk"];
   [GMSServices provideAPIKey:@"AIzaSyDU-YbMlOCtS66V80vfOclTDezSJg3VlXk"];
+  [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:nil];  // allow
 
   NSURL *jsCodeLocation;
 

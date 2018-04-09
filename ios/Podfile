@@ -6,8 +6,8 @@ target 'azstack_react_native_sdk' do
   rn_path = '../node_modules/react-native'
   rn_maps_path = '../node_modules/react-native-maps'
 
-  pod 'yoga', path: "#{rn_path}/ReactCommon/yoga/yoga.podspec"
-  pod 'React', path: rn_path, subspecs: [
+     pod 'yoga', path: "#{rn_path}/ReactCommon/yoga/yoga.podspec"
+     pod 'React', path: rn_path, subspecs: [
     'Core',
     'RCTActionSheet',
     'RCTAnimation',
@@ -22,21 +22,30 @@ target 'azstack_react_native_sdk' do
     'BatchedBridge'
   ]
 
-  pod 'react-native-webrtc', :path => '../node_modules/react-native-webrtc'
+    
+    pod 'react-native-document-picker', :path => '../node_modules/react-native-document-picker'
+    pod 'RNFS', :path => '../node_modules/react-native-fs'
+    pod 'react-native-webrtc', :path => '../node_modules/react-native-webrtc'
+    
+    # React Native third party dependencies podspecs
+    pod 'DoubleConversion', :podspec => "#{rn_path}/third-party-podspecs/DoubleConversion.podspec"
+    #pod 'glog', :podspec => "#{rn_path}/third-party-podspecs/glog.podspec"
+    # If you are using React Native <0.54, you will get the following error:
+    # "The name of the given podspec `GLog` doesn't match the expected one `glog`"
+    # Use the following line instead:
+    pod 'GLog', :podspec => "#{rn_path}/third-party-podspecs/GLog.podspec"
+    pod 'Folly', :podspec => "#{rn_path}/third-party-podspecs/Folly.podspec"
 
-  pod 'RSKImageCropper'
-  pod 'QBImagePickerController'
+    # react-native-image-crop-picker dependencies
+    pod 'RSKImageCropper'
+    pod 'QBImagePickerController'
 
-  pod 'react-native-maps', path: rn_maps_path
-
-  pod 'GoogleMaps'
-  pod 'react-native-google-maps', path: rn_maps_path
-
-  pod 'GooglePlaces'
-  pod 'GooglePlacePicker'
-
-
-
+     # react-native-maps dependencies
+    pod 'react-native-maps', path: rn_maps_path
+    pod 'react-native-google-maps', path: rn_maps_path
+    pod 'GoogleMaps'
+    pod 'GooglePlaces'
+    pod 'GooglePlacePicker'
 end
 
 post_install do |installer|
