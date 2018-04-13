@@ -50,6 +50,9 @@ class Event {
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_SWITCH_CAMERA_TYPE_RETURN] = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_SWITCH_CAMERA_TYPE_RETURN, { error, result });
         };
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_PAID_CALL_LOG_RETURN] = (error, result) => {
+            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_PAID_CALL_LOG_RETURN, { error, result });
+        };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_TYPING] = (error, result) => {
             if (error) {
                 this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_TYPING, { error, result: null });

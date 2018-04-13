@@ -20,6 +20,7 @@ class CallLogsComponent extends React.Component {
     constructor(props) {
         super(props);
         this.coreInstances = props.getCoreInstances();
+		this.subscriptions = {};
         this.pagination = {
             done: 0,
             page: 1,
@@ -35,6 +36,19 @@ class CallLogsComponent extends React.Component {
         this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
     }
 
+    addSubscriptions() {
+		this.subscriptions.onPaidCallLogReturn = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_PAID_CALL_LOG_RETURN, ({ error, result}) => {
+            let newLogs = this.state.logs;
+            newLogs.unshift(result);
+            this.setState({logs: newLogs});
+		});
+    }
+	clearSubscriptions() {
+		for (let subscriptionName in this.subscriptions) {
+			this.subscriptions[subscriptionName].remove();
+		}
+	};
+
     onHardBackButtonPressed() {
         this.props.onBackButtonPressed();
         return true;
@@ -45,10 +59,12 @@ class CallLogsComponent extends React.Component {
     }
 
     componentDidMount() {
+		this.addSubscriptions();
         BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     }
 
     componentWillUnmount() {
+		this.clearSubscriptions();
         BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     }
 
@@ -138,7 +154,6 @@ class CallLogsComponent extends React.Component {
             page: this.pagination.page,
             lastCreated: this.pagination.lastCreated
         }).then((result) => {
-            console.log(result);
             this.setState({ loading: false });
             this.pagination.page += 1;
             this.pagination.done = result.done;

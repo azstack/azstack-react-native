@@ -78,39 +78,18 @@ class NumberPadComponent extends React.Component {
 	}
 
 	renderFromNumber() {
-		if(this.state.myNumbers.length <= 1) {
+		if(this.state.myNumbers.length <= 1 || this.state.phoneNumber === '') {
 			return null;
 		}
 
 		return (
 			<View style={{position: 'relative'}}>
-				<View style={{flexDirection: 'row', height: 40, justifyContent: 'space-between', alignItems: 'flex-end', paddingBottom: 10}}>
-					<Text style={{fontSize: 18}}>Call from {this.state.fromPhoneNumber}</Text>
-					<Text style={{color: 'blue'}} onPress={() => this.setState({selectPhoneNumberModalVisible: true})}>Change</Text>
+				<View style={{flexDirection: 'row', height: 40, justifyContent: 'flex-end', alignItems: 'flex-end', paddingBottom: 10}}>
+					<Text style={{fontSize: 14}}>Call from </Text>
+					<Text style={{color: 'blue', fontSize: 16}} onPress={() => this.setState({selectPhoneNumberModalVisible: true})}>{this.state.fromPhoneNumber}</Text>
 				</View>
 			</View>
 		);
-		// return (
-		// 	<ScrollView horizontal={true}>
-		// 	{
-		// 		this.state.myNumbers.map((value, index) => {
-		// 			let backgroundColor = '#fff';
-		// 			let color = '#d1d1d1';
-		// 			if(value === this.state.fromPhoneNumber) {
-		// 				backgroundColor = '#44f441';
-		// 				color = '#fff';
-		// 			}
-		// 			return (
-		// 				<TouchableOpacity onPress={() => this.setState({fromPhoneNumber: value})} style={{paddingHorizontal: 5, justifyContent: 'center', alignItems: 'center', backgroundColor, borderWidth: 1, borderColor: '#d1d1d1', borderRadius: 15, marginRight: 10}} key={index}>
-		// 					<Text style={{color}}>
-		// 						{value}
-		// 					</Text>
-		// 				</TouchableOpacity>
-		// 			);
-		// 		})
-		// 	}
-		// 	</ScrollView>
-		// );
 	}
 
 	renderSelectFromNumber() {
@@ -167,7 +146,7 @@ class NumberPadComponent extends React.Component {
 						{this.renderFromNumber()}
 					</View>
 					<View style={{width: '69%', alignSelf: 'center', flexDirection: 'row', justifyContent: 'flex-end', backgroundColor: '#fff', alignItems: 'center', height: 50, marginBottom: 15}}>
-						<View style={{ alignItems: 'flex-end'}}>
+						<View style={{ alignItems: 'flex-end', flex: 1, height: 50, justifyContent: 'center'}}>
 							<Text style={{ fontSize: this.state.phoneNumber.length <= 9 ? 40 : this.state.phoneNumber.length <= 12 ? 30 : 20}} numberOfLines={1}>{this.state.phoneNumber}</Text>
 						</View>
 						{
