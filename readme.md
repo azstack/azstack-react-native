@@ -4,8 +4,20 @@
 ```
     npm install --save azstack-react-native
 ```
+## 1.1. Core
+### 1.1.1. Install jsencrypt https://github.com/travist/jsencrypt
+### 1.1.2. Install react-native-webrtc https://github.com/oney/react-native-webrtc
 ## Install peer dependencies
-
+```
+    react-native link react-native-device-info
+    react-native link react-native-google-places
+    react-native link @terrylinla/react-native-sketch-canvas
+    react-native link react-native-fs
+    react-native link react-native-audio
+    react-native link react-native-video
+    react-native link react-native-document-picker
+    react-native link react-native-image-crop-picker
+```
 ## Linking Android
 
 ### android/settings.gradle
@@ -33,8 +45,6 @@
     project(':react-native-document-picker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-document-picker/android')
     include ':WebRTCModule', ':app'
     project(':WebRTCModule').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-webrtc/android')
-    include ':react-native-maps'
-    project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/lib/android')
 ```
 
 ### android/app/build.gradle
@@ -152,8 +162,8 @@ target 'your_project_name' do
   rn_path = '../node_modules/react-native'
   rn_maps_path = '../node_modules/react-native-maps'
 
-  pod 'yoga', path: "#{rn_path}/ReactCommon/yoga/yoga.podspec"
-  pod 'React', path: rn_path, subspecs: [
+     pod 'yoga', path: "#{rn_path}/ReactCommon/yoga/yoga.podspec"
+     pod 'React', path: rn_path, subspecs: [
     'Core',
     'RCTActionSheet',
     'RCTAnimation',
@@ -168,26 +178,40 @@ target 'your_project_name' do
     'BatchedBridge'
   ]
 
-  pod 'react-native-webrtc', :path => '../node_modules/react-native-webrtc'
+    
+    pod 'react-native-document-picker', :path => '../node_modules/react-native-document-picker'
+    pod 'RNFS', :path => '../node_modules/react-native-fs'
+    pod 'react-native-webrtc', :path => '../node_modules/react-native-webrtc'
 
-  pod 'RSKImageCropper'
-  pod 'QBImagePickerController'
+    # React Native third party dependencies podspecs
+    pod 'DoubleConversion', :podspec => "#{rn_path}/third-party-podspecs/DoubleConversion.podspec"
+    pod 'glog', :podspec => "#{rn_path}/third-party-podspecs/glog.podspec"
+    # If you are using React Native <0.54, you will get the following error:
+    # "The name of the given podspec `GLog` doesn't match the expected one `glog`"
+    # Use the following line instead:
+    #pod 'GLog', :podspec => "#{rn_path}/third-party-podspecs/GLog.podspec"
+    pod 'Folly', :podspec => "#{rn_path}/third-party-podspecs/Folly.podspec"
 
-  pod 'react-native-maps', path: rn_maps_path
+    # react-native-image-crop-picker dependencies
+    pod 'RSKImageCropper'
+    pod 'QBImagePickerController'
 
-  pod 'GoogleMaps'
-  pod 'react-native-google-maps', path: rn_maps_path
-
-  pod 'GooglePlaces'
-  pod 'GooglePlacePicker'
-
-
-
+     # react-native-maps dependencies
+    pod 'react-native-maps', path: rn_maps_path
+    pod 'react-native-google-maps', path: rn_maps_path
+    pod 'GoogleMaps'
+    pod 'GooglePlaces'
+    pod 'GooglePlacePicker'
 end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     if target.name == 'react-native-google-maps'
+      target.build_configurations.each do |config|
+        config.build_settings['CLANG_ENABLE_MODULES'] = 'No'
+      end
+    end
+     if target.name == 'react-native-google-maps'
       target.build_configurations.each do |config|
         config.build_settings['CLANG_ENABLE_MODULES'] = 'No'
       end
@@ -206,10 +230,37 @@ run ```pod install```
 Please following this instruction to install PushNotificationIOS manually 
 
 https://facebook.github.io/react-native/docs/pushnotificationios.html
+# Info.plist
+On iOS you need to add a usage description to Info.plist:
+```
+    <key>NSContactsUsageDescription</key>
+	<string>$(PRODUCT_NAME) contact use</string>
+    <key>NSCameraUsageDescription</key>
+	<string>Camera Permission</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string></string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Microphone Permission</string>
+```
+# AppDelegate.m
+If you would like to allow other apps to play music over your video component, add:
+```
+@import GooglePlaces;
+@import GoogleMaps;
+#import <AVFoundation/AVFoundation.h>  // import
 
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+  ...
+    [GMSPlacesClient provideAPIKey:@"your_key_map"];
+    [GMSServices provideAPIKey:@"your_key_map"];
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:nil];  // allow
+  ...
+}
+```
 # 2. Usage
 
-``` import { AZStackSdk, } from '../../common/azstack/'; ```
+``` import {AZStackSdk} from 'azstack-react-native'; ```
 
 ```
     componentDidMount() {
