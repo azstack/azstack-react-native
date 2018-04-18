@@ -90,6 +90,11 @@ export class AZStackCore {
         if (!this.Validator.isObject(options)) {
             return;
         }
+        this.setConfigData(options);
+        this.setAuthenticatingData(options.authenticatingData);
+    };
+
+    setConfigData(options) {
         if (options.requestTimeout && this.Validator.isNumber(options.requestTimeout)) {
             this.requestTimeout = options.requestTimeout;
         }
@@ -108,17 +113,7 @@ export class AZStackCore {
         if (options.logLevel && this.Validator.isString(options.logLevel)) {
             this.logLevel = options.logLevel;
         }
-        if (options.authenticatingData && this.Validator.isObject(options.authenticatingData)) {
-            this.authenticatingData.appId = this.Validator.isString(options.authenticatingData.appId) ? options.authenticatingData.appId : '';
-            this.authenticatingData.publicKey = this.Validator.isString(options.authenticatingData.publicKey) ? options.authenticatingData.publicKey : '';
-            this.authenticatingData.azStackUserId = this.Validator.isString(options.authenticatingData.azStackUserId) ? options.authenticatingData.azStackUserId : '';
-            this.authenticatingData.userCredentials = this.Validator.isString(options.authenticatingData.userCredentials) ? options.authenticatingData.userCredentials : '';
-            this.authenticatingData.fullname = this.Validator.isString(options.authenticatingData.fullname) ? options.authenticatingData.fullname : '';
-            this.authenticatingData.namespace = this.Validator.isString(options.authenticatingData.namespace) ? options.authenticatingData.namespace : '';
-        }
     };
-
-    // this will overwrite old, for connect with options
     setAuthenticatingData(authenticatingData) {
         if (authenticatingData && this.Validator.isObject(authenticatingData)) {
             this.authenticatingData.appId = this.Validator.isString(authenticatingData.appId) ? authenticatingData.appId : '';
@@ -1063,7 +1058,6 @@ export class AZStackCore {
 
     connect(options, callback) {
         if (options && options.authenticatingData) {
-            // receive authenticatingData from options when connect
             this.setAuthenticatingData(options.authenticatingData);
         }
         return new Promise((resolve, reject) => {
@@ -1176,6 +1170,23 @@ export class AZStackCore {
             if (this.slaveSocket) {
                 this.slaveSocket.open();
             } else {
+
+                if (!this.authenticatingData.appId || !this.authenticatingData.publicKey || !this.authenticatingData.azStackUserId || !this.authenticatingData.fullname) {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                        message: 'Missing authenticating data'
+                    });
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                        message: 'Authenticating data',
+                        payload: this.authenticatingData
+                    });
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', {
+                        code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                        message: 'appId, publicKey, azStackUserId, fullname are required for authenticating data, connect fail'
+                    }, null);
+                    this.stateControls.reconnecting = false;
+                    return;
+                }
+
                 this.Authentication.getSlaveSocket({
                     masterSocketUri: this.masterSocketUri,
                     azStackUserId: this.authenticatingData.azStackUserId
