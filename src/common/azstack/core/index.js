@@ -1217,14 +1217,20 @@ export class AZStackCore {
 
             this.autoReconnectTrieds = 0;
             this.stateControls.autoReconnecting = false;
-            if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED] === 'function') {
-                this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED]({
+            if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECT_STOP] === 'function') {
+                this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECT_STOP]({
                     code: this.errorCodes.ERR_UNEXPECTED_DATA,
                     message: 'Stop auto reconnect, trieds exceed limit'
                 }, null);
             }
 
             return;
+        }
+
+        if (this.autoReconnectTrieds === 0) {
+            if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECT_START] === 'function') {
+                this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECT_START](null, null);
+            }
         }
 
         this.stateControls.autoReconnecting = true;

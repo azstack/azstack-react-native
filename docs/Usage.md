@@ -40,9 +40,11 @@
         * [3.4.1. Connect](#341-connect)
         * [3.4.2. Reconnect](#342-reconnect)
         * [3.4.3. Disconnect](#343-disconnect)
-        * [3.4.4. Delegates](#344-delegates)
-            * [3.4.4.1. Auto reconnected ](#3441-auto-reconnected)
-            * [3.4.4.2. Disconnected](#3442-disconnected)
+        * [3.4.4. Delegates](#344-delegates) 
+            * [3.4.4.1. Auto reconnect start](#3441-auto-reconnect-start)
+            * [3.4.4.2. Auto reconnect stop](#3442-auto-reconnect-stop)
+            * [3.4.4.3. Auto reconnected](#3443-auto-reconnected)
+            * [3.4.4.4. Disconnected](#3444-disconnected)
     * [3.5. Calls](#35-calls)
         * [3.5.1. Free call](#351-free-call)
             * [3.5.1.1. Start function](#3511-start-function)
@@ -483,7 +485,27 @@ this.AZStackCore.disconnect({});
 
 ### 3.4.4. Delegates
 
-#### 3.4.4.1. Auto reconnected 
+#### 3.4.4.1. Auto reconnect start 
+
+```javascript 
+this.AZStackCore.Delegates.onAutoReconnectStart = (error, result) => {
+    console.log(error, result);
+};
+```
+
+#### 3.4.4.2. Auto reconnect stop 
+
+```javascript 
+this.AZStackCore.Delegates.onAutoReconnectedStop = (error, result) => {
+    console.log(error, result);
+};
+```
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### 3.4.4.3. Auto reconnected 
 
 ```javascript 
 this.AZStackCore.Delegates.onAutoReconnected = (error, result) => {
@@ -495,7 +517,12 @@ this.AZStackCore.Delegates.onAutoReconnected = (error, result) => {
 > - code: error code
 > - message: error message
 
-#### 3.4.4.2. Disconnected
+#### result:
+> - azStackUserId: unique key string of users
+> - userId: userId of user in azstack
+> - fullname: fullname of user
+
+#### 3.4.4.4. Disconnected
 
 ```javascript 
 this.AZStackCore.Delegates.onDisconnected = (error, result) => {

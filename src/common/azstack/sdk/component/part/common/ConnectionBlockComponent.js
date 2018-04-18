@@ -35,6 +35,28 @@ class ConnectionBlockComponent extends React.Component {
                 this.timeoutHide = null;
             }, 2000);
         });
+        this.subscriptions.onAutoReconnecStart = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_AUTO_RECONNECT_START, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            if (this.timeoutHide) {
+                clearTimeout(this.timeoutHide);
+                this.timeoutHide = null;
+            }
+            this.setState({
+                connectionState: 'connecting',
+                show: true
+            });
+        });
+        this.subscriptions.onAutoReconnecStop = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_AUTO_RECONNECT_STOP, ({ error, result }) => {
+            if (error) {
+                this.setState({
+                    connectionState: 'disconnected',
+                    show: true
+                });
+                return;
+            }
+        });
         this.subscriptions.onAutoReconnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_AUTO_RECONNECTED, ({ error, result }) => {
             if (error) {
                 return;
@@ -51,6 +73,10 @@ class ConnectionBlockComponent extends React.Component {
         });
         this.subscriptions.onReconnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_RECONNECT_RETURN, ({ error, result }) => {
             if (error) {
+                this.setState({
+                    connectionState: 'disconnected',
+                    show: true
+                });
                 return;
             }
             this.setState({
@@ -72,7 +98,7 @@ class ConnectionBlockComponent extends React.Component {
                 this.timeoutHide = null;
             }
             this.setState({
-                connectionState: 'connecting',
+                connectionState: 'disconnected',
                 show: true
             });
         });
@@ -105,13 +131,16 @@ class ConnectionBlockComponent extends React.Component {
                 style={[
                     this.coreInstances.CustomStyle.getStyle('CONNECTION_BLOCK_STYLE'),
                     (this.state.connectionState === 'connecting' ? this.coreInstances.CustomStyle.getStyle('CONNECTION_BLOCK_CONNECTING_STYLE') : {}),
+                    (this.state.connectionState === 'disconnected' ? this.coreInstances.CustomStyle.getStyle('CONNECTION_BLOCK_DISCONNECTED_STYLE') : {}),
                     (this.state.connectionState === 'connected' ? this.coreInstances.CustomStyle.getStyle('CONNECTION_BLOCK_CONNECTED_STYLE') : {})
                 ]}
             >
                 <Text
                     style={this.coreInstances.CustomStyle.getStyle('CONNECTION_TEXT_STYLE')}
                 >
-                    {this.coreInstances.Language.getText(this.state.connectionState === 'connecting' ? 'CONNECTTION_CONNECTING_TEXT' : 'CONNECTTION_CONNECTED_TEXT')}
+                    {this.state.connectionState === 'connecting' && this.coreInstances.Language.getText('CONNECTTION_CONNECTING_TEXT')}
+                    {this.state.connectionState === 'disconnected' && this.coreInstances.Language.getText('CONNECTTION_DISCONNECTED_TEXT')}
+                    {this.state.connectionState === 'connected' && this.coreInstances.Language.getText('CONNECTTION_CONNECTED_TEXT')}
                 </Text>
             </View>
         );

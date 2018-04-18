@@ -86,6 +86,9 @@ export const CONNECTION_BLOCK_STYLE = {
 export const CONNECTION_BLOCK_CONNECTING_STYLE = {
     backgroundColor: '#F3C200'
 };
+export const CONNECTION_BLOCK_DISCONNECTED_STYLE = {
+    backgroundColor: '#E7505A'
+};
 export const CONNECTION_BLOCK_CONNECTED_STYLE = {
     backgroundColor: '#26C281'
 };

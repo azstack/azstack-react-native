@@ -11,6 +11,12 @@ class Event {
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_CONNECT_RETURN] = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_CONNECT_RETURN, { error, result });
         };
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_AUTO_RECONNECT_START] = (error, result) => {
+            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_AUTO_RECONNECT_START, { error, result });
+        };
+        this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_AUTO_RECONNECT_STOP] = (error, result) => {
+            this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_AUTO_RECONNECT_STOP, { error, result });
+        };
         this.AZStackCore.Delegates[this.AZStackCore.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED] = (error, result) => {
             this.EventEmitter.emit(this.eventConstants.EVENT_NAME_ON_AUTO_RECONNECTED, { error, result });
         };

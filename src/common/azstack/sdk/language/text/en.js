@@ -13,6 +13,7 @@ export const PERMISSION_REQUEST_LOCATION_TITLE_TEXT = 'Location Permission';
 export const PERMISSION_REQUEST_LOCATION_DESCRIPTION_TEXT = 'We needs access to your location so you can detect your current location.';
 
 export const CONNECTTION_CONNECTING_TEXT = 'Connecting...';
+export const CONNECTTION_DISCONNECTED_TEXT = 'Diconnected';
 export const CONNECTTION_CONNECTED_TEXT = 'Connected';
 
 export const FROM_NOW_FUTURE_TEXT = 'in';
