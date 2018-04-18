@@ -27,6 +27,7 @@ export const IMAGE_ERASER = require('../../static/image/classic/eraser.png');
 export const IMAGE_CROSS = require('../../static/image/classic/cross.png');
 export const IMAGE_DOWNLOAD = require('../../static/image/classic/download.png');
 export const IMAGE_TRASH = require('../../static/image/classic/trash.png');
+export const IMAGE_REFRESH = require('../../static/image/classic/refresh.png');
 
 
 export const SCREEN_BLOCK_STYLE = {
@@ -97,6 +98,19 @@ export const CONNECTION_TEXT_STYLE = {
     fontWeight: '400',
     lineHeight: 20,
     color: '#fff'
+};
+export const CONNECTION_RECONNECT_BUTTON_BLOCK_STYLE = {
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    top: 0,
+    right: 15
+};
+export const CONNECTION_RECONNECT_BUTTON_IMAGE_STYLE = {
+    width: 20,
+    height: 20
 };
 
 export const EMPTY_BLOCK_STYLE = {

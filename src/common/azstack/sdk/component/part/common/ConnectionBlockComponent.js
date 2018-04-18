@@ -1,7 +1,9 @@
 import React from 'react';
 import {
     View,
-    Text
+    Text,
+    TouchableOpacity,
+    Image
 } from 'react-native';
 
 class ConnectionBlockComponent extends React.Component {
@@ -19,6 +21,8 @@ class ConnectionBlockComponent extends React.Component {
         };
 
         this.timeoutHide = null;
+
+        this.onReconnectButtonPressed = this.onReconnectButtonPressed.bind(this);
     };
 
     addSubscriptions() {
@@ -115,6 +119,14 @@ class ConnectionBlockComponent extends React.Component {
         }
     };
 
+    onReconnectButtonPressed() {
+        this.setState({
+            connectionState: 'connecting',
+            show: true
+        });
+        this.coreInstances.AZStackCore.reconnect();
+    };
+
     componentDidMount() {
         this.addSubscriptions();
         if (this.coreInstances.AZStackCore.slaveSocketConnected) {
@@ -144,10 +156,22 @@ class ConnectionBlockComponent extends React.Component {
                 <Text
                     style={this.coreInstances.CustomStyle.getStyle('CONNECTION_TEXT_STYLE')}
                 >
-                    {this.state.connectionState === 'connecting' && `${this.state.autoReconnectedTimes ? `(${this.state.autoReconnectedTimes}) `:''}${this.coreInstances.Language.getText('CONNECTTION_CONNECTING_TEXT')}`}
+                    {this.state.connectionState === 'connecting' && `${this.state.autoReconnectedTimes ? `(${this.state.autoReconnectedTimes}) ` : ''}${this.coreInstances.Language.getText('CONNECTTION_CONNECTING_TEXT')}`}
                     {this.state.connectionState === 'disconnected' && this.coreInstances.Language.getText('CONNECTTION_DISCONNECTED_TEXT')}
                     {this.state.connectionState === 'connected' && this.coreInstances.Language.getText('CONNECTTION_CONNECTED_TEXT')}
                 </Text>
+                {this.state.connectionState === 'disconnected' && (
+                    <TouchableOpacity
+                        style={this.coreInstances.CustomStyle.getStyle('CONNECTION_RECONNECT_BUTTON_BLOCK_STYLE')}
+                        activeOpacity={0.5}
+                        onPress={this.onReconnectButtonPressed}
+                    >
+                        <Image
+                            style={this.coreInstances.CustomStyle.getStyle('CONNECTION_RECONNECT_BUTTON_IMAGE_STYLE')}
+                            source={this.coreInstances.CustomStyle.getImage('IMAGE_REFRESH')}
+                        />
+                    </TouchableOpacity>
+                )}
             </View>
         );
     };
