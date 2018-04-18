@@ -376,6 +376,7 @@ export class AZStackCore {
             }, this.intervalPingTime);
         });
         this.slaveSocket.on('connect_error', (error) => {
+            this.slaveSocket = null;
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                 message: 'Cannot connect to slave socket'
             });
@@ -412,6 +413,7 @@ export class AZStackCore {
             this.slaveSocketConnected = false;
             clearInterval(this.intervalSendPing);
             this.intervalSendPing = null;
+            this.slaveSocket = null;
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Disconnected to slave socket'
             });
