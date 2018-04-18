@@ -13,6 +13,7 @@ class ConnectionBlockComponent extends React.Component {
         this.subscriptions = {};
 
         this.state = {
+            autoReconnectedTimes: 0,
             connectionState: 'connecting',
             show: true
         };
@@ -45,6 +46,7 @@ class ConnectionBlockComponent extends React.Component {
             }
             this.setState({
                 connectionState: 'connecting',
+                autoReconnectedTimes: 1,
                 show: true
             });
         });
@@ -52,6 +54,7 @@ class ConnectionBlockComponent extends React.Component {
             if (error) {
                 this.setState({
                     connectionState: 'disconnected',
+                    autoReconnectedTimes: 0,
                     show: true
                 });
                 return;
@@ -59,6 +62,9 @@ class ConnectionBlockComponent extends React.Component {
         });
         this.subscriptions.onAutoReconnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_AUTO_RECONNECTED, ({ error, result }) => {
             if (error) {
+                this.setState({
+                    autoReconnectedTimes: this.state.autoReconnectedTimes + 1
+                });
                 return;
             }
             this.setState({
@@ -138,7 +144,7 @@ class ConnectionBlockComponent extends React.Component {
                 <Text
                     style={this.coreInstances.CustomStyle.getStyle('CONNECTION_TEXT_STYLE')}
                 >
-                    {this.state.connectionState === 'connecting' && this.coreInstances.Language.getText('CONNECTTION_CONNECTING_TEXT')}
+                    {this.state.connectionState === 'connecting' && `${this.state.autoReconnectedTimes ? `(${this.state.autoReconnectedTimes}) `:''}${this.coreInstances.Language.getText('CONNECTTION_CONNECTING_TEXT')}`}
                     {this.state.connectionState === 'disconnected' && this.coreInstances.Language.getText('CONNECTTION_DISCONNECTED_TEXT')}
                     {this.state.connectionState === 'connected' && this.coreInstances.Language.getText('CONNECTTION_CONNECTED_TEXT')}
                 </Text>
