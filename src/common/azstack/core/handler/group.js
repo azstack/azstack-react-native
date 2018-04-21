@@ -81,7 +81,7 @@ class Group {
                         adminId: group.admin,
                         membersCount: group.members.length,
                         isIn: this.groupConstants.GROUP_IS_IN,
-                        isAutojoin: this.groupConstants.GROUP_IS_AUTO_JOIN
+                        isAutojoin: this.groupConstants.GROUP_IS_NOT_AUTO_JOIN
                     };
                     listGroups.list.push(privateGroup);
                 });
