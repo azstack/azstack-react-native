@@ -413,7 +413,7 @@ class Message {
     sendGetModifiedFiles(options) {
         return new Promise((resolve, reject) => {
 
-            const getModifiedMessagesPacket = {
+            const getModifiedFilesPacket = {
                 service: this.serviceTypes.MESSAGE_GET_LIST_MODIFIED_FILES,
                 body: JSON.stringify({
                     lastCreated: options.lastCreated,
@@ -426,9 +426,9 @@ class Message {
             });
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
                 message: 'Get modified files packet',
-                payload: getModifiedMessagesPacket
+                payload: getModifiedFilesPacket
             });
-            this.sendPacketFunction(getModifiedMessagesPacket).then(() => {
+            this.sendPacketFunction(getModifiedFilesPacket).then(() => {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                     message: 'Send get modified files packet successfully'
                 });
