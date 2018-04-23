@@ -601,7 +601,7 @@ export const CHAT_INPUT_STICKER_BOX_BODY_BLOCK_STYLE = {
 export const CHAT_INPUT_STICKER_BOX_STICKERS_BLOCK_STYLE = {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'flex-start'
 };
 export const CHAT_INPUT_STICKER_BOX_STICKERS_STICKER_BUTTON_STYLE = {
