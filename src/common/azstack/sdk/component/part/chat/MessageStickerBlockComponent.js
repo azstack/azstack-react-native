@@ -1,6 +1,7 @@
 import React from 'react';
 import {
-    Image
+    Image,
+    Dimensions
 } from 'react-native';
 
 class MessageStickerBlockComponent extends React.Component {
@@ -11,11 +12,16 @@ class MessageStickerBlockComponent extends React.Component {
     };
 
     render() {
+        const { width: windowWidth } = Dimensions.get('window');
+        let limitSize = 200;
+        if (windowWidth / 3 < limitSize) {
+            limitSize = windowWidth / 3;
+        }
         return (
             <Image
                 style={[
                     this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_STICKER_STYLE'),
-                    this.coreInstances.FileConverter.ajustImageSizes(this.props.sticker, { width: 60, height: 60 })
+                    this.coreInstances.FileConverter.ajustImageSizes(this.props.sticker, { width: limitSize, height: limitSize })
                 ]}
                 source={{
                     uri: this.props.sticker.url
