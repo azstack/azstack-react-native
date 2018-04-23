@@ -25,6 +25,7 @@ import Diacritic from './helper/diacritic';
 import Event from './handler/event';
 import Member from './handler/member';
 import Number from './handler/number';
+import Message from './handler/message';
 import Notification from './handler/notification';
 
 import AZStackBaseComponent from './component/AZStackBaseComponent';
@@ -65,16 +66,21 @@ export class AZStackSdk extends AZStackBaseComponent {
         this.Event.delegatesToEvents();
 
         this.Member = new Member();
-        if(this.props.options.getInitialMembers) {
+        if (this.props.options.getInitialMembers && typeof this.props.options.getInitialMembers === 'function') {
             this.Member.getInitialMembers = this.props.options.getInitialMembers;
         }
-        if(this.props.options.getMoreMembers) {
+        if (this.props.options.getMoreMembers && typeof this.props.options.getMoreMembers === 'function') {
             this.Member.getMoreMembers = this.props.options.getMoreMembers;
         }
 
         this.Number = new Number();
-        if(this.props.options.getNumbers) {
+        if (this.props.options.getNumbers && typeof this.props.options.getNumbers === 'function') {
             this.Number.getNumbers = this.props.options.getNumbers;
+        }
+
+        this.Message = new Message();
+        if (this.props.options.onBeforeMessageSend && typeof this.props.options.onBeforeMessageSend === 'function') {
+            this.Message.onBeforeMessageSend = this.props.options.onBeforeMessageSend;
         }
 
         this.Notification = new Notification({
@@ -141,7 +147,7 @@ export class AZStackSdk extends AZStackBaseComponent {
         this.Notification.getInitialNotification().then((notification) => {
             console.log('initial notification');
             console.log(notification);
-        }).catch((error) => { 
+        }).catch((error) => {
             console.log('initial notification error');
             console.log(error);
         });
@@ -181,6 +187,7 @@ export class AZStackSdk extends AZStackBaseComponent {
             EventEmitter: this.EventEmitter,
 
             Member: this.Member,
+            Message: this.Message,
             Number: this.Number
         };
     };
@@ -375,7 +382,7 @@ export class AZStackSdk extends AZStackBaseComponent {
     };
 
     startCallout(options) {
-        this.navigate (
+        this.navigate(
             this.getNavigation().OnCallComponent,
             {
                 ...options,
@@ -383,7 +390,7 @@ export class AZStackSdk extends AZStackBaseComponent {
                     if (options.onEndCall) {
                         options.onEndCall()
                     }
-                    this.AZStackCore.stopCallout().then((result) => {});
+                    this.AZStackCore.stopCallout().then((result) => { });
                     setTimeout(() => {
                         this.pop();
                     }, 1500);
@@ -402,7 +409,7 @@ export class AZStackSdk extends AZStackBaseComponent {
                 },
             }
         );
-        
+
         this.AZStackCore.startCallout({
             toPhoneNumber: options.info.phoneNumber,
             fromPhoneNumber: options.info.fromPhoneNumber,

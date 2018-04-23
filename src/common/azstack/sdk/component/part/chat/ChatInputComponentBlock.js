@@ -191,32 +191,52 @@ class ChatInputComponentBlock extends React.Component {
         this.setState({ text: Object.assign({}, this.state.text, { val: '' }) });
         this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...textMessage } });
 
-        this.sendingMessageFailChecks[textMessage.msgId] = setTimeout(() => {
-            textMessage.status = -1;
-            this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...textMessage } });
-            delete this.sendingMessageFailChecks[textMessage.msgId];
-        }, 5000);
-
-        this.coreInstances.AZStackCore.newMessage({
+        this.coreInstances.Message.onBeforeMessageSend({
             chatType: this.props.chatType,
             chatId: this.props.chatId,
-            msgId: textMessage.msgId,
             text: textMessage.text
-        }).then((result) => { }).catch((error) => { });
+        }).then((preparedMessage) => {
+
+            let invalidData = false;
+
+            if (!preparedMessage || typeof preparedMessage !== 'object') {
+                invalidData = true;
+            } else if (preparedMessage.chatType !== textMessage.chatType || preparedMessage.chatId !== textMessage.chatId) {
+                invalidData = true;
+            } else if (!preparedMessage.text || typeof preparedMessage.text !== 'string') {
+                invalidData = true;
+            }
+
+            if (invalidData) {
+                textMessage.status = -1;
+                this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...textMessage } });
+                return;
+            }
+
+            textMessage.text = preparedMessage.text;
+            this.sendingMessageFailChecks[textMessage.msgId] = setTimeout(() => {
+                textMessage.status = -1;
+                this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...textMessage } });
+                delete this.sendingMessageFailChecks[textMessage.msgId];
+            }, 5000);
+
+            this.coreInstances.AZStackCore.newMessage({
+                chatType: this.props.chatType,
+                chatId: this.props.chatId,
+                msgId: textMessage.msgId,
+                text: textMessage.text
+            }).then((result) => { }).catch((error) => { });
+        }).catch((error) => {
+            textMessage.status = -1;
+            this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...textMessage } });
+        });
     };
     sendStickerMessage(stickerMessage) {
         this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...stickerMessage } });
 
-        this.sendingMessageFailChecks[stickerMessage.msgId] = setTimeout(() => {
-            stickerMessage.status = -1;
-            this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...stickerMessage } });
-            delete this.sendingMessageFailChecks[stickerMessage.msgId];
-        }, 5000);
-
-        this.coreInstances.AZStackCore.newMessage({
+        this.coreInstances.Message.onBeforeMessageSend({
             chatType: this.props.chatType,
             chatId: this.props.chatId,
-            msgId: stickerMessage.msgId,
             sticker: {
                 name: stickerMessage.sticker.name,
                 catId: stickerMessage.sticker.catId,
@@ -224,7 +244,59 @@ class ChatInputComponentBlock extends React.Component {
                 width: stickerMessage.sticker.width,
                 height: stickerMessage.sticker.height
             }
-        }).then((result) => { }).catch((error) => { });
+        }).then((preparedMessage) => {
+
+            let invalidData = false;
+
+            if (!preparedMessage || typeof preparedMessage !== 'object') {
+                invalidData = true;
+            } else if (preparedMessage.chatType !== stickerMessage.chatType || preparedMessage.chatId !== stickerMessage.chatId) {
+                invalidData = true;
+            } else if (
+                !preparedMessage.sticker || typeof preparedMessage.sticker !== 'object' ||
+                !preparedMessage.sticker.name || typeof preparedMessage.sticker.name !== 'string' ||
+                !preparedMessage.sticker.catId || typeof preparedMessage.sticker.catId !== 'number' ||
+                !preparedMessage.sticker.url || typeof preparedMessage.sticker.url !== 'string' || !/^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(preparedMessage.sticker.url) ||
+                (preparedMessage.sticker.width && typeof preparedMessage.sticker.width !== 'number') ||
+                (preparedMessage.sticker.height && typeof preparedMessage.sticker.height !== 'number')
+            ) {
+                invalidData = true;
+            }
+
+            if (invalidData) {
+                stickerMessage.status = -1;
+                this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...stickerMessage } });
+                return;
+            }
+
+            stickerMessage.sticker.name = preparedMessage.sticker.name;
+            stickerMessage.sticker.catId = preparedMessage.sticker.catId;
+            stickerMessage.sticker.url = preparedMessage.sticker.url;
+            stickerMessage.sticker.width = preparedMessage.sticker.width;
+            stickerMessage.sticker.height = preparedMessage.sticker.height;
+
+            this.sendingMessageFailChecks[stickerMessage.msgId] = setTimeout(() => {
+                stickerMessage.status = -1;
+                this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...stickerMessage } });
+                delete this.sendingMessageFailChecks[stickerMessage.msgId];
+            }, 5000);
+
+            this.coreInstances.AZStackCore.newMessage({
+                chatType: this.props.chatType,
+                chatId: this.props.chatId,
+                msgId: stickerMessage.msgId,
+                sticker: {
+                    name: stickerMessage.sticker.name,
+                    catId: stickerMessage.sticker.catId,
+                    url: stickerMessage.sticker.url,
+                    width: stickerMessage.sticker.width,
+                    height: stickerMessage.sticker.height
+                }
+            }).then((result) => { }).catch((error) => { });
+        }).catch((error) => {
+            stickerMessage.status = -1;
+            this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...stickerMessage } });
+        });
     };
     sendFileMessages(fileMessages) {
         fileMessages.map((fileMessage) => {
@@ -233,16 +305,9 @@ class ChatInputComponentBlock extends React.Component {
                 return;
             }
 
-            this.sendingMessageFailChecks[fileMessage.msgId] = setTimeout(() => {
-                fileMessage.status = -1;
-                this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...fileMessage } });
-                delete this.sendingMessageFailChecks[fileMessage.msgId];
-            }, 5000);
-
-            this.coreInstances.AZStackCore.newMessage({
+            this.coreInstances.Message.onBeforeMessageSend({
                 chatType: this.props.chatType,
                 chatId: this.props.chatId,
-                msgId: fileMessage.msgId,
                 file: {
                     name: fileMessage.file.name,
                     length: fileMessage.file.length,
@@ -251,7 +316,62 @@ class ChatInputComponentBlock extends React.Component {
                     width: fileMessage.file.width,
                     height: fileMessage.file.height
                 }
-            }).then((result) => { }).catch((error) => { });
+            }).then((preparedMessage) => {
+
+                let invalidData = false;
+
+                if (!preparedMessage || typeof preparedMessage !== 'object') {
+                    invalidData = true;
+                } else if (preparedMessage.chatType !== fileMessage.chatType || preparedMessage.chatId !== fileMessage.chatId) {
+                    invalidData = true;
+                } else if (
+                    !preparedMessage.file || typeof preparedMessage.file !== 'object' ||
+                    !preparedMessage.file.name || typeof preparedMessage.file.name !== 'string' ||
+                    !preparedMessage.file.length || typeof preparedMessage.file.length !== 'number' ||
+                    !preparedMessage.file.type || typeof preparedMessage.file.type !== 'number' ||
+                    !preparedMessage.file.url || typeof preparedMessage.file.url !== 'string' || !/^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(preparedMessage.file.url) ||
+                    (preparedMessage.file.width && typeof preparedMessage.file.width !== 'number') ||
+                    (preparedMessage.file.height && typeof preparedMessage.file.height !== 'number')
+                ) {
+                    invalidData = true;
+                }
+
+                if (invalidData) {
+                    fileMessage.status = -1;
+                    this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...fileMessage } });
+                    return;
+                }
+
+                fileMessage.file.name = preparedMessage.file.name;
+                fileMessage.file.length = preparedMessage.file.length;
+                fileMessage.file.type = preparedMessage.file.type;
+                fileMessage.file.url = preparedMessage.file.url;
+                fileMessage.file.width = preparedMessage.file.width;
+                fileMessage.file.height = preparedMessage.file.height;
+
+                this.sendingMessageFailChecks[fileMessage.msgId] = setTimeout(() => {
+                    fileMessage.status = -1;
+                    this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...fileMessage } });
+                    delete this.sendingMessageFailChecks[fileMessage.msgId];
+                }, 5000);
+
+                this.coreInstances.AZStackCore.newMessage({
+                    chatType: this.props.chatType,
+                    chatId: this.props.chatId,
+                    msgId: fileMessage.msgId,
+                    file: {
+                        name: fileMessage.file.name,
+                        length: fileMessage.file.length,
+                        type: fileMessage.file.type,
+                        url: fileMessage.file.url,
+                        width: fileMessage.file.width,
+                        height: fileMessage.file.height
+                    }
+                }).then((result) => { }).catch((error) => { });
+            }).catch((error) => {
+                fileMessage.status = -1;
+                this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...fileMessage } });
+            });
         });
     };
     sendLocationMessage(location) {
@@ -291,18 +411,61 @@ class ChatInputComponentBlock extends React.Component {
         };
         this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...locationMessage } });
 
-        this.sendingMessageFailChecks[locationMessage.msgId] = setTimeout(() => {
-            locationMessage.status = -1;
-            this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...locationMessage } });
-            delete this.sendingMessageFailChecks[locationMessage.msgId];
-        }, 5000);
-
-        this.coreInstances.AZStackCore.newMessage({
+        this.coreInstances.Message.onBeforeMessageSend({
             chatType: this.props.chatType,
             chatId: this.props.chatId,
-            msgId: locationMessage.msgId,
-            location: locationMessage.location
-        }).then((result) => { }).catch((error) => { });
+            location: {
+                address: locationMessage.location.address,
+                latitude: locationMessage.location.latitude,
+                longitude: locationMessage.location.longitude
+            }
+        }).then((preparedMessage) => {
+
+            let invalidData = false;
+
+            if (!preparedMessage || typeof preparedMessage !== 'object') {
+                invalidData = true;
+            } else if (preparedMessage.chatType !== locationMessage.chatType || preparedMessage.chatId !== locationMessage.chatId) {
+                invalidData = true;
+            } else if (
+                !preparedMessage.location || typeof preparedMessage.location !== 'object' ||
+                !preparedMessage.location.address || typeof preparedMessage.location.address !== 'string' ||
+                (preparedMessage.location.latitude !== 0 && !preparedMessage.location.latitude) || typeof preparedMessage.location.latitude !== 'number' ||
+                (preparedMessage.location.longitude !== 0 && !preparedMessage.location.longitude) || typeof preparedMessage.location.longitude !== 'number'
+            ) {
+                invalidData = true;
+            }
+
+            if (invalidData) {
+                locationMessage.status = -1;
+                this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...locationMessage } });
+                return;
+            }
+
+            locationMessage.location.address = preparedMessage.location.address;
+            locationMessage.location.latitude = preparedMessage.location.latitude;
+            locationMessage.location.longitude = preparedMessage.location.longitude;
+
+            this.sendingMessageFailChecks[locationMessage.msgId] = setTimeout(() => {
+                locationMessage.status = -1;
+                this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...locationMessage } });
+                delete this.sendingMessageFailChecks[locationMessage.msgId];
+            }, 5000);
+
+            this.coreInstances.AZStackCore.newMessage({
+                chatType: this.props.chatType,
+                chatId: this.props.chatId,
+                msgId: locationMessage.msgId,
+                location: {
+                    address: locationMessage.location.address,
+                    latitude: locationMessage.location.latitude,
+                    longitude: locationMessage.location.longitude
+                }
+            }).then((result) => { }).catch((error) => { });
+        }).catch((error) => {
+            locationMessage.status = -1;
+            this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_NEW_MESSAGE_RETURN, { error: null, result: { ...locationMessage } });
+        });
     };
 
     onInputContentChangeSize(e) {
