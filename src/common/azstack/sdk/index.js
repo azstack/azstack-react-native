@@ -2,6 +2,7 @@ import React from 'react';
 import {
     Platform,
     AppState,
+    Keyboard,
     Alert,
     Dimensions,
     View
@@ -562,6 +563,7 @@ export class AZStackSdk extends AZStackBaseComponent {
                     return;
                 }
 
+                Keyboard.dismiss();
                 this.startAudioCall({
                     info: {
                         userId: event.userId
@@ -574,6 +576,7 @@ export class AZStackSdk extends AZStackBaseComponent {
                     return;
                 }
 
+                Keyboard.dismiss();
                 this.startVideoCall({
                     info: {
                         userId: event.userId
@@ -1106,6 +1109,7 @@ export class AZStackSdk extends AZStackBaseComponent {
                         return;
                     }
 
+                    Keyboard.dismiss();
                     this.startAudioCall({
                         info: {
                             userId: event.userId
@@ -1118,6 +1122,7 @@ export class AZStackSdk extends AZStackBaseComponent {
                         return;
                     }
 
+                    Keyboard.dismiss();
                     this.startVideoCall({
                         info: {
                             userId: event.userId
