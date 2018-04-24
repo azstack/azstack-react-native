@@ -356,6 +356,7 @@ class OnCallComponent extends React.Component {
 
 	toggleSpeaker() {
 		this.setState({isSpeaker: !this.state.isSpeaker});
+		InCallManager.setForceSpeakerphoneOn(!this.state.isSpeaker);
 	}
 
 }

@@ -52,7 +52,7 @@ class AppMain extends React.Component {
     };
     getNumbers = (options) => {
         return new Promise((resolve, reject) => {
-            resolve(['01672848892', '0966275092']);
+            resolve([]);
         });
     }
 
