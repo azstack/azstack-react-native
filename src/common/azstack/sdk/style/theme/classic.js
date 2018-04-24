@@ -496,7 +496,7 @@ export const CHAT_INPUT_INPUT_DISABLE_TOUCH_BLOCK_STYLE = {
 export const CHAT_INPUT_INPUT_CONTENT_BLOCK_STYLE = {
     borderTopWidth: 1,
     borderTopColor: '#E1E5EC',
-    paddingVertical: 5,
+    paddingVertical: 0,
     paddingHorizontal: 15,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -601,7 +601,7 @@ export const CHAT_INPUT_STICKER_BOX_BODY_BLOCK_STYLE = {
 export const CHAT_INPUT_STICKER_BOX_STICKERS_BLOCK_STYLE = {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'flex-start'
 };
 export const CHAT_INPUT_STICKER_BOX_STICKERS_STICKER_BUTTON_STYLE = {

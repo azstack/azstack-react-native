@@ -1,6 +1,7 @@
 import React from 'react';
 import {
     BackHandler,
+    Dimensions,
     Alert,
     View,
     Image,
@@ -80,6 +81,9 @@ class ChatInputStickerBlockComponent extends React.Component {
             selected: 0,
             items: [{ ...this.defaultSticker }]
         };
+
+        this.stickerSize = 70;
+        this.itemsPerLine = Math.floor(Dimensions.get('window').width / this.stickerSize);
 
         this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
 
@@ -166,6 +170,12 @@ class ChatInputStickerBlockComponent extends React.Component {
                                 files.map((file) => {
                                     downloadedSticker.files.push(`file://${RNFS.DocumentDirectoryPath}/stickers/${downloadedSticker.catId}/${file}`);
                                 });
+                                if (downloadedSticker.files.length % this.itemsPerLine !== 0) {
+                                    let missingItemTotal = this.itemsPerLine - downloadedSticker.files.length % this.itemsPerLine;
+                                    for (let i = 0; i < missingItemTotal; i++) {
+                                        downloadedSticker.files.push('');
+                                    }
+                                }
                                 resolve(downloadedSticker);
                             }).catch((error) => {
                                 reject(error);
@@ -203,6 +213,12 @@ class ChatInputStickerBlockComponent extends React.Component {
                 files.map((file) => {
                     newSticker.files.push(`file://${RNFS.DocumentDirectoryPath}/stickers/${newSticker.catId}/${file}`);
                 });
+                if (newSticker.files.length % this.itemsPerLine !== 0) {
+                    let missingItemTotal = this.itemsPerLine - newSticker.files.length % this.itemsPerLine;
+                    for (let i = 0; i < missingItemTotal; i++) {
+                        newSticker.files.push('');
+                    }
+                }
                 stickers.push(newSticker);
                 stickers.sort((a, b) => {
                     if (a.catId < b.catId) {
@@ -357,13 +373,16 @@ class ChatInputStickerBlockComponent extends React.Component {
                         contentContainerStyle={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_STICKERS_BLOCK_STYLE')}
                     >
                         {
-                            this.state.items[this.state.selected].files.map((item) => {
+                            this.state.items[this.state.selected].files.map((item, index) => {
                                 return (
                                     <TouchableOpacity
-                                        style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_STICKERS_STICKER_BUTTON_STYLE')}
+                                        style={[
+                                            this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_STICKERS_STICKER_BUTTON_STYLE'),
+                                            { width: this.stickerSize, height: this.stickerSize }
+                                        ]}
                                         activeOpacity={0.5}
                                         onPress={() => { this.onStickerPressed({ catId: this.state.items[this.state.selected].catId, url: item }) }}
-                                        key={`sticker_${this.state.items[this.state.selected].catId}_${this.coreInstances.FileConverter.nameFromPath(item)}`}
+                                        key={`sticker_${this.state.items[this.state.selected].catId}_${this.coreInstances.FileConverter.nameFromPath(item) ? this.coreInstances.FileConverter.nameFromPath(item) : index}`}
                                     >
                                         <Image
                                             style={this.coreInstances.CustomStyle.getStyle('CHAT_INPUT_STICKER_BOX_STICKERS_STICKER_IMAGE_STYLE')}

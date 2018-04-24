@@ -88,7 +88,7 @@ class AZStackSdkExample extends React.Component {
     componentDidMount() {
         this.refs.AZStackSdk.connect().then((result) => {
             this.setState({ authenticatedUser: result });
-        }).catch((error) => {});
+        }).catch((error) => { });
     };
 
     componentWillUnmount() {
@@ -110,7 +110,8 @@ class AZStackSdkExample extends React.Component {
                     members: this.props.members,
                     getInitialMembers: this.props.getInitialMembers,
                     getMoreMembers: this.props.getMoreMembers,
-                    getNumbers: this.props.getNumbers
+                    getNumbers: this.props.getNumbers,
+                    onBeforeMessageSend: this.props.onBeforeMessageSend
                 }}
             >
                 <View

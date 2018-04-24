@@ -16,7 +16,7 @@ class AppMain extends React.Component {
             requestTimeout: 60000,
             intervalPingTime: 60000,
             autoReconnect: true,
-            autoReconnectLimitTries: 0,
+            autoReconnectLimitTries: 10,
             autoReconnectIntervalTime: 5000,
             logLevel: 'ERROR',
             authenticatingData: {
@@ -36,6 +36,7 @@ class AppMain extends React.Component {
         this.getInitialMembers = this.getInitialMembers.bind(this);
         this.getMoreMembers = this.getMoreMembers.bind(this);
         this.getNumbers = this.getNumbers.bind(this);
+        this.onBeforeMessageSend = this.onBeforeMessageSend.bind(this);
     };
 
     getInitialMembers = (options) => {
@@ -54,7 +55,12 @@ class AppMain extends React.Component {
         return new Promise((resolve, reject) => {
             resolve([]);
         });
-    }
+    };
+    onBeforeMessageSend = (message) => {
+        return new Promise((resolve, reject) => {
+            resolve(message);
+        });
+    };
 
     render() {
         return (
@@ -72,6 +78,7 @@ class AppMain extends React.Component {
                         getInitialMembers={this.getInitialMembers}
                         getMoreMembers={this.getMoreMembers}
                         getNumbers={this.getNumbers}
+                        onBeforeMessageSend={this.onBeforeMessageSend}
                     />}
             </View>
         );
