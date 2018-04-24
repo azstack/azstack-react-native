@@ -496,7 +496,7 @@ export const CHAT_INPUT_INPUT_DISABLE_TOUCH_BLOCK_STYLE = {
 export const CHAT_INPUT_INPUT_CONTENT_BLOCK_STYLE = {
     borderTopWidth: 1,
     borderTopColor: '#E1E5EC',
-    paddingVertical: 5,
+    paddingVertical: 0,
     paddingHorizontal: 15,
     flexDirection: 'row',
     justifyContent: 'center',
