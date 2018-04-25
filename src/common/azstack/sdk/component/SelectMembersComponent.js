@@ -214,7 +214,10 @@ class SelectMembersComponent extends React.Component {
                 return;
             }
 
-            let firstLetter = member.fullname[0].toUpperCase();
+            let firstLetter = "UF";
+            if(member.fullname) {
+                firstLetter = member.fullname[0].toUpperCase();
+            }
             let foundGroupedMember = false;
             for (let i = 0; i < groupedMembers.length; i++) {
                 let groupedMember = groupedMembers[i];
