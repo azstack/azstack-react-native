@@ -41,7 +41,7 @@ class AppMain extends React.Component {
 
     getInitialMembers = (options) => {
         return new Promise((resolve, reject) => {
-            resolve(['test_user_1', 'test_user_2', 'test_user_3', 'test_user_1', 'test_user_2', 'test_user_3', 'test_user_1', 'test_user_2', 'test_user_3', 'test_user_1', 'test_user_2', 'test_user_3'].filter((member) => {
+            resolve(['test_user_1', 'test_user_2', 'test_user_3'].filter((member) => {
                 return member.indexOf(options.searchText) > -1;
             }));
         });

@@ -16,7 +16,7 @@ import UserComponent from './UserComponent';
 import GroupComponent from './GroupComponent';
 import SelectMembersComponent from './SelectMembersComponent';
 import SelectMemberComponent from './SelectMemberComponent';
-import NewGroupComponent from './NewGroupComponent';
+import GroupInputNameComponent from './GroupInputNameComponent';
 import ImageGalleryComponent from './ImageGalleryComponent';
 import LocationMapComponent from './LocationMapComponent';
 import SketchDrawingComponent from './SketchDrawingComponent';
@@ -36,7 +36,7 @@ const NavigationEnum = {
     GroupComponent: 'GroupComponent',
     SelectMembersComponent: 'SelectMembersComponent',
     SelectMemberComponent: 'SelectMemberComponent',
-    NewGroupComponent: 'NewGroupComponent',
+    GroupInputNameComponent: 'GroupInputNameComponent',
     ImageGalleryComponent: 'ImageGalleryComponent',
     LocationMapComponent: 'LocationMapComponent',
     SketchDrawingComponent: 'SketchDrawingComponent',
@@ -91,8 +91,8 @@ export default class AZStackBaseComponent extends React.Component {
                 return this.renderSelectMembers(options, index);
             case 'SelectMemberComponent':
                 return this.renderSelectMember(options, index);
-            case 'NewGroupComponent':
-                return this.renderNewGroup(options, index);
+            case 'GroupInputNameComponent':
+                return this.renderGroupInputName(options, index);
             case 'ImageGalleryComponent':
                 return this.renderImageGallery(options, index);
             case 'LocationMapComponent':
@@ -237,8 +237,8 @@ export default class AZStackBaseComponent extends React.Component {
         />;
     };
 
-    renderNewGroup(options, key) {
-        return <NewGroupComponent
+    renderGroupInputName(options, key) {
+        return <GroupInputNameComponent
             key={key}
             Sizes={this.Sizes}
             getCoreInstances={this.getCoreInstances}

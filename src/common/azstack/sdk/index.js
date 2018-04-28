@@ -669,8 +669,8 @@ export class AZStackSdk extends AZStackBaseComponent {
             showSelectMembers: (event) => {
                 this.showSelectMembers(event);
             },
-            showNewGroup: (event) => {
-                this.showNewGroup(event);
+            showGroupInputName: (event) => {
+                this.showGroupInputName(event);
             },
             onConversationPressed: (event) => {
                 if (options && typeof options === 'object' && typeof options.onConversationPressed === 'function') {
@@ -831,8 +831,8 @@ export class AZStackSdk extends AZStackBaseComponent {
             }
         });
     };
-    showNewGroup(options) {
-        this.navigate(this.getNavigation().NewGroupComponent, {
+    showGroupInputName(options) {
+        this.navigate(this.getNavigation().GroupInputNameComponent, {
             ...options,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
@@ -1020,8 +1020,8 @@ export class AZStackSdk extends AZStackBaseComponent {
                 showSelectMembers: (event) => {
                     this.showSelectMembers(event);
                 },
-                showNewGroup: (event) => {
-                    this.showNewGroup(event);
+                showGroupInputName: (event) => {
+                    this.showGroupInputName(event);
                 },
                 onConversationPressed: (event) => {
                     if (options && typeof options === 'object' && typeof options.onConversationPressed === 'function') {

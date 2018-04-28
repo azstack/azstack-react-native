@@ -405,11 +405,11 @@ class ConversationsComponent extends React.Component {
                 }
 
                 setTimeout(() => {
-                    this.props.showNewGroup({
+                    this.props.showGroupInputName({
                         headerTitle: this.coreInstances.Language.getText('CONVERSATIONS_LIST_NEW_GROUP_TO_CHAT_TEXT'),
                         onInputDone: (event) => {
                             this.coreInstances.AZStackCore.createGroup({
-                                type: event.groupType,
+                                type: this.coreInstances.AZStackCore.groupConstants.GROUP_TYPE_PRIVATE,
                                 name: event.groupName,
                                 memberIds: selectedMembers.map((member) => { return member.userId })
                             }).then((result) => {
