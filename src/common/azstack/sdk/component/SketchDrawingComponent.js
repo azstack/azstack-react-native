@@ -26,6 +26,7 @@ class SketchDrawingComponent extends React.Component {
                 show: false
             },
             draw: {
+                show: false,
                 drawed: false,
                 color: '#000',
                 size: 3
@@ -79,10 +80,14 @@ class SketchDrawingComponent extends React.Component {
         this.setState({ setting: Object.assign({}, this.state.setting, { show: !this.state.setting.show }) });
     };
     onUndoButtonPressed() {
-        this.refs.SketchCanvas.undo();
+        if (this.refs.SketchCanvas) {
+            this.refs.SketchCanvas.undo();
+        }
     };
     onClearButtonPressed() {
-        this.refs.SketchCanvas.clear();
+        if (this.refs.SketchCanvas) {
+            this.refs.SketchCanvas.clear();
+        }
     };
     onDoneButtonPressed() {
 
@@ -91,7 +96,7 @@ class SketchDrawingComponent extends React.Component {
                 this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
                 this.coreInstances.Language.getText('SKETCH_DRAWING_EMPTY_ERROR_TEXT'),
                 [
-                    {text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => {}}
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
                 ],
                 { cancelable: true }
             );
@@ -138,9 +143,13 @@ class SketchDrawingComponent extends React.Component {
 
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        setTimeout(() => {
+            this.setState({ draw: Object.assign({}, this.state.draw, { show: true }) });
+        }, 500);
     };
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        this.onClearButtonPressed();
     };
 
     render() {
@@ -161,14 +170,18 @@ class SketchDrawingComponent extends React.Component {
                     getCoreInstances={this.props.getCoreInstances}
                     style={this.props.contentContainerStyle}
                 >
-                    <SketchCanvas
-                        ref={'SketchCanvas'}
-                        style={this.coreInstances.CustomStyle.getStyle('SKETCH_DRAWING_BLOCK_STYLE')}
-                        strokeColor={this.state.draw.color}
-                        strokeWidth={this.state.draw.size}
-                        onStrokeStart={this.onSketchCanvasStrokeStart}
-                        onPathsChange={this.onSketchCanvasPathsChange}
-                    />
+                    {
+                        this.state.draw.show && (
+                            <SketchCanvas
+                                ref={'SketchCanvas'}
+                                style={this.coreInstances.CustomStyle.getStyle('SKETCH_DRAWING_BLOCK_STYLE')}
+                                strokeColor={this.state.draw.color}
+                                strokeWidth={this.state.draw.size}
+                                onStrokeStart={this.onSketchCanvasStrokeStart}
+                                onPathsChange={this.onSketchCanvasPathsChange}
+                            />
+                        )
+                    }
                     {
                         this.state.setting.show && (
                             <SketchDrawingSettingBlockComponent
