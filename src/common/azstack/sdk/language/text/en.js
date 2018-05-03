@@ -141,8 +141,10 @@ export const SELECT_MEMBERS_SELECTED_TITLE_TEXT = 'Selected';
 export const SELECT_MEMBER_SEARCH_PLACEHOLDER_TEXT = 'Search...';
 export const SELECT_MEMBER_EMPTY_TEXT = 'No Member';
 
-export const GROUP_INPUT_NAME_NAME_INPUT_PLACEHOLDER_TEXT = 'Group name';
-export const GROUP_INPUT_NAME_NAME_EMPTY_ERROR = 'Group name can\'t be left blank';
+export const GROUP_INPUT_NAME_INPUT_TITLE_TEXT = 'Group name';
+export const GROUP_INPUT_NAME_DONE_BUTTON_TITLE_TEXT = 'Done';
+export const GROUP_INPUT_NAME_CANCEL_BUTTON_TITLE_TEXT = 'Cancel';
+export const GROUP_INPUT_NAME_NAME_EMPTY_ERROR_TEXT = 'Group name can\'t be left blank';
 
 export const IMAGE_GALLERY_EMPTY_TEXT = 'No image';
 

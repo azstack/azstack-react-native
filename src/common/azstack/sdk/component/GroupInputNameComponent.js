@@ -5,13 +5,10 @@ import {
     View,
     Text,
     TextInput,
-    Picker
+    TouchableOpacity
 } from 'react-native';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
-import GroupInputNameHeaderBlockComponent from './part/group/GroupInputNameHeaderBlockComponent';
-import ScreenBodyBlockComponent from './part/screen/ScreenBodyBlockComponent';
-import ConnectionBlockComponent from './part/common/ConnectionBlockComponent';
 
 class GroupInputNameComponent extends React.Component {
     constructor(props) {
@@ -39,7 +36,7 @@ class GroupInputNameComponent extends React.Component {
         if (!this.state.groupName) {
             Alert.alert(
                 this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
-                this.coreInstances.Language.getText('GROUP_INPUT_NAME_NAME_EMPTY_ERROR'),
+                this.coreInstances.Language.getText('GROUP_INPUT_NAME_NAME_EMPTY_ERROR_TEXT'),
                 [
                     { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
                 ],
@@ -70,39 +67,56 @@ class GroupInputNameComponent extends React.Component {
     render() {
         return (
             <ScreenBlockComponent
-                fullScreen={false}
+                fullScreen={true}
                 getCoreInstances={this.props.getCoreInstances}
                 statusbar={this.props.statusbar}
-                style={this.props.style}
+                style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_SCREEN_BLOCK_STYLE')}
             >
-                <GroupInputNameHeaderBlockComponent
-                    getCoreInstances={this.props.getCoreInstances}
-                    onBackButtonPressed={this.props.onBackButtonPressed}
-                    onDoneButtonPressed={this.onDoneButtonPressed}
-                    title={this.props.headerTitle}
-                />
-                <ScreenBodyBlockComponent
-                    getCoreInstances={this.props.getCoreInstances}
-                    style={this.props.contentContainerStyle}
+                <View
+                    style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_BLOCK_STYLE')}
                 >
-                    <View
-                        style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_BLOCK_STYLE')}
+                    <Text
+                        style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_GROUP_NAME_TITLE_STYLE')}
                     >
-                        <TextInput
-                            style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_GROUP_NAME_INPUT_STYLE')}
-                            onChangeText={this.onGroupNameInputTextChanged}
-                            value={this.state.groupName}
-                            placeholder={this.coreInstances.Language.getText('GROUP_INPUT_NAME_NAME_INPUT_PLACEHOLDER_TEXT')}
-                            returnKeyType='done'
-                            {
-                            ...this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_GROUP_NAME_INPUT_PROPS_STYLE')
-                            }
-                        />
-                    </View>
-                    <ConnectionBlockComponent
-                        getCoreInstances={this.props.getCoreInstances}
+                        {this.coreInstances.Language.getText('GROUP_INPUT_NAME_INPUT_TITLE_TEXT')}
+                    </Text>
+                    <TextInput
+                        style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_GROUP_NAME_INPUT_STYLE')}
+                        onChangeText={this.onGroupNameInputTextChanged}
+                        value={this.state.groupName}
+                        placeholder={this.coreInstances.Language.getText('GROUP_INPUT_NAME_NAME_INPUT_PLACEHOLDER_TEXT')}
+                        returnKeyType='done'
+                        {
+                        ...this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_GROUP_NAME_INPUT_PROPS_STYLE')
+                        }
                     />
-                </ScreenBodyBlockComponent>
+                    <View
+                        style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_BUTTON_BLOCK_STYLE')}
+                    >
+                        <TouchableOpacity
+                            style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_DONE_BUTTON_STYLE')}
+                            activeOpacity={0.5}
+                            onPress={this.onDoneButtonPressed}
+                        >
+                            <Text
+                                style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_DONE_BUTTON_TEXT_STYLE')}
+                            >
+                                {this.coreInstances.Language.getText('GROUP_INPUT_NAME_DONE_BUTTON_TITLE_TEXT')}
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_CANCEL_BUTTON_STYLE')}
+                            activeOpacity={0.5}
+                            onPress={this.props.onBackButtonPressed}
+                        >
+                            <Text
+                                style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_CANCEL_BUTTON_TEXT_STYLE')}
+                            >
+                                {this.coreInstances.Language.getText('GROUP_INPUT_NAME_CANCEL_BUTTON_TITLE_TEXT')}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </ScreenBlockComponent>
         );
     };

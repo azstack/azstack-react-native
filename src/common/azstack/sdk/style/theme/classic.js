@@ -1451,48 +1451,22 @@ export const SELECT_MEMBER_SELECTED_IMAGE_STYLE = {
     height: 35
 };
 
-export const GROUP_INPUT_NAME_HEADER_BLOCK_STYLE = {
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderStyle: 'solid',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E1E5EC',
+export const GROUP_INPUT_NAME_SCREEN_BLOCK_STYLE = {
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row'
+    alignItems: 'center'
 };
-export const GROUP_INPUT_NAME_HEADER_BACK_BUTTON_STYLE = {
-    width: 50,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'flex-start'
-};
-export const GROUP_INPUT_NAME_HEADER_BACK_BUTTON_IMAGE_STYLE = {
-    width: 25,
-    height: 25
-};
-export const GROUP_INPUT_NAME_HEADER_TITLE_TEXT_STYLE = {
-    flex: 1,
-    fontSize: 20,
-    fontWeight: '400',
-    lineHeight: 25,
-    color: '#2F353B',
-    textAlign: 'center'
-};
-export const GROUP_INPUT_NAME_HEADER_DONE_BUTTON_STYLE = {
-    width: 50,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'flex-end'
-};
-export const GROUP_INPUT_NAME_HEADER_DONE_BUTTON_IMAGE_STYLE = {
-    width: 25,
-    height: 25
-};
-
 export const GROUP_INPUT_NAME_BLOCK_STYLE = {
-    paddingVertical: 10,
-    paddingHorizontal: 15
+    padding: 20,
+    backgroundColor: '#fff',
+    width: 300,
+    borderRadius: 5
+};
+export const GROUP_INPUT_NAME_GROUP_NAME_TITLE_STYLE = {
+    fontSize: 16,
+    fontWeight: '400',
+    lineHeight: 20,
+    color: '#2F353B'
 };
 export const GROUP_INPUT_NAME_GROUP_NAME_INPUT_STYLE = {
     borderStyle: 'solid',
@@ -1500,15 +1474,51 @@ export const GROUP_INPUT_NAME_GROUP_NAME_INPUT_STYLE = {
     borderBottomColor: '#F2784B',
     paddingBottom: 5,
     paddingHorizontal: 0,
-    marginHorizontal: 10,
+    marginHorizontal: 0,
     fontSize: 15,
     lineHeight: 20,
     fontWeight: '400',
-    color: '#2F353B'
+    color: '#2F353B',
+    marginTop: 10
 };
 export const GROUP_INPUT_NAME_GROUP_NAME_INPUT_PROPS_STYLE = {
     underlineColorAndroid: 'transparent',
     placeholderTextColor: '#E1E5EC'
+};
+export const GROUP_INPUT_NAME_BUTTON_BLOCK_STYLE = {
+    marginTop: 15,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center'
+};
+export const GROUP_INPUT_NAME_DONE_BUTTON_STYLE = {
+    paddingHorizontal: 15,
+    paddingVertical: 3,
+    borderWidth: 1,
+    borderColor: '#F2784B',
+    borderRadius: 5,
+    marginRight: 10
+};
+export const GROUP_INPUT_NAME_DONE_BUTTON_TEXT_STYLE = {
+    fontSize: 14,
+    fontWeight: '400',
+    lineHeight: 20,
+    color: '#F2784B',
+    textAlign: 'center'
+};
+export const GROUP_INPUT_NAME_CANCEL_BUTTON_STYLE = {
+    paddingHorizontal: 15,
+    paddingVertical: 3,
+    borderWidth: 1,
+    borderColor: '#95A5A6',
+    borderRadius: 5
+};
+export const GROUP_INPUT_NAME_CANCEL_BUTTON_TEXT_STYLE = {
+    fontSize: 14,
+    fontWeight: '400',
+    lineHeight: 20,
+    color: '#95A5A6',
+    textAlign: 'center'
 };
 
 export const IMAGE_GALLERY_SCREEN_BLOCK_STYLE = {
