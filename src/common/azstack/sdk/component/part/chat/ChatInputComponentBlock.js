@@ -54,6 +54,18 @@ class ChatInputComponentBlock extends React.Component {
     };
 
     addSubscriptions() {
+        this.subscriptions.onMessageListScrollStart = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_MESSAGE_LIST_SCROLL_START, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+
+            if (this.state.sticker.showed) {
+                this.setState({ sticker: Object.assign({}, this.state.sticker, { showed: false }) });
+            }
+            if (this.state.file.showed) {
+                this.setState({ file: Object.assign({}, this.state.file, { showed: false }) });
+            }
+        });
         this.subscriptions.onMessageStatusChanged = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_MESSAGE_STATUS_CHANGED, ({ error, result }) => {
             if (error) {
                 return;

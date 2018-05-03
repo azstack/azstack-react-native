@@ -57,6 +57,7 @@ class ChatComponent extends React.Component {
 
         this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
 
+        this.onMessagesListScrollBegin = this.onMessagesListScrollBegin.bind(this);
         this.onMessagesListEndReach = this.onMessagesListEndReach.bind(this);
         this.onMessageImagePressed = this.onMessageImagePressed.bind(this);
         this.onMessageLocationPressed = this.onMessageLocationPressed.bind(this);
@@ -686,6 +687,9 @@ class ChatComponent extends React.Component {
         });
     };
 
+    onMessagesListScrollBegin() {
+        this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_MESSAGE_LIST_SCROLL_START, { error: null, result: null });
+    };
     onMessagesListEndReach() {
         this.getModifiedMessages();
     };
@@ -1337,6 +1341,7 @@ class ChatComponent extends React.Component {
                                         />
                                     );
                                 }}
+                                onScrollBeginDrag={this.onMessagesListScrollBegin}
                                 onEndReached={this.onMessagesListEndReach}
                                 onEndReachedThreshold={0.1}
                                 keyboardDismissMode={Platform.select({ ios: 'interactive', android: 'on-drag' })}
