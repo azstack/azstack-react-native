@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Platform,
     Alert,
     BackHandler,
     View,
@@ -107,6 +108,20 @@ class ChatInputAudioRecordBlockComponent extends React.Component {
             }
         );
     };
+    onAudioRecordFinished(data) {
+        if (Platform.OS === 'ios') {
+            this.onAudioFilePathReturn(data.audioFileURL);
+        }
+    };
+    onAudioFilePathReturn(filePath) {
+        if (filePath.indexOf('file://') === -1) {
+            filePath = `file://${filePath}`;
+        }
+        this.setState({
+            recording: Object.assign({}, this.state.recording, { isOn: false, time: 0 }),
+            playback: Object.assign({}, this.state.playback, { filePath: filePath })
+        });
+    };
 
     onVideoLoadStart(data) { };
     onVideoLoad(data) {
@@ -147,10 +162,9 @@ class ChatInputAudioRecordBlockComponent extends React.Component {
     async onStopRecordingButtonPressed() {
         const filePath = await AudioRecorder.stopRecording();
         clearInterval(this.intervalRecoringTime);
-        this.setState({
-            recording: Object.assign({}, this.state.recording, { isOn: false, time: 0 }),
-            playback: Object.assign({}, this.state.playback, { filePath: `file://${filePath}` })
-        });
+        if (Platform.OS === 'android') {
+            this.onAudioFilePathReturn(filePath);
+        }
     };
     onPlayButtonPressed() {
         this.setState({ playback: Object.assign({}, this.state.playback, { isOn: true, time: 0 }) });
@@ -188,6 +202,9 @@ class ChatInputAudioRecordBlockComponent extends React.Component {
 
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        AudioRecorder.onFinished = (data) => {
+            this.onAudioRecordFinished(data);
+        };
     };
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
