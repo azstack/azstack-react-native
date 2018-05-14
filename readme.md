@@ -295,7 +295,6 @@ render() {
             ref={"AZStackSdk"}
             options={{
                 azstackConfig: azstackConfig,
-                googleApiKey: 'your google api key here',
                 languageCode: 'en',
                 themeName: 'classic',
                 members: ['test_user_1', 'test_user_2', 'test_user_3']
