@@ -27,6 +27,7 @@ import Event from './handler/event';
 import Member from './handler/member';
 import Number from './handler/number';
 import Message from './handler/message';
+import Call from './handler/call';
 import Notification from './handler/notification';
 
 import AZStackBaseComponent from './component/AZStackBaseComponent';
@@ -82,6 +83,11 @@ export class AZStackSdk extends AZStackBaseComponent {
         this.Message = new Message();
         if (this.props.options.onBeforeMessageSend && typeof this.props.options.onBeforeMessageSend === 'function') {
             this.Message.onBeforeMessageSend = this.props.options.onBeforeMessageSend;
+        }
+
+        this.Call = new Call();
+        if (this.props.options.onBeforeCalloutStart && typeof this.props.options.onBeforeCalloutStart === 'function') {
+            this.Call.onBeforeCalloutStart = this.props.options.onBeforeCalloutStart;
         }
 
         this.Notification = new Notification({
@@ -189,7 +195,8 @@ export class AZStackSdk extends AZStackBaseComponent {
 
             Member: this.Member,
             Message: this.Message,
-            Number: this.Number
+            Number: this.Number,
+            Call: this.Call
         };
     };
 
@@ -383,41 +390,42 @@ export class AZStackSdk extends AZStackBaseComponent {
     };
 
     startCallout(options) {
-        this.navigate(
-            this.getNavigation().OnCallComponent,
-            {
-                ...options,
-                onEndCall: () => {
-                    if (options.onEndCall) {
-                        options.onEndCall()
-                    }
-                    this.AZStackCore.stopCallout().then((result) => { });
-                    setTimeout(() => {
-                        this.pop();
-                    }, 1500);
-                },
-                onCallEnded: () => {
-                    setTimeout(() => {
-                        this.pop();
-                    }, 1500);
-                },
-                onToggleAudio: (toOn) => {
-                    this.AZStackCore.toggleAudioState({
-                        state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
-                    }, (error, result) => {
-
-                    });
-                },
-            }
-        );
-
-        this.AZStackCore.startCallout({
+        this.Call.onBeforeCalloutStart({
             toPhoneNumber: options.info.phoneNumber,
             fromPhoneNumber: options.info.fromPhoneNumber,
-        }).then((result) => {
-        }).catch((error) => {
-            Alert.alert("Error", error.message, [{ text: 'OK', onPress: () => { } }]);
-        });
+        }).then((preparedCalloutData) => {
+            this.navigate(
+                this.getNavigation().OnCallComponent,
+                {
+                    ...options,
+                    onEndCall: () => {
+                        if (options.onEndCall) {
+                            options.onEndCall()
+                        }
+                        this.AZStackCore.stopCallout().then((result) => { });
+                        setTimeout(() => {
+                            this.pop();
+                        }, 1500);
+                    },
+                    onCallEnded: () => {
+                        setTimeout(() => {
+                            this.pop();
+                        }, 1500);
+                    },
+                    onToggleAudio: (toOn) => {
+                        this.AZStackCore.toggleAudioState({
+                            state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
+                        }, (error, result) => {
+
+                        });
+                    },
+                }
+            );
+            this.AZStackCore.startCallout(preparedCalloutData).then((result) => {
+            }).catch((error) => {
+                Alert.alert("Error", error.message, [{ text: 'OK', onPress: () => { } }]);
+            });
+        }).catch((error) => { });
     };
     startAudioCall(options) {
         this.AZStackCore.startFreeCall({

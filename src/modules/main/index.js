@@ -37,6 +37,7 @@ class AppMain extends React.Component {
         this.getMoreMembers = this.getMoreMembers.bind(this);
         this.getNumbers = this.getNumbers.bind(this);
         this.onBeforeMessageSend = this.onBeforeMessageSend.bind(this);
+        this.onBeforeCalloutStart = this.onBeforeCalloutStart.bind(this);
     };
 
     getInitialMembers = (options) => {
@@ -61,6 +62,11 @@ class AppMain extends React.Component {
             resolve(message);
         });
     };
+    onBeforeCalloutStart = (calloutData) => {
+        return new Promise((resolve, reject) => {
+            resolve(calloutData);
+        });
+    };
 
     render() {
         return (
@@ -79,6 +85,7 @@ class AppMain extends React.Component {
                         getMoreMembers={this.getMoreMembers}
                         getNumbers={this.getNumbers}
                         onBeforeMessageSend={this.onBeforeMessageSend}
+                        onBeforeCalloutStart={this.onBeforeCalloutStart}
                     />}
             </View>
         );
