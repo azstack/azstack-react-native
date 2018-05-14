@@ -378,7 +378,7 @@ export const CHAT_HEADER_BLOCK_STYLE = {
     flexDirection: 'row'
 };
 export const CHAT_HEADER_BACK_BUTTON_STYLE = {
-    width: 50,
+    width: 40,
     height: 50,
     justifyContent: 'center',
     alignItems: 'flex-start'
