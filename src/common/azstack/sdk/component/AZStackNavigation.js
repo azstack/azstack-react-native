@@ -44,7 +44,7 @@ const NavigationEnum = {
     StickerDetailsComponent: 'StickerDetailsComponent'
 };
 
-export default class AZStackBaseComponent extends React.Component {
+export default class AZStackNavigation extends React.Component {
     constructor(props) {
         super(props);
 
