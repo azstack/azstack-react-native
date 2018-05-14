@@ -45,7 +45,7 @@ class SelectMemberComponent extends React.Component {
     };
 
     addSubscriptions() {
-        
+
     };
     clearSubscriptions() {
         for (let subscriptionName in this.subscriptions) {
@@ -134,15 +134,19 @@ class SelectMemberComponent extends React.Component {
         return (
             <ScreenBlockComponent
                 fullScreen={false}
+                withStatusbar={this.props.withStatusbar}
                 getCoreInstances={this.props.getCoreInstances}
-                statusbar={this.props.statusbar}
                 style={this.props.style}
             >
-                <ScreenHeaderBlockComponent
-                    getCoreInstances={this.props.getCoreInstances}
-                    onBackButtonPressed={this.props.onBackButtonPressed}
-                    title={this.props.headerTitle}
-                />
+                {
+                    (this.props.withHeader || (this.props.withHeader === undefined && this.coreInstances.defaultLayout.withHeader)) && (
+                        <ScreenHeaderBlockComponent
+                            getCoreInstances={this.props.getCoreInstances}
+                            onBackButtonPressed={this.props.onBackButtonPressed}
+                            title={this.props.headerTitle}
+                        />
+                    )
+                }
                 <ScreenBodyBlockComponent
                     getCoreInstances={this.props.getCoreInstances}
                     style={this.props.contentContainerStyle}

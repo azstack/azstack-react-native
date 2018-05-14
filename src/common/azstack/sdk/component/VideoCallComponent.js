@@ -60,7 +60,7 @@ class VideoCallComponent extends React.Component {
 	}
 
 	onHardBackButtonPressed() {
-        return true;
+		return true;
 	};
 
 	addSubscriptions() {
@@ -156,15 +156,15 @@ class VideoCallComponent extends React.Component {
 	renderUserInfoCenter() {
 		return (
 			<View style={styles.userInfoCenter}>
-				<View style={{alignItems: 'center'}}>
+				<View style={{ alignItems: 'center' }}>
 					<View>
-						<View style={{justifyContent: 'center', alignItems: 'center'}}>
-							<Pulse style={{justifyContent: 'center', alignItems: 'center',}} color={'#48D2A0'} numPulses={7} diameter={250} duration={850} speed={34} image={{source:ic_avatar, style:{width: 100, height: 100, borderRadius: 50,}}} />
+						<View style={{ justifyContent: 'center', alignItems: 'center' }}>
+							<Pulse style={{ justifyContent: 'center', alignItems: 'center', }} color={'#48D2A0'} numPulses={7} diameter={250} duration={850} speed={34} image={{ source: ic_avatar, style: { width: 100, height: 100, borderRadius: 50, } }} />
 						</View>
 					</View>
 					<View style={{ alignItems: 'center' }}>
 						<Text style={{ color: '#fff', marginVertical: 10, fontSize: 20 }}>{this.props.info.name}</Text>
-						<Text style={{ color: '#57FFC1', fontSize: 18, backgroundColor: 'transparent'}}>{this.state.message}</Text>
+						<Text style={{ color: '#57FFC1', fontSize: 18, backgroundColor: 'transparent' }}>{this.state.message}</Text>
 					</View>
 				</View>
 			</View>
@@ -222,10 +222,10 @@ class VideoCallComponent extends React.Component {
 				<View style={styles.bottomActionBlockWrapper}>
 					<TouchableOpacity onPress={() => this.onPressToggleVideo()}>
 						{this.state.isVideoOn === true && <View style={[styles.button, { backgroundColor: 'transparent', borderWidth: 1, borderColor: '#fff' }]}>
-							<Image source={ic_camera_off} style={{height: 20}} resizeMode='contain' />
+							<Image source={ic_camera_off} style={{ height: 20 }} resizeMode='contain' />
 						</View>}
 						{this.state.isVideoOn === false && <View style={[styles.button, { backgroundColor: 'rgba(255,255,255,0.5)' }]}>
-							<Image source={ic_camera_off} style={{height: 20}} resizeMode='contain' />
+							<Image source={ic_camera_off} style={{ height: 20 }} resizeMode='contain' />
 						</View>}
 					</TouchableOpacity>
 					<TouchableOpacity onPress={() => this.onPressEndCall()}>
@@ -271,21 +271,21 @@ class VideoCallComponent extends React.Component {
 
 	renderIncomingCall() {
 		return (
-			<View style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: '#353535', justifyContent: 'space-between'}}>
-				<View style={{ flex: 0.3}}>
+			<View style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: '#353535', justifyContent: 'space-between' }}>
+				<View style={{ flex: 0.3 }}>
 					<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 						<Text style={{ color: '#fff', fontSize: 30 }}>{this.props.info.name || this.props.info.phoneNumber}</Text>
-						<Text style={{ color: '#fff', fontSize: 20}}>{this.props.info.name ? this.props.info.phoneNumber : ''}</Text>
+						<Text style={{ color: '#fff', fontSize: 20 }}>{this.props.info.name ? this.props.info.phoneNumber : ''}</Text>
 						<Text style={{ color: '#57FFC1', fontSize: 18, backgroundColor: 'transparent' }}>{this.state.message}</Text>
 					</View>
 				</View>
 				<View>
-					<View style={{justifyContent: 'center', alignItems: 'center'}}>
-						<Pulse style={{justifyContent: 'center', alignItems: 'center',}} color={'#48D2A0'} numPulses={7} diameter={250} duration={850} speed={34} image={{source:ic_avatar, style:{width: 100, height: 100, borderRadius: 50,}}} />
+					<View style={{ justifyContent: 'center', alignItems: 'center' }}>
+						<Pulse style={{ justifyContent: 'center', alignItems: 'center', }} color={'#48D2A0'} numPulses={7} diameter={250} duration={850} speed={34} image={{ source: ic_avatar, style: { width: 100, height: 100, borderRadius: 50, } }} />
 					</View>
 				</View>
-				<View style={{ flex: 0.3, justifyContent: 'flex-end', paddingBottom: 60}}>
-					<View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+				<View style={{ flex: 0.3, justifyContent: 'flex-end', paddingBottom: 60 }}>
+					<View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
 						<TouchableOpacity onPress={() => this.onPressAnswer()}>
 							<View style={[styles.button, { backgroundColor: 'green', marginHorizontal: 60 }]}>
 								<Image source={ic_answer_phone} style={{ width: 30, height: 30 }} resizeMode={'contain'} />
@@ -304,30 +304,30 @@ class VideoCallComponent extends React.Component {
 
 	renderRinging() {
 		return (
-			<View style={{flex: 1, backgroundColor: '#353535'}}>
+			<View style={{ flex: 1, backgroundColor: '#353535' }}>
 				<View style={styles.userCamera}>
 					{
-						this.state.localVideoUrl !== null && this.state.isVideoOn === true && <View style={{width: '100%', height: '100%'}}><RTCView streamURL={this.state.localVideoUrl} style={{ width: '100%', height: '100%' }} objectFit={"cover"} /></View>
+						this.state.localVideoUrl !== null && this.state.isVideoOn === true && <View style={{ width: '100%', height: '100%' }}><RTCView streamURL={this.state.localVideoUrl} style={{ width: '100%', height: '100%' }} objectFit={"cover"} /></View>
 					}
 					{
-						(this.state.localVideoUrl === null || this.state.isVideoOn) === false && <View style={{width: '100%', height: '100%'}}><RTCView streamURL={this.state.localVideoUrl} objectFit={"cover"} /></View>
+						(this.state.localVideoUrl === null || this.state.isVideoOn) === false && <View style={{ width: '100%', height: '100%' }}><RTCView streamURL={this.state.localVideoUrl} objectFit={"cover"} /></View>
 					}
 				</View>
-				<View style={[styles.topLayer, {justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0)',}]}>
-					<View style={{paddingTop: 40}}>
-						<Text style={{ color: '#fff', marginVertical: 10, fontSize: 20, backgroundColor: 'transparent'}}>{this.props.info.name}</Text>
-						<Text style={{  color: '#57FFC1', fontSize: 18, backgroundColor: 'transparent'}}>{this.state.message}</Text>
+				<View style={[styles.topLayer, { justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0)', }]}>
+					<View style={{ paddingTop: 40 }}>
+						<Text style={{ color: '#fff', marginVertical: 10, fontSize: 20, backgroundColor: 'transparent' }}>{this.props.info.name}</Text>
+						<Text style={{ color: '#57FFC1', fontSize: 18, backgroundColor: 'transparent' }}>{this.state.message}</Text>
 					</View>
 					<View>
-						<Pulse style={{}} color={'#48D2A0'} numPulses={7} diameter={250} duration={850} speed={34} image={{source:ic_avatar, style:{width: 100, height: 100, borderRadius: 50,}}} />
+						<Pulse style={{}} color={'#48D2A0'} numPulses={7} diameter={250} duration={850} speed={34} image={{ source: ic_avatar, style: { width: 100, height: 100, borderRadius: 50, } }} />
 					</View>
 					<View style={styles.bottomActionBlockWrapper}>
 						<TouchableOpacity onPress={() => this.onPressToggleVideo()}>
 							{this.state.isVideoOn === true && <View style={[styles.button, { backgroundColor: 'transparent', borderWidth: 1, borderColor: '#fff' }]}>
-								<Image source={ic_camera_off} style={{height: 20}} resizeMode='contain' />
+								<Image source={ic_camera_off} style={{ height: 20 }} resizeMode='contain' />
 							</View>}
 							{this.state.isVideoOn === false && <View style={[styles.button, { backgroundColor: 'rgba(255,255,255,0.5)' }]}>
-								<Image source={ic_camera_off} style={{height: 20}} resizeMode='contain' />
+								<Image source={ic_camera_off} style={{ height: 20 }} resizeMode='contain' />
 							</View>}
 						</TouchableOpacity>
 						<TouchableOpacity onPress={() => this.onPressEndCall()}>
@@ -351,17 +351,17 @@ class VideoCallComponent extends React.Component {
 
 	renderOnCall() {
 		return (
-			<View style={{flex: 1, backgroundColor: '#353535'}}>
+			<View style={{ flex: 1, backgroundColor: '#353535' }}>
 				<View style={styles.userCamera}>
 					{
-						this.state.remoteVideoUrl !== null && <View style={{width: '100%', height: '100%'}}><RTCView streamURL={this.state.remoteVideoUrl} style={{ width: '100%', height: '100%' }} objectFit={"cover"} /></View>
+						this.state.remoteVideoUrl !== null && <View style={{ width: '100%', height: '100%' }}><RTCView streamURL={this.state.remoteVideoUrl} style={{ width: '100%', height: '100%' }} objectFit={"cover"} /></View>
 					}
 					{
-						this.state.remoteVideoUrl === null && <View style={{width: '100%', height: '100%'}}><RTCView streamURL={this.state.remoteVideoUrl} objectFit={"cover"} /></View>
+						this.state.remoteVideoUrl === null && <View style={{ width: '100%', height: '100%' }}><RTCView streamURL={this.state.remoteVideoUrl} objectFit={"cover"} /></View>
 					}
 				</View>
 				<TouchableWithoutFeedback onPress={() => this.onPressTouchLayer()}>
-					<View style={[styles.topLayer, {justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0)'}, { opacity: this.state.showAction === false ? 0 : 1 }]}>
+					<View style={[styles.topLayer, { justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0)' }, { opacity: this.state.showAction === false ? 0 : 1 }]}>
 						{this.renderBottomActions()}
 						{this.renderUserInfoTop()}
 						{this.renderMyCamera()}
@@ -372,26 +372,26 @@ class VideoCallComponent extends React.Component {
 	}
 
 	renderMessage(status) {
-		if(status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_CONNECTING) {
-			return this.coreInstances.Language.getText('CALL_CONNECTING'); 
+		if (status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_CONNECTING) {
+			return this.coreInstances.Language.getText('CALL_CONNECTING');
 		}
-		if(status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_BUSY) {
-			return this.coreInstances.Language.getText('CALL_BUSY'); 
+		if (status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_BUSY) {
+			return this.coreInstances.Language.getText('CALL_BUSY');
 		}
-		if(status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_NOT_ANSWERED) {
-			return this.coreInstances.Language.getText('CALL_NOT_ANSWERED'); 
+		if (status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_NOT_ANSWERED) {
+			return this.coreInstances.Language.getText('CALL_NOT_ANSWERED');
 		}
-		if(status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_RINGING) {
-			return this.coreInstances.Language.getText('CALL_RINGING'); 
+		if (status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_RINGING) {
+			return this.coreInstances.Language.getText('CALL_RINGING');
 		}
-		if(status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_REJECTED) {
-			return this.coreInstances.Language.getText('CALL_REJECTED'); 
+		if (status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_REJECTED) {
+			return this.coreInstances.Language.getText('CALL_REJECTED');
 		}
-		if(status === 700) {
-			return this.coreInstances.Language.getText('CALL_END'); 
+		if (status === 700) {
+			return this.coreInstances.Language.getText('CALL_END');
 		}
-		if(status === 200) {
-			return this.coreInstances.Language.getText('CALL_CALLING'); 
+		if (status === 200) {
+			return this.coreInstances.Language.getText('CALL_CALLING');
 		}
 		return this.coreInstances.Language.getText('CALL_UNKNOWN');
 	}
@@ -400,13 +400,13 @@ class VideoCallComponent extends React.Component {
 		return (
 			<ScreenBlockComponent
 				fullScreen={true}
-				statusbar={this.props.statusbar}
+				withStatusbar={this.props.withStatusbar}
 				style={this.props.style}
 				getCoreInstances={this.props.getCoreInstances}
 			>
-				{ this.state.isIncomingCall === true && this.renderIncomingCall()}
-				{ this.state.status < 200 && this.state.isIncomingCall === false && this.renderRinging()}
-				{ this.state.status >= 200 && this.state.isIncomingCall === false && this.renderOnCall()}
+				{this.state.isIncomingCall === true && this.renderIncomingCall()}
+				{this.state.status < 200 && this.state.isIncomingCall === false && this.renderRinging()}
+				{this.state.status >= 200 && this.state.isIncomingCall === false && this.renderOnCall()}
 			</ScreenBlockComponent>
 		);
 	}

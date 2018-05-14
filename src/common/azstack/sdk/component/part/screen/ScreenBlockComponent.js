@@ -4,6 +4,7 @@ import {
     Animated,
     Platform,
     Dimensions,
+    StatusBar
 } from 'react-native';
 import CustomStatusBar from '../common/CustomStatusBar';
 
@@ -15,10 +16,11 @@ class ScreenBlockComponent extends React.Component {
 
         this.coreInstances = props.getCoreInstances();
 
+        this.withStatusbar = (this.props.withStatusbar || (this.props.withStatusbar === undefined && this.coreInstances.defaultLayout.withStatusbar)) ? true : false;
+        this.realHeight = height - (this.withStatusbar ? 0 : (Platform.OS === 'ios' ? 20 : StatusBar.currentHeight));
+
         this.state = {
-            opacityAnimated: new Animated.Value(0),
-            marginLeftAnimated: new Animated.Value(width),
-            heightAnimated: new Animated.Value(height)
+            heightAnimated: new Animated.Value(this.realHeight)
         };
 
         this.keyboardListeners = {
@@ -28,30 +30,11 @@ class ScreenBlockComponent extends React.Component {
     };
 
     componentDidMount() {
-        if(this.props.willAnimate === true || this.props.willAnimate === undefined) {
-            Animated.parallel([
-                Animated.timing(
-                    this.state.opacityAnimated,
-                    {
-                        toValue: 1,
-                        duration: 200,
-                    }
-                ),
-                Animated.timing(
-                    this.state.marginLeftAnimated,
-                    {
-                        toValue: 0,
-                        duration: 200,
-                    }
-                )
-            ]).start();
-        }
-
         this.keyboardListeners.onShowed = Keyboard.addListener('keyboardDidShow', (event) => {
             Animated.timing(
                 this.state.heightAnimated,
                 {
-                    toValue: height - event.endCoordinates.height,
+                    toValue: this.realHeight - event.endCoordinates.height,
                     duration: 0,
                 }
             ).start();
@@ -60,7 +43,7 @@ class ScreenBlockComponent extends React.Component {
             Animated.timing(
                 this.state.heightAnimated,
                 {
-                    toValue: height,
+                    toValue: this.realHeight,
                     duration: 0,
                 }
             ).start();
@@ -96,13 +79,11 @@ class ScreenBlockComponent extends React.Component {
             <Animated.View
                 style={{
                     ...this.coreInstances.CustomStyle.getStyle('SCREEN_BLOCK_STYLE'),
-                    opacity: (this.props.willAnimate === true || this.props.willAnimate === undefined) ? this.state.opacityAnimated : 1,
-                    marginLeft: (this.props.willAnimate === true || this.props.willAnimate === undefined) ? this.state.marginLeftAnimated : 0,
                     height: this.state.heightAnimated,
                     ...this.props.style || {}
                 }}
             >
-                {this.props.statusbar !== false && <CustomStatusBar backgroundColor="#fff" barStyle="dark-content" hidden={this.props.fullScreen === true} /> }
+                {this.withStatusbar && <CustomStatusBar backgroundColor="#fff" barStyle="dark-content" hidden={this.props.fullScreen} />}
                 {this.props.children}
             </Animated.View >
         );

@@ -20,7 +20,7 @@ class CallLogsComponent extends React.Component {
     constructor(props) {
         super(props);
         this.coreInstances = props.getCoreInstances();
-		this.subscriptions = {};
+        this.subscriptions = {};
         this.pagination = {
             done: 0,
             page: 1,
@@ -37,17 +37,17 @@ class CallLogsComponent extends React.Component {
     }
 
     addSubscriptions() {
-		this.subscriptions.onPaidCallLogReturn = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_PAID_CALL_LOG_RETURN, ({ error, result}) => {
+        this.subscriptions.onPaidCallLogReturn = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_PAID_CALL_LOG_RETURN, ({ error, result }) => {
             let newLogs = this.state.logs;
             newLogs.unshift(result);
-            this.setState({logs: newLogs});
-		});
+            this.setState({ logs: newLogs });
+        });
     }
-	clearSubscriptions() {
-		for (let subscriptionName in this.subscriptions) {
-			this.subscriptions[subscriptionName].remove();
-		}
-	};
+    clearSubscriptions() {
+        for (let subscriptionName in this.subscriptions) {
+            this.subscriptions[subscriptionName].remove();
+        }
+    };
 
     onHardBackButtonPressed() {
         this.props.onBackButtonPressed();
@@ -59,12 +59,12 @@ class CallLogsComponent extends React.Component {
     }
 
     componentDidMount() {
-		this.addSubscriptions();
+        this.addSubscriptions();
         BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     }
 
     componentWillUnmount() {
-		this.clearSubscriptions();
+        this.clearSubscriptions();
         BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     }
 
@@ -128,16 +128,20 @@ class CallLogsComponent extends React.Component {
         return (
             <ScreenBlockComponent
                 fullScreen={false}
+                withStatusbar={this.props.withStatusbar}
                 getCoreInstances={this.props.getCoreInstances}
                 style={this.props.style}
-                statusbar={this.props.statusbar}
                 willAnimate={this.props.willAnimate}
             >
-                {this.props.header !== 'hidden' && <ScreenHeaderBlockComponent
-                    getCoreInstances={this.props.getCoreInstances}
-                    onBackButtonPressed={() => this.props.onBackButtonPressed()}
-                    title={'Call Logs'}
-                />}
+                {
+                    (this.props.withHeader || (this.props.withHeader === undefined && this.coreInstances.defaultLayout.withHeader)) && (
+                        <ScreenHeaderBlockComponent
+                            getCoreInstances={this.props.getCoreInstances}
+                            onBackButtonPressed={() => this.props.onBackButtonPressed()}
+                            title={'Call Logs'}
+                        />
+                    )
+                }
                 <ScreenBodyBlockComponent
                     getCoreInstances={this.props.getCoreInstances}
                     style={this.props.contentContainerStyle}

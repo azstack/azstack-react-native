@@ -1286,30 +1286,34 @@ class ChatComponent extends React.Component {
         return (
             <ScreenBlockComponent
                 fullScreen={false}
+                withStatusbar={this.props.withStatusbar}
                 getCoreInstances={this.props.getCoreInstances}
-                statusbar={this.props.statusbar}
                 style={this.props.style}
             >
                 <View
                     style={this.coreInstances.CustomStyle.getStyle('CHAT_NOT_INPUT_BLOCK_STYLE')}
                 >
                     {
-                        !this.state.chatTarget && <ScreenHeaderBlockComponent
-                            getCoreInstances={this.props.getCoreInstances}
-                            onBackButtonPressed={this.props.onBackButtonPressed}
-                            title={this.coreInstances.Language.getText('CHAT_HEADER_TITLE_TEXT')}
-                        />
+                        (this.props.withHeader || (this.props.withHeader === undefined && this.coreInstances.defaultLayout.withHeader)) && !this.state.chatTarget && (
+                            <ScreenHeaderBlockComponent
+                                getCoreInstances={this.props.getCoreInstances}
+                                onBackButtonPressed={this.props.onBackButtonPressed}
+                                title={this.coreInstances.Language.getText('CHAT_HEADER_TITLE_TEXT')}
+                            />
+                        )
                     }
                     {
-                        !!this.state.chatTarget && <ChatHeaderComponent
-                            getCoreInstances={this.props.getCoreInstances}
-                            onBackButtonPressed={this.props.onBackButtonPressed}
-                            onChatTargetPressed={this.props.onChatTargetPressed}
-                            onVoiceCallButtonPressed={this.props.onVoiceCallButtonPressed}
-                            onVideoCallButtonPressed={this.props.onVideoCallButtonPressed}
-                            chatType={this.props.chatType}
-                            chatTarget={this.state.chatTarget}
-                        />
+                        (this.props.withHeader || (this.props.withHeader === undefined && this.coreInstances.defaultLayout.withHeader)) && !!this.state.chatTarget && (
+                            <ChatHeaderComponent
+                                getCoreInstances={this.props.getCoreInstances}
+                                onBackButtonPressed={this.props.onBackButtonPressed}
+                                onChatTargetPressed={this.props.onChatTargetPressed}
+                                onVoiceCallButtonPressed={this.props.onVoiceCallButtonPressed}
+                                onVideoCallButtonPressed={this.props.onVideoCallButtonPressed}
+                                chatType={this.props.chatType}
+                                chatTarget={this.state.chatTarget}
+                            />
+                        )
                     }
                     <ScreenBodyBlockComponent
                         getCoreInstances={this.props.getCoreInstances}

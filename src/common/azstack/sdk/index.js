@@ -44,6 +44,20 @@ export class AZStackSdk extends AZStackNavigation {
         this.linkConstants = linkConstants;
         this.limitConstants = limitConstants;
 
+        this.defaultLayout = {
+            withStatusbar: true,
+            withHeader: true
+        };
+
+        if (props.options.defaultLayout && typeof props.options.defaultLayout === 'object') {
+            if (typeof props.options.defaultLayout.withStatusbar === 'boolean') {
+                this.defaultLayout.withStatusbar = props.options.defaultLayout.withStatusbar;
+            }
+            if (typeof props.options.defaultLayout.withHeader === 'boolean') {
+                this.defaultLayout.withHeader = props.options.defaultLayout.withHeader;
+            }
+        }
+
         this.Language = new Language({ languageCode: props.options.languageCode });
         this.CustomStyle = new CustomStyle({ themeName: props.options.themeName });
 
@@ -178,6 +192,9 @@ export class AZStackSdk extends AZStackNavigation {
 
     getCoreInstances() {
         return {
+
+            defaultLayout: this.defaultLayout,
+
             eventConstants: this.eventConstants,
             linkConstants: this.linkConstants,
             limitConstants: this.limitConstants,

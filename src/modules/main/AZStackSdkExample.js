@@ -104,6 +104,7 @@ class AZStackSdkExample extends React.Component {
                 ref={"AZStackSdk"}
                 options={{
                     azstackConfig: this.props.azstackConfig,
+                    defaultLayout: this.props.defaultLayout,
                     languageCode: this.props.languageCode,
                     themeName: this.props.themeName,
                     getInitialMembers: this.props.getInitialMembers,

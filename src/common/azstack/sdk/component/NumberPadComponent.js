@@ -39,24 +39,24 @@ class NumberPadComponent extends React.Component {
 
 	componentWillMount() {
 		this.coreInstances.Number.getNumbers().then((numbers) => {
-			this.setState({myNumbers: numbers});
+			this.setState({ myNumbers: numbers });
 
-			this.setState({fromPhoneNumber: numbers[0]});
-		}); 
+			this.setState({ fromPhoneNumber: numbers[0] });
+		});
 	}
 
 	onHardBackButtonPressed() {
-        this.props.onBackButtonPressed();
-        return true;
+		this.props.onBackButtonPressed();
+		return true;
 	};
-	
-	componentDidMount() {
-        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
-    };
 
-    componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
-    };
+	componentDidMount() {
+		BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+	};
+
+	componentWillUnmount() {
+		BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+	};
 
 	onClickNumber(number) {
 		this.setState({ phoneNumber: this.state.phoneNumber + number });
@@ -78,15 +78,15 @@ class NumberPadComponent extends React.Component {
 	}
 
 	renderFromNumber() {
-		if(this.state.myNumbers.length <= 1 || this.state.phoneNumber === '') {
+		if (this.state.myNumbers.length <= 1 || this.state.phoneNumber === '') {
 			return null;
 		}
 
 		return (
-			<View style={{position: 'relative'}}>
-				<View style={{flexDirection: 'row', height: 40, justifyContent: 'flex-end', alignItems: 'flex-end', paddingBottom: 10}}>
-					<Text style={{fontSize: 14}}>Call from </Text>
-					<Text style={{color: 'blue', fontSize: 16}} onPress={() => this.setState({selectPhoneNumberModalVisible: true})}>{this.state.fromPhoneNumber}</Text>
+			<View style={{ position: 'relative' }}>
+				<View style={{ flexDirection: 'row', height: 40, justifyContent: 'flex-end', alignItems: 'flex-end', paddingBottom: 10 }}>
+					<Text style={{ fontSize: 14 }}>Call from </Text>
+					<Text style={{ color: 'blue', fontSize: 16 }} onPress={() => this.setState({ selectPhoneNumberModalVisible: true })}>{this.state.fromPhoneNumber}</Text>
 				</View>
 			</View>
 		);
@@ -94,25 +94,25 @@ class NumberPadComponent extends React.Component {
 
 	renderSelectFromNumber() {
 		return (
-            <Modal
-                animationType="slide"
-                transparent={true}
-                position={"bottom"}
-                visible={this.state.selectPhoneNumberModalVisible}
-                onRequestClose={() => {}}
-            >
-                <TouchableWithoutFeedback onPress={() => this.setState({selectPhoneNumberModalVisible: false})}>
-                    <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,.8)', justifyContent: 'flex-end'}}>
-						<View style={{backgroundColor: '#fff'}}>
+			<Modal
+				animationType="slide"
+				transparent={true}
+				position={"bottom"}
+				visible={this.state.selectPhoneNumberModalVisible}
+				onRequestClose={() => { }}
+			>
+				<TouchableWithoutFeedback onPress={() => this.setState({ selectPhoneNumberModalVisible: false })}>
+					<View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,.8)', justifyContent: 'flex-end' }}>
+						<View style={{ backgroundColor: '#fff' }}>
 							<ScrollView>
 								{
 									this.state.myNumbers.map((value, index) => {
 										let backgroundColor = '#fff';
-										if(value === this.state.fromPhoneNumber) {
+										if (value === this.state.fromPhoneNumber) {
 											backgroundColor = '#e3e2e1';
 										}
 										return (
-											<TouchableOpacity onPress={() => this.setState({fromPhoneNumber: value, selectPhoneNumberModalVisible: false})} style={{justifyContent: 'center', alignItems: 'flex-start', padding: 15, borderBottomWidth: 1, borderBottomColor: '#d1d1d1', backgroundColor}} key={index}>
+											<TouchableOpacity onPress={() => this.setState({ fromPhoneNumber: value, selectPhoneNumberModalVisible: false })} style={{ justifyContent: 'center', alignItems: 'flex-start', padding: 15, borderBottomWidth: 1, borderBottomColor: '#d1d1d1', backgroundColor }} key={index}>
 												<Text>
 													{value}
 												</Text>
@@ -122,9 +122,9 @@ class NumberPadComponent extends React.Component {
 								}
 							</ScrollView>
 						</View>
-                    </View>
-                </TouchableWithoutFeedback>
-            </Modal>
+					</View>
+				</TouchableWithoutFeedback>
+			</Modal>
 		);
 	}
 
@@ -132,22 +132,26 @@ class NumberPadComponent extends React.Component {
 		return (
 			<ScreenBlockComponent
 				fullScreen={false}
+				withStatusbar={this.props.withStatusbar}
 				getCoreInstances={this.props.getCoreInstances}
-                statusbar={this.props.statusbar}
-                style={this.props.style}
+				style={this.props.style}
 			>
-				{this.props.header !== 'hidden' && <ScreenHeaderBlockComponent
-					getCoreInstances={this.props.getCoreInstances}
-					onBackButtonPressed={() => this.props.onBackButtonPressed()}
-					title={"Callout"}
-				/>}
+				{
+					(this.props.withHeader || (this.props.withHeader === undefined && this.coreInstances.defaultLayout.withHeader)) && (
+						<ScreenHeaderBlockComponent
+							getCoreInstances={this.props.getCoreInstances}
+							onBackButtonPressed={() => this.props.onBackButtonPressed()}
+							title={"Callout"}
+						/>
+					)
+				}
 				<View style={{ backgroundColor: '#fff', justifyContent: 'flex-end', alignItems: 'center', flex: 1, paddingBottom: 40 }}>
-					<View style={{width: '69%', height: 30, marginBottom: 10}}>
+					<View style={{ width: '69%', height: 30, marginBottom: 10 }}>
 						{this.renderFromNumber()}
 					</View>
-					<View style={{width: '69%', alignSelf: 'center', flexDirection: 'row', justifyContent: 'flex-end', backgroundColor: '#fff', alignItems: 'center', height: 50, marginBottom: 15}}>
-						<View style={{ alignItems: 'flex-end', flex: 1, height: 50, justifyContent: 'center'}}>
-							<Text style={{ fontSize: this.state.phoneNumber.length <= 9 ? 40 : this.state.phoneNumber.length <= 12 ? 30 : 20}} numberOfLines={1}>{this.state.phoneNumber}</Text>
+					<View style={{ width: '69%', alignSelf: 'center', flexDirection: 'row', justifyContent: 'flex-end', backgroundColor: '#fff', alignItems: 'center', height: 50, marginBottom: 15 }}>
+						<View style={{ alignItems: 'flex-end', flex: 1, height: 50, justifyContent: 'center' }}>
+							<Text style={{ fontSize: this.state.phoneNumber.length <= 9 ? 40 : this.state.phoneNumber.length <= 12 ? 30 : 20 }} numberOfLines={1}>{this.state.phoneNumber}</Text>
 						</View>
 						{
 							this.state.phoneNumber != '' && <TouchableOpacity onPress={() => this.onClear()}>

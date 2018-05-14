@@ -164,8 +164,8 @@ import { AZStackCore } from '{path_to_libs}/azstack/';
 this.AZStackCore = new AZStackCore({
     requestTimeout: 60000,
     intervalPingTime: 60000,
-    autoReconnect: false,
-    autoReconnectLimitTries: 0,
+    autoReconnect: true,
+    autoReconnectLimitTries: 10,
     autoReconnectIntervalTime: 5000
     logLevel: 'NONE',
     authenticatingData: {

@@ -105,15 +105,19 @@ class LocationMapComponent extends React.Component {
         return (
             <ScreenBlockComponent
                 fullScreen={false}
+                withStatusbar={this.props.withStatusbar}
                 getCoreInstances={this.props.getCoreInstances}
-                statusbar={this.props.statusbar}
                 style={this.props.style}
             >
-                <ScreenHeaderBlockComponent
-                    getCoreInstances={this.props.getCoreInstances}
-                    onBackButtonPressed={this.props.onBackButtonPressed}
-                    title={this.coreInstances.Language.getText('LOCATION_MAP_HEADER_TITLE_TEXT')}
-                />
+                {
+                    (this.props.withHeader || (this.props.withHeader === undefined && this.coreInstances.defaultLayout.withHeader)) && (
+                        <ScreenHeaderBlockComponent
+                            getCoreInstances={this.props.getCoreInstances}
+                            onBackButtonPressed={this.props.onBackButtonPressed}
+                            title={this.coreInstances.Language.getText('LOCATION_MAP_HEADER_TITLE_TEXT')}
+                        />
+                    )
+                }
                 <ScreenBodyBlockComponent
                     getCoreInstances={this.props.getCoreInstances}
                     style={this.props.contentContainerStyle}
@@ -144,7 +148,7 @@ class LocationMapComponent extends React.Component {
                         )
                     }
                 </ScreenBodyBlockComponent>
-                <LocationMapFooterBlockComponent 
+                <LocationMapFooterBlockComponent
                     getCoreInstances={this.props.getCoreInstances}
                     openMapButtonPressed={this.openMapButtonPressed}
                 />

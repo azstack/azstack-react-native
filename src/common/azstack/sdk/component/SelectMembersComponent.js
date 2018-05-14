@@ -215,7 +215,7 @@ class SelectMembersComponent extends React.Component {
             }
 
             let firstLetter = "UF";
-            if(member.fullname) {
+            if (member.fullname) {
                 firstLetter = member.fullname[0].toUpperCase();
             }
             let foundGroupedMember = false;
@@ -243,7 +243,7 @@ class SelectMembersComponent extends React.Component {
         }
 
         groupedMembers.sort((a, b) => {
-            if(a.title === this.coreInstances.Language.getText('SELECT_MEMBERS_SELECTED_TITLE_TEXT')) {
+            if (a.title === this.coreInstances.Language.getText('SELECT_MEMBERS_SELECTED_TITLE_TEXT')) {
                 return -1;
             }
             return a.title > b.title ? 1 : -1;
@@ -318,16 +318,20 @@ class SelectMembersComponent extends React.Component {
         return (
             <ScreenBlockComponent
                 fullScreen={false}
+                withStatusbar={this.props.withStatusbar}
                 getCoreInstances={this.props.getCoreInstances}
-                statusbar={this.props.statusbar}
                 style={this.props.style}
             >
-                <SelectMembersHeaderBlockComponent
-                    getCoreInstances={this.props.getCoreInstances}
-                    onBackButtonPressed={this.props.onBackButtonPressed}
-                    onDoneButtonPressed={this.onDoneButtonPressed}
-                    title={this.props.headerTitle}
-                />
+                {
+                    (this.props.withHeader || (this.props.withHeader === undefined && this.coreInstances.defaultLayout.withHeader)) && (
+                        <SelectMembersHeaderBlockComponent
+                            getCoreInstances={this.props.getCoreInstances}
+                            onBackButtonPressed={this.props.onBackButtonPressed}
+                            onDoneButtonPressed={this.onDoneButtonPressed}
+                            title={this.props.headerTitle}
+                        />
+                    )
+                }
                 <ScreenBodyBlockComponent
                     getCoreInstances={this.props.getCoreInstances}
                     style={this.props.contentContainerStyle}
@@ -370,9 +374,9 @@ class SelectMembersComponent extends React.Component {
                                 );
                             }}
                             contentContainerStyle={this.coreInstances.CustomStyle.getStyle('SELECT_MEMBERS_LIST_CONTENT_CONTAINER_STYLE')}
-                            onEndReached={() => {console.log(this.onEndReachedCalledDuringMomentum); if(this.onEndReachedCalledDuringMomentum == false) {console.log('Load more'); this.onEndReachedCalledDuringMomentum = true;}}}
+                            onEndReached={() => { console.log(this.onEndReachedCalledDuringMomentum); if (this.onEndReachedCalledDuringMomentum == false) { console.log('Load more'); this.onEndReachedCalledDuringMomentum = true; } }}
                             onEndReachedThreshold={0.02}
-                            onMomentumScrollBegin={() => {console.log('hooho'); this.onEndReachedCalledDuringMomentum = false; }}
+                            onMomentumScrollBegin={() => { console.log('hooho'); this.onEndReachedCalledDuringMomentum = false; }}
                         />
                     }
                     <ConnectionBlockComponent
