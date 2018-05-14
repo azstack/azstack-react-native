@@ -56,4 +56,4 @@ buck-out/
 # ios pod
 ios/Pods/
 ios/Podfile.lock
-ios/TelePro.xcworkspace/
+ios/azstack_react_native_sdk.xcworkspace/
