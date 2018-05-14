@@ -5,23 +5,23 @@ import {
     View,
 } from 'react-native';
 
-import ConversationsComponent from './ConversationsComponent';
-import ChatComponent from './ChatComponent';
-import OnCallComponent from './OnCallComponent';
-import ContactComponent from './ContactComponent';
-import NumberPadComponent from './NumberPadComponent';
-import VideoCallComponent from './VideoCallComponent';
-import CallLogsComponent from './CallLogsComponent';
-import UserComponent from './UserComponent';
-import GroupComponent from './GroupComponent';
-import SelectMembersComponent from './SelectMembersComponent';
-import SelectMemberComponent from './SelectMemberComponent';
-import GroupInputNameComponent from './GroupInputNameComponent';
-import ImageGalleryComponent from './ImageGalleryComponent';
-import LocationMapComponent from './LocationMapComponent';
-import SketchDrawingComponent from './SketchDrawingComponent';
-import StickerListComponent from './StickerListComponent';
-import StickerDetailsComponent from './StickerDetailsComponent';
+import ConversationsComponent from './component/ConversationsComponent';
+import ChatComponent from './component/ChatComponent';
+import OnCallComponent from './component/OnCallComponent';
+import ContactComponent from './component/ContactComponent';
+import NumberPadComponent from './component/NumberPadComponent';
+import VideoCallComponent from './component/VideoCallComponent';
+import CallLogsComponent from './component/CallLogsComponent';
+import UserComponent from './component/UserComponent';
+import GroupComponent from './component/GroupComponent';
+import SelectMembersComponent from './component/SelectMembersComponent';
+import SelectMemberComponent from './component/SelectMemberComponent';
+import GroupInputNameComponent from './component/GroupInputNameComponent';
+import ImageGalleryComponent from './component/ImageGalleryComponent';
+import LocationMapComponent from './component/LocationMapComponent';
+import SketchDrawingComponent from './component/SketchDrawingComponent';
+import StickerListComponent from './component/StickerListComponent';
+import StickerDetailsComponent from './component/StickerDetailsComponent';
 
 
 const NavigationEnum = {

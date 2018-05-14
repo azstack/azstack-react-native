@@ -30,7 +30,7 @@ import Message from './handler/message';
 import Call from './handler/call';
 import Notification from './handler/notification';
 
-import AZStackNavigation from './component/AZStackNavigation';
+import AZStackNavigation from './AZStackNavigation';
 
 export class AZStackSdk extends AZStackNavigation {
     constructor(props) {
