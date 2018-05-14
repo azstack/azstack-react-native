@@ -52,3 +52,8 @@ buck-out/
 */fastlane/report.xml
 */fastlane/Preview.html
 */fastlane/screenshots
+
+# ios pod
+ios/Pods/
+ios/Podfile.lock
+ios/TelePro.xcworkspace/
