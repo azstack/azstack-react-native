@@ -3,6 +3,7 @@ package com.azstack_react_native_sdk;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
 import com.rnziparchive.RNZipArchivePackage;
 import com.zxcpoiu.incallmanager.InCallManagerPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
@@ -12,7 +13,6 @@ import com.rnfs.RNFSPackage;
 import com.rnim.rn.audio.ReactNativeAudioPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.brentvatne.react.ReactVideoPackage;
-import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -36,6 +36,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactNativeDocumentPicker(),
             new RNZipArchivePackage(),
             new InCallManagerPackage(),
           new RNDeviceInfo(),
