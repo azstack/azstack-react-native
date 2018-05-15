@@ -109,7 +109,7 @@ class CallLogsComponent extends React.Component {
         return (
             <FlatList
                 data={this.state.logs}
-                keyExtractor={(item, index) => index}
+                keyExtractor={(item, index) => (`call_log_${index}`)}
                 renderItem={({ item, index }) => this.renderItem(item, index)}
                 onEndReached={() => this.onEndReached()}
                 onEndReachedThreshold={0.2}

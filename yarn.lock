@@ -428,9 +428,9 @@
     lodash "^4.17.5"
     to-fast-properties "^2.0.0"
 
-"@terrylinla/react-native-sketch-canvas@^0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@terrylinla/react-native-sketch-canvas/-/react-native-sketch-canvas-0.3.1.tgz#06e06c8c7eaf8dda6d4114bfffdfca92bca6cf77"
+"@terrylinla/react-native-sketch-canvas@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@terrylinla/react-native-sketch-canvas/-/react-native-sketch-canvas-0.4.1.tgz#42dce2f135aa946a15deaa0ab942936dc8dbd0af"
 
 abab@^1.0.3:
   version "1.0.4"
@@ -619,6 +619,10 @@ astral-regex@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/astral-regex/-/astral-regex-1.0.0.tgz#6c8c3fb827dd43ee3918f27b82782ab7658a6fd9"
 
+async-limiter@~1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/async-limiter/-/async-limiter-1.0.0.tgz#78faed8c3d074ab81f22b4e985d79e8738f720f8"
+
 async@^1.4.0:
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/async/-/async-1.5.2.tgz#ec6a61ae56480c0c3cb241c95618e20892f9672a"
@@ -628,10 +632,6 @@ async@^2.1.4, async@^2.4.0:
   resolved "https://registry.yarnpkg.com/async/-/async-2.6.0.tgz#61a29abb6fcc026fea77e56d1c6ec53a795951f4"
   dependencies:
     lodash "^4.14.0"
-
-async@~0.2.6:
-  version "0.2.10"
-  resolved "https://registry.yarnpkg.com/async/-/async-0.2.10.tgz#b6bbe0b0674b9d719708ca38de8c237cb526c3d1"
 
 asynckit@^0.4.0:
   version "0.4.0"
@@ -1685,17 +1685,13 @@ dateformat@^2.0.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/dateformat/-/dateformat-2.2.0.tgz#4065e2013cf9fb916ddfd82efb506ad4c6769062"
 
-deap@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/deap/-/deap-1.0.0.tgz#b148bf82430a27699b7483a03eb6b67585bfc888"
-
-debug@2.6.9, debug@^2.2.0, debug@^2.6.8, debug@~2.6.4, debug@~2.6.9:
+debug@2.6.9, debug@^2.2.0, debug@^2.6.8:
   version "2.6.9"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.9.tgz#5d128515df134ff327e90a4c93f4e077a536341f"
   dependencies:
     ms "2.0.0"
 
-debug@^3.1.0:
+debug@^3.1.0, debug@~3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
   dependencies:
@@ -1787,19 +1783,19 @@ encoding@^0.1.11:
   dependencies:
     iconv-lite "~0.4.13"
 
-engine.io-client@~3.1.0:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/engine.io-client/-/engine.io-client-3.1.3.tgz#d705e48985dfe8b54a98c9f77052b8b08258be05"
+engine.io-client@~3.2.0:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/engine.io-client/-/engine.io-client-3.2.1.tgz#6f54c0475de487158a1a7c77d10178708b6add36"
   dependencies:
     component-emitter "1.2.1"
     component-inherit "0.0.3"
-    debug "~2.6.9"
+    debug "~3.1.0"
     engine.io-parser "~2.1.1"
     has-cors "1.1.0"
     indexof "0.0.1"
     parseqs "0.0.5"
     parseuri "0.0.5"
-    ws "~2.3.1"
+    ws "~3.3.1"
     xmlhttprequest-ssl "~1.5.4"
     yeast "0.1.2"
 
@@ -1962,7 +1958,7 @@ extsprintf@1.3.0, extsprintf@^1.2.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.3.0.tgz#96918440e3041a7a414f8c52e3c574eb3c3e1e05"
 
-fancy-log@^1.0.0, fancy-log@^1.1.0:
+fancy-log@^1.1.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/fancy-log/-/fancy-log-1.3.0.tgz#45be17d02bb9917d60ccffd4995c999e6c8c9948"
   dependencies:
@@ -2239,24 +2235,7 @@ growly@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/growly/-/growly-1.3.0.tgz#f10748cbe76af964b7c96c93c6bcc28af120c081"
 
-gulp-rename@^1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/gulp-rename/-/gulp-rename-1.2.2.tgz#3ad4428763f05e2764dec1c67d868db275687817"
-
-gulp-uglify@^1.5.3:
-  version "1.5.4"
-  resolved "https://registry.yarnpkg.com/gulp-uglify/-/gulp-uglify-1.5.4.tgz#524788d87666d09f9d0c21fb2177f90039a658c9"
-  dependencies:
-    deap "^1.0.0"
-    fancy-log "^1.0.0"
-    gulp-util "^3.0.0"
-    isobject "^2.0.0"
-    through2 "^2.0.0"
-    uglify-js "2.6.4"
-    uglify-save-license "^0.4.1"
-    vinyl-sourcemaps-apply "^0.2.0"
-
-gulp-util@^3.0.0, gulp-util@^3.0.4:
+gulp-util@^3.0.4:
   version "3.0.8"
   resolved "https://registry.yarnpkg.com/gulp-util/-/gulp-util-3.0.8.tgz#0054e1e744502e27c04c187c3ecc505dd54bbb4f"
   dependencies:
@@ -2989,12 +2968,9 @@ jsdom@^9.12.0:
     whatwg-url "^4.3.0"
     xml-name-validator "^2.0.1"
 
-jsencrypt@^2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/jsencrypt/-/jsencrypt-2.3.1.tgz#64edcb781bf92035db6a95901012e91c0f42eaca"
-  dependencies:
-    gulp-rename "^1.2.2"
-    gulp-uglify "^1.5.3"
+jsencrypt@^3.0.0-beta.1:
+  version "3.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/jsencrypt/-/jsencrypt-3.0.0-beta.1.tgz#ea5c65d4c905819cd6a4ed75da47820048f8df14"
 
 jsesc@^1.3.0:
   version "1.3.0"
@@ -3233,7 +3209,7 @@ lodash@^4.14.0, lodash@^4.17.4, lodash@^4.3.0, lodash@^4.6.1:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
-lodash@^4.16.6:
+lodash@^4.17.5:
   version "4.17.10"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
 
@@ -3987,44 +3963,44 @@ react-devtools-core@3.1.0:
     shell-quote "^1.6.1"
     ws "^2.0.3"
 
-react-native-audio@^3.5.1:
-  version "3.5.1"
-  resolved "https://registry.yarnpkg.com/react-native-audio/-/react-native-audio-3.5.1.tgz#4acf1d5731c51cfdf76b0b8c8e60e0af41783f6e"
+react-native-audio@^4.1.3:
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/react-native-audio/-/react-native-audio-4.1.3.tgz#cab41703419f57c6d4de9c6bfd27f8fc54a4acaf"
 
-react-native-device-info@^0.17.3:
-  version "0.17.3"
-  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-0.17.3.tgz#7aa58f5c6ce1381beddc86429b9fd4e06e3ce20d"
+react-native-device-info@^0.21.5:
+  version "0.21.5"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-0.21.5.tgz#99478a2d68182e012297f2d63f2bd1b788106dee"
 
 react-native-document-picker@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/react-native-document-picker/-/react-native-document-picker-2.1.0.tgz#61bbe113435a9d7bf67ab77093a4092d76b52fe3"
 
-react-native-fcm@^14.0.1:
-  version "14.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-fcm/-/react-native-fcm-14.0.1.tgz#833e6a38a1b2fd1a9b7b69be35e007f7361fe474"
+react-native-fcm@^15.0.0:
+  version "15.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-fcm/-/react-native-fcm-15.0.0.tgz#4656a79df14d8d3c5a7b2759e4396081e8c04643"
 
-react-native-fs@^2.9.11:
-  version "2.9.11"
-  resolved "https://registry.yarnpkg.com/react-native-fs/-/react-native-fs-2.9.11.tgz#0fd134ecc8ae53fe8023267f51463eb77287c93a"
+react-native-fs@^2.9.12:
+  version "2.9.12"
+  resolved "https://registry.yarnpkg.com/react-native-fs/-/react-native-fs-2.9.12.tgz#88d6c1e8eb26acbebca955e1cbd9c47d2c9452ba"
   dependencies:
     base-64 "^0.1.0"
     utf8 "^2.1.1"
 
-react-native-google-places@^2.4.2:
-  version "2.4.2"
-  resolved "https://registry.yarnpkg.com/react-native-google-places/-/react-native-google-places-2.4.2.tgz#ac4cf3391481ecd89803282554e209f0bfefc31e"
+react-native-google-places@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/react-native-google-places/-/react-native-google-places-2.5.0.tgz#a52c0ee6629a5c4aa222589022f127c5fa201436"
 
-react-native-image-crop-picker@^0.19.1:
-  version "0.19.1"
-  resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.19.1.tgz#29ac98104b89e623501d5bcf476ada875679cce8"
-
-react-native-incall-manager@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-incall-manager/-/react-native-incall-manager-3.1.0.tgz#51a53c48f03110fbb34507cd8d8a4f880a482f0d"
-
-react-native-maps@^0.20.1:
+react-native-image-crop-picker@^0.20.1:
   version "0.20.1"
-  resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.20.1.tgz#b5247a9a26446b2e1ffc3f680db8ba6ccc960096"
+  resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.20.1.tgz#048c70219ba9f4fcf70fea5819f8dcaadefc63f9"
+
+react-native-incall-manager@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/react-native-incall-manager/-/react-native-incall-manager-3.2.1.tgz#8ac31f9a995d1de8abf6df73704059c1ca3bec01"
+
+react-native-maps@^0.21.0:
+  version "0.21.0"
+  resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.21.0.tgz#005f58e93d7623ad59667e8002101970ddf235c2"
   dependencies:
     babel-plugin-module-resolver "^2.3.0"
     babel-preset-react-native "1.9.0"
@@ -4050,9 +4026,9 @@ react-native-webrtc@^1.58.3:
     event-target-shim "^1.0.5"
     prop-types "^15.5.10"
 
-react-native-zip-archive@^2.2.2:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/react-native-zip-archive/-/react-native-zip-archive-2.2.2.tgz#e3ab0261980aaadca472d32c46ae83e42eb81efd"
+react-native-zip-archive@^2.2.4:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/react-native-zip-archive/-/react-native-zip-archive-2.2.4.tgz#556ad1ec113f0db2c9503e72f30e2e81d6439244"
 
 react-native@0.55.4:
   version "0.55.4"
@@ -4524,31 +4500,31 @@ sntp@2.x.x:
   dependencies:
     hoek "4.x.x"
 
-socket.io-client@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/socket.io-client/-/socket.io-client-2.0.4.tgz#0918a552406dc5e540b380dcd97afc4a64332f8e"
+socket.io-client@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/socket.io-client/-/socket.io-client-2.1.0.tgz#0d0b21d460dc4ed36e57085136f2be0137ff20ff"
   dependencies:
     backo2 "1.0.2"
     base64-arraybuffer "0.1.5"
     component-bind "1.0.0"
     component-emitter "1.2.1"
-    debug "~2.6.4"
-    engine.io-client "~3.1.0"
+    debug "~3.1.0"
+    engine.io-client "~3.2.0"
+    has-binary2 "~1.0.2"
     has-cors "1.1.0"
     indexof "0.0.1"
     object-component "0.0.3"
     parseqs "0.0.5"
     parseuri "0.0.5"
-    socket.io-parser "~3.1.1"
+    socket.io-parser "~3.2.0"
     to-array "0.1.4"
 
-socket.io-parser@~3.1.1:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/socket.io-parser/-/socket.io-parser-3.1.2.tgz#dbc2282151fc4faebbe40aeedc0772eba619f7f2"
+socket.io-parser@~3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/socket.io-parser/-/socket.io-parser-3.2.0.tgz#e7c6228b6aa1f814e6148aea325b51aa9499e077"
   dependencies:
     component-emitter "1.2.1"
-    debug "~2.6.4"
-    has-binary2 "~1.0.2"
+    debug "~3.1.0"
     isarray "2.0.1"
 
 source-map-support@^0.4.15, source-map-support@^0.4.2:
@@ -4563,7 +4539,7 @@ source-map@^0.4.4:
   dependencies:
     amdefine ">=0.0.4"
 
-source-map@^0.5.0, source-map@^0.5.1, source-map@^0.5.3, source-map@^0.5.6, source-map@~0.5.1, source-map@~0.5.6:
+source-map@^0.5.0, source-map@^0.5.3, source-map@^0.5.6, source-map@~0.5.1, source-map@~0.5.6:
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.7.tgz#8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
 
@@ -4611,13 +4587,9 @@ stacktrace-parser@^0.1.3:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/stacktrace-parser/-/stacktrace-parser-0.1.4.tgz#01397922e5f62ecf30845522c95c4fe1d25e7d4e"
 
-statuses@1:
+"statuses@>= 1.4.0 < 2":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.5.0.tgz#161c7dac177659fd9811f43771fa99381478628c"
-
-statuses@~1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.2.1.tgz#dded45cc18256d51ed40aec142489d5c61026d28"
 
 statuses@~1.3.1:
   version "1.3.1"
@@ -4845,15 +4817,6 @@ uglify-es@^3.1.9:
     commander "~2.13.0"
     source-map "~0.6.1"
 
-uglify-js@2.6.4:
-  version "2.6.4"
-  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-2.6.4.tgz#65ea2fb3059c9394692f15fed87c2b36c16b9adf"
-  dependencies:
-    async "~0.2.6"
-    source-map "~0.5.1"
-    uglify-to-browserify "~1.0.0"
-    yargs "~3.10.0"
-
 uglify-js@^2.6:
   version "2.8.29"
   resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-2.8.29.tgz#29c5733148057bb4e1f75df35b7a9cb72e6a59dd"
@@ -4862,10 +4825,6 @@ uglify-js@^2.6:
     yargs "~3.10.0"
   optionalDependencies:
     uglify-to-browserify "~1.0.0"
-
-uglify-save-license@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/uglify-save-license/-/uglify-save-license-0.4.1.tgz#95726c17cc6fd171c3617e3bf4d8d82aa8c4cce1"
 
 uglify-to-browserify@~1.0.0:
   version "1.0.2"
@@ -4925,12 +4884,6 @@ verror@1.10.0:
     assert-plus "^1.0.0"
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
-
-vinyl-sourcemaps-apply@^0.2.0:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/vinyl-sourcemaps-apply/-/vinyl-sourcemaps-apply-0.2.1.tgz#ab6549d61d172c2b1b87be5c508d239c8ef87705"
-  dependencies:
-    source-map "^0.5.1"
 
 vinyl@^0.5.0:
   version "0.5.3"
@@ -5061,11 +5014,19 @@ ws@^1.1.0:
     options ">=0.0.5"
     ultron "1.0.x"
 
-ws@^2.0.3, ws@~2.3.1:
+ws@^2.0.3:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/ws/-/ws-2.3.1.tgz#6b94b3e447cb6a363f785eaf94af6359e8e81c80"
   dependencies:
     safe-buffer "~5.0.1"
+    ultron "~1.1.0"
+
+ws@~3.3.1:
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-3.3.3.tgz#f1cf84fe2d5e901ebce94efaece785f187a228f2"
+  dependencies:
+    async-limiter "~1.0.0"
+    safe-buffer "~5.1.0"
     ultron "~1.1.0"
 
 xcode@^0.9.1:

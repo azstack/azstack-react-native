@@ -231,7 +231,7 @@ class StickerListComponent extends React.Component {
                         filteredStickers.length > 0 && <FlatList
                             style={this.coreInstances.CustomStyle.getStyle('STICKERS_LIST_BLOCK_STYLE')}
                             data={filteredStickers}
-                            keyExtractor={(item, index) => (item.catId)}
+                            keyExtractor={(item, index) => (`sticker_cat_${item.catId}`)}
                             renderItem={({ item, index }) => {
                                 return (
                                     <TouchableOpacity
