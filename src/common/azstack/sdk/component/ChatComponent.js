@@ -1331,7 +1331,7 @@ class ChatComponent extends React.Component {
                                 inverted={true}
                                 style={this.coreInstances.CustomStyle.getStyle('MESSAGES_LIST_STYLE')}
                                 data={this.state.messages}
-                                keyExtractor={(item, index) => (item.msgId)}
+                                keyExtractor={(item, index) => (`message_${item.msgId}`)}
                                 renderItem={({ item, index }) => {
                                     return (
                                         <MessageBlockComponent

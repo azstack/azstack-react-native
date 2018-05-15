@@ -913,7 +913,7 @@ class ConversationsComponent extends React.Component {
                         filteredConversations.length > 0 && <FlatList
                             style={this.coreInstances.CustomStyle.getStyle('CONVERSATIONS_LIST_STYLE')}
                             data={filteredConversations}
-                            keyExtractor={(item, index) => (item.chatType + '_' + item.chatId)}
+                            keyExtractor={(item, index) => (`conversation_${item.chatType}_${item.chatId}`)}
                             renderItem={({ item }) => {
                                 return (
                                     <ConversationBlockComponent
