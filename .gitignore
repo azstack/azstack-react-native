@@ -57,3 +57,5 @@ buck-out/
 ios/Pods/
 ios/Podfile.lock
 ios/azstack_react_native_sdk.xcworkspace/
+# Bundle artifact
+*.jsbundle
