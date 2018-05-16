@@ -1574,6 +1574,9 @@ export const IMAGE_GALLERY_CONTROL_BUTTON_TEXT_STYLE = {
 };
 
 
+export const LOCATION_MAP_CONTENT_BLOCK_STYLE = {
+    flex: 1
+};
 export const LOCATION_MAP_FOOTER_BLOCK_STYLE = {
     borderTopWidth: 1,
     borderTopColor: '#E1E5EC',

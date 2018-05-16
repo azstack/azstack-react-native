@@ -2,7 +2,8 @@ import React from 'react';
 import {
     BackHandler,
     Alert,
-    Linking
+    Linking,
+    View
 } from 'react-native';
 import MapView from 'react-native-maps';
 
@@ -121,32 +122,36 @@ class LocationMapComponent extends React.Component {
                 }
                 <ScreenBodyBlockComponent
                     getCoreInstances={this.props.getCoreInstances}
-                    onLayout={this.onMapBoundLayout}
                 >
-                    {
-                        !!this.state.mapSizes.height &&
-                        !!this.state.mapSizes.width && (
-                            <MapView
-                                style={{
-                                    width: this.state.mapSizes.width,
-                                    height: this.state.mapSizes.height
-                                }}
-                                initialRegion={{
-                                    latitude: this.props.location.latitude,
-                                    longitude: this.props.location.longitude,
-                                    latitudeDelta: 0.01,
-                                    longitudeDelta: 0.01 * this.state.mapSizes.width / this.state.mapSizes.height,
-                                }}
-                            >
-                                <MapView.Marker
-                                    coordinate={{
-                                        latitude: this.props.location.latitude,
-                                        longitude: this.props.location.longitude
+                    <View
+                        style={this.coreInstances.CustomStyle.getStyle('LOCATION_MAP_CONTENT_BLOCK_STYLE')}
+                        onLayout={this.onMapBoundLayout}
+                    >
+                        {
+                            !!this.state.mapSizes.height &&
+                            !!this.state.mapSizes.width && (
+                                <MapView
+                                    style={{
+                                        width: this.state.mapSizes.width,
+                                        height: this.state.mapSizes.height
                                     }}
-                                />
-                            </MapView>
-                        )
-                    }
+                                    initialRegion={{
+                                        latitude: this.props.location.latitude,
+                                        longitude: this.props.location.longitude,
+                                        latitudeDelta: 0.01,
+                                        longitudeDelta: 0.01 * this.state.mapSizes.width / this.state.mapSizes.height,
+                                    }}
+                                >
+                                    <MapView.Marker
+                                        coordinate={{
+                                            latitude: this.props.location.latitude,
+                                            longitude: this.props.location.longitude
+                                        }}
+                                    />
+                                </MapView>
+                            )
+                        }
+                    </View>
                 </ScreenBodyBlockComponent>
                 <LocationMapFooterBlockComponent
                     getCoreInstances={this.props.getCoreInstances}
