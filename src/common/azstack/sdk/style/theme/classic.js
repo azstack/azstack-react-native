@@ -37,7 +37,10 @@ export const SCREEN_BLOCK_STYLE = {
     right: 0,
     bottom: 0,
     backgroundColor: '#fff',
-    flexDirection: 'column',
+    flexDirection: 'column'
+};
+export const SCREEN_CONTENT_BLOCK_STYLE = {
+    flex: 1
 };
 export const SCREEN_STATUS_BAR_PROPS_STYLE = {
     backgroundColor: '#fff',
