@@ -17,7 +17,8 @@ class ScreenBlockComponent extends React.Component {
         this.coreInstances = props.getCoreInstances();
 
         this.withStatusbar = (this.props.withStatusbar || (this.props.withStatusbar === undefined && this.coreInstances.defaultLayout.withStatusbar)) ? true : false;
-        this.realHeight = height - (this.withStatusbar ? 0 : (Platform.OS === 'ios' ? 20 : StatusBar.currentHeight));
+        this.fullScreen = (this.props.fullScreen || (this.props.fullScreen === undefined && this.coreInstances.defaultLayout.fullScreen)) ? true : false;
+        this.realHeight = height - (this.fullScreen ? 0 : (this.withStatusbar ? 0 : (Platform.OS === 'ios' ? 20 : StatusBar.currentHeight)));
 
         this.state = {
             heightAnimated: new Animated.Value(this.realHeight)
@@ -48,31 +49,17 @@ class ScreenBlockComponent extends React.Component {
                 }
             ).start();
         });
+        if (this.fullScreen) {
+            StatusBar.setHidden(true);
+        }
     };
-
     componentWillUnmount() {
         this.keyboardListeners.onShowed.remove();
         this.keyboardListeners.onHided.remove();
+        if (this.fullScreen) {
+            StatusBar.setHidden(false);
+        }
     };
-
-    dismiss() {
-        Animated.parallel([
-            Animated.timing(
-                this.state.opacityAnimated,
-                {
-                    toValue: 0,
-                    duration: 200,
-                }
-            ),
-            Animated.timing(
-                this.state.marginLeftAnimated,
-                {
-                    toValue: width,
-                    duration: 200,
-                }
-            )
-        ]).start();
-    }
 
     render() {
         return (
@@ -83,7 +70,14 @@ class ScreenBlockComponent extends React.Component {
                     ...this.props.style || {}
                 }}
             >
-                {this.withStatusbar && <CustomStatusBar backgroundColor="#fff" barStyle="dark-content" hidden={this.props.fullScreen} />}
+                {
+                    this.withStatusbar && (
+                        <CustomStatusBar
+                            {...this.coreInstances.CustomStyle.getStyle('SCREEN_STATUS_BAR_PROPS_STYLE')}
+                            hidden={this.fullScreen}
+                        />
+                    )
+                }
                 {this.props.children}
             </Animated.View >
         );

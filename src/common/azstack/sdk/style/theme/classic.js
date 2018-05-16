@@ -39,6 +39,10 @@ export const SCREEN_BLOCK_STYLE = {
     backgroundColor: '#fff',
     flexDirection: 'column',
 };
+export const SCREEN_STATUS_BAR_PROPS_STYLE = {
+    backgroundColor: '#fff',
+    barStyle: 'dark-content'
+};
 export const SCREEN_HEADER_BLOCK_STYLE = {
     paddingVertical: 10,
     paddingHorizontal: 15,
