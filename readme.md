@@ -5,8 +5,9 @@
     npm install --save azstack-react-native
 ```
 ## 1.1. Core
-### 1.1.1. Install jsencrypt https://github.com/travist/jsencrypt
-### 1.1.2. Install react-native-webrtc https://github.com/oney/react-native-webrtc
+### 1.1.1. Install socket.io-client https://github.com/socketio/socket.io-client
+### 1.1.2. Install jsencrypt https://github.com/travist/jsencrypt
+### 1.1.3. Install react-native-webrtc https://github.com/oney/react-native-webrtc
 ## 1.2. Sdk
 ### 1.2.1. Install react-native-image-crop-picker https://github.com/ivpusic/react-native-image-crop-picker
 ### 1.2.2. Install react-native-document-picker https://github.com/Elyx0/react-native-document-picker
