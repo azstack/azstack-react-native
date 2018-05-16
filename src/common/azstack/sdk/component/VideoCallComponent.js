@@ -401,7 +401,8 @@ class VideoCallComponent extends React.Component {
 			<ScreenBlockComponent
 				fullScreen={true}
 				withStatusbar={this.props.withStatusbar}
-				style={this.props.style}
+				screenStyle={this.props.screenStyle}
+                statusbarStyle={this.props.statusbarStyle}
 				getCoreInstances={this.props.getCoreInstances}
 			>
 				{this.state.isIncomingCall === true && this.renderIncomingCall()}

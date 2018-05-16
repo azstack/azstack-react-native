@@ -33,7 +33,9 @@ class AppMain extends React.Component {
         //user 3: test_user_3 391658
         this.defaultLayout = {
             withStatusbar: true,
-            withHeader: true
+            withHeader: true,
+            screenStyle: {},
+            statusbarStyle: {}
         };
         this.languageCode = 'en';
         this.themeName = 'classic';

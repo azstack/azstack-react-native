@@ -1287,8 +1287,9 @@ class ChatComponent extends React.Component {
             <ScreenBlockComponent
                 fullScreen={false}
                 withStatusbar={this.props.withStatusbar}
+                screenStyle={this.props.screenStyle}
+                statusbarStyle={this.props.statusbarStyle}
                 getCoreInstances={this.props.getCoreInstances}
-                style={this.props.style}
             >
                 <View
                     style={this.coreInstances.CustomStyle.getStyle('CHAT_NOT_INPUT_BLOCK_STYLE')}
@@ -1317,7 +1318,6 @@ class ChatComponent extends React.Component {
                     }
                     <ScreenBodyBlockComponent
                         getCoreInstances={this.props.getCoreInstances}
-                        style={this.props.contentContainerStyle}
                     >
                         {
                             this.state.messages.length === 0 && <EmptyBlockComponent

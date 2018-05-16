@@ -291,8 +291,9 @@ class OnCallComponent extends React.Component {
 			<ScreenBlockComponent
 				fullScreen={true}
 				withStatusbar={this.props.withStatusbar}
+				screenStyle={this.props.screenStyle}
+                statusbarStyle={this.props.statusbarStyle}
 				getCoreInstances={this.props.getCoreInstances}
-                style={this.props.style}
 			>
 				{this.state.isIncomingCall === true && this.renderIncomingCall()}
 				{this.state.isIncomingCall === false && this.renderOncall()}

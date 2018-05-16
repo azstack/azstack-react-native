@@ -58,7 +58,9 @@ render() {
     };
     let defaultLayout = {
         withStatusbar: true,
-        withHeader: true
+        withHeader: true,
+        screenStyle: {},
+        statusbarStyle: {}
     };
     let languageCode = 'en';
     let themeName = 'classic';
@@ -179,8 +181,8 @@ Show group info
 ```javascript
 {
     onBackButtonPressed: () => {},
-    style: {},
-    containerStyle: {}
+    screenStyle: {},
+    statusbarStyle: {},
     withStatusbar: true | false, // true by default, overwrite defaultLayout
     withHeader: true | false, // true by default, overwrite defaultLayout
 }

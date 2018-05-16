@@ -69,8 +69,12 @@ class GroupInputNameComponent extends React.Component {
             <ScreenBlockComponent
                 fullScreen={true}
                 withStatusbar={this.props.withStatusbar}
+                screenStyle={{
+                    ...this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_SCREEN_BLOCK_STYLE'),
+                    ...this.props.screenStyle
+                }}
+                statusbarStyle={this.props.statusbarStyle}
                 getCoreInstances={this.props.getCoreInstances}
-                style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_SCREEN_BLOCK_STYLE')}
             >
                 <View
                     style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_BLOCK_STYLE')}

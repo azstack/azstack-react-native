@@ -66,14 +66,17 @@ class ScreenBlockComponent extends React.Component {
             <Animated.View
                 style={{
                     ...this.coreInstances.CustomStyle.getStyle('SCREEN_BLOCK_STYLE'),
-                    height: this.state.heightAnimated,
-                    ...this.props.style || {}
+                    ...this.coreInstances.defaultLayout.screenStyle,
+                    ...this.props.screenStyle,
+                    height: this.state.heightAnimated
                 }}
             >
                 {
                     this.withStatusbar && (
                         <CustomStatusBar
                             {...this.coreInstances.CustomStyle.getStyle('SCREEN_STATUS_BAR_PROPS_STYLE')}
+                            {...this.coreInstances.defaultLayout.statusbarStyle}
+                            {...this.props.statusbarStyle}
                             hidden={this.fullScreen}
                         />
                     )

@@ -46,7 +46,9 @@ export class AZStackSdk extends AZStackNavigation {
 
         this.defaultLayout = {
             withStatusbar: true,
-            withHeader: true
+            withHeader: true,
+            screenStyle: {},
+            statusbarStyle: {}
         };
 
         if (props.options.defaultLayout && typeof props.options.defaultLayout === 'object') {
@@ -55,6 +57,20 @@ export class AZStackSdk extends AZStackNavigation {
             }
             if (typeof props.options.defaultLayout.withHeader === 'boolean') {
                 this.defaultLayout.withHeader = props.options.defaultLayout.withHeader;
+            }
+            if (typeof props.options.defaultLayout.screenStyle === 'object') {
+                for (let field in props.options.defaultLayout.screenStyle) {
+                    if (typeof props.options.defaultLayout.screenStyle[field] === 'string' || !isNaN(typeof props.options.defaultLayout.screenStyle[field])) {
+                        this.defaultLayout.screenStyle[field] = props.options.defaultLayout.screenStyle[field];
+                    }
+                }
+            }
+            if (typeof props.options.defaultLayout.statusbarStyle === 'object') {
+                for (let field in props.options.defaultLayout.statusbarStyle) {
+                    if (typeof props.options.defaultLayout.statusbarStyle[field] === 'string' || !isNaN(typeof props.options.defaultLayout.statusbarStyle[field])) {
+                        this.defaultLayout.statusbarStyle[field] = props.options.defaultLayout.statusbarStyle[field];
+                    }
+                }
             }
         }
 

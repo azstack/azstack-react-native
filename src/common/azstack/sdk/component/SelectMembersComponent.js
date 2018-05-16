@@ -319,8 +319,9 @@ class SelectMembersComponent extends React.Component {
             <ScreenBlockComponent
                 fullScreen={false}
                 withStatusbar={this.props.withStatusbar}
+                screenStyle={this.props.screenStyle}
+                statusbarStyle={this.props.statusbarStyle}
                 getCoreInstances={this.props.getCoreInstances}
-                style={this.props.style}
             >
                 {
                     (this.props.withHeader || (this.props.withHeader === undefined && this.coreInstances.defaultLayout.withHeader)) && (
@@ -334,7 +335,6 @@ class SelectMembersComponent extends React.Component {
                 }
                 <ScreenBodyBlockComponent
                     getCoreInstances={this.props.getCoreInstances}
-                    style={this.props.contentContainerStyle}
                 >
                     <SearchBlockComponent
                         getCoreInstances={this.props.getCoreInstances}
