@@ -274,6 +274,7 @@ export class AZStackSdk extends AZStackNavigation {
 
     onCallinStart(error, result) {
         this.navigate(this.getNavigation().OnCallComponent, {
+            withBackButtonHandler: true,
             info: {
                 phoneNumber: result.fromPhoneNumber
             },
@@ -327,6 +328,7 @@ export class AZStackSdk extends AZStackNavigation {
             if (resultUser.list.length > 0) {
                 if (result.mediaType === this.AZStackCore.callConstants.CALL_MEDIA_TYPE_AUDIO) {
                     this.navigate(this.getNavigation().OnCallComponent, {
+                        withBackButtonHandler: true,
                         info: {
                             name: resultUser.list[0].fullname,
                             userId: resultUser.list[0].userId,
@@ -367,6 +369,7 @@ export class AZStackSdk extends AZStackNavigation {
                     });
                 } else if (result.mediaType === this.AZStackCore.callConstants.CALL_MEDIA_TYPE_VIDEO) {
                     this.navigate(this.getNavigation().VideoCallComponent, {
+                        withBackButtonHandler: true,
                         info: {
                             name: resultUser.list[0].fullname,
                             userId: resultUser.list[0].userId,
@@ -421,7 +424,6 @@ export class AZStackSdk extends AZStackNavigation {
             console.log(error);
         });
     };
-
     startCallout(options) {
         this.Call.onBeforeCalloutStart({
             toPhoneNumber: options.info.phoneNumber,
@@ -431,6 +433,7 @@ export class AZStackSdk extends AZStackNavigation {
                 this.getNavigation().OnCallComponent,
                 {
                     ...options,
+                    withBackButtonHandler: true,
                     onEndCall: () => {
                         if (options.onEndCall) {
                             options.onEndCall()
@@ -469,6 +472,7 @@ export class AZStackSdk extends AZStackNavigation {
                 this.getNavigation().OnCallComponent,
                 {
                     ...options,
+                    withBackButtonHandler: true,
                     onEndCall: () => {
                         if (options.onEndCall) {
                             options.onEndCall()
@@ -507,6 +511,7 @@ export class AZStackSdk extends AZStackNavigation {
                 this.getNavigation().VideoCallComponent,
                 {
                     ...options,
+                    withBackButtonHandler: true,
                     onEndCall: () => {
                         if (options.onEndCall) {
                             options.onEndCall()
@@ -549,6 +554,7 @@ export class AZStackSdk extends AZStackNavigation {
     startChat(options) {
         this.navigate(this.getNavigation().ChatComponent, {
             ...options,
+            withBackButtonHandler: true,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
@@ -626,12 +632,12 @@ export class AZStackSdk extends AZStackNavigation {
             }
         });
     };
-
     showNumberPad(options) {
         this.navigate(
             this.getNavigation().NumberPadComponent,
             {
                 ...options,
+                withBackButtonHandler: true,
                 onBackButtonPressed: () => {
                     if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                         options.onBackButtonPressed();
@@ -651,6 +657,7 @@ export class AZStackSdk extends AZStackNavigation {
             this.getNavigation().ContactComponent,
             {
                 ...options,
+                withBackButtonHandler: true,
                 onBackButtonPressed: () => {
                     if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                         options.onBackButtonPressed();
@@ -676,6 +683,7 @@ export class AZStackSdk extends AZStackNavigation {
             this.getNavigation().CallLogsComponent,
             {
                 ...options,
+                withBackButtonHandler: true,
                 onBackButtonPressed: () => {
                     if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                         options.onBackButtonPressed();
@@ -699,6 +707,7 @@ export class AZStackSdk extends AZStackNavigation {
     showConversations(options) {
         this.navigate(this.getNavigation().ConversationsComponent, {
             ...options,
+            withBackButtonHandler: true,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
@@ -740,6 +749,7 @@ export class AZStackSdk extends AZStackNavigation {
     showUser(options) {
         this.navigate(this.getNavigation().UserComponent, {
             ...options,
+            withBackButtonHandler: true,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
@@ -788,6 +798,7 @@ export class AZStackSdk extends AZStackNavigation {
     showGroup(options) {
         this.navigate(this.getNavigation().GroupComponent, {
             ...options,
+            withBackButtonHandler: true,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
@@ -821,6 +832,7 @@ export class AZStackSdk extends AZStackNavigation {
     showSelectMembers(options) {
         this.navigate(this.getNavigation().SelectMembersComponent, {
             ...options,
+            withBackButtonHandler: true,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
@@ -848,6 +860,7 @@ export class AZStackSdk extends AZStackNavigation {
     showSelectMember(options) {
         this.navigate(this.getNavigation().SelectMemberComponent, {
             ...options,
+            withBackButtonHandler: true,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
@@ -875,6 +888,7 @@ export class AZStackSdk extends AZStackNavigation {
     showGroupInputName(options) {
         this.navigate(this.getNavigation().GroupInputNameComponent, {
             ...options,
+            withBackButtonHandler: true,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
@@ -902,6 +916,7 @@ export class AZStackSdk extends AZStackNavigation {
     showImageGallery(options) {
         this.navigate(this.getNavigation().ImageGalleryComponent, {
             ...options,
+            withBackButtonHandler: true,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
@@ -915,6 +930,7 @@ export class AZStackSdk extends AZStackNavigation {
     showLocationMap(options) {
         this.navigate(this.getNavigation().LocationMapComponent, {
             ...options,
+            withBackButtonHandler: true,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
@@ -928,6 +944,7 @@ export class AZStackSdk extends AZStackNavigation {
     showSketchDrawing(options) {
         this.navigate(this.getNavigation().SketchDrawingComponent, {
             ...options,
+            withBackButtonHandler: true,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
@@ -949,6 +966,7 @@ export class AZStackSdk extends AZStackNavigation {
     showStickersList(options) {
         this.navigate(this.getNavigation().StickerListComponent, {
             ...options,
+            withBackButtonHandler: true,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
@@ -962,6 +980,7 @@ export class AZStackSdk extends AZStackNavigation {
     showStickerDetails(options) {
         this.navigate(this.getNavigation().StickerDetailsComponent, {
             ...options,
+            withBackButtonHandler: true,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
@@ -978,6 +997,7 @@ export class AZStackSdk extends AZStackNavigation {
             this.getNavigation().ConversationsComponent,
             {
                 ...options,
+                withBackButtonHandler: false,
                 onBackButtonPressed: () => {
                     if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                         options.onBackButtonPressed();
@@ -1004,6 +1024,7 @@ export class AZStackSdk extends AZStackNavigation {
             this.getNavigation().CallLogsComponent,
             {
                 ...options,
+                withBackButtonHandler: false,
                 onBackButtonPressed: () => {
                     if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                         options.onBackButtonPressed();
@@ -1030,6 +1051,7 @@ export class AZStackSdk extends AZStackNavigation {
             this.getNavigation().NumberPadComponent,
             {
                 ...options,
+                withBackButtonHandler: false,
                 onBackButtonPressed: () => {
                     if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                         options.onBackButtonPressed();
@@ -1050,6 +1072,7 @@ export class AZStackSdk extends AZStackNavigation {
             this.getNavigation().ConversationsComponent,
             {
                 ...options,
+                withBackButtonHandler: false,
                 onBackButtonPressed: () => {
                     if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                         options.onBackButtonPressed();
@@ -1095,6 +1118,7 @@ export class AZStackSdk extends AZStackNavigation {
             this.getNavigation().ChatComponent,
             {
                 ...options,
+                withBackButtonHandler: false,
                 onBackButtonPressed: () => {
                     if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                         options.onBackButtonPressed();
@@ -1179,6 +1203,7 @@ export class AZStackSdk extends AZStackNavigation {
             this.getNavigation().UserComponent,
             {
                 ...options,
+                withBackButtonHandler: false,
                 onBackButtonPressed: () => {
                     if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                         options.onBackButtonPressed();
@@ -1231,6 +1256,7 @@ export class AZStackSdk extends AZStackNavigation {
             this.getNavigation().GroupComponent,
             {
                 ...options,
+                withBackButtonHandler: false,
                 onBackButtonPressed: () => {
                     if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                         options.onBackButtonPressed();

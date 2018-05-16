@@ -305,12 +305,16 @@ class SelectMembersComponent extends React.Component {
 
     componentDidMount() {
         this.addSubscriptions();
-        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        if (this.props.withBackButtonHandler) {
+            BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        }
         this.initRun();
     };
     componentWillUnmount() {
         this.clearSubscriptions();
-        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        if (this.props.withBackButtonHandler) {
+            BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        }
     };
 
     render() {

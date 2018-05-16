@@ -34,7 +34,7 @@ class CallLogsComponent extends React.Component {
         };
 
         this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
-    }
+    };
 
     addSubscriptions() {
         this.subscriptions.onPaidCallLogReturn = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_PAID_CALL_LOG_RETURN, ({ error, result }) => {
@@ -56,17 +56,19 @@ class CallLogsComponent extends React.Component {
 
     componentWillMount() {
         this.getCallLogs({ reload: true });
-    }
-
+    };
     componentDidMount() {
         this.addSubscriptions();
-        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
-    }
-
+        if (this.props.withBackButtonHandler) {
+            BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        }
+    };
     componentWillUnmount() {
         this.clearSubscriptions();
-        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
-    }
+        if (this.props.withBackButtonHandler) {
+            BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        }
+    };
 
     renderItem(item, index) {
         return (
@@ -85,8 +87,7 @@ class CallLogsComponent extends React.Component {
                 }}
             />
         );
-    }
-
+    };
     renderContent() {
         if (this.state.loading === true) {
             return (
@@ -122,8 +123,7 @@ class CallLogsComponent extends React.Component {
                 centerContent={true}
             />
         );
-    }
-
+    };
     render() {
         return (
             <ScreenBlockComponent
@@ -149,7 +149,7 @@ class CallLogsComponent extends React.Component {
                 </ScreenBodyBlockComponent>
             </ScreenBlockComponent>
         );
-    }
+    };
 
     getCallLogs({ reload }) {
         this.setState({ loading: true });
@@ -168,8 +168,7 @@ class CallLogsComponent extends React.Component {
         }).catch((error) => {
             this.setState({ loading: false });
         });
-    }
-
+    };
     onEndReached() {
         if (this.pagination.done === this.coreInstances.AZStackCore.listConstants.GET_LIST_DONE) {
             return;
@@ -184,19 +183,17 @@ class CallLogsComponent extends React.Component {
 
         this.getCallLogs({});
         this.onEndReachedCalledDuringMomentum = true;
-    }
-
+    };
     onRefresh() {
         this.getCallLogs({ reload: true });
-    }
-
+    };
     onItemPress(callLog, index) {
         this.props.onCallout({
             info: {
                 phoneNumber: callLog.callType === 1 ? callLog.toPhoneNumber : callLog.fromPhoneNumber
             }
         });
-    }
+    };
 };
 
 export default CallLogsComponent;

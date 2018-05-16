@@ -1274,12 +1274,16 @@ class ChatComponent extends React.Component {
 
     componentDidMount() {
         this.addSubscriptions();
+        if (this.props.withBackButtonHandler) {
+            BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        }
         this.initRun();
-        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     };
     componentWillUnmount() {
         this.clearSubscriptions();
-        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        if (this.props.withBackButtonHandler) {
+            BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        }
     };
 
     render() {

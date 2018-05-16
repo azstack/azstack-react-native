@@ -142,13 +142,17 @@ class SketchDrawingComponent extends React.Component {
     };
 
     componentDidMount() {
-        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        if (this.props.withBackButtonHandler) {
+            BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        }
         setTimeout(() => {
             this.setState({ draw: Object.assign({}, this.state.draw, { show: true }) });
         }, 500);
     };
     componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        if (this.props.withBackButtonHandler) {
+            BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        }
         this.onClearButtonPressed();
     };
 

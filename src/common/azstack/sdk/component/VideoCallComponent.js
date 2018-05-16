@@ -57,7 +57,7 @@ class VideoCallComponent extends React.Component {
 		};
 
 		this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
-	}
+	};
 
 	onHardBackButtonPressed() {
 		return true;
@@ -123,7 +123,6 @@ class VideoCallComponent extends React.Component {
 			}
 		});
 	};
-
 	clearSubscriptions() {
 		for (let subscriptionName in this.subscriptions) {
 			this.subscriptions[subscriptionName].remove();
@@ -134,8 +133,7 @@ class VideoCallComponent extends React.Component {
 		if (this.props.isIncomingCall) {
 			this.setState({ isIncomingCall: this.props.isIncomingCall, message: 'Ringing' });
 		}
-	}
-
+	};
 	componentDidMount() {
 		this.addSubscriptions();
 		if (!this.props.isIncomingCall) {
@@ -145,13 +143,16 @@ class VideoCallComponent extends React.Component {
 				});
 			}
 		}
-		BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
-	}
-
+		if (this.props.withBackButtonHandler) {
+			BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+		}
+	};
 	componentWillUnmount() {
 		this.clearSubscriptions();
-		BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
-	}
+		if (this.props.withBackButtonHandler) {
+			BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+		}
+	};
 
 	renderUserInfoCenter() {
 		return (
@@ -169,8 +170,7 @@ class VideoCallComponent extends React.Component {
 				</View>
 			</View>
 		);
-	}
-
+	};
 	renderBackgroundContent() {
 		if (this.state.status !== 200) {
 			// 
@@ -196,8 +196,7 @@ class VideoCallComponent extends React.Component {
 				}
 			</View>
 		);
-	}
-
+	};
 	renderMyCamera() {
 		return (
 			<View style={[styles.myCamera, { top: this.state.showAction === true ? 60 : 10 }]}>
@@ -214,8 +213,7 @@ class VideoCallComponent extends React.Component {
 				</TouchableWithoutFeedback>
 			</View>
 		);
-	}
-
+	};
 	renderBottomActions() {
 		return (
 			<View style={[styles.bottomActionBlock, { opacity: this.state.showAction === false ? 0 : 1 }]}>
@@ -244,8 +242,7 @@ class VideoCallComponent extends React.Component {
 				</View>
 			</View>
 		);
-	}
-
+	};
 	renderUserInfoTop() {
 		return (
 			<View style={[styles.userInfoTop, { opacity: this.state.showAction === false ? 0 : 1 }]}>
@@ -267,8 +264,7 @@ class VideoCallComponent extends React.Component {
 				</View>
 			</View>
 		);
-	}
-
+	};
 	renderIncomingCall() {
 		return (
 			<View style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: '#353535', justifyContent: 'space-between' }}>
@@ -300,8 +296,7 @@ class VideoCallComponent extends React.Component {
 				</View>
 			</View>
 		);
-	}
-
+	};
 	renderRinging() {
 		return (
 			<View style={{ flex: 1, backgroundColor: '#353535' }}>
@@ -347,8 +342,7 @@ class VideoCallComponent extends React.Component {
 				</View>
 			</View>
 		);
-	}
-
+	};
 	renderOnCall() {
 		return (
 			<View style={{ flex: 1, backgroundColor: '#353535' }}>
@@ -369,8 +363,7 @@ class VideoCallComponent extends React.Component {
 				</TouchableWithoutFeedback>
 			</View>
 		);
-	}
-
+	};
 	renderMessage(status) {
 		if (status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_CONNECTING) {
 			return this.coreInstances.Language.getText('CALL_CONNECTING');
@@ -394,15 +387,14 @@ class VideoCallComponent extends React.Component {
 			return this.coreInstances.Language.getText('CALL_CALLING');
 		}
 		return this.coreInstances.Language.getText('CALL_UNKNOWN');
-	}
-
+	};
 	render() {
 		return (
 			<ScreenBlockComponent
 				fullScreen={true}
 				withStatusbar={this.props.withStatusbar}
 				screenStyle={this.props.screenStyle}
-                statusbarStyle={this.props.statusbarStyle}
+				statusbarStyle={this.props.statusbarStyle}
 				getCoreInstances={this.props.getCoreInstances}
 			>
 				{this.state.isIncomingCall === true && this.renderIncomingCall()}
@@ -410,7 +402,7 @@ class VideoCallComponent extends React.Component {
 				{this.state.status >= 200 && this.state.isIncomingCall === false && this.renderOnCall()}
 			</ScreenBlockComponent>
 		);
-	}
+	};
 
 	onPressTouchLayer() {
 		this.setState({ showAction: true });
@@ -421,34 +413,28 @@ class VideoCallComponent extends React.Component {
 			clearTimeout(this.state.touchTimeout);
 			this.setState({ touchTimeout: touchTimer });
 		}
-	}
-
+	};
 	onPressChangeDeviceCamera() {
 		this.props.onSwitchCameraType();
-	}
-
+	};
 	onPressMyCameraTouchLayer() {
 		this.setState({ remoteVideoUrl: this.state.localVideoUrl, localVideoUrl: this.state.remoteVideoUrl });
-	}
-
+	};
 	onPressEndCall() {
 		this.props.onEndCall();
-	}
-
+	};
 	onPressAnswer() {
 		this.props.onAnswer();
 		this.setState({ isIncomingCall: false, status: 200 });
-	}
-
+	};
 	onPressToggleAudio() {
 		this.props.onToggleAudio(!this.state.isAudioOn);
 		this.setState({ isAudioOn: !this.state.isAudioOn });
-	}
-
+	};
 	onPressToggleVideo() {
 		this.props.onToggleVideo(!this.state.isVideoOn);
 		this.setState({ isVideoOn: !this.state.isVideoOn });
-	}
+	};
 }
 
 export default VideoCallComponent;

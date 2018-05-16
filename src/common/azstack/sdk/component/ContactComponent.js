@@ -53,11 +53,14 @@ class ContactComponent extends React.Component {
     };
 
     componentDidMount() {
-        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        if (this.props.withBackButtonHandler) {
+            BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        }
     };
-
     componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        if (this.props.withBackButtonHandler) {
+            BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        }
     };
 
     renderItem(item, index) {
@@ -78,7 +81,6 @@ class ContactComponent extends React.Component {
             />
         );
     };
-
     renderContent() {
         if (this.state.contact.length === 0) {
             return (
@@ -99,7 +101,6 @@ class ContactComponent extends React.Component {
             />
         );
     };
-
     render() {
         return (
             <ScreenBlockComponent
@@ -137,7 +138,6 @@ class ContactComponent extends React.Component {
     onEndReached() {
 
     };
-
     onItemPress(contact, index) {
         if (this.state.showItemActions === index) {
             this.setState({ showItemActions: null });

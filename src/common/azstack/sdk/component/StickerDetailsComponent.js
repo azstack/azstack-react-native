@@ -214,13 +214,17 @@ class StickerDetailsComponent extends React.Component {
     };
 
     componentDidMount() {
-        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        if (this.props.withBackButtonHandler) {
+            BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        }
         this.getFullCoverSizes();
         this.checkStickerDownloaded();
         this.registerZipProcessListener();
     };
     componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        if (this.props.withBackButtonHandler) {
+            BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        }
         this.unregisterZipProcessListener();
     };
 

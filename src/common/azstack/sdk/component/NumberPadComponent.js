@@ -35,37 +35,19 @@ class NumberPadComponent extends React.Component {
 		};
 
 		this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
-	}
-
-	componentWillMount() {
-		this.coreInstances.Number.getNumbers().then((numbers) => {
-			this.setState({ myNumbers: numbers });
-
-			this.setState({ fromPhoneNumber: numbers[0] });
-		});
-	}
+	};
 
 	onHardBackButtonPressed() {
 		this.props.onBackButtonPressed();
 		return true;
 	};
 
-	componentDidMount() {
-		BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
-	};
-
-	componentWillUnmount() {
-		BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
-	};
-
 	onClickNumber(number) {
 		this.setState({ phoneNumber: this.state.phoneNumber + number });
-	}
-
+	};
 	onClear() {
 		this.setState({ phoneNumber: this.state.phoneNumber.slice(0, -1) });
-	}
-
+	};
 	onCall() {
 		this.props.onCallout({
 			info: {
@@ -75,7 +57,25 @@ class NumberPadComponent extends React.Component {
 				avatar: '',
 			}
 		});
-	}
+	};
+
+	componentWillMount() {
+		this.coreInstances.Number.getNumbers().then((numbers) => {
+			this.setState({ myNumbers: numbers });
+
+			this.setState({ fromPhoneNumber: numbers[0] });
+		});
+	};
+	componentDidMount() {
+		if (this.props.withBackButtonHandler) {
+			BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+		}
+	};
+	componentWillUnmount() {
+		if (this.props.withBackButtonHandler) {
+			BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+		}
+	};
 
 	renderFromNumber() {
 		if (this.state.myNumbers.length <= 1 || this.state.phoneNumber === '') {
@@ -90,8 +90,7 @@ class NumberPadComponent extends React.Component {
 				</View>
 			</View>
 		);
-	}
-
+	};
 	renderSelectFromNumber() {
 		return (
 			<Modal
@@ -126,15 +125,14 @@ class NumberPadComponent extends React.Component {
 				</TouchableWithoutFeedback>
 			</Modal>
 		);
-	}
-
+	};
 	render() {
 		return (
 			<ScreenBlockComponent
 				fullScreen={false}
 				withStatusbar={this.props.withStatusbar}
 				screenStyle={this.props.screenStyle}
-                statusbarStyle={this.props.statusbarStyle}
+				statusbarStyle={this.props.statusbarStyle}
 				getCoreInstances={this.props.getCoreInstances}
 			>
 				{
@@ -257,7 +255,7 @@ class NumberPadComponent extends React.Component {
 				{this.renderSelectFromNumber()}
 			</ScreenBlockComponent>
 		);
-	}
+	};
 }
 
 export default NumberPadComponent;

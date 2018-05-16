@@ -29,10 +29,14 @@ class ImageGalleryComponent extends React.Component {
     };
 
     componentDidMount() {
-        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        if (this.props.withBackButtonHandler) {
+            BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        }
     };
     componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        if (this.props.withBackButtonHandler) {
+            BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        }
     };
 
     render() {
