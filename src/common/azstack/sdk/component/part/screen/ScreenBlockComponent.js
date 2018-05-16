@@ -49,16 +49,10 @@ class ScreenBlockComponent extends React.Component {
                 }
             ).start();
         });
-        if (this.fullScreen) {
-            StatusBar.setHidden(true);
-        }
     };
     componentWillUnmount() {
         this.keyboardListeners.onShowed.remove();
         this.keyboardListeners.onHided.remove();
-        if (this.fullScreen) {
-            StatusBar.setHidden(false);
-        }
     };
 
     render() {
