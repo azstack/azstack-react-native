@@ -28,6 +28,8 @@ export const IMAGE_CROSS = require('../static/image/classic/cross.png');
 export const IMAGE_DOWNLOAD = require('../static/image/classic/download.png');
 export const IMAGE_TRASH = require('../static/image/classic/trash.png');
 export const IMAGE_REFRESH = require('../static/image/classic/refresh.png');
+export const IMAGE_CALLOUT = require('../static/image/classic/callout.png');
+export const IMAGE_CALLIN = require('../static/image/classic/callin.png');
 
 
 export const SCREEN_BLOCK_STYLE = {
@@ -415,7 +417,7 @@ export const CHAT_HEADER_NAME_TEXT_STYLE = {
     fontSize: 15,
     fontWeight: '400',
     lineHeight: 20,
-    color: '#2F353B',
+    color: '#2F353B'
 };
 export const CHAT_HEADER_OFFLINE_TEXT_STYLE = {
     fontSize: 14,
@@ -1092,6 +1094,55 @@ export const CALL_LOGS_LIST_STYLE = {
 };
 export const CALL_LOGS_LIST_CONTAINER_STYLE = {
     paddingBottom: 15
+};
+
+export const CALL_LOG_BLOCK_STYLE = {
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E1E5EC',
+    paddingVertical: 15,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const CALL_LOG_TYPE_IMAGE_BLOCK_STYLE = {
+    width: 15,
+    height: 15
+};
+export const CALL_LOG_INFORMATION_BLOCK_STYLE = {
+    flex: 1,
+    marginHorizontal: 30
+};
+export const CALL_LOG_PHONE_NUMBER_TEXT_STYLE = {
+    fontSize: 16,
+    fontWeight: '400',
+    lineHeight: 20,
+    color: '#2F353B'
+};
+export const CALL_LOG_CALL_STATUS_TEXT_STYLE = {
+    fontSize: 14,
+    lineHeight: 20,
+    fontWeight: '400',
+    color: '#95A5A6',
+    marginTop: 5
+};
+export const CALL_LOG_CALL_STATUS_ANSWERED_TEXT_STYLE = {
+    color: '#26C281'
+};
+export const CALL_LOG_CALL_STATUS_REJECTED_TEXT_STYLE = {
+    color: '#EF4836'
+};
+export const CALL_LOG_CALL_STATUS_NOT_ANSWERED_TEXT_STYLE = {
+    color: '#F3C200'
+};
+export const CALL_LOG_CALL_TIME_TEXT_STYLE = {
+    fontSize: 15,
+    lineHeight: 20,
+    fontWeight: '300',
+    color: '#95A5A6',
+    marginTop: 5
+};
+export const CALL_LOG_FROM_NOW_TEXT_STYLE = {
+    fontSize: 14
 };
 
 

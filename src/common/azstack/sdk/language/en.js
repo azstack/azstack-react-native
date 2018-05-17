@@ -120,6 +120,9 @@ export const CHAT_INPUT_DISCARD_RECORDED_AUDIO_CONFIRMATION_TEXT = 'Are you sure
 export const CALL_LOGS_HEADER_TITLE_TEXT = 'Call Logs';
 export const CALL_LOGS_SEARCH_PLACEHOLDER_TEXT = 'Search...';
 export const CALL_LOGS_LIST_EMPTY_TEXT = 'No Call Log';
+export const CALL_LOG_ANSWERED_TEXT = 'Answered';
+export const CALL_LOG_REJECTED_TEXT = 'Rejected';
+export const CALL_LOG_NOT_ANSWERED_TEXT = 'Not answered';
 
 export const USER_HEADER_TITLE_TEXT = 'User Information';
 export const USER_EMPTY_TEXT = 'No User Infomation';
