@@ -22,27 +22,43 @@ class CallLogsComponent extends React.Component {
         this.coreInstances = props.getCoreInstances();
         this.subscriptions = {};
         this.pagination = {
-            done: 0,
+            done: false,
             page: 1,
-            lastCreated: new Date().getTime()
+            lastCreated: new Date().getTime(),
+            loading: false
         }
         this.state = {
-            logs: [
-
-            ],
-            loading: false,
+            callLogs: []
         };
 
         this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
     };
 
     addSubscriptions() {
-        this.subscriptions.onPaidCallLogReturn = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_PAID_CALL_LOG_RETURN, ({ error, result }) => {
-            let newLogs = this.state.logs;
-            newLogs.unshift(result);
-            this.setState({ logs: newLogs });
+        this.subscriptions.onConnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_CONNECT_RETURN, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.initRun();
         });
-    }
+        this.subscriptions.onAutoReconnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_AUTO_RECONNECTED, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.initRun();
+        });
+        this.subscriptions.onReconnected = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_ON_RECONNECT_RETURN, ({ error, result }) => {
+            if (error) {
+                return;
+            }
+            this.initRun();
+        });
+        this.subscriptions.onPaidCallLogReturn = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_PAID_CALL_LOG_RETURN, ({ error, result }) => {
+            let newCallLogs = this.state.callLogs;
+            newCallLogs.unshift(result);
+            this.setState({ callLogs: newCallLogs });
+        });
+    };
     clearSubscriptions() {
         for (let subscriptionName in this.subscriptions) {
             this.subscriptions[subscriptionName].remove();
@@ -54,14 +70,56 @@ class CallLogsComponent extends React.Component {
         return true;
     };
 
-    componentWillMount() {
-        this.getCallLogs({ reload: true });
+    initRun() {
+        this.state.callLogs = [];
+        this.pagination.done = false;
+        this.pagination.page = 1;
+        this.pagination.lastCreated = new Date().getTime();
+        this.getCallLogs();
     };
+
+    getCallLogs() {
+
+        if (!this.coreInstances.AZStackCore.slaveSocketConnected) {
+            return;
+        }
+
+        if (this.pagination.done) {
+            return;
+        }
+
+        if (this.pagination.loading) {
+            return;
+        }
+
+        this.pagination.loading = true;
+        this.coreInstances.AZStackCore.getPaidCallLogs({
+            page: this.pagination.page,
+            lastCreated: this.pagination.lastCreated
+        }).then((result) => {
+            if (result.done === this.coreInstances.AZStackCore.listConstants.GET_LIST_DONE) {
+                this.pagination.done = true;
+            } else {
+                this.pagination.page += 1;
+            }
+            this.pagination.loading = false;
+            this.setState({
+                callLogs: this.state.callLogs.concat(result.list)
+            });
+        }).catch((error) => {
+            this.pagination.loading = false;
+        });
+    };
+    onEndReached() {
+        this.getCallLogs();
+    };
+
     componentDidMount() {
         this.addSubscriptions();
         if (this.props.withBackButtonHandler) {
             BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
         }
+        this.initRun();
     };
     componentWillUnmount() {
         this.clearSubscriptions();
@@ -70,60 +128,6 @@ class CallLogsComponent extends React.Component {
         }
     };
 
-    renderItem(item, index) {
-        return (
-            <CallLogItem
-                getCoreInstances={this.props.getCoreInstances}
-                callLog={item}
-                onPress={() => this.onItemPress(item, index)}
-                onVideoCall={(options) => {
-                    this.props.onVideoCall(options);
-                }}
-                onAudioCall={(options) => {
-                    this.props.onAudioCall(options);
-                }}
-                onCallout={(options) => {
-                    this.props.onCallout(options);
-                }}
-            />
-        );
-    };
-    renderContent() {
-        if (this.state.loading === true) {
-            return (
-                <EmptyBlockComponent
-                    getCoreInstances={this.props.getCoreInstances}
-                    emptyText={"Loading"}
-                />
-            );
-        }
-
-        if (this.state.logs.length === 0) {
-            return (
-                <EmptyBlockComponent
-                    getCoreInstances={this.props.getCoreInstances}
-                    emptyText={"No recently call"}
-                />
-            );
-        }
-
-        return (
-            <FlatList
-                data={this.state.logs}
-                keyExtractor={(item, index) => (`call_log_${index}`)}
-                renderItem={({ item, index }) => this.renderItem(item, index)}
-                onEndReached={() => this.onEndReached()}
-                onEndReachedThreshold={0.2}
-                onRefresh={() => this.onRefresh()}
-                refreshing={this.state.loading}
-                onMomentumScrollBegin={() => { console.log('begin'); this.onEndReachedCalledDuringMomentum = false; }}
-                onMomentumScrollEnd={() => { console.log('end'); this.onEndReachedCalledDuringMomentum = true; }}
-                contentContainerStyle={{ paddingBottom: 15 }}
-                keyboardDismissMode={Platform.select({ ios: 'interactive', android: 'on-drag' })}
-                centerContent={true}
-            />
-        );
-    };
     render() {
         return (
             <ScreenBlockComponent
@@ -145,54 +149,38 @@ class CallLogsComponent extends React.Component {
                 <ScreenBodyBlockComponent
                     getCoreInstances={this.props.getCoreInstances}
                 >
-                    {this.renderContent()}
+                    {
+                        !this.state.callLogs.length && (
+                            <EmptyBlockComponent
+                                getCoreInstances={this.props.getCoreInstances}
+                                emptyText={"No recently call"}
+                            />
+                        )
+                    }
+                    {
+                        !!this.state.callLogs.length && (
+                            <FlatList
+                                data={this.state.callLogs}
+                                keyExtractor={(item, index) => (`call_log_${index}`)}
+                                renderItem={({ item, index }) => {
+                                    return (
+                                        <CallLogItem
+                                            getCoreInstances={this.props.getCoreInstances}
+                                            callLog={item}
+                                            startCallout={this.props.startCallout}
+                                        />
+                                    );
+                                }}
+                                onEndReached={() => this.onEndReached()}
+                                onEndReachedThreshold={0.1}
+                                contentContainerStyle={{ paddingBottom: 15 }}
+                                keyboardDismissMode={Platform.select({ ios: 'interactive', android: 'on-drag' })}
+                            />
+                        )
+                    }
                 </ScreenBodyBlockComponent>
             </ScreenBlockComponent>
         );
-    };
-
-    getCallLogs({ reload }) {
-        this.setState({ loading: true });
-        this.coreInstances.AZStackCore.getPaidCallLogs({
-            page: this.pagination.page,
-            lastCreated: this.pagination.lastCreated
-        }).then((result) => {
-            this.setState({ loading: false });
-            this.pagination.page += 1;
-            this.pagination.done = result.done;
-            if (reload) {
-                this.setState({ logs: result.list });
-            } else {
-                this.setState({ logs: this.state.logs.concat(result.list) });
-            }
-        }).catch((error) => {
-            this.setState({ loading: false });
-        });
-    };
-    onEndReached() {
-        if (this.pagination.done === this.coreInstances.AZStackCore.listConstants.GET_LIST_DONE) {
-            return;
-        }
-
-        if (this.state.loading === true) {
-            return;
-        }
-        if (this.onEndReachedCalledDuringMomentum) { // mean scrolling
-            return;
-        }
-
-        this.getCallLogs({});
-        this.onEndReachedCalledDuringMomentum = true;
-    };
-    onRefresh() {
-        this.getCallLogs({ reload: true });
-    };
-    onItemPress(callLog, index) {
-        this.props.onCallout({
-            info: {
-                phoneNumber: callLog.callType === 1 ? callLog.toPhoneNumber : callLog.fromPhoneNumber
-            }
-        });
     };
 };
 

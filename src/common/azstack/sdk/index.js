@@ -692,13 +692,13 @@ export class AZStackSdk extends AZStackNavigation {
 
                     this.pop();
                 },
-                onVideoCall: (options) => {
+                startVideoCall: (options) => {
                     this.startVideoCall(options);
                 },
-                onAudioCall: (options) => {
+                startAudioCall: (options) => {
                     this.startAudioCall(options);
                 },
-                onCallout: (options) => {
+                startCallout: (options) => {
                     this.startCallout(options);
                 },
             }
@@ -1033,13 +1033,13 @@ export class AZStackSdk extends AZStackNavigation {
 
                     this.pop();
                 },
-                onVideoCall: (options) => {
+                startVideoCall: (options) => {
                     this.startVideoCall(options);
                 },
-                onAudioCall: (options) => {
+                startAudioCall: (options) => {
                     this.startAudioCall(options);
                 },
-                onCallout: (options) => {
+                startCallout: (options) => {
                     this.startCallout(options);
                 }
             },

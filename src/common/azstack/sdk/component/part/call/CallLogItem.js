@@ -13,15 +13,24 @@ class CallLogItem extends React.Component {
     constructor(props) {
         super(props);
         this.coreInstances = props.getCoreInstances();
-        this.state = {
-            showActions: false,
-        };
-    }
+
+        this.startCallout = this.startCallout.bind(this);
+    };
+
+    startCallout() {
+        this.props.startCallout({
+            info: {
+                phoneNumber: this.props.callLog.callType === 1 ? this.props.callLog.toPhoneNumber : this.props.callLog.fromPhoneNumber
+            }
+        });
+    };
 
     render() {
         return (
             <View>
-                <TouchableOpacity onPress={() => this.onPress()}>
+                <TouchableOpacity
+                    onPress={this.startCallout}
+                >
                     <View style={styles.contactToggle}>
                         <View style={styles.avatar}>
                             <Image source={ic_avatar} style={{ height: 50, width: 50 }} resizeMode={'contain'} />
@@ -31,7 +40,7 @@ class CallLogItem extends React.Component {
                             <Text numberOfLines={1}>{this.props.callLog.callType} <Text>{this.coreInstances.DateTimeFormatter.formatDate(this.props.callLog.recordTime, "YYYY/MM/DD HH:mm:ss")}</Text></Text>
                         </View>
                         <View style={styles.inlineActions}>
-                            <TouchableOpacity onPress={() => this.callout()}>
+                            <TouchableOpacity onPress={() => { }}>
                                 <View style={{ alignSelf: 'flex-end' }}>
                                     <Image source={call_icon} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                                 </View>
@@ -41,12 +50,8 @@ class CallLogItem extends React.Component {
                 </TouchableOpacity>
             </View>
         );
-    }
-
-    onPress() {
-        this.props.onPress();
-    }
-}
+    };
+};
 
 export default CallLogItem;
 
