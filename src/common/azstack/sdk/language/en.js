@@ -186,9 +186,11 @@ export const STICKER_DETAILS_REMOVE_ERROR_TEXT = 'Can\t remove sticker, please t
 export const STICKER_DETAILS_DOWNLOAING_TITLE_TEXT = 'downloading...';
 export const STICKER_DETAILS_EXTRACTING_TITLE_TEXT = 'extracting...';
 
+export const SELECT_PHONE_NUMBER_CANCEL_BUTTON_TITLE_TEXT = 'Cancel'
+
 export const CALL_RINGING = 'Ringing';
 export const CALL_CONNECTING = 'Connecting';
-export const CALL_BUSY = 'Busy'; // target is on an other call
+export const CALL_BUSY = 'Busy';
 export const CALL_REJECTED = 'Rejected';
 export const CALL_NOT_ANSWERED = 'Not answered';
 export const CALL_END = 'Ending';

@@ -1526,11 +1526,14 @@ export const SELECT_MEMBER_SELECTED_IMAGE_STYLE = {
 };
 
 export const GROUP_INPUT_NAME_SCREEN_BLOCK_STYLE = {
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)'
+};
+export const GROUP_INPUT_NAME_BLOCK_STYLE = {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
 };
-export const GROUP_INPUT_NAME_BLOCK_STYLE = {
+export const GROUP_INPUT_NAME_CONTENT_BLOCK_STYLE = {
     padding: 20,
     backgroundColor: '#fff',
     width: 300,
@@ -1956,13 +1959,44 @@ export const STICKER_DETAILS_FULL_COVER_CONTAINER_BLOCK_STYLE = {
 };
 
 export const SELECT_PHONE_NUMBER_SCREEN_BLOCK_STYLE = {
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    justifyContent: 'center',
-    alignItems: 'center'
+    backgroundColor: 'rgba(0, 0, 0, 0.7)'
 };
 export const SELECT_PHONE_NUMBER_BLOCK_STYLE = {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1
+};
+export const SELECT_PHONE_NUMBER_CONTENT_BLOCK_STYLE = {
     padding: 20,
     backgroundColor: '#fff',
     width: 300,
     borderRadius: 5
+};
+export const SELECT_PHONE_NUMBER_ITEM_BLOCK_STYLE = {
+    paddingVertical: 10,
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E1E5EC',
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const SELECT_PHONE_NUMBER_ITEM_TEXT_STYLE = {
+    fontSize: 15,
+    fontWeight: '400',
+    lineHeight: 20,
+    color: '#2F353B'
+};
+export const SELECT_PHONE_NUMBER_CANCEL_BUTTON_BLOCK_STYLE = {
+    paddingVertical: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#95A5A6',
+    borderRadius: 5,
+    marginTop: 20
+};
+export const SELECT_PHONE_NUMBER_CANCEL_BUTTON_TITLE_STYLE = {
+    fontSize: 15,
+    fontWeight: '400',
+    lineHeight: 20,
+    color: '#FFF'
 };
