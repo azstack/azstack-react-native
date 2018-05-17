@@ -25,7 +25,7 @@ class NumberPadComponent extends React.Component {
 		this.coreInstances = props.getCoreInstances();
 
 		this.state = {
-			myPhoneNumber: [],
+			fromPhoneNumbers: [],
 			fromPhoneNumber: [],
 			toPhoneNumber: '',
 			onCall: null
@@ -43,7 +43,7 @@ class NumberPadComponent extends React.Component {
 
 	onFromPhoneNumberPressed() {
 		this.props.showSelectPhoneNumber({
-			phoneNumbers: this.state.myPhoneNumber,
+			phoneNumbers: this.state.fromPhoneNumbers,
 			onSelectDone: (event) => {
 				console.log(event);
 			}
@@ -70,10 +70,10 @@ class NumberPadComponent extends React.Component {
 		if (this.props.withBackButtonHandler) {
 			BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
 		}
-		this.coreInstances.Number.getNumbers().then((numbers) => {
+		this.coreInstances.PhoneNumber.getFromPhoneNumbers().then((fromPhoneNumbers) => {
 			this.setState({
-				myPhoneNumber: numbers,
-				fromPhoneNumber: numbers[0]
+				fromPhoneNumbers: fromPhoneNumbers,
+				fromPhoneNumber: fromPhoneNumbers[0]
 			});
 		});
 	};
@@ -107,7 +107,7 @@ class NumberPadComponent extends React.Component {
 					<View style={{ backgroundColor: '#fff', justifyContent: 'flex-end', alignItems: 'center', flex: 1, paddingBottom: 40 }}>
 						<View style={{ width: '69%', height: 30, marginBottom: 10 }}>
 							{
-								this.state.myPhoneNumber.length > 1 &&
+								this.state.fromPhoneNumbers.length > 1 &&
 								!!this.state.toPhoneNumber && (
 									<View style={{ position: 'relative' }}>
 										<View style={{ flexDirection: 'row', height: 40, justifyContent: 'flex-end', alignItems: 'flex-end', paddingBottom: 10 }}>

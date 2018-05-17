@@ -105,7 +105,7 @@ class AZStackSdkExample extends React.Component {
                     themeName: this.props.themeName,
                     getInitialMembers: this.props.getInitialMembers,
                     getMoreMembers: this.props.getMoreMembers,
-                    getNumbers: this.props.getNumbers,
+                    getFromPhoneNumbers: this.props.getFromPhoneNumbers,
                     onBeforeMessageSend: this.props.onBeforeMessageSend,
                     onBeforeCalloutStart: this.props.onBeforeCalloutStart
                 }}

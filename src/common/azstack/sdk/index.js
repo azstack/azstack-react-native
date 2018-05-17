@@ -25,7 +25,7 @@ import Diacritic from './helper/diacritic';
 
 import Event from './handler/event';
 import Member from './handler/member';
-import Number from './handler/number';
+import PhoneNumber from './handler/phoneNumber';
 import Message from './handler/message';
 import Call from './handler/call';
 import Notification from './handler/notification';
@@ -105,9 +105,9 @@ export class AZStackSdk extends AZStackNavigation {
             this.Member.getMoreMembers = this.props.options.getMoreMembers;
         }
 
-        this.Number = new Number();
-        if (this.props.options.getNumbers && typeof this.props.options.getNumbers === 'function') {
-            this.Number.getNumbers = this.props.options.getNumbers;
+        this.PhoneNumber = new PhoneNumber();
+        if (this.props.options.getFromPhoneNumbers && typeof this.props.options.getFromPhoneNumbers === 'function') {
+            this.PhoneNumber.getFromPhoneNumbers = this.props.options.getFromPhoneNumbers;
         }
 
         this.Message = new Message();
@@ -228,7 +228,7 @@ export class AZStackSdk extends AZStackNavigation {
 
             Member: this.Member,
             Message: this.Message,
-            Number: this.Number,
+            PhoneNumber: this.PhoneNumber,
             Call: this.Call
         };
     };
