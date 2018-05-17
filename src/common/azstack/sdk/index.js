@@ -646,6 +646,9 @@ export class AZStackSdk extends AZStackNavigation {
 
                     this.pop();
                 },
+                showSelectPhoneNumber: (options) => {
+                    this.showSelectPhoneNumber(options)
+                },
                 onCallout: (options) => {
                     this.startCallout(options);
                 }
@@ -967,7 +970,35 @@ export class AZStackSdk extends AZStackNavigation {
             }
         });
     };
-    
+    showSelectPhoneNumber(options) {
+        this.navigate(this.getNavigation().SelectPhoneNumberComponent, {
+            ...options,
+            withBackButtonHandler: true,
+            onBackButtonPressed: () => {
+                if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                    options.onBackButtonPressed();
+                    return;
+                }
+
+                this.pop();
+            },
+            onSelectDone: (event) => {
+                if (options && typeof options === 'object' && typeof options.onSelectDone === 'function') {
+                    options.onSelectDone(event);
+                    return;
+                }
+            },
+            onDoneClose: () => {
+                if (options && typeof options === 'object' && typeof options.onDoneClose === 'function') {
+                    options.onDoneClose(event);
+                    return;
+                }
+
+                this.pop();
+            }
+        });
+    };
+
     UICallLogs(options) {
         return this.renderScreen(
             this.getNavigation().CallLogsComponent,
@@ -1010,6 +1041,9 @@ export class AZStackSdk extends AZStackNavigation {
                     }
 
                     this.pop();
+                },
+                showSelectPhoneNumber: (options) => {
+                    this.showSelectPhoneNumber(options)
                 },
                 onCallout: (options) => {
                     this.startCallout(options);

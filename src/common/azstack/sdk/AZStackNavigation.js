@@ -21,6 +21,7 @@ import LocationMapComponent from './component/LocationMapComponent';
 import SketchDrawingComponent from './component/SketchDrawingComponent';
 import StickerListComponent from './component/StickerListComponent';
 import StickerDetailsComponent from './component/StickerDetailsComponent';
+import SelectPhoneNumberComponent from './component/SelectPhoneNumberComponent';
 
 
 const NavigationEnum = {
@@ -39,7 +40,8 @@ const NavigationEnum = {
     LocationMapComponent: 'LocationMapComponent',
     SketchDrawingComponent: 'SketchDrawingComponent',
     StickerListComponent: 'StickerListComponent',
-    StickerDetailsComponent: 'StickerDetailsComponent'
+    StickerDetailsComponent: 'StickerDetailsComponent',
+    SelectPhoneNumberComponent: 'SelectPhoneNumberComponent'
 };
 
 export default class AZStackNavigation extends React.Component {
@@ -64,7 +66,6 @@ export default class AZStackNavigation extends React.Component {
 
         return screens;
     };
-
     renderScreen(screen, options, index) {
         switch (screen) {
             case 'ConversationsComponent':
@@ -99,6 +100,8 @@ export default class AZStackNavigation extends React.Component {
                 return this.renderStickersList(options, index);
             case 'StickerDetailsComponent':
                 return this.renderStickerDetails(options, index);
+            case 'SelectPhoneNumberComponent':
+                return this.renderSelectPhoneNumber(options, index);
             default:
                 break;
         }
@@ -110,23 +113,19 @@ export default class AZStackNavigation extends React.Component {
         newNavigation.push({ screen, options });
         this.setState({ navigation: newNavigation });
     };
-
     dismiss() {
         this.setState({
             navigation: []
         })
     };
-
     getNavigation() {
         return NavigationEnum;
     };
-
     pop() {
         let newNavigation = [...this.state.navigation];
         newNavigation.splice(-1, 1);
         this.setState({ navigation: newNavigation });
     };
-
     push(screen, options) {
         let newNavigation = [...this.state.navigation];
         newNavigation.push({ screen, options });
@@ -142,7 +141,6 @@ export default class AZStackNavigation extends React.Component {
             {...options}
         />;
     };
-
     renderChat(options, key) {
         return <ChatComponent
             key={key}
@@ -151,7 +149,6 @@ export default class AZStackNavigation extends React.Component {
             {...options}
         />;
     };
-
     renderVoiceCall(options, key) {
         return <VoiceCallComponent
             key={key}
@@ -160,7 +157,6 @@ export default class AZStackNavigation extends React.Component {
             {...options}
         />;
     };
-
     renderNumberPad(options, key) {
         return <NumberPadComponent
             key={key}
@@ -169,7 +165,6 @@ export default class AZStackNavigation extends React.Component {
             {...options}
         />;
     };
-
     renderVideoCall(options, key) {
         return <VideoCallComponent
             key={key}
@@ -178,7 +173,6 @@ export default class AZStackNavigation extends React.Component {
             {...options}
         />;
     };
-
     renderCallLogs(options, key) {
         return <CallLogsComponent
             key={key}
@@ -187,7 +181,6 @@ export default class AZStackNavigation extends React.Component {
             {...options}
         />;
     };
-
     renderUser(options, key) {
         return <UserComponent
             key={key}
@@ -196,7 +189,6 @@ export default class AZStackNavigation extends React.Component {
             {...options}
         />;
     };
-
     renderGroup(options, key) {
         return <GroupComponent
             key={key}
@@ -205,7 +197,6 @@ export default class AZStackNavigation extends React.Component {
             {...options}
         />;
     };
-
     renderSelectMembers(options, key) {
         return <SelectMembersComponent
             key={key}
@@ -214,7 +205,6 @@ export default class AZStackNavigation extends React.Component {
             {...options}
         />;
     };
-
     renderSelectMember(options, key) {
         return <SelectMemberComponent
             key={key}
@@ -223,7 +213,6 @@ export default class AZStackNavigation extends React.Component {
             {...options}
         />;
     };
-
     renderGroupInputName(options, key) {
         return <GroupInputNameComponent
             key={key}
@@ -232,7 +221,6 @@ export default class AZStackNavigation extends React.Component {
             {...options}
         />;
     };
-
     renderImageGallery(options, key) {
         return <ImageGalleryComponent
             key={key}
@@ -241,7 +229,6 @@ export default class AZStackNavigation extends React.Component {
             {...options}
         />;
     };
-
     renderLocationMap(options, key) {
         return <LocationMapComponent
             key={key}
@@ -250,7 +237,6 @@ export default class AZStackNavigation extends React.Component {
             {...options}
         />;
     };
-
     renderSketchDrawing(options, key) {
         return <SketchDrawingComponent
             key={key}
@@ -259,7 +245,6 @@ export default class AZStackNavigation extends React.Component {
             {...options}
         />;
     };
-
     renderStickersList(options, key) {
         return <StickerListComponent
             key={key}
@@ -268,9 +253,16 @@ export default class AZStackNavigation extends React.Component {
             {...options}
         />;
     };
-
     renderStickerDetails(options, key) {
         return <StickerDetailsComponent
+            key={key}
+            Sizes={this.Sizes}
+            getCoreInstances={this.getCoreInstances}
+            {...options}
+        />;
+    };
+    renderSelectPhoneNumber(options, key) {
+        return <SelectPhoneNumberComponent
             key={key}
             Sizes={this.Sizes}
             getCoreInstances={this.getCoreInstances}

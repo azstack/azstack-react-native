@@ -1,10 +1,8 @@
 import React from 'react';
 import {
     BackHandler,
-    View,
     FlatList,
-    Platform,
-    TextInput,
+    Platform
 } from 'react-native';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';

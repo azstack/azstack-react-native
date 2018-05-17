@@ -1954,3 +1954,15 @@ export const STICKER_DETAILS_FULL_COVER_BLOCK_STYLE = {
 export const STICKER_DETAILS_FULL_COVER_CONTAINER_BLOCK_STYLE = {
     alignItems: 'center'
 };
+
+export const SELECT_PHONE_NUMBER_SCREEN_BLOCK_STYLE = {
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const SELECT_PHONE_NUMBER_BLOCK_STYLE = {
+    padding: 20,
+    backgroundColor: '#fff',
+    width: 300,
+    borderRadius: 5
+};
