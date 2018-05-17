@@ -54,8 +54,11 @@ class NumberPadComponent extends React.Component {
 	onClickNumber(number) {
 		this.setState({ toPhoneNumber: this.state.toPhoneNumber + number });
 	};
-	onClear() {
+	onClearButtonPressed() {
 		this.setState({ toPhoneNumber: this.state.toPhoneNumber.slice(0, -1) });
+	};
+	onClearButtonLongPressed() {
+		this.setState({ toPhoneNumber: '' });
 	};
 	onCallButtonPressed() {
 		this.props.startCallout({
@@ -125,7 +128,10 @@ class NumberPadComponent extends React.Component {
 								<Text style={{ fontSize: this.state.toPhoneNumber.length <= 9 ? 40 : this.state.toPhoneNumber.length <= 12 ? 30 : 20 }} numberOfLines={1}>{this.state.toPhoneNumber}</Text>
 							</View>
 							{
-								this.state.toPhoneNumber != '' && <TouchableOpacity onPress={() => this.onClear()}>
+								this.state.toPhoneNumber != '' && <TouchableOpacity
+									onPress={() => this.onClearButtonPressed()}
+									onLongPress={() => this.onClearButtonLongPressed()}
+								>
 									<View style={{ justifyContent: 'center', alignItems: 'flex-end', width: 40, height: 50 }}>
 										<Image source={ic_input_back} style={{ width: 25, height: 19 }} />
 									</View>
