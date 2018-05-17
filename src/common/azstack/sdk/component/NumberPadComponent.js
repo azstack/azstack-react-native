@@ -26,14 +26,14 @@ class NumberPadComponent extends React.Component {
 
 		this.state = {
 			fromPhoneNumbers: [],
-			fromPhoneNumber: [],
-			toPhoneNumber: '',
-			onCall: null
+			fromPhoneNumber: '',
+			toPhoneNumber: ''
 		};
 
 		this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
 
 		this.onFromPhoneNumberPressed = this.onFromPhoneNumberPressed.bind(this);
+		this.onCallButtonPressed = this.onCallButtonPressed.bind(this);
 	};
 
 	onHardBackButtonPressed() {
@@ -45,7 +45,9 @@ class NumberPadComponent extends React.Component {
 		this.props.showSelectPhoneNumber({
 			phoneNumbers: this.state.fromPhoneNumbers,
 			onSelectDone: (event) => {
-				console.log(event);
+				this.setState({
+					fromPhoneNumber: event.phoneNumber
+				});
 			}
 		});
 	};
@@ -55,8 +57,8 @@ class NumberPadComponent extends React.Component {
 	onClear() {
 		this.setState({ toPhoneNumber: this.state.toPhoneNumber.slice(0, -1) });
 	};
-	onCall() {
-		this.props.onCallout({
+	onCallButtonPressed() {
+		this.props.startCallout({
 			info: {
 				name: '',
 				toPhoneNumber: this.state.toPhoneNumber,
@@ -213,7 +215,7 @@ class NumberPadComponent extends React.Component {
 									</TouchableOpacity>
 								</View>
 								<View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-									<TouchableOpacity onPress={() => this.onCall()}>
+									<TouchableOpacity onPress={this.onCallButtonPressed}>
 										<View style={[styles.number, { backgroundColor: '#44f441', marginRight: 0 }]}>
 											<Image source={ic_action_answer} style={{ width: 40, height: 40 }} />
 										</View>

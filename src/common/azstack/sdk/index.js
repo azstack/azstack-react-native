@@ -426,8 +426,8 @@ export class AZStackSdk extends AZStackNavigation {
     };
     startCallout(options) {
         this.Call.onBeforeCalloutStart({
-            toPhoneNumber: options.info.phoneNumber,
-            fromPhoneNumber: options.info.fromPhoneNumber,
+            toPhoneNumber: options.info.toPhoneNumber,
+            fromPhoneNumber: options.info.fromPhoneNumber
         }).then((preparedCalloutData) => {
             this.navigate(
                 this.getNavigation().VoiceCallComponent,
@@ -649,7 +649,7 @@ export class AZStackSdk extends AZStackNavigation {
                 showSelectPhoneNumber: (options) => {
                     this.showSelectPhoneNumber(options)
                 },
-                onCallout: (options) => {
+                startCallout: (options) => {
                     this.startCallout(options);
                 }
             }
@@ -1045,7 +1045,7 @@ export class AZStackSdk extends AZStackNavigation {
                 showSelectPhoneNumber: (options) => {
                     this.showSelectPhoneNumber(options)
                 },
-                onCallout: (options) => {
+                startCallout: (options) => {
                     this.startCallout(options);
                 },
             },

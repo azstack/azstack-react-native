@@ -23,8 +23,10 @@ class SelectPhoneNumberComponent extends React.Component {
         return true;
     };
 
-    onPhoneNumberPressed() {
-        this.props.onSelectDone({});
+    onPhoneNumberPressed(phoneNumber) {
+        this.props.onSelectDone({
+            phoneNumber: phoneNumber
+        });
         this.props.onDoneClose();
     };
 
