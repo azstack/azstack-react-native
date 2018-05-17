@@ -167,7 +167,7 @@ class CallLogsComponent extends React.Component {
                                         <CallLogItem
                                             getCoreInstances={this.props.getCoreInstances}
                                             callLog={item}
-                                            startCallout={this.props.startCallout}
+                                            onCallLogItemPressed={this.props.onCallLogItemPressed}
                                         />
                                     );
                                 }}

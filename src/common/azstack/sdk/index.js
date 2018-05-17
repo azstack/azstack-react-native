@@ -666,15 +666,17 @@ export class AZStackSdk extends AZStackNavigation {
 
                     this.pop();
                 },
-                startVideoCall: (options) => {
-                    this.startVideoCall(options);
-                },
-                startAudioCall: (options) => {
-                    this.startAudioCall(options);
-                },
-                startCallout: (options) => {
-                    this.startCallout(options);
-                },
+                onCallLogItemPressed: (event) => {
+                    if (options && typeof options === 'object' && typeof options.onCallLogItemPressed === 'function') {
+                        options.onCallLogItemPressed(event);
+                        return;
+                    }
+                    this.startCallout({
+                        info: {
+                            phoneNumber: event.phoneNumber
+                        }
+                    });
+                }
             }
         );
     };
@@ -980,14 +982,16 @@ export class AZStackSdk extends AZStackNavigation {
 
                     this.pop();
                 },
-                startVideoCall: (options) => {
-                    this.startVideoCall(options);
-                },
-                startAudioCall: (options) => {
-                    this.startAudioCall(options);
-                },
-                startCallout: (options) => {
-                    this.startCallout(options);
+                onCallLogItemPressed: (event) => {
+                    if (options && typeof options === 'object' && typeof options.onCallLogItemPressed === 'function') {
+                        options.onCallLogItemPressed(event);
+                        return;
+                    }
+                    this.startCallout({
+                        info: {
+                            phoneNumber: event.phoneNumber
+                        }
+                    });
                 }
             },
             0

@@ -14,14 +14,12 @@ class CallLogItem extends React.Component {
         super(props);
         this.coreInstances = props.getCoreInstances();
 
-        this.startCallout = this.startCallout.bind(this);
+        this.onCallLogItemPressed = this.onCallLogItemPressed.bind(this);
     };
 
-    startCallout() {
-        this.props.startCallout({
-            info: {
-                phoneNumber: this.props.callLog.callType === 1 ? this.props.callLog.toPhoneNumber : this.props.callLog.fromPhoneNumber
-            }
+    onCallLogItemPressed() {
+        this.props.onCallLogItemPressed({
+            phoneNumber: this.props.callLog.callType === 1 ? this.props.callLog.toPhoneNumber : this.props.callLog.fromPhoneNumber
         });
     };
 
@@ -29,7 +27,7 @@ class CallLogItem extends React.Component {
         return (
             <View>
                 <TouchableOpacity
-                    onPress={this.startCallout}
+                    onPress={this.onCallLogItemPressed}
                 >
                     <View style={styles.contactToggle}>
                         <View style={styles.avatar}>
