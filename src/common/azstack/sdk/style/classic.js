@@ -1102,7 +1102,7 @@ export const CALL_LOG_BLOCK_STYLE = {
     borderBottomColor: '#E1E5EC',
     paddingVertical: 15,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'flex-start'
 };
 export const CALL_LOG_TYPE_IMAGE_BLOCK_STYLE = {
     width: 15,
@@ -1134,15 +1134,18 @@ export const CALL_LOG_CALL_STATUS_REJECTED_TEXT_STYLE = {
 export const CALL_LOG_CALL_STATUS_NOT_ANSWERED_TEXT_STYLE = {
     color: '#F3C200'
 };
-export const CALL_LOG_CALL_TIME_TEXT_STYLE = {
+export const CALL_LOG_CALL_TIME_BLOCK_STYLE = {
+    alignItems: 'flex-end'
+};
+export const CALL_LOG_FROM_NOW_TEXT_STYLE = {
+    fontSize: 14
+};
+export const CALL_LOG_CALL_DURATION_TEXT_STYLE = {
     fontSize: 15,
     lineHeight: 20,
     fontWeight: '300',
     color: '#95A5A6',
     marginTop: 5
-};
-export const CALL_LOG_FROM_NOW_TEXT_STYLE = {
-    fontSize: 14
 };
 
 

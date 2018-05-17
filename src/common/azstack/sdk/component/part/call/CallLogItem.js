@@ -14,8 +14,6 @@ class CallLogItem extends React.Component {
         this.coreInstances = props.getCoreInstances();
 
         this.onCallLogItemPressed = this.onCallLogItemPressed.bind(this);
-
-        console.log(this.props.callLog);
     };
 
     onCallLogItemPressed() {
@@ -79,21 +77,25 @@ class CallLogItem extends React.Component {
                             </Text>
                         )
                     }
+                </View>
+                <View
+                    style={this.coreInstances.CustomStyle.getStyle('CALL_LOG_CALL_TIME_BLOCK_STYLE')}
+                >
+                    <TimeFromNowBlockComponent
+                        getCoreInstances={this.props.getCoreInstances}
+                        textStyle={this.coreInstances.CustomStyle.getStyle('CALL_LOG_FROM_NOW_TEXT_STYLE')}
+                        time={this.props.callLog.recordTime}
+                    />
                     {
                         this.props.callLog.callStatus === this.coreInstances.AZStackCore.callConstants.CALL_PAID_LOG_CALL_STATUS_ANSWERED && (
                             <Text
-                                style={this.coreInstances.CustomStyle.getStyle('CALL_LOG_CALL_TIME_TEXT_STYLE')}
+                                style={this.coreInstances.CustomStyle.getStyle('CALL_LOG_CALL_DURATION_TEXT_STYLE')}
                             >
                                 {this.coreInstances.FileConverter.timeAsString(this.props.callLog.duration)}
                             </Text>
                         )
                     }
                 </View>
-                <TimeFromNowBlockComponent
-                    getCoreInstances={this.props.getCoreInstances}
-                    textStyle={this.coreInstances.CustomStyle.getStyle('CALL_LOG_FROM_NOW_TEXT_STYLE')}
-                    time={this.props.callLog.recordTime}
-                />
             </TouchableOpacity>
         );
     };
