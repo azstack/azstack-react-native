@@ -12,6 +12,7 @@ import ScreenHeaderBlockComponent from './part/screen/ScreenHeaderBlockComponent
 import ScreenBodyBlockComponent from './part/screen/ScreenBodyBlockComponent';
 import EmptyBlockComponent from './part/common/EmptyBlockComponent';
 import SearchBlockComponent from './part/common/SearchBlockComponent';
+import ConnectionBlockComponent from './part/common/ConnectionBlockComponent';
 
 import CallLogItem from './part/call/CallLogItem';
 
@@ -28,10 +29,14 @@ class CallLogsComponent extends React.Component {
             loading: false
         }
         this.state = {
-            callLogs: []
+            callLogs: [],
+            searchText: ''
         };
 
         this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
+
+        this.onSearchTextChanged = this.onSearchTextChanged.bind(this);
+        this.onSearchTextCleared = this.onSearchTextCleared.bind(this);
     };
 
     addSubscriptions() {
@@ -68,6 +73,21 @@ class CallLogsComponent extends React.Component {
     onHardBackButtonPressed() {
         this.props.onBackButtonPressed();
         return true;
+    };
+
+    onSearchTextChanged(newText) {
+        this.setState({ searchText: newText });
+    };
+    onSearchTextCleared() {
+        this.setState({ searchText: '' });
+    };
+    getFilteredCallLogs() {
+        if (!this.state.searchText) {
+            return this.state.callLogs;
+        }
+        return this.state.callLogs.filter((callLog) => {
+            return (callLog.callType === this.coreInstances.AZStackCore.callConstants.CALL_PAID_LOG_CALL_TYPE_CALLOUT ? callLog.toPhoneNumber : callLog.fromPhoneNumber).indexOf(this.state.searchText) > -1;
+        });
     };
 
     initRun() {
@@ -129,6 +149,7 @@ class CallLogsComponent extends React.Component {
     };
 
     render() {
+        let filteredCallLogs = this.getFilteredCallLogs();
         return (
             <ScreenBlockComponent
                 fullScreen={false}
@@ -142,25 +163,33 @@ class CallLogsComponent extends React.Component {
                         <ScreenHeaderBlockComponent
                             getCoreInstances={this.props.getCoreInstances}
                             onBackButtonPressed={() => this.props.onBackButtonPressed()}
-                            title={'Call Logs'}
+                            title={this.coreInstances.Language.getText('CALL_LOGS_HEADER_TITLE_TEXT')}
                         />
                     )
                 }
                 <ScreenBodyBlockComponent
                     getCoreInstances={this.props.getCoreInstances}
                 >
+                    <SearchBlockComponent
+                        getCoreInstances={this.props.getCoreInstances}
+                        containerStyle={this.coreInstances.CustomStyle.getStyle('CALL_LOGS_SEARCH_BLOCK_STYLE')}
+                        onSearchTextChanged={this.onSearchTextChanged}
+                        onSearchTextCleared={this.onSearchTextCleared}
+                        placeholder={this.coreInstances.Language.getText('CALL_LOGS_SEARCH_PLACEHOLDER_TEXT')}
+                    />
                     {
-                        !this.state.callLogs.length && (
+                        !filteredCallLogs.length && (
                             <EmptyBlockComponent
                                 getCoreInstances={this.props.getCoreInstances}
-                                emptyText={"No recently call"}
+                                emptyText={this.coreInstances.Language.getText('CALL_LOGS_LIST_EMPTY_TEXT')}
                             />
                         )
                     }
                     {
-                        !!this.state.callLogs.length && (
+                        !!filteredCallLogs.length && (
                             <FlatList
-                                data={this.state.callLogs}
+                                style={this.coreInstances.CustomStyle.getStyle('CALL_LOGS_LIST_STYLE')}
+                                data={filteredCallLogs}
                                 keyExtractor={(item, index) => (`call_log_${index}`)}
                                 renderItem={({ item, index }) => {
                                     return (
@@ -173,11 +202,14 @@ class CallLogsComponent extends React.Component {
                                 }}
                                 onEndReached={() => this.onEndReached()}
                                 onEndReachedThreshold={0.1}
-                                contentContainerStyle={{ paddingBottom: 15 }}
+                                contentContainerStyle={this.coreInstances.CustomStyle.getStyle('CALL_LOGS_LIST_CONTAINER_STYLE')}
                                 keyboardDismissMode={Platform.select({ ios: 'interactive', android: 'on-drag' })}
                             />
                         )
                     }
+                    <ConnectionBlockComponent
+                        getCoreInstances={this.props.getCoreInstances}
+                    />
                 </ScreenBodyBlockComponent>
             </ScreenBlockComponent>
         );

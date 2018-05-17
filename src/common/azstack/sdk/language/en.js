@@ -117,6 +117,10 @@ export const CHAT_INPUT_NO_MICROPHONE_PERMISSION_ERROR_TEXT = 'Can\'t record aud
 export const CHAT_INPUT_NO_LOCATION_PERMISSION_ERROR_TEXT = 'Can\'t detect current location, location permission is not allowed';
 export const CHAT_INPUT_DISCARD_RECORDED_AUDIO_CONFIRMATION_TEXT = 'Are you sure to discard recorded audio?';
 
+export const CALL_LOGS_HEADER_TITLE_TEXT = 'Call Logs';
+export const CALL_LOGS_SEARCH_PLACEHOLDER_TEXT = 'Search...';
+export const CALL_LOGS_LIST_EMPTY_TEXT = 'No Call Log';
+
 export const USER_HEADER_TITLE_TEXT = 'User Information';
 export const USER_EMPTY_TEXT = 'No User Infomation';
 

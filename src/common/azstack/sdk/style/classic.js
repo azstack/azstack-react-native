@@ -1082,6 +1082,19 @@ export const MESSAGE_TYPE_MEDIA_STATUS_TEXT_STYLE = {
 };
 
 
+export const CALL_LOGS_SEARCH_BLOCK_STYLE = {
+    marginVertical: 10,
+    marginHorizontal: 15,
+};
+export const CALL_LOGS_LIST_STYLE = {
+    paddingHorizontal: 15,
+    flex: 1
+};
+export const CALL_LOGS_LIST_CONTAINER_STYLE = {
+    paddingBottom: 15
+};
+
+
 export const USER_BLOCK_STYLE = {
     paddingHorizontal: 15,
     justifyContent: 'center',
