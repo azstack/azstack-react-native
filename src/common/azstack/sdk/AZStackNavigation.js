@@ -8,7 +8,6 @@ import {
 import ConversationsComponent from './component/ConversationsComponent';
 import ChatComponent from './component/ChatComponent';
 import OnCallComponent from './component/OnCallComponent';
-import ContactComponent from './component/ContactComponent';
 import NumberPadComponent from './component/NumberPadComponent';
 import VideoCallComponent from './component/VideoCallComponent';
 import CallLogsComponent from './component/CallLogsComponent';
@@ -28,7 +27,6 @@ const NavigationEnum = {
     ConversationsComponent: 'ConversationsComponent',
     ChatComponent: 'ChatComponent',
     OnCallComponent: 'OnCallComponent',
-    ContactComponent: 'ContactComponent',
     NumberPadComponent: 'NumberPadComponent',
     VideoCallComponent: 'VideoCallComponent',
     CallLogsComponent: 'CallLogsComponent',
@@ -75,8 +73,6 @@ export default class AZStackNavigation extends React.Component {
                 return this.renderChat(options, index);
             case 'OnCallComponent':
                 return this.renderOnCall(options, index);
-            case 'ContactComponent':
-                return this.renderContact(options, index)
             case 'NumberPadComponent':
                 return this.renderNumberPad(options, index);
             case 'VideoCallComponent':
@@ -158,15 +154,6 @@ export default class AZStackNavigation extends React.Component {
 
     renderOnCall(options, key) {
         return <OnCallComponent
-            key={key}
-            Sizes={this.Sizes}
-            getCoreInstances={this.getCoreInstances}
-            {...options}
-        />;
-    };
-
-    renderContact(options, key) {
-        return <ContactComponent
             key={key}
             Sizes={this.Sizes}
             getCoreInstances={this.getCoreInstances}

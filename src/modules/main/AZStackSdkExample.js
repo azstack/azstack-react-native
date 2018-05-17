@@ -39,10 +39,6 @@ class AZStackSdkExample extends React.Component {
         });
     };
 
-    showContact() {
-        this.refs.AZStackSdk.showContacts({});
-    };
-
     showNumberPad() {
         this.refs.AZStackSdk.showNumberPad({});
     };
@@ -132,8 +128,7 @@ class AZStackSdkExample extends React.Component {
                         <Button onPress={() => this.startChatUser()} title='Chat with user'></Button>
                         <Button onPress={() => this.audioCall()} title='Voice Call User 2'></Button>
                         <Button onPress={() => this.videoCall()} title='Video Call User 2'></Button>
-                        <Button onPress={() => this.showContact()} title='Contact List'></Button>
-                        <Button onPress={() => this.showNumberPad()} title='Callout'></Button>
+                        <Button onPress={() => this.showNumberPad()} title='Show number pad'></Button>
                         <Button onPress={() => this.showCallLogs()} title='Show call logs'></Button>
                         <Button onPress={() => this.showUser()} title='Show user'></Button>
                         <Button onPress={() => this.showGroup()} title='Show group'></Button>

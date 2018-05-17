@@ -652,32 +652,6 @@ export class AZStackSdk extends AZStackNavigation {
             }
         );
     };
-    showContacts(options) {
-        this.navigate(
-            this.getNavigation().ContactComponent,
-            {
-                ...options,
-                withBackButtonHandler: true,
-                onBackButtonPressed: () => {
-                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
-                        options.onBackButtonPressed();
-                        return;
-                    }
-
-                    this.pop();
-                },
-                onVideoCall: (options) => {
-                    this.startVideoCall(options);
-                },
-                onAudioCall: (options) => {
-                    this.startAudioCall(options);
-                },
-                onCallout: (options) => {
-                    this.startCallout(options);
-                },
-            }
-        );
-    };
     showCallLogs(options) {
         this.navigate(
             this.getNavigation().CallLogsComponent,
@@ -991,34 +965,7 @@ export class AZStackSdk extends AZStackNavigation {
             }
         });
     };
-
-    UIContacts(options) {
-        return this.renderScreen(
-            this.getNavigation().ConversationsComponent,
-            {
-                ...options,
-                withBackButtonHandler: false,
-                onBackButtonPressed: () => {
-                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
-                        options.onBackButtonPressed();
-                        return;
-                    }
-
-                    this.pop();
-                },
-                onVideoCall: (options) => {
-                    this.startVideoCall(options);
-                },
-                onAudioCall: (options) => {
-                    this.startAudioCall(options);
-                },
-                onCallout: (options) => {
-                    this.startCallout(options);
-                },
-            },
-            0
-        );
-    };
+    
     UICallLogs(options) {
         return this.renderScreen(
             this.getNavigation().CallLogsComponent,
