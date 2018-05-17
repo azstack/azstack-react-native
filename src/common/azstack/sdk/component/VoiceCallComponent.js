@@ -30,7 +30,7 @@ const ic_cancel = require('../static/image/ic_cancel.png');
 const ic_muted_white = require('../static/image/ic_muted_white.png');
 const ic_speaker_white = require('../static/image/ic_speaker_white.png');
 
-class OnCallComponent extends React.Component {
+class VoiceCallComponent extends React.Component {
 	constructor(props) {
 		super(props);
 		this.coreInstances = props.getCoreInstances();
@@ -365,7 +365,7 @@ class OnCallComponent extends React.Component {
 
 }
 
-export default OnCallComponent;
+export default VoiceCallComponent;
 
 
 const styles = {

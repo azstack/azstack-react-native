@@ -7,8 +7,8 @@ import {
 
 import ConversationsComponent from './component/ConversationsComponent';
 import ChatComponent from './component/ChatComponent';
-import OnCallComponent from './component/OnCallComponent';
 import NumberPadComponent from './component/NumberPadComponent';
+import VoiceCallComponent from './component/VoiceCallComponent';
 import VideoCallComponent from './component/VideoCallComponent';
 import CallLogsComponent from './component/CallLogsComponent';
 import UserComponent from './component/UserComponent';
@@ -26,8 +26,8 @@ import StickerDetailsComponent from './component/StickerDetailsComponent';
 const NavigationEnum = {
     ConversationsComponent: 'ConversationsComponent',
     ChatComponent: 'ChatComponent',
-    OnCallComponent: 'OnCallComponent',
     NumberPadComponent: 'NumberPadComponent',
+    VoiceCallComponent: 'VoiceCallComponent',
     VideoCallComponent: 'VideoCallComponent',
     CallLogsComponent: 'CallLogsComponent',
     UserComponent: 'UserComponent',
@@ -71,10 +71,10 @@ export default class AZStackNavigation extends React.Component {
                 return this.renderConversations(options, index);
             case 'ChatComponent':
                 return this.renderChat(options, index);
-            case 'OnCallComponent':
-                return this.renderOnCall(options, index);
             case 'NumberPadComponent':
                 return this.renderNumberPad(options, index);
+            case 'VoiceCallComponent':
+                return this.renderVoiceCall(options, index);
             case 'VideoCallComponent':
                 return this.renderVideoCall(options, index);
             case 'CallLogsComponent':
@@ -152,8 +152,8 @@ export default class AZStackNavigation extends React.Component {
         />;
     };
 
-    renderOnCall(options, key) {
-        return <OnCallComponent
+    renderVoiceCall(options, key) {
+        return <VoiceCallComponent
             key={key}
             Sizes={this.Sizes}
             getCoreInstances={this.getCoreInstances}

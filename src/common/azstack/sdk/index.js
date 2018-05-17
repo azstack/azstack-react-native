@@ -273,7 +273,7 @@ export class AZStackSdk extends AZStackNavigation {
     };
 
     onCallinStart(error, result) {
-        this.navigate(this.getNavigation().OnCallComponent, {
+        this.navigate(this.getNavigation().VoiceCallComponent, {
             withBackButtonHandler: true,
             info: {
                 phoneNumber: result.fromPhoneNumber
@@ -327,7 +327,7 @@ export class AZStackSdk extends AZStackNavigation {
         }).then((resultUser) => {
             if (resultUser.list.length > 0) {
                 if (result.mediaType === this.AZStackCore.callConstants.CALL_MEDIA_TYPE_AUDIO) {
-                    this.navigate(this.getNavigation().OnCallComponent, {
+                    this.navigate(this.getNavigation().VoiceCallComponent, {
                         withBackButtonHandler: true,
                         info: {
                             name: resultUser.list[0].fullname,
@@ -430,7 +430,7 @@ export class AZStackSdk extends AZStackNavigation {
             fromPhoneNumber: options.info.fromPhoneNumber,
         }).then((preparedCalloutData) => {
             this.navigate(
-                this.getNavigation().OnCallComponent,
+                this.getNavigation().VoiceCallComponent,
                 {
                     ...options,
                     withBackButtonHandler: true,
@@ -469,7 +469,7 @@ export class AZStackSdk extends AZStackNavigation {
             toUserId: options.info.userId,
         }).then((result) => {
             this.navigate(
-                this.getNavigation().OnCallComponent,
+                this.getNavigation().VoiceCallComponent,
                 {
                     ...options,
                     withBackButtonHandler: true,
