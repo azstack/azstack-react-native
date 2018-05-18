@@ -30,6 +30,8 @@ export const IMAGE_TRASH = require('../static/image/classic/trash.png');
 export const IMAGE_REFRESH = require('../static/image/classic/refresh.png');
 export const IMAGE_CALLOUT = require('../static/image/classic/callout.png');
 export const IMAGE_CALLIN = require('../static/image/classic/callin.png');
+export const IMAGE_CALLOUT_START = require('../static/image/classic/call-out-start.png');
+export const IMAGE_BACK_X = require('../static/image/classic/back-x.png');
 
 
 export const SCREEN_BLOCK_STYLE = {
@@ -1146,6 +1148,114 @@ export const CALL_LOG_CALL_DURATION_TEXT_STYLE = {
     fontWeight: '300',
     color: '#95A5A6',
     marginTop: 5
+};
+
+export const NUMBER_PAD_BLOCK_STYLE = {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    paddingBottom: 40
+};
+export const NUMBER_PAD_CONTENT_BLOCK_STYLE = {
+    width: '69%'
+};
+export const NUMBER_PAD_CALL_FROM_BLOCK_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    marginBottom: 15
+};
+export const NUMBER_PAD_CALL_FROM_TITLE_TEXT_STYLE = {
+    fontSize: 14,
+    fontWeight: '400',
+    lineHeight: 20,
+    color: '#2F353B',
+    marginRight: 5
+};
+export const NUMBER_PAD_CALL_FROM_PHONE_NUMBER_TEXT_STYLE = {
+    fontSize: 16,
+    fontWeight: '400',
+    lineHeight: 20,
+    color: '#3598DC'
+};
+export const NUMBER_PAD_TO_PHONE_NUMBER_BLOCK_STYLE = {
+    height: 40,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 30
+};
+export const NUMBER_PAD_TO_PHONE_NUMBER_TEXT_STYLE = {
+    flex: 1,
+    fontSize: 20,
+    fontWeight: '400',
+    lineHeight: 40,
+    color: '#2F353B',
+    textAlign: 'right'
+
+};
+export const NUMBER_PAD_TO_PHONE_NUMBER_TEXT_BIG_STYLE = {
+    fontSize: 40
+};
+export const NUMBER_PAD_TO_PHONE_NUMBER_TEXT_MEDIUM_STYLE = {
+    fontSize: 30
+};
+export const NUMBER_PAD_TO_PHONE_NUMBER_CLEAR_BLOCK_STYLE = {
+    width: 40,
+    height: 40
+};
+export const NUMBER_PAD_TO_PHONE_NUMBER_CLEAR_BUTTON_BLOCK_STYLE = {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'flex-end'
+};
+export const NUMBER_PAD_TO_PHONE_NUMBER_CLEAR_BUTTON_IMAGE_STYLE = {
+    width: 25,
+    height: 19
+};
+export const NUMBER_PAD_BUTTONS_BLOCK_STYLE = {};
+export const NUMBER_PAD_BUTTONS_LINE_BLOCK_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 5
+};
+export const NUMBER_PAD_BUTTONS_ITEM_BLOCK_STYLE = {
+    backgroundColor: '#f0f0f0',
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const NUMBER_PAD_BUTTONS_ITEM_NUMBER_TEXT_STYLE = {
+    fontSize: 34,
+    fontWeight: '400',
+    lineHeight: 40,
+    color: '#2F353B'
+};
+export const NUMBER_PAD_BUTTONS_ITEM_CHARACTER_TEXT_STYLE = {
+    fontSize: 10,
+    fontWeight: '400',
+    lineHeight: 15,
+    color: '#2F353B'
+};
+export const NUMBER_PAD_BUTTONS_LAST_LINE_BLOCK_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginVertical: 5
+};
+export const NUMBER_PAD_BUTTONS_CALL_BUTTON_BLOCK_STYLE = {
+    backgroundColor: '#44f441',
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const NUMBER_PAD_BUTTONS_CALL_BUTTON_IMAGE_STYLE = {
+    width: 40,
+    height: 40
 };
 
 
