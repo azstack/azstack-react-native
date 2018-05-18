@@ -60,7 +60,7 @@ class AppMain extends React.Component {
     };
     getFromPhoneNumbers = (options) => {
         return new Promise((resolve, reject) => {
-            resolve(['0123456789', '0987654321']);
+            resolve([]);
         });
     };
     onBeforeMessageSend = (message) => {
