@@ -1259,6 +1259,9 @@ export const NUMBER_PAD_BUTTONS_CALL_BUTTON_IMAGE_STYLE = {
 };
 
 
+export const VOICE_CALL_BLOCK_STYLE = {};
+
+
 export const USER_BLOCK_STYLE = {
     paddingHorizontal: 15,
     justifyContent: 'center',

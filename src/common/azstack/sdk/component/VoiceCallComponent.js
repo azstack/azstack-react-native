@@ -36,11 +36,11 @@ class VoiceCallComponent extends React.Component {
 		this.coreInstances = props.getCoreInstances();
 		this.subscriptions = {};
 		this.state = {
-			isIncomingCall: false,
+			isIncomingCall: props.isIncomingCall,
 			status: null,
-			message: '',
+			message: props.isIncomingCall ? this.coreInstances.Language.getText('CALL_RINGING') : this.coreInstances.Language.getText('CALL_CONNECTING'),
 			isAudioOn: true,
-			isSpeaker: false,
+			isSpeakerOn: false,
 		};
 
 		this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
@@ -74,7 +74,7 @@ class VoiceCallComponent extends React.Component {
 				}
 			}
 
-			this.setState({ status: result.status, message: this.renderMessage(result.status) });
+			this.setState({ status: result.status, message: this.getStatusMessage(result.status) });
 
 			if (result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_STOP ||
 				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_BUSY ||
@@ -91,7 +91,7 @@ class VoiceCallComponent extends React.Component {
 				return;
 			}
 
-			this.setState({ status: result.status, message: this.renderMessage(result.status) });
+			this.setState({ status: result.status, message: this.getStatusMessage(result.status) });
 
 			if (result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING) {
 				InCallManager.startRingtone('_BUNDLE_');
@@ -128,7 +128,7 @@ class VoiceCallComponent extends React.Component {
 				return;
 			}
 
-			this.setState({ status: result.status, message: this.renderMessage(result.status) });
+			this.setState({ status: result.status, message: this.getStatusMessage(result.status) });
 
 			if (result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_RINGING) {
 				InCallManager.start({ media: 'audio' });
@@ -153,7 +153,7 @@ class VoiceCallComponent extends React.Component {
 				return;
 			}
 
-			this.setState({ status: result.status, message: this.renderMessage(result.status) });
+			this.setState({ status: result.status, message: this.getStatusMessage(result.status) });
 
 			if (result.status !== this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_RINGING) {
 				InCallManager.stop();
@@ -167,134 +167,7 @@ class VoiceCallComponent extends React.Component {
 		}
 	};
 
-	componentWillMount() {
-		this.setState({ message: this.coreInstances.Language.getText('CALL_CONNECTING') });
-		if (this.props.isIncomingCall) {
-			this.setState({ isIncomingCall: this.props.isIncomingCall, message: this.coreInstances.Language.getText('CALL_RINGING') });
-		}
-	};
-	componentDidMount() {
-		this.addSubscriptions();
-		if (this.props.withBackButtonHandler) {
-			BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
-		}
-	};
-	componentWillUnmount() {
-		this.clearSubscriptions();
-		if (this.props.withBackButtonHandler) {
-			BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
-		}
-	};
-
-	renderStatus() {
-		if (this.props.callType === CallConstant.CALL_TYPE_CALLIN) {
-			return (
-				<View style={{ position: 'absolute', top: 0, left: 0, }}>
-					<Text style={{ color: "#fff" }}>{this.props.status}</Text>
-				</View>
-			);
-		} else {
-			return (
-				<View style={{ position: 'absolute', top: 0, left: 0, }}>
-					<Text style={{ color: "#fff" }}>{this.props.status}</Text>
-				</View>
-			);
-		}
-	};
-	renderButtons() {
-		return (
-			<View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-				<TouchableOpacity onPress={() => this.toggleAudio()}>
-					{this.state.isAudioOn && <View style={{
-						width: 70, height: 70, borderRadius: 35,
-						justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#fff'
-					}}>
-						<Image source={ic_muted_white} /></View>}
-					{!this.state.isAudioOn &&
-						<View style={{
-							width: 70, height: 70, borderRadius: 35,
-							justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.5)'
-						}}>
-							<Image source={ic_muted_white} /></View>}
-				</TouchableOpacity>
-				<TouchableOpacity onPress={() => this.onPressEndCall()}>
-					<View style={[styles.button, { backgroundColor: 'red' }]}>
-						<Image source={ic_end_call_white} style={styles.buttonIcon} resizeMode={'contain'} />
-					</View>
-				</TouchableOpacity>
-				<TouchableOpacity onPress={() => this.toggleSpeaker()}>
-					{this.state.isSpeaker && <View style={{
-						width: 70, height: 70, borderRadius: 35,
-						justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.5)'
-					}}><Image source={ic_speaker_white} /></View>}
-					{!this.state.isSpeaker && <View style={{
-						width: 70, height: 70, borderRadius: 35,
-						justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#fff'
-					}}><Image source={ic_speaker_white} /></View>}
-				</TouchableOpacity>
-			</View>
-		);
-	};
-	renderIncomingCall() {
-		return (
-			<View style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: '#353535', justifyContent: 'space-between' }}>
-				<View style={{ flex: 0.3 }}>
-					<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-						<Text style={{ color: '#fff', fontSize: 30 }}>{this.props.info.name || this.props.info.phoneNumber}</Text>
-						<Text style={{ color: '#fff', fontSize: 20 }}>{this.props.info.name ? this.props.info.phoneNumber : ''}</Text>
-						<Text style={{ color: '#57FFC1', fontSize: 18, }}>{this.state.message}</Text>
-						{
-							this.state.status === 200 && <Timer />
-						}
-					</View>
-				</View>
-				<View>
-					<View style={{ justifyContent: 'center', alignItems: 'center' }}>
-						<Pulse style={{ justifyContent: 'center', alignItems: 'center', }} color={'#48D2A0'} numPulses={7} diameter={250} duration={850} speed={34} image={{ source: ic_avatar, style: { width: 100, height: 100, borderRadius: 50, } }} />
-					</View>
-				</View>
-				<View style={{ flex: 0.3, justifyContent: 'flex-end', paddingBottom: 60 }}>
-					<View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-						<TouchableOpacity onPress={() => this.onPressAnswer()}>
-							<View style={[styles.button, { backgroundColor: 'green', marginHorizontal: 60 }]}>
-								<Image source={ic_answer_phone} style={{ width: 30, height: 30 }} resizeMode={'contain'} />
-							</View>
-						</TouchableOpacity>
-						<TouchableOpacity onPress={() => this.props.onReject()}>
-							<View style={[styles.button, { backgroundColor: 'red', marginHorizontal: 60 }]}>
-								<Image source={ic_cancel} style={{ width: 30, height: 30 }} resizeMode={'contain'} />
-							</View>
-						</TouchableOpacity>
-					</View>
-				</View>
-			</View>
-		);
-	};
-	renderOncall() {
-		return (
-			<View style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: '#353535', justifyContent: 'space-between' }}>
-				<View style={{ flex: 0.3 }}>
-					<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-						<Text style={{ color: '#fff', fontSize: 30 }}>{this.props.info.name || this.props.info.phoneNumber}</Text>
-						<Text style={{ color: '#fff', fontSize: 20 }}>{this.props.info.name ? this.props.info.phoneNumber : ''}</Text>
-						<Text style={{ color: '#57FFC1', fontSize: 18, }}>{this.state.message}</Text>
-						{
-							this.state.status === 200 && <Timer />
-						}
-					</View>
-				</View>
-				<View>
-					<View style={{ justifyContent: 'center', alignItems: 'center' }}>
-						<Pulse style={{ justifyContent: 'center', alignItems: 'center', }} color={'#48D2A0'} numPulses={7} diameter={250} duration={560} speed={30} image={{ source: ic_avatar, style: { width: 100, height: 100, borderRadius: 50, } }} />
-					</View>
-				</View>
-				<View style={{ flex: 0.3, justifyContent: 'flex-end', paddingBottom: 60 }}>
-					{this.renderButtons()}
-				</View>
-			</View>
-		);
-	};
-	renderMessage(status) {
+	getStatusMessage(status) {
 		if (status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_CONNECTING ||
 			status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_CONNECTING) {
 			return this.coreInstances.Language.getText('CALL_CONNECTING');
@@ -327,6 +200,41 @@ class VoiceCallComponent extends React.Component {
 		}
 		return this.coreInstances.Language.getText('CALL_UNKNOWN');
 	};
+
+	onEndCallButtonPressed() {
+		InCallManager.stopRingback();
+		this.props.onEndCall();
+		this.setState({ message: 'Ending' });
+	};
+	onAnswerButtonPressed() {
+		this.props.onAnswer();
+		this.setState({ isIncomingCall: false, status: 200, message: "Calling" });
+	};
+	onRejectButtonPressed() {
+		this.props.onReject();
+	};
+	onToggleAudioButtonPressed() {
+		this.props.onToggleAudio(!this.state.isAudioOn);
+		this.setState({ isAudioOn: !this.state.isAudioOn });
+	};
+	onToggleSpeakerButtonPressed() {
+		this.setState({ isSpeakerOn: !this.state.isSpeakerOn });
+		InCallManager.setForceSpeakerphoneOn(!this.state.isSpeakerOn);
+	};
+
+	componentDidMount() {
+		this.addSubscriptions();
+		if (this.props.withBackButtonHandler) {
+			BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+		}
+	};
+	componentWillUnmount() {
+		this.clearSubscriptions();
+		if (this.props.withBackButtonHandler) {
+			BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+		}
+	};
+
 	render() {
 		return (
 			<ScreenBlockComponent
@@ -336,34 +244,78 @@ class VoiceCallComponent extends React.Component {
 				statusbarStyle={this.props.statusbarStyle}
 				getCoreInstances={this.props.getCoreInstances}
 			>
-				{this.state.isIncomingCall === true && this.renderIncomingCall()}
-				{this.state.isIncomingCall === false && this.renderOncall()}
+				<View style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: '#353535', paddingTop: 40 }}>
+					<View style={{ justifyContent: 'center', alignItems: 'center' }}>
+						<Text style={{ color: '#fff', fontSize: 30, lineHeight: 35, marginTop: 5 }}>{this.props.info.fullname || this.props.info.phoneNumber}</Text>
+						{
+							!!this.props.info.fullname &&
+							!!this.props.info.phoneNumber && (
+								<Text style={{ color: '#fff', fontSize: 20, lineHeight: 25, marginTop: 5 }}>{this.props.info.phoneNumber}</Text>
+							)
+						}
+						<Text style={{ color: '#57FFC1', fontSize: 18, lineHeight: 20, marginTop: 5 }}>{this.state.message}</Text>
+						<View style={{ height: 20, marginTop: 5 }}>
+							{
+								this.state.status === 200 && <Timer />
+							}
+						</View>
+					</View>
+					<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+						<Pulse style={{ justifyContent: 'center', alignItems: 'center', }} color={'#48D2A0'} numPulses={7} diameter={250} duration={850} speed={34} image={{ source: ic_avatar, style: { width: 100, height: 100, borderRadius: 50, } }} />
+					</View>
+					<View style={{ justifyContent: 'flex-end', paddingBottom: 40 }}>
+						{
+							this.state.isIncomingCall && (
+								<View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+									<TouchableOpacity style={[styles.button, { backgroundColor: 'green', marginHorizontal: 60 }]} onPress={() => this.onAnswerButtonPressed()}>
+										<Image source={ic_answer_phone} style={{ width: 30, height: 30 }} resizeMode={'contain'} />
+									</TouchableOpacity>
+									<TouchableOpacity style={[styles.button, { backgroundColor: 'red', marginHorizontal: 60 }]} onPress={() => this.props.onReject()}>
+										<Image source={ic_cancel} style={{ width: 30, height: 30 }} resizeMode={'contain'} />
+									</TouchableOpacity>
+								</View>
+							)
+						}
+						{
+							!this.state.isIncomingCall && (
+								<View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+									<TouchableOpacity onPress={() => this.onToggleAudioButtonPressed()}>
+										{this.state.isAudioOn && <View style={{
+											width: 70, height: 70, borderRadius: 35,
+											justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#fff'
+										}}>
+											<Image source={ic_muted_white} /></View>}
+										{!this.state.isAudioOn &&
+											<View style={{
+												width: 70, height: 70, borderRadius: 35,
+												justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.5)'
+											}}>
+												<Image source={ic_muted_white} /></View>}
+									</TouchableOpacity>
+									<TouchableOpacity onPress={() => this.onEndCallButtonPressed()}>
+										<View style={[styles.button, { backgroundColor: 'red' }]}>
+											<Image source={ic_end_call_white} style={styles.buttonIcon} resizeMode={'contain'} />
+										</View>
+									</TouchableOpacity>
+									<TouchableOpacity onPress={() => this.onToggleSpeakerButtonPressed()}>
+										{this.state.isSpeakerOn && <View style={{
+											width: 70, height: 70, borderRadius: 35,
+											justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.5)'
+										}}><Image source={ic_speaker_white} /></View>}
+										{!this.state.isSpeakerOn && <View style={{
+											width: 70, height: 70, borderRadius: 35,
+											justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#fff'
+										}}><Image source={ic_speaker_white} /></View>}
+									</TouchableOpacity>
+								</View>
+							)
+						}
+					</View>
+				</View>
 			</ScreenBlockComponent>
 		);
 	};
-
-	onPressEndCall() {
-		InCallManager.stopRingback();
-		this.props.onEndCall();
-		this.setState({ message: 'Ending' });
-	};
-	onPressAnswer() {
-		this.props.onAnswer();
-		this.setState({ isIncomingCall: false, status: 200, message: "Calling" });
-	};
-	onPressReject() {
-		this.props.onReject();
-	};
-	toggleAudio() {
-		this.props.onToggleAudio(!this.state.isAudioOn);
-		this.setState({ isAudioOn: !this.state.isAudioOn });
-	};
-	toggleSpeaker() {
-		this.setState({ isSpeaker: !this.state.isSpeaker });
-		InCallManager.setForceSpeakerphoneOn(!this.state.isSpeaker);
-	};
-
-}
+};
 
 export default VoiceCallComponent;
 

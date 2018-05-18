@@ -132,12 +132,26 @@ Show number pad for callout
     this.refs.AZStackSdk.showNumberPad(screenOptions) 
 ```
 
+How to start callout
+```javascript
+    this.refs.AZStackSdk.startCallout({
+        info: {
+            fullname: 'Some name',
+            toPhoneNumber: '0123456789',
+            fromPhoneNumber: '0123456789',
+        },
+        onEndCall: () => {
+            // or whatever you want here
+        },
+        // other screenOptions
+    }); 
+```
+
 How to start video call
 ```javascript 
     this.refs.AZStackSdk.startVideoCall({
         info: {
             name: 'User 2',
-            phoneNumber: '',
             userId: 387212, // must be number
         },
         onEndCall: () => {
@@ -151,8 +165,7 @@ How to start audio call
 ```javascript
     this.refs.AZStackSdk.startAudioCall({
         info: {
-            name: 'User 2',
-            phoneNumber: '',
+            fullname: 'User 2',
             userId: 387212, // must be number
         },
         onEndCall: () => {

@@ -86,7 +86,8 @@ class UserComponent extends React.Component {
     };
     onVoiceCallButtonPressed() {
         this.props.onVoiceCallButtonPressed({
-            userId: this.props.userId
+            userId: this.state.user.userId,
+            fullname: this.state.user.fullname
         });
     };
     onVideoCallButtonPressed() {

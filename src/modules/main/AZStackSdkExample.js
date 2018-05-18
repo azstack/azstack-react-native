@@ -46,26 +46,20 @@ class AZStackSdkExample extends React.Component {
     audioCall() {
         this.refs.AZStackSdk.startAudioCall({
             info: {
-                name: 'User 2',
-                phoneNumber: '',
-                userId: 387212, // must be number
+                fullname: 'Test User 2',
+                userId: 387212,
             },
-            onEndCall: () => {
-                // or whatever you want here
-            },
+            onEndCall: () => { }
         });
     };
 
     videoCall() {
         this.refs.AZStackSdk.startVideoCall({
             info: {
-                name: 'User 2',
-                phoneNumber: '',
-                userId: 387212, // must be number
+                name: 'Test User 2',
+                userId: 387212,
             },
-            onEndCall: () => {
-                // or whatever you want here
-            },
+            onEndCall: () => { }
         });
     };
 

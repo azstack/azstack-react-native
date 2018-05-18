@@ -276,6 +276,7 @@ export class AZStackSdk extends AZStackNavigation {
         this.navigate(this.getNavigation().VoiceCallComponent, {
             withBackButtonHandler: true,
             info: {
+                fullname: '',
                 phoneNumber: result.fromPhoneNumber
             },
             isIncomingCall: true,
@@ -330,8 +331,8 @@ export class AZStackSdk extends AZStackNavigation {
                     this.navigate(this.getNavigation().VoiceCallComponent, {
                         withBackButtonHandler: true,
                         info: {
-                            name: resultUser.list[0].fullname,
-                            userId: resultUser.list[0].userId,
+                            fullname: resultUser.list[0].fullname,
+                            phoneNumber: ''
                         },
                         isIncomingCall: true,
                         onCallEnded: () => {
@@ -433,6 +434,10 @@ export class AZStackSdk extends AZStackNavigation {
                 this.getNavigation().VoiceCallComponent,
                 {
                     ...options,
+                    info: {
+                        fullname: options.info.fullname,
+                        phoneNumber: options.info.toPhoneNumber
+                    },
                     withBackButtonHandler: true,
                     onEndCall: () => {
                         if (options.onEndCall) {
@@ -466,12 +471,16 @@ export class AZStackSdk extends AZStackNavigation {
     startAudioCall(options) {
         this.AZStackCore.startFreeCall({
             mediaType: this.AZStackCore.callConstants.CALL_MEDIA_TYPE_AUDIO,
-            toUserId: options.info.userId,
+            toUserId: options.info.userId
         }).then((result) => {
             this.navigate(
                 this.getNavigation().VoiceCallComponent,
                 {
                     ...options,
+                    info: {
+                        fullname: options.info.fullname,
+                        phoneNumber: ''
+                    },
                     withBackButtonHandler: true,
                     onEndCall: () => {
                         if (options.onEndCall) {
@@ -613,7 +622,8 @@ export class AZStackSdk extends AZStackNavigation {
                 Keyboard.dismiss();
                 this.startAudioCall({
                     info: {
-                        userId: event.userId
+                        userId: event.userId,
+                        fullname: event.fullname
                     }
                 });
             },
@@ -756,7 +766,8 @@ export class AZStackSdk extends AZStackNavigation {
 
                 this.startAudioCall({
                     info: {
-                        userId: event.userId
+                        userId: event.userId,
+                        fullname: event.fullname
                     }
                 });
             },
@@ -1162,7 +1173,8 @@ export class AZStackSdk extends AZStackNavigation {
                     Keyboard.dismiss();
                     this.startAudioCall({
                         info: {
-                            userId: event.userId
+                            userId: event.userId,
+                            fullname: event.fullname
                         }
                     });
                 },
@@ -1216,7 +1228,8 @@ export class AZStackSdk extends AZStackNavigation {
 
                     this.startAudioCall({
                         info: {
-                            userId: event.userId
+                            userId: event.userId,
+                            fullname: event.fullname
                         }
                     });
                 },

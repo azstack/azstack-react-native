@@ -11,10 +11,10 @@ export default class Timer extends React.Component {
 
 	componentWillMount() {
 		var interval = setInterval(() => {
-			this.setState({time: this.state.time + 1});
+			this.setState({ time: this.state.time + 1 });
 		}, 1000);
 
-		this.setState({interval: interval});
+		this.setState({ interval: interval });
 	}
 
 	componentWillUnmount() {
@@ -23,11 +23,11 @@ export default class Timer extends React.Component {
 
 	render() {
 		return (
-			<Text style={{color: '#fff'}}>{this.pad(Math.floor(this.state.time / 60))}:{this.pad(this.state.time % 60)}</Text>
+			<Text style={{ color: '#fff', fontSize: 15, lineHeight: 20 }}>{this.pad(Math.floor(this.state.time / 60))}:{this.pad(this.state.time % 60)}</Text>
 		);
 	}
 
-    pad(d) {
-        return (d < 10) ? '0' + d.toString() : d.toString();
-    }
+	pad(d) {
+		return (d < 10) ? '0' + d.toString() : d.toString();
+	}
 }

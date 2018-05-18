@@ -46,7 +46,8 @@ class ChatHeaderComponent extends React.Component {
     };
     onVoiceCallButtonPressed() {
         this.props.onVoiceCallButtonPressed({
-            userId: this.props.chatTarget.userId
+            userId: this.props.chatTarget.userId,
+            fullname: this.props.chatTarget.fullname
         });
     };
     onVideoCallButtonPressed() {
