@@ -20,8 +20,8 @@ import {
 } from 'react-native-webrtc';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
-import Timer from './part/common/Timer';
-import Pulse from './part/common/Pulse';
+import TimerTextComponent from './part/common/TimerTextComponent';
+import PulseAnimateComponent from './part/common/PulseAnimateComponent';
 
 const { height, width } = Dimensions.get('window');
 
@@ -160,7 +160,7 @@ class VideoCallComponent extends React.Component {
 				<View style={{ alignItems: 'center' }}>
 					<View>
 						<View style={{ justifyContent: 'center', alignItems: 'center' }}>
-							<Pulse style={{ justifyContent: 'center', alignItems: 'center', }} color={'#48D2A0'} numPulses={7} diameter={250} duration={850} speed={34} image={{ source: ic_avatar, style: { width: 100, height: 100, borderRadius: 50, } }} />
+							<PulseAnimateComponent style={{ justifyContent: 'center', alignItems: 'center', }} color={'#48D2A0'} numPulses={7} diameter={250} duration={850} speed={34} image={{ source: ic_avatar, style: { width: 100, height: 100, borderRadius: 50, } }} />
 						</View>
 					</View>
 					<View style={{ alignItems: 'center' }}>
@@ -252,7 +252,7 @@ class VideoCallComponent extends React.Component {
 					</View>
 					<View style={{ flex: 1 }}>
 						<Text style={{ color: '#fff', fontSize: 16 }}>{this.props.info.name || "Anonymous"}</Text>
-						<Timer />
+						<TimerTextComponent />
 					</View>
 					<View style={{ position: 'absolute', top: 0, right: 0 }}>
 						<TouchableOpacity onPress={() => this.onPressChangeDeviceCamera()}>
@@ -277,7 +277,7 @@ class VideoCallComponent extends React.Component {
 				</View>
 				<View>
 					<View style={{ justifyContent: 'center', alignItems: 'center' }}>
-						<Pulse style={{ justifyContent: 'center', alignItems: 'center', }} color={'#48D2A0'} numPulses={7} diameter={250} duration={850} speed={34} image={{ source: ic_avatar, style: { width: 100, height: 100, borderRadius: 50, } }} />
+						<PulseAnimateComponent style={{ justifyContent: 'center', alignItems: 'center', }} color={'#48D2A0'} numPulses={7} diameter={250} duration={850} speed={34} image={{ source: ic_avatar, style: { width: 100, height: 100, borderRadius: 50, } }} />
 					</View>
 				</View>
 				<View style={{ flex: 0.3, justifyContent: 'flex-end', paddingBottom: 60 }}>
@@ -314,7 +314,7 @@ class VideoCallComponent extends React.Component {
 						<Text style={{ color: '#57FFC1', fontSize: 18, backgroundColor: 'transparent' }}>{this.state.message}</Text>
 					</View>
 					<View>
-						<Pulse style={{}} color={'#48D2A0'} numPulses={7} diameter={250} duration={850} speed={34} image={{ source: ic_avatar, style: { width: 100, height: 100, borderRadius: 50, } }} />
+						<PulseAnimateComponent style={{}} color={'#48D2A0'} numPulses={7} diameter={250} duration={850} speed={34} image={{ source: ic_avatar, style: { width: 100, height: 100, borderRadius: 50, } }} />
 					</View>
 					<View style={styles.bottomActionBlockWrapper}>
 						<TouchableOpacity onPress={() => this.onPressToggleVideo()}>

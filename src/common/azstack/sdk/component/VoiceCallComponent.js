@@ -9,8 +9,8 @@ import {
 import InCallManager from 'react-native-incall-manager';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
-import Timer from './part/common/Timer';
-import Pulse from './part/common/Pulse';
+import TimerTextComponent from './part/common/TimerTextComponent';
+import PulseAnimateComponent from './part/common/PulseAnimateComponent';
 
 class VoiceCallComponent extends React.Component {
 	constructor(props) {
@@ -256,14 +256,14 @@ class VoiceCallComponent extends React.Component {
 							style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_CALL_TIME_BLOCK_STYLE')}
 						>
 							{
-								this.state.status === 200 && <Timer />
+								this.state.status === 200 && <TimerTextComponent />
 							}
 						</View>
 					</View>
 					<View
 						style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_MIDDLE_PART_BLOCK_STYLE')}
 					>
-						<Pulse
+						<PulseAnimateComponent
 							style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_PULSE_BLOCK_STYLE')}
 							{...this.coreInstances.CustomStyle.getStyle('VOICE_CALL_PULSE_PROPS_STYLE')}
 							image={{
