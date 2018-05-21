@@ -3,32 +3,14 @@ import {
 	BackHandler,
 	View,
 	Text,
-	TouchableWithoutFeedback,
-	StyleSheet,
 	Image,
-	Dimensions,
-	TouchableOpacity,
-	FlatList,
-	StatusBar,
-	Platform,
-	Alert,
-	TextInput,
-	ScrollView,
+	TouchableOpacity
 } from 'react-native';
 import InCallManager from 'react-native-incall-manager';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
 import Timer from './part/common/Timer';
 import Pulse from './part/common/Pulse';
-
-const { height, width } = Dimensions.get('window');
-
-const ic_end_call_white = require('../static/image/ic_end_call_white.png');
-const ic_avatar = require('../static/image/ic_avatar.png');
-const ic_answer_phone = require('../static/image/ic_answer_phone.png');
-const ic_cancel = require('../static/image/ic_cancel.png');
-const ic_muted_white = require('../static/image/ic_muted_white.png');
-const ic_speaker_white = require('../static/image/ic_speaker_white.png');
 
 class VoiceCallComponent extends React.Component {
 	constructor(props) {
@@ -244,68 +226,123 @@ class VoiceCallComponent extends React.Component {
 				statusbarStyle={this.props.statusbarStyle}
 				getCoreInstances={this.props.getCoreInstances}
 			>
-				<View style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: '#353535', paddingTop: 40 }}>
-					<View style={{ justifyContent: 'center', alignItems: 'center' }}>
-						<Text style={{ color: '#fff', fontSize: 30, lineHeight: 35, marginTop: 5 }}>{this.props.info.fullname || this.props.info.phoneNumber}</Text>
+				<View
+					style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_BLOCK_STYLE')}
+				>
+					<View
+						style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOP_PART_BLOCK_STYLE')}
+					>
+						<Text
+							style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_FULLNAME_TEXT_STYLE')}
+						>
+							{this.props.info.fullname || this.props.info.phoneNumber}
+						</Text>
 						{
 							!!this.props.info.fullname &&
 							!!this.props.info.phoneNumber && (
-								<Text style={{ color: '#fff', fontSize: 20, lineHeight: 25, marginTop: 5 }}>{this.props.info.phoneNumber}</Text>
+								<Text
+									style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_PHONE_NUMBER_TEXT_STYLE')}
+								>
+									{this.props.info.phoneNumber}
+								</Text>
 							)
 						}
-						<Text style={{ color: '#57FFC1', fontSize: 18, lineHeight: 20, marginTop: 5 }}>{this.state.message}</Text>
-						<View style={{ height: 20, marginTop: 5 }}>
+						<Text
+							style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_STATUS_MESSAGE_TEXT_STYLE')}
+						>
+							{this.state.message}
+						</Text>
+						<View
+							style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_CALL_TIME_BLOCK_STYLE')}
+						>
 							{
 								this.state.status === 200 && <Timer />
 							}
 						</View>
 					</View>
-					<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-						<Pulse style={{ justifyContent: 'center', alignItems: 'center', }} color={'#48D2A0'} numPulses={7} diameter={250} duration={850} speed={34} image={{ source: ic_avatar, style: { width: 100, height: 100, borderRadius: 50, } }} />
+					<View
+						style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_MIDDLE_PART_BLOCK_STYLE')}
+					>
+						<Pulse
+							style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_PULSE_BLOCK_STYLE')}
+							{...this.coreInstances.CustomStyle.getStyle('VOICE_CALL_PULSE_PROPS_STYLE')}
+							image={{
+								source: this.coreInstances.CustomStyle.getImage('IMAGE_AVATAR'),
+								style: this.coreInstances.CustomStyle.getStyle('VOICE_CALL_PULSE_IMAGE_STYLE')
+							}}
+						/>
 					</View>
-					<View style={{ justifyContent: 'flex-end', paddingBottom: 40 }}>
+					<View
+						style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_BOTTOM_PART_BLOCK_STYLE')}
+					>
 						{
 							this.state.isIncomingCall && (
-								<View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-									<TouchableOpacity style={[styles.button, { backgroundColor: 'green', marginHorizontal: 60 }]} onPress={() => this.onAnswerButtonPressed()}>
-										<Image source={ic_answer_phone} style={{ width: 30, height: 30 }} resizeMode={'contain'} />
+								<View
+									style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_BUTTONS_BLOCK_STYLE')}
+								>
+									<TouchableOpacity
+										style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_ANSWER_BUTTON_BLOCK_STYLE')}
+										activeOpacity={0.5}
+										onPress={() => this.onAnswerButtonPressed()}
+									>
+										<Image
+											source={this.coreInstances.CustomStyle.getImage('IMAGE_ANSWER_CALL')}
+											style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_ANSWER_BUTTON_IMAGE_STYLE')}
+										/>
 									</TouchableOpacity>
-									<TouchableOpacity style={[styles.button, { backgroundColor: 'red', marginHorizontal: 60 }]} onPress={() => this.props.onReject()}>
-										<Image source={ic_cancel} style={{ width: 30, height: 30 }} resizeMode={'contain'} />
+									<TouchableOpacity
+										style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_REJECT_BUTTON_BLOCK_STYLE')}
+										activeOpacity={0.5}
+										onPress={() => this.props.onReject()}
+									>
+										<Image
+											source={this.coreInstances.CustomStyle.getImage('IMAGE_REJECT_CALL')}
+											style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_REJECT_BUTTON_IMAGE_STYLE')}
+										/>
 									</TouchableOpacity>
 								</View>
 							)
 						}
 						{
 							!this.state.isIncomingCall && (
-								<View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-									<TouchableOpacity onPress={() => this.onToggleAudioButtonPressed()}>
-										{this.state.isAudioOn && <View style={{
-											width: 70, height: 70, borderRadius: 35,
-											justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#fff'
-										}}>
-											<Image source={ic_muted_white} /></View>}
-										{!this.state.isAudioOn &&
-											<View style={{
-												width: 70, height: 70, borderRadius: 35,
-												justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.5)'
-											}}>
-												<Image source={ic_muted_white} /></View>}
+								<View
+									style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_BUTTONS_BLOCK_STYLE')}
+								>
+									<TouchableOpacity
+										style={[
+											this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_AUDIO_BUTTON_BLOCK_STYLE'),
+											!this.state.isAudioOn ? this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_AUDIO_BUTTON_ACTIVE_STYLE') : {}
+										]}
+										activeOpacity={0.5}
+										onPress={() => this.onToggleAudioButtonPressed()}
+									>
+										<Image
+											style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_AUDIO_BUTTON_IMAGE_STYLE')}
+											source={this.coreInstances.CustomStyle.getImage('IMAGE_MUTED')}
+										/>
 									</TouchableOpacity>
-									<TouchableOpacity onPress={() => this.onEndCallButtonPressed()}>
-										<View style={[styles.button, { backgroundColor: 'red' }]}>
-											<Image source={ic_end_call_white} style={styles.buttonIcon} resizeMode={'contain'} />
-										</View>
+									<TouchableOpacity
+										style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_END_BUTTON_BLOCK_STYLE')}
+										activeOpacity={0.5}
+										onPress={() => this.onEndCallButtonPressed()}
+									>
+										<Image
+											style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_END_BUTTON_IMAGE_STYLE')}
+											source={this.coreInstances.CustomStyle.getImage('IMAGE_END_CALL')}
+										/>
 									</TouchableOpacity>
-									<TouchableOpacity onPress={() => this.onToggleSpeakerButtonPressed()}>
-										{this.state.isSpeakerOn && <View style={{
-											width: 70, height: 70, borderRadius: 35,
-											justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.5)'
-										}}><Image source={ic_speaker_white} /></View>}
-										{!this.state.isSpeakerOn && <View style={{
-											width: 70, height: 70, borderRadius: 35,
-											justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#fff'
-										}}><Image source={ic_speaker_white} /></View>}
+									<TouchableOpacity
+										style={[
+											this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_SPEAKER_BUTTON_BLOCK_STYLE'),
+											this.state.isSpeakerOn ? this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_SPEAKER_BUTTON_ACTIVE_STYLE') : {}
+										]}
+										activeOpacity={0.5}
+										onPress={() => this.onToggleSpeakerButtonPressed()}
+									>
+										<Image
+											style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_SPEAKER_BUTTON_IMAGE_STYLE')}
+											source={this.coreInstances.CustomStyle.getImage('IMAGE_SPEAKER')}
+										/>
 									</TouchableOpacity>
 								</View>
 							)
@@ -318,42 +355,4 @@ class VoiceCallComponent extends React.Component {
 };
 
 export default VoiceCallComponent;
-
-
-const styles = {
-	button: {
-		width: 70,
-		height: 70,
-		justifyContent: 'center',
-		alignItems: 'center',
-		borderRadius: 35,
-	},
-	buttonIcon: {
-		width: 40,
-		height: 40,
-	},
-	bottomActionBlock: {
-		position: 'absolute',
-		right: 0,
-		left: 0,
-		bottom: 0,
-		justifyContent: 'flex-end',
-	},
-	bottomActionBlockWrapper: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'center',
-		padding: 15,
-		paddingBottom: 40,
-	},
-	userInfoCenter: {
-		position: 'absolute',
-		top: 0,
-		bottom: 0,
-		left: 0,
-		right: 0,
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-};
 

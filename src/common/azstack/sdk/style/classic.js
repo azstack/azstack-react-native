@@ -32,6 +32,12 @@ export const IMAGE_CALLOUT = require('../static/image/classic/callout.png');
 export const IMAGE_CALLIN = require('../static/image/classic/callin.png');
 export const IMAGE_CALLOUT_START = require('../static/image/classic/call-out-start.png');
 export const IMAGE_BACK_X = require('../static/image/classic/back-x.png');
+export const IMAGE_AVATAR = require('../static/image/classic/avatar.png');
+export const IMAGE_ANSWER_CALL = require('../static/image/classic/answer-call.png');
+export const IMAGE_REJECT_CALL = require('../static/image/classic/reject-call.png');
+export const IMAGE_END_CALL = require('../static/image/classic/end-call.png');
+export const IMAGE_MUTED = require('../static/image/classic/muted.png');
+export const IMAGE_SPEAKER = require('../static/image/classic/speaker.png');
 
 
 export const SCREEN_BLOCK_STYLE = {
@@ -1259,7 +1265,141 @@ export const NUMBER_PAD_BUTTONS_CALL_BUTTON_IMAGE_STYLE = {
 };
 
 
-export const VOICE_CALL_BLOCK_STYLE = {};
+export const VOICE_CALL_BLOCK_STYLE = {
+    flex: 1,
+    backgroundColor: '#353535'
+};
+export const VOICE_CALL_TOP_PART_BLOCK_STYLE = {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 40
+};
+export const VOICE_CALL_FULLNAME_TEXT_STYLE = {
+    color: '#fff',
+    fontSize: 30,
+    fontWeight: '400',
+    lineHeight: 35,
+    marginTop: 5
+};
+export const VOICE_CALL_PHONE_NUMBER_TEXT_STYLE = {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: '400',
+    lineHeight: 25,
+    marginTop: 5
+};
+export const VOICE_CALL_STATUS_MESSAGE_TEXT_STYLE = {
+    color: '#57FFC1',
+    fontSize: 18,
+    fontWeight: '400',
+    lineHeight: 20,
+    marginTop: 5
+};
+export const VOICE_CALL_CALL_TIME_BLOCK_STYLE = {
+    height: 20,
+    marginTop: 5
+};
+export const VOICE_CALL_MIDDLE_PART_BLOCK_STYLE = {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const VOICE_CALL_PULSE_BLOCK_STYLE = {
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const VOICE_CALL_PULSE_PROPS_STYLE = {
+    color: '#48D2A0',
+    numPulses: 7,
+    diameter: 250,
+    duration: 850,
+    speed: 34
+};
+export const VOICE_CALL_PULSE_IMAGE_STYLE = {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+};
+export const VOICE_CALL_BOTTOM_PART_BLOCK_STYLE = {
+    justifyContent: 'flex-end',
+    paddingBottom: 40
+};
+export const VOICE_CALL_BUTTONS_BLOCK_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'space-around'
+};
+export const VOICE_CALL_ANSWER_BUTTON_BLOCK_STYLE = {
+    width: 70,
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 35,
+    backgroundColor: '#26C281',
+    marginHorizontal: 60
+};
+export const VOICE_CALL_ANSWER_BUTTON_IMAGE_STYLE = {
+    width: 30,
+    height: 30
+};
+export const VOICE_CALL_REJECT_BUTTON_BLOCK_STYLE = {
+    width: 70,
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 35,
+    backgroundColor: '#D91E18',
+    marginHorizontal: 60
+};
+export const VOICE_CALL_REJECT_BUTTON_IMAGE_STYLE = {
+    width: 30,
+    height: 30
+};
+export const VOICE_CALL_TOGGLE_AUDIO_BUTTON_BLOCK_STYLE = {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#fff'
+};
+export const VOICE_CALL_TOGGLE_AUDIO_BUTTON_ACTIVE_STYLE = {
+    backgroundColor: 'rgba(255,255,255,0.5)',
+    borderWidth: 0
+};
+export const VOICE_CALL_TOGGLE_AUDIO_BUTTON_IMAGE_STYLE = {
+    width: 19,
+    height: 31
+};
+export const VOICE_CALL_TOGGLE_SPEAKER_BUTTON_BLOCK_STYLE = {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#fff'
+};
+export const VOICE_CALL_TOGGLE_SPEAKER_BUTTON_ACTIVE_STYLE = {
+    backgroundColor: 'rgba(255,255,255,0.5)',
+    borderWidth: 0
+};
+export const VOICE_CALL_TOGGLE_SPEAKER_BUTTON_IMAGE_STYLE = {
+    width: 31,
+    height: 27
+};
+export const VOICE_CALL_END_BUTTON_BLOCK_STYLE = {
+    width: 70,
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 35,
+    backgroundColor: '#D91E18'
+};
+export const VOICE_CALL_END_BUTTON_IMAGE_STYLE = {
+    width: 39,
+    height: 13
+};
 
 
 export const USER_BLOCK_STYLE = {
