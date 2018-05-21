@@ -185,18 +185,18 @@ class VoiceCallComponent extends React.Component {
 
 	onEndCallButtonPressed() {
 		InCallManager.stopRingback();
-		this.props.onEndCall();
+		this.props.endCall();
 		this.setState({ message: 'Ending' });
 	};
 	onAnswerButtonPressed() {
-		this.props.onAnswer();
+		this.props.answerCall();
 		this.setState({ isIncomingCall: false, status: 200, message: "Calling" });
 	};
 	onRejectButtonPressed() {
-		this.props.onReject();
+		this.props.rejectCall();
 	};
 	onToggleAudioButtonPressed() {
-		this.props.onToggleAudio(!this.state.isAudioOn);
+		this.props.toggleAudio(!this.state.isAudioOn);
 		this.setState({ isAudioOn: !this.state.isAudioOn });
 	};
 	onToggleSpeakerButtonPressed() {
@@ -293,7 +293,7 @@ class VoiceCallComponent extends React.Component {
 									<TouchableOpacity
 										style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_REJECT_BUTTON_BLOCK_STYLE')}
 										activeOpacity={0.5}
-										onPress={() => this.props.onReject()}
+										onPress={() => this.onRejectButtonPressed()}
 									>
 										<Image
 											source={this.coreInstances.CustomStyle.getImage('IMAGE_REJECT_CALL')}

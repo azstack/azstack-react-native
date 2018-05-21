@@ -285,39 +285,36 @@ export class AZStackSdk extends AZStackNavigation {
                     this.pop();
                 }, 1500);
             },
-            onEndCall: () => {
+            endCall: () => {
                 this.AZStackCore.stopCallin({}, (error, result) => {
                     setTimeout(() => {
                         this.pop();
                     }, 1500);
                 });
             },
-            onReject: () => {
+            rejectCall: () => {
                 this.AZStackCore.rejectCallin({}, (error, result) => {
                     setTimeout(() => {
                         this.pop();
                     }, 1500);
                 });
             },
-            onAnswer: () => {
+            answerCall: () => {
                 this.AZStackCore.answerCallin({}, (error, result) => {
                 });
-            },
-            onToggleAudio: (toOn) => {
-                this.AZStackCore.toggleAudioState({
-                    state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
-                }, (error, result) => {
-
-                });
-            },
-            onToggleSpeaker: () => {
-
             },
             onTimeout: () => {
                 this.AZStackCore.notAnsweredCallin({}, (error, result) => {
                     setTimeout(() => {
                         this.pop();
                     }, 1500);
+                });
+            },
+            toggleAudio: (toOn) => {
+                this.AZStackCore.toggleAudioState({
+                    state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
+                }, (error, result) => {
+
                 });
             }
         });
@@ -340,32 +337,32 @@ export class AZStackSdk extends AZStackNavigation {
                                 this.pop();
                             }, 1500);
                         },
-                        onEndCall: () => {
+                        endCall: () => {
                             this.AZStackCore.stopFreeCall({}, (error, result) => {
                                 setTimeout(() => {
                                     this.pop();
                                 }, 1500);
                             });
                         },
-                        onReject: () => {
+                        rejectCall: () => {
                             this.AZStackCore.rejectFreeCall({}, (error, result) => {
                                 setTimeout(() => {
                                     this.pop();
                                 }, 1500);
                             });
                         },
-                        onAnswer: () => {
+                        answerCall: () => {
                             this.AZStackCore.answerFreeCall({}, (error, result) => { });
                         },
-                        onToggleAudio: (toOn) => {
+                        onTimeout: () => {
+                            this.AZStackCore.notAnswerFreeCall({}, (error, result) => { });
+                        },
+                        toggleAudio: (toOn) => {
                             this.AZStackCore.toggleAudioState({
                                 state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
                             }, (error, result) => {
 
                             });
-                        },
-                        onTimeout: () => {
-                            this.AZStackCore.notAnswerFreeCall({}, (error, result) => { });
                         }
                     });
                 } else if (result.mediaType === this.AZStackCore.callConstants.CALL_MEDIA_TYPE_VIDEO) {
@@ -439,21 +436,26 @@ export class AZStackSdk extends AZStackNavigation {
                         phoneNumber: options.info.toPhoneNumber
                     },
                     withBackButtonHandler: true,
-                    onEndCall: () => {
-                        if (options.onEndCall) {
-                            options.onEndCall()
+                    onCallEnded: () => {
+                        if (options.onCallEnded) {
+                            options.onCallEnded();
+                            return;
+                        }
+                        setTimeout(() => {
+                            this.pop();
+                        }, 1500);
+                    },
+                    endCall: () => {
+                        if (options.endCall) {
+                            options.endCall();
+                            return;
                         }
                         this.AZStackCore.stopCallout().then((result) => { });
                         setTimeout(() => {
                             this.pop();
                         }, 1500);
                     },
-                    onCallEnded: () => {
-                        setTimeout(() => {
-                            this.pop();
-                        }, 1500);
-                    },
-                    onToggleAudio: (toOn) => {
+                    toggleAudio: (toOn) => {
                         this.AZStackCore.toggleAudioState({
                             state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
                         }, (error, result) => {
@@ -482,9 +484,19 @@ export class AZStackSdk extends AZStackNavigation {
                         phoneNumber: ''
                     },
                     withBackButtonHandler: true,
-                    onEndCall: () => {
-                        if (options.onEndCall) {
-                            options.onEndCall()
+                    onCallEnded: () => {
+                        if (options.onCallEnded) {
+                            options.onCallEnded();
+                            return;
+                        }
+                        setTimeout(() => {
+                            this.pop();
+                        }, 1500);
+                    },
+                    endCall: () => {
+                        if (options.endCall) {
+                            options.endCall();
+                            return;
                         }
 
                         this.AZStackCore.stopFreeCall().then((result) => {
@@ -493,12 +505,7 @@ export class AZStackSdk extends AZStackNavigation {
                             }, 1500);
                         });
                     },
-                    onCallEnded: () => {
-                        setTimeout(() => {
-                            this.pop();
-                        }, 1500);
-                    },
-                    onToggleAudio: (toOn) => {
+                    toggleAudio: (toOn) => {
                         this.AZStackCore.toggleAudioState({
                             state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
                         }, (error, result) => {
