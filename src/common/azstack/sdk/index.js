@@ -303,7 +303,7 @@ export class AZStackSdk extends AZStackNavigation {
                 this.AZStackCore.answerCallin({}, (error, result) => {
                 });
             },
-            onTimeout: () => {
+            notAnswerCall: () => {
                 this.AZStackCore.notAnsweredCallin({}, (error, result) => {
                     setTimeout(() => {
                         this.pop();
@@ -354,7 +354,7 @@ export class AZStackSdk extends AZStackNavigation {
                         answerCall: () => {
                             this.AZStackCore.answerFreeCall({}, (error, result) => { });
                         },
-                        onTimeout: () => {
+                        notAnswerCall: () => {
                             this.AZStackCore.notAnswerFreeCall({}, (error, result) => { });
                         },
                         toggleAudio: (toOn) => {
