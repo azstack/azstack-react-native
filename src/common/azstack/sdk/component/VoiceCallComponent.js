@@ -30,6 +30,9 @@ class VoiceCallComponent extends React.Component {
 				textLineTwo = props.callData.fullname ? props.callData.toPhoneNumber : '';
 				break;
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_CALLIN:
+				isOnCall = false;
+				textLineOne = props.callData.fullname || props.callData.toPhoneNumber;
+				textLineTwo = props.callData.fullname ? props.callData.toPhoneNumber : '';
 				break;
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_FREE_CALL:
 				break;
@@ -57,6 +60,11 @@ class VoiceCallComponent extends React.Component {
 			}
 		};
 
+		this.notAnswerInterval = {
+			runner: null,
+			time: 0
+		};
+
 		this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
 	};
 
@@ -72,7 +80,7 @@ class VoiceCallComponent extends React.Component {
 
 			this.setState({ status: result.status });
 
-			switch (this.state.status) {
+			switch (result.status) {
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_UNKNOWN:
 					this.setState({
 						showTimerText: false,
@@ -149,23 +157,52 @@ class VoiceCallComponent extends React.Component {
 				return;
 			}
 
-			this.setState({ status: result.status, message: this.getStatusMessage(result.status) });
+			this.setState({ status: result.status });
 
-			if (result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING) {
-				InCallManager.startRingtone('_BUNDLE_');
-			}
+			switch (result.status) {
+				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_UNKNOWN:
 
-			if (result.status !== this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING) {
-				InCallManager.stopRingtone();
-			}
+					clearInterval(this.notAnswerInterval.runner);
+					this.notAnswerInterval.runner = null;
+					this.notAnswerInterval.time = 0;
 
-			if (result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_STOP ||
-				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING_STOP ||
-				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_BUSY ||
-				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_UNKNOWN ||
-				result.status === this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_NOT_ANSWERED) {
+					this.setState({
+						showTimerText: false,
+						showButtons: false,
+						audios: Object.assign({}, this.state.audios, { ringingIn: false, error: true })
+					});
+					setTimeout(() => {
+						this.props.onCallEnded();
+					}, 1500);
+					break;
+				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING_STOP:
 
-				this.props.onCallEnded();
+					clearInterval(this.notAnswerInterval.runner);
+					this.notAnswerInterval.runner = null;
+					this.notAnswerInterval.time = 0;
+
+					this.setState({
+						showTimerText: false,
+						showButtons: false,
+						audios: Object.assign({}, this.state.audios, { ringingIn: false, end: true }),
+						status: this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_STOP
+					});
+					setTimeout(() => {
+						this.props.onCallEnded();
+					}, 1500);
+					break;
+				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_STOP:
+					this.setState({
+						showTimerText: false,
+						showButtons: false,
+						audios: Object.assign({}, this.state.audios, { end: true })
+					});
+					setTimeout(() => {
+						this.props.onCallEnded();
+					}, 1500);
+					break;
+				default:
+					break;
 			}
 		});
 		this.subscriptions.onCallinStatusChangedByMe = this.coreInstances.EventEmitter.addListener(this.coreInstances.eventConstants.EVENT_NAME_CALLIN_STATUS_CHANGED_BY_ME, ({ error, result }) => {
@@ -174,9 +211,23 @@ class VoiceCallComponent extends React.Component {
 				return;
 			}
 
-			if (result.status !== this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING) {
-				InCallManager.stop();
-				this.props.onCallEnded();
+			switch (result.status) {
+				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING:
+					break;
+				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_UNKNOWN:
+				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_ANSWERED:
+				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_BUSY:
+				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_NOT_ANSWERED:
+				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING_STOP:
+				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_STOP:
+
+					clearInterval(this.notAnswerInterval.runner);
+					this.notAnswerInterval.runner = null;
+					this.notAnswerInterval.time = 0;
+
+					this.props.onCallEnded();
+				default:
+					break;
 			}
 		});
 
@@ -273,6 +324,31 @@ class VoiceCallComponent extends React.Component {
 
 				break;
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_CALLIN:
+				switch (this.state.status) {
+					case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_UNKNOWN:
+						statusMessage = this.coreInstances.Language.getText('VOICE_CALL_CALLOUT_STATUS_MESSAGE_STOP_TEXT');
+						break;
+					case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING:
+						statusMessage = this.coreInstances.Language.getText('VOICE_CALL_CALLIN_STATUS_MESSAGE_RINGING_TEXT');
+						break;
+					case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_ANSWERED:
+						statusMessage = this.coreInstances.Language.getText('VOICE_CALL_CALLIN_STATUS_MESSAGE_ANSWERED_TEXT');
+						break;
+					case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_BUSY:
+						statusMessage = this.coreInstances.Language.getText('VOICE_CALL_CALLIN_STATUS_MESSAGE_BUSY_TEXT');
+						break;
+					case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_NOT_ANSWERED:
+						statusMessage = this.coreInstances.Language.getText('VOICE_CALL_CALLIN_STATUS_MESSAGE_NOT_ANSWERED_TEXT');
+						break;
+					case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING_STOP:
+						statusMessage = this.coreInstances.Language.getText('VOICE_CALL_CALLIN_STATUS_MESSAGE_RINGING_STOP_TEXT');
+						break;
+					case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_STOP:
+						statusMessage = this.coreInstances.Language.getText('VOICE_CALL_CALLIN_STATUS_MESSAGE_STOP_TEXT');
+						break;
+					default:
+						break;
+				}
 				break;
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_FREE_CALL:
 				break;
@@ -290,13 +366,24 @@ class VoiceCallComponent extends React.Component {
 				this.setState({
 					showTimerText: false,
 					showButtons: false,
-					audios: Object.assign({}, this.state.audios, { ringingOut: false, end: true })
+					audios: Object.assign({}, this.state.audios, { ringingOut: false, end: true }),
+					status: this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_STOP
 				});
 				setTimeout(() => {
 					this.props.onCallEnded();
 				}, 1500);
 				break;
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_CALLIN:
+				this.coreInstances.AZStackCore.stopCallin({}).then((result) => { }).catch((error) => { });
+				this.setState({
+					showTimerText: false,
+					showButtons: false,
+					audios: Object.assign({}, this.state.audios, { end: true }),
+					status: this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_STOP
+				});
+				setTimeout(() => {
+					this.props.onCallEnded();
+				}, 1500);
 				break;
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_FREE_CALL:
 				break;
@@ -305,10 +392,54 @@ class VoiceCallComponent extends React.Component {
 		};
 	};
 	onAnswerButtonPressed() {
+		switch (this.props.callData.callType) {
+			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_CALLOUT:
+				break;
+			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_CALLIN:
 
+				clearInterval(this.notAnswerInterval.runner);
+				this.notAnswerInterval.runner = null;
+				this.notAnswerInterval.time = 0;
+
+				this.coreInstances.AZStackCore.answerCallin({}).then((result) => { }).catch((error) => { });
+				this.setState({
+					isOnCall: true,
+					showTimerText: true,
+					audios: Object.assign({}, this.state.audios, { ringingIn: false }),
+					status: this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_ANSWERED
+				});
+				break;
+			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_FREE_CALL:
+				break;
+			default:
+				break;
+		};
 	};
 	onRejectButtonPressed() {
+		switch (this.props.callData.callType) {
+			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_CALLOUT:
+				break;
+			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_CALLIN:
 
+				clearInterval(this.notAnswerInterval.runner);
+				this.notAnswerInterval.runner = null;
+				this.notAnswerInterval.time = 0;
+
+				this.coreInstances.AZStackCore.rejectCallin({}).then((result) => { }).catch((error) => { });
+				this.setState({
+					showButtons: false,
+					audios: Object.assign({}, this.state.audios, { ringingIn: false, rejected: true }),
+					status: this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING_STOP
+				});
+				setTimeout(() => {
+					this.props.onCallEnded();
+				}, 1500);
+				break;
+			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_FREE_CALL:
+				break;
+			default:
+				break;
+		};
 	};
 	onToggleAudioButtonPressed() {
 		this.setState({ isAudioOn: !this.state.isAudioOn }, () => {
@@ -347,6 +478,28 @@ class VoiceCallComponent extends React.Component {
 				});
 				break;
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_CALLIN:
+				this.setState({
+					audios: Object.assign({}, this.state.audios, { ringingIn: true }),
+					status: this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING
+				});
+				this.notAnswerInterval.runner = setInterval(() => {
+					this.notAnswerInterval.time += 1;
+					if (this.notAnswerInterval.time >= 30) {
+						clearInterval(this.notAnswerInterval.runner);
+						this.notAnswerInterval.runner = null;
+						this.notAnswerInterval.time = 0;
+
+						this.coreInstances.AZStackCore.rejectCallin({}).then((result) => { }).catch((error) => { });
+						this.setState({
+							showButtons: false,
+							audios: Object.assign({}, this.state.audios, { ringingIn: false, notAnswered: true }),
+							status: this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_NOT_ANSWERED
+						});
+						setTimeout(() => {
+							this.props.onCallEnded();
+						}, 1500);
+					}
+				}, 1000);
 				break;
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_FREE_CALL:
 				break;

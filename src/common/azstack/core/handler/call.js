@@ -2302,7 +2302,7 @@ class Call {
                 return;
             }
 
-            if (this.callData.callStatus !== this.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING || this.callData.callStatus !== this.callConstants.CALL_STATUS_CALLIN_STATUS_ANSWERED) {
+            if (this.callData.callStatus !== this.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING && this.callData.callStatus !== this.callConstants.CALL_STATUS_CALLIN_STATUS_ANSWERED) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Cannot stop callin when current status is not ringing or answered'
                 });
