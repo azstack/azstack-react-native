@@ -135,7 +135,7 @@ Show number pad for callout
 How to start callout
 ```javascript
     this.refs.AZStackSdk.startCallout({
-        info: {
+        callData: {
             fullname: 'Some name',
             toPhoneNumber: '0123456789',
             fromPhoneNumber: '0123456789',
@@ -164,7 +164,7 @@ How to start video call
 How to start audio call
 ```javascript
     this.refs.AZStackSdk.startAudioCall({
-        info: {
+        callData: {
             fullname: 'User 2',
             userId: 387212, // must be number
         },

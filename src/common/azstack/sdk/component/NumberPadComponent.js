@@ -56,8 +56,7 @@ class NumberPadComponent extends React.Component {
 	};
 	onCallButtonPressed() {
 		this.props.startCallout({
-			info: {
-				fullname: '',
+			callData: {
 				toPhoneNumber: this.state.toPhoneNumber,
 				fromPhoneNumber: this.state.fromPhoneNumber
 			}

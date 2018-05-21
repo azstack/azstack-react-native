@@ -275,47 +275,19 @@ export class AZStackSdk extends AZStackNavigation {
     onCallinStart(error, result) {
         this.navigate(this.getNavigation().VoiceCallComponent, {
             withBackButtonHandler: true,
-            info: {
-                fullname: '',
-                phoneNumber: result.fromPhoneNumber
+            callData: {
+                fullname: null,
+                userId: null,
+                toPhoneNumber: result.toPhoneNumber,
+                fromPhoneNumber: result.fromPhoneNumber,
+                callType: this.AZStackCore.callConstants.CALL_TYPE_CALLIN,
+                isCaller: false,
+                status: this.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING
             },
-            isIncomingCall: true,
             onCallEnded: () => {
                 setTimeout(() => {
                     this.pop();
                 }, 1500);
-            },
-            endCall: () => {
-                this.AZStackCore.stopCallin({}, (error, result) => {
-                    setTimeout(() => {
-                        this.pop();
-                    }, 1500);
-                });
-            },
-            rejectCall: () => {
-                this.AZStackCore.rejectCallin({}, (error, result) => {
-                    setTimeout(() => {
-                        this.pop();
-                    }, 1500);
-                });
-            },
-            answerCall: () => {
-                this.AZStackCore.answerCallin({}, (error, result) => {
-                });
-            },
-            notAnswerCall: () => {
-                this.AZStackCore.notAnsweredCallin({}, (error, result) => {
-                    setTimeout(() => {
-                        this.pop();
-                    }, 1500);
-                });
-            },
-            toggleAudio: (toOn) => {
-                this.AZStackCore.toggleAudioState({
-                    state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
-                }, (error, result) => {
-
-                });
             }
         });
     };
@@ -327,42 +299,19 @@ export class AZStackSdk extends AZStackNavigation {
                 if (result.mediaType === this.AZStackCore.callConstants.CALL_MEDIA_TYPE_AUDIO) {
                     this.navigate(this.getNavigation().VoiceCallComponent, {
                         withBackButtonHandler: true,
-                        info: {
+                        callData: {
                             fullname: resultUser.list[0].fullname,
-                            phoneNumber: ''
+                            userId: resultUser.list[0].userId,
+                            toPhoneNumber: null,
+                            fromPhoneNumber: null,
+                            callType: this.AZStackCore.callConstants.CALL_TYPE_FREE_CALL,
+                            isCaller: false,
+                            status: this.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_RINGING
                         },
-                        isIncomingCall: true,
                         onCallEnded: () => {
                             setTimeout(() => {
                                 this.pop();
                             }, 1500);
-                        },
-                        endCall: () => {
-                            this.AZStackCore.stopFreeCall({}, (error, result) => {
-                                setTimeout(() => {
-                                    this.pop();
-                                }, 1500);
-                            });
-                        },
-                        rejectCall: () => {
-                            this.AZStackCore.rejectFreeCall({}, (error, result) => {
-                                setTimeout(() => {
-                                    this.pop();
-                                }, 1500);
-                            });
-                        },
-                        answerCall: () => {
-                            this.AZStackCore.answerFreeCall({}, (error, result) => { });
-                        },
-                        notAnswerCall: () => {
-                            this.AZStackCore.notAnswerFreeCall({}, (error, result) => { });
-                        },
-                        toggleAudio: (toOn) => {
-                            this.AZStackCore.toggleAudioState({
-                                state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
-                            }, (error, result) => {
-
-                            });
                         }
                     });
                 } else if (result.mediaType === this.AZStackCore.callConstants.CALL_MEDIA_TYPE_VIDEO) {
@@ -418,105 +367,65 @@ export class AZStackSdk extends AZStackNavigation {
                     });
                 }
             }
-        }).catch((error) => {
-            console.log(error);
-        });
+        }).catch((error) => { });
     };
     startCallout(options) {
         this.Call.onBeforeCalloutStart({
-            toPhoneNumber: options.info.toPhoneNumber,
-            fromPhoneNumber: options.info.fromPhoneNumber
+            toPhoneNumber: options.callData.toPhoneNumber,
+            fromPhoneNumber: options.callData.fromPhoneNumber
         }).then((preparedCalloutData) => {
             this.navigate(
                 this.getNavigation().VoiceCallComponent,
                 {
                     ...options,
-                    info: {
-                        fullname: options.info.fullname,
-                        phoneNumber: options.info.toPhoneNumber
-                    },
                     withBackButtonHandler: true,
+                    callData: {
+                        fullname: options.callData.fullname,
+                        userId: null,
+                        toPhoneNumber: options.callData.toPhoneNumber,
+                        fromPhoneNumber: options.callData.fromPhoneNumber,
+                        callType: this.AZStackCore.callConstants.CALL_TYPE_CALLOUT,
+                        isCaller: false,
+                        status: this.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_CONNECTING
+                    },
                     onCallEnded: () => {
                         if (options.onCallEnded) {
                             options.onCallEnded();
                             return;
                         }
-                        setTimeout(() => {
-                            this.pop();
-                        }, 1500);
-                    },
-                    endCall: () => {
-                        if (options.endCall) {
-                            options.endCall();
-                            return;
-                        }
-                        this.AZStackCore.stopCallout().then((result) => { });
-                        setTimeout(() => {
-                            this.pop();
-                        }, 1500);
-                    },
-                    toggleAudio: (toOn) => {
-                        this.AZStackCore.toggleAudioState({
-                            state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
-                        }, (error, result) => {
 
-                        });
-                    },
+                        this.pop();
+                    }
                 }
             );
-            this.AZStackCore.startCallout(preparedCalloutData).then((result) => {
-            }).catch((error) => {
-                Alert.alert("Error", error.message, [{ text: 'OK', onPress: () => { } }]);
-            });
         }).catch((error) => { });
     };
     startAudioCall(options) {
-        this.AZStackCore.startFreeCall({
-            mediaType: this.AZStackCore.callConstants.CALL_MEDIA_TYPE_AUDIO,
-            toUserId: options.info.userId
-        }).then((result) => {
-            this.navigate(
-                this.getNavigation().VoiceCallComponent,
-                {
-                    ...options,
-                    info: {
-                        fullname: options.info.fullname,
-                        phoneNumber: ''
-                    },
-                    withBackButtonHandler: true,
-                    onCallEnded: () => {
-                        if (options.onCallEnded) {
-                            options.onCallEnded();
-                            return;
-                        }
-                        setTimeout(() => {
-                            this.pop();
-                        }, 1500);
-                    },
-                    endCall: () => {
-                        if (options.endCall) {
-                            options.endCall();
-                            return;
-                        }
-
-                        this.AZStackCore.stopFreeCall().then((result) => {
-                            setTimeout(() => {
-                                this.pop();
-                            }, 1500);
-                        });
-                    },
-                    toggleAudio: (toOn) => {
-                        this.AZStackCore.toggleAudioState({
-                            state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
-                        }, (error, result) => {
-
-                        });
-                    },
+        this.navigate(
+            this.getNavigation().VoiceCallComponent,
+            {
+                ...options,
+                callData: {
+                    fullname: options.callData.fullname,
+                    userId: options.callData.userId,
+                    toPhoneNumber: null,
+                    fromPhoneNumber: null,
+                    callType: this.AZStackCore.callConstants.CALL_TYPE_FREE_CALL,
+                    isCaller: false,
+                    status: this.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_CONNECTING
+                },
+                withBackButtonHandler: true,
+                onCallEnded: () => {
+                    if (options.onCallEnded) {
+                        options.onCallEnded();
+                        return;
+                    }
+                    setTimeout(() => {
+                        this.pop();
+                    }, 1500);
                 }
-            );
-        }).catch((error) => {
-            Alert.alert("Error", error.message, [{ text: 'OK', onPress: () => { } }]);
-        });
+            }
+        );
     };
     startVideoCall(options) {
         this.AZStackCore.startFreeCall({
@@ -628,7 +537,7 @@ export class AZStackSdk extends AZStackNavigation {
 
                 Keyboard.dismiss();
                 this.startAudioCall({
-                    info: {
+                    callData: {
                         userId: event.userId,
                         fullname: event.fullname
                     }
@@ -772,7 +681,7 @@ export class AZStackSdk extends AZStackNavigation {
                 }
 
                 this.startAudioCall({
-                    info: {
+                    callData: {
                         userId: event.userId,
                         fullname: event.fullname
                     }
@@ -1179,7 +1088,7 @@ export class AZStackSdk extends AZStackNavigation {
 
                     Keyboard.dismiss();
                     this.startAudioCall({
-                        info: {
+                        callData: {
                             userId: event.userId,
                             fullname: event.fullname
                         }
@@ -1234,7 +1143,7 @@ export class AZStackSdk extends AZStackNavigation {
                     }
 
                     this.startAudioCall({
-                        info: {
+                        callData: {
                             userId: event.userId,
                             fullname: event.fullname
                         }

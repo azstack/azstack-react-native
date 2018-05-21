@@ -1321,6 +1321,7 @@ export const VOICE_CALL_PULSE_IMAGE_STYLE = {
     borderRadius: 50,
 };
 export const VOICE_CALL_BOTTOM_PART_BLOCK_STYLE = {
+    flex: 0.3,
     justifyContent: 'flex-end',
     paddingBottom: 40
 };
