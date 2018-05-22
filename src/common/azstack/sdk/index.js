@@ -426,13 +426,17 @@ export class AZStackSdk extends AZStackNavigation {
     startVideoCall(options) {
         this.AZStackCore.startFreeCall({
             mediaType: this.AZStackCore.callConstants.CALL_MEDIA_TYPE_VIDEO,
-            toUserId: options.info.userId,
+            toUserId: options.callData.toUserId,
         }).then((result) => {
             this.navigate(
                 this.getNavigation().VideoCallComponent,
                 {
                     ...options,
                     withBackButtonHandler: true,
+                    callData: {
+                        fullname: options.callData.fullname,
+                        toUserId: options.callData.toUserId
+                    },
                     onEndCall: () => {
                         if (options.onEndCall) {
                             options.onEndCall()
@@ -534,7 +538,7 @@ export class AZStackSdk extends AZStackNavigation {
                 Keyboard.dismiss();
                 this.startAudioCall({
                     callData: {
-                        toUserId: event.userId,
+                        toUserId: event.toUserId,
                         fullname: event.fullname
                     }
                 });
@@ -547,8 +551,9 @@ export class AZStackSdk extends AZStackNavigation {
 
                 Keyboard.dismiss();
                 this.startVideoCall({
-                    info: {
-                        userId: event.userId
+                    callData: {
+                        fullname: event.fullname,
+                        toUserId: event.toUserId
                     }
                 });
             }
@@ -678,7 +683,7 @@ export class AZStackSdk extends AZStackNavigation {
 
                 this.startAudioCall({
                     callData: {
-                        toUserId: event.userId,
+                        toUserId: event.toUserId,
                         fullname: event.fullname
                     }
                 });
@@ -690,8 +695,9 @@ export class AZStackSdk extends AZStackNavigation {
                 }
 
                 this.startVideoCall({
-                    info: {
-                        userId: event.userId
+                    callData: {
+                        fullname: event.fullname,
+                        toUserId: event.toUserId
                     }
                 });
             }
@@ -1085,7 +1091,7 @@ export class AZStackSdk extends AZStackNavigation {
                     Keyboard.dismiss();
                     this.startAudioCall({
                         callData: {
-                            toUserId: event.userId,
+                            toUserId: event.toUserId,
                             fullname: event.fullname
                         }
                     });
@@ -1098,8 +1104,9 @@ export class AZStackSdk extends AZStackNavigation {
 
                     Keyboard.dismiss();
                     this.startVideoCall({
-                        info: {
-                            userId: event.userId
+                        callData: {
+                            fullname: event.fullname,
+                            toUserId: event.toUserId
                         }
                     });
                 }
@@ -1140,7 +1147,7 @@ export class AZStackSdk extends AZStackNavigation {
 
                     this.startAudioCall({
                         callData: {
-                            toUserId: event.userId,
+                            toUserId: event.toUserId,
                             fullname: event.fullname
                         }
                     });
@@ -1152,8 +1159,9 @@ export class AZStackSdk extends AZStackNavigation {
                     }
 
                     this.startVideoCall({
-                        info: {
-                            userId: event.userId
+                        callData: {
+                            fullname: event.fullname,
+                            toUserId: event.toUserId
                         }
                     });
                 }

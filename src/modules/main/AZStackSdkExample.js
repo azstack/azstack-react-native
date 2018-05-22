@@ -55,9 +55,9 @@ class AZStackSdkExample extends React.Component {
 
     videoCall() {
         this.refs.AZStackSdk.startVideoCall({
-            info: {
-                name: 'Test User 2',
-                userId: 387212,
+            callData: {
+                fullname: 'Test User 2',
+                toUserId: 387212,
             },
             onEndCall: () => { }
         });

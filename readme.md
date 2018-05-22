@@ -150,9 +150,9 @@ How to start callout
 How to start video call
 ```javascript 
     this.refs.AZStackSdk.startVideoCall({
-        info: {
-            name: 'User 2',
-            userId: 387212, // must be number
+        callData: {
+            fullname: 'User 2',
+            toUserId: 387212, // must be number
         },
         onEndCall: () => {
             // or whatever you want here

@@ -164,7 +164,7 @@ class VideoCallComponent extends React.Component {
 						</View>
 					</View>
 					<View style={{ alignItems: 'center' }}>
-						<Text style={{ color: '#fff', marginVertical: 10, fontSize: 20 }}>{this.props.info.name}</Text>
+						<Text style={{ color: '#fff', marginVertical: 10, fontSize: 20 }}>{this.props.callData.fullname}</Text>
 						<Text style={{ color: '#57FFC1', fontSize: 18, backgroundColor: 'transparent' }}>{this.state.message}</Text>
 					</View>
 				</View>
@@ -251,7 +251,7 @@ class VideoCallComponent extends React.Component {
 						<Image source={ic_avatar} style={{ width: 60, height: 60, borderRadius: 45, marginRight: 10 }} />
 					</View>
 					<View style={{ flex: 1 }}>
-						<Text style={{ color: '#fff', fontSize: 16 }}>{this.props.info.name || "Anonymous"}</Text>
+						<Text style={{ color: '#fff', fontSize: 16 }}>{this.props.callData.fullname || "Anonymous"}</Text>
 						<TimerTextComponent />
 					</View>
 					<View style={{ position: 'absolute', top: 0, right: 0 }}>
@@ -270,8 +270,8 @@ class VideoCallComponent extends React.Component {
 			<View style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: '#353535', justifyContent: 'space-between' }}>
 				<View style={{ flex: 0.3 }}>
 					<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-						<Text style={{ color: '#fff', fontSize: 30 }}>{this.props.info.name || this.props.info.phoneNumber}</Text>
-						<Text style={{ color: '#fff', fontSize: 20 }}>{this.props.info.name ? this.props.info.phoneNumber : ''}</Text>
+						<Text style={{ color: '#fff', fontSize: 30 }}>{this.props.callData.fullname || this.props.info.phoneNumber}</Text>
+						<Text style={{ color: '#fff', fontSize: 20 }}>{this.props.callData.fullname ? this.props.info.phoneNumber : ''}</Text>
 						<Text style={{ color: '#57FFC1', fontSize: 18, backgroundColor: 'transparent' }}>{this.state.message}</Text>
 					</View>
 				</View>
@@ -310,7 +310,7 @@ class VideoCallComponent extends React.Component {
 				</View>
 				<View style={[styles.topLayer, { justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0)', }]}>
 					<View style={{ paddingTop: 40 }}>
-						<Text style={{ color: '#fff', marginVertical: 10, fontSize: 20, backgroundColor: 'transparent' }}>{this.props.info.name}</Text>
+						<Text style={{ color: '#fff', marginVertical: 10, fontSize: 20, backgroundColor: 'transparent' }}>{this.props.callData.fullname}</Text>
 						<Text style={{ color: '#57FFC1', fontSize: 18, backgroundColor: 'transparent' }}>{this.state.message}</Text>
 					</View>
 					<View>
