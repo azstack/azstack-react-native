@@ -316,8 +316,9 @@ export class AZStackSdk extends AZStackNavigation {
                     this.navigate(this.getNavigation().VideoCallComponent, {
                         withBackButtonHandler: true,
                         info: {
-                            name: resultUser.list[0].fullname,
-                            userId: resultUser.list[0].userId,
+                            fullname: resultUser.list[0].fullname,
+                            toUserId: resultUser.list[0].userId,
+                            isCaller: false
                         },
                         isIncomingCall: true,
                         onCallEnded: () => {
@@ -435,7 +436,8 @@ export class AZStackSdk extends AZStackNavigation {
                     withBackButtonHandler: true,
                     callData: {
                         fullname: options.callData.fullname,
-                        toUserId: options.callData.toUserId
+                        toUserId: options.callData.toUserId,
+                        isCaller: true
                     },
                     onEndCall: () => {
                         if (options.onEndCall) {
