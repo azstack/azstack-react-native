@@ -166,7 +166,7 @@ How to start audio call
     this.refs.AZStackSdk.startAudioCall({
         callData: {
             fullname: 'User 2',
-            userId: 387212, // must be number
+            toUserId: 387212, // must be number
         },
         onEndCall: () => {
             // or whatever you want here

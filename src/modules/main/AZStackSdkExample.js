@@ -45,9 +45,9 @@ class AZStackSdkExample extends React.Component {
 
     audioCall() {
         this.refs.AZStackSdk.startAudioCall({
-            info: {
+            callData: {
                 fullname: 'Test User 2',
-                userId: 387212,
+                toUserId: 387212,
             },
             onEndCall: () => { }
         });

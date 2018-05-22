@@ -277,12 +277,11 @@ export class AZStackSdk extends AZStackNavigation {
             withBackButtonHandler: true,
             callData: {
                 fullname: null,
-                userId: null,
+                toUserId: null,
                 toPhoneNumber: result.toPhoneNumber,
                 fromPhoneNumber: result.fromPhoneNumber,
                 callType: this.AZStackCore.callConstants.CALL_TYPE_CALLIN,
-                isCaller: false,
-                status: this.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING
+                isCaller: false
             },
             onCallEnded: () => {
                 setTimeout(() => {
@@ -301,12 +300,11 @@ export class AZStackSdk extends AZStackNavigation {
                         withBackButtonHandler: true,
                         callData: {
                             fullname: resultUser.list[0].fullname,
-                            userId: resultUser.list[0].userId,
+                            toUserId: resultUser.list[0].userId,
                             toPhoneNumber: null,
                             fromPhoneNumber: null,
                             callType: this.AZStackCore.callConstants.CALL_TYPE_FREE_CALL,
-                            isCaller: false,
-                            status: this.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_RINGING
+                            isCaller: false
                         },
                         onCallEnded: () => {
                             setTimeout(() => {
@@ -381,12 +379,11 @@ export class AZStackSdk extends AZStackNavigation {
                     withBackButtonHandler: true,
                     callData: {
                         fullname: options.callData.fullname,
-                        userId: null,
+                        toUserId: null,
                         toPhoneNumber: options.callData.toPhoneNumber,
                         fromPhoneNumber: options.callData.fromPhoneNumber,
                         callType: this.AZStackCore.callConstants.CALL_TYPE_CALLOUT,
-                        isCaller: false,
-                        status: this.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_CONNECTING
+                        isCaller: true
                     },
                     onCallEnded: () => {
                         if (options.onCallEnded) {
@@ -405,16 +402,15 @@ export class AZStackSdk extends AZStackNavigation {
             this.getNavigation().VoiceCallComponent,
             {
                 ...options,
+                withBackButtonHandler: true,
                 callData: {
                     fullname: options.callData.fullname,
-                    userId: options.callData.userId,
+                    toUserId: options.callData.toUserId,
                     toPhoneNumber: null,
                     fromPhoneNumber: null,
                     callType: this.AZStackCore.callConstants.CALL_TYPE_FREE_CALL,
-                    isCaller: false,
-                    status: this.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_CONNECTING
+                    isCaller: true
                 },
-                withBackButtonHandler: true,
                 onCallEnded: () => {
                     if (options.onCallEnded) {
                         options.onCallEnded();
@@ -538,7 +534,7 @@ export class AZStackSdk extends AZStackNavigation {
                 Keyboard.dismiss();
                 this.startAudioCall({
                     callData: {
-                        userId: event.userId,
+                        toUserId: event.userId,
                         fullname: event.fullname
                     }
                 });
@@ -682,7 +678,7 @@ export class AZStackSdk extends AZStackNavigation {
 
                 this.startAudioCall({
                     callData: {
-                        userId: event.userId,
+                        toUserId: event.userId,
                         fullname: event.fullname
                     }
                 });
@@ -1089,7 +1085,7 @@ export class AZStackSdk extends AZStackNavigation {
                     Keyboard.dismiss();
                     this.startAudioCall({
                         callData: {
-                            userId: event.userId,
+                            toUserId: event.userId,
                             fullname: event.fullname
                         }
                     });
@@ -1144,7 +1140,7 @@ export class AZStackSdk extends AZStackNavigation {
 
                     this.startAudioCall({
                         callData: {
-                            userId: event.userId,
+                            toUserId: event.userId,
                             fullname: event.fullname
                         }
                     });
