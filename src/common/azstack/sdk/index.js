@@ -527,8 +527,9 @@ export class AZStackSdk extends AZStackNavigation {
                         return;
                     }
                     this.startCallout({
-                        info: {
-                            phoneNumber: event.phoneNumber
+                        callData: {
+                            toPhoneNumber: event.phoneNumber,
+                            fromPhoneNumber: ''
                         }
                     });
                 }
@@ -873,8 +874,9 @@ export class AZStackSdk extends AZStackNavigation {
                         return;
                     }
                     this.startCallout({
-                        info: {
-                            phoneNumber: event.phoneNumber
+                        callData: {
+                            toPhoneNumber: event.phoneNumber,
+                            fromPhoneNumber: ''
                         }
                     });
                 }
