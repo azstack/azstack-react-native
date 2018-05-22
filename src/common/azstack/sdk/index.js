@@ -284,9 +284,7 @@ export class AZStackSdk extends AZStackNavigation {
                 isCaller: false
             },
             onCallEnded: () => {
-                setTimeout(() => {
-                    this.pop();
-                }, 1500);
+                this.pop();
             }
         });
     };
@@ -307,61 +305,19 @@ export class AZStackSdk extends AZStackNavigation {
                             isCaller: false
                         },
                         onCallEnded: () => {
-                            setTimeout(() => {
-                                this.pop();
-                            }, 1500);
+                            this.pop();
                         }
                     });
                 } else if (result.mediaType === this.AZStackCore.callConstants.CALL_MEDIA_TYPE_VIDEO) {
                     this.navigate(this.getNavigation().VideoCallComponent, {
                         withBackButtonHandler: true,
-                        info: {
+                        callData: {
                             fullname: resultUser.list[0].fullname,
                             toUserId: resultUser.list[0].userId,
                             isCaller: false
                         },
-                        isIncomingCall: true,
                         onCallEnded: () => {
-                            setTimeout(() => {
-                                this.pop();
-                            }, 1500);
-                        },
-                        onEndCall: () => {
-                            this.AZStackCore.stopFreeCall({}, (error, result) => {
-                                setTimeout(() => {
-                                    this.pop();
-                                }, 1500);
-                            });
-                        },
-                        onReject: () => {
-                            this.AZStackCore.rejectFreeCall({}, (error, result) => {
-                                setTimeout(() => {
-                                    this.pop();
-                                }, 1500);
-                            });
-                        },
-                        onAnswer: () => {
-                            this.AZStackCore.answerFreeCall({}, (error, result) => { });
-                        },
-                        onToggleAudio: (toOn) => {
-                            this.AZStackCore.toggleAudioState({
-                                state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
-                            }, (error, result) => {
-
-                            });
-                        },
-                        onToggleVideo: (toOn) => {
-                            this.AZStackCore.toggleVideoState({
-                                state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_VIDEO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_VIDEO_STATE_OFF
-                            }, (error, result) => {
-
-                            });
-                        },
-                        onTimeout: () => {
-                            this.AZStackCore.notAnswerFreeCall({}, (error, result) => { });
-                        },
-                        onSwitchCameraType: () => {
-                            this.AZStackCore.switchCameraType({});
+                            this.pop();
                         }
                     });
                 }
@@ -417,66 +373,33 @@ export class AZStackSdk extends AZStackNavigation {
                         options.onCallEnded();
                         return;
                     }
-                    setTimeout(() => {
-                        this.pop();
-                    }, 1500);
+
+                    this.pop();
                 }
             }
         );
     };
     startVideoCall(options) {
-        this.AZStackCore.startFreeCall({
-            mediaType: this.AZStackCore.callConstants.CALL_MEDIA_TYPE_VIDEO,
-            toUserId: options.callData.toUserId,
-        }).then((result) => {
-            this.navigate(
-                this.getNavigation().VideoCallComponent,
-                {
-                    ...options,
-                    withBackButtonHandler: true,
-                    callData: {
-                        fullname: options.callData.fullname,
-                        toUserId: options.callData.toUserId,
-                        isCaller: true
-                    },
-                    onEndCall: () => {
-                        if (options.onEndCall) {
-                            options.onEndCall()
-                        }
+        this.navigate(
+            this.getNavigation().VideoCallComponent,
+            {
+                ...options,
+                withBackButtonHandler: true,
+                callData: {
+                    fullname: options.callData.fullname,
+                    toUserId: options.callData.toUserId,
+                    isCaller: true
+                },
+                onCallEnded: () => {
+                    if (options.onCallEnded) {
+                        options.onCallEnded();
+                        return;
+                    }
 
-                        this.AZStackCore.stopFreeCall().then((result) => {
-                            setTimeout(() => {
-                                this.pop();
-                            }, 1500);
-                        });
-                    },
-                    onCallEnded: () => {
-                        setTimeout(() => {
-                            this.pop();
-                        }, 1500);
-                    },
-                    onSwitchCameraType: () => {
-                        this.AZStackCore.switchCameraType({});
-                    },
-                    onToggleAudio: (toOn) => {
-                        this.AZStackCore.toggleAudioState({
-                            state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
-                        }, (error, result) => {
-
-                        });
-                    },
-                    onToggleVideo: (toOn) => {
-                        this.AZStackCore.toggleVideoState({
-                            state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_VIDEO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_VIDEO_STATE_OFF
-                        }, (error, result) => {
-
-                        });
-                    },
+                    this.pop();
                 }
-            );
-        }).catch((error) => {
-            Alert.alert("Error", error.message, [{ text: 'OK', onPress: () => { } }]);
-        });
+            }
+        );
     };
     startChat(options) {
         this.navigate(this.getNavigation().ChatComponent, {

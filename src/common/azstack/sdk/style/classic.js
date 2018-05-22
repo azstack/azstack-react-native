@@ -36,8 +36,10 @@ export const IMAGE_AVATAR = require('../static/image/classic/avatar.png');
 export const IMAGE_ANSWER_CALL = require('../static/image/classic/answer-call.png');
 export const IMAGE_REJECT_CALL = require('../static/image/classic/reject-call.png');
 export const IMAGE_END_CALL = require('../static/image/classic/end-call.png');
-export const IMAGE_MUTED = require('../static/image/classic/muted.png');
+export const IMAGE_VOICE_OFF = require('../static/image/classic/voice-off.png');
+export const IMAGE_CAMRERA_OFF = require('../static/image/classic/camera-off.png');
 export const IMAGE_SPEAKER = require('../static/image/classic/speaker.png');
+export const IMAGE_SWITCH_CAMERA = require('../static/image/classic/switch-camera.png');
 
 
 export const SCREEN_BLOCK_STYLE = {

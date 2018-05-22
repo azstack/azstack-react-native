@@ -22,9 +22,6 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		140ED2AC1D01E1AD002B40FF /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
-		22CD01EE205FA15600ADD959 /* incallmanager_busytone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 22CD01EB205FA15500ADD959 /* incallmanager_busytone.mp3 */; };
-		22CD01EF205FA15600ADD959 /* incallmanager_ringback.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 22CD01EC205FA15600ADD959 /* incallmanager_ringback.mp3 */; };
-		22CD01F0205FA15600ADD959 /* incallmanager_ringtone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 22CD01ED205FA15600ADD959 /* incallmanager_ringtone.mp3 */; };
 		22FDCB321FFE2DB000B86669 /* WebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22FDCB311FFE2DB000B86669 /* WebRTC.framework */; };
 		22FDCB331FFE2E3200B86669 /* WebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22FDCB311FFE2DB000B86669 /* WebRTC.framework */; };
 		22FDCB341FFE2E3200B86669 /* WebRTC.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22FDCB311FFE2DB000B86669 /* WebRTC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -498,9 +495,6 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = azstack_react_native_sdk/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		1BEF368D1EC3469E2B7AA6C8 /* Pods-azstack_react_native_sdk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-azstack_react_native_sdk.release.xcconfig"; path = "Pods/Target Support Files/Pods-azstack_react_native_sdk/Pods-azstack_react_native_sdk.release.xcconfig"; sourceTree = "<group>"; };
-		22CD01EB205FA15500ADD959 /* incallmanager_busytone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = incallmanager_busytone.mp3; sourceTree = "<group>"; };
-		22CD01EC205FA15600ADD959 /* incallmanager_ringback.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = incallmanager_ringback.mp3; sourceTree = "<group>"; };
-		22CD01ED205FA15600ADD959 /* incallmanager_ringtone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = incallmanager_ringtone.mp3; sourceTree = "<group>"; };
 		22D44FA4202BF25A00561864 /* azstack_react_native_sdk.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = azstack_react_native_sdk.entitlements; path = azstack_react_native_sdk/azstack_react_native_sdk.entitlements; sourceTree = "<group>"; };
 		22FDCB101FFE2D9B00B86669 /* RCTWebRTC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebRTC.xcodeproj; path = "../node_modules/react-native-webrtc/ios/RCTWebRTC.xcodeproj"; sourceTree = "<group>"; };
 		22FDCB311FFE2DB000B86669 /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebRTC.framework; path = "../node_modules/react-native-webrtc/ios/WebRTC.framework"; sourceTree = "<group>"; };
@@ -700,9 +694,6 @@
 		13B07FAE1A68108700A75B9A /* azstack_react_native_sdk */ = {
 			isa = PBXGroup;
 			children = (
-				22CD01EB205FA15500ADD959 /* incallmanager_busytone.mp3 */,
-				22CD01EC205FA15600ADD959 /* incallmanager_ringback.mp3 */,
-				22CD01ED205FA15600ADD959 /* incallmanager_ringtone.mp3 */,
 				22D44FA4202BF25A00561864 /* azstack_react_native_sdk.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -1593,11 +1584,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22CD01EE205FA15600ADD959 /* incallmanager_busytone.mp3 in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				22CD01EF205FA15600ADD959 /* incallmanager_ringback.mp3 in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				22CD01F0205FA15600ADD959 /* incallmanager_ringtone.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

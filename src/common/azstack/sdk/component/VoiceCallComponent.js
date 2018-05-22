@@ -871,7 +871,7 @@ class VoiceCallComponent extends React.Component {
 									>
 										<Image
 											style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_AUDIO_BUTTON_IMAGE_STYLE')}
-											source={this.coreInstances.CustomStyle.getImage('IMAGE_MUTED')}
+											source={this.coreInstances.CustomStyle.getImage('IMAGE_VOICE_OFF')}
 										/>
 									</TouchableOpacity>
 									<TouchableOpacity
