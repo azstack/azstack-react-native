@@ -4,9 +4,15 @@ import {
 } from 'react-native';
 
 class TimerTextComponent extends React.Component {
-	state = {
-		time: 0,
-		interval: null,
+	constructor(props) {
+		super(props);
+
+		this.coreInstances = props.getCoreInstances();
+
+		this.state = {
+			time: 0,
+			interval: null,
+		};
 	};
 
 	componentWillMount() {
@@ -16,19 +22,21 @@ class TimerTextComponent extends React.Component {
 
 		this.setState({ interval: interval });
 	};
-
 	componentWillUnmount() {
 		clearInterval(this.state.interval);
 	};
 
 	render() {
 		return (
-			<Text style={{ color: '#fff', fontSize: 15, lineHeight: 20 }}>{this.pad(Math.floor(this.state.time / 60))}:{this.pad(this.state.time % 60)}</Text>
+			<Text
+				style={[
+					this.coreInstances.CustomStyle.getStyle('TIMER_TEXT_STYLE'),
+					(this.props.style ? this.props.style : {})
+				]}
+			>
+				{this.coreInstances.DateTimeFormatter.pad(Math.floor(this.state.time / 60))}:{this.coreInstances.DateTimeFormatter.pad(this.state.time % 60)}
+			</Text>
 		);
-	};
-
-	pad(d) {
-		return (d < 10) ? '0' + d.toString() : d.toString();
 	};
 };
 

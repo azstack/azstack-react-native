@@ -217,6 +217,12 @@ export const FROM_NOW_TIME_TEXT_STYLE = {
     color: '#2F353B'
 };
 
+export const TIMER_TEXT_STYLE = {
+    color: '#fff',
+    fontSize: 15,
+    lineHeight: 20
+};
+
 export const MESSAGE_STATUS_BLOCK_STYLE = {
     width: '100%',
     height: '100%',
@@ -1300,6 +1306,11 @@ export const VOICE_CALL_STATUS_MESSAGE_TEXT_STYLE = {
 export const VOICE_CALL_CALL_TIME_BLOCK_STYLE = {
     height: 20,
     marginTop: 5
+};
+export const VOICE_CALL_CALL_TIME_TEXT_STYLE = {
+    color: '#FFF',
+    fontSize: 15,
+    lineHeight: 20
 };
 export const VOICE_CALL_MIDDLE_PART_BLOCK_STYLE = {
     flex: 1,

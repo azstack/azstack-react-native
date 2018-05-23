@@ -807,7 +807,12 @@ class VoiceCallComponent extends React.Component {
 							style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_CALL_TIME_BLOCK_STYLE')}
 						>
 							{
-								this.state.showTimerText && <TimerTextComponent />
+								this.state.showTimerText && (
+									<TimerTextComponent
+										getCoreInstances={this.props.getCoreInstances}
+										style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_CALL_TIME_TEXT_STYLE')}
+									/>
+								)
 							}
 						</View>
 					</View>
