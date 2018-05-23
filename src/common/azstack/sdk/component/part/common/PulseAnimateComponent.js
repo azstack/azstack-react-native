@@ -1,6 +1,4 @@
-import React, {
-    Component
-} from 'react';
+import React from 'react';
 import {
     View,
     Text,
@@ -8,25 +6,31 @@ import {
     StyleSheet,
 } from 'react-native';
 
-class PulseAnimateComponent extends Component {
+class PulseAnimateComponent extends React.Component {
     constructor(props) {
         super(props);
 
+        this.coreInstances = props.getCoreInstances();
+
+        this.mounted = true;
+        this.createPulseTimer = null;
+        this.timer = null;
+
+        const defaultSettings = this.coreInstances.CustomStyle.getStyle('PULSE_ANIMATE_DEFAULT_SETTING');
+
         this.state = {
             started: false,
-            style: [{ top: 0, bottom: 0, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }, this.props.style],
             image: this.props.image,
-            color: this.props.color || "blue",
-            numPulses: this.props.numPulses || 3,
-            maxDiameter: this.props.diameter || 400,
-            speed: this.props.speed || 10,
-            duration: this.props.duration || 1000,
+            color: this.props.color || defaultSettings.color,
+            numPulses: this.props.numPulses || defaultSettings.numPulses,
+            maxDiameter: this.props.maxDiameter || defaultSettings.maxDiameter,
+            maxOpacity: this.props.maxOpacity || defaultSettings.maxOpacity,
+            speed: this.props.speed || defaultSettings.speed,
+            duration: this.props.duration || defaultSettings.duration,
             pulses: []
         };
 
     };
-
-    mounted = true;
 
     componentDidMount() {
         const { numPulses, duration, speed } = this.state;
@@ -46,7 +50,6 @@ class PulseAnimateComponent extends Component {
             this.updatePulse();
         }, speed);
     };
-
     componentWillUnmount() {
         this.mounted = false;
         clearTimeout(this.createPulseTimer);
@@ -61,7 +64,7 @@ class PulseAnimateComponent extends Component {
             let pulse = {
                 pulseKey: pulses.length + 1,
                 diameter: 0,
-                opacity: .5
+                opacity: this.state.maxOpacity
             };
 
             pulses.push(pulse);
@@ -82,7 +85,7 @@ class PulseAnimateComponent extends Component {
                 let pulse = {
                     pulseKey: i + 1,
                     diameter: newDiameter,
-                    opacity: (opacity > .5 ? .5 : opacity),
+                    opacity: (opacity > this.state.maxOpacity ? this.state.maxOpacity : opacity),
                     centerOffset: centerOffset
                 };
 
@@ -95,33 +98,38 @@ class PulseAnimateComponent extends Component {
     };
 
     render() {
-        const { style, image, maxDiameter, color, started, pulses } = this.state;
-        const wrapperStyle = [styles.container, style];
+        const { image, maxDiameter, color, started, pulses } = this.state;
+        const wrapperStyle = [this.coreInstances.CustomStyle.getStyle('PULSE_ANIMATE_WRAPPER_BLOCK_STYLE'), this.props.style];
         const containerStyle = { width: maxDiameter, height: maxDiameter };
 
         return (
             <View style={wrapperStyle}>
                 {started &&
                     <View style={containerStyle}>
-                        {pulses.map((pulse) =>
+                        {
+                            pulses.map((pulse) =>
+                                <View
+                                    key={pulse.pulseKey}
+                                    style={[
+                                        this.coreInstances.CustomStyle.getStyle('PULSE_ANIMATE_PULSE_STYLE'),
+                                        {
+                                            backgroundColor: color,
+                                            width: pulse.diameter,
+                                            height: pulse.diameter,
+                                            opacity: pulse.opacity,
+                                            borderRadius: pulse.diameter / 2,
+                                            top: pulse.centerOffset,
+                                            left: pulse.centerOffset
+                                        }
+                                    ]}
+                                />
+                            )
+                        }
+                        {
+                            image &&
                             <View
-                                key={pulse.pulseKey}
-                                style={[
-                                    styles.pulse,
-                                    {
-                                        backgroundColor: color,
-                                        width: pulse.diameter,
-                                        height: pulse.diameter,
-                                        opacity: pulse.opacity,
-                                        borderRadius: pulse.diameter / 2,
-                                        top: pulse.centerOffset,
-                                        left: pulse.centerOffset
-                                    }
-                                ]}
-                            />
-                        )}
-                        {image &&
-                            <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, justifyContent: 'center', alignItems: 'center' }}>
+                                style={this.coreInstances.CustomStyle.getStyle('PULSE_ANIMATE_IMAGE_BLOCK_STYLE')}
+                            >
                                 <Image
                                     style={[image.style, {}]}
                                     source={image.source}
@@ -135,15 +143,5 @@ class PulseAnimateComponent extends Component {
 
     };
 };
-
-const styles = StyleSheet.create({
-    container: {
-        alignItems: 'center'
-    },
-    pulse: {
-        position: 'absolute',
-        flex: 1
-    }
-});
 
 export default PulseAnimateComponent;

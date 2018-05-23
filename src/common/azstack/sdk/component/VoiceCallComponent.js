@@ -820,6 +820,7 @@ class VoiceCallComponent extends React.Component {
 						style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_MIDDLE_PART_BLOCK_STYLE')}
 					>
 						<PulseAnimateComponent
+							getCoreInstances={this.props.getCoreInstances}
 							style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_PULSE_BLOCK_STYLE')}
 							{...this.coreInstances.CustomStyle.getStyle('VOICE_CALL_PULSE_PROPS_STYLE')}
 							image={{

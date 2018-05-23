@@ -223,6 +223,35 @@ export const TIMER_TEXT_STYLE = {
     lineHeight: 20
 };
 
+export const PULSE_ANIMATE_DEFAULT_SETTING = {
+    color: 'blue',
+    numPulses: 3,
+    maxDiameter: 400,
+    maxOpacity: .5,
+    speed: 10,
+    duration: 1000,
+};
+export const PULSE_ANIMATE_WRAPPER_BLOCK_STYLE = {
+    top: 0,
+    bottom: 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const PULSE_ANIMATE_PULSE_STYLE = {
+    position: 'absolute',
+    flex: 1
+};
+export const PULSE_ANIMATE_IMAGE_BLOCK_STYLE = {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+
 export const MESSAGE_STATUS_BLOCK_STYLE = {
     width: '100%',
     height: '100%',
@@ -1324,7 +1353,8 @@ export const VOICE_CALL_PULSE_BLOCK_STYLE = {
 export const VOICE_CALL_PULSE_PROPS_STYLE = {
     color: '#48D2A0',
     numPulses: 7,
-    diameter: 250,
+    maxDiameter: 250,
+    maxOpacity: 0.5,
     duration: 850,
     speed: 34
 };
