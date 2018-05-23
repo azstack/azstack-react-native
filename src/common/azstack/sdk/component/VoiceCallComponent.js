@@ -811,43 +811,7 @@ class VoiceCallComponent extends React.Component {
 								<View
 									style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_BUTTONS_BLOCK_STYLE')}
 								>
-									<View
-										style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_ACTION_BUTTONS_BLOCK_STYLE')}
-									>
-										<TouchableOpacity
-											style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_ANSWER_BUTTON_BLOCK_STYLE')}
-											activeOpacity={0.5}
-											onPress={() => this.onAnswerButtonPressed()}
-										>
-											<Image
-												source={this.coreInstances.CustomStyle.getImage('IMAGE_ANSWER_CALL')}
-												style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_ANSWER_BUTTON_IMAGE_STYLE')}
-											/>
-										</TouchableOpacity>
-										<TouchableOpacity
-											style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_REJECT_BUTTON_BLOCK_STYLE')}
-											activeOpacity={0.5}
-											onPress={() => this.onRejectButtonPressed()}
-										>
-											<Image
-												source={this.coreInstances.CustomStyle.getImage('IMAGE_REJECT_CALL')}
-												style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_REJECT_BUTTON_IMAGE_STYLE')}
-											/>
-										</TouchableOpacity>
-									</View>
-								</View>
-							)
-						}
-						{
-							this.state.showButtons &&
-							this.state.isOnCall && (
-								<View
-									style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_BUTTONS_BLOCK_STYLE')}
-								>
-									<View
-										style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_ACTION_BUTTONS_BLOCK_STYLE')}
-									>
-										{/* <TouchableOpacity
+									<TouchableOpacity
 										style={[
 											this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_AUDIO_BUTTON_BLOCK_STYLE'),
 											!this.state.isAudioOn ? this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_AUDIO_BUTTON_ACTIVE_STYLE') : {}
@@ -859,18 +823,8 @@ class VoiceCallComponent extends React.Component {
 											style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_AUDIO_BUTTON_IMAGE_STYLE')}
 											source={this.coreInstances.CustomStyle.getImage('IMAGE_VOICE_OFF')}
 										/>
-									</TouchableOpacity> */}
-										<TouchableOpacity
-											style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_END_BUTTON_BLOCK_STYLE')}
-											activeOpacity={0.5}
-											onPress={() => this.onEndCallButtonPressed()}
-										>
-											<Image
-												style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_END_BUTTON_IMAGE_STYLE')}
-												source={this.coreInstances.CustomStyle.getImage('IMAGE_END_CALL')}
-											/>
-										</TouchableOpacity>
-										{/* <TouchableOpacity
+									</TouchableOpacity>
+									<TouchableOpacity
 										style={[
 											this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_SPEAKER_BUTTON_BLOCK_STYLE'),
 											this.state.isSpeakerOn ? this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_SPEAKER_BUTTON_ACTIVE_STYLE') : {}
@@ -882,8 +836,72 @@ class VoiceCallComponent extends React.Component {
 											style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_SPEAKER_BUTTON_IMAGE_STYLE')}
 											source={this.coreInstances.CustomStyle.getImage('IMAGE_SPEAKER')}
 										/>
-									</TouchableOpacity> */}
-									</View>
+									</TouchableOpacity>
+									<TouchableOpacity
+										style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_ANSWER_BUTTON_BLOCK_STYLE')}
+										activeOpacity={0.5}
+										onPress={() => this.onAnswerButtonPressed()}
+									>
+										<Image
+											source={this.coreInstances.CustomStyle.getImage('IMAGE_ANSWER_CALL')}
+											style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_ANSWER_BUTTON_IMAGE_STYLE')}
+										/>
+									</TouchableOpacity>
+									<TouchableOpacity
+										style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_REJECT_BUTTON_BLOCK_STYLE')}
+										activeOpacity={0.5}
+										onPress={() => this.onRejectButtonPressed()}
+									>
+										<Image
+											source={this.coreInstances.CustomStyle.getImage('IMAGE_REJECT_CALL')}
+											style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_REJECT_BUTTON_IMAGE_STYLE')}
+										/>
+									</TouchableOpacity>
+								</View>
+							)
+						}
+						{
+							this.state.showButtons &&
+							this.state.isOnCall && (
+								<View
+									style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_BUTTONS_BLOCK_STYLE')}
+								>
+									<TouchableOpacity
+										style={[
+											this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_AUDIO_BUTTON_BLOCK_STYLE'),
+											!this.state.isAudioOn ? this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_AUDIO_BUTTON_ACTIVE_STYLE') : {}
+										]}
+										activeOpacity={0.5}
+										onPress={() => this.onToggleAudioButtonPressed()}
+									>
+										<Image
+											style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_AUDIO_BUTTON_IMAGE_STYLE')}
+											source={this.coreInstances.CustomStyle.getImage('IMAGE_VOICE_OFF')}
+										/>
+									</TouchableOpacity>
+									<TouchableOpacity
+										style={[
+											this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_SPEAKER_BUTTON_BLOCK_STYLE'),
+											this.state.isSpeakerOn ? this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_SPEAKER_BUTTON_ACTIVE_STYLE') : {}
+										]}
+										activeOpacity={0.5}
+										onPress={() => this.onToggleSpeakerButtonPressed()}
+									>
+										<Image
+											style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_SPEAKER_BUTTON_IMAGE_STYLE')}
+											source={this.coreInstances.CustomStyle.getImage('IMAGE_SPEAKER')}
+										/>
+									</TouchableOpacity>
+									<TouchableOpacity
+										style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_END_BUTTON_BLOCK_STYLE')}
+										activeOpacity={0.5}
+										onPress={() => this.onEndCallButtonPressed()}
+									>
+										<Image
+											style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_END_BUTTON_IMAGE_STYLE')}
+											source={this.coreInstances.CustomStyle.getImage('IMAGE_END_CALL')}
+										/>
+									</TouchableOpacity>
 								</View>
 							)
 						}

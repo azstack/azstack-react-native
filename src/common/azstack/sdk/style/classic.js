@@ -1372,10 +1372,12 @@ export const VOICE_CALL_PULSE_IMAGE_STYLE = {
 export const VOICE_CALL_BOTTOM_PART_BLOCK_STYLE = {
     flex: 0.3,
     justifyContent: 'flex-end',
-    paddingBottom: 40
+    paddingBottom: 40,
+    paddingHorizontal: 20
 };
 export const VOICE_CALL_BUTTONS_BLOCK_STYLE = {
-
+    flexDirection: 'row',
+    justifyContent: 'space-between'
 };
 export const VOICE_CALL_TOGGLE_AUDIO_BUTTON_BLOCK_STYLE = {
     width: 70,
@@ -1411,18 +1413,13 @@ export const VOICE_CALL_TOGGLE_SPEAKER_BUTTON_IMAGE_STYLE = {
     width: 31,
     height: 27
 };
-export const VOICE_CALL_ACTION_BUTTONS_BLOCK_STYLE = {
-    flexDirection: 'row',
-    justifyContent: 'center'
-};
 export const VOICE_CALL_ANSWER_BUTTON_BLOCK_STYLE = {
     width: 70,
     height: 70,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 35,
-    backgroundColor: '#26C281',
-    marginHorizontal: 60
+    backgroundColor: '#26C281'
 };
 export const VOICE_CALL_ANSWER_BUTTON_IMAGE_STYLE = {
     width: 30,
@@ -1434,8 +1431,7 @@ export const VOICE_CALL_REJECT_BUTTON_BLOCK_STYLE = {
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 35,
-    backgroundColor: '#D91E18',
-    marginHorizontal: 60
+    backgroundColor: '#D91E18'
 };
 export const VOICE_CALL_REJECT_BUTTON_IMAGE_STYLE = {
     width: 30,
