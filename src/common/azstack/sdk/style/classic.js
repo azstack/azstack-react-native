@@ -1311,12 +1311,18 @@ export const VOICE_CALL_TOP_PART_BLOCK_STYLE = {
     alignItems: 'center',
     paddingTop: 40
 };
-export const VOICE_CALL_FULLNAME_TEXT_STYLE = {
+export const VOICE_CALL_TITLE_TEXT_STYLE = {
     color: '#fff',
     fontSize: 30,
     fontWeight: '400',
-    lineHeight: 35,
-    marginTop: 5
+    lineHeight: 35
+};
+export const VOICE_CALL_FULLNAME_TEXT_STYLE = {
+    color: '#fff',
+    fontSize: 25,
+    fontWeight: '400',
+    lineHeight: 30,
+    marginTop: 15
 };
 export const VOICE_CALL_PHONE_NUMBER_TEXT_STYLE = {
     color: '#fff',
@@ -1330,7 +1336,7 @@ export const VOICE_CALL_STATUS_MESSAGE_TEXT_STYLE = {
     fontSize: 18,
     fontWeight: '400',
     lineHeight: 20,
-    marginTop: 5
+    marginTop: 10
 };
 export const VOICE_CALL_CALL_TIME_BLOCK_STYLE = {
     height: 20,
@@ -1369,34 +1375,7 @@ export const VOICE_CALL_BOTTOM_PART_BLOCK_STYLE = {
     paddingBottom: 40
 };
 export const VOICE_CALL_BUTTONS_BLOCK_STYLE = {
-    flexDirection: 'row',
-    justifyContent: 'space-around'
-};
-export const VOICE_CALL_ANSWER_BUTTON_BLOCK_STYLE = {
-    width: 70,
-    height: 70,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 35,
-    backgroundColor: '#26C281',
-    marginHorizontal: 60
-};
-export const VOICE_CALL_ANSWER_BUTTON_IMAGE_STYLE = {
-    width: 30,
-    height: 30
-};
-export const VOICE_CALL_REJECT_BUTTON_BLOCK_STYLE = {
-    width: 70,
-    height: 70,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 35,
-    backgroundColor: '#D91E18',
-    marginHorizontal: 60
-};
-export const VOICE_CALL_REJECT_BUTTON_IMAGE_STYLE = {
-    width: 30,
-    height: 30
+
 };
 export const VOICE_CALL_TOGGLE_AUDIO_BUTTON_BLOCK_STYLE = {
     width: 70,
@@ -1431,6 +1410,36 @@ export const VOICE_CALL_TOGGLE_SPEAKER_BUTTON_ACTIVE_STYLE = {
 export const VOICE_CALL_TOGGLE_SPEAKER_BUTTON_IMAGE_STYLE = {
     width: 31,
     height: 27
+};
+export const VOICE_CALL_ACTION_BUTTONS_BLOCK_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'center'
+};
+export const VOICE_CALL_ANSWER_BUTTON_BLOCK_STYLE = {
+    width: 70,
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 35,
+    backgroundColor: '#26C281',
+    marginHorizontal: 60
+};
+export const VOICE_CALL_ANSWER_BUTTON_IMAGE_STYLE = {
+    width: 30,
+    height: 30
+};
+export const VOICE_CALL_REJECT_BUTTON_BLOCK_STYLE = {
+    width: 70,
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 35,
+    backgroundColor: '#D91E18',
+    marginHorizontal: 60
+};
+export const VOICE_CALL_REJECT_BUTTON_IMAGE_STYLE = {
+    width: 30,
+    height: 30
 };
 export const VOICE_CALL_END_BUTTON_BLOCK_STYLE = {
     width: 70,

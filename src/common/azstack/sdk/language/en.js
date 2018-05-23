@@ -124,6 +124,9 @@ export const CALL_LOG_ANSWERED_TEXT = 'Answered';
 export const CALL_LOG_REJECTED_TEXT = 'Rejected';
 export const CALL_LOG_NOT_ANSWERED_TEXT = 'Not answered';
 
+export const VOICE_CALL_CALLOUT_TITLE_TEXT = '[Callout]';
+export const VOICE_CALL_CALLIN_TITLE_TEXT = '[Callin]';
+export const VOICE_CALL_FREE_CALL_TITLE_TEXT = '[Voice Call]';
 export const VOICE_CALL_CALLOUT_STATUS_MESSAGE_INITIAL_BUSY_TEXT = 'Busy';
 export const VOICE_CALL_CALLOUT_STATUS_MESSAGE_INITIAL_NOT_ENOUGH_BALANCE_TEXT = 'Not enough balance';
 export const VOICE_CALL_CALLOUT_STATUS_MESSAGE_INITIAL_TO_NUMBER_TEXT = 'Invalid Number';

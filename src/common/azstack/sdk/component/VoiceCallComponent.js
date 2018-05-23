@@ -21,22 +21,26 @@ class VoiceCallComponent extends React.Component {
 		this.subscriptions = {};
 
 		let isOnCall = false;
+		let titleText = '';
 		let textLineOne = '';
 		let textLineTwo = '';
 
 		switch (props.callData.callType) {
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_CALLOUT:
 				isOnCall = true;
+				titleText = this.coreInstances.Language.getText('VOICE_CALL_CALLOUT_TITLE_TEXT');
 				textLineOne = props.callData.fullname || props.callData.toPhoneNumber;
 				textLineTwo = props.callData.fullname ? props.callData.toPhoneNumber : '';
 				break;
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_CALLIN:
 				isOnCall = false;
+				titleText = this.coreInstances.Language.getText('VOICE_CALL_CALLIN_TITLE_TEXT');
 				textLineOne = props.callData.fullname || props.callData.toPhoneNumber;
 				textLineTwo = props.callData.fullname ? props.callData.toPhoneNumber : '';
 				break;
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_FREE_CALL:
 				isOnCall = props.callData.isCaller;
+				titleText = this.coreInstances.Language.getText('VOICE_CALL_FREE_CALL_TITLE_TEXT');
 				textLineOne = props.callData.fullname;
 				textLineTwo = '';
 				break;
@@ -49,6 +53,7 @@ class VoiceCallComponent extends React.Component {
 			isAudioOn: true,
 			isSpeakerOn: false,
 			isOnCall: isOnCall,
+			titleText: titleText,
 			textLineOne: textLineOne,
 			textLineTwo: textLineTwo,
 			showTimerText: false,
@@ -736,7 +741,7 @@ class VoiceCallComponent extends React.Component {
 				{
 					this.state.timeoutNotAnswer && (
 						<TimeoutCallComponent
-							callTime={5}
+							callTime={30}
 							callFunction={this.notAnswerFunction}
 						/>
 					)
@@ -747,6 +752,11 @@ class VoiceCallComponent extends React.Component {
 					<View
 						style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOP_PART_BLOCK_STYLE')}
 					>
+						<Text
+							style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TITLE_TEXT_STYLE')}
+						>
+							{this.state.titleText}
+						</Text>
 						<Text
 							style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_FULLNAME_TEXT_STYLE')}
 						>
@@ -801,26 +811,30 @@ class VoiceCallComponent extends React.Component {
 								<View
 									style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_BUTTONS_BLOCK_STYLE')}
 								>
-									<TouchableOpacity
-										style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_ANSWER_BUTTON_BLOCK_STYLE')}
-										activeOpacity={0.5}
-										onPress={() => this.onAnswerButtonPressed()}
+									<View
+										style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_ACTION_BUTTONS_BLOCK_STYLE')}
 									>
-										<Image
-											source={this.coreInstances.CustomStyle.getImage('IMAGE_ANSWER_CALL')}
-											style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_ANSWER_BUTTON_IMAGE_STYLE')}
-										/>
-									</TouchableOpacity>
-									<TouchableOpacity
-										style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_REJECT_BUTTON_BLOCK_STYLE')}
-										activeOpacity={0.5}
-										onPress={() => this.onRejectButtonPressed()}
-									>
-										<Image
-											source={this.coreInstances.CustomStyle.getImage('IMAGE_REJECT_CALL')}
-											style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_REJECT_BUTTON_IMAGE_STYLE')}
-										/>
-									</TouchableOpacity>
+										<TouchableOpacity
+											style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_ANSWER_BUTTON_BLOCK_STYLE')}
+											activeOpacity={0.5}
+											onPress={() => this.onAnswerButtonPressed()}
+										>
+											<Image
+												source={this.coreInstances.CustomStyle.getImage('IMAGE_ANSWER_CALL')}
+												style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_ANSWER_BUTTON_IMAGE_STYLE')}
+											/>
+										</TouchableOpacity>
+										<TouchableOpacity
+											style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_REJECT_BUTTON_BLOCK_STYLE')}
+											activeOpacity={0.5}
+											onPress={() => this.onRejectButtonPressed()}
+										>
+											<Image
+												source={this.coreInstances.CustomStyle.getImage('IMAGE_REJECT_CALL')}
+												style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_REJECT_BUTTON_IMAGE_STYLE')}
+											/>
+										</TouchableOpacity>
+									</View>
 								</View>
 							)
 						}
@@ -830,7 +844,10 @@ class VoiceCallComponent extends React.Component {
 								<View
 									style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_BUTTONS_BLOCK_STYLE')}
 								>
-									<TouchableOpacity
+									<View
+										style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_ACTION_BUTTONS_BLOCK_STYLE')}
+									>
+										{/* <TouchableOpacity
 										style={[
 											this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_AUDIO_BUTTON_BLOCK_STYLE'),
 											!this.state.isAudioOn ? this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_AUDIO_BUTTON_ACTIVE_STYLE') : {}
@@ -842,18 +859,18 @@ class VoiceCallComponent extends React.Component {
 											style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_AUDIO_BUTTON_IMAGE_STYLE')}
 											source={this.coreInstances.CustomStyle.getImage('IMAGE_VOICE_OFF')}
 										/>
-									</TouchableOpacity>
-									<TouchableOpacity
-										style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_END_BUTTON_BLOCK_STYLE')}
-										activeOpacity={0.5}
-										onPress={() => this.onEndCallButtonPressed()}
-									>
-										<Image
-											style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_END_BUTTON_IMAGE_STYLE')}
-											source={this.coreInstances.CustomStyle.getImage('IMAGE_END_CALL')}
-										/>
-									</TouchableOpacity>
-									<TouchableOpacity
+									</TouchableOpacity> */}
+										<TouchableOpacity
+											style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_END_BUTTON_BLOCK_STYLE')}
+											activeOpacity={0.5}
+											onPress={() => this.onEndCallButtonPressed()}
+										>
+											<Image
+												style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_END_BUTTON_IMAGE_STYLE')}
+												source={this.coreInstances.CustomStyle.getImage('IMAGE_END_CALL')}
+											/>
+										</TouchableOpacity>
+										{/* <TouchableOpacity
 										style={[
 											this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_SPEAKER_BUTTON_BLOCK_STYLE'),
 											this.state.isSpeakerOn ? this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_SPEAKER_BUTTON_ACTIVE_STYLE') : {}
@@ -865,7 +882,8 @@ class VoiceCallComponent extends React.Component {
 											style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_TOGGLE_SPEAKER_BUTTON_IMAGE_STYLE')}
 											source={this.coreInstances.CustomStyle.getImage('IMAGE_SPEAKER')}
 										/>
-									</TouchableOpacity>
+									</TouchableOpacity> */}
+									</View>
 								</View>
 							)
 						}
