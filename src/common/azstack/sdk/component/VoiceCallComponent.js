@@ -11,6 +11,7 @@ import Video from 'react-native-video';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
 import TimerTextComponent from './part/common/TimerTextComponent';
+import TimeoutCallComponent from './part/common/TimeoutCallComponent';
 import PulseAnimateComponent from './part/common/PulseAnimateComponent';
 
 class VoiceCallComponent extends React.Component {
@@ -51,6 +52,7 @@ class VoiceCallComponent extends React.Component {
 			textLineOne: textLineOne,
 			textLineTwo: textLineTwo,
 			showTimerText: false,
+			timeoutNotAnswer: false,
 			showButtons: true,
 			audios: {
 				ringingOut: false,
@@ -63,10 +65,7 @@ class VoiceCallComponent extends React.Component {
 			}
 		};
 
-		this.notAnswerInterval = {
-			runner: null,
-			time: 0
-		};
+		this.notAnswerFunction = null;
 
 		this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
 	};
@@ -164,12 +163,8 @@ class VoiceCallComponent extends React.Component {
 
 			switch (result.status) {
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_UNKNOWN:
-
-					clearInterval(this.notAnswerInterval.runner);
-					this.notAnswerInterval.runner = null;
-					this.notAnswerInterval.time = 0;
-
 					this.setState({
+						timeoutNotAnswer: false,
 						showTimerText: false,
 						showButtons: false,
 						audios: Object.assign({}, this.state.audios, { ringingIn: false, error: true })
@@ -179,12 +174,8 @@ class VoiceCallComponent extends React.Component {
 					}, 1500);
 					break;
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING_STOP:
-
-					clearInterval(this.notAnswerInterval.runner);
-					this.notAnswerInterval.runner = null;
-					this.notAnswerInterval.time = 0;
-
 					this.setState({
+						timeoutNotAnswer: false,
 						showTimerText: false,
 						showButtons: false,
 						audios: Object.assign({}, this.state.audios, { ringingIn: false, end: true }),
@@ -223,11 +214,6 @@ class VoiceCallComponent extends React.Component {
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_NOT_ANSWERED:
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING_STOP:
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_STOP:
-
-					clearInterval(this.notAnswerInterval.runner);
-					this.notAnswerInterval.runner = null;
-					this.notAnswerInterval.time = 0;
-
 					this.props.onCallEnded();
 				default:
 					break;
@@ -243,11 +229,9 @@ class VoiceCallComponent extends React.Component {
 
 			switch (result.status) {
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_UNKNOWN:
-					clearInterval(this.notAnswerInterval.runner);
-					this.notAnswerInterval.runner = null;
-					this.notAnswerInterval.time = 0;
 
 					this.setState({
+						timeoutNotAnswer: false,
 						showTimerText: false,
 						showButtons: false,
 						audios: Object.assign({}, this.state.audios, { ringingIn: false, ringingOut: false, error: true })
@@ -286,11 +270,8 @@ class VoiceCallComponent extends React.Component {
 					}, 1500);
 					break;
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_STOP:
-					clearInterval(this.notAnswerInterval.runner);
-					this.notAnswerInterval.runner = null;
-					this.notAnswerInterval.time = 0;
-
 					this.setState({
+						timeoutNotAnswer: false,
 						showTimerText: false,
 						showButtons: false,
 						audios: Object.assign({}, this.state.audios, { ringingIn: false, end: true })
@@ -327,10 +308,6 @@ class VoiceCallComponent extends React.Component {
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_REJECTED:
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_STOP:
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_NOT_ANSWERED:
-					clearInterval(this.notAnswerInterval.runner);
-					this.notAnswerInterval.runner = null;
-					this.notAnswerInterval.time = 0;
-
 					this.props.onCallEnded();
 				default:
 					break;
@@ -503,12 +480,9 @@ class VoiceCallComponent extends React.Component {
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_CALLOUT:
 				break;
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_CALLIN:
-				clearInterval(this.notAnswerInterval.runner);
-				this.notAnswerInterval.runner = null;
-				this.notAnswerInterval.time = 0;
-
 				this.coreInstances.AZStackCore.answerCallin({}).then((result) => { }).catch((error) => { });
 				this.setState({
+					timeoutNotAnswer: false,
 					isOnCall: true,
 					showTimerText: true,
 					audios: Object.assign({}, this.state.audios, { ringingIn: false }),
@@ -516,12 +490,9 @@ class VoiceCallComponent extends React.Component {
 				});
 				break;
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_FREE_CALL:
-				clearInterval(this.notAnswerInterval.runner);
-				this.notAnswerInterval.runner = null;
-				this.notAnswerInterval.time = 0;
-
 				this.coreInstances.AZStackCore.answerFreeCall({}).then((result) => { }).catch((error) => { });
 				this.setState({
+					timeoutNotAnswer: false,
 					isOnCall: true,
 					showTimerText: true,
 					audios: Object.assign({}, this.state.audios, { ringingIn: false }),
@@ -537,12 +508,9 @@ class VoiceCallComponent extends React.Component {
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_CALLOUT:
 				break;
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_CALLIN:
-				clearInterval(this.notAnswerInterval.runner);
-				this.notAnswerInterval.runner = null;
-				this.notAnswerInterval.time = 0;
-
 				this.coreInstances.AZStackCore.rejectCallin({}).then((result) => { }).catch((error) => { });
 				this.setState({
+					timeoutNotAnswer: false,
 					showButtons: false,
 					audios: Object.assign({}, this.state.audios, { ringingIn: false, rejected: true }),
 					status: this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING_STOP
@@ -553,12 +521,9 @@ class VoiceCallComponent extends React.Component {
 
 				break;
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_FREE_CALL:
-				clearInterval(this.notAnswerInterval.runner);
-				this.notAnswerInterval.runner = null;
-				this.notAnswerInterval.time = 0;
-
 				this.coreInstances.AZStackCore.rejectFreeCall({}).then((result) => { }).catch((error) => { });
 				this.setState({
+					timeoutNotAnswer: false,
 					showButtons: false,
 					audios: Object.assign({}, this.state.audios, { ringingIn: false, rejected: true }),
 					status: this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_REJECTED
@@ -612,28 +577,23 @@ class VoiceCallComponent extends React.Component {
 				});
 				break;
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_CALLIN:
+				this.notAnswerFunction = (() => {
+					this.coreInstances.AZStackCore.notAnsweredCallin({}).then((result) => { }).catch((error) => { });
+					this.setState({
+						timeoutNotAnswer: false,
+						showButtons: false,
+						audios: Object.assign({}, this.state.audios, { ringingIn: false, notAnswered: true }),
+						status: this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_NOT_ANSWERED
+					});
+					setTimeout(() => {
+						this.props.onCallEnded();
+					}, 1500);
+				}).bind(this);
 				this.setState({
+					timeoutNotAnswer: true,
 					audios: Object.assign({}, this.state.audios, { ringingIn: true }),
 					status: this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING
 				});
-				this.notAnswerInterval.runner = setInterval(() => {
-					this.notAnswerInterval.time += 1;
-					if (this.notAnswerInterval.time >= 30) {
-						clearInterval(this.notAnswerInterval.runner);
-						this.notAnswerInterval.runner = null;
-						this.notAnswerInterval.time = 0;
-
-						this.coreInstances.AZStackCore.notAnsweredCallin({}).then((result) => { }).catch((error) => { });
-						this.setState({
-							showButtons: false,
-							audios: Object.assign({}, this.state.audios, { ringingIn: false, notAnswered: true }),
-							status: this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_NOT_ANSWERED
-						});
-						setTimeout(() => {
-							this.props.onCallEnded();
-						}, 1500);
-					}
-				}, 1000);
 				break;
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_FREE_CALL:
 				if (this.props.callData.isCaller) {
@@ -656,28 +616,23 @@ class VoiceCallComponent extends React.Component {
 						}, 1500);
 					});
 				} else {
+					this.notAnswerFunction = (() => {
+						this.coreInstances.AZStackCore.notAnswerFreeCall({}).then((result) => { }).catch((error) => { });
+						this.setState({
+							timeoutNotAnswer: false,
+							showButtons: false,
+							audios: Object.assign({}, this.state.audios, { ringingIn: false, notAnswered: true }),
+							status: this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_NOT_ANSWERED
+						});
+						setTimeout(() => {
+							this.props.onCallEnded();
+						}, 1500);
+					}).bind(this);
 					this.setState({
+						timeoutNotAnswer: true,
 						audios: Object.assign({}, this.state.audios, { ringingIn: true }),
 						status: this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_RINGING
 					});
-					this.notAnswerInterval.runner = setInterval(() => {
-						this.notAnswerInterval.time += 1;
-						if (this.notAnswerInterval.time >= 30) {
-							clearInterval(this.notAnswerInterval.runner);
-							this.notAnswerInterval.runner = null;
-							this.notAnswerInterval.time = 0;
-
-							this.coreInstances.AZStackCore.notAnswerFreeCall({}).then((result) => { }).catch((error) => { });
-							this.setState({
-								showButtons: false,
-								audios: Object.assign({}, this.state.audios, { ringingIn: false, notAnswered: true }),
-								status: this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_NOT_ANSWERED
-							});
-							setTimeout(() => {
-								this.props.onCallEnded();
-							}, 1500);
-						}
-					}, 1000);
 				}
 				break;
 			default:
@@ -778,6 +733,14 @@ class VoiceCallComponent extends React.Component {
 					ignoreSilentSwitch={'ignore'}
 					progressUpdateInterval={250.0}
 				/>
+				{
+					this.state.timeoutNotAnswer && (
+						<TimeoutCallComponent
+							callTime={5}
+							callFunction={this.notAnswerFunction}
+						/>
+					)
+				}
 				<View
 					style={this.coreInstances.CustomStyle.getStyle('VOICE_CALL_BLOCK_STYLE')}
 				>
