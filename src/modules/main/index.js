@@ -33,13 +33,15 @@ class AppMain extends React.Component {
         //user 3: test_user_3 391658
         this.defaultLayout = {
             withStatusbar: true,
-            withHeader: true
+            withHeader: true,
+            screenStyle: {},
+            statusbarStyle: {}
         };
         this.languageCode = 'en';
         this.themeName = 'classic';
         this.getInitialMembers = this.getInitialMembers.bind(this);
         this.getMoreMembers = this.getMoreMembers.bind(this);
-        this.getNumbers = this.getNumbers.bind(this);
+        this.getFromPhoneNumbers = this.getFromPhoneNumbers.bind(this);
         this.onBeforeMessageSend = this.onBeforeMessageSend.bind(this);
         this.onBeforeCalloutStart = this.onBeforeCalloutStart.bind(this);
     };
@@ -56,7 +58,7 @@ class AppMain extends React.Component {
             resolve(false);
         });
     };
-    getNumbers = (options) => {
+    getFromPhoneNumbers = (options) => {
         return new Promise((resolve, reject) => {
             resolve([]);
         });
@@ -88,7 +90,7 @@ class AppMain extends React.Component {
                         themeName={this.themeName}
                         getInitialMembers={this.getInitialMembers}
                         getMoreMembers={this.getMoreMembers}
-                        getNumbers={this.getNumbers}
+                        getFromPhoneNumbers={this.getFromPhoneNumbers}
                         onBeforeMessageSend={this.onBeforeMessageSend}
                         onBeforeCalloutStart={this.onBeforeCalloutStart}
                     />}

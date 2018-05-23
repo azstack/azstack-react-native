@@ -214,13 +214,17 @@ class StickerDetailsComponent extends React.Component {
     };
 
     componentDidMount() {
-        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        if (this.props.withBackButtonHandler) {
+            BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        }
         this.getFullCoverSizes();
         this.checkStickerDownloaded();
         this.registerZipProcessListener();
     };
     componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        if (this.props.withBackButtonHandler) {
+            BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        }
         this.unregisterZipProcessListener();
     };
 
@@ -229,8 +233,9 @@ class StickerDetailsComponent extends React.Component {
             <ScreenBlockComponent
                 fullScreen={false}
                 withStatusbar={this.props.withStatusbar}
+                screenStyle={this.props.screenStyle}
+                statusbarStyle={this.props.statusbarStyle}
                 getCoreInstances={this.props.getCoreInstances}
-                style={this.props.style}
             >
                 {
                     (this.props.withHeader || (this.props.withHeader === undefined && this.coreInstances.defaultLayout.withHeader)) && (
@@ -243,7 +248,6 @@ class StickerDetailsComponent extends React.Component {
                 }
                 <ScreenBodyBlockComponent
                     getCoreInstances={this.props.getCoreInstances}
-                    style={this.props.contentContainerStyle}
                 >
                     <View
                         style={this.coreInstances.CustomStyle.getStyle('STICKER_DETAILS_MAIN_BLOCK_STYLE')}

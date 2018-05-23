@@ -4,21 +4,13 @@ import {
 	View,
 	Text,
 	Image,
-	Dimensions,
-	TouchableOpacity,
-	TouchableWithoutFeedback,
-	Platform,
-	ScrollView,
-	Modal,
+	TouchableOpacity
 } from 'react-native';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
 import ScreenHeaderBlockComponent from './part/screen/ScreenHeaderBlockComponent';
-
-const { height, width } = Dimensions.get('window');
-
-const ic_action_answer = require('../static/image/ic_action_answer.png');
-const ic_input_back = require('../static/image/ic_input_back.png');
+import ScreenBodyBlockComponent from './part/screen/ScreenBodyBlockComponent';
+import ConnectionBlockComponent from './part/common/ConnectionBlockComponent';
 
 
 class NumberPadComponent extends React.Component {
@@ -27,114 +19,75 @@ class NumberPadComponent extends React.Component {
 		this.coreInstances = props.getCoreInstances();
 
 		this.state = {
-			myNumbers: [],
-			fromPhoneNumber: [],
-			phoneNumber: '',
-			onCall: null,
-			selectPhoneNumberModalVisible: false,
+			fromPhoneNumbers: [],
+			fromPhoneNumber: '',
+			toPhoneNumber: ''
 		};
 
 		this.onHardBackButtonPressed = this.onHardBackButtonPressed.bind(this);
-	}
 
-	componentWillMount() {
-		this.coreInstances.Number.getNumbers().then((numbers) => {
-			this.setState({ myNumbers: numbers });
-
-			this.setState({ fromPhoneNumber: numbers[0] });
-		});
-	}
+		this.onFromPhoneNumberPressed = this.onFromPhoneNumberPressed.bind(this);
+		this.onCallButtonPressed = this.onCallButtonPressed.bind(this);
+	};
 
 	onHardBackButtonPressed() {
 		this.props.onBackButtonPressed();
 		return true;
 	};
 
-	componentDidMount() {
-		BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
-	};
-
-	componentWillUnmount() {
-		BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
-	};
-
-	onClickNumber(number) {
-		this.setState({ phoneNumber: this.state.phoneNumber + number });
-	}
-
-	onClear() {
-		this.setState({ phoneNumber: this.state.phoneNumber.slice(0, -1) });
-	}
-
-	onCall() {
-		this.props.onCallout({
-			info: {
-				name: '',
-				phoneNumber: this.state.phoneNumber,
-				fromPhoneNumber: this.state.fromPhoneNumber,
-				avatar: '',
+	onFromPhoneNumberPressed() {
+		this.props.showSelectPhoneNumber({
+			phoneNumbers: this.state.fromPhoneNumbers,
+			onSelectDone: (event) => {
+				this.setState({
+					fromPhoneNumber: event.phoneNumber
+				});
 			}
 		});
-	}
+	};
+	onClickNumber(number) {
+		this.setState({ toPhoneNumber: this.state.toPhoneNumber + number });
+	};
+	onClearButtonPressed() {
+		this.setState({ toPhoneNumber: this.state.toPhoneNumber.slice(0, -1) });
+	};
+	onClearButtonLongPressed() {
+		this.setState({ toPhoneNumber: '' });
+	};
+	onCallButtonPressed() {
+		this.props.startCallout({
+			callData: {
+				toPhoneNumber: this.state.toPhoneNumber,
+				fromPhoneNumber: this.state.fromPhoneNumber
+			}
+		});
+	};
 
-	renderFromNumber() {
-		if (this.state.myNumbers.length <= 1 || this.state.phoneNumber === '') {
-			return null;
+	componentDidMount() {
+		if (this.props.withBackButtonHandler) {
+			BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
 		}
-
-		return (
-			<View style={{ position: 'relative' }}>
-				<View style={{ flexDirection: 'row', height: 40, justifyContent: 'flex-end', alignItems: 'flex-end', paddingBottom: 10 }}>
-					<Text style={{ fontSize: 14 }}>Call from </Text>
-					<Text style={{ color: 'blue', fontSize: 16 }} onPress={() => this.setState({ selectPhoneNumberModalVisible: true })}>{this.state.fromPhoneNumber}</Text>
-				</View>
-			</View>
-		);
-	}
-
-	renderSelectFromNumber() {
-		return (
-			<Modal
-				animationType="slide"
-				transparent={true}
-				position={"bottom"}
-				visible={this.state.selectPhoneNumberModalVisible}
-				onRequestClose={() => { }}
-			>
-				<TouchableWithoutFeedback onPress={() => this.setState({ selectPhoneNumberModalVisible: false })}>
-					<View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,.8)', justifyContent: 'flex-end' }}>
-						<View style={{ backgroundColor: '#fff' }}>
-							<ScrollView>
-								{
-									this.state.myNumbers.map((value, index) => {
-										let backgroundColor = '#fff';
-										if (value === this.state.fromPhoneNumber) {
-											backgroundColor = '#e3e2e1';
-										}
-										return (
-											<TouchableOpacity onPress={() => this.setState({ fromPhoneNumber: value, selectPhoneNumberModalVisible: false })} style={{ justifyContent: 'center', alignItems: 'flex-start', padding: 15, borderBottomWidth: 1, borderBottomColor: '#d1d1d1', backgroundColor }} key={index}>
-												<Text>
-													{value}
-												</Text>
-											</TouchableOpacity>
-										);
-									})
-								}
-							</ScrollView>
-						</View>
-					</View>
-				</TouchableWithoutFeedback>
-			</Modal>
-		);
-	}
+		this.coreInstances.PhoneNumber.getFromPhoneNumbers().then((fromPhoneNumbers) => {
+			this.setState({
+				fromPhoneNumbers: fromPhoneNumbers,
+				fromPhoneNumber: fromPhoneNumbers[0]
+			});
+		});
+	};
+	componentWillUnmount() {
+		if (this.props.withBackButtonHandler) {
+			BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+		}
+	};
 
 	render() {
 		return (
 			<ScreenBlockComponent
 				fullScreen={false}
 				withStatusbar={this.props.withStatusbar}
+				screenStyle={this.props.screenStyle}
+				statusbarStyle={this.props.statusbarStyle}
 				getCoreInstances={this.props.getCoreInstances}
-				style={this.props.style}
 			>
 				{
 					(this.props.withHeader || (this.props.withHeader === undefined && this.coreInstances.defaultLayout.withHeader)) && (
@@ -145,134 +98,285 @@ class NumberPadComponent extends React.Component {
 						/>
 					)
 				}
-				<View style={{ backgroundColor: '#fff', justifyContent: 'flex-end', alignItems: 'center', flex: 1, paddingBottom: 40 }}>
-					<View style={{ width: '69%', height: 30, marginBottom: 10 }}>
-						{this.renderFromNumber()}
-					</View>
-					<View style={{ width: '69%', alignSelf: 'center', flexDirection: 'row', justifyContent: 'flex-end', backgroundColor: '#fff', alignItems: 'center', height: 50, marginBottom: 15 }}>
-						<View style={{ alignItems: 'flex-end', flex: 1, height: 50, justifyContent: 'center' }}>
-							<Text style={{ fontSize: this.state.phoneNumber.length <= 9 ? 40 : this.state.phoneNumber.length <= 12 ? 30 : 20 }} numberOfLines={1}>{this.state.phoneNumber}</Text>
-						</View>
-						{
-							this.state.phoneNumber != '' && <TouchableOpacity onPress={() => this.onClear()}>
-								<View style={{ justifyContent: 'center', alignItems: 'flex-end', width: 40, height: 50 }}>
-									<Image source={ic_input_back} style={{ width: 25, height: 19 }} />
+				<ScreenBodyBlockComponent
+					getCoreInstances={this.props.getCoreInstances}
+				>
+					<View
+						style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BLOCK_STYLE')}
+					>
+						<View style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_CONTENT_BLOCK_STYLE')}>
+							{
+								this.state.fromPhoneNumbers.length > 1 &&
+								!!this.state.toPhoneNumber && (
+									<View
+										style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_CALL_FROM_BLOCK_STYLE')}
+									>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_CALL_FROM_TITLE_TEXT_STYLE')}
+										>
+											Call from
+										</Text>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_CALL_FROM_PHONE_NUMBER_TEXT_STYLE')}
+											onPress={this.onFromPhoneNumberPressed}
+										>
+											{this.state.fromPhoneNumber}
+										</Text>
+									</View>
+								)
+							}
+							<View
+								style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_TO_PHONE_NUMBER_BLOCK_STYLE')}
+							>
+								<Text
+									style={[
+										this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_TO_PHONE_NUMBER_TEXT_STYLE'),
+										(this.state.toPhoneNumber.length <= 9 ? this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_TO_PHONE_NUMBER_TEXT_BIG_STYLE') : {}),
+										((this.state.toPhoneNumber.length > 9 && this.state.toPhoneNumber.length <= 12) ? this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_TO_PHONE_NUMBER_TEXT_MEDIUM_STYLE') : {})
+									]}
+									numberOfLines={1}
+								>
+									{this.state.toPhoneNumber}
+								</Text>
+								<View
+									style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_TO_PHONE_NUMBER_CLEAR_BLOCK_STYLE')}
+								>
+									{
+										this.state.toPhoneNumber != '' && <TouchableOpacity
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_TO_PHONE_NUMBER_CLEAR_BUTTON_BLOCK_STYLE')}
+											onPress={() => this.onClearButtonPressed()}
+											onLongPress={() => this.onClearButtonLongPressed()}
+										>
+
+											<Image
+												style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_TO_PHONE_NUMBER_CLEAR_BUTTON_IMAGE_STYLE')}
+												source={this.coreInstances.CustomStyle.getImage('IMAGE_BACK_X')}
+											/>
+										</TouchableOpacity>
+									}
 								</View>
-							</TouchableOpacity>
-						}
-					</View>
-					<View style={{ width: width, justifyContent: 'center', alignItems: 'center' }}>
-						<View style={{ width: '69%', alignSelf: 'center' }}>
-							<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-								<TouchableOpacity onPress={() => { this.onClickNumber('1') }}>
-									<View style={styles.number}>
-										<Text style={{ fontSize: 34 }}>1</Text>
-										<Text style={{ fontSize: 10 }}> </Text>
-									</View>
-								</TouchableOpacity>
-								<TouchableOpacity onPress={() => { this.onClickNumber('2') }}>
-									<View style={styles.number}>
-										<Text style={{ fontSize: 34 }}>2</Text>
-										<Text style={{ fontSize: 10 }}>A B C</Text>
-									</View>
-								</TouchableOpacity>
-								<TouchableOpacity onPress={() => { this.onClickNumber('3') }}>
-									<View style={[styles.number, { marginRight: 0 }]}>
-										<Text style={{ fontSize: 34 }}>3</Text>
-										<Text style={{ fontSize: 10 }}>D E F</Text>
-									</View>
-								</TouchableOpacity>
 							</View>
-							<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-								<TouchableOpacity onPress={() => { this.onClickNumber('4') }}>
-									<View style={styles.number}>
-										<Text style={{ fontSize: 34 }}>4</Text>
-										<Text style={{ fontSize: 10 }}>G H I</Text>
-									</View>
-								</TouchableOpacity>
-								<TouchableOpacity onPress={() => { this.onClickNumber('5') }}>
-									<View style={styles.number}>
-										<Text style={{ fontSize: 34 }}>5</Text>
-										<Text style={{ fontSize: 10 }}>J K L</Text>
-									</View>
-								</TouchableOpacity>
-								<TouchableOpacity onPress={() => { this.onClickNumber('6') }}>
-									<View style={[styles.number, { marginRight: 0 }]}>
-										<Text style={{ fontSize: 34 }}>6</Text>
-										<Text style={{ fontSize: 10 }}>M N O</Text>
-									</View>
-								</TouchableOpacity>
-							</View>
-							<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-								<TouchableOpacity onPress={() => { this.onClickNumber('7') }}>
-									<View style={styles.number}>
-										<Text style={{ fontSize: 34 }}>7</Text>
-										<Text style={{ fontSize: 10 }}>P Q R S</Text>
-									</View>
-								</TouchableOpacity>
-								<TouchableOpacity onPress={() => { this.onClickNumber('8') }}>
-									<View style={styles.number}>
-										<Text style={{ fontSize: 34 }}>8</Text>
-										<Text style={{ fontSize: 10 }}>T U V</Text>
-									</View>
-								</TouchableOpacity>
-								<TouchableOpacity onPress={() => { this.onClickNumber('9') }}>
-									<View style={[styles.number, { marginRight: 0 }]}>
-										<Text style={{ fontSize: 34 }}>9</Text>
-										<Text style={{ fontSize: 10 }}>W X Y Z</Text>
-									</View>
-								</TouchableOpacity>
-							</View>
-							<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-								<TouchableOpacity onPress={() => { this.onClickNumber('*') }}>
-									<View style={styles.number}>
-										<Text style={{ fontSize: 34 }}>*</Text>
-										<Text style={{ fontSize: 10 }}> </Text>
-									</View>
-								</TouchableOpacity>
-								<TouchableOpacity onPress={() => { this.onClickNumber('0') }} onLongPress={() => this.onClickNumber('+')}>
-									<View style={styles.number}>
-										<Text style={{ fontSize: 34 }}>0</Text>
-										<Text style={{ fontSize: 10 }}>+</Text>
-									</View>
-								</TouchableOpacity>
-								<TouchableOpacity onPress={() => { this.onClickNumber('#') }}>
-									<View style={[styles.number, { marginRight: 0 }]}>
-										<Text style={{ fontSize: 34 }}>#</Text>
-										<Text style={{ fontSize: 10 }}> </Text>
-									</View>
-								</TouchableOpacity>
-							</View>
-							<View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-								<TouchableOpacity onPress={() => this.onCall()}>
-									<View style={[styles.number, { backgroundColor: '#44f441', marginRight: 0 }]}>
-										<Image source={ic_action_answer} style={{ width: 40, height: 40 }} />
-									</View>
-								</TouchableOpacity>
+							<View
+								style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_BLOCK_STYLE')}
+							>
+								<View
+									style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_LINE_BLOCK_STYLE')}
+								>
+									<TouchableOpacity
+										style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_BLOCK_STYLE')}
+										onPress={() => { this.onClickNumber('1') }}
+									>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_NUMBER_TEXT_STYLE')}
+										>
+											1
+										</Text>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_CHARACTER_TEXT_STYLE')}
+										>
+										</Text>
+									</TouchableOpacity>
+									<TouchableOpacity
+										style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_BLOCK_STYLE')}
+										onPress={() => { this.onClickNumber('2') }}
+									>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_NUMBER_TEXT_STYLE')}
+										>
+											2
+										</Text>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_CHARACTER_TEXT_STYLE')}
+										>
+											A B C
+										</Text>
+									</TouchableOpacity>
+									<TouchableOpacity
+										style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_BLOCK_STYLE')}
+										onPress={() => { this.onClickNumber('3') }}
+									>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_NUMBER_TEXT_STYLE')}
+										>
+											3
+										</Text>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_CHARACTER_TEXT_STYLE')}
+										>
+											D E F
+										</Text>
+									</TouchableOpacity>
+								</View>
+								<View
+									style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_LINE_BLOCK_STYLE')}
+								>
+									<TouchableOpacity
+										style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_BLOCK_STYLE')}
+										onPress={() => { this.onClickNumber('4') }}
+									>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_NUMBER_TEXT_STYLE')}
+										>
+											4
+										</Text>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_CHARACTER_TEXT_STYLE')}
+										>
+											G H I
+										</Text>
+									</TouchableOpacity>
+									<TouchableOpacity
+										style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_BLOCK_STYLE')}
+										onPress={() => { this.onClickNumber('5') }}
+									>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_NUMBER_TEXT_STYLE')}
+										>
+											5
+										</Text>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_CHARACTER_TEXT_STYLE')}
+										>
+											J K L
+										</Text>
+									</TouchableOpacity>
+									<TouchableOpacity
+										style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_BLOCK_STYLE')}
+										onPress={() => { this.onClickNumber('6') }}
+									>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_NUMBER_TEXT_STYLE')}
+										>
+											6
+										</Text>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_CHARACTER_TEXT_STYLE')}
+										>
+											M N O
+										</Text>
+									</TouchableOpacity>
+								</View>
+								<View
+									style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_LINE_BLOCK_STYLE')}
+								>
+									<TouchableOpacity
+										style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_BLOCK_STYLE')}
+										onPress={() => { this.onClickNumber('7') }}
+									>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_NUMBER_TEXT_STYLE')}
+										>
+											7
+										</Text>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_CHARACTER_TEXT_STYLE')}
+										>
+											P Q R S
+										</Text>
+									</TouchableOpacity>
+									<TouchableOpacity
+										style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_BLOCK_STYLE')}
+										onPress={() => { this.onClickNumber('8') }}
+									>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_NUMBER_TEXT_STYLE')}
+										>
+											8
+										</Text>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_CHARACTER_TEXT_STYLE')}
+										>
+											T U V
+										</Text>
+									</TouchableOpacity>
+									<TouchableOpacity
+										style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_BLOCK_STYLE')}
+										onPress={() => { this.onClickNumber('9') }}
+									>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_NUMBER_TEXT_STYLE')}
+										>
+											9
+										</Text>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_CHARACTER_TEXT_STYLE')}
+										>
+											W X Y Z
+										</Text>
+									</TouchableOpacity>
+								</View>
+								<View
+									style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_LINE_BLOCK_STYLE')}
+								>
+									<TouchableOpacity
+										style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_BLOCK_STYLE')}
+										onPress={() => { this.onClickNumber('*') }}
+									>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_NUMBER_TEXT_STYLE')}
+										>
+											*
+										</Text>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_CHARACTER_TEXT_STYLE')}
+										>
+										</Text>
+									</TouchableOpacity>
+									<TouchableOpacity
+										style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_BLOCK_STYLE')}
+										onPress={() => { this.onClickNumber('0') }}
+										onLongPress={() => this.onClickNumber('+')}
+									>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_NUMBER_TEXT_STYLE')}
+										>
+											0
+										</Text>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_CHARACTER_TEXT_STYLE')}
+										>
+											+
+										</Text>
+									</TouchableOpacity>
+									<TouchableOpacity
+										style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_BLOCK_STYLE')}
+										onPress={() => { this.onClickNumber('#') }}
+									>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_NUMBER_TEXT_STYLE')}
+										>
+											#
+										</Text>
+										<Text
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_ITEM_CHARACTER_TEXT_STYLE')}
+										>
+										</Text>
+									</TouchableOpacity>
+								</View>
+								<View
+									style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_LAST_LINE_BLOCK_STYLE')}
+								>
+									<TouchableOpacity
+										style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_CALL_BUTTON_BLOCK_STYLE')}
+										onPress={this.onCallButtonPressed}
+									>
+										<Image
+											style={this.coreInstances.CustomStyle.getStyle('NUMBER_PAD_BUTTONS_CALL_BUTTON_IMAGE_STYLE')}
+											source={this.coreInstances.CustomStyle.getImage('IMAGE_CALLOUT_START')}
+										/>
+									</TouchableOpacity>
+								</View>
 							</View>
 						</View>
 					</View>
-				</View>
-				{this.renderSelectFromNumber()}
+					<ConnectionBlockComponent
+						getCoreInstances={this.props.getCoreInstances}
+					/>
+				</ScreenBodyBlockComponent>
 			</ScreenBlockComponent>
 		);
-	}
+	};
 }
 
 export default NumberPadComponent;
-
-
-const styles = {
-	number: {
-		backgroundColor: '#f0f0f0',
-		width: 70,
-		height: 70,
-		borderRadius: 35,
-		justifyContent: 'center',
-		alignItems: 'center',
-		marginRight: 10,
-		marginTop: 5,
-		marginBottom: 5,
-	}
-};
 

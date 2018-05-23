@@ -25,7 +25,7 @@ import Diacritic from './helper/diacritic';
 
 import Event from './handler/event';
 import Member from './handler/member';
-import Number from './handler/number';
+import PhoneNumber from './handler/phoneNumber';
 import Message from './handler/message';
 import Call from './handler/call';
 import Notification from './handler/notification';
@@ -46,7 +46,9 @@ export class AZStackSdk extends AZStackNavigation {
 
         this.defaultLayout = {
             withStatusbar: true,
-            withHeader: true
+            withHeader: true,
+            screenStyle: {},
+            statusbarStyle: {}
         };
 
         if (props.options.defaultLayout && typeof props.options.defaultLayout === 'object') {
@@ -55,6 +57,20 @@ export class AZStackSdk extends AZStackNavigation {
             }
             if (typeof props.options.defaultLayout.withHeader === 'boolean') {
                 this.defaultLayout.withHeader = props.options.defaultLayout.withHeader;
+            }
+            if (typeof props.options.defaultLayout.screenStyle === 'object') {
+                for (let field in props.options.defaultLayout.screenStyle) {
+                    if (typeof props.options.defaultLayout.screenStyle[field] === 'string' || !isNaN(typeof props.options.defaultLayout.screenStyle[field])) {
+                        this.defaultLayout.screenStyle[field] = props.options.defaultLayout.screenStyle[field];
+                    }
+                }
+            }
+            if (typeof props.options.defaultLayout.statusbarStyle === 'object') {
+                for (let field in props.options.defaultLayout.statusbarStyle) {
+                    if (typeof props.options.defaultLayout.statusbarStyle[field] === 'string' || !isNaN(typeof props.options.defaultLayout.statusbarStyle[field])) {
+                        this.defaultLayout.statusbarStyle[field] = props.options.defaultLayout.statusbarStyle[field];
+                    }
+                }
             }
         }
 
@@ -89,9 +105,9 @@ export class AZStackSdk extends AZStackNavigation {
             this.Member.getMoreMembers = this.props.options.getMoreMembers;
         }
 
-        this.Number = new Number();
-        if (this.props.options.getNumbers && typeof this.props.options.getNumbers === 'function') {
-            this.Number.getNumbers = this.props.options.getNumbers;
+        this.PhoneNumber = new PhoneNumber();
+        if (this.props.options.getFromPhoneNumbers && typeof this.props.options.getFromPhoneNumbers === 'function') {
+            this.PhoneNumber.getFromPhoneNumbers = this.props.options.getFromPhoneNumbers;
         }
 
         this.Message = new Message();
@@ -212,7 +228,7 @@ export class AZStackSdk extends AZStackNavigation {
 
             Member: this.Member,
             Message: this.Message,
-            Number: this.Number,
+            PhoneNumber: this.PhoneNumber,
             Call: this.Call
         };
     };
@@ -257,50 +273,18 @@ export class AZStackSdk extends AZStackNavigation {
     };
 
     onCallinStart(error, result) {
-        this.navigate(this.getNavigation().OnCallComponent, {
-            info: {
-                phoneNumber: result.fromPhoneNumber
+        this.navigate(this.getNavigation().VoiceCallComponent, {
+            withBackButtonHandler: true,
+            callData: {
+                fullname: null,
+                toUserId: null,
+                toPhoneNumber: result.toPhoneNumber,
+                fromPhoneNumber: result.fromPhoneNumber,
+                callType: this.AZStackCore.callConstants.CALL_TYPE_CALLIN,
+                isCaller: false
             },
-            isIncomingCall: true,
             onCallEnded: () => {
-                setTimeout(() => {
-                    this.pop();
-                }, 1500);
-            },
-            onEndCall: () => {
-                this.AZStackCore.stopCallin({}, (error, result) => {
-                    setTimeout(() => {
-                        this.pop();
-                    }, 1500);
-                });
-            },
-            onReject: () => {
-                this.AZStackCore.rejectCallin({}, (error, result) => {
-                    setTimeout(() => {
-                        this.pop();
-                    }, 1500);
-                });
-            },
-            onAnswer: () => {
-                this.AZStackCore.answerCallin({}, (error, result) => {
-                });
-            },
-            onToggleAudio: (toOn) => {
-                this.AZStackCore.toggleAudioState({
-                    state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
-                }, (error, result) => {
-
-                });
-            },
-            onToggleSpeaker: () => {
-
-            },
-            onTimeout: () => {
-                this.AZStackCore.notAnsweredCallin({}, (error, result) => {
-                    setTimeout(() => {
-                        this.pop();
-                    }, 1500);
-                });
+                this.pop();
             }
         });
     };
@@ -310,229 +294,117 @@ export class AZStackSdk extends AZStackNavigation {
         }).then((resultUser) => {
             if (resultUser.list.length > 0) {
                 if (result.mediaType === this.AZStackCore.callConstants.CALL_MEDIA_TYPE_AUDIO) {
-                    this.navigate(this.getNavigation().OnCallComponent, {
-                        info: {
-                            name: resultUser.list[0].fullname,
-                            userId: resultUser.list[0].userId,
+                    this.navigate(this.getNavigation().VoiceCallComponent, {
+                        withBackButtonHandler: true,
+                        callData: {
+                            fullname: resultUser.list[0].fullname,
+                            toUserId: resultUser.list[0].userId,
+                            toPhoneNumber: null,
+                            fromPhoneNumber: null,
+                            callType: this.AZStackCore.callConstants.CALL_TYPE_FREE_CALL,
+                            isCaller: false
                         },
-                        isIncomingCall: true,
                         onCallEnded: () => {
-                            setTimeout(() => {
-                                this.pop();
-                            }, 1500);
-                        },
-                        onEndCall: () => {
-                            this.AZStackCore.stopFreeCall({}, (error, result) => {
-                                setTimeout(() => {
-                                    this.pop();
-                                }, 1500);
-                            });
-                        },
-                        onReject: () => {
-                            this.AZStackCore.rejectFreeCall({}, (error, result) => {
-                                setTimeout(() => {
-                                    this.pop();
-                                }, 1500);
-                            });
-                        },
-                        onAnswer: () => {
-                            this.AZStackCore.answerFreeCall({}, (error, result) => { });
-                        },
-                        onToggleAudio: (toOn) => {
-                            this.AZStackCore.toggleAudioState({
-                                state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
-                            }, (error, result) => {
-
-                            });
-                        },
-                        onTimeout: () => {
-                            this.AZStackCore.notAnswerFreeCall({}, (error, result) => { });
+                            this.pop();
                         }
                     });
                 } else if (result.mediaType === this.AZStackCore.callConstants.CALL_MEDIA_TYPE_VIDEO) {
                     this.navigate(this.getNavigation().VideoCallComponent, {
-                        info: {
-                            name: resultUser.list[0].fullname,
-                            userId: resultUser.list[0].userId,
+                        withBackButtonHandler: true,
+                        callData: {
+                            fullname: resultUser.list[0].fullname,
+                            toUserId: resultUser.list[0].userId,
+                            isCaller: false
                         },
-                        isIncomingCall: true,
                         onCallEnded: () => {
-                            setTimeout(() => {
-                                this.pop();
-                            }, 1500);
-                        },
-                        onEndCall: () => {
-                            this.AZStackCore.stopFreeCall({}, (error, result) => {
-                                setTimeout(() => {
-                                    this.pop();
-                                }, 1500);
-                            });
-                        },
-                        onReject: () => {
-                            this.AZStackCore.rejectFreeCall({}, (error, result) => {
-                                setTimeout(() => {
-                                    this.pop();
-                                }, 1500);
-                            });
-                        },
-                        onAnswer: () => {
-                            this.AZStackCore.answerFreeCall({}, (error, result) => { });
-                        },
-                        onToggleAudio: (toOn) => {
-                            this.AZStackCore.toggleAudioState({
-                                state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
-                            }, (error, result) => {
-
-                            });
-                        },
-                        onToggleVideo: (toOn) => {
-                            this.AZStackCore.toggleVideoState({
-                                state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_VIDEO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_VIDEO_STATE_OFF
-                            }, (error, result) => {
-
-                            });
-                        },
-                        onTimeout: () => {
-                            this.AZStackCore.notAnswerFreeCall({}, (error, result) => { });
-                        },
-                        onSwitchCameraType: () => {
-                            this.AZStackCore.switchCameraType({});
+                            this.pop();
                         }
                     });
                 }
             }
-        }).catch((error) => {
-            console.log(error);
-        });
+        }).catch((error) => { });
     };
-
     startCallout(options) {
         this.Call.onBeforeCalloutStart({
-            toPhoneNumber: options.info.phoneNumber,
-            fromPhoneNumber: options.info.fromPhoneNumber,
+            toPhoneNumber: options.callData.toPhoneNumber,
+            fromPhoneNumber: options.callData.fromPhoneNumber
         }).then((preparedCalloutData) => {
             this.navigate(
-                this.getNavigation().OnCallComponent,
+                this.getNavigation().VoiceCallComponent,
                 {
                     ...options,
-                    onEndCall: () => {
-                        if (options.onEndCall) {
-                            options.onEndCall()
-                        }
-                        this.AZStackCore.stopCallout().then((result) => { });
-                        setTimeout(() => {
-                            this.pop();
-                        }, 1500);
+                    withBackButtonHandler: true,
+                    callData: {
+                        fullname: options.callData.fullname,
+                        toUserId: null,
+                        toPhoneNumber: options.callData.toPhoneNumber,
+                        fromPhoneNumber: options.callData.fromPhoneNumber,
+                        callType: this.AZStackCore.callConstants.CALL_TYPE_CALLOUT,
+                        isCaller: true
                     },
                     onCallEnded: () => {
-                        setTimeout(() => {
-                            this.pop();
-                        }, 1500);
-                    },
-                    onToggleAudio: (toOn) => {
-                        this.AZStackCore.toggleAudioState({
-                            state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
-                        }, (error, result) => {
+                        if (options.onCallEnded) {
+                            options.onCallEnded();
+                            return;
+                        }
 
-                        });
-                    },
+                        this.pop();
+                    }
                 }
             );
-            this.AZStackCore.startCallout(preparedCalloutData).then((result) => {
-            }).catch((error) => {
-                Alert.alert("Error", error.message, [{ text: 'OK', onPress: () => { } }]);
-            });
         }).catch((error) => { });
     };
     startAudioCall(options) {
-        this.AZStackCore.startFreeCall({
-            mediaType: this.AZStackCore.callConstants.CALL_MEDIA_TYPE_AUDIO,
-            toUserId: options.info.userId,
-        }).then((result) => {
-            this.navigate(
-                this.getNavigation().OnCallComponent,
-                {
-                    ...options,
-                    onEndCall: () => {
-                        if (options.onEndCall) {
-                            options.onEndCall()
-                        }
+        this.navigate(
+            this.getNavigation().VoiceCallComponent,
+            {
+                ...options,
+                withBackButtonHandler: true,
+                callData: {
+                    fullname: options.callData.fullname,
+                    toUserId: options.callData.toUserId,
+                    toPhoneNumber: null,
+                    fromPhoneNumber: null,
+                    callType: this.AZStackCore.callConstants.CALL_TYPE_FREE_CALL,
+                    isCaller: true
+                },
+                onCallEnded: () => {
+                    if (options.onCallEnded) {
+                        options.onCallEnded();
+                        return;
+                    }
 
-                        this.AZStackCore.stopFreeCall().then((result) => {
-                            setTimeout(() => {
-                                this.pop();
-                            }, 1500);
-                        });
-                    },
-                    onCallEnded: () => {
-                        setTimeout(() => {
-                            this.pop();
-                        }, 1500);
-                    },
-                    onToggleAudio: (toOn) => {
-                        this.AZStackCore.toggleAudioState({
-                            state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
-                        }, (error, result) => {
-
-                        });
-                    },
+                    this.pop();
                 }
-            );
-        }).catch((error) => {
-            Alert.alert("Error", error.message, [{ text: 'OK', onPress: () => { } }]);
-        });
+            }
+        );
     };
     startVideoCall(options) {
-        this.AZStackCore.startFreeCall({
-            mediaType: this.AZStackCore.callConstants.CALL_MEDIA_TYPE_VIDEO,
-            toUserId: options.info.userId,
-        }).then((result) => {
-            this.navigate(
-                this.getNavigation().VideoCallComponent,
-                {
-                    ...options,
-                    onEndCall: () => {
-                        if (options.onEndCall) {
-                            options.onEndCall()
-                        }
+        this.navigate(
+            this.getNavigation().VideoCallComponent,
+            {
+                ...options,
+                withBackButtonHandler: true,
+                callData: {
+                    fullname: options.callData.fullname,
+                    toUserId: options.callData.toUserId,
+                    isCaller: true
+                },
+                onCallEnded: () => {
+                    if (options.onCallEnded) {
+                        options.onCallEnded();
+                        return;
+                    }
 
-                        this.AZStackCore.stopFreeCall().then((result) => {
-                            setTimeout(() => {
-                                this.pop();
-                            }, 1500);
-                        });
-                    },
-                    onCallEnded: () => {
-                        setTimeout(() => {
-                            this.pop();
-                        }, 1500);
-                    },
-                    onSwitchCameraType: () => {
-                        this.AZStackCore.switchCameraType({});
-                    },
-                    onToggleAudio: (toOn) => {
-                        this.AZStackCore.toggleAudioState({
-                            state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
-                        }, (error, result) => {
-
-                        });
-                    },
-                    onToggleVideo: (toOn) => {
-                        this.AZStackCore.toggleVideoState({
-                            state: toOn === true ? this.AZStackCore.callConstants.CALL_WEBRTC_VIDEO_STATE_ON : this.AZStackCore.callConstants.CALL_WEBRTC_VIDEO_STATE_OFF
-                        }, (error, result) => {
-
-                        });
-                    },
+                    this.pop();
                 }
-            );
-        }).catch((error) => {
-            Alert.alert("Error", error.message, [{ text: 'OK', onPress: () => { } }]);
-        });
+            }
+        );
     };
     startChat(options) {
         this.navigate(this.getNavigation().ChatComponent, {
             ...options,
+            withBackButtonHandler: true,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
@@ -590,8 +462,9 @@ export class AZStackSdk extends AZStackNavigation {
 
                 Keyboard.dismiss();
                 this.startAudioCall({
-                    info: {
-                        userId: event.userId
+                    callData: {
+                        toUserId: event.toUserId,
+                        fullname: event.fullname
                     }
                 });
             },
@@ -603,19 +476,20 @@ export class AZStackSdk extends AZStackNavigation {
 
                 Keyboard.dismiss();
                 this.startVideoCall({
-                    info: {
-                        userId: event.userId
+                    callData: {
+                        fullname: event.fullname,
+                        toUserId: event.toUserId
                     }
                 });
             }
         });
     };
-
     showNumberPad(options) {
         this.navigate(
             this.getNavigation().NumberPadComponent,
             {
                 ...options,
+                withBackButtonHandler: true,
                 onBackButtonPressed: () => {
                     if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                         options.onBackButtonPressed();
@@ -624,34 +498,12 @@ export class AZStackSdk extends AZStackNavigation {
 
                     this.pop();
                 },
-                onCallout: (options) => {
+                showSelectPhoneNumber: (options) => {
+                    this.showSelectPhoneNumber(options)
+                },
+                startCallout: (options) => {
                     this.startCallout(options);
                 }
-            }
-        );
-    };
-    showContacts(options) {
-        this.navigate(
-            this.getNavigation().ContactComponent,
-            {
-                ...options,
-                onBackButtonPressed: () => {
-                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
-                        options.onBackButtonPressed();
-                        return;
-                    }
-
-                    this.pop();
-                },
-                onVideoCall: (options) => {
-                    this.startVideoCall(options);
-                },
-                onAudioCall: (options) => {
-                    this.startAudioCall(options);
-                },
-                onCallout: (options) => {
-                    this.startCallout(options);
-                },
             }
         );
     };
@@ -660,6 +512,7 @@ export class AZStackSdk extends AZStackNavigation {
             this.getNavigation().CallLogsComponent,
             {
                 ...options,
+                withBackButtonHandler: true,
                 onBackButtonPressed: () => {
                     if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                         options.onBackButtonPressed();
@@ -668,21 +521,25 @@ export class AZStackSdk extends AZStackNavigation {
 
                     this.pop();
                 },
-                onVideoCall: (options) => {
-                    this.startVideoCall(options);
-                },
-                onAudioCall: (options) => {
-                    this.startAudioCall(options);
-                },
-                onCallout: (options) => {
-                    this.startCallout(options);
-                },
+                onCallLogItemPressed: (event) => {
+                    if (options && typeof options === 'object' && typeof options.onCallLogItemPressed === 'function') {
+                        options.onCallLogItemPressed(event);
+                        return;
+                    }
+                    this.startCallout({
+                        callData: {
+                            toPhoneNumber: event.phoneNumber,
+                            fromPhoneNumber: ''
+                        }
+                    });
+                }
             }
         );
     };
     showConversations(options) {
         this.navigate(this.getNavigation().ConversationsComponent, {
             ...options,
+            withBackButtonHandler: true,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
@@ -724,6 +581,7 @@ export class AZStackSdk extends AZStackNavigation {
     showUser(options) {
         this.navigate(this.getNavigation().UserComponent, {
             ...options,
+            withBackButtonHandler: true,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
@@ -750,8 +608,9 @@ export class AZStackSdk extends AZStackNavigation {
                 }
 
                 this.startAudioCall({
-                    info: {
-                        userId: event.userId
+                    callData: {
+                        toUserId: event.toUserId,
+                        fullname: event.fullname
                     }
                 });
             },
@@ -762,8 +621,9 @@ export class AZStackSdk extends AZStackNavigation {
                 }
 
                 this.startVideoCall({
-                    info: {
-                        userId: event.userId
+                    callData: {
+                        fullname: event.fullname,
+                        toUserId: event.toUserId
                     }
                 });
             }
@@ -772,6 +632,7 @@ export class AZStackSdk extends AZStackNavigation {
     showGroup(options) {
         this.navigate(this.getNavigation().GroupComponent, {
             ...options,
+            withBackButtonHandler: true,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
@@ -805,6 +666,7 @@ export class AZStackSdk extends AZStackNavigation {
     showSelectMembers(options) {
         this.navigate(this.getNavigation().SelectMembersComponent, {
             ...options,
+            withBackButtonHandler: true,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
@@ -832,6 +694,7 @@ export class AZStackSdk extends AZStackNavigation {
     showSelectMember(options) {
         this.navigate(this.getNavigation().SelectMemberComponent, {
             ...options,
+            withBackButtonHandler: true,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
@@ -859,6 +722,7 @@ export class AZStackSdk extends AZStackNavigation {
     showGroupInputName(options) {
         this.navigate(this.getNavigation().GroupInputNameComponent, {
             ...options,
+            withBackButtonHandler: true,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
@@ -886,6 +750,7 @@ export class AZStackSdk extends AZStackNavigation {
     showImageGallery(options) {
         this.navigate(this.getNavigation().ImageGalleryComponent, {
             ...options,
+            withBackButtonHandler: true,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
@@ -899,6 +764,7 @@ export class AZStackSdk extends AZStackNavigation {
     showLocationMap(options) {
         this.navigate(this.getNavigation().LocationMapComponent, {
             ...options,
+            withBackButtonHandler: true,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
@@ -912,6 +778,7 @@ export class AZStackSdk extends AZStackNavigation {
     showSketchDrawing(options) {
         this.navigate(this.getNavigation().SketchDrawingComponent, {
             ...options,
+            withBackButtonHandler: true,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
@@ -933,6 +800,7 @@ export class AZStackSdk extends AZStackNavigation {
     showStickersList(options) {
         this.navigate(this.getNavigation().StickerListComponent, {
             ...options,
+            withBackButtonHandler: true,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
@@ -946,6 +814,7 @@ export class AZStackSdk extends AZStackNavigation {
     showStickerDetails(options) {
         this.navigate(this.getNavigation().StickerDetailsComponent, {
             ...options,
+            withBackButtonHandler: true,
             onBackButtonPressed: () => {
                 if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                     options.onBackButtonPressed();
@@ -956,38 +825,41 @@ export class AZStackSdk extends AZStackNavigation {
             }
         });
     };
+    showSelectPhoneNumber(options) {
+        this.navigate(this.getNavigation().SelectPhoneNumberComponent, {
+            ...options,
+            withBackButtonHandler: true,
+            onBackButtonPressed: () => {
+                if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                    options.onBackButtonPressed();
+                    return;
+                }
 
-    UIContacts(options) {
-        return this.renderScreen(
-            this.getNavigation().ConversationsComponent,
-            {
-                ...options,
-                onBackButtonPressed: () => {
-                    if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
-                        options.onBackButtonPressed();
-                        return;
-                    }
-
-                    this.pop();
-                },
-                onVideoCall: (options) => {
-                    this.startVideoCall(options);
-                },
-                onAudioCall: (options) => {
-                    this.startAudioCall(options);
-                },
-                onCallout: (options) => {
-                    this.startCallout(options);
-                },
+                this.pop();
             },
-            0
-        );
+            onSelectDone: (event) => {
+                if (options && typeof options === 'object' && typeof options.onSelectDone === 'function') {
+                    options.onSelectDone(event);
+                    return;
+                }
+            },
+            onDoneClose: () => {
+                if (options && typeof options === 'object' && typeof options.onDoneClose === 'function') {
+                    options.onDoneClose(event);
+                    return;
+                }
+
+                this.pop();
+            }
+        });
     };
+
     UICallLogs(options) {
         return this.renderScreen(
             this.getNavigation().CallLogsComponent,
             {
                 ...options,
+                withBackButtonHandler: false,
                 onBackButtonPressed: () => {
                     if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                         options.onBackButtonPressed();
@@ -996,14 +868,17 @@ export class AZStackSdk extends AZStackNavigation {
 
                     this.pop();
                 },
-                onVideoCall: (options) => {
-                    this.startVideoCall(options);
-                },
-                onAudioCall: (options) => {
-                    this.startAudioCall(options);
-                },
-                onCallout: (options) => {
-                    this.startCallout(options);
+                onCallLogItemPressed: (event) => {
+                    if (options && typeof options === 'object' && typeof options.onCallLogItemPressed === 'function') {
+                        options.onCallLogItemPressed(event);
+                        return;
+                    }
+                    this.startCallout({
+                        callData: {
+                            toPhoneNumber: event.phoneNumber,
+                            fromPhoneNumber: ''
+                        }
+                    });
                 }
             },
             0
@@ -1014,6 +889,7 @@ export class AZStackSdk extends AZStackNavigation {
             this.getNavigation().NumberPadComponent,
             {
                 ...options,
+                withBackButtonHandler: false,
                 onBackButtonPressed: () => {
                     if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                         options.onBackButtonPressed();
@@ -1022,7 +898,10 @@ export class AZStackSdk extends AZStackNavigation {
 
                     this.pop();
                 },
-                onCallout: (options) => {
+                showSelectPhoneNumber: (options) => {
+                    this.showSelectPhoneNumber(options)
+                },
+                startCallout: (options) => {
                     this.startCallout(options);
                 },
             },
@@ -1034,6 +913,7 @@ export class AZStackSdk extends AZStackNavigation {
             this.getNavigation().ConversationsComponent,
             {
                 ...options,
+                withBackButtonHandler: false,
                 onBackButtonPressed: () => {
                     if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                         options.onBackButtonPressed();
@@ -1079,6 +959,7 @@ export class AZStackSdk extends AZStackNavigation {
             this.getNavigation().ChatComponent,
             {
                 ...options,
+                withBackButtonHandler: false,
                 onBackButtonPressed: () => {
                     if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                         options.onBackButtonPressed();
@@ -1136,8 +1017,9 @@ export class AZStackSdk extends AZStackNavigation {
 
                     Keyboard.dismiss();
                     this.startAudioCall({
-                        info: {
-                            userId: event.userId
+                        callData: {
+                            toUserId: event.toUserId,
+                            fullname: event.fullname
                         }
                     });
                 },
@@ -1149,8 +1031,9 @@ export class AZStackSdk extends AZStackNavigation {
 
                     Keyboard.dismiss();
                     this.startVideoCall({
-                        info: {
-                            userId: event.userId
+                        callData: {
+                            fullname: event.fullname,
+                            toUserId: event.toUserId
                         }
                     });
                 }
@@ -1163,6 +1046,7 @@ export class AZStackSdk extends AZStackNavigation {
             this.getNavigation().UserComponent,
             {
                 ...options,
+                withBackButtonHandler: false,
                 onBackButtonPressed: () => {
                     if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                         options.onBackButtonPressed();
@@ -1189,8 +1073,9 @@ export class AZStackSdk extends AZStackNavigation {
                     }
 
                     this.startAudioCall({
-                        info: {
-                            userId: event.userId
+                        callData: {
+                            toUserId: event.toUserId,
+                            fullname: event.fullname
                         }
                     });
                 },
@@ -1201,8 +1086,9 @@ export class AZStackSdk extends AZStackNavigation {
                     }
 
                     this.startVideoCall({
-                        info: {
-                            userId: event.userId
+                        callData: {
+                            fullname: event.fullname,
+                            toUserId: event.toUserId
                         }
                     });
                 }
@@ -1215,6 +1101,7 @@ export class AZStackSdk extends AZStackNavigation {
             this.getNavigation().GroupComponent,
             {
                 ...options,
+                withBackButtonHandler: false,
                 onBackButtonPressed: () => {
                     if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
                         options.onBackButtonPressed();

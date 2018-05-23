@@ -6,85 +6,99 @@ import {
     Image
 } from 'react-native';
 
-import call_icon from '../../../static/image/call-icon.png';
-import ic_avatar from '../../../static/image/ic_avatar.png';
+import TimeFromNowBlockComponent from '../common/TimeFromNowBlockComponent';
 
 class CallLogItem extends React.Component {
     constructor(props) {
         super(props);
         this.coreInstances = props.getCoreInstances();
-        this.state = {
-            showActions: false,
-        };
-    }
+
+        this.onCallLogItemPressed = this.onCallLogItemPressed.bind(this);
+    };
+
+    onCallLogItemPressed() {
+        this.props.onCallLogItemPressed({
+            phoneNumber: this.props.callLog.callType === this.coreInstances.AZStackCore.callConstants.CALL_PAID_LOG_CALL_TYPE_CALLOUT ? this.props.callLog.toPhoneNumber : this.props.callLog.fromPhoneNumber
+        });
+    };
 
     render() {
         return (
-            <View>
-                <TouchableOpacity onPress={() => this.onPress()}>
-                    <View style={styles.contactToggle}>
-                        <View style={styles.avatar}>
-                            <Image source={ic_avatar} style={{ height: 50, width: 50 }} resizeMode={'contain'} />
-                        </View>
-                        <View style={{ flex: 1, paddingRight: 60 }}>
-                            <Text numberOfLines={1}>{this.props.callLog.callType === 1 ? this.props.callLog.toPhoneNumber : this.props.callLog.fromPhoneNumber}</Text>
-                            <Text numberOfLines={1}>{this.props.callLog.callType} <Text>{this.coreInstances.DateTimeFormatter.formatDate(this.props.callLog.recordTime, "YYYY/MM/DD HH:mm:ss")}</Text></Text>
-                        </View>
-                        <View style={styles.inlineActions}>
-                            <TouchableOpacity onPress={() => this.callout()}>
-                                <View style={{ alignSelf: 'flex-end' }}>
-                                    <Image source={call_icon} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
-                                </View>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+                style={this.coreInstances.CustomStyle.getStyle('CALL_LOG_BLOCK_STYLE')}
+                activeOpacity={0.5}
+                onPress={this.onCallLogItemPressed}
+            >
+                <Image
+                    style={this.coreInstances.CustomStyle.getStyle('CALL_LOG_TYPE_IMAGE_BLOCK_STYLE')}
+                    source={this.coreInstances.CustomStyle.getImage(this.props.callLog.callType === this.coreInstances.AZStackCore.callConstants.CALL_PAID_LOG_CALL_TYPE_CALLOUT ? 'IMAGE_CALLOUT' : 'IMAGE_CALLIN')}
+                />
+                <View
+                    style={this.coreInstances.CustomStyle.getStyle('CALL_LOG_INFORMATION_BLOCK_STYLE')}
+                >
+                    <Text
+                        style={this.coreInstances.CustomStyle.getStyle('CALL_LOG_PHONE_NUMBER_TEXT_STYLE')}
+                    >
+                        {this.props.callLog.callType === this.coreInstances.AZStackCore.callConstants.CALL_PAID_LOG_CALL_TYPE_CALLOUT ? this.props.callLog.toPhoneNumber : this.props.callLog.fromPhoneNumber}
+                    </Text>
+                    {
+                        this.props.callLog.callStatus === this.coreInstances.AZStackCore.callConstants.CALL_PAID_LOG_CALL_STATUS_ANSWERED && (
+                            <Text
+                                style={[
+                                    this.coreInstances.CustomStyle.getStyle('CALL_LOG_CALL_STATUS_TEXT_STYLE'),
+                                    this.coreInstances.CustomStyle.getStyle('CALL_LOG_CALL_STATUS_ANSWERED_TEXT_STYLE')
+                                ]}
+                            >
+                                {this.coreInstances.Language.getText('CALL_LOG_ANSWERED_TEXT')}
+                            </Text>
+                        )
+                    }
+                    {
+                        this.props.callLog.callStatus === this.coreInstances.AZStackCore.callConstants.CALL_PAID_LOG_CALL_STATUS_REJECTED && (
+                            <Text
+                                style={[
+                                    this.coreInstances.CustomStyle.getStyle('CALL_LOG_CALL_STATUS_TEXT_STYLE'),
+                                    this.coreInstances.CustomStyle.getStyle('CALL_LOG_CALL_STATUS_REJECTED_TEXT_STYLE')
+                                ]}
+                            >
+                                {this.coreInstances.Language.getText('CALL_LOG_REJECTED_TEXT')}
+                            </Text>
+                        )
+                    }
+                    {
+                        this.props.callLog.callStatus === this.coreInstances.AZStackCore.callConstants.CALL_PAID_LOG_CALL_STATUS_NOT_ANSWERED && (
+                            <Text
+                                style={[
+                                    this.coreInstances.CustomStyle.getStyle('CALL_LOG_CALL_STATUS_TEXT_STYLE'),
+                                    this.coreInstances.CustomStyle.getStyle('CALL_LOG_CALL_STATUS_NOT_ANSWERED_TEXT_STYLE')
+                                ]}
+                            >
+                                {this.coreInstances.Language.getText('CALL_LOG_NOT_ANSWERED_TEXT')}
+                            </Text>
+                        )
+                    }
+                </View>
+                <View
+                    style={this.coreInstances.CustomStyle.getStyle('CALL_LOG_CALL_TIME_BLOCK_STYLE')}
+                >
+                    <TimeFromNowBlockComponent
+                        getCoreInstances={this.props.getCoreInstances}
+                        textStyle={this.coreInstances.CustomStyle.getStyle('CALL_LOG_FROM_NOW_TEXT_STYLE')}
+                        time={this.props.callLog.recordTime}
+                    />
+                    {
+                        this.props.callLog.callStatus === this.coreInstances.AZStackCore.callConstants.CALL_PAID_LOG_CALL_STATUS_ANSWERED && (
+                            <Text
+                                style={this.coreInstances.CustomStyle.getStyle('CALL_LOG_CALL_DURATION_TEXT_STYLE')}
+                            >
+                                {this.coreInstances.FileConverter.timeAsString(this.props.callLog.duration)}
+                            </Text>
+                        )
+                    }
+                </View>
+            </TouchableOpacity>
         );
-    }
-
-    onPress() {
-        this.props.onPress();
-    }
-}
+    };
+};
 
 export default CallLogItem;
-
-const styles = {
-    contactToggle: {
-        flexDirection: 'row',
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        alignItems: 'center',
-        borderBottomWidth: 1,
-        borderBottomColor: '#e3e2e1',
-        justifyContent: 'space-around'
-    },
-    avatar: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-        marginRight: 10,
-    },
-    inlineActions: {
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        right: 20,
-        paddingVertical: 10,
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        display: 'none'
-    },
-    actions: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        borderBottomWidth: 1,
-        borderBottomColor: '#e3e2e1',
-    },
-    actionButton: {
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-    }
-}

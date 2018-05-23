@@ -39,37 +39,27 @@ class AZStackSdkExample extends React.Component {
         });
     };
 
-    showContact() {
-        this.refs.AZStackSdk.showContacts({});
-    };
-
     showNumberPad() {
         this.refs.AZStackSdk.showNumberPad({});
     };
 
     audioCall() {
         this.refs.AZStackSdk.startAudioCall({
-            info: {
-                name: 'User 2',
-                phoneNumber: '',
-                userId: 387212, // must be number
+            callData: {
+                fullname: 'Test User 2',
+                toUserId: 387212,
             },
-            onEndCall: () => {
-                // or whatever you want here
-            },
+            onEndCall: () => { }
         });
     };
 
     videoCall() {
         this.refs.AZStackSdk.startVideoCall({
-            info: {
-                name: 'User 2',
-                phoneNumber: '',
-                userId: 387212, // must be number
+            callData: {
+                fullname: 'Test User 2',
+                toUserId: 387212,
             },
-            onEndCall: () => {
-                // or whatever you want here
-            },
+            onEndCall: () => { }
         });
     };
 
@@ -109,7 +99,7 @@ class AZStackSdkExample extends React.Component {
                     themeName: this.props.themeName,
                     getInitialMembers: this.props.getInitialMembers,
                     getMoreMembers: this.props.getMoreMembers,
-                    getNumbers: this.props.getNumbers,
+                    getFromPhoneNumbers: this.props.getFromPhoneNumbers,
                     onBeforeMessageSend: this.props.onBeforeMessageSend,
                     onBeforeCalloutStart: this.props.onBeforeCalloutStart
                 }}
@@ -132,8 +122,7 @@ class AZStackSdkExample extends React.Component {
                         <Button onPress={() => this.startChatUser()} title='Chat with user'></Button>
                         <Button onPress={() => this.audioCall()} title='Voice Call User 2'></Button>
                         <Button onPress={() => this.videoCall()} title='Video Call User 2'></Button>
-                        <Button onPress={() => this.showContact()} title='Contact List'></Button>
-                        <Button onPress={() => this.showNumberPad()} title='Callout'></Button>
+                        <Button onPress={() => this.showNumberPad()} title='Show number pad'></Button>
                         <Button onPress={() => this.showCallLogs()} title='Show call logs'></Button>
                         <Button onPress={() => this.showUser()} title='Show user'></Button>
                         <Button onPress={() => this.showGroup()} title='Show group'></Button>

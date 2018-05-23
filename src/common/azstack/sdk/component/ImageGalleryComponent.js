@@ -29,10 +29,14 @@ class ImageGalleryComponent extends React.Component {
     };
 
     componentDidMount() {
-        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        if (this.props.withBackButtonHandler) {
+            BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        }
     };
     componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        if (this.props.withBackButtonHandler) {
+            BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        }
     };
 
     render() {
@@ -40,8 +44,12 @@ class ImageGalleryComponent extends React.Component {
             <ScreenBlockComponent
                 fullScreen={true}
                 withStatusbar={this.props.withStatusbar}
+                screenStyle={{
+                    ...this.coreInstances.CustomStyle.getStyle('IMAGE_GALLERY_SCREEN_BLOCK_STYLE'),
+                    ...this.props.screenStyle
+                }}
+                statusbarStyle={this.props.statusbarStyle}
                 getCoreInstances={this.props.getCoreInstances}
-                style={this.coreInstances.CustomStyle.getStyle('IMAGE_GALLERY_SCREEN_BLOCK_STYLE')}
             >
                 {
                     (!this.props.imageFiles.length || this.props.initialIndex === -1) && <EmptyBlockComponent

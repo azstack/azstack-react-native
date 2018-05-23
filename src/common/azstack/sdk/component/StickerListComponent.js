@@ -184,12 +184,16 @@ class StickerListComponent extends React.Component {
 
     componentDidMount() {
         this.addSubscriptions();
+        if (this.props.withBackButtonHandler) {
+            BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        }
         this.initRun();
-        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
     };
     componentWillUnmount() {
         this.clearSubscriptions();
-        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        if (this.props.withBackButtonHandler) {
+            BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        }
     };
 
     render() {
@@ -198,8 +202,9 @@ class StickerListComponent extends React.Component {
             <ScreenBlockComponent
                 fullScreen={false}
                 withStatusbar={this.props.withStatusbar}
+                screenStyle={this.props.screenStyle}
+                statusbarStyle={this.props.statusbarStyle}
                 getCoreInstances={this.props.getCoreInstances}
-                style={this.props.style}
             >
                 {
                     (this.props.withHeader || (this.props.withHeader === undefined && this.coreInstances.defaultLayout.withHeader)) && (
@@ -212,7 +217,6 @@ class StickerListComponent extends React.Component {
                 }
                 <ScreenBodyBlockComponent
                     getCoreInstances={this.props.getCoreInstances}
-                    style={this.props.contentContainerStyle}
                 >
                     <SearchBlockComponent
                         getCoreInstances={this.props.getCoreInstances}

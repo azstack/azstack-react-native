@@ -5,8 +5,9 @@
     npm install --save azstack-react-native
 ```
 ## 1.1. Core
-### 1.1.1. Install jsencrypt https://github.com/travist/jsencrypt
-### 1.1.2. Install react-native-webrtc https://github.com/oney/react-native-webrtc
+### 1.1.1. Install socket.io-client https://github.com/socketio/socket.io-client
+### 1.1.2. Install jsencrypt https://github.com/travist/jsencrypt
+### 1.1.3. Install react-native-webrtc https://github.com/oney/react-native-webrtc
 ## 1.2. Sdk
 ### 1.2.1. Install react-native-image-crop-picker https://github.com/ivpusic/react-native-image-crop-picker
 ### 1.2.2. Install react-native-document-picker https://github.com/Elyx0/react-native-document-picker
@@ -58,7 +59,9 @@ render() {
     };
     let defaultLayout = {
         withStatusbar: true,
-        withHeader: true
+        withHeader: true,
+        screenStyle: {},
+        statusbarStyle: {}
     };
     let languageCode = 'en';
     let themeName = 'classic';
@@ -129,13 +132,27 @@ Show number pad for callout
     this.refs.AZStackSdk.showNumberPad(screenOptions) 
 ```
 
+How to start callout
+```javascript
+    this.refs.AZStackSdk.startCallout({
+        callData: {
+            fullname: 'Some name',
+            toPhoneNumber: '0123456789',
+            fromPhoneNumber: '0123456789',
+        },
+        onEndCall: () => {
+            // or whatever you want here
+        },
+        // other screenOptions
+    }); 
+```
+
 How to start video call
 ```javascript 
     this.refs.AZStackSdk.startVideoCall({
-        info: {
-            name: 'User 2',
-            phoneNumber: '',
-            userId: 387212, // must be number
+        callData: {
+            fullname: 'User 2',
+            toUserId: 387212, // must be number
         },
         onEndCall: () => {
             // or whatever you want here
@@ -147,10 +164,9 @@ How to start video call
 How to start audio call
 ```javascript
     this.refs.AZStackSdk.startAudioCall({
-        info: {
-            name: 'User 2',
-            phoneNumber: '',
-            userId: 387212, // must be number
+        callData: {
+            fullname: 'User 2',
+            toUserId: 387212, // must be number
         },
         onEndCall: () => {
             // or whatever you want here
@@ -179,8 +195,8 @@ Show group info
 ```javascript
 {
     onBackButtonPressed: () => {},
-    style: {},
-    containerStyle: {}
+    screenStyle: {},
+    statusbarStyle: {},
     withStatusbar: true | false, // true by default, overwrite defaultLayout
     withHeader: true | false, // true by default, overwrite defaultLayout
 }

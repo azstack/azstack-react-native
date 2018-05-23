@@ -43,6 +43,7 @@ class Call {
             }
         };
     };
+
     setIceServers(options) {
         this.iceServers = options.iceServers;
     };
@@ -86,7 +87,66 @@ class Call {
         this.callData.webRTC.remoteSessionDescription = null;
         this.callData.webRTC.remoteStream = null;
     };
-    initWebRTC() {
+
+    getUserMedia() {
+        return new Promise((resolve, reject) => {
+            const mediaConstraints = {
+                audio: true,
+                video: this.callData.mediaType === this.callConstants.CALL_MEDIA_TYPE_AUDIO ? false : {
+                    mandatory: {
+                        minWidth: 500,
+                        minHeight: 300,
+                        minFrameRate: 30
+                    },
+                    facingMode: this.callConstants.CALL_WEBRTC_CAMERA_TYPE_FRONT
+                }
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Get user media'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Get user media constraints',
+                payload: mediaConstraints
+            });
+            getUserMedia(mediaConstraints).then((stream) => {
+                getUserMediaSuccess(stream);
+            }).catch((error) => {
+                getUserMediaError(error);
+            });
+
+            const getUserMediaSuccess = (stream) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Got local stream'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Local stream',
+                    payload: stream
+                });
+                this.callData.webRTC.localStream = stream;
+
+                if (this.callData.mediaType === this.callConstants.CALL_MEDIA_TYPE_VIDEO) {
+                    this.onLocalStreamArrived({ stream: stream });
+                }
+
+                resolve();
+            };
+            const getUserMediaError = (error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Cannot get local stream'
+                });
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                    message: 'Get local stream error',
+                    payload: error
+                });
+                this.clearCallData();
+                reject({
+                    error: this.errorCodes.ERR_WEBRTC,
+                    message: 'Cannot get user media'
+                });
+            };
+        });
+    };
+    initPeerConnection() {
         return new Promise((resolve, reject) => {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Start peer connection'
@@ -224,161 +284,110 @@ class Call {
                 }
             };
 
-            const mediaConstraints = {
-                audio: true,
-                video: this.callData.mediaType === this.callConstants.CALL_MEDIA_TYPE_AUDIO ? false : {
-                    mandatory: {
-                        minWidth: 500,
-                        minHeight: 300,
-                        minFrameRate: 30
-                    },
-                    facingMode: this.callConstants.CALL_WEBRTC_CAMERA_TYPE_FRONT
-                }
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Add local stream to peer connection'
+            });
+            this.callData.webRTC.peerConnection.addStream(this.callData.webRTC.localStream);
+
+            const peerConnectionMandatory = {
+                OfferToReceiveAudio: true,
+                OfferToReceiveVideo: this.callData.mediaType === this.callConstants.CALL_MEDIA_TYPE_AUDIO ? false : true
             };
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                message: 'Get user media'
+                message: 'Peer connection init'
             });
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                message: 'Get user media constraints',
-                payload: mediaConstraints
+                message: 'Peer connection options mandatory',
+                payload: peerConnectionMandatory
             });
-            getUserMedia(mediaConstraints).then((stream) => {
-                getUserMediaSuccess(stream);
-            }).catch((error) => {
-                getUserMediaError(error);
-            });
-
-            const getUserMediaSuccess = (stream) => {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                    message: 'Got local stream'
+            if (this.callData.isCaller) {
+                this.callData.webRTC.peerConnection.createOffer({
+                    mandatory: peerConnectionMandatory
+                }).then(this.callData.webRTC.peerConnection.setLocalDescription).then(() => {
+                    peerConnectionInitConnectionSuccess();
+                }).catch((error) => {
+                    peerConnectionInitConnectionError(error);
                 });
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                    message: 'Local stream',
-                    payload: stream
-                });
-                this.callData.webRTC.localStream = stream;
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                    message: 'Add local stream to peer connection'
-                });
-                this.callData.webRTC.peerConnection.addStream(stream);
-
-                if (this.callData.mediaType === this.callConstants.CALL_MEDIA_TYPE_VIDEO) {
-                    this.onLocalStreamArrived({ stream: stream });
+            } else {
+                if (this.callData.callType === this.callConstants.CALL_TYPE_FREE_CALL) {
+                    const answerFreeCallPacket = {
+                        service: this.serviceTypes.FREE_CALL_STATUS_CHANGED,
+                        body: JSON.stringify({
+                            callId: this.callData.callId,
+                            to: this.callData.fromUserId,
+                            status: this.callConstants.CALL_STATUS_FREE_CALL_ANSWERED
+                        })
+                    };
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Send answer free call packet'
+                    });
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                        message: 'Answer free call packet',
+                        payload: answerFreeCallPacket
+                    });
+                    this.sendPacketFunction(answerFreeCallPacket).then(() => {
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                            message: 'Send answer free call packet successfully'
+                        });
+                        resolve();
+                    }).catch((error) => {
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                            message: 'Cannot send answer free call data, answer free call fail'
+                        });
+                        this.clearCallData();
+                        reject({
+                            code: error.code,
+                            message: 'Cannot send answer free call data, answer free call fail'
+                        });
+                    });
                 }
 
-                const peerConnectionMandatory = {
-                    OfferToReceiveAudio: true,
-                    OfferToReceiveVideo: this.callData.mediaType === this.callConstants.CALL_MEDIA_TYPE_AUDIO ? false : true
-                };
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                    message: 'Peer connection init'
+                    message: 'Set remote session description to peer connection'
                 });
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                    message: 'Peer connection options mandatory',
-                    payload: peerConnectionMandatory
-                });
-                if (this.callData.isCaller) {
-                    this.callData.webRTC.peerConnection.createOffer({
-                        mandatory: peerConnectionMandatory
-                    }).then(this.callData.webRTC.peerConnection.setLocalDescription).then(() => {
-                        peerConnectionInitConnectionSuccess();
-                    }).catch((error) => {
-                        peerConnectionInitConnectionError(error);
-                    });
-                } else {
-                    if (this.callData.callType === this.callConstants.CALL_TYPE_FREE_CALL) {
-                        const answerFreeCallPacket = {
-                            service: this.serviceTypes.FREE_CALL_STATUS_CHANGED,
-                            body: JSON.stringify({
-                                callId: this.callData.callId,
-                                to: this.callData.fromUserId,
-                                status: this.callConstants.CALL_STATUS_FREE_CALL_ANSWERED
-                            })
-                        };
-                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                            message: 'Send answer free call packet'
-                        });
-                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                            message: 'Answer free call packet',
-                            payload: answerFreeCallPacket
-                        });
-                        this.sendPacketFunction(answerFreeCallPacket).then(() => {
-                            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                                message: 'Send answer free call packet successfully'
-                            });
-                            resolve();
-                        }).catch((error) => {
-                            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                                message: 'Cannot send answer free call data, answer free call fail'
-                            });
-                            this.clearCallData();
-                            reject({
-                                code: error.code,
-                                message: 'Cannot send answer free call data, answer free call fail'
-                            });
-                        });
-                    }
-
+                this.callData.webRTC.peerConnection.setRemoteDescription(this.callData.webRTC.remoteSessionDescription).then(() => {
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                        message: 'Set remote session description to peer connection'
+                        message: 'Set remote session description success'
                     });
-                    this.callData.webRTC.peerConnection.setRemoteDescription(this.callData.webRTC.remoteSessionDescription).then(() => {
+                }).catch((error) => {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                        message: 'Set remote session description fail'
+                    });
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                        message: 'Set remote session description error',
+                        payload: error
+                    });
+                });
+
+                let totalUnAddedIceCandidates = this.callData.webRTC.remoteIceCandidates.length;
+                for (let i = 0; i < totalUnAddedIceCandidates; i++) {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Add remote ice candidate to peer connection'
+                    });
+                    this.callData.webRTC.peerConnection.addIceCandidate(this.callData.webRTC.remoteIceCandidates[i]).then(() => {
                         this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                            message: 'Set remote session description success'
+                            message: 'Add remote ice candidate success'
                         });
                     }).catch((error) => {
                         this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                            message: 'Set remote session description fail'
+                            message: 'Add remote ice candidate fail'
                         });
                         this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                            message: 'Set remote session description error',
+                            message: 'Add remote ice candidate error',
                             payload: error
                         });
                     });
-
-                    let totalUnAddedIceCandidates = this.callData.webRTC.remoteIceCandidates.length;
-                    for (let i = 0; i < totalUnAddedIceCandidates; i++) {
-                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                            message: 'Add remote ice candidate to peer connection'
-                        });
-                        this.callData.webRTC.peerConnection.addIceCandidate(this.callData.webRTC.remoteIceCandidates[i]).then(() => {
-                            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                                message: 'Add remote ice candidate success'
-                            });
-                        }).catch((error) => {
-                            this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
-                                message: 'Add remote ice candidate fail'
-                            });
-                            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                                message: 'Add remote ice candidate error',
-                                payload: error
-                            });
-                        });
-                    }
-
-                    this.callData.webRTC.peerConnection.createAnswer({
-                        mandatory: peerConnectionMandatory
-                    }).then(this.callData.webRTC.peerConnection.setLocalDescription).then(() => {
-                        peerConnectionInitConnectionSuccess();
-                    }).catch((error) => {
-                        peerConnectionInitConnectionError(error);
-                    });
                 }
-            };
-            const getUserMediaError = (error) => {
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                    message: 'Cannot get local stream'
+
+                this.callData.webRTC.peerConnection.createAnswer({
+                    mandatory: peerConnectionMandatory
+                }).then(this.callData.webRTC.peerConnection.setLocalDescription).then(() => {
+                    peerConnectionInitConnectionSuccess();
+                }).catch((error) => {
+                    peerConnectionInitConnectionError(error);
                 });
-                this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                    message: 'Get local stream error',
-                    payload: error
-                });
-                this.clearCallData();
-                reject({
-                    error: this.errorCodes.ERR_WEBRTC,
-                    message: 'Cannot get user media'
-                });
-            };
+            }
+
             const peerConnectionInitConnectionSuccess = () => {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                     message: 'Got local session description'
@@ -733,7 +742,9 @@ class Call {
                 cameraType: options.mediaType === this.callConstants.CALL_MEDIA_TYPE_VIDEO ? this.callConstants.CALL_WEBRTC_CAMERA_TYPE_FRONT : null
             });
 
-            return this.initWebRTC().then(() => {
+            this.getUserMedia().then(() => {
+                return this.initPeerConnection();
+            }).then(() => {
                 resolve();
             }).catch((error) => {
                 reject(error);
@@ -753,7 +764,7 @@ class Call {
                 message: 'Got free call start request data'
             });
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
-                message: 'Callin start request data',
+                message: 'Free call start request data',
                 payload: body
             });
 
@@ -842,10 +853,14 @@ class Call {
             });
             this.callData.webRTC.remoteSessionDescription = new RTCSessionDescription(body.sdp);
 
-            resolve({
-                mediaType: body.mediaType,
-                fromUserId: body.from,
-                toUserId: body.to
+            this.getUserMedia().then(() => {
+                resolve({
+                    mediaType: body.mediaType,
+                    fromUserId: body.from,
+                    toUserId: body.to
+                });
+            }).catch((error) => {
+                reject(error);
             });
         });
     };
@@ -1279,7 +1294,7 @@ class Call {
                 return;
             }
 
-            return this.initWebRTC().then(() => {
+            this.initPeerConnection().then(() => {
                 this.callData.callStatus = this.callConstants.CALL_STATUS_FREE_CALL_ANSWERED;
                 resolve();
             }).catch((error) => {
@@ -1616,7 +1631,9 @@ class Call {
                 return;
             }
 
-            return this.initWebRTC().then(() => {
+            this.getUserMedia().then(() => {
+                return this.initPeerConnection();
+            }).then(() => {
                 resolve();
             }).catch((error) => {
                 reject(error);
@@ -1944,9 +1961,13 @@ class Call {
                 type: 'offer'
             });
 
-            resolve({
-                fromPhoneNumber: body.from,
-                toPhoneNumber: body.to
+            this.getUserMedia().then(() => {
+                resolve({
+                    fromPhoneNumber: body.from,
+                    toPhoneNumber: body.to
+                });
+            }).catch((error) => {
+                reject(error);
             });
         });
     };
@@ -2145,7 +2166,7 @@ class Call {
                 return;
             }
 
-            return this.initWebRTC().then(() => {
+            this.initPeerConnection().then(() => {
                 this.callData.callStatus = this.callConstants.CALL_STATUS_CALLIN_STATUS_ANSWERED;
                 resolve();
             }).catch((error) => {
@@ -2302,7 +2323,7 @@ class Call {
                 return;
             }
 
-            if (this.callData.callStatus !== this.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING || this.callData.callStatus !== this.callConstants.CALL_STATUS_CALLIN_STATUS_ANSWERED) {
+            if (this.callData.callStatus !== this.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING && this.callData.callStatus !== this.callConstants.CALL_STATUS_CALLIN_STATUS_ANSWERED) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
                     message: 'Cannot stop callin when current status is not ringing or answered'
                 });

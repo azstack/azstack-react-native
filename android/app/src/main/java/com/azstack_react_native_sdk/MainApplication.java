@@ -36,9 +36,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new ReactNativeDocumentPicker(),
-            new RNZipArchivePackage(),
-            new InCallManagerPackage(),
+          new RNZipArchivePackage(),
+          new InCallManagerPackage(),
           new RNDeviceInfo(),
           new FIRMessagingPackage(),
           new MapsPackage(),

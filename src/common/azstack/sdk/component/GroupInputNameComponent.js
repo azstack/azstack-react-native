@@ -58,10 +58,14 @@ class GroupInputNameComponent extends React.Component {
     };
 
     componentDidMount() {
-        BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        if (this.props.withBackButtonHandler) {
+            BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        }
     };
     componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        if (this.props.withBackButtonHandler) {
+            BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
+        }
     };
 
     render() {
@@ -69,52 +73,60 @@ class GroupInputNameComponent extends React.Component {
             <ScreenBlockComponent
                 fullScreen={true}
                 withStatusbar={this.props.withStatusbar}
+                screenStyle={{
+                    ...this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_SCREEN_BLOCK_STYLE'),
+                    ...this.props.screenStyle
+                }}
+                statusbarStyle={this.props.statusbarStyle}
                 getCoreInstances={this.props.getCoreInstances}
-                style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_SCREEN_BLOCK_STYLE')}
             >
                 <View
                     style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_BLOCK_STYLE')}
                 >
-                    <Text
-                        style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_GROUP_NAME_TITLE_STYLE')}
-                    >
-                        {this.coreInstances.Language.getText('GROUP_INPUT_NAME_INPUT_TITLE_TEXT')}
-                    </Text>
-                    <TextInput
-                        style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_GROUP_NAME_INPUT_STYLE')}
-                        onChangeText={this.onGroupNameInputTextChanged}
-                        value={this.state.groupName}
-                        placeholder={this.coreInstances.Language.getText('GROUP_INPUT_NAME_NAME_INPUT_PLACEHOLDER_TEXT')}
-                        returnKeyType='done'
-                        {
-                        ...this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_GROUP_NAME_INPUT_PROPS_STYLE')
-                        }
-                    />
                     <View
-                        style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_BUTTON_BLOCK_STYLE')}
+                        style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_CONTENT_BLOCK_STYLE')}
                     >
-                        <TouchableOpacity
-                            style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_DONE_BUTTON_STYLE')}
-                            activeOpacity={0.5}
-                            onPress={this.onDoneButtonPressed}
+                        <Text
+                            style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_GROUP_NAME_TITLE_STYLE')}
                         >
-                            <Text
-                                style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_DONE_BUTTON_TEXT_STYLE')}
-                            >
-                                {this.coreInstances.Language.getText('GROUP_INPUT_NAME_DONE_BUTTON_TITLE_TEXT')}
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_CANCEL_BUTTON_STYLE')}
-                            activeOpacity={0.5}
-                            onPress={this.props.onBackButtonPressed}
+                            {this.coreInstances.Language.getText('GROUP_INPUT_NAME_INPUT_TITLE_TEXT')}
+                        </Text>
+                        <TextInput
+                            style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_GROUP_NAME_INPUT_STYLE')}
+                            onChangeText={this.onGroupNameInputTextChanged}
+                            value={this.state.groupName}
+                            placeholder={this.coreInstances.Language.getText('GROUP_INPUT_NAME_NAME_INPUT_PLACEHOLDER_TEXT')}
+                            returnKeyType='done'
+                            {
+                            ...this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_GROUP_NAME_INPUT_PROPS_STYLE')
+                            }
+                        />
+                        <View
+                            style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_BUTTON_BLOCK_STYLE')}
                         >
-                            <Text
-                                style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_CANCEL_BUTTON_TEXT_STYLE')}
+                            <TouchableOpacity
+                                style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_DONE_BUTTON_STYLE')}
+                                activeOpacity={0.5}
+                                onPress={this.onDoneButtonPressed}
                             >
-                                {this.coreInstances.Language.getText('GROUP_INPUT_NAME_CANCEL_BUTTON_TITLE_TEXT')}
-                            </Text>
-                        </TouchableOpacity>
+                                <Text
+                                    style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_DONE_BUTTON_TEXT_STYLE')}
+                                >
+                                    {this.coreInstances.Language.getText('GROUP_INPUT_NAME_DONE_BUTTON_TITLE_TEXT')}
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_CANCEL_BUTTON_STYLE')}
+                                activeOpacity={0.5}
+                                onPress={this.props.onBackButtonPressed}
+                            >
+                                <Text
+                                    style={this.coreInstances.CustomStyle.getStyle('GROUP_INPUT_NAME_CANCEL_BUTTON_TEXT_STYLE')}
+                                >
+                                    {this.coreInstances.Language.getText('GROUP_INPUT_NAME_CANCEL_BUTTON_TITLE_TEXT')}
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </ScreenBlockComponent>

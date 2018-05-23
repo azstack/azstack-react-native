@@ -1,4 +1,4 @@
-import * as classicTheme from './theme/classic';
+import * as classicTheme from './classic';
 
 class CustomStyle {
     constructor(options) {
