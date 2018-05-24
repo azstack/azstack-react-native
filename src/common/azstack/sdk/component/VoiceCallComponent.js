@@ -49,7 +49,7 @@ class VoiceCallComponent extends React.Component {
 		};
 
 		this.state = {
-			status: props.callData.status,
+			status: null,
 			isAudioOn: true,
 			isSpeakerOn: false,
 			isOnCall: isOnCall,
@@ -546,7 +546,7 @@ class VoiceCallComponent extends React.Component {
 		this.setState({ isAudioOn: !this.state.isAudioOn }, () => {
 			this.coreInstances.AZStackCore.toggleAudioState({
 				state: this.state.isAudioOn ? this.coreInstances.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_ON : this.coreInstances.AZStackCore.callConstants.CALL_WEBRTC_AUDIO_STATE_OFF
-			}, (error, result) => { });
+			}).then((result) => { }).catch((error) => { });
 		});
 	};
 	onToggleSpeakerButtonPressed() {

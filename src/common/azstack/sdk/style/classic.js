@@ -1451,6 +1451,347 @@ export const VOICE_CALL_END_BUTTON_IMAGE_STYLE = {
 };
 
 
+export const VIDEO_CALL_BLOCK_STYLE = {
+    flex: 1,
+    backgroundColor: '#353535'
+};
+export const VIDEO_CALL_REQUEST_BLOCK_STYLE = {
+    flex: 1
+};
+export const VIDEO_CALL_REQUEST_TOP_PART_BLOCK_STYLE = {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 40
+};
+export const VIDEO_CALL_REQUEST_TITLE_TEXT_STYLE = {
+    color: '#fff',
+    fontSize: 30,
+    fontWeight: '400',
+    lineHeight: 35
+};
+export const VIDEO_CALL_REQUEST_FULLNAME_TEXT_STYLE = {
+    color: '#fff',
+    fontSize: 25,
+    fontWeight: '400',
+    lineHeight: 30,
+    marginTop: 15
+};
+export const VIDEO_CALL_REQUEST_STATUS_MESSAGE_TEXT_STYLE = {
+    color: '#57FFC1',
+    fontSize: 18,
+    fontWeight: '400',
+    lineHeight: 20,
+    marginTop: 10
+};
+export const VIDEO_CALL_REQUEST_MIDDLE_PART_BLOCK_STYLE = {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const VIDEO_CALL_REQUEST_PULSE_BLOCK_STYLE = {
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const VIDEO_CALL_REQUEST_PULSE_PROPS_STYLE = {
+    color: '#48D2A0',
+    numPulses: 7,
+    maxDiameter: 250,
+    maxOpacity: 0.5,
+    duration: 850,
+    speed: 34
+};
+export const VIDEO_CALL_REQUEST_PULSE_IMAGE_STYLE = {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+};
+export const VIDEO_CALL_REQUEST_BOTTOM_PART_BLOCK_STYLE = {
+    flex: 0.3,
+    justifyContent: 'flex-end',
+    paddingBottom: 40,
+    paddingHorizontal: 20
+};
+export const VIDEO_CALL_REQUEST_BUTTONS_BLOCK_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+};
+export const VIDEO_CALL_REQUEST_BUTTONS_MARGIN_TOP_STYLE = {
+    marginTop: 20
+};
+export const VIDEO_CALL_REQUEST_BUTTONS_PADDING_BIGGER_STYLE = {
+    paddingHorizontal: 40
+};
+export const VIDEO_CALL_REQUEST_TOGGLE_AUDIO_BUTTON_BLOCK_STYLE = {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#fff'
+};
+export const VIDEO_CALL_REQUEST_TOGGLE_AUDIO_BUTTON_ACTIVE_STYLE = {
+    backgroundColor: 'rgba(255,255,255,0.5)',
+    borderWidth: 0
+};
+export const VIDEO_CALL_REQUEST_TOGGLE_AUDIO_BUTTON_IMAGE_STYLE = {
+    width: 19,
+    height: 31
+};
+export const VIDEO_CALL_REQUEST_TOGGLE_VIDEO_BUTTON_BLOCK_STYLE = {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#fff'
+};
+export const VIDEO_CALL_REQUEST_TOGGLE_VIDEO_BUTTON_ACTIVE_STYLE = {
+    backgroundColor: 'rgba(255,255,255,0.5)',
+    borderWidth: 0
+};
+export const VIDEO_CALL_REQUEST_TOGGLE_VIDEO_BUTTON_IMAGE_STYLE = {
+    width: 40,
+    height: 29
+};
+export const VIDEO_CALL_REQUEST_TOGGLE_SPEAKER_BUTTON_BLOCK_STYLE = {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#fff'
+};
+export const VIDEO_CALL_REQUEST_TOGGLE_SPEAKER_BUTTON_ACTIVE_STYLE = {
+    backgroundColor: 'rgba(255,255,255,0.5)',
+    borderWidth: 0
+};
+export const VIDEO_CALL_REQUEST_TOGGLE_SPEAKER_BUTTON_IMAGE_STYLE = {
+    width: 31,
+    height: 27
+};
+export const VIDEO_CALL_REQUEST_ANSWER_BUTTON_BLOCK_STYLE = {
+    width: 70,
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 35,
+    backgroundColor: '#26C281'
+};
+export const VIDEO_CALL_REQUEST_ANSWER_BUTTON_IMAGE_STYLE = {
+    width: 30,
+    height: 30
+};
+export const VIDEO_CALL_REQUEST_REJECT_BUTTON_BLOCK_STYLE = {
+    width: 70,
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 35,
+    backgroundColor: '#D91E18'
+};
+export const VIDEO_CALL_REQUEST_REJECT_BUTTON_IMAGE_STYLE = {
+    width: 30,
+    height: 30
+};
+export const VIDEO_CALL_REQUEST_END_BUTTON_BLOCK_STYLE = {
+    width: 70,
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 35,
+    backgroundColor: '#D91E18'
+};
+export const VIDEO_CALL_REQUEST_END_BUTTON_IMAGE_STYLE = {
+    width: 39,
+    height: 13
+};
+export const VIDEO_CALL_ON_CALL_BLOCK_STYLE = {
+    flex: 1,
+    position: 'relative'
+};
+export const VIDEO_CALL_ON_CALL_REMOTE_VIDEO_BLOCK_STYLE = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    zIndex: 1
+};
+export const VIDEO_CALL_ON_CALL_LOCAL_VIDEO_BLOCK_STYLE = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: 200,
+    height: 200,
+    zIndex: 2
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_BLOCK_STYLE = {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    left: 0,
+    bottom: 0,
+    zIndex: 3,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)'
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_HIDDEN_STYLE = {
+    opacity: 0
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_TOP_PART_BLOCK_STYLE = {
+    paddingTop: 20,
+    paddingHorizontal: 20
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_TOP_PART_INFORMATION_BLOCK_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'flex-end'
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_AVATAR_BLOCK_STYLE = {
+    width: 60,
+    height: 60,
+    borderRadius: 20
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_TEXTS_BLOCK_STYLE = {
+    marginRight: 15,
+    alignItems: 'flex-end'
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_FULLNAME_TEXT_STYLE = {
+    color: '#fff',
+    fontSize: 25,
+    fontWeight: '400',
+    lineHeight: 30
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_CALL_TIME_TEXT_STYLE = {
+    color: '#FFF',
+    fontSize: 15,
+    lineHeight: 20,
+    marginTop: 5
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_TOP_PART_BUTTONS_BLOCK_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: 20,
+    marginRight: 5
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_SWITCH_CAMERA_BUTTON_BLOCK_STYLE = {
+    width: 50,
+    height: 50,
+    borderRadius: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#fff'
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_SWITCH_CAMERA_BUTTON_IMAGE_STYLE = {
+    width: 25,
+    height: 25
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_MIDDLE_PART_BLOCK_STYLE = {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_BOTTOM_PART_BLOCK_STYLE = {
+    flex: 0.3,
+    justifyContent: 'flex-end',
+    paddingBottom: 40,
+    paddingHorizontal: 20
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_BUTTONS_BLOCK_STYLE = {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_TOGGLE_AUDIO_BUTTON_BLOCK_STYLE = {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#fff'
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_TOGGLE_AUDIO_BUTTON_ACTIVE_STYLE = {
+    backgroundColor: 'rgba(255,255,255,0.5)',
+    borderWidth: 0
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_TOGGLE_AUDIO_BUTTON_IMAGE_STYLE = {
+    width: 19,
+    height: 31
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_TOGGLE_VIDEO_BUTTON_BLOCK_STYLE = {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#fff'
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_TOGGLE_VIDEO_BUTTON_ACTIVE_STYLE = {
+    backgroundColor: 'rgba(255,255,255,0.5)',
+    borderWidth: 0
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_TOGGLE_VIDEO_BUTTON_IMAGE_STYLE = {
+    width: 40,
+    height: 29
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_TOGGLE_SPEAKER_BUTTON_BLOCK_STYLE = {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#fff'
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_TOGGLE_SPEAKER_BUTTON_ACTIVE_STYLE = {
+    backgroundColor: 'rgba(255,255,255,0.5)',
+    borderWidth: 0
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_TOGGLE_SPEAKER_BUTTON_IMAGE_STYLE = {
+    width: 31,
+    height: 27
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_ANSWER_BUTTON_BLOCK_STYLE = {
+    width: 70,
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 35,
+    backgroundColor: '#26C281'
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_ANSWER_BUTTON_IMAGE_STYLE = {
+    width: 30,
+    height: 30
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_REJECT_BUTTON_BLOCK_STYLE = {
+    width: 70,
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 35,
+    backgroundColor: '#D91E18'
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_REJECT_BUTTON_IMAGE_STYLE = {
+    width: 30,
+    height: 30
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_END_BUTTON_BLOCK_STYLE = {
+    width: 70,
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 35,
+    backgroundColor: '#D91E18'
+};
+export const VIDEO_CALL_ON_CALL_CONTROL_END_BUTTON_IMAGE_STYLE = {
+    width: 39,
+    height: 13
+};
+
+
 export const USER_BLOCK_STYLE = {
     paddingHorizontal: 15,
     justifyContent: 'center',
