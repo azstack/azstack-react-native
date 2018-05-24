@@ -29,6 +29,7 @@ class VideoCallComponent extends React.Component {
 			remoteVideoUrl: null,
 			status: null,
 			isOnCall: false,
+			showLocalVideo: false,
 			showControlBlock: false,
 			isAudioOn: true,
 			isVideoOn: true,
@@ -74,6 +75,10 @@ class VideoCallComponent extends React.Component {
 			}
 			this.setState({
 				remoteVideoUrl: result.stream.toURL()
+			}, () => {
+				setTimeout(() => {
+					this.setState({ showLocalVideo: true });
+				}, 500);
 			});
 		});
 
@@ -647,10 +652,14 @@ class VideoCallComponent extends React.Component {
 										streamURL={this.state.remoteVideoUrl}
 										style={this.coreInstances.CustomStyle.getStyle('VIDEO_CALL_ON_CALL_REMOTE_VIDEO_BLOCK_STYLE')}
 									/>
-									<RTCView
-										streamURL={this.state.localVideoUrl}
-										style={this.coreInstances.CustomStyle.getStyle('VIDEO_CALL_ON_CALL_LOCAL_VIDEO_BLOCK_STYLE')}
-									/>
+									{
+										this.state.showLocalVideo && (
+											<RTCView
+												streamURL={this.state.localVideoUrl}
+												style={this.coreInstances.CustomStyle.getStyle('VIDEO_CALL_ON_CALL_LOCAL_VIDEO_BLOCK_STYLE')}
+											/>
+										)
+									}
 									<View
 										style={[
 											this.coreInstances.CustomStyle.getStyle('VIDEO_CALL_ON_CALL_CONTROL_BLOCK_STYLE'),
