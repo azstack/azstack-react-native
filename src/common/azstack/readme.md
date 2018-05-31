@@ -77,7 +77,7 @@ render() {
             resolve(false);
         });
     };
-    let getNumbers = (options) => {
+    let getFromPhoneNumbers = (options) => {
         return new Promise((resolve, reject) => {
             resolve([]);
         });
@@ -102,7 +102,7 @@ render() {
                 languageCode: languageCode,
                 getInitialMembers: getInitialMembers,
                 getMoreMembers: getMoreMembers,
-                getNumbers: getNumbers,
+                getFromPhoneNumbers: getFromPhoneNumbers,
                 onBeforeMessageSend: onBeforeMessageSend,
                 onBeforeCalloutStart: onBeforeCalloutStart
             }}
