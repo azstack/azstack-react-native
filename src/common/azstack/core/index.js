@@ -80,7 +80,7 @@ export class AZStackCore {
         this.authenticatedUser = null;
 
         this.devicePlatformOS = Platform.OS === 'android' ? this.platformConstants.PLATFORM_ANDROID : (Platform.OS === 'ios' ? this.platformConstants.PLATFORM_IOS : this.platformConstants.PLATFORM_WEB);
-        this.deviceScreenSizes = `${Dimensions.get('window').width}x${Dimensions.get('window').height}`;
+        this.deviceScreenSizes = `${Math.round(Dimensions.get('window').width)}x${Math.round(Dimensions.get('window').height)}`;
 
         this.intervalSendPing = null;
         this.autoReconnectTrieds = 0;

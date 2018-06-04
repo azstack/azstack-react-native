@@ -1680,6 +1680,7 @@ class Call {
                     });
                     break;
                 case this.callConstants.CALL_STATUS_CALLOUT_STATUS_RINGING:
+                case this.callConstants.CALL_STATUS_CALLOUT_STATUS_RINGING_OTHER:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callout status changed to ringing'
                     });
