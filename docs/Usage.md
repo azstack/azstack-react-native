@@ -820,6 +820,7 @@ this.AZStackCore.startCallout({
 #### params(required):
 > - toPhoneNumber(required): target phone number
 > - fromPhoneNumber(optional): from phone number
+> - tags(optional): tags
 
 #### error:
 > - code: error code
@@ -903,6 +904,9 @@ this.AZStackCore.Delegates.onAnswerCallinReturn = (error, result) => {
 this.AZStackCore.answerCallin({});
 ```
 
+#### params(optional):
+> - tags(optional): tags
+
 #### error:
 > - code: error code
 > - message: error message
@@ -935,6 +939,9 @@ this.AZStackCore.Delegates.onRejectCallinReturn = (error, result) => {
 this.AZStackCore.rejectCallin({});
 ```
 
+#### params(optional):
+> - tags(optional): tags
+
 #### error:
 > - code: error code
 > - message: error message
@@ -966,6 +973,9 @@ this.AZStackCore.Delegates.onNotAnsweredCallinReturn = (error, result) => {
 };
 this.AZStackCore.notAnsweredCallin({});
 ```
+
+#### params(optional):
+> - tags(optional): tags
 
 #### error:
 > - code: error code
@@ -1205,16 +1215,19 @@ this.AZStackCore.getPaidCallLogs({});
 > - code: error code
 > - message: error message
 
-#### result: list of callLog with
-> - callId: id of call
-> - callType: type of call
-> - callStatus: status of call
-> - userId: id of user
-> - fromPhoneNumber: from phone number
-> - toPhoneNumber: to phone number
-> - duration: duration of call
-> - recordTime: recording time
-> - recordUrl: recording url
+#### result:
+> - done: done or not
+> - list: paid callLog list
+>    - callId: id of call
+>    - callType: type of call
+>    - callStatus: status of call
+>    - userId: id of user
+>    - fromPhoneNumber: from phone number
+>    - toPhoneNumber: to phone number
+>    - tags: tags
+>    - duration: duration of call
+>    - recordTime: recording time
+>    - recordUrl: recording url
 
 #### 3.5.5.2. Delegates
 
@@ -1235,6 +1248,7 @@ this.AZStackCore.Delegates.onPaidCallLogReturn = (error, result) => {
 > - userId: id of user
 > - fromPhoneNumber: from phone number
 > - toPhoneNumber: to phone number
+> - tags: tags
 > - duration: duration of call
 > - recordTime: recording time
 > - recordUrl: recording url

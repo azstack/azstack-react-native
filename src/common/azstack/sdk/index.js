@@ -119,6 +119,9 @@ export class AZStackSdk extends AZStackNavigation {
         if (this.props.options.onBeforeCalloutStart && typeof this.props.options.onBeforeCalloutStart === 'function') {
             this.Call.onBeforeCalloutStart = this.props.options.onBeforeCalloutStart;
         }
+        if (this.props.options.getPaidCallTags && typeof this.props.options.getPaidCallTags === 'function') {
+            this.Call.getPaidCallTags = this.props.options.getPaidCallTags;
+        }
 
         this.Notification = new Notification({
             AZStackCore: this.AZStackCore

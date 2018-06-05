@@ -1561,6 +1561,11 @@ export class AZStackCore {
                 required: false,
                 dataType: this.dataTypes.DATA_TYPE_PHONE_NUMBER,
                 data: options.fromPhoneNumber
+            }, {
+                name: 'tags',
+                required: false,
+                dataType: this.dataTypes.DATA_TYPE_STRING,
+                data: options.tags
             }]);
             if (dataErrorMessage) {
                 this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
@@ -1577,7 +1582,8 @@ export class AZStackCore {
             this.Call.sendStartCallout({
                 callId: this.uniqueId,
                 toPhoneNumber: options.toPhoneNumber,
-                fromPhoneNumber: options.fromPhoneNumber
+                fromPhoneNumber: options.fromPhoneNumber,
+                tags: options.tags
             }).then(() => { }).catch((error) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_START_CALLOUT, 'default', error, null);
             });
@@ -1603,9 +1609,38 @@ export class AZStackCore {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Answer callin'
             });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Answer callin data',
+                payload: options
+            });
             this.addUncall(this.uncallConstants.UNCALL_KEY_ANSWER_CALLIN, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_ANSWER_CALLIN_RETURN);
 
-            this.Call.sendAnswerCallin({}).then((result) => {
+            let answerCallinOptions = {};
+
+            if (options && typeof options === 'object') {
+                let dataErrorMessage = this.Validator.check([{
+                    name: 'tags',
+                    required: false,
+                    dataType: this.dataTypes.DATA_TYPE_STRING,
+                    data: options.tags
+                }]);
+                if (dataErrorMessage) {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                        message: dataErrorMessage
+                    });
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_ANSWER_CALLIN, 'default', {
+                        code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                        message: dataErrorMessage
+                    }, null);
+                    return;
+                }
+
+                if (options.tags) {
+                    answerCallinOptions.tags = options.tags;
+                }
+            }
+
+            this.Call.sendAnswerCallin(answerCallinOptions).then((result) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_ANSWER_CALLIN, 'default', null, null);
             }).catch((error) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_ANSWER_CALLIN, 'default', error, null);
@@ -1617,9 +1652,38 @@ export class AZStackCore {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Reject callin'
             });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Reject callin data',
+                payload: options
+            });
             this.addUncall(this.uncallConstants.UNCALL_KEY_REJECT_CALLIN, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_REJECT_CALLIN_RETURN);
 
-            this.Call.sendRejectCallin({}).then((result) => {
+            let rejectCallinOptions = {};
+
+            if (options && typeof options === 'object') {
+                let dataErrorMessage = this.Validator.check([{
+                    name: 'tags',
+                    required: false,
+                    dataType: this.dataTypes.DATA_TYPE_STRING,
+                    data: options.tags
+                }]);
+                if (dataErrorMessage) {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                        message: dataErrorMessage
+                    });
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_REJECT_CALLIN, 'default', {
+                        code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                        message: dataErrorMessage
+                    }, null);
+                    return;
+                }
+
+                if (options.tags) {
+                    rejectCallinOptions.tags = options.tags;
+                }
+            }
+
+            this.Call.sendRejectCallin(rejectCallinOptions).then((result) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_REJECT_CALLIN, 'default', null, null);
             }).catch((error) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_REJECT_CALLIN, 'default', error, null);
@@ -1631,9 +1695,38 @@ export class AZStackCore {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Not Answered callin'
             });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Not answered callin data',
+                payload: options
+            });
             this.addUncall(this.uncallConstants.UNCALL_KEY_NOT_ANSWERED_CALLIN, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_NOT_ANSWERED_CALLIN_RETURN);
 
-            this.Call.sendNotAnsweredCallin({}).then((result) => {
+            let notAnwserCallinOptions = {};
+
+            if (options && typeof options === 'object') {
+                let dataErrorMessage = this.Validator.check([{
+                    name: 'tags',
+                    required: false,
+                    dataType: this.dataTypes.DATA_TYPE_STRING,
+                    data: options.tags
+                }]);
+                if (dataErrorMessage) {
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                        message: dataErrorMessage
+                    });
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_NOT_ANSWERED_CALLIN, 'default', {
+                        code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                        message: dataErrorMessage
+                    }, null);
+                    return;
+                }
+
+                if (options.tags) {
+                    notAnwserCallinOptions.tags = options.tags;
+                }
+            }
+
+            this.Call.sendNotAnsweredCallin(notAnwserCallinOptions).then((result) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_NOT_ANSWERED_CALLIN, 'default', null, null);
             }).catch((error) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_NOT_ANSWERED_CALLIN, 'default', error, null);

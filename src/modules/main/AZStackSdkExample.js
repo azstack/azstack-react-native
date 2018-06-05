@@ -91,7 +91,7 @@ class AZStackSdkExample extends React.Component {
         const { width, height } = Dimensions.get('window');
         return (
             <AZStackSdk
-                ref={"AZStackSdk"}
+                ref={'AZStackSdk'}
                 options={{
                     azstackConfig: this.props.azstackConfig,
                     defaultLayout: this.props.defaultLayout,
@@ -100,6 +100,7 @@ class AZStackSdkExample extends React.Component {
                     getInitialMembers: this.props.getInitialMembers,
                     getMoreMembers: this.props.getMoreMembers,
                     getFromPhoneNumbers: this.props.getFromPhoneNumbers,
+                    getPaidCallTags: this.props.getPaidCallTags,
                     onBeforeMessageSend: this.props.onBeforeMessageSend,
                     onBeforeCalloutStart: this.props.onBeforeCalloutStart
                 }}

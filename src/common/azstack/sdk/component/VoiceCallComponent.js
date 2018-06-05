@@ -485,13 +485,22 @@ class VoiceCallComponent extends React.Component {
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_CALLOUT:
 				break;
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_CALLIN:
-				this.coreInstances.AZStackCore.answerCallin({}).then((result) => { }).catch((error) => { });
-				this.setState({
-					timeoutNotAnswer: false,
-					isOnCall: true,
-					showTimerText: true,
-					audios: Object.assign({}, this.state.audios, { ringingIn: false }),
-					status: this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_ANSWERED
+				const answerCallin = (tags) => {
+					this.coreInstances.AZStackCore.answerCallin({
+						tags: tags
+					}).then((result) => { }).catch((error) => { });
+					this.setState({
+						timeoutNotAnswer: false,
+						isOnCall: true,
+						showTimerText: true,
+						audios: Object.assign({}, this.state.audios, { ringingIn: false }),
+						status: this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_ANSWERED
+					});
+				};
+				this.coreInstances.Call.getPaidCallTags().then((tags) => {
+					answerCallin(tags);
+				}).catch((error) => {
+					answerCallin('');
 				});
 				break;
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_FREE_CALL:
@@ -513,16 +522,25 @@ class VoiceCallComponent extends React.Component {
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_CALLOUT:
 				break;
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_CALLIN:
-				this.coreInstances.AZStackCore.rejectCallin({}).then((result) => { }).catch((error) => { });
-				this.setState({
-					timeoutNotAnswer: false,
-					showButtons: false,
-					audios: Object.assign({}, this.state.audios, { ringingIn: false, rejected: true }),
-					status: this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING_STOP
+				const rejectCallin = (tags) => {
+					this.coreInstances.AZStackCore.rejectCallin({
+						tags: tags
+					}).then((result) => { }).catch((error) => { });
+					this.setState({
+						timeoutNotAnswer: false,
+						showButtons: false,
+						audios: Object.assign({}, this.state.audios, { ringingIn: false, rejected: true }),
+						status: this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING_STOP
+					});
+					setTimeout(() => {
+						this.props.onCallEnded();
+					}, 1500);
+				};
+				this.coreInstances.Call.getPaidCallTags().then((tags) => {
+					rejectCallin(tags);
+				}).catch((error) => {
+					rejectCallin('');
 				});
-				setTimeout(() => {
-					this.props.onCallEnded();
-				}, 1500);
 
 				break;
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_FREE_CALL:
@@ -562,37 +580,54 @@ class VoiceCallComponent extends React.Component {
 		}
 		switch (this.props.callData.callType) {
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_CALLOUT:
-				this.setState({
-					status: this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_CONNECTING
-				});
-				this.coreInstances.AZStackCore.startCallout({
-					toPhoneNumber: this.props.callData.toPhoneNumber,
-					fromPhoneNumber: this.props.callData.fromPhoneNumber
-				}).then((result) => {
-
-				}).catch((error) => {
+				const startCallout = (tags) => {
 					this.setState({
-						status: error.status ? error.status : this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_UNKNOWN,
-						showButtons: false,
-						audios: Object.assign({}, this.state.audios, { error: true })
+						status: this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_CONNECTING
 					});
-					setTimeout(() => {
-						this.props.onCallEnded();
-					}, 1500);
+					this.coreInstances.AZStackCore.startCallout({
+						toPhoneNumber: this.props.callData.toPhoneNumber,
+						fromPhoneNumber: this.props.callData.fromPhoneNumber,
+						tags: tags
+					}).then((result) => {
+
+					}).catch((error) => {
+						this.setState({
+							status: error.status ? error.status : this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_UNKNOWN,
+							showButtons: false,
+							audios: Object.assign({}, this.state.audios, { error: true })
+						});
+						setTimeout(() => {
+							this.props.onCallEnded();
+						}, 1500);
+					});
+				};
+				this.coreInstances.Call.getPaidCallTags().then((tags) => {
+					startCallout(tags);
+				}).catch((error) => {
+					startCallout('');
 				});
 				break;
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_CALLIN:
 				this.notAnswerFunction = (() => {
-					this.coreInstances.AZStackCore.notAnsweredCallin({}).then((result) => { }).catch((error) => { });
-					this.setState({
-						timeoutNotAnswer: false,
-						showButtons: false,
-						audios: Object.assign({}, this.state.audios, { ringingIn: false, notAnswered: true }),
-						status: this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_NOT_ANSWERED
+					const notAnsweredCallin = (tags) => {
+						this.coreInstances.AZStackCore.notAnsweredCallin({
+							tags: tags
+						}).then((result) => { }).catch((error) => { });
+						this.setState({
+							timeoutNotAnswer: false,
+							showButtons: false,
+							audios: Object.assign({}, this.state.audios, { ringingIn: false, notAnswered: true }),
+							status: this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_NOT_ANSWERED
+						});
+						setTimeout(() => {
+							this.props.onCallEnded();
+						}, 1500);
+					};
+					this.coreInstances.Call.getPaidCallTags().then((tags) => {
+						notAnsweredCallin(tags);
+					}).catch((error) => {
+						notAnsweredCallin('');
 					});
-					setTimeout(() => {
-						this.props.onCallEnded();
-					}, 1500);
 				}).bind(this);
 				this.setState({
 					timeoutNotAnswer: true,

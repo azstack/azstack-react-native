@@ -29,6 +29,7 @@ class Call {
             fromPhoneNumber: null,
             toPhoneNumber: null,
             callinType: null,
+            tags: null,
             webRTC: {
                 audioState: null,
                 videoState: null,
@@ -76,6 +77,7 @@ class Call {
         this.callData.fromPhoneNumber = null;
         this.callData.toPhoneNumber = null;
         this.callData.callinType = null;
+        this.callData.tags = null;
         this.callData.webRTC.audioState = null;
         this.callData.webRTC.videoState = null;
         this.callData.webRTC.cameraType = null;
@@ -199,8 +201,10 @@ class Call {
                                 callType: this.callData.callinType,
                                 destination: this.callData.fromPhoneNumber,
                                 phonenumber: this.callData.toPhoneNumber,
+                                tags: this.callData.tags,
                                 code: this.callConstants.CALL_STATUS_CALLIN_STATUS_ANSWERED,
                                 sdp_candidate: sdpCandidate
+
                             })
                         };
                         this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
@@ -1485,7 +1489,8 @@ class Call {
                 callId: options.callId,
                 callStatus: this.callConstants.CALL_STATUS_CALLOUT_STATUS_CONNECTING,
                 toPhoneNumber: options.toPhoneNumber,
-                fromPhoneNumber: options.fromPhoneNumber
+                fromPhoneNumber: options.fromPhoneNumber,
+                tags: options.tags
             });
             this.setWebRTCCallData({
                 audioState: this.callConstants.CALL_WEBRTC_AUDIO_STATE_ON
@@ -1496,7 +1501,8 @@ class Call {
                 body: JSON.stringify({
                     callId: this.callData.callId,
                     to: this.callData.toPhoneNumber,
-                    from: this.callData.fromPhoneNumber
+                    from: this.callData.fromPhoneNumber,
+                    tags: this.callData.tags
                 })
             };
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
@@ -2167,6 +2173,8 @@ class Call {
                 return;
             }
 
+            this.callData.tags = options.tags;
+
             this.initPeerConnection().then(() => {
                 this.callData.callStatus = this.callConstants.CALL_STATUS_CALLIN_STATUS_ANSWERED;
                 resolve();
@@ -2214,6 +2222,7 @@ class Call {
                     callType: this.callData.callinType,
                     destination: this.callData.fromPhoneNumber,
                     phonenumber: this.callData.toPhoneNumber,
+                    tags: options.tags,
                     code: this.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING_STOP
                 })
             };
@@ -2280,6 +2289,7 @@ class Call {
                     callType: this.callData.callinType,
                     destination: this.callData.fromPhoneNumber,
                     phonenumber: this.callData.toPhoneNumber,
+                    tags: options.tags,
                     code: this.callConstants.CALL_STATUS_CALLIN_STATUS_NOT_ANSWERED
                 })
             };
@@ -2346,6 +2356,7 @@ class Call {
                     callType: this.callData.callinType,
                     destination: this.callData.fromPhoneNumber,
                     phonenumber: this.callData.toPhoneNumber,
+                    tags: this.callData.tags,
                     code: this.callConstants.CALL_STATUS_CALLIN_STATUS_STOP
                 })
             };
@@ -2395,6 +2406,7 @@ class Call {
                 callId: body.data.callId,
                 fromPhoneNumber: body.data.from,
                 toPhoneNumber: body.data.to,
+                tags: body.data.tags,
                 duration: body.data.duration,
                 recordTime: body.data.recordTime,
                 recordUrl: body.data.urlRecord,
@@ -2471,6 +2483,7 @@ class Call {
                     callId: item.callId,
                     fromPhoneNumber: item.from,
                     toPhoneNumber: item.to,
+                    tags: item.tags,
                     duration: item.duration,
                     recordTime: item.recordTime,
                     recordUrl: item.url,

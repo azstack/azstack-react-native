@@ -6,6 +6,12 @@ class Message {
             resolve(options);
         });
     };
+
+    getPaidCallTags = (options) => {
+        return new Promise((resolve, reject) => {
+            resolve('');
+        });
+    };
 };
 
 export default Message;

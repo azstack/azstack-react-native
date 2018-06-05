@@ -42,6 +42,7 @@ class AppMain extends React.Component {
         this.getInitialMembers = this.getInitialMembers.bind(this);
         this.getMoreMembers = this.getMoreMembers.bind(this);
         this.getFromPhoneNumbers = this.getFromPhoneNumbers.bind(this);
+        this.getPaidCallTags = this.getPaidCallTags.bind(this);
         this.onBeforeMessageSend = this.onBeforeMessageSend.bind(this);
         this.onBeforeCalloutStart = this.onBeforeCalloutStart.bind(this);
     };
@@ -61,6 +62,11 @@ class AppMain extends React.Component {
     getFromPhoneNumbers = (options) => {
         return new Promise((resolve, reject) => {
             resolve([]);
+        });
+    };
+    getPaidCallTags = (options) => {
+        return new Promise((resolve, reject) => {
+            resolve('');
         });
     };
     onBeforeMessageSend = (message) => {
@@ -91,6 +97,7 @@ class AppMain extends React.Component {
                         getInitialMembers={this.getInitialMembers}
                         getMoreMembers={this.getMoreMembers}
                         getFromPhoneNumbers={this.getFromPhoneNumbers}
+                        getPaidCallTags={this.getPaidCallTags}
                         onBeforeMessageSend={this.onBeforeMessageSend}
                         onBeforeCalloutStart={this.onBeforeCalloutStart}
                     />}

@@ -82,6 +82,11 @@ render() {
             resolve([]);
         });
     };
+    let getPaidCallTags = (options) => {
+        return new Promise((resolve, reject) => {
+            resolve('');
+        });
+    };
     let onBeforeMessageSend = (message) => {
         return new Promise((resolve, reject) => {
             resolve(message);
@@ -95,7 +100,7 @@ render() {
     ...
     return (
         <AZStackSdk
-            ref={"AZStackSdk"}
+            ref={'AZStackSdk'}
             options={{
                 azstackConfig: azstackConfig,
                 defaultLayout: defaultLayout,
@@ -103,6 +108,7 @@ render() {
                 getInitialMembers: getInitialMembers,
                 getMoreMembers: getMoreMembers,
                 getFromPhoneNumbers: getFromPhoneNumbers,
+                getPaidCallTags: getPaidCallTags,
                 onBeforeMessageSend: onBeforeMessageSend,
                 onBeforeCalloutStart: onBeforeCalloutStart
             }}

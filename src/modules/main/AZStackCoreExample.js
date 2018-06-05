@@ -190,13 +190,13 @@ class AZStackCoreExample extends React.Component {
     };
 
     answerCallin() {
-        this.AZStackCore.answerCallin().then(() => { }).catch(() => { });
+        this.AZStackCore.answerCallin({}).then(() => { }).catch(() => { });
     };
     rejectCallin() {
-        this.AZStackCore.rejectCallin().then(() => { }).catch(() => { });
+        this.AZStackCore.rejectCallin({}).then(() => { }).catch(() => { });
     };
     notAnsweredCallin() {
-        this.AZStackCore.notAnsweredCallin().then(() => { }).catch(() => { });
+        this.AZStackCore.notAnsweredCallin({}).then(() => { }).catch(() => { });
     };
     stopCallin() {
         this.AZStackCore.stopCallin().then(() => { }).catch(() => { });
@@ -647,13 +647,13 @@ class AZStackCoreExample extends React.Component {
                     <Button onPress={this.getListGroupsPrivate} title='Get list groups private' />
                     <Button onPress={this.getListGroupsPublic} title='Get list groups public' />
                     <Text>{'\n'}{'\n'}</Text>
-                    <Button onPress={this.changeApplicationState} title='Change application state' /> 
+                    <Button onPress={this.changeApplicationState} title='Change application state' />
                     <Text>{'\n'}{'\n'}</Text>
-                    <Button onPress={this.notificationRegisterDevice} title='Notification register device' />   
+                    <Button onPress={this.notificationRegisterDevice} title='Notification register device' />
                     <Text>{'\n'}{'\n'}</Text>
-                    <Button onPress={this.getDefaultStickersList} title='Get default stickers list' />   
-                    <Button onPress={this.getNotDefaultStickersList} title='Get not default stickers list' />   
-                    <Text>{'\n'}{'\n'}</Text>                     
+                    <Button onPress={this.getDefaultStickersList} title='Get default stickers list' />
+                    <Button onPress={this.getNotDefaultStickersList} title='Get not default stickers list' />
+                    <Text>{'\n'}{'\n'}</Text>
                 </View>
             </ScrollView>
         );
