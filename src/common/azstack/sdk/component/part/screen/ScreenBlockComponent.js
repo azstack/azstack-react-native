@@ -18,6 +18,7 @@ class ScreenBlockComponent extends React.Component {
             takePartHeight: 0
         };
 
+        this.keyboardShowed = false;
         this.withStatusbar = (this.props.withStatusbar || (this.props.withStatusbar === undefined && this.coreInstances.defaultLayout.withStatusbar)) ? true : false;
         this.fullScreen = (this.props.fullScreen || (this.props.fullScreen === undefined && this.coreInstances.defaultLayout.fullScreen)) ? true : false;
 
@@ -30,6 +31,9 @@ class ScreenBlockComponent extends React.Component {
     };
 
     onScreenLayout(event) {
+        if (this.keyboardShowed) {
+            return;
+        }
         this.setState({
             realHeight: event.nativeEvent.layout.height - (this.fullScreen ? 0 : (this.withStatusbar ? 0 : (Platform.OS === 'ios' ? 20 : StatusBar.currentHeight)))
         });
@@ -37,11 +41,13 @@ class ScreenBlockComponent extends React.Component {
 
     componentDidMount() {
         this.keyboardListeners.onShowed = Keyboard.addListener('keyboardDidShow', (event) => {
+            this.keyboardShowed = true;
             this.setState({
                 takePartHeight: event.endCoordinates.height
             });
         });
         this.keyboardListeners.onHided = Keyboard.addListener('keyboardDidHide', (event) => {
+            this.keyboardShowed = false;
             this.setState({
                 takePartHeight: 0
             });

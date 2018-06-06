@@ -52,7 +52,9 @@ export const SCREEN_BLOCK_STYLE = {
     flexDirection: 'column'
 };
 export const SCREEN_CONTENT_BLOCK_STYLE = {
-    flex: 1
+    height: '100%',
+    width: '100%',
+    position: 'relative'
 };
 export const SCREEN_STATUS_BAR_PROPS_STYLE = {
     backgroundColor: '#fff',
@@ -550,6 +552,8 @@ export const CHAT_INPUT_INPUT_DISABLE_TOUCH_BLOCK_STYLE = {
 export const CHAT_INPUT_INPUT_CONTENT_BLOCK_STYLE = {
     borderTopWidth: 1,
     borderTopColor: '#E1E5EC',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E1E5EC',
     paddingVertical: 0,
     paddingHorizontal: 15,
     flexDirection: 'row',
@@ -607,9 +611,7 @@ export const CHAT_INPUT_TEXT_INPUT_PROPS_STYLE = {
     maxHeight: 70,
 };
 export const CHAT_INPUT_STICKER_BOX_BLOCK_STYLE = {
-    height: 250,
-    borderTopWidth: 1,
-    borderTopColor: '#E1E5EC'
+    height: 250
 };
 export const CHAT_INPUT_STICKER_BOX_HEADER_BLOCK_STYLE = {
     paddingVertical: 5,
@@ -669,9 +671,7 @@ export const CHAT_INPUT_STICKER_BOX_STICKERS_STICKER_IMAGE_STYLE = {
     height: 60
 };
 export const CHAT_INPUT_FILE_BOX_BLOCK_STYLE = {
-    height: 250,
-    borderTopWidth: 1,
-    borderTopColor: '#E1E5EC'
+    height: 250
 };
 export const CHAT_INPUT_FILE_BOX_CONTENT_BLOCK_STYLE = {
     flex: 1,
