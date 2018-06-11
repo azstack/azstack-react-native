@@ -321,6 +321,7 @@ class VideoCallComponent extends React.Component {
 		if (this.props.withBackButtonHandler) {
 			BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
 		}
+		InCallManager.start();
 		if (this.props.callData.isCaller) {
 			this.setState({
 				status: this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_CONNECTING
@@ -354,6 +355,7 @@ class VideoCallComponent extends React.Component {
 		if (this.props.withBackButtonHandler) {
 			BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
 		}
+		InCallManager.stop();
 	};
 
 	render() {

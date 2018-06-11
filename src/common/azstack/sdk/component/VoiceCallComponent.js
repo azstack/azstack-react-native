@@ -578,6 +578,7 @@ class VoiceCallComponent extends React.Component {
 		if (this.props.withBackButtonHandler) {
 			BackHandler.addEventListener('hardwareBackPress', this.onHardBackButtonPressed);
 		}
+		InCallManager.start();
 		switch (this.props.callData.callType) {
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_CALLOUT:
 				const startCallout = (tags) => {
@@ -684,6 +685,7 @@ class VoiceCallComponent extends React.Component {
 		if (this.props.withBackButtonHandler) {
 			BackHandler.removeEventListener('hardwareBackPress', this.onHardBackButtonPressed);
 		}
+		InCallManager.stop();
 	};
 
 	render() {
