@@ -1,6 +1,6 @@
 {
   "name": "azstack-react-native",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "React native SDK for AZSTACK Communication Platform",
   "main": "index.js",
   "scripts": {
