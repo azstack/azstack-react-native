@@ -34,7 +34,7 @@ import Sticker from './handler/sticker';
 
 export class AZStackCore {
     constructor(options) {
-        this.sdkVersion = '0.0.1';
+        this.sdkVersion = '2.2.4';
         this.masterSocketUri = 'https://www.azhub.xyz:9199';
 
         this.platformConstants = platformConstants;
