@@ -11,7 +11,7 @@ class AppMain extends React.Component {
     constructor(props) {
         super(props);
 
-        this.exampleType = 'sdk';
+        this.exampleType = 'core';
         this.azstackConfig = {
             requestTimeout: 60000,
             intervalPingTime: 60000,

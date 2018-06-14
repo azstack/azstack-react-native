@@ -10,7 +10,7 @@ import {
     RTCView
 } from 'react-native-webrtc';
 
-import { AZStackCore } from '../../common/azstack/';
+import AZStackCore from '../../common/azstack/core/';
 
 class AZStackCoreExample extends React.Component {
 

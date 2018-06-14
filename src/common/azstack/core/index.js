@@ -32,7 +32,7 @@ import Group from './handler/group';
 import Notification from './handler/notification';
 import Sticker from './handler/sticker';
 
-export class AZStackCore {
+class AZStackCore {
     constructor(options) {
         this.sdkVersion = '2.2.4';
         this.masterSocketUri = 'https://www.azhub.xyz:9199';
@@ -3364,3 +3364,5 @@ export class AZStackCore {
         });
     };
 };
+
+export default AZStackCore;

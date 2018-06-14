@@ -17,7 +17,7 @@ import * as limitConstants from './constant/limitConstants';
 import Language from './language/';
 import CustomStyle from './style/';
 
-import { AZStackCore } from '../core/';
+import AZStackCore from '../core/';
 
 import DateTimeFormatter from './helper/dateTimeFormatter';
 import FileConverter from './helper/fileConverter';
@@ -32,7 +32,7 @@ import Notification from './handler/notification';
 
 import AZStackNavigation from './AZStackNavigation';
 
-export class AZStackSdk extends AZStackNavigation {
+class AZStackSdk extends AZStackNavigation {
     constructor(props) {
         super(props);
         this.subscriptions = {};
@@ -1128,3 +1128,5 @@ export class AZStackSdk extends AZStackNavigation {
         );
     };
 };
+
+export default AZStackSdk;

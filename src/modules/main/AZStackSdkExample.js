@@ -8,9 +8,7 @@ import {
     Platform
 } from 'react-native';
 
-import {
-    AZStackSdk,
-} from '../../common/azstack/';
+import AZStackSdk from '../../common/azstack/sdk/';
 
 class AZStackSdkExample extends React.Component {
     constructor(props) {
