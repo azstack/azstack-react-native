@@ -268,8 +268,8 @@ class AZStackSdk extends AZStackNavigation {
     connect(options) {
         return this.AZStackCore.connect(options);
     };
-    reconnect() {
-        return this.AZStackCore.reconnect();
+    reconnect(options) {
+        return this.AZStackCore.reconnect(options);
     };
     disconnect() {
         return this.AZStackCore.disconnect();

@@ -399,6 +399,9 @@ class AZStackCore {
                     code: this.errorCodes.ERR_SOCKET_CONNECT,
                     message: 'Cannot reconnect to slave socket'
                 }, null);
+                if (this.autoReconnect) {
+                    this.tryAutoReconnect();
+                }
             } else if (this.stateControls.autoReconnecting) {
                 if (typeof this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED] === 'function') {
                     this.Delegates[this.delegateConstants.DELEGATE_ON_AUTO_RECONNECTED]({
@@ -1059,7 +1062,7 @@ class AZStackCore {
     };
 
     connect(options, callback) {
-        if (options && options.authenticatingData) {
+        if (typeof options === 'object' && options.authenticatingData) {
             this.setAuthenticatingData(options.authenticatingData);
         }
         return new Promise((resolve, reject) => {
@@ -1116,6 +1119,9 @@ class AZStackCore {
         });
     };
     reconnect(options, callback) {
+        if (typeof options === 'object' && options.authenticatingData) {
+            this.setAuthenticatingData(options.authenticatingData);
+        }
         return new Promise((resolve, reject) => {
 
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
@@ -1198,6 +1204,9 @@ class AZStackCore {
                 }).catch((error) => {
                     this.stateControls.reconnecting = false;
                     this.callUncall(this.uncallConstants.UNCALL_KEY_RECONNECT, 'default', error, null);
+                    if (this.autoReconnect) {
+                        this.tryAutoReconnect();
+                    }
                 });
             }
         });

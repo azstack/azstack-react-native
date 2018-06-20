@@ -381,7 +381,16 @@ this.AZStackCore = new AZStackCore({
 ### 3.4.1. Connect
 
 ```javascript 
-this.AZStackCore.connect({}, (error, result) => {
+this.AZStackCore.connect({
+    authenticatingData: {
+        appId: 'bd7095762179b886c094c31b8f5e4646',
+        publicKey: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs1XFclMmD+l83OY3oOqN2a4JH4PkFvi9O/SOAnASmgfjXliWm7XeVMHeTfNKWKcEZKzWp8rFdwVlO5dXqKquLmcmnr4gb+yvakXNnRm6z135BQDQKCAvrDyEuzr31mmtk935+Yxms8Lfiuxmi5hWZszfTyJDBp2xokeOXbDLjqhunMO3wfxs+lao0qxWxfk4Eb0847/3sY+Zt7hMIceZEYhg7rwdnkl+zNJusPnWYFsf5povE1/qke+KCAL5z2Xte7xcpSv3b29Tl5W4iMfGOqh4ikytfRL/OTRXH3U0wuLuxSDsD7Lms0foAEPCdRJzbGnoNmsV/ongwKRrONitFQIDAQAB',
+        azStackUserId: 'test_user_1',
+        userCredentials: '',
+        fullname: 'Test User 1',
+        namespace: ''
+    }
+}, (error, result) => {
     console.log(error);
     console.log(result);
 });
@@ -390,7 +399,16 @@ this.AZStackCore.connect({}, (error, result) => {
 OR
 
 ```javascript 
-this.AZStackCore.connect({}).then((result) => {
+this.AZStackCore.connect({
+    authenticatingData: {
+        appId: 'bd7095762179b886c094c31b8f5e4646',
+        publicKey: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs1XFclMmD+l83OY3oOqN2a4JH4PkFvi9O/SOAnASmgfjXliWm7XeVMHeTfNKWKcEZKzWp8rFdwVlO5dXqKquLmcmnr4gb+yvakXNnRm6z135BQDQKCAvrDyEuzr31mmtk935+Yxms8Lfiuxmi5hWZszfTyJDBp2xokeOXbDLjqhunMO3wfxs+lao0qxWxfk4Eb0847/3sY+Zt7hMIceZEYhg7rwdnkl+zNJusPnWYFsf5povE1/qke+KCAL5z2Xte7xcpSv3b29Tl5W4iMfGOqh4ikytfRL/OTRXH3U0wuLuxSDsD7Lms0foAEPCdRJzbGnoNmsV/ongwKRrONitFQIDAQAB',
+        azStackUserId: 'test_user_1',
+        userCredentials: '',
+        fullname: 'Test User 1',
+        namespace: ''
+    }
+}).then((result) => {
     console.log(result);
 }).catch((error) => {
     console.log(error);
@@ -403,8 +421,25 @@ OR
 this.AZStackCore.Delegates.onConnectReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStackCore.connect({});
+this.AZStackCore.connect({
+    authenticatingData: {
+        appId: 'bd7095762179b886c094c31b8f5e4646',
+        publicKey: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs1XFclMmD+l83OY3oOqN2a4JH4PkFvi9O/SOAnASmgfjXliWm7XeVMHeTfNKWKcEZKzWp8rFdwVlO5dXqKquLmcmnr4gb+yvakXNnRm6z135BQDQKCAvrDyEuzr31mmtk935+Yxms8Lfiuxmi5hWZszfTyJDBp2xokeOXbDLjqhunMO3wfxs+lao0qxWxfk4Eb0847/3sY+Zt7hMIceZEYhg7rwdnkl+zNJusPnWYFsf5povE1/qke+KCAL5z2Xte7xcpSv3b29Tl5W4iMfGOqh4ikytfRL/OTRXH3U0wuLuxSDsD7Lms0foAEPCdRJzbGnoNmsV/ongwKRrONitFQIDAQAB',
+        azStackUserId: 'test_user_1',
+        userCredentials: '',
+        fullname: 'Test User 1',
+        namespace: ''
+    }
+});
 ```
+
+#### authenticatingData(optional):
+> - appId(required): the id of your azstack application
+> - publicKey(required): the public key of ypur azstack application
+> - azStackUserId(required): an unique string for authenticating user in your application
+> - userCredentials(optional): the creadentials of authenticating user
+> - fullname(required): the name of authenticating user
+> - namespace(optional): the namespace of authenticating user
 
 #### error:
 > - code: error code
@@ -418,7 +453,16 @@ this.AZStackCore.connect({});
 ### 3.4.2. Reconnect
 
 ```javascript 
-this.AZStackCore.reconnect({}, (error, result) => {
+this.AZStackCore.reconnect({
+    authenticatingData: {
+        appId: 'bd7095762179b886c094c31b8f5e4646',
+        publicKey: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs1XFclMmD+l83OY3oOqN2a4JH4PkFvi9O/SOAnASmgfjXliWm7XeVMHeTfNKWKcEZKzWp8rFdwVlO5dXqKquLmcmnr4gb+yvakXNnRm6z135BQDQKCAvrDyEuzr31mmtk935+Yxms8Lfiuxmi5hWZszfTyJDBp2xokeOXbDLjqhunMO3wfxs+lao0qxWxfk4Eb0847/3sY+Zt7hMIceZEYhg7rwdnkl+zNJusPnWYFsf5povE1/qke+KCAL5z2Xte7xcpSv3b29Tl5W4iMfGOqh4ikytfRL/OTRXH3U0wuLuxSDsD7Lms0foAEPCdRJzbGnoNmsV/ongwKRrONitFQIDAQAB',
+        azStackUserId: 'test_user_1',
+        userCredentials: '',
+        fullname: 'Test User 1',
+        namespace: ''
+    }
+}, (error, result) => {
     console.log(error);
     console.log(result);
 });
@@ -427,7 +471,16 @@ this.AZStackCore.reconnect({}, (error, result) => {
 OR
 
 ```javascript 
-this.AZStackCore.reconnect({}).then((result) => {
+this.AZStackCore.reconnect({
+    authenticatingData: {
+        appId: 'bd7095762179b886c094c31b8f5e4646',
+        publicKey: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs1XFclMmD+l83OY3oOqN2a4JH4PkFvi9O/SOAnASmgfjXliWm7XeVMHeTfNKWKcEZKzWp8rFdwVlO5dXqKquLmcmnr4gb+yvakXNnRm6z135BQDQKCAvrDyEuzr31mmtk935+Yxms8Lfiuxmi5hWZszfTyJDBp2xokeOXbDLjqhunMO3wfxs+lao0qxWxfk4Eb0847/3sY+Zt7hMIceZEYhg7rwdnkl+zNJusPnWYFsf5povE1/qke+KCAL5z2Xte7xcpSv3b29Tl5W4iMfGOqh4ikytfRL/OTRXH3U0wuLuxSDsD7Lms0foAEPCdRJzbGnoNmsV/ongwKRrONitFQIDAQAB',
+        azStackUserId: 'test_user_1',
+        userCredentials: '',
+        fullname: 'Test User 1',
+        namespace: ''
+    }
+}).then((result) => {
     console.log(result);
 }).catch((error) => {
     console.log(error);
@@ -440,8 +493,25 @@ OR
 this.AZStackCore.Delegates.onReconnectReturn = (error, result) => {
     console.log(error, result);
 };
-this.AZStackCore.reconnect({});
+this.AZStackCore.reconnect({
+    authenticatingData: {
+        appId: 'bd7095762179b886c094c31b8f5e4646',
+        publicKey: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs1XFclMmD+l83OY3oOqN2a4JH4PkFvi9O/SOAnASmgfjXliWm7XeVMHeTfNKWKcEZKzWp8rFdwVlO5dXqKquLmcmnr4gb+yvakXNnRm6z135BQDQKCAvrDyEuzr31mmtk935+Yxms8Lfiuxmi5hWZszfTyJDBp2xokeOXbDLjqhunMO3wfxs+lao0qxWxfk4Eb0847/3sY+Zt7hMIceZEYhg7rwdnkl+zNJusPnWYFsf5povE1/qke+KCAL5z2Xte7xcpSv3b29Tl5W4iMfGOqh4ikytfRL/OTRXH3U0wuLuxSDsD7Lms0foAEPCdRJzbGnoNmsV/ongwKRrONitFQIDAQAB',
+        azStackUserId: 'test_user_1',
+        userCredentials: '',
+        fullname: 'Test User 1',
+        namespace: ''
+    }
+});
 ```
+
+#### authenticatingData(optional):
+> - appId(required): the id of your azstack application
+> - publicKey(required): the public key of ypur azstack application
+> - azStackUserId(required): an unique string for authenticating user in your application
+> - userCredentials(optional): the creadentials of authenticating user
+> - fullname(required): the name of authenticating user
+> - namespace(optional): the namespace of authenticating user
 
 #### error:
 > - code: error code
