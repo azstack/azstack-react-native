@@ -4018,9 +4018,9 @@ react-native-video@^2.0.0:
     keymirror "0.1.1"
     prop-types "^15.5.10"
 
-react-native-webrtc@^1.58.3:
-  version "1.58.3"
-  resolved "https://registry.yarnpkg.com/react-native-webrtc/-/react-native-webrtc-1.58.3.tgz#4d4f4f057ccf1ec25f985c63ada6c4a1b44e5c49"
+react-native-webrtc@^1.63.0:
+  version "1.63.0"
+  resolved "https://registry.yarnpkg.com/react-native-webrtc/-/react-native-webrtc-1.63.0.tgz#702154d287ff3091de714c4af7482ffa0523c3e8"
   dependencies:
     base64-js "^1.1.2"
     event-target-shim "^1.0.5"
