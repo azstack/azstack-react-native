@@ -48,9 +48,7 @@ FCM.on(FCMEvent.Notification, async (notification) => {
 });
 
 class Notication {
-    constructor(options) {
-        this.AZStackCore = options.AZStackCore;
-    };
+    constructor(options) {};
 
     init() {
         return new Promise((resolve, reject) => {
@@ -72,22 +70,13 @@ class Notication {
             FCM.getInitialNotification().then(notification => {
 
                 if (notification && notification.fcm.action === fcmActionBannerClicked && notification.initialNotification) {
-                    this.AZStackCore.parseNotification({ notification: notification.initialNotification }).then((result) => {
-                        resolve(result);
-                    }).catch((error) => {
-                        reject(error);
-                    });
+                    resolve(notification.initialNotification)
                     return;
                 }
 
                 if (initialNotification) {
-                    this.AZStackCore.parseNotification({ notification: initialNotification }).then((result) => {
-                        resolve(result);
-                        initialNotification = null;
-                    }).catch((error) => {
-                        initialNotification = null;
-                        reject(error);
-                    });
+                    resolve(initialNotification);
+                    initialNotification = null;
                     return;
                 }
 

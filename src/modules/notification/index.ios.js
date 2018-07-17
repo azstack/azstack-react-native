@@ -5,8 +5,6 @@ import {
 class Notication {
     constructor(options) {
 
-        this.AZStackCore = options.AZStackCore;
-
         this.resolveFunction = null;
         this.rejectFunction = null;
         PushNotificationIOS.addEventListener('register', (deviceToken) => {
@@ -36,16 +34,7 @@ class Notication {
                     return reject({});
                 }
 
-                this.AZStackCore.parseNotification({
-                    notification: {
-                        appId: notification._data.appId,
-                        pushPacketType: notification._data.pushPacketType
-                    }
-                }).then((result) => {
-                    resolve(result);
-                }).catch((error) => {
-                    reject(error);
-                });
+                resolve(notification);
             }).then((error) => {
                 reject({});
             });

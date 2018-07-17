@@ -1,14 +1,10 @@
 import React from 'react';
 import {
-    Platform,
     AppState,
     Keyboard,
-    Alert,
-    Dimensions,
     View
 } from 'react-native';
 import EventEmitter from 'react-native/Libraries/vendor/emitter/EventEmitter';
-import DeviceInfo from 'react-native-device-info';
 
 import * as eventConstants from './constant/eventConstants';
 import * as linkConstants from './constant/linkConstants';
@@ -28,14 +24,12 @@ import Member from './handler/member';
 import PhoneNumber from './handler/phoneNumber';
 import Message from './handler/message';
 import Call from './handler/call';
-import Notification from './handler/notification';
 
 import AZStackNavigation from './AZStackNavigation';
 
 class AZStackSdk extends AZStackNavigation {
     constructor(props) {
         super(props);
-        this.subscriptions = {};
         this.state = {
             navigation: []
         };
@@ -123,90 +117,9 @@ class AZStackSdk extends AZStackNavigation {
             this.Call.getPaidCallTags = this.props.options.getPaidCallTags;
         }
 
-        this.Notification = new Notification({
-            AZStackCore: this.AZStackCore
-        });
-        this.deviceToken = null;
-        this.devicePlatformOS = Platform.OS === 'android' ? this.AZStackCore.platformConstants.PLATFORM_ANDROID : (Platform.OS === 'ios' ? this.AZStackCore.platformConstants.PLATFORM_IOS : this.AZStackCore.platformConstants.PLATFORM_WEB);
-        this.applicationBundleId = DeviceInfo.getBundleId();
-
         this.getCoreInstances = this.getCoreInstances.bind(this);
 
         this.handleAppStateChange = this.handleAppStateChange.bind(this);
-    };
-
-    addSubscriptions() {
-        this.subscriptions.onConnected = this.EventEmitter.addListener(this.eventConstants.EVENT_NAME_CONNECT_RETURN, ({ error, result }) => {
-            if (error) {
-                return;
-            }
-            this.initRun();
-        });
-        this.subscriptions.onAutoReconnected = this.EventEmitter.addListener(this.eventConstants.EVENT_NAME_ON_AUTO_RECONNECTED, ({ error, result }) => {
-            if (error) {
-                return;
-            }
-            this.initRun();
-        });
-        this.subscriptions.onReconnected = this.EventEmitter.addListener(this.eventConstants.EVENT_NAME_ON_RECONNECT_RETURN, ({ error, result }) => {
-            if (error) {
-                return;
-            }
-            this.initRun();
-        });
-        this.subscriptions.onDisconnectReturn = this.EventEmitter.addListener(this.eventConstants.EVENT_NAME_ON_DISCONNECT_RETURN, ({ error, result }) => {
-            if (error) {
-                return;
-            }
-            this.deviceToken = null;
-        });
-    };
-    clearSubscriptions() {
-        for (let subscriptionName in this.subscriptions) {
-            this.subscriptions[subscriptionName].remove();
-        }
-    };
-
-    registerDeviceToken() {
-        if (!this.AZStackCore.slaveSocketConnected) {
-            return;
-        }
-        if (this.deviceToken) {
-            return;
-        }
-        this.Notification.init().then((deviceToken) => {
-            this.deviceToken = deviceToken;
-            this.AZStackCore.notificationRegisterDevice({
-                deviceToken: this.deviceToken,
-                devicePlatformOS: this.devicePlatformOS,
-                applicationBundleId: this.applicationBundleId
-            }).then((result) => { }).catch((error) => { });
-        }).catch((error) => { });
-    };
-    getInitialNotification() {
-        this.Notification.getInitialNotification().then((notification) => {
-            console.log('initial notification');
-            console.log(notification);
-        }).catch((error) => {
-            console.log('initial notification error');
-            console.log(error);
-        });
-    };
-    handleAppStateChange(nextAppState) {
-        if (!!this.AZStackCore && this.AZStackCore.slaveSocketConnected) {
-            this.AZStackCore.changeApplicationState({
-                state: nextAppState === 'active' ? this.AZStackCore.applicationStateConstants.APPLICATION_STATE_FOREGROUND : this.AZStackCore.applicationStateConstants.APPLICATION_STATE_BACKGROUND
-            }).then(() => { }).catch(() => { });
-        };
-
-        if (nextAppState === 'active') {
-            if (Platform.OS === 'android') {
-                this.getInitialNotification();
-            }
-        }
-    };
-    initRun() {
-        this.registerDeviceToken();
     };
 
     getCoreInstances() {
@@ -236,16 +149,18 @@ class AZStackSdk extends AZStackNavigation {
         };
     };
 
+    handleAppStateChange(nextAppState) {
+        if (!!this.AZStackCore && this.AZStackCore.slaveSocketConnected) {
+            this.AZStackCore.changeApplicationState({
+                state: nextAppState === 'active' ? this.AZStackCore.applicationStateConstants.APPLICATION_STATE_FOREGROUND : this.AZStackCore.applicationStateConstants.APPLICATION_STATE_BACKGROUND
+            }).then(() => { }).catch(() => { });
+        };
+    };
+
     componentDidMount() {
-        this.addSubscriptions();
-        this.initRun();
         AppState.addEventListener('change', this.handleAppStateChange);
-        if (Platform.OS === 'ios') {
-            this.getInitialNotification();
-        }
     };
     componentWillUnmount() {
-        this.clearSubscriptions();
         AppState.removeEventListener('change', this.handleAppStateChange);
     };
 
