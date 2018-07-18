@@ -35,8 +35,8 @@ class VoiceCallComponent extends React.Component {
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_CALLIN:
 				isOnCall = false;
 				titleText = this.coreInstances.Language.getText('VOICE_CALL_CALLIN_TITLE_TEXT');
-				textLineOne = props.callData.fullname || props.callData.toPhoneNumber;
-				textLineTwo = props.callData.fullname ? props.callData.toPhoneNumber : '';
+				textLineOne = props.callData.fullname || props.callData.fromPhoneNumber;
+				textLineTwo = props.callData.fullname ? props.callData.fromPhoneNumber : '';
 				break;
 			case this.coreInstances.AZStackCore.callConstants.CALL_TYPE_FREE_CALL:
 				isOnCall = props.callData.isCaller;
