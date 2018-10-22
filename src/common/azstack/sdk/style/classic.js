@@ -866,19 +866,26 @@ export const MESSAGE_TYPE_MEDIA_CANCELED_STYLE = {
     borderRadius: 5,
     backgroundColor: '#E9EDEF'
 };
-export const MESSAGE_TYPE_MEDIA_TEXT_STYLE = {
-    maxWidth: '80%',
+export const MESSAGE_TYPE_MEDIA_TEXT_BLOCK_STYLE = {
+    maxWidth: '80%'
+};
+export const MESSAGE_TYPE_MEDIA_TEXT_FROM_ME_STYLE = {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    backgroundColor: '#F2784B'
+};
+export const MESSAGE_TYPE_MEDIA_TEXT_TEXT_STYLE = {
     fontSize: 16,
     lineHeight: 20,
     fontWeight: '400',
     color: '#2F353B'
 };
-export const MESSAGE_TYPE_MEDIA_TEXT_FROM_ME_STYLE = {
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    color: '#fff',
-    borderRadius: 5,
-    backgroundColor: '#F2784B'
+export const MESSAGE_TYPE_MEDIA_TEXT_TEXT_FROM_ME_STYLE = {
+    color: '#fff'
+};
+export const MESSAGE_TYPE_MEDIA_TEXT_TEXT_URL_STYLE = {
+    textDecorationLine: 'underline'
 };
 export const MESSAGE_TYPE_MEDIA_STICKER_STYLE = {
     width: 70,

@@ -8,6 +8,7 @@ import {
 
 import ChatAvatarBlockComponent from '../common/ChatAvatarBlockComponent';
 import MessageStatusBlockComponent from '../common/MessageStatusBlockComponent';
+import MessageTextBlockComponent from './MessageTextBlockComponent';
 import MessageStickerBlockComponent from './MessageStickerBlockComponent';
 import MessageImageBlockComponent from './MessageImageBlockComponent';
 import MessageAudioBlockComponent from './MessageAudioBlockComponent';
@@ -330,14 +331,13 @@ class MessageBlockComponent extends React.Component {
                                 {
                                     this.props.message.status !== this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED &&
                                     this.props.message.type === this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT && (
-                                        <Text
-                                            style={[
-                                                this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_TEXT_STYLE'),
-                                                (this.props.message.sender.userId === this.coreInstances.AZStackCore.authenticatedUser.userId ? this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_TEXT_FROM_ME_STYLE') : {})
-                                            ]}
-                                        >
-                                            {this.props.message.text}
-                                        </Text>
+                                        <MessageTextBlockComponent
+                                            getCoreInstances={this.props.getCoreInstances}
+                                            isFromMe={this.props.message.sender.userId === this.coreInstances.AZStackCore.authenticatedUser.userId}
+                                            msgId={this.props.message.msgId}
+                                            text={this.props.message.text}
+                                            onMessageUrlPressed={this.props.onMessageUrlPressed}
+                                        />
                                     )
                                 }
                                 {

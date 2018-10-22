@@ -4,6 +4,7 @@ import {
     Alert,
     BackHandler,
     Platform,
+    Linking,
     FlatList,
     Image,
     View,
@@ -59,6 +60,7 @@ class ChatComponent extends React.Component {
 
         this.onMessagesListScrollBegin = this.onMessagesListScrollBegin.bind(this);
         this.onMessagesListEndReach = this.onMessagesListEndReach.bind(this);
+        this.onMessageUrlPressed = this.onMessageUrlPressed.bind(this);
         this.onMessageImagePressed = this.onMessageImagePressed.bind(this);
         this.onMessageLocationPressed = this.onMessageLocationPressed.bind(this);
 
@@ -692,6 +694,31 @@ class ChatComponent extends React.Component {
     };
     onMessagesListEndReach() {
         this.getModifiedMessages();
+    };
+    onMessageUrlPressed(event) {
+        Linking.canOpenURL(event.url).then((supported) => {
+            if (!supported) {
+                Alert.alert(
+                    this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                    this.coreInstances.Language.getText('CHAT_OPEN_LINK_ERROR_TEXT'),
+                    [
+                        { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                    ],
+                    { cancelable: true }
+                );
+                return;
+            }
+            Linking.openURL(event.url);
+        }).catch((error) => {
+            Alert.alert(
+                this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
+                this.coreInstances.Language.getText('ALERT_GENERAL_ERROR_TEXT'),
+                [
+                    { text: this.coreInstances.Language.getText('ALERT_BUTTON_TITLE_OK_TEXT'), onPress: () => { } }
+                ],
+                { cancelable: true }
+            );
+        });
     };
     onMessageImagePressed(event) {
         let imageFiles = this.files.filter((file) => {
@@ -1344,6 +1371,7 @@ class ChatComponent extends React.Component {
                                             shouldRenderTimeMark={this.shouldRenderTimeMark(index)}
                                             shouldRenderSender={this.shouldRenderSender(index)}
                                             onSenderPressed={this.props.onSenderPressed}
+                                            onMessageUrlPressed={this.onMessageUrlPressed}
                                             onMessageImagePressed={this.onMessageImagePressed}
                                             onMessageLocationPressed={this.onMessageLocationPressed}
                                         />
