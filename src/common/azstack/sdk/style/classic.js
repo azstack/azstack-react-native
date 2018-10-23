@@ -254,6 +254,63 @@ export const PULSE_ANIMATE_IMAGE_BLOCK_STYLE = {
     alignItems: 'center'
 };
 
+
+export const ACTIONS_SHEET_SCREEN_BLOCK_STYLE = {
+    backgroundColor: 'rgba(0, 0, 0, 0.7)'
+};
+export const ACTIONS_SHEET_CLOSE_BUTTON_BLOCK_STYLE = {
+    width: 40,
+    height: 40,
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const ACTIONS_SHEET_CLOSE_BUTTON_TEXT_STYLE = {
+    fontSize: 40,
+    fontWeight: '400',
+    lineHeight: 40,
+    color: '#fff'
+};
+export const ACTIONS_SHEET_BLOCK_STYLE = {
+    flex: 1,
+    padding: 40,
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+export const ACTIONS_SHEET_CONTENT_BLOCK_STYLE = {
+    width: '100%',
+    padding: 20,
+    backgroundColor: '#FFF',
+    borderRadius: 5
+};
+export const ACTIONS_SHEET_CONTENT_HEADER_BLOCK_STYLE = {
+    paddingBottom: 10,
+    borderStyle: 'solid',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E1E5EC'
+};
+export const ACTIONS_SHEET_CONTENT_HEADER_TEXT_STYLE = {
+    fontSize: 16,
+    fontWeight: '400',
+    lineHeight: 20,
+    color: '#2F353B'
+};
+export const ACTIONS_SHEET_CONTENT_BODY_BLOCK_STYLE = {
+    paddingTop: 10
+};
+export const ACTIONS_SHEET_CONTENT_OPTION_BLOCK_STYLE = {
+    paddingVertical: 5
+};
+export const ACTIONS_SHEET_CONTENT_OPTION_TEXT_STYLE = {
+    fontSize: 15,
+    fontWeight: '400',
+    lineHeight: 20,
+    color: '#2F353B'
+};
+
+
 export const MESSAGE_STATUS_BLOCK_STYLE = {
     width: '100%',
     height: '100%',
@@ -2247,6 +2304,7 @@ export const GROUP_INPUT_NAME_CANCEL_BUTTON_TEXT_STYLE = {
     color: '#95A5A6',
     textAlign: 'center'
 };
+
 
 export const IMAGE_GALLERY_SCREEN_BLOCK_STYLE = {
     backgroundColor: 'rgba(0, 0, 0, 0.7)'

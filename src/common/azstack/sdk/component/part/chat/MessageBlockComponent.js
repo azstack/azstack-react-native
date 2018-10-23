@@ -27,7 +27,8 @@ class MessageBlockComponent extends React.Component {
             showDetails: false
         };
 
-        this.toggleMessageDetails = this.toggleMessageDetails.bind(this);
+        this.onMessagePressed = this.onMessagePressed.bind(this);
+        this.onMessageLongPressed = this.onMessageLongPressed.bind(this);
         this.onSenderPressed = this.onSenderPressed.bind(this);
     };
 
@@ -78,13 +79,18 @@ class MessageBlockComponent extends React.Component {
                 return '';
         }
     };
-
-    toggleMessageDetails() {
+    onMessagePressed() {
         if (!this.state.showDetails) {
             this.coreInstances.EventEmitter.emit(this.coreInstances.eventConstants.EVENT_NAME_ON_MESSAGE_DETAILS_SHOWED, { error: null, result: { msgId: this.props.message.msgId } });
         }
         this.setState({ showDetails: !this.state.showDetails });
     };
+    onMessageLongPressed() {
+        this.props.onMessageActionsPressed({
+            message: this.props.message
+        });
+    };
+
     onSenderPressed() {
         this.props.onSenderPressed({
             userId: this.props.message.sender.userId
@@ -103,7 +109,9 @@ class MessageBlockComponent extends React.Component {
             <TouchableOpacity
                 style={this.coreInstances.CustomStyle.getStyle('MESSAGE_BLOCK_STYLE')}
                 activeOpacity={0.5}
-                onPress={this.toggleMessageDetails}
+                onPress={this.onMessagePressed}
+                onLongPress={this.onMessageLongPressed}
+                delayLongPress={2}
             >
                 {
                     (this.props.shouldRenderTimeMark || this.state.showDetails) && (

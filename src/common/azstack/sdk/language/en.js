@@ -92,6 +92,7 @@ export const GROUP_ACTION_JOIN_ERROR_TEXT = 'Can\'t join group, please try again
 export const USER_ONLINE_TEXT = 'Online';
 export const USER_OFFLINE_TEXT = 'Last seen';
 
+
 export const CONVERSATIONS_HEADER_TITLE_TEXT = 'Conversations';
 export const CONVERSATIONS_SEARCH_PLACEHOLDER_TEXT = 'Search...';
 export const CONVERSATIONS_LIST_EMPTY_TEXT = 'No Conversation';
@@ -101,6 +102,8 @@ export const CONVERSATIONS_LIST_NEW_GROUP_TO_CHAT_ERROR_TEXT = 'Create group to 
 
 
 export const CHAT_HEADER_TITLE_TEXT = 'Chat';
+export const CHAT_MESSAGE_ACTIONS_SHEET_TITLE_TEXT = 'Menu';
+export const CHAT_MESSAGE_ACTIONS_SHEET_OPTION_COPY_TEXT = 'Copy';
 export const CHAT_OPEN_LINK_ERROR_TEXT = 'Can\'t open link';
 export const MESSAGES_LIST_EMPTY_TEXT = 'No Message';
 export const CHAT_INPUT_DISABLED_TEXT = 'You can\'t reply to this conversation';

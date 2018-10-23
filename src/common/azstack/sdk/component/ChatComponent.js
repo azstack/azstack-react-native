@@ -4,6 +4,7 @@ import {
     Alert,
     BackHandler,
     Platform,
+    Clipboard,
     Linking,
     FlatList,
     Image,
@@ -60,6 +61,7 @@ class ChatComponent extends React.Component {
 
         this.onMessagesListScrollBegin = this.onMessagesListScrollBegin.bind(this);
         this.onMessagesListEndReach = this.onMessagesListEndReach.bind(this);
+        this.onMessageActionsPressed = this.onMessageActionsPressed.bind(this);
         this.onMessageUrlPressed = this.onMessageUrlPressed.bind(this);
         this.onMessageImagePressed = this.onMessageImagePressed.bind(this);
         this.onMessageLocationPressed = this.onMessageLocationPressed.bind(this);
@@ -694,6 +696,52 @@ class ChatComponent extends React.Component {
     };
     onMessagesListEndReach() {
         this.getModifiedMessages();
+    };
+    onMessageActionsPressed(event) {
+
+        if (event.message.status === this.coreInstances.AZStackCore.chatConstants.MESSAGE_STATUS_CANCELLED) {
+            return;
+        }
+
+        switch (event.message.type) {
+            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_TEXT:
+                this.props.showActionsSheet({
+                    title: this.coreInstances.Language.getText('CHAT_MESSAGE_ACTIONS_SHEET_TITLE_TEXT'),
+                    options: [
+                        this.coreInstances.Language.getText('CHAT_MESSAGE_ACTIONS_SHEET_OPTION_COPY_TEXT')
+                    ],
+                    onOptionSelected: (index) => {
+                        switch (index) {
+                            case 0:
+                                Clipboard.setString(event.message.text);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+                break;
+            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_STICKER:
+                break;
+            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_FILE:
+                break;
+            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_LOCATION:
+                break;
+            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_CREATED:
+                break;
+            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_INVITED:
+                break;
+            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_LEFT:
+                break;
+            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_RENAMED:
+                break;
+            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_ADMIN_CHANGED:
+                break;
+            case this.coreInstances.AZStackCore.chatConstants.MESSAGE_TYPE_GROUP_PUBLIC_JOINED:
+                break;
+            default:
+                break;
+        }
     };
     onMessageUrlPressed(event) {
         Linking.canOpenURL(event.url).then((supported) => {
@@ -1371,6 +1419,7 @@ class ChatComponent extends React.Component {
                                             shouldRenderTimeMark={this.shouldRenderTimeMark(index)}
                                             shouldRenderSender={this.shouldRenderSender(index)}
                                             onSenderPressed={this.props.onSenderPressed}
+                                            onMessageActionsPressed={this.onMessageActionsPressed}
                                             onMessageUrlPressed={this.onMessageUrlPressed}
                                             onMessageImagePressed={this.onMessageImagePressed}
                                             onMessageLocationPressed={this.onMessageLocationPressed}

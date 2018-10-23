@@ -331,6 +331,9 @@ class AZStackSdk extends AZStackNavigation {
 
                 this.pop();
             },
+            showActionsSheet: (event) => {
+                this.showActionsSheet(event);
+            },
             showImageGallery: (event) => {
                 this.showImageGallery(event);
             },
@@ -399,6 +402,25 @@ class AZStackSdk extends AZStackNavigation {
                         toUserId: event.toUserId
                     }
                 });
+            }
+        });
+    };
+    showActionsSheet(options) {
+        this.navigate(this.getNavigation().ActionsSheetComponent, {
+            ...options,
+            withBackButtonHandler: true,
+            onBackButtonPressed: () => {
+                if (options && typeof options === 'object' && typeof options.onBackButtonPressed === 'function') {
+                    options.onBackButtonPressed();
+                    return;
+                }
+
+                this.pop();
+            },
+            onOptionSelected: (index) => {
+                if (options && typeof options === 'object' && typeof options.onOptionSelected === 'function') {
+                    options.onOptionSelected(index);
+                }
             }
         });
     };
@@ -885,6 +907,9 @@ class AZStackSdk extends AZStackNavigation {
                     }
 
                     this.pop();
+                },
+                showActionsSheet: (event) => {
+                    this.showActionsSheet(event);
                 },
                 showImageGallery: (event) => {
                     this.showImageGallery(event);

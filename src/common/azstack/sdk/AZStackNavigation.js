@@ -5,6 +5,7 @@ import {
     View,
 } from 'react-native';
 
+import ActionsSheetComponent from './component/ActionsSheetComponent';
 import ConversationsComponent from './component/ConversationsComponent';
 import ChatComponent from './component/ChatComponent';
 import NumberPadComponent from './component/NumberPadComponent';
@@ -25,6 +26,7 @@ import SelectPhoneNumberComponent from './component/SelectPhoneNumberComponent';
 
 
 const NavigationEnum = {
+    ActionsSheetComponent: 'ActionsSheetComponent',
     ConversationsComponent: 'ConversationsComponent',
     ChatComponent: 'ChatComponent',
     NumberPadComponent: 'NumberPadComponent',
@@ -68,6 +70,8 @@ export default class AZStackNavigation extends React.Component {
     };
     renderScreen(screen, options, index) {
         switch (screen) {
+            case 'ActionsSheetComponent':
+                return this.renderActionsSheet(options, index);
             case 'ConversationsComponent':
                 return this.renderConversations(options, index);
             case 'ChatComponent':
@@ -133,6 +137,14 @@ export default class AZStackNavigation extends React.Component {
     };
 
     /* Render component */
+    renderActionsSheet(options, key) {
+        return <ActionsSheetComponent
+            key={key}
+            Sizes={this.Sizes}
+            getCoreInstances={this.getCoreInstances}
+            {...options}
+        />;
+    };
     renderConversations(options, key) {
         return <ConversationsComponent
             key={key}
