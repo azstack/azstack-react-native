@@ -428,9 +428,9 @@
     lodash "^4.17.5"
     to-fast-properties "^2.0.0"
 
-"@terrylinla/react-native-sketch-canvas@^0.4.1":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@terrylinla/react-native-sketch-canvas/-/react-native-sketch-canvas-0.4.1.tgz#42dce2f135aa946a15deaa0ab942936dc8dbd0af"
+"@terrylinla/react-native-sketch-canvas@^0.8.0":
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/@terrylinla/react-native-sketch-canvas/-/react-native-sketch-canvas-0.8.0.tgz#3d3aa4ce2afb71bac2fbd512889e292d3265b264"
 
 abab@^1.0.3:
   version "1.0.4"

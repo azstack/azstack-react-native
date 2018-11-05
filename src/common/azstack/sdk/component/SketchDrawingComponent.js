@@ -103,7 +103,7 @@ class SketchDrawingComponent extends React.Component {
             return;
         }
 
-        this.refs.SketchCanvas.getBase64('png', true, (error, result) => {
+        this.refs.SketchCanvas.getBase64('png', true, false, false, false, (error, result) => {
             if (error) {
                 Alert.alert(
                     this.coreInstances.Language.getText('ALERT_TITLE_ERROR_TEXT'),
