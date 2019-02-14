@@ -3,10 +3,8 @@
 
 target 'azstack_react_native_sdk' do
 
+  # React libs
   rn_path = '../node_modules/react-native'
-  rn_maps_path = '../node_modules/react-native-maps'
-
-      # React libs
   pod 'yoga', path: "#{rn_path}/ReactCommon/yoga/yoga.podspec"
   pod 'React', path: rn_path, subspecs: [
   'Core',
@@ -29,16 +27,23 @@ target 'azstack_react_native_sdk' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   #libs
+  pod 'RNSketchCanvas', :path => '../node_modules/@terrylinla/react-native-sketch-canvas'
+  pod 'RNAudio', :path => '../node_modules/react-native-audio'
+  pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
   pod 'react-native-document-picker', :path => '../node_modules/react-native-document-picker'
   pod 'RNFS', :path => '../node_modules/react-native-fs'
-  pod 'react-native-webrtc', :path => '../node_modules/react-native-webrtc'
-  pod 'RSKImageCropper'
-  pod 'QBImagePickerController'
+  pod 'RNImageCropPicker', :path =>  '../node_modules/react-native-image-crop-picker'
+  pod 'ReactNativeIncallManager', :path => '../node_modules/react-native-incall-manager'
+  rn_maps_path = '../node_modules/react-native-maps'
   pod 'react-native-maps', path: rn_maps_path
   pod 'react-native-google-maps', path: rn_maps_path
   pod 'GoogleMaps'
+  pod 'Google-Maps-iOS-Utils'
   pod 'GooglePlaces'
   pod 'GooglePlacePicker'
+  pod 'react-native-video', :path => '../node_modules/react-native-video'
+  pod 'react-native-webrtc', :path => '../node_modules/react-native-webrtc'
+  pod 'RNZipArchive', :path => '../node_modules/react-native-zip-archive'
 end
 
 post_install do |installer|
@@ -48,8 +53,10 @@ post_install do |installer|
         config.build_settings['CLANG_ENABLE_MODULES'] = 'No'
       end
     end
-    if target.name == 'React'
-      target.remove_from_project
+    
+    targets_to_ignore = %w(React yoga)
+    if targets_to_ignore.include? target.name
+        target.remove_from_project
     end
   end
 end

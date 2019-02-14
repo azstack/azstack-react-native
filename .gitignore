@@ -53,9 +53,10 @@ buck-out/
 */fastlane/Preview.html
 */fastlane/screenshots
 
+# Bundle artifact
+*.jsbundle
+
 # ios pod
 ios/Pods/
 ios/Podfile.lock
 ios/azstack_react_native_sdk.xcworkspace/
-# Bundle artifact
-*.jsbundle
