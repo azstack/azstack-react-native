@@ -14,6 +14,8 @@ export const CALL_WEBRTC_DATA_TYPE_ICE_CANDIDATE = 2;
 export const CALL_WEBRTC_CAMERA_TYPE_FRONT = 'user';
 export const CALL_WEBRTC_CAMERA_TYPE_BACK = 'environment';
 
+export const CALL_WEBRTC_BUNBLE_POLICY_TYPE_BALANCED = 'balanced';
+
 export const CALL_MEDIA_TYPE_AUDIO = 1;
 export const CALL_MEDIA_TYPE_VIDEO = 2;
 

@@ -82,7 +82,7 @@ class AppMain extends React.Component {
 
     render() {
         return (
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, backgroundColor: '#fff' }}>
                 {
                     this.exampleType === 'core' && <AZStackCoreExample
                         azstackConfig={this.azstackConfig}

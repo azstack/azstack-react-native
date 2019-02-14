@@ -2,7 +2,7 @@ import {
     RTCPeerConnection,
     RTCSessionDescription,
     RTCIceCandidate,
-    getUserMedia
+    mediaDevices
 } from 'react-native-webrtc';
 
 class Call {
@@ -110,7 +110,7 @@ class Call {
                 message: 'Get user media constraints',
                 payload: mediaConstraints
             });
-            getUserMedia(mediaConstraints).then((stream) => {
+            mediaDevices.getUserMedia(mediaConstraints).then((stream) => {
                 getUserMediaSuccess(stream);
             }).catch((error) => {
                 getUserMediaError(error);
@@ -153,7 +153,10 @@ class Call {
             this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                 message: 'Start peer connection'
             });
-            this.callData.webRTC.peerConnection = new RTCPeerConnection({ iceServers: this.iceServers });
+            this.callData.webRTC.peerConnection = new RTCPeerConnection({
+                iceServers: this.iceServers,
+                bundlePolicy: this.callConstants.CALL_WEBRTC_BUNBLE_POLICY_TYPE_BALANCED
+            });
             this.callData.webRTC.peerConnection.onicecandidate = (event) => {
                 if (!event.candidate) {
                     let sdpCandidate = '' + this.callData.webRTC.localSessionDescription.sdp;
@@ -307,7 +310,9 @@ class Call {
             if (this.callData.isCaller) {
                 this.callData.webRTC.peerConnection.createOffer({
                     mandatory: peerConnectionMandatory
-                }).then(this.callData.webRTC.peerConnection.setLocalDescription).then(() => {
+                }).then((localDescription) => {
+                    return this.callData.webRTC.peerConnection.setLocalDescription(localDescription);
+                }).then(() => {
                     peerConnectionInitConnectionSuccess();
                 }).catch((error) => {
                     peerConnectionInitConnectionError(error);
@@ -385,7 +390,9 @@ class Call {
 
                 this.callData.webRTC.peerConnection.createAnswer({
                     mandatory: peerConnectionMandatory
-                }).then(this.callData.webRTC.peerConnection.setLocalDescription).then(() => {
+                }).then((localDescription) => {
+                    return this.callData.webRTC.peerConnection.setLocalDescription(localDescription);
+                }).then(() => {
                     peerConnectionInitConnectionSuccess();
                 }).catch((error) => {
                     peerConnectionInitConnectionError(error);
