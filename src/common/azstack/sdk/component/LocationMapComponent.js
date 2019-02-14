@@ -5,7 +5,9 @@ import {
     Linking,
     View
 } from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, {
+    PROVIDER_GOOGLE
+} from 'react-native-maps';
 
 import ScreenBlockComponent from './part/screen/ScreenBlockComponent';
 import ScreenHeaderBlockComponent from './part/screen/ScreenHeaderBlockComponent';
@@ -135,6 +137,7 @@ class LocationMapComponent extends React.Component {
                             !!this.state.mapSizes.height &&
                             !!this.state.mapSizes.width && (
                                 <MapView
+                                    provider={PROVIDER_GOOGLE}
                                     style={{
                                         width: this.state.mapSizes.width,
                                         height: this.state.mapSizes.height

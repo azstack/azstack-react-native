@@ -4,7 +4,9 @@ import {
     Text,
     View
 } from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, {
+    PROVIDER_GOOGLE
+} from 'react-native-maps';
 
 class MessageLocationBlockComponent extends React.Component {
     constructor(props) {
@@ -37,6 +39,7 @@ class MessageLocationBlockComponent extends React.Component {
                 style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_LOCATION_BLOCK_STYLE')}
             >
                 <MapView
+                    provider={PROVIDER_GOOGLE}
                     style={this.coreInstances.CustomStyle.getStyle('MESSAGE_TYPE_MEDIA_LOCATION_MAP_BLOCK_STYLE')}
                     initialRegion={{
                         latitude: this.props.location.latitude,

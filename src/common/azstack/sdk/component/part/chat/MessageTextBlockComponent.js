@@ -4,7 +4,6 @@ import {
     Text,
     View
 } from 'react-native';
-import MapView from 'react-native-maps';
 
 class MessageTextBlockComponent extends React.Component {
     constructor(props) {
