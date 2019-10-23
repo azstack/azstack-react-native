@@ -1,46 +1,61 @@
-import {
-    PushNotificationIOS
-} from 'react-native';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
-class Notication {
+class Notification {
     constructor(options) {
 
         this.resolveFunction = null;
         this.rejectFunction = null;
-        PushNotificationIOS.addEventListener('register', (deviceToken) => {
-            this.resolveFunction(deviceToken);
-        });
-        PushNotificationIOS.addEventListener('registrationError', (error) => {
-            this.rejectFunction();
-        });
-        PushNotificationIOS.addEventListener('notification', (notification) => { });
-        PushNotificationIOS.addEventListener('localNotification', (notification) => { });
+
+        this.onRegisterSuccessHandler = this.onRegisterSuccessHandler.bind(this);
+        this.onRegisterErrorHandler = this.onRegisterErrorHandler.bind(this);
+        this.onHasRemoteNotification = this.onHasRemoteNotification.bind(this);
+        this.onHasLocalNotification = this.onHasLocalNotification.bind(this);
+
+        PushNotificationIOS.addEventListener('register', this.onRegisterSuccessHandler);
+        PushNotificationIOS.addEventListener('registrationError', this.onRegisterErrorHandler);
+        PushNotificationIOS.addEventListener('notification', this.onHasRemoteNotification);
+        PushNotificationIOS.addEventListener('localNotification', this.onHasLocalNotification);
     };
 
     init() {
         return new Promise((resolve, reject) => {
             this.resolveFunction = resolve;
             this.rejectFunction = reject;
-            this.requestPermissions().then(() => { }).catch(() => {
-                reject();
+            this.requestPermissions().then(() => { }).catch((error) => {
+                reject(error);
             });
         });
     };
+    clear() {
+        PushNotificationIOS.removeEventListener('register', this.onRegisterSuccessHandler);
+        PushNotificationIOS.removeEventListener('registrationError', this.onRegisterErrorHandler);
+        PushNotificationIOS.removeEventListener('notification', this.onHasRemoteNotification);
+        PushNotificationIOS.removeEventListener('localNotification', this.onHasLocalNotification);
+    };
+
+    onRegisterSuccessHandler(deviceToken) {
+        this.resolveFunction(deviceToken);
+    };
+    onRegisterErrorHandler(error) {
+        this.rejectFunction(error);
+    };
+    onHasRemoteNotification(notification) { };
+    onHasLocalNotification(notification) { };
 
     getInitialNotification() {
         return new Promise((resolve, reject) => {
             PushNotificationIOS.getInitialNotification().then((notification) => {
-                if (!notification) {
-                    return reject({});
+                if (!notification || !notification._data) {
+                    return reject(new Error('No initial notification'));
                 }
 
-                resolve(notification);
+                resolve(notification._data);
+
             }).then((error) => {
-                reject({});
+                reject(error);
             });
         });
     };
-
     requestPermissions() {
         return new Promise((resolve, reject) => {
             PushNotificationIOS.requestPermissions({
@@ -49,14 +64,14 @@ class Notication {
                 sound: true
             }).then((result) => {
                 if (!result.alert || !result.badge || !result.sound) {
-                    return reject();
+                    return reject(new Error('Notification permission denied'));
                 }
                 resolve();
             }).catch((error) => {
-                reject();
+                reject(error);
             });
         });
     };
 };
 
-export default Notication;
+export default Notification;

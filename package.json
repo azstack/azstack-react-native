@@ -1,39 +1,47 @@
 {
-	"name": "azstack_react_native_sdk",
-	"version": "0.0.1",
-	"private": true,
-	"scripts": {
-		"start": "node node_modules/react-native/local-cli/cli.js start",
-		"test": "jest"
-	},
-	"dependencies": {
-		"@terrylinla/react-native-sketch-canvas": "^0.8.0",
-		"jsencrypt": "^3.0.0-beta.1",
-		"react": "16.6.3",
-		"react-native": "0.58.4",
-		"react-native-audio": "^4.3.0",
-		"react-native-device-info": "^0.26.2",
-		"react-native-document-picker": "^2.2.0",
-		"react-native-fcm": "^16.2.4",
-		"react-native-fs": "^2.13.3",
-		"react-native-google-places": "^2.5.2",
-		"react-native-image-crop-picker": "^0.22.0",
-		"react-native-incall-manager": "^3.2.2",
-		"react-native-maps": "^0.23.0",
-		"react-native-swiper": "^1.5.14",
-		"react-native-video": "^4.3.1",
-		"react-native-webrtc": "^1.69.0",
-		"react-native-zip-archive": "^3.0.1",
-		"socket.io-client": "^2.2.0"
-	},
-	"devDependencies": {
-		"babel-core": "^7.0.0-bridge.0",
-		"babel-jest": "24.1.0",
-		"jest": "24.1.0",
-		"metro-react-native-babel-preset": "0.51.1",
-		"react-test-renderer": "16.6.3"
-	},
-	"jest": {
-		"preset": "react-native"
-	}
+  "name": "azstack_react_native_sdk",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@react-native-community/push-notification-ios": "^1.0.2",
+    "@react-native-community/viewpager": "^2.0.1",
+    "@terrylinla/react-native-sketch-canvas": "^0.8.0",
+    "jsencrypt": "^3.0.0-rc.1",
+    "react": "16.9.0",
+    "react-native": "0.61.2",
+    "react-native-audio": "^4.3.0",
+    "react-native-device-info": "^4.0.1",
+    "react-native-document-picker": "^3.2.4",
+    "react-native-firebase": "^5.5.6",
+    "react-native-fs": "^2.16.1",
+    "react-native-google-places": "^3.1.2",
+    "react-native-image-crop-picker": "^0.26.1",
+    "react-native-incall-manager": "^3.2.6",
+    "react-native-maps": "^0.26.1",
+    "react-native-swiper": "^1.5.14",
+    "react-native-video": "^5.0.2",
+    "react-native-webrtc": "^1.75.1",
+    "react-native-zip-archive": "^5.0.0",
+    "socket.io-client": "^2.3.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.4",
+    "@babel/runtime": "^7.6.3",
+    "@react-native-community/eslint-config": "^0.0.5",
+    "babel-jest": "^24.9.0",
+    "eslint": "^6.5.1",
+    "jest": "^24.9.0",
+    "metro-react-native-babel-preset": "^0.56.0",
+    "react-test-renderer": "16.9.0"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
 }

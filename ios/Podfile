@@ -1,62 +1,53 @@
-# Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+platform :ios, '10.0'
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 target 'azstack_react_native_sdk' do
+  # Pods for azstack_react_native_sdk
+  pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
+  pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
+  pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
+  pod 'RCTTypeSafety', :path => "../node_modules/react-native/Libraries/TypeSafety"
+  pod 'React', :path => '../node_modules/react-native/'
+  pod 'React-Core', :path => '../node_modules/react-native/'
+  pod 'React-CoreModules', :path => '../node_modules/react-native/React/CoreModules'
+  pod 'React-Core/DevSupport', :path => '../node_modules/react-native/'
+  pod 'React-RCTActionSheet', :path => '../node_modules/react-native/Libraries/ActionSheetIOS'
+  pod 'React-RCTAnimation', :path => '../node_modules/react-native/Libraries/NativeAnimation'
+  pod 'React-RCTBlob', :path => '../node_modules/react-native/Libraries/Blob'
+  pod 'React-RCTImage', :path => '../node_modules/react-native/Libraries/Image'
+  pod 'React-RCTLinking', :path => '../node_modules/react-native/Libraries/LinkingIOS'
+  pod 'React-RCTNetwork', :path => '../node_modules/react-native/Libraries/Network'
+  pod 'React-RCTSettings', :path => '../node_modules/react-native/Libraries/Settings'
+  pod 'React-RCTText', :path => '../node_modules/react-native/Libraries/Text'
+  pod 'React-RCTVibration', :path => '../node_modules/react-native/Libraries/Vibration'
+  pod 'React-Core/RCTWebSocket', :path => '../node_modules/react-native/'
 
-  # React libs
-  rn_path = '../node_modules/react-native'
-  pod 'yoga', path: "#{rn_path}/ReactCommon/yoga/yoga.podspec"
-  pod 'React', path: rn_path, subspecs: [
-  'Core',
-  'CxxBridge',
-  'RCTActionSheet',
-  'RCTAnimation',
-  'RCTGeolocation',
-  'RCTImage',
-  'RCTLinkingIOS',
-  'RCTNetwork',
-  'RCTSettings',
-  'RCTText',
-  'RCTVibration',
-  'RCTWebSocket'
-  ]
+  pod 'React-cxxreact', :path => '../node_modules/react-native/ReactCommon/cxxreact'
+  pod 'React-jsi', :path => '../node_modules/react-native/ReactCommon/jsi'
+  pod 'React-jsiexecutor', :path => '../node_modules/react-native/ReactCommon/jsiexecutor'
+  pod 'React-jsinspector', :path => '../node_modules/react-native/ReactCommon/jsinspector'
+  pod 'ReactCommon/jscallinvoker', :path => "../node_modules/react-native/ReactCommon"
+  pod 'ReactCommon/turbomodule/core', :path => "../node_modules/react-native/ReactCommon"
+  pod 'Yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
 
-  # React Native third party dependencies podspecs
   pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  #libs
-  pod 'RNSketchCanvas', :path => '../node_modules/@terrylinla/react-native-sketch-canvas'
-  pod 'RNAudio', :path => '../node_modules/react-native-audio'
-  pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
-  pod 'react-native-document-picker', :path => '../node_modules/react-native-document-picker'
-  pod 'RNFS', :path => '../node_modules/react-native-fs'
-  pod 'RNImageCropPicker', :path =>  '../node_modules/react-native-image-crop-picker'
-  pod 'ReactNativeIncallManager', :path => '../node_modules/react-native-incall-manager'
-  rn_maps_path = '../node_modules/react-native-maps'
-  pod 'react-native-maps', path: rn_maps_path
-  pod 'react-native-google-maps', path: rn_maps_path
-  pod 'GoogleMaps'
-  pod 'Google-Maps-iOS-Utils'
-  pod 'GooglePlaces'
-  pod 'GooglePlacePicker'
-  pod 'react-native-video', :path => '../node_modules/react-native-video'
-  pod 'react-native-webrtc', :path => '../node_modules/react-native-webrtc'
-  pod 'RNZipArchive', :path => '../node_modules/react-native-zip-archive'
+  target 'azstack_react_native_sdkTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  use_native_modules!
 end
 
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    if target.name == 'react-native-google-maps'
-      target.build_configurations.each do |config|
-        config.build_settings['CLANG_ENABLE_MODULES'] = 'No'
-      end
-    end
-    
-    targets_to_ignore = %w(React yoga)
-    if targets_to_ignore.include? target.name
-        target.remove_from_project
-    end
+target 'azstack_react_native_sdk-tvOS' do
+  # Pods for azstack_react_native_sdk-tvOS
+
+  target 'azstack_react_native_sdk-tvOSTests' do
+    inherit! :search_paths
+    # Pods for testing
   end
+
 end

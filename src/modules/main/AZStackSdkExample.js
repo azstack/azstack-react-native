@@ -83,7 +83,7 @@ class AZStackSdkExample extends React.Component {
             }).then((result) => { }).catch((error) => { });
         }).catch((error) => { });
     };
-    getInitialNotification() {
+    checkClickedNotification() {
         this.Notification.getInitialNotification().then((initialNotification) => {
             console.log('initial notification');
             console.log(initialNotification);
@@ -101,9 +101,7 @@ class AZStackSdkExample extends React.Component {
     };
     handleAppStateChange(nextAppState) {
         if (nextAppState === 'active') {
-            if (Platform.OS === 'android') {
-                this.getInitialNotification();
-            }
+            this.checkClickedNotification();
         }
     };
 
@@ -158,17 +156,15 @@ class AZStackSdkExample extends React.Component {
         this.addSubscriptions();
         AppState.addEventListener('change', this.handleAppStateChange);
         this.registerDeviceToken();
-        if (Platform.OS === 'ios') {
-            this.getInitialNotification();
-        }
+        this.checkClickedNotification();
 
-        this.refs.AZStackSdk.connect().then((result) => {}).catch((error) => { });
+        this.refs.AZStackSdk.connect().then((result) => { }).catch((error) => { });
     };
     componentWillUnmount() {
         this.clearSubscriptions();
         AppState.removeEventListener('change', this.handleAppStateChange);
-
-        this.refs.AZStackSdk.disconnect().then((result) => {}).catch((error) => { });
+        this.Notification.clear();
+        this.refs.AZStackSdk.disconnect().then((result) => { }).catch((error) => { });
     };
 
     render() {
