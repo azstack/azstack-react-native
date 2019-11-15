@@ -91,16 +91,6 @@ class VideoCallComponent extends React.Component {
 
 			switch (result.status) {
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_UNKNOWN:
-
-					this.setState({
-						isOnCall: false,
-						timeoutNotAnswer: false,
-						showButtons: false,
-						audios: Object.assign({}, this.state.audios, { ringingIn: false, ringingOut: false, error: true })
-					});
-					setTimeout(() => {
-						this.props.onCallEnded();
-					}, 1500);
 					break;
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_CONNECTING:
 					break;
@@ -163,8 +153,8 @@ class VideoCallComponent extends React.Component {
 			switch (result.status) {
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_CONNECTING:
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_RINGING:
-					break;
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_UNKNOWN:
+					break;
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_ANSWERED:
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_BUSY:
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_REJECTED:

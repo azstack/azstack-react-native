@@ -89,14 +89,6 @@ class VoiceCallComponent extends React.Component {
 
 			switch (result.status) {
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_UNKNOWN:
-					this.setState({
-						showTimerText: false,
-						showButtons: false,
-						audios: Object.assign({}, this.state.audios, { ringingOut: false, error: true })
-					});
-					setTimeout(() => {
-						this.props.onCallEnded();
-					}, 1500);
 					break;
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_CONNECTING:
 					break;
@@ -168,15 +160,6 @@ class VoiceCallComponent extends React.Component {
 
 			switch (result.status) {
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_UNKNOWN:
-					this.setState({
-						timeoutNotAnswer: false,
-						showTimerText: false,
-						showButtons: false,
-						audios: Object.assign({}, this.state.audios, { ringingIn: false, error: true })
-					});
-					setTimeout(() => {
-						this.props.onCallEnded();
-					}, 1500);
 					break;
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING_STOP:
 					this.setState({
@@ -212,8 +195,8 @@ class VoiceCallComponent extends React.Component {
 
 			switch (result.status) {
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_RINGING:
-					break;
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_UNKNOWN:
+					break;
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_ANSWERED:
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_BUSY:
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLIN_STATUS_NOT_ANSWERED:
@@ -234,16 +217,6 @@ class VoiceCallComponent extends React.Component {
 
 			switch (result.status) {
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_UNKNOWN:
-
-					this.setState({
-						timeoutNotAnswer: false,
-						showTimerText: false,
-						showButtons: false,
-						audios: Object.assign({}, this.state.audios, { ringingIn: false, ringingOut: false, error: true })
-					});
-					setTimeout(() => {
-						this.props.onCallEnded();
-					}, 1500);
 					break;
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_CONNECTING:
 					break;
@@ -306,8 +279,8 @@ class VoiceCallComponent extends React.Component {
 			switch (result.status) {
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_CONNECTING:
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_RINGING:
-					break;
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_UNKNOWN:
+					break;
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_ANSWERED:
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_BUSY:
 				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_FREE_CALL_REJECTED:
