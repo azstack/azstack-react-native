@@ -138,6 +138,10 @@ class AZStackCore {
         if (!this.unCalls[uncallKey]) {
             this.unCalls[uncallKey] = {};
         }
+        if (this.unCalls[uncallKey][requestKey]) {
+            clearTimeout(this.unCalls[uncallKey][requestKey].timeout);
+        }
+
         this.unCalls[uncallKey][requestKey] = {};
         this.unCalls[uncallKey][requestKey].callback = callbackFunction;
         this.unCalls[uncallKey][requestKey].resolve = resolveFunction;
@@ -234,6 +238,14 @@ class AZStackCore {
                 this.unCalls[uncallKey][requestKey].temporary[temporaryKey].data = dataObj[temporaryKey];
                 break;
         }
+    };
+    clearUncall(uncallKey, requestKey) {
+        if (!this.unCalls[uncallKey] || !this.unCalls[uncallKey][requestKey]) {
+            return;
+        }
+
+        clearTimeout(this.unCalls[uncallKey][requestKey].timeout);
+        delete this.unCalls[uncallKey][requestKey];
     };
 
     init() {
@@ -1488,6 +1500,11 @@ class AZStackCore {
             });
             this.addUncall(this.uncallConstants.UNCALL_KEY_STOP_FREE_CALL, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_STOP_FREE_CALL_RETURN);
 
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Clear start free call request if exist'
+            });
+            this.clearUncall(this.uncallConstants.UNCALL_KEY_START_FREE_CALL, 'default');
+
             this.Call.sendStopFreeCall({}).then((result) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_STOP_FREE_CALL, 'default', null, null);
             }).catch((error) => {
@@ -1604,6 +1621,11 @@ class AZStackCore {
                 message: 'Stop callout'
             });
             this.addUncall(this.uncallConstants.UNCALL_KEY_STOP_CALLOUT, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_STOP_CALLOUT_RETURN);
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Clear start calout request if exist'
+            });
+            this.clearUncall(this.uncallConstants.UNCALL_KEY_START_CALLOUT, 'default');
 
             this.Call.sendStopCallout({}).then((result) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_STOP_CALLOUT, 'default', null, null);
