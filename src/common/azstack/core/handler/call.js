@@ -1073,12 +1073,11 @@ class Call {
                     break;
                 default:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                        message: 'Free call status changed to unknown, free call end'
+                        message: 'Free call status changed to unknown, ignore'
                     });
-                    this.clearCallData();
                     resolve({
                         status: this.callConstants.CALL_STATUS_FREE_CALL_UNKNOWN,
-                        message: 'Free call status changed to unknown, free call end'
+                        message: 'Free call status changed to unknown, ignore'
                     });
                     break;
             }
@@ -1183,12 +1182,11 @@ class Call {
                     break;
                 default:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                        message: 'Free call status changed to unknown by me, free call end'
+                        message: 'Free call status changed to unknown by me, ignore'
                     });
-                    this.clearCallData();
                     resolve({
                         status: this.callConstants.CALL_STATUS_FREE_CALL_UNKNOWN,
-                        message: 'Free call status changed to unknown by me, free call end'
+                        message: 'Free call status changed to unknown by me, ignore'
                     });
                     break;
             }
@@ -1792,12 +1790,11 @@ class Call {
                     break;
                 default:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                        message: 'Callout status changed to unknown'
+                        message: 'Callout status changed to unknown, ignore'
                     });
-                    this.clearCallData();
                     resolve({
                         status: this.callConstants.CALL_STATUS_CALLOUT_STATUS_UNKNOWN,
-                        message: 'Callout status changed to unknown'
+                        message: 'Callout status changed to unknown, ignore'
                     });
                     break;
             }
@@ -2036,12 +2033,11 @@ class Call {
                     break;
                 default:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                        message: 'Callin status changed to unknown, callin end'
+                        message: 'Callin status changed to unknown, ignore'
                     });
-                    this.clearCallData();
                     resolve({
                         status: this.callConstants.CALL_STATUS_CALLIN_STATUS_UNKNOWN,
-                        message: 'Callin status changed to unknown, callin end'
+                        message: 'Callin status changed to unknown, ignore'
                     });
                     break;
             }
@@ -2137,12 +2133,11 @@ class Call {
                     break;
                 default:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                        message: 'Callin status changed to unknown by me, callin end'
+                        message: 'Callin status changed to unknown by me, ignore'
                     });
-                    this.clearCallData();
                     resolve({
                         status: this.callConstants.CALL_STATUS_CALLIN_STATUS_UNKNOWN,
-                        message: 'Callin status changed to unknown by me, callin end'
+                        message: 'Callin status changed to unknown by me, ignore'
                     });
                     break;
             }
