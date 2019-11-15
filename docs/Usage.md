@@ -275,6 +275,7 @@ this.AZStackCore = new AZStackCore({
 > - CALL_STATUS_CALLIN_STATUS_RINGING(183): status ringing;
 > - CALL_STATUS_CALLIN_STATUS_ANSWERED(200): status answered;
 > - CALL_STATUS_CALLIN_STATUS_BUSY(486): status busy;
+> - CALL_STATUS_CALLOUT_STATUS_TERMINAL(487): status terminal;
 > - CALL_STATUS_CALLIN_STATUS_NOT_ANSWERED(403): status answered;
 > - CALL_STATUS_CALLIN_STATUS_RINGING_STOP(702): status ringing stop;
 > - CALL_STATUS_CALLIN_STATUS_STOP(700): status stop;
