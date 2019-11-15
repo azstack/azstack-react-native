@@ -64,6 +64,7 @@ class VoiceCallComponent extends React.Component {
 				ringingIn: false,
 				error: false,
 				busy: false,
+				terminal: false,
 				rejected: false,
 				notAnswered: false,
 				end: false
@@ -114,6 +115,15 @@ class VoiceCallComponent extends React.Component {
 					this.setState({
 						showButtons: false,
 						audios: Object.assign({}, this.state.audios, { ringingOut: false, busy: true })
+					});
+					setTimeout(() => {
+						this.props.onCallEnded();
+					}, 1500);
+					break;
+				case this.coreInstances.AZStackCore.callConstants.CALL_STATUS_CALLOUT_STATUS_TERMINAL:
+					this.setState({
+						showButtons: false,
+						audios: Object.assign({}, this.state.audios, { ringingOut: false, terminal: true })
 					});
 					setTimeout(() => {
 						this.props.onCallEnded();
@@ -715,6 +725,19 @@ class VoiceCallComponent extends React.Component {
 					volume={1.0}
 					muted={false}
 					paused={!this.state.audios.busy}
+					resizeMode='cover'
+					repeat={false}
+					playInBackground={false}
+					playWhenInactive={false}
+					ignoreSilentSwitch={'ignore'}
+					progressUpdateInterval={250.0}
+				/>
+				<Video
+					source={require('../static/audio/call_busy.mp3')}
+					rate={1.0}
+					volume={1.0}
+					muted={false}
+					paused={!this.state.audios.terminal}
 					resizeMode='cover'
 					repeat={false}
 					playInBackground={false}

@@ -1758,6 +1758,16 @@ class Call {
                         message: 'Callout status changed to busy, callout end'
                     });
                     break;
+                case this.callConstants.CALL_STATUS_CALLOUT_STATUS_TERMINAL:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Callout status changed to terminal, callout end'
+                    });
+                    this.clearCallData();
+                    resolve({
+                        status: this.callConstants.CALL_STATUS_CALLOUT_STATUS_TERMINAL,
+                        message: 'Callout status changed to terminal, callout end'
+                    });
+                    break;
                 case this.callConstants.CALL_STATUS_CALLOUT_STATUS_NOT_ANSWERED:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callout status changed to not answered, callout end'
