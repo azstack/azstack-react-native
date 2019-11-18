@@ -1748,6 +1748,16 @@ class Call {
                         message: 'Callout status changed to rejected, callout end'
                     });
                     break;
+                case this.callConstants.CALL_STATUS_CALLOUT_STATUS_USER_NOT_AVAILABLE:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Callout status changed to user not available, callout end'
+                    });
+                    this.clearCallData();
+                    resolve({
+                        status: this.callConstants.CALL_STATUS_CALLOUT_STATUS_USER_NOT_AVAILABLE,
+                        message: 'Callout status changed to user not available, callout end'
+                    });
+                    break;
                 case this.callConstants.CALL_STATUS_CALLOUT_STATUS_BUSY:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callout status changed to busy, callout end'
