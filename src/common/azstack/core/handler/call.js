@@ -1778,6 +1778,16 @@ class Call {
                         message: 'Callout status changed to terminal, callout end'
                     });
                     break;
+                case this.callConstants.CALL_STATUS_CALLOUT_STATUS_NO_SIGNAL:
+                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                        message: 'Callout status changed to no signal, callout end'
+                    });
+                    this.clearCallData();
+                    resolve({
+                        status: this.callConstants.CALL_STATUS_CALLOUT_STATUS_NO_SIGNAL,
+                        message: 'Callout status changed to no signal, callout end'
+                    });
+                    break;
                 case this.callConstants.CALL_STATUS_CALLOUT_STATUS_NOT_ANSWERED:
                     this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
                         message: 'Callout status changed to not answered, callout end'

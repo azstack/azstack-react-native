@@ -267,6 +267,8 @@ this.AZStackCore = new AZStackCore({
 > - CALL_STATUS_CALLOUT_STATUS_REJECTED(403): status rejected;
 > - CALL_STATUS_CALLOUT_STATUS_USER_NOT_AVAILABLE(408): status user not available;
 > - CALL_STATUS_CALLOUT_STATUS_BUSY(486): status busy;
+> - CALL_STATUS_CALLOUT_STATUS_TERMINAL(487): status terminal;
+> - CALL_STATUS_CALLOUT_STATUS_NO_SIGNAL(503): status no signal;
 > - CALL_STATUS_CALLOUT_STATUS_NOT_ANSWERED(480): status answered;
 > - CALL_STATUS_CALLOUT_STATUS_STOP(700): status stop;
 > - CALL_STATUS_CALLOUT_STATUS_NOT_ENOUGH_BALANCE(702): status not enough balance;
@@ -276,7 +278,6 @@ this.AZStackCore = new AZStackCore({
 > - CALL_STATUS_CALLIN_STATUS_RINGING(183): status ringing;
 > - CALL_STATUS_CALLIN_STATUS_ANSWERED(200): status answered;
 > - CALL_STATUS_CALLIN_STATUS_BUSY(486): status busy;
-> - CALL_STATUS_CALLOUT_STATUS_TERMINAL(487): status terminal;
 > - CALL_STATUS_CALLIN_STATUS_NOT_ANSWERED(403): status answered;
 > - CALL_STATUS_CALLIN_STATUS_RINGING_STOP(702): status ringing stop;
 > - CALL_STATUS_CALLIN_STATUS_STOP(700): status stop;
