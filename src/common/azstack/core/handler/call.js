@@ -1819,13 +1819,24 @@ class Call {
                     });
                     break;
                 default:
-                    this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
-                        message: 'Callout status changed to unknown, ignore'
-                    });
-                    resolve({
-                        status: this.callConstants.CALL_STATUS_CALLOUT_STATUS_UNKNOWN,
-                        message: 'Callout status changed to unknown, ignore'
-                    });
+                    if (body.code >= 400) {
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                            message: 'Callout status changed to busy, callout end'
+                        });
+                        this.clearCallData();
+                        resolve({
+                            status: this.callConstants.CALL_STATUS_CALLOUT_STATUS_BUSY,
+                            message: 'Callout status changed to busy, callout end'
+                        });
+                    } else {
+                        this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                            message: 'Callout status changed to unknown, ignore'
+                        });
+                        resolve({
+                            status: this.callConstants.CALL_STATUS_CALLOUT_STATUS_UNKNOWN,
+                            message: 'Callout status changed to unknown, ignore'
+                        });
+                    }
                     break;
             }
         });
