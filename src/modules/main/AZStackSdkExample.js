@@ -150,6 +150,17 @@ class AZStackSdkExample extends React.Component {
     showGroup() {
         this.refs.AZStackSdk.showGroup({ groupId: 7436 });
     };
+    unregisterDeviceToken() {
+        if (!this.refs.AZStackSdk.AZStackCore.slaveSocketConnected) {
+            return;
+        }
+        if (!this.deviceToken) {
+            return;
+        }
+        this.refs.AZStackSdk.AZStackCore.notificationUnregisterDevice({
+            deviceToken: this.deviceToken
+        }).then((result) => { }).catch((error) => { });
+    };
 
     componentDidMount() {
         this.devicePlatformOS = Platform.OS === 'android' ? this.refs.AZStackSdk.AZStackCore.platformConstants.PLATFORM_ANDROID : (Platform.OS === 'ios' ? this.refs.AZStackSdk.AZStackCore.platformConstants.PLATFORM_IOS : this.refs.AZStackSdk.AZStackCore.platformConstants.PLATFORM_WEB);
@@ -207,6 +218,7 @@ class AZStackSdkExample extends React.Component {
                         <Button onPress={() => this.showCallLogs()} title='Show call logs'></Button>
                         <Button onPress={() => this.showUser()} title='Show user'></Button>
                         <Button onPress={() => this.showGroup()} title='Show group'></Button>
+                        <Button onPress={() => this.unregisterDeviceToken()} title='Unregister device token'></Button>
                     </ScrollView>
                 </View>
             </AZStackSdk>

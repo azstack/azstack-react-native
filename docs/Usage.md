@@ -111,6 +111,7 @@
     * [3.10. Notification](#310-notification)
         * [3.10.1. Change application state](#3101-change-application-state)
         * [3.10.2. Notification register device](#3102-notification-register-device)
+        * [3.10.3. Notification unregister device](#3103-notification-unregister-device)
     * [3.11. Sticker](#311-sticker)
         * [3.11.1. Get stickers list](#3111-get-stickers-list)
 
@@ -2951,6 +2952,49 @@ this.AZStackCore.notificationRegisterDevice({
 > - deviceToken(required): token of device
 > - devicePlatformOS(required): platform os of device
 > - applicationBundleId(required): bundle id of application
+
+#### error:
+> - code: error code
+> - message: error message
+
+#### result:
+
+### 3.10.3. Notification unregister device
+
+```javascript 
+this.AZStackCore.notificationUnregisterDevice({
+    deviceToken: 'this-is-device-token'
+}, (error, result) => {
+    console.log(error);
+    console.log(result);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.notificationUnregisterDevice({
+    deviceToken: 'this-is-device-token'
+}).then((result) => {
+    console.log(result);
+}).catch((error) => {
+    console.log(error);
+});
+```
+
+OR
+
+```javascript 
+this.AZStackCore.Delegates.onNotificationUnregisterDeviceReturn = (error, result) => {
+    console.log(error, result);
+};
+this.AZStackCore.notificationUnregisterDevice({
+    deviceToken: 'this-is-device-token'
+});
+```
+
+#### params
+> - deviceToken(required): token of device
 
 #### error:
 > - code: error code

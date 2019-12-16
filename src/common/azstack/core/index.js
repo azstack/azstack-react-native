@@ -1056,6 +1056,13 @@ class AZStackCore {
                     this.callUncall(this.uncallConstants.UNCALL_KEY_NOTIFICATION_REGISTER_DEVICE, 'default', error, null);
                 });
                 break;
+            case this.serviceTypes.PUSH_NOTIFICATION_UNREGISTER_DEVICE_RECEIVE:
+                this.Notification.receiveNotificationUnregisterDevice(body).then((result) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_NOTIFICATION_UNREGISTER_DEVICE, 'default', null, result);
+                }).catch((error) => {
+                    this.callUncall(this.uncallConstants.UNCALL_KEY_NOTIFICATION_UNREGISTER_DEVICE, 'default', error, null);
+                });
+                break;
 
             case this.serviceTypes.STICKER_GET_LIST:
                 this.Sticker.receiveStickersList(body).then((result) => {
@@ -3273,6 +3280,55 @@ class AZStackCore {
 
             }).catch((error) => {
                 this.callUncall(this.uncallConstants.UNCALL_KEY_NOTIFICATION_REGISTER_DEVICE, 'default', error, null);
+            });
+        });
+    };
+    notificationUnregisterDevice(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Notification unregister device'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Notification unregister device params',
+                payload: options
+            });
+
+            this.addUncall(this.uncallConstants.UNCALL_KEY_NOTIFICATION_UNREGISTER_DEVICE, 'default', callback, resolve, reject, this.delegateConstants.DELEGATE_ON_NOTIFICATION_UNREGISTER_DEVICE_RETURN);
+
+            if (!options || typeof options !== 'object') {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Missing notification unregister device params'
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NOTIFICATION_UNREGISTER_DEVICE, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: 'Missing notification unregister device params'
+                }, null);
+                return;
+            }
+
+            let dataErrorMessage = this.Validator.check([{
+                name: 'deviceToken',
+                required: true,
+                dataType: this.dataTypes.DATA_TYPE_STRING,
+                data: options.deviceToken
+            }]);
+            if (dataErrorMessage) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: dataErrorMessage
+                });
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NOTIFICATION_UNREGISTER_DEVICE, 'default', {
+                    code: this.errorCodes.ERR_UNEXPECTED_SEND_DATA,
+                    message: dataErrorMessage
+                }, null);
+                return;
+            }
+
+            this.Notification.sendNotificationUnregisterDevice({
+                deviceToken: options.deviceToken
+            }).then((result) => {
+
+            }).catch((error) => {
+                this.callUncall(this.uncallConstants.UNCALL_KEY_NOTIFICATION_UNREGISTER_DEVICE, 'default', error, null);
             });
         });
     };

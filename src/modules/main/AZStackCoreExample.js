@@ -103,6 +103,7 @@ class AZStackCoreExample extends React.Component {
         this.changeApplicationState = this.changeApplicationState.bind(this);
 
         this.notificationRegisterDevice = this.notificationRegisterDevice.bind(this);
+        this.notificationUnregisterDevice = this.notificationUnregisterDevice.bind(this);
 
         this.getDefaultStickersList = this.getDefaultStickersList.bind(this);
         this.getNotDefaultStickersList = this.getNotDefaultStickersList.bind(this);
@@ -536,6 +537,11 @@ class AZStackCoreExample extends React.Component {
             applicationBundleId: 'com.azstack_react_native_sdk'
         }).then(() => { }).catch(() => { });
     };
+    notificationUnregisterDevice() {
+        this.AZStackCore.notificationUnregisterDevice({
+            deviceToken: 'this-is-device-token'
+        }).then(() => { }).catch(() => { });
+    };
 
     getDefaultStickersList() {
         this.AZStackCore.getStickersList({
@@ -650,6 +656,7 @@ class AZStackCoreExample extends React.Component {
                     <Button onPress={this.changeApplicationState} title='Change application state' />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.notificationRegisterDevice} title='Notification register device' />
+                    <Button onPress={this.notificationUnregisterDevice} title='Notification unregister device' />
                     <Text>{'\n'}{'\n'}</Text>
                     <Button onPress={this.getDefaultStickersList} title='Get default stickers list' />
                     <Button onPress={this.getNotDefaultStickersList} title='Get not default stickers list' />

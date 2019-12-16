@@ -128,6 +128,76 @@ class Notification {
         });
     };
 
+    sendNotificationUnregisterDevice(options, callback) {
+
+        return new Promise((resolve, reject) => {
+
+            const pushNotificationUnregisterDevicePacket = {
+                service: this.serviceTypes.PUSH_NOTIFICATION_UNREGISTER_DEVICE_SEND,
+                body: JSON.stringify({
+                    id: options.deviceToken
+                })
+            };
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Send push notification unregister device'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Push notification unregister device packet',
+                payload: pushNotificationUnregisterDevicePacket
+            });
+            this.sendPacketFunction(pushNotificationUnregisterDevicePacket).then(() => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                    message: 'Send push notification unregister device data successfully'
+                });
+                resolve();
+            }).catch((error) => {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot send push notification unregister device data, notification unregister device fail'
+                });
+                reject({
+                    code: error.code,
+                    message: 'Cannot send push notification unregister device data, notification unregister device fail'
+                });
+            });
+        });
+    };
+    receiveNotificationUnregisterDevice(body) {
+        return new Promise((resolve, reject) => {
+
+            if (!body) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Cannot detect notification unregister device result, ignored'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Cannot detect notification unregister device result'
+                });
+                return;
+            }
+
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_INFO, {
+                message: 'Got notification unregister device result'
+            });
+            this.Logger.log(this.logLevelConstants.LOG_LEVEL_DEBUG, {
+                message: 'Notification unregister device result',
+                payload: body
+            });
+
+            if (body.r !== this.errorCodes.REQUEST_SUCCESS_FROM_SERVER) {
+                this.Logger.log(this.logLevelConstants.LOG_LEVEL_ERROR, {
+                    message: 'Server response with error, notification unregister device fail'
+                });
+                reject({
+                    code: this.errorCodes.ERR_UNEXPECTED_RECEIVED_DATA,
+                    message: 'Server response with error, notification unregister device fail'
+                });
+                return;
+            }
+
+            resolve({});
+        });
+    };
+
     parseNotification(options) {
         let parsedNotification = {
             appId: options.appId,
